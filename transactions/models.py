@@ -5,7 +5,7 @@ from mezzanine.pages.models import Page
 
 class Accounts(models.Model):
     user = models.ForeignKey(User, verbose_name="Kontoinnehaver")
-
+	balance = models.PositiveIntegerField(verbose_name="Kontobalanse")
 
 class Transactions(models.Model):
         account = models.ForeignKey("Accounts")
@@ -23,7 +23,7 @@ class Items(Page):
         (DEACTIVATED, 'Ikke aktiv')
     )
     status_condition = models.IntegerField(blank=False,
-                              max_length=2,
+                              max_length=1,
                               choices=STATUS_CHOICES,default=ACTIVATED,
                               verbose_name="Status",
                               )
