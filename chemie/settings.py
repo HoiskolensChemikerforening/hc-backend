@@ -82,7 +82,8 @@ from django.utils.translation import ugettext_lazy as _
 # If True, the django-modeltranslation will be added to the
 # INSTALLED_APPS setting.
 USE_MODELTRANSLATION = False
-
+SECRET_KEY = "some_very_long_random_text"
+NEVERCACHE_KEY = "yet_another_very_long_random_text"
 
 ########################
 # MAIN DJANGO SETTINGS #
@@ -116,7 +117,7 @@ LANGUAGES = (
 # A boolean that turns on/off debug mode. When set to ``True``, stack traces
 # are displayed for error pages. Should always be set to ``False`` in
 # production. Best set to ``True`` in local_settings.py
-DEBUG = False
+DEBUG = True
 
 # Whether a user's session cookie expires when the Web browser is closed.
 SESSION_EXPIRE_AT_BROWSER_CLOSE = True
@@ -221,7 +222,7 @@ INSTALLED_APPS = (
     "mezzanine.forms",
     "mezzanine.galleries",
     "mezzanine.twitter",
-    'transactions'
+    "transactions"
     # "mezzanine.accounts",
     # "mezzanine.mobile",
 )

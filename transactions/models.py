@@ -5,7 +5,7 @@ from mezzanine.pages.models import Page
 
 class Accounts(models.Model):
     user = models.ForeignKey(User, verbose_name="Kontoinnehaver")
-	balance = models.PositiveIntegerField(verbose_name="Kontobalanse")
+    balance = models.PositiveIntegerField(verbose_name="Kontobalanse")
 
 class Transactions(models.Model):
         account = models.ForeignKey("Accounts")
