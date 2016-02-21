@@ -13,11 +13,17 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import include,url
 from django.contrib import admin
+<<<<<<< HEAD
 
 from chemie import views
 
 urlpatterns = ['',
+=======
+import elections
+urlpatterns = [
+    url(r'^valg/', include(elections.urls)),
+>>>>>>> 928f94de4b6a4fb2c2ea46185f79abba26bd2349
     url(r'^admin/', admin.site.urls),
 ]
