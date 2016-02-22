@@ -1,0 +1,5 @@
+<form action="/ditt-sladder/" method="post">
+    {% csrf_token %}
+    {{ form }}
+    <input type="submit" value="Send inn" />
+</form>
