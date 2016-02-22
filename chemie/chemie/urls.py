@@ -17,7 +17,9 @@ from django.conf.urls import include,url
 from django.contrib import admin
 
 import elections
+import shitbox
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
+    url(r'^shitbox/', include('shitbox.urls')),
     url(r'^admin/', admin.site.urls),
 ]
