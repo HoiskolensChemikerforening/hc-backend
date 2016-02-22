@@ -16,6 +16,7 @@ Including another URLconf
 from django.conf.urls import include,url
 from django.contrib import admin
 
+import elections
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
