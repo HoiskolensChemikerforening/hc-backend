@@ -7,10 +7,6 @@ class Position(models.Model):
     seats = models.SmallIntegerField(verbose_name="Number of seats to be selected")
     active = models.BooleanField(verbose_name="Active position")
 
-    def __init__(self, arg):
-        super(Position, self).__init__()
-        self.arg = arg
-
     def __str__(self):
         return self.name
 
@@ -24,9 +20,7 @@ class Position(models.Model):
 class Ticket(models.Model):
     """docstring for Ticket"""
     secret = models.CharField(max_length = 12)
-    def __init__(self, arg):
-        super(Ticket, self).__init__()
-        self.arg = arg
+
 
 class Candidate(models.Model):
     """docstring for Candidate"""
@@ -34,12 +28,8 @@ class Candidate(models.Model):
     users = models.ManyToManyField(User)
     votes = models.ManyToManyField(Ticket, through = 'Vote')
 
-    def __init__(self, arg):
-        super(Candidate, self).__init__()
-        self.arg = arg
-
     def __str__(self):
-        return self.user.name
+        return self.users.get(id=1).username
 
 
 
@@ -48,9 +38,6 @@ class Vote(models.Model):
     candidate = models.ForeignKey(Candidate)
     ticket = models.ForeignKey(Ticket)
     time = models.TimeField(auto_now_add=True)
-    def __init__(self, arg):
-        super(Vote, self).__init__()
-        self.arg = arg
 
 
 # Create your models here.

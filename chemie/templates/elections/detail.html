@@ -1,8 +1,8 @@
 {% block content %}
   {% for position in position_list %}
     <h2>{{ position.name }}</h2>
-    <p>Antall {{ position.seats }}</p>
-    <p>{{ newsletter.article }}</p>
+    <p>Antall som skal velges: {{ position.seats }}</p>
+    
     <ul>
     {% for candidate in position.candidate_set.all %}
       <li>{{ candidate }}</li>
