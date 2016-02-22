@@ -29,8 +29,9 @@ class Candidate(models.Model):
     votes = models.ManyToManyField(Ticket, through = 'Vote')
 
     def __str__(self):
-        return self.users.get(id=1).username
-
+        users = self.users.all()
+        usernames = [user.username for user in users]
+        return ', '.join(usernames)
 
 
 class Vote(models.Model):
