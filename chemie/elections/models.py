@@ -1,5 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.db import transaction
+
+class Election(models.Model):
+    name = models.CharField(max_length = 20)
+    date = models.DateField(auto_now=True)
 
 class Position(models.Model):
     """docstring for Position"""
@@ -16,11 +21,15 @@ class Position(models.Model):
     def deactivate(self):
         self.active = False
 
+#class TicketManager(models.Manager):
+#    def create_ticket(self, secret):
+#        ticket = self.create(secret=secret)
+#        return ticket
 
 class Ticket(models.Model):
     """docstring for Ticket"""
-    secret = models.CharField(max_length = 12)
-
+    secret = models.CharField(max_length = 12, unique = True)
+    #objects = TicketManager()
 
 class Candidate(models.Model):
     """docstring for Candidate"""
@@ -40,5 +49,7 @@ class Vote(models.Model):
     ticket = models.ForeignKey(Ticket)
     time = models.TimeField(auto_now_add=True)
 
-
+    @transaction.atomic
+    def add_vote(request):
+        pass
 # Create your models here.
