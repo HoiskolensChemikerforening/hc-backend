@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'home',
     'news',
     'avatar',
+    'shitbox',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
