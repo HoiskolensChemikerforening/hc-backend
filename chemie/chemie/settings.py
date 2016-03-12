@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'elections',
     'home',
     'news',
+    'avatar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
