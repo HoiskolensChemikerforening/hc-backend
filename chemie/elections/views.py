@@ -38,7 +38,10 @@ def generate_tickets(ticket_count):
 
 
 def post_votes(request):
-    form = Postform()
+    form = Postform(request.POST or None)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        instance.save()
     context = {
     "form": form,
     }
