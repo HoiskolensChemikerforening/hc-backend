@@ -4,6 +4,6 @@ from . import views
 from . import forms
 
 urlpatterns = [
-    url(r'^$', views.index, name = 'index')
-    url(r'^vote/', forms.Postform )
+    url(r'^$', views.index, name = 'index'),
+    url(r'^vote/', views.post_votes )
 ]
