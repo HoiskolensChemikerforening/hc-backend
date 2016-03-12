@@ -4,3 +4,5 @@ chemie/chemie/__pycache__
 chemie/elections/__pycache__
 chemie/elections/migrations
 chemie/.idea
+chemie/home/migrations
+chemie/home/__pycache__
