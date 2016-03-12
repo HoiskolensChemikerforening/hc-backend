@@ -1,0 +1,12 @@
+*.pyc
+build/
+src/
+pip-log.txt
+*DS_Store
+*~
+dist/
+*.egg-info/
+avatars
+.coverage
+docs/_build
+htmlcov/
