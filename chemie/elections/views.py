@@ -1,6 +1,6 @@
 from .models import Candidate, Position, Vote, Position, Election, Ticket
 from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, render
 from random import randint
 from .forms import Postform
 
