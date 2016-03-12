@@ -3,4 +3,4 @@ chemie/db.sqlite3
 chemie/chemie/__pycache__
 chemie/elections/__pycache__
 chemie/elections/migrations
-.idea
+chemie/.idea
