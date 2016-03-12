@@ -2,6 +2,7 @@ from .models import Candidate, Position, Vote, Position, Election, Ticket
 from django.http import HttpResponse
 from django.shortcuts import render_to_response, get_object_or_404
 from random import randint
+from .forms import Postform
 
 
 SECRET_CHARS = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
@@ -34,3 +35,11 @@ def generate_tickets(ticket_count):
         tickets.append(Ticket(secret=secret))
 
     Ticket.objects.bulk_create(tickets)
+
+
+def post_votes(request):
+    form = Postform()
+    context = {
+    "form": form,
+    }
+    return render(request, "post_form.html", context)
