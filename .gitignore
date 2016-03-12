@@ -4,4 +4,9 @@ chemie/chemie/__pycache__
 chemie/elections/__pycache__
 chemie/elections/migrations
 chemie/.idea
+<<<<<<< HEAD
 .idea
+=======
+chemie/home/migrations
+chemie/home/__pycache__
+>>>>>>> b4e6cb8723d4b5687a3b42ba549e232e239ab2ea
