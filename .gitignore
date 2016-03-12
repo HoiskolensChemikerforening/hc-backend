@@ -9,7 +9,6 @@ chemie/.idea/*
 .idea/*
 chemie/home/migrations/*
 chemie/home/__pycache__/*
-settings.py
 *.log
 *.pot
 *.pyc
