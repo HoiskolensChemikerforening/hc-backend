@@ -1,9 +1,11 @@
 chemie/__pycache__
 chemie/db.sqlite3
-chemie/chemie/__pycache__
-chemie/elections/__pycache__
-chemie/elections/migrations
+chemie/chemie/__pycache__/
+chemie/elections/__pycache__/
+chemie/elections/migrations/
 chemie/.idea/
+chemie/.idea/*
 .idea/
-chemie/home/migrations
-chemie/home/__pycache__
+.idea/*
+chemie/home/migrations/
+chemie/home/__pycache__/
