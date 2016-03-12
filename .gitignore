@@ -1,27 +1,15 @@
-;;chemie/__pycache__/
-;;chemie/db.sqlite3
-;;chemie/chemie/__pycache__/*
-;;chemie/elections/__pycache__/*
-;;chemie/elections/migrations/*
-;;chemie/.idea/
-;;chemie/.idea/*
-;;.idea/
-;;.idea/*
-;;chemie/home/migrations/
-;;chemie/home/__pycache__/
-
-
-;; 2013.01.21
-;; yasushisakai
-;;
-;; gitignore for Django using pyCharm
-;;
-
-;;files to ignore
-;;settings.py
-
-;;extensions to ignore
-;;*.log
-;;*.pot
-;;*.pyc
-
+chemie/__pycache__/
+chemie/db.sqlite3
+chemie/chemie/__pycache__/*
+chemie/elections/__pycache__/*
+chemie/elections/migrations/*
+chemie/.idea/
+chemie/.idea/*
+.idea/
+.idea/*
+chemie/home/migrations/*
+chemie/home/__pycache__/*
+settings.py
+*.log
+*.pot
+*.pyc
