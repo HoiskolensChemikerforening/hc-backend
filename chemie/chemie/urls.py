@@ -21,5 +21,6 @@ urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^$', include('home.urls'), name='frontpage'),
-    url(r'^avatar/', include('avatar.urls'))
+    url(r'^avatar/', include('avatar.urls')),
+    url(r'^shitbox/', include('shitbox.urls'))
 ]
