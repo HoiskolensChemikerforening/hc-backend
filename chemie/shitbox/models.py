@@ -7,6 +7,5 @@ from django import forms
 
 class Submission(models.Model):
     """docstring for submission"""
-    title = models.CharField(max_length = 100)
     content = models.TextField(max_length = 2000)
     time = models.TimeField(auto_now_add=True)
