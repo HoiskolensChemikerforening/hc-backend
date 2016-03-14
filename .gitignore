@@ -1,3 +1,4 @@
+*.DS_Store/
 chemie/__pycache__/
 chemie/db.sqlite3
 chemie/chemie/__pycache__/*
