@@ -1,5 +1,5 @@
 chemie/__pycache__/
-chemie/db.sqlite3
+;chemie/db.sqlite3
 chemie/chemie/__pycache__/*
 chemie/elections/__pycache__/*
 chemie/elections/migrations/*
