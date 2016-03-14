@@ -8,4 +8,5 @@ from django import forms
 class Submission(models.Model):
     """docstring for submission"""
     content = models.TextField(max_length = 2000)
-    time = models.TimeField(auto_now_add=True)
+    date = models.DateTimeField(auto_now_add=True)
+    author = models.ForeignKey(User, verbose_name = 'Innsender')
