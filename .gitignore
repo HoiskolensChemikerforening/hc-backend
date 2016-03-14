@@ -13,3 +13,4 @@ chemie/home/__pycache__/*
 *.log
 *.pot
 *.pyc
+.DS_Store
