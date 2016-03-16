@@ -1,10 +1,9 @@
 {% block content %}
-  {% for committee in Committee_list %}
+  {% for committee in committee_list %}
     <h2>{{ committee.name }}</h2>
-    <p>Antall som skal velges:</p>
 
     <ul>
-    {% for person in committee.person_set.all %}
+    {% for person in person.committee_set.all %}
       <li>{{ person }}</li>
     {% endfor %}
     </ul>
