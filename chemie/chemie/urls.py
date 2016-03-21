@@ -20,7 +20,7 @@ import elections
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^$', include('home.urls'), name='frontpage'),
+    url(r'^', include('home.urls'), name='frontpage'),
     url(r'^shitbox/', include('shitbox.urls')),
     url(r'^verv/', include('committiees.urls'))
 ]
