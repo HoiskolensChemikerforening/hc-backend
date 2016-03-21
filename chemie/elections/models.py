@@ -6,6 +6,7 @@ class Election(models.Model):
     name = models.CharField(max_length = 20)
     date = models.DateField(auto_now=True)
 
+
 class Position(models.Model):
     """docstring for Position"""
     name = models.CharField(max_length = 20)
