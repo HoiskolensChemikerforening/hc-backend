@@ -22,10 +22,6 @@ class Position(models.Model):
     def deactivate(self):
         self.active = False
 
-#class TicketManager(models.Manager):
-#    def create_ticket(self, secret):
-#        ticket = self.create(secret=secret)
-#        return ticket
 
 class Ticket(models.Model):
     """docstring for Ticket"""

@@ -16,7 +16,7 @@ class User(models.Model):
 
 
 class Ownership(models.Model):
-    locker = models.ForeignKey(Locker)
+    locker = models.ForeignKey(Locker, related_name="ownerships")
     user = models.ForeignKey(User)
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
