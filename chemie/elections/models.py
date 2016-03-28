@@ -28,6 +28,9 @@ class Ticket(models.Model):
     secret = models.CharField(max_length = 12, unique = True)
     #objects = TicketManager()
 
+    class Meta:
+        permissions = ['Can generate shit ']
+
 class Candidate(models.Model):
     """docstring for Candidate"""
     postition = models.ForeignKey(Position)
@@ -50,3 +53,24 @@ class Vote(models.Model):
     def add_vote(request):
         pass
 # Create your models here.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
