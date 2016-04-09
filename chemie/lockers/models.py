@@ -15,7 +15,7 @@ class LockerUser(models.Model):
     username = models.CharField(max_length=10, blank=True)
     internal_user = models.ForeignKey(User, null=True, blank=True)
     created = models.DateField(auto_now=False, auto_now_add=True)
-    ownership = models.ManyToManyField(Locker, through='Ownership')
+    ownerships = models.ManyToManyField(Locker, through='Ownership')
 
     def clean(self):
         if self.internal_user:
@@ -28,7 +28,7 @@ class LockerUser(models.Model):
 
 class Ownership(models.Model):
     locker = models.ForeignKey(Locker)
-    user = models.ForeignKey(LockerUser)
+    user = models.ForeignKey(LockerUser, related_name="User")
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
     activation_code = models.UUIDField(default=uuid)
