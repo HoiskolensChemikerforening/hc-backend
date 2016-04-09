@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Locker, User, Ownership
+from .models import Locker, LockerUser, Ownership
 
 admin.site.register(Locker)
-admin.site.register(User)
+admin.site.register(LockerUser)
 admin.site.register(Ownership)
