@@ -7,6 +7,7 @@ from django.utils.translation import ugettext_lazy as _
 
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField()
+    # ownership = models.ForeignKey(Ownership)
 
 
 class LockerUser(models.Model):
