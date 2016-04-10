@@ -9,14 +9,18 @@ class Locker(models.Model):
     number = models.PositiveSmallIntegerField()
     # ownership = models.ForeignKey(Ownership)
 
-
+    def __str__(self):
+        return str(self.number)
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
-    username = models.CharField(max_length=10, blank=True)
+    username = models.CharField(max_length=10, blank=True, unique=True)
     internal_user = models.ForeignKey(User, null=True, blank=True)
     created = models.DateField(auto_now=False, auto_now_add=True)
     ownerships = models.ManyToManyField(Locker, through='Ownership')
+
+    def __str__(self):
+        return self.first_name + " " + self.last_name
 
     def clean(self):
         if self.internal_user:
@@ -26,6 +30,8 @@ class LockerUser(models.Model):
         elif not (self.first_name and self.last_name and self.username):
             raise ValidationError(_("Du må fylle ut alle tre feltene."))
 
+    class Meta:
+        unique_together = ("first_name", "last_name")
 
 class Ownership(models.Model):
     locker = models.ForeignKey(Locker)
@@ -34,3 +40,6 @@ class Ownership(models.Model):
     edited = models.DateField(auto_now=True, auto_now_add=False)
     activation_code = models.UUIDField(default=uuid)
     active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "Locker " + self.locker + " registered to " + self.user
