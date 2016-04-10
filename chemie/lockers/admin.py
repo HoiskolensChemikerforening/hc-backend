@@ -9,7 +9,7 @@ class LockerUserAdmin(admin.ModelAdmin):
     list_filter = ["created"]
     search_fields = ["username", "internal_user__username"]
     list_display_links = None
-    
+
     class Meta:
         model = LockerUser
 
@@ -29,8 +29,8 @@ class OwnershipAdmin(admin.ModelAdmin):
     def get_locker_number(self, obj):
         return(obj.locker.number)
 
-    get_locker_number.short_description = "number"
-    get_locker_number.admin_order_field = "Skapnummer"
+    get_locker_number.short_description = "skapnummer"
+    get_locker_number.admin_order_field = "number"
 
     class Meta:
         model = Ownership
