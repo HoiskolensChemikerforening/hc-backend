@@ -11,6 +11,8 @@ class Locker(models.Model):
 
     def __str__(self):
         return str(self.number)
+
+
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
@@ -20,7 +22,10 @@ class LockerUser(models.Model):
     ownerships = models.ManyToManyField(Locker, through='Ownership')
 
     def __str__(self):
-        return self.first_name + " " + self.last_name
+        if (self.internal_user):
+            return(internal_user.username)
+        else:
+            return(self.first_name + " " + self.last_name)
 
     def clean(self):
         if self.internal_user:
