@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from .models import Locker, Ownership, User
+from .models import Locker, LockerUser, Ownership, User
 from django.shortcuts import render_to_response, get_object_or_404, render
+from django.core.context_processors import csrf
 
 def view_lockers(request):
     free_lockers = Locker.objects.filter(ownership__active=True)
@@ -11,5 +12,16 @@ def view_lockers(request):
         "all": all_lockers,
         "occupied": occupied_lockers,
     }
-    print (free_lockers)
     return render_to_response('lockers/list.html', context)
+
+def register_locker(request, number):
+    is_logged_in = request.user.is_authenticated()
+    c = {}
+    c.update(csrf(request))
+    print (request.user.username)
+    context = {
+        "innlogget": is_logged_in,
+        "number": number,
+        "c": c
+    }
+    return render_to_response('lockers/register.html', context)
