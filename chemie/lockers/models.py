@@ -12,6 +12,8 @@ class Locker(models.Model):
     def __str__(self):
         return str(self.number)
 
+    def is_free(self):
+        return self.owner is None
 
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, blank=True)
