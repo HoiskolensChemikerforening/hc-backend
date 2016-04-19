@@ -4,6 +4,7 @@ from django.http import HttpResponseRedirect
 # Create your views here.
 from .forms import Postform
 
+
 def post_votes(request):
     form = Postform(request.POST or None)
     if form.is_valid():
