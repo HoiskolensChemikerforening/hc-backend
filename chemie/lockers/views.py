@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Locker, LockerUser, Ownership, User
 from django.shortcuts import render_to_response, get_object_or_404, render
-from django.core.context_processors import csrf
+from django.template.context_processors import csrf
 
 def view_lockers(request):
     free_lockers = Locker.objects.filter(ownership__active=True)
