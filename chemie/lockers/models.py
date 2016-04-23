@@ -22,7 +22,7 @@ class Locker(models.Model):
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, blank=True)
     last_name = models.CharField(max_length=40, blank=True)
-    username = models.CharField(max_length=10, blank=True, unique=True)
+    username = models.EmailField(blank=True, null = True)
     internal_user = models.ForeignKey(User, null=True, blank=True)
     created = models.DateField(auto_now=False, auto_now_add=True)
     ownerships = models.ManyToManyField(Locker, through='Ownership')
