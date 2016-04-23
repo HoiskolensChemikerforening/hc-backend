@@ -1,5 +1,5 @@
 from django.db import models
-from uuid import uuid4 as uuid
+from uuid import uuid4
 from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
@@ -10,7 +10,8 @@ VALID_TIME = 14  # 2 Weeks
 
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField()
-    owner = models.ForeignKey("Ownership", related_name="Owner", null=True)
+    owner = models.ForeignKey("Ownership", related_name="Owner",
+                                null=True, blank=True)
 
     def __str__(self):
         return str(self.number)
@@ -28,7 +29,7 @@ class LockerUser(models.Model):
 
     def __str__(self):
         if (self.internal_user):
-            return(internal_user.username)
+            return(self.internal_user.username)
         else:
             return(self.first_name + " " + self.last_name)
 
@@ -56,7 +57,7 @@ class Ownership(models.Model):
 
 class LockerConfirmation(models.Model):
     ownership = models.ForeignKey(Ownership)
-    key = models.UUIDField(default=uuid.uuid4, editable=False)
+    key = models.UUIDField(default=uuid4, editable=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
     def activate(self):
