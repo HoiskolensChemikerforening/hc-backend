@@ -15,13 +15,33 @@ def view_lockers(request):
     return render_to_response('lockers/list.html', context)
 
 def register_locker(request, number):
-    is_logged_in = request.user.is_authenticated()
-    c = {}
-    c.update(csrf(request))
-    print (request.user.username)
     context = {
-        "innlogget": is_logged_in,
         "number": number,
-        "c": c
     }
+
+    if request.user.is_authenticated():
+        if request.POST == True:
+            # If the logged in user has confirmed locker
+            locker = Locker.objects.get(pk=number)
+            if not locker.is_free():
+                locker_user = LockerUser.objects.get(internal_user=request.user)
+                if locker_user:
+                    # Count this locker users' lockers and check that its lower than the limit
+                else:
+                    pass
+                    # Create locker_user
+                # Send mail
+            else:
+                pass
+                # This is awkward. The locker is already in user
+        else:
+            pass
+            # User has not clicked yes
+            # Give a confirmation of sorts ?
+            # This can probably be moved to a modal/popup during locker selection
+    else:
+        pass
+        # User is not internal user
+        form = ExternalRegisterLocker
+        # Very simiilar logic to the one above
     return render_to_response('lockers/register.html', context)
