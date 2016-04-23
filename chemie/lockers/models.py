@@ -1,8 +1,11 @@
 from django.db import models
 from uuid import uuid4 as uuid
+from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+
+VALID_TIME = 14  # 2 Weeks
 
 
 class Locker(models.Model):
@@ -43,8 +46,28 @@ class Ownership(models.Model):
     user = models.ForeignKey(LockerUser, related_name="User")
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
-    activation_code = models.UUIDField(default=uuid)
-    active = models.BooleanField(default=False)
+    is_active = models.BooleanField(default=False)
 
     def __str__(self):
         return "Locker " + self.locker + " registered to " + self.user
+
+
+class LockerConfirmation(models.Model):
+    ownership = models.ForeignKey(Ownership)
+    key = models.UUIDField(default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    def activate(self):
+        # Activating ownership
+        self.ownership.is_active = True
+
+        if not self.ownership.locker.owner:
+            # Locker is not yet taken
+            # Binding the locker to this ownership
+            self.ownership.locker.owner = self
+
+        self.ownership.save()
+        self.delete()
+
+    def expired(self):
+        return not datetime.now() < timedelta(days=VALID_TIME) + self.created
