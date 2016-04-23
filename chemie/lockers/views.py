@@ -26,6 +26,7 @@ def register_locker(request, number):
             if not locker.is_free():
                 locker_user = LockerUser.objects.get(internal_user=request.user)
                 if locker_user:
+                    pass
                     # Count this locker users' lockers and check that its lower than the limit
                 else:
                     pass
