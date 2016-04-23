@@ -4,9 +4,9 @@ from django.shortcuts import render_to_response, get_object_or_404, render
 from django.template.context_processors import csrf
 
 def view_lockers(request):
-    free_lockers = Locker.objects.filter(ownership__active=True)
+    free_lockers = Locker.objects.filter(ownership__is_active=True)
     all_lockers = Locker.objects.all()
-    occupied_lockers = Locker.objects.filter(ownership__active=False)
+    occupied_lockers = Locker.objects.filter(ownership__is_active=False)
     context = {
         "lockers": free_lockers,
         "all": all_lockers,
