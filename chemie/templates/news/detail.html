@@ -1,0 +1,15 @@
+{% extends 'chemie/base.html' %}
+{% block content %}
+
+
+{% for newspost in newsposts %}
+<div class = 'title'>
+    {{newspost.title}}
+</div>
+<div class = 'content'>
+    {{newspost.content}}
+</div>
+
+{% endfor %}
+
+{% endblock content %}

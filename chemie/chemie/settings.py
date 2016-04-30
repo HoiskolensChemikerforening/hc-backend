@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'shitbox',
     'committiees',
     'lockers',
+    'yearbook',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
