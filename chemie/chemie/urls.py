@@ -24,5 +24,9 @@ urlpatterns = [
     url(r'^shitbox/', include('shitbox.urls')),
     url(r'^verv/', include('committiees.urls')),
     url(r'^bokskap/', include('lockers.urls')),
+<<<<<<< HEAD
     url(r'^klassekatalog/', include('yearbook.urls'))
+=======
+    url(r'^news/', include('news.urls'))
+>>>>>>> 11d71e8f9f539534c2cefeb7d8ef377a95931dd4
 ]
