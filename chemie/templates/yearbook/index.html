@@ -1,0 +1,12 @@
+{% extends "chemie/base.html" %}
+
+{% block content %}
+
+{% for profile in profiles %}
+<div class = 'avatar'>
+  <img src = "{{profile.image.avatar_thumbnail.url}}" alt = "some_text">
+</div>
+{{profile.image.avatar_thumbnail.url}}
+{% endfor %}
+
+{% endblock content %}
