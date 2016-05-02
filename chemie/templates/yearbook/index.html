@@ -1,12 +1,11 @@
 {% extends "chemie/base.html" %}
 
 {% block content %}
-
+{% load staticfiles %}
 {% for profile in profiles %}
 <div class = 'avatar'>
-  <img src = "{{profile.image.avatar_thumbnail.url}}" alt = "some_text">
+  <img src='{% static profile.image.url %}' alt='Meuche' style='width:180px;'>
 </div>
-{{profile.image.avatar_thumbnail.url}}
 {% endfor %}
 
 {% endblock content %}
