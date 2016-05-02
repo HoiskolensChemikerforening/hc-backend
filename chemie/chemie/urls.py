@@ -13,7 +13,9 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.conf.urls import include,url
+from django.conf.urls.static import static
 from django.contrib import admin
 
 import elections
@@ -24,9 +26,10 @@ urlpatterns = [
     url(r'^shitbox/', include('shitbox.urls')),
     url(r'^verv/', include('committiees.urls')),
     url(r'^bokskap/', include('lockers.urls')),
-<<<<<<< HEAD
-    url(r'^klassekatalog/', include('yearbook.urls'))
-=======
-    url(r'^news/', include('news.urls'))
->>>>>>> 11d71e8f9f539534c2cefeb7d8ef377a95931dd4
+    url(r'^klassekatalog/', include('yearbook.urls')),
+    url(r'^news/', include('news.urls')),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
