@@ -22,6 +22,7 @@ class Profile(models.Model):
     last_name = models.CharField(max_length=30, null = True)
     username = models.ForeignKey(User, null = True)
     image = models.FileField(null=True, blank=True)
+    year = models.PositiveSmallIntegerField()
 
     def __str__(self):
         return(self.last_name + ", " + self.first_name)

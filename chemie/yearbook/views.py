@@ -12,3 +12,13 @@ def index(request):
             'profiles': all_profiles,
     }
     return render(request, 'yearbook/index.html', context)
+
+def specific_year(request, year):
+    profiles = Profile.objects.filter(year=year)
+    for profile in profiles:
+        print(profile.image)
+    context = {
+        'profiles': profiles,
+    }
+    return render(request, 'yearbook/index.html', context)
+    pass
