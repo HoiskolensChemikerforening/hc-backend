@@ -1,0 +1,10 @@
+{% extends "chemie/base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+{% for profile in profiles %}
+<div class = 'avatar'>
+  <img src='{% static profile.image.url %}' alt='Profilbilde' style='width:180px;'>
+</div>
+{% endfor %}
+{% endblock content %}

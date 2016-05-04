@@ -1,11 +1,24 @@
 {% extends "chemie/base.html" %}
 
 {% block content %}
-{% load staticfiles %}
-{% for profile in profiles %}
-<div class = 'avatar'>
-  <img src='{% static profile.image.url %}' alt='Meuche' style='width:180px;'>
+<div class='klassetrinn'>
+  <a href = "1">1. klasse </a>
 </div>
-{% endfor %}
+
+<div class='klassetrinn'>
+<a href = "2">2. klasse </a>
+</div>
+
+<div class='klassetrinn'>
+<a href = "3">3. klasse </a>
+</div>
+
+<div class='klassetrinn'>
+<a href = "4">4. klasse </a>
+</div>
+
+<div class='klassetrinn'>
+<a href = "5">5. klasse </a>
+</div>
 
 {% endblock content %}
