@@ -9,7 +9,7 @@ VALID_TIME = 14  # 2 Weeks
 
 
 class Locker(models.Model):
-    number = models.PositiveSmallIntegerField()
+    number = models.PositiveSmallIntegerField(unique=True)
     owner = models.ForeignKey("Ownership", related_name="Owner",
                                 null=True, blank=True)
 
