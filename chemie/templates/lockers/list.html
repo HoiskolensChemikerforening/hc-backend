@@ -37,4 +37,19 @@ There are {{lockers|length}} locker(s) available:
 {% endfor %}
 
 
+<ul class="pagination nav navbar-nav">
+    {% if lockers.has_previous %}
+        <li><a href="group={{ lockers.previous_page_number }}">Prev</a></li>
+    {% endif %}
+    {% for page in lockers.paginator.page_range %}
+        <li class="{% if lockers.number == page  %}active{% endif %}"><a href="group={{page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if lockers.has_next %}
+        <li> <a href="group={{ lockers.next_page_number }}">Next</a></li>
+    {% endif %}
+</ul>
+
+
+
 {% endblock content %}
