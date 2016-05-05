@@ -3,6 +3,14 @@ from .models import Locker, LockerUser, Ownership
 
 admin.site.register(Locker)
 
+class LockerAdmin(admin.ModelAdmin):
+    list_display = ["locker"]
+    list_filter = ["locker"]
+    search_fields = ["locker"]
+    list_display_links = None
+
+    class Meta:
+        model = Locker
 
 class LockerUserAdmin(admin.ModelAdmin):
     list_display = ["username", "internal_user"]
