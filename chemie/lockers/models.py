@@ -46,7 +46,7 @@ class LockerUser(models.Model):
             raise ValidationError(_("Du må fylle ut alle tre feltene."))
 
     def reached_limit(self):
-        user_locker_count = Ownership.objects.filter(user=user, is_active=True).count()
+        user_locker_count = Ownership.objects.filter(user=self, is_active=True).count()
         return (user_locker_count>=2)
 
 class Ownership(models.Model):
