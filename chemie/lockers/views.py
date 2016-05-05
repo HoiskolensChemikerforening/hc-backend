@@ -1,16 +1,25 @@
 from .models import Locker, LockerUser, Ownership, LockerConfirmation
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import get_object_or_404, render
 from .forms import RegisterExternalLockerUserForm, RegisterInternalLockerUserForm
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 
-def view_lockers(request):
-    lockers = Locker.objects.all()
+def view_lockers(request, page=0):
+    locker_list = Locker.objects.all()
+    paginator = Paginator(locker_list, 20)
+
+    try:
+        lockers = paginator.page(page)
+    except PageNotAnInteger:
+        lockers = paginator.page(1)
+    except EmptyPage:
+        lockers = paginator.page(paginator.num_pages)
+
     context = {
-        "lockers":lockers,
+        "lockers": lockers,
     }
     return render(request, 'lockers/list.html', context)
-
 
 
 def register_locker_external(request, number):
@@ -46,6 +55,8 @@ def register_locker_external(request, number):
             "user": user,
             "ownership": new_ownership,
         }
+
+        render(request, 'lockers/almostDone.html', context)
 
     context = {
         "form": form,
