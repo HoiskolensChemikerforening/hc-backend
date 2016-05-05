@@ -9,7 +9,7 @@ VALID_TIME = 14  # 2 Weeks
 
 
 class Locker(models.Model):
-    number = models.PositiveSmallIntegerField(unique=True)
+    number = models.PositiveSmallIntegerField(unique=True, primary_key=True)
     owner = models.ForeignKey("Ownership", related_name="Owner",
                                 null=True, blank=True)
 
@@ -18,6 +18,9 @@ class Locker(models.Model):
 
     def is_free(self):
         return self.owner is None
+
+    class Meta:
+        ordering = ('number',)
 
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, blank=True)
