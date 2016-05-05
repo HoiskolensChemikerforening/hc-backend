@@ -1,20 +1,72 @@
-from django.shortcuts import render
-from .models import Locker, LockerUser, Ownership, User
-from django.shortcuts import render_to_response, get_object_or_404, render
-from django.template.context_processors import csrf
+from .models import Locker, LockerUser, Ownership, LockerConfirmation
+from django.shortcuts import get_object_or_404, render
+from .forms import RegisterExternalLockerUserForm, RegisterInternalLockerUserForm
+from django.http import Http404
 
 def view_lockers(request):
-    free_lockers = Locker.objects.filter(ownership__is_active=True)
-    all_lockers = Locker.objects.all()
-    occupied_lockers = Locker.objects.filter(ownership__is_active=False)
+    lockers = Locker.objects.all()
     context = {
-        "lockers": free_lockers,
-        "all": all_lockers,
-        "occupied": occupied_lockers,
+        "lockers":lockers,
     }
-    return render_to_response('lockers/list.html', context)
+    return render(request, 'lockers/list.html', context)
+
+
+
+def register_locker_external(request, number):
+    # Fetch requested locker
+    locker = Locker.objects.get(number=number)
+    if not locker.is_free():
+        # Locker was already taken
+        raise Http404
+
+    form = RegisterExternalLockerUserForm(request.POST or None)
+    if form.is_valid():
+        # Check if user already exists
+        instance = form.save(commit=False)
+        user = LockerUser.objects.filter(username=instance.username)[0]
+        if not user:
+            # User not found. Create user
+            instance.save()
+            user = instance
+
+        if user.reached_limit():
+            # User has reached the active locker limit
+            raise Http404
+
+        # Create a new ownership for the user
+        new_ownership = Ownership.objects.add(locker=locker, user=user)
+        user.ownerships.add(new_ownership)
+        confirmation_object = LockerConfirmation.objects.create(ownership=new_ownership)
+        confirmation_object.save()
+
+        context  = {
+            "confirmation": confirmation_object,
+            "user": user,
+            "ownership": new_ownership,
+        }
+
+    context = {
+        "form": form,
+    }
+    return render(request, 'lockers/register2.html', context)
+
+
+def register_locker_internal(request, number):
+    pass
+
 
 def register_locker(request, number):
+    if Locker.objects.get(number=number).is_free():
+        if request.user.is_authenticated():
+            register_locker_external(request, number)
+        else:
+            # Internal
+            register_locker_external(request, number)
+    else:
+        raise Http404
+
+
+
     context = {
         "number": number,
     }
@@ -43,6 +95,7 @@ def register_locker(request, number):
     else:
         pass
         # User is not internal user
-        form = ExternalRegisterLocker
+        form = RegisterExternalLockerUserForm
         # Very simiilar logic to the one above
-    return render_to_response('lockers/register.html', context)
+    return render(request, 'lockers/register.html', context)
+
