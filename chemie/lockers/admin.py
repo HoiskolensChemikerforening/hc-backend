@@ -1,16 +1,14 @@
 from django.contrib import admin
 from .models import Locker, LockerUser, Ownership
 
-admin.site.register(Locker)
 
 class LockerAdmin(admin.ModelAdmin):
-    list_display = ["locker"]
-    list_filter = ["locker"]
-    search_fields = ["locker"]
+    search_fields = ["number"]
     list_display_links = None
 
     class Meta:
         model = Locker
+        ordering = ['number']
 
 class LockerUserAdmin(admin.ModelAdmin):
     list_display = ["username", "internal_user"]
@@ -24,6 +22,8 @@ class LockerUserAdmin(admin.ModelAdmin):
 
 class OwnershipAdmin(admin.ModelAdmin):
     list_display = ["get_locker_number", "get_user"]
+
+
 
     def get_user(self, obj):
         if obj.user.username:
@@ -43,6 +43,6 @@ class OwnershipAdmin(admin.ModelAdmin):
     class Meta:
         model = Ownership
 
-
+admin.site.register(Locker, LockerAdmin)
 admin.site.register(LockerUser, LockerUserAdmin)
 admin.site.register(Ownership, OwnershipAdmin)
