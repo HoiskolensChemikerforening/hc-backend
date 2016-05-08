@@ -136,3 +136,4 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+#todo, gjøre slik at bilde havner i /media/"appname"

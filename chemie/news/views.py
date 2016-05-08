@@ -7,7 +7,17 @@ def index(request):
     all_posts = NewsPost.objects.all()
     for post in all_posts:
         print(post.content)
+        print(post.slug)
     context = {
             'newsposts': all_posts
     }
     return render(request,'news/detail.html', context)
+
+def singlePost(request, slug):
+    print('cunt')
+    post = get_object_or_404(NewsPost, slug=slug)
+    print('cunt')
+    context = {
+        'newspost': post
+    }
+    return render(request, 'news/single.html', context)
