@@ -2,9 +2,22 @@
 
 {% block content %}
 {% load staticfiles %}
-{% for profile in profiles %}
-<div class = 'avatar'>
-  <img src='{% static profile.image.url %}' alt='Profilbilde' style='width:180px;'>
+<style>
+.all_avatars {
+  margin-left: 300px;
+}
+.avatar {
+  margin: 10px;
+  text-align: center;
+  font-size: 12px;
+}
+</style>
+<div class = 'all_avatars'>
+  {% for profile in profiles %}
+  <div class = 'avatar'>
+    <img src='{% static profile.image.url %}' alt='Profilbilde' style='width:180px; height:270px;'>
+    <br> {{ profile.first_name }} {{ profile.last_name }}
+  </div>
 </div>
 {% endfor %}
 {% endblock content %}

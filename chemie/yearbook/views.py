@@ -6,7 +6,7 @@ import re
 
 def index(request):
     context = {
-    
+
     }
     return render(request, 'yearbook/index.html', context)
 
