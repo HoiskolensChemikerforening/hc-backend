@@ -11,28 +11,38 @@
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="static/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="static/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
 <body>
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container"><a id="logo-container" href="#" class="brand-logo">Logo</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="#">Navbard Link</a></li>
+        <li><a href="../valg/">Valgsystem</a></li>
+        <li><a href="../shitbox/">Sladreboks</a></li>
+        <li><a href="../bokskap/">Bokskap</a></li>
+        <li><a href="../klassekatalog/">Klassekatalog</a></li>
+        <li><a href="../news/">Nyheter</a></li>
+        <li><a href="../admin/">Adminpanel</a></li>
+        <li><a href="../calendar/">Kalender</a></li>
       </ul>
 
       <ul id="nav-mobile" class="side-nav">
-        <li><a href="#">Navbar Link</a></li>
-        <li><a href="#">Navbar Link</a></li>
-                           {% block content %}
-                           {% endblock content %}
-
+        <li><a href="../valg/">Valgsystem</a></li>
+        <li><a href="../shitbox/">Sladreboks</a></li>
+        <li><a href="../bokskap/">Bokskap</a></li>
+        <li><a href="../klassekatalog/">Klassekatalog</a></li>
+        <li><a href="../news/">Nyheter</a></li>
+        <li><a href="../admin/">Adminpanel</a></li>
+        <li><a href="../calendar/">Kalender</a></li>
       </ul>
       <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
     </div>
   </nav>
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
+                                   {% block content %}
+                           {% endblock content %}
       <br><br>
       <h1 class="header center orange-text">Starter Template</h1>
       <div class="row center">
@@ -127,8 +137,8 @@
 
   <!--  Scripts-->
   <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="static/js/materialize.js"></script>
-  <script src="static/js/init.js"></script>
+  <script src="{% static "js/materialize.js" %}"></script>
+  <script src="{% static "js/init.js" %}"></script>
 
   </body>
 </html>
