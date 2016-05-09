@@ -2264,6 +2264,12 @@ body {
   padding-left: 240px;
 }
 
+ @media only screen and (max-width : 992px) {
+body{
+    padding-left: 0px;
+}
+ }
+
 /* HTML5 display definitions
    ========================================================================== */
 /**
@@ -2277,12 +2283,10 @@ aside,
 details,
 figcaption,
 figure,
-footer{padding-left: 0px;},
-header{padding-left: 0px;},
+footer,
+header,
 hgroup,
-main{
-    padding-left: 240px;
-    },
+main,
 menu,
 nav,
 section,
