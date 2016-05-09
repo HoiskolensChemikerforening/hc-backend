@@ -14,9 +14,7 @@ def index(request):
     return render(request,'news/detail.html', context)
 
 def singlePost(request, slug):
-    print('cunt')
     post = get_object_or_404(NewsPost, slug=slug)
-    print('cunt')
     context = {
         'newspost': post
     }
