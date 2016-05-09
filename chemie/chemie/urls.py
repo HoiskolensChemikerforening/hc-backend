@@ -28,6 +28,7 @@ urlpatterns = [
     url(r'^bokskap/', include('lockers.urls')),
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls')),
+    url(r'^calendar/', include('webcalendar.urls')),
 ]
 
 if settings.DEBUG:
