@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'captcha',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -136,3 +137,8 @@ STATICFILES_DIRS = [
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+RECAPTCHA_PUBLIC_KEY = '6Lc-VB8TAAAAAD7HwjcKbpfOOiU8X0_NRcp91g54'
+RECAPTCHA_PRIVATE_KEY = '6Lc-VB8TAAAAAIDtd6vJ_cO1Vy7q6AzSEXt1OcDA'
+
+NOCAPTCHA = True
