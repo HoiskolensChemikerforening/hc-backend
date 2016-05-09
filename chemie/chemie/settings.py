@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'committiees',
     'lockers',
     'yearbook',
+    'webcalendar',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
