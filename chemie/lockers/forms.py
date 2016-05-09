@@ -1,8 +1,11 @@
 from django import forms
 from .models import LockerUser, Locker, Ownership
+from captcha.fields import ReCaptchaField
 
 
 class RegisterExternalLockerUserForm(forms.ModelForm):
+    captcha = ReCaptchaField()
+
     class Meta:
         model = LockerUser
         fields = [
@@ -12,6 +15,8 @@ class RegisterExternalLockerUserForm(forms.ModelForm):
         ]
 
 class RegisterInternalLockerUserForm(forms.ModelForm):
+    captcha = ReCaptchaField()
+
     class Meta:
         model = LockerUser
         fields = [
