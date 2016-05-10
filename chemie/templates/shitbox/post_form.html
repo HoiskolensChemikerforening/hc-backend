@@ -4,7 +4,7 @@
     <p></p>
     <form method='POST' action=''>{% csrf_token %}
         {{ form.as_p }}
-        <a class="btn" onclick="Materialize.toast('Takk for innslaget!', 4000)">Send inn sladder!</a>
+        <input class ="btn" type ='submit' value = 'Send inn sladder!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
       </form>
 </body>
 {% endblock content %}
