@@ -1,18 +1,17 @@
 from django.shortcuts import render
-from .models import Profile
-import os
-import re
-# Create your views here.
+from customprofile.models import Profile, GRADES
 
-def index(request):
+
+def index(request, year=1):
+    if year not in GRADES:
+        if year > GRADES.FIFTH:
+            year = GRADES.FIFTH
+        else:
+            year = 1
+
+    profiles = Profile.objects.filter(grade=year)
     context = {
-
-    }
-    return render(request, 'yearbook/index.html', context)
-
-def get_images(request, year):
-    all_profiles = Profile.objects.filter(year=year)
-    context = {
-            'profiles': all_profiles,
+        'profiles': profiles,
+        'grades': GRADES,
     }
     return render(request, 'yearbook/get_images.html', context)
