@@ -1,9 +1,9 @@
 from django.conf.urls import url
 
-from . import views, models
+from . import views
 
 urlpatterns = [
     url(r'^$', views.index, name='index'),
-    url(r'^(?P<year>[0-9]+)/$', views.get_images),
+    url(r'^(?P<year>[0-9]+)/$', views.index),
 
 ]
