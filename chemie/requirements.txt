@@ -1,0 +1,6 @@
+django==1.9.6
+django-recaptcha==1.0.5
+django-ckeditor==5.0.3
+sorl-thumbnail==12.3
+django-extended-choices==1.0.7
+pillow==3.2.0

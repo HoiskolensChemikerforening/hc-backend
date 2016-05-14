@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'captcha',
+    'customprofile',
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE_CLASSES = [
