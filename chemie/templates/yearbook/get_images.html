@@ -15,6 +15,13 @@
   float: left;
 }
 </style>
+
+
+{% for year_number, year_text in grades %}
+    {{ year_number }} / {{ year_text }}
+{% endfor %}
+
+# TODO: Figure out dimensions first! Then use: http://sorl-thumbnail.readthedocs.io/en/latest/operation.html
 <div class = 'all_avatars'>
   {% for profile in profiles %}
   <div class = 'avatar'>
