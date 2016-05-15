@@ -4,30 +4,49 @@
 {% load staticfiles %}
 <style>
 .all_avatars {
-  margin-left: 300px;
   position: relative;
-  clear: left;
 }
 .avatar {
-  margin: 10px;
-  text-align: center;
-  font-size: 12px;
   float: left;
 }
+
 </style>
 
-
-{% for year_number, year_text in grades %}
-    {{ year_number }} / {{ year_text }}
-{% endfor %}
-
-# TODO: Figure out dimensions first! Then use: http://sorl-thumbnail.readthedocs.io/en/latest/operation.html
-<div class = 'all_avatars'>
-  {% for profile in profiles %}
-  <div class = 'avatar'>
-    <img src='{% static profile.image.url %}' alt='Profilbilde' style='width:180px; height:270px;'>
-    <br> {{ profile.first_name }} {{ profile.last_name }}
-  </div>
+<div class='klassetrinn'>
+    <nav class="light-blue lighten-1" role="navigation">
+        <div class="nav-wrapper container">
+          <a class="brand-logo"></a>
+          <ul id="nav-mobile" class="left hide-on-med-and-down">
+              {% for year_number, year_text in grades %}
+            <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
+            {% endfor %}
+          </ul>
+          <ul id="yearbook-mobile" class="side-nav">
+               {% for year_number, year_text in grades %}
+            <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
+            {% endfor %}
+          </ul>
+          <a href="#" data-activates="yearbook-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+      </nav>
 </div>
-{% endfor %}
+
+
+
+
+  <div class="row">
+       {% for profile in profiles %}
+          <div class="col s10 m4">
+            <div class="card">
+              <div class="card-image">
+                  <img src="/media/{{profile.image_primary}}">
+              </div>
+              <div class="card-content">
+                  <span class="card-title">{{ profile }}</span>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+
 {% endblock content %}
