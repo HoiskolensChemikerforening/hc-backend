@@ -76,7 +76,8 @@ class LockerConfirmation(models.Model):
         # Activating ownership
         self.ownership.is_active = True
         # Binding the locker to the ownership
-        self.ownership.locker.owner = self
+        self.ownership.locker.owner = self.ownership
+        self.ownership.locker.save()
         self.ownership.save()
         self.delete()
 
