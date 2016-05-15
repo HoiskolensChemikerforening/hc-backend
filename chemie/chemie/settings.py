@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     'customprofile',
     'sorl.thumbnail',
     'material',
+    'mail_templated'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -146,3 +147,12 @@ RECAPTCHA_PUBLIC_KEY = '6Lc-VB8TAAAAAD7HwjcKbpfOOiU8X0_NRcp91g54'
 RECAPTCHA_PRIVATE_KEY = '6Lc-VB8TAAAAAIDtd6vJ_cO1Vy7q6AzSEXt1OcDA'
 
 NOCAPTCHA = True
+
+
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_PASSWORD = '532TTIuqx4RA' #my gmail password
+EMAIL_HOST_USER = 'edb.ntnu@gmail.com' #my gmail username
+EMAIL_PORT = 587
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
