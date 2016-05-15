@@ -67,9 +67,11 @@ def register_locker_external(request, number):
 
         # Create a new ownership for the user
         new_ownership = Ownership.objects.create(locker=locker, user=user)
+        new_ownership.save()
 
         # Create confirmation link object
         confirmation_object = LockerConfirmation.objects.create(ownership=new_ownership)
+        confirmation_object.save()
 
         context  = {
             "confirmation": confirmation_object,
