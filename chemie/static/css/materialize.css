@@ -2283,7 +2283,10 @@ aside,
 details,
 figcaption,
 figure,
-footer,
+footer{
+    position: fixed;
+    bottom: 0px;
+    },
 header,
 hgroup,
 main,
