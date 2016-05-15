@@ -1,40 +1,5 @@
 {% extends "chemie/base.html" %}
 {% block content %}
-<style>
-div.unoccupied {
-    background-color:green;
-    color:white;
-    margin:20px;
-    padding:10px;
-    width: 8px;
-}
-div.occupied {
-  background-color:red;
-  color:white;
-  margin:20px;
-  padding:10px;
-  width:8px;
-}
-</style>
-
-{% if lockers %}
-There are {{lockers|length}} locker(s) available:
-<div class="lockers">
-  {% for l in lockers %}
-  <div class="unoccupied">
-    <a href="/bokskap/registrere-skap/{{l.number}}">{{ l.number }}</a>
-  </div>
-  {% endfor %}
-  {% else %}
-  There are no lockers available.
-  {% endif %}
-  Unavailable lockers:
-  {% for l in occupied %}
-  <div class="occupied">
-    <a href="">{{ l.number }}</a>
-  </div>
-</div>
-{% endfor %}
 
 
 <ul class="pagination nav navbar-nav">
@@ -49,6 +14,20 @@ There are {{lockers|length}} locker(s) available:
         <li> <a href="group={{ lockers.next_page_number }}">Next</a></li>
     {% endif %}
 </ul>
+
+There are {{lockers|length}} locker(s) available:
+<div class="row">
+  {% for locker in lockers %}
+      <div class="col s3 m2">
+          <div class="card cyan">
+              <div class="card-content">
+                  <span class="card-title grey-text text-darken-4 modal-trigger" href="#modal1">{{ locker.number }}</span>
+              </div>
+          </div>
+      </div>
+ {% endfor %}
+</div>
+
 
 
 

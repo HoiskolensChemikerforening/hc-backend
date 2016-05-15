@@ -2261,14 +2261,7 @@ html {
  */
 body {
   margin: 0;
-  padding-left: 240px;
 }
-
- @media only screen and (max-width : 992px) {
-body{
-    padding-left: 0px;
-}
- }
 
 /* HTML5 display definitions
    ========================================================================== */
@@ -2283,10 +2276,7 @@ aside,
 details,
 figcaption,
 figure,
-footer{
-    position: fixed;
-    bottom: 0px;
-    },
+footer,
 header,
 hgroup,
 main,
@@ -2815,11 +2805,7 @@ video.responsive-video {
   float: none;
 }
 
-
 @media only screen and (max-width: 992px) {
-    header, main, footer {
-        padding-left: 0;
-      }
   .pagination {
     width: 100%;
   }
@@ -2939,9 +2925,6 @@ ul.staggered-list li {
 }
 
 @media only screen and (min-width: 600px) and (max-width: 992px) {
-    header, main, footer {
-        padding-left: 0;
-      }
   .hide-on-med-only {
     display: none !important;
   }
@@ -4263,7 +4246,6 @@ nav .input-field label.active {
   height: 56px;
   z-index: 998;
 }
-
 
 .navbar-fixed nav {
   position: fixed;
@@ -7658,7 +7640,6 @@ input[type=range]:focus::-ms-fill-upper {
   text-align: center;
   position: relative;
   margin-top: .75em;
-  padding-left: 240px;
 }
 
 /**
