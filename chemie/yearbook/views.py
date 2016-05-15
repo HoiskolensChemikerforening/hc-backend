@@ -3,9 +3,10 @@ from customprofile.models import Profile, GRADES
 
 
 def index(request, year=1):
+    year = int(year)
     if year not in GRADES:
-        if year > GRADES.FIFTH:
-            year = GRADES.FIFTH
+        if year > GRADES.FIFTH.value:
+            year = GRADES.FIFTH.value
         else:
             year = 1
 
