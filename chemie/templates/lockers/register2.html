@@ -1,13 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-        <form method='POST' action=''>{% csrf_token %}
-            {{ form.as_p }}
-            <input type='submit' value='Send inn sladder' />
+{% extends "chemie/base.html" %}
+
+{% block content %}
+{% load staticfiles %}
+    <div class="row">
+    <p class="flow-text">Fyll ut feltene under for å reservere bokskapet. Du må klikke på linken i eposten du mottar
+    for å bekrefte registrasjonen. Takk!</p>
+        <form method='POST'>{% csrf_token %}
+            {{ form }}
+            <button type="submit" name="_submit" class="btn">Submit</button>
         </form>
-</body>
-</html>
+</div>
+{% endblock content %}

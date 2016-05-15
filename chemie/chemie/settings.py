@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'captcha',
     'customprofile',
     'sorl.thumbnail',
+    'material',
 ]
 
 MIDDLEWARE_CLASSES = [
