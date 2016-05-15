@@ -4,6 +4,7 @@ from django.shortcuts import get_object_or_404, render
 from .forms import RegisterExternalLockerUserForm, RegisterInternalLockerUserForm
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
+from customprofile.models import Profile
 
 def view_lockers(request, page=0):
     locker_list = Locker.objects.all()
@@ -30,6 +31,7 @@ def register_locker_external(request, number):
         raise Http404
 
     form = RegisterExternalLockerUserForm(request.POST or None)
+
     if form.is_valid():
         # Check if user already exists
         instance = form.save(commit=False)
@@ -39,6 +41,25 @@ def register_locker_external(request, number):
             # User not found. Create user
             instance.save()
             user = instance
+
+        if user.reached_limit():
+            # User has reached the active locker limit
+            raise Http404
+
+    auth_user = request.user
+    if auth_user.is_authenticated():
+        # Check if user already exists
+
+        try:
+            user = LockerUser.objects.get(internal_user=auth_user)
+        except ObjectDoesNotExist:
+            # User not found. Create user
+            lockeruser = LockerUser.objects.create(internal_user=auth_user)
+            lockeruser.save()
+            user = lockeruser
+
+            #instance.save()
+            #user = instance
 
         if user.reached_limit():
             # User has reached the active locker limit
@@ -56,7 +77,7 @@ def register_locker_external(request, number):
             "ownership": new_ownership,
         }
 
-        render(request, 'lockers/almostDone.html', context)
+        return render(request, 'lockers/almostDone.html', context)
 
     context = {
         "form": form,
@@ -111,4 +132,3 @@ def register_locker(request, number):
     #     form = RegisterExternalLockerUserForm
     #     # Very simiilar logic to the one above
     # return render(request, 'lockers/register.html', context)
-

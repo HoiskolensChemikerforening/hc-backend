@@ -24,8 +24,8 @@ class Locker(models.Model):
 
 
 class LockerUser(models.Model):
-    first_name = models.CharField(max_length=40, blank=True)
-    last_name = models.CharField(max_length=40, blank=True)
+    first_name = models.CharField(max_length=40, default="")
+    last_name = models.CharField(max_length=40, default="")
     username = models.EmailField(blank=True, null = True)
     internal_user = models.ForeignKey(User, null=True, blank=True)
     created = models.DateField(auto_now=False, auto_now_add=True)
@@ -82,3 +82,6 @@ class LockerConfirmation(models.Model):
 
     def expired(self):
         return not datetime.now() < timedelta(days=VALID_TIME) + self.created
+
+    def __str__(self):
+        return str(self.ownership.locker)

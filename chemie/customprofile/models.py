@@ -32,7 +32,7 @@ class Profile(models.Model):
     end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME)
 
     phone_number = models.PositiveSmallIntegerField()
-    access_card = models.CharField(max_length=10)
+    access_card = models.CharField(max_length=10, unique=True)
 
     image_primary = ImageField(upload_to='avatars')
     image_secondary = ImageField(upload_to='avatars')
@@ -40,4 +40,3 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
-
