@@ -15,11 +15,8 @@ class RegisterExternalLockerUserForm(forms.ModelForm):
         ]
 
 class RegisterInternalLockerUserForm(forms.ModelForm):
-    captcha = ReCaptchaField()
-
     class Meta:
         model = LockerUser
         fields = [
             "internal_user"
         ]
-
