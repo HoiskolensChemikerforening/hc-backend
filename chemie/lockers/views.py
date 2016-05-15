@@ -5,6 +5,7 @@ from .forms import RegisterExternalLockerUserForm, RegisterInternalLockerUserFor
 from django.http import Http404
 from django.core.exceptions import ObjectDoesNotExist
 from customprofile.models import Profile
+from .email import queue_activation_mail
 
 def view_lockers(request, page=0):
     locker_list = Locker.objects.all()
@@ -75,10 +76,10 @@ def register_locker_external(request, number):
 
         context  = {
             "confirmation": confirmation_object,
-            "user": user,
+            "locker_user": user,
             "ownership": new_ownership,
         }
-
+        queue_activation_mail(context)
         return render(request, 'lockers/almostDone.html', context)
 
     context = {
@@ -100,37 +101,3 @@ def register_locker(request, number):
             return(register_locker_external(request, number))
     else:
         raise Http404
-
-
-
-    # context = {
-    #     "number": number,
-    # }
-    #
-    # if request.user.is_authenticated():
-    #     if request.POST == True:
-    #         # If the logged in user has confirmed locker
-    #         locker = Locker.objects.get(pk=number)
-    #         if not locker.is_free():
-    #             locker_user = LockerUser.objects.get(internal_user=request.user)
-    #             if locker_user:
-    #                 pass
-    #                 # Count this locker users' lockers and check that its lower than the limit
-    #             else:
-    #                 pass
-    #                 # Create locker_user
-    #             # Send mail
-    #         else:
-    #             pass
-    #             # This is awkward. The locker is already in user
-    #     else:
-    #         pass
-    #         # User has not clicked yes
-    #         # Give a confirmation of sorts ?
-    #         # This can probably be moved to a modal/popup during locker selection
-    # else:
-    #     pass
-    #     # User is not internal user
-    #     form = RegisterExternalLockerUserForm
-    #     # Very simiilar logic to the one above
-    # return render(request, 'lockers/register.html', context)

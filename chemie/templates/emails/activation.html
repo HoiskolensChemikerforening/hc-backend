@@ -1,0 +1,13 @@
+{% extends "mail_templated/base.tpl" %}
+
+{% block subject %}
+Aktivering av bokskap nr {{ ownership.locker }} / {{ ownership.locker.number }}
+{% endblock %}
+
+{% block body %}
+{{ user }}, this is a plain text message. Click {{ confirmation.key }}. Get locker {{ ownership.locker }}
+{% endblock %}
+
+{% block html %}
+{{ user }}, this is an <strong>html</strong> message. Click {{ confirmation.key }}. Get locker {{ ownership.locker }}
+{% endblock %}
