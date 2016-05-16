@@ -1,12 +1,15 @@
 {% extends "chemie/base.html" %}
-
+{% load material_form %}
 {% block content %}
 {% load staticfiles %}
     <div class="row">
     <p class="flow-text">Fyll ut feltene under for å reservere bokskapet. Du må klikke på linken i eposten du mottar
     for å bekrefte registrasjonen. Takk!</p>
         <form method='POST'>{% csrf_token %}
-            {{ form }}
+            {% form %}
+                {% part form.first_name prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
+                {% part form.last_name prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
+            {% endform %}
             <button type="submit" name="_submit" class="btn">Submit</button>
         </form>
 </div>
