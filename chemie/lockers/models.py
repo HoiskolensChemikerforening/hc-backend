@@ -8,10 +8,11 @@ from django.utils.translation import ugettext_lazy as _
 VALID_TIME = 14  # 2 Weeks
 LOCKER_COUNT = 2
 
+
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField(unique=True)
     owner = models.ForeignKey("Ownership", related_name="Owner",
-                                null=True, blank=True)
+                              null=True, blank=True)
 
     def __str__(self):
         return str(self.number)
@@ -20,7 +21,7 @@ class Locker(models.Model):
         return self.owner is None
 
     class Meta:
-         ordering = ('number',)
+        ordering = ('number',)
 
 
 class LockerUser(models.Model):
@@ -33,13 +34,13 @@ class LockerUser(models.Model):
 
     def __str__(self):
         if self.internal_user:
-            return self.internal_user.username
+            return str(self.internal_user.profile)
         else:
             return self.first_name + " " + self.last_name
 
     def clean(self):
         if self.internal_user:
-            if (self.first_name or self.last_name or self.username):
+            if self.first_name or self.last_name or self.username:
                 raise ValidationError(_("Fyll ut enten din interne bruker " +
                                         "eller navn og brukernavn."))
         elif not (self.first_name and self.last_name and self.username):
@@ -47,7 +48,8 @@ class LockerUser(models.Model):
 
     def reached_limit(self):
         user_locker_count = Ownership.objects.filter(user=self, is_active=True).count()
-        return (user_locker_count>=2)
+        return user_locker_count >= 2
+
 
 class Ownership(models.Model):
     locker = models.ForeignKey(Locker)
