@@ -111,4 +111,10 @@ def activate_ownership(request, code):
     except ObjectDoesNotExist:
         raise Http404
 
-    return render(request, 'lockers/almostDone.html')
+    context = {
+        "title": 'Fullført',
+        "message": 'Bokskapet er nå ditt =D',
+        "status": 'success',
+    }
+    return render(request, 'common/feedback.html', context)
+
