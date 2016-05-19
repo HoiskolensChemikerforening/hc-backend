@@ -10,6 +10,7 @@
                 {% part form.first_name prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
                 {% part form.last_name prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
             {% endform %}
+            {{ form.captcha }}
             <button type="submit" name="_submit" class="btn">Submit</button>
         </form>
 </div>
