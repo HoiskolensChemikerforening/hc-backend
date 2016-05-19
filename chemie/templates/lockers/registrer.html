@@ -2,16 +2,22 @@
 {% load material_form %}
 {% block content %}
 {% load staticfiles %}
+
+<div class="container">
     <div class="row">
     <p class="flow-text">Fyll ut feltene under for å reservere bokskapet. Du må klikke på linken i eposten du mottar
     for å bekrefte registrasjonen. Takk!</p>
         <form method='POST'>{% csrf_token %}
             {% form %}
-                {% part form.first_name prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
-                {% part form.last_name prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
+                {% part form.first_name prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
+                {% part form.last_name prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
+                {% part form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
             {% endform %}
-            {{ form.captcha }}
+            <div class="row">
+                    {{ form.captcha }}
+            </div>
             <button type="submit" name="_submit" class="btn">Submit</button>
         </form>
+    </div>
 </div>
 {% endblock content %}
