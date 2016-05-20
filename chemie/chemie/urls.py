@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls')),
     url(r'^calendar/', include('webcalendar.urls')),
+    url(r'^profile/', include('customprofile.urls')),
 ]
 
 if settings.DEBUG:
