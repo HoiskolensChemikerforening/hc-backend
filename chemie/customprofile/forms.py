@@ -1,6 +1,6 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Profile, GRADES, YEARS, CURRENT_YEAR, STIPULATED_TIME
+from .models import Profile
 import material as M
 
 
@@ -9,8 +9,8 @@ class RegisterUserForm(forms.ModelForm):
     password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm password")
 
     layout = M.Layout(M.Row('first_name', 'last_name'),
-                      M.Row('username'),
                       M.Row('email'),
+                      M.Row('username'),
                       M.Row('password', 'password_confirm'),)
 
     class Meta:
@@ -26,10 +26,10 @@ class RegisterProfileForm(forms.ModelForm):
     layout = M.Layout(M.Row('user'),
                       M.Row('grade'),
                       M.Row('start_year', 'end_year'),
+                      M.Row('address'),
                       M.Row('access_card'),
                       M.Row('phone_number'),
-                      M.Row('allergies'),
-                      M.Row('image_primary'))
+                      M.Row('allergies'))
 
     class Meta:
         model = Profile
@@ -41,5 +41,4 @@ class RegisterProfileForm(forms.ModelForm):
                   "phone_number",
                   "allergies",
                   "address",
-                  "image_primary",
                 ]
