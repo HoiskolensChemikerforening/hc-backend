@@ -1,10 +1,13 @@
 {% extends "chemie/base.html" %}
+{% load material_form %}
+
 {% block content %}
 <body>
     <p></p>
-    <form method='POST' action=''>{% csrf_token %}
-        {{ form.as_p }}
-        <input class ="btn" type ='submit' value = 'Send inn sladder!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
+    <form method='POST'>{% csrf_token %}
+        {% form %}
+        {% endform %}
+        <button type="submit" name="submit" class="btn">Submit</button>
       </form>
 </body>
 {% endblock content %}

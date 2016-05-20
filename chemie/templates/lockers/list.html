@@ -1,6 +1,7 @@
 {% extends "chemie/base.html" %}
-{% block content %}
 
+
+{% block content %}
 
 <ul class="pagination nav navbar-nav">
     {% if lockers.has_previous %}
@@ -19,16 +20,20 @@ There are {{lockers|length}} locker(s) available:
 <div class="row">
   {% for locker in lockers %}
       <div class="col s3 m2">
-          <div class="card cyan">
+          {% if locker.is_free %}
+            <div class="card cyan">
               <div class="card-content">
                   <span class="card-title grey-text text-darken-4 modal-trigger" href="#modal1">{{ locker.number }}</span>
               </div>
-          </div>
+            </div>
+          {% else %}
+            <div class="card pink">
+              <div class="card-content">
+                  <span class="card-title grey-text text-darken-4">{{ locker.number }}</span>
+              </div>
+            </div>
+          {% endif %}
       </div>
- {% endfor %}
+  {% endfor %}
 </div>
-
-
-
-
 {% endblock content %}
