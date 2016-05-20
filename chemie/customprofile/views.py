@@ -10,7 +10,19 @@ def register_user(request):
     user_profile_form = RegisterProfileForm(request.POST or None)
 
     if user_core_form.is_valid() and user_profile_form.is_valid():
-        pass
+        user = user_core_form.save(commit=False)
+        user.set_password(user_core_form.password_matches())
+        user.save()
+
+        profile = user_profile_form.save(commit=False)
+        profile.user = user
+        profile.save()
+        context = {
+            "title": 'Fullført',
+            "message": 'Registreringen ble fullført!',
+            "status": 'success',
+        }
+        return render(request, 'common/feedback.html', context)
 
     context = {
         "user_core_form": user_core_form,

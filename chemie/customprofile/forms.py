@@ -1,4 +1,5 @@
 from django import forms
+from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from .models import Profile
 import material as M
@@ -21,10 +22,14 @@ class RegisterUserForm(forms.ModelForm):
                   "username",
                 ]
 
+    def password_matches(self):
+        if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
+            raise forms.ValidationError(_('Password does not match'), code='mismatch')
+        return self.cleaned_data['password']
+
 
 class RegisterProfileForm(forms.ModelForm):
-    layout = M.Layout(M.Row('user'),
-                      M.Row('grade'),
+    layout = M.Layout(M.Row('grade'),
                       M.Row('start_year', 'end_year'),
                       M.Row('address'),
                       M.Row('access_card'),
@@ -33,8 +38,7 @@ class RegisterProfileForm(forms.ModelForm):
 
     class Meta:
         model = Profile
-        fields = ["user",
-                  "grade",
+        fields = ["grade",
                   "start_year",
                   "end_year",
                   "access_card",
