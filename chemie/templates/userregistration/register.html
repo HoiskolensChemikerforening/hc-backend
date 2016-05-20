@@ -1,0 +1,28 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block content %}
+{% load staticfiles %}
+
+
+<div class="container">
+    <div class="row">
+    <p class="flow-text">Velkommen til HC! Her kan det stå litt tekst som du kan lese.
+        Eller ikke.</p>
+        <form method='POST'>{% csrf_token %}
+            {% form form=user_core_form %}
+                {% part user_core_form.first_name prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
+                {% part user_core_form.last_name prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
+                {% part user_core_form.username prefix %}<i class="material-icons prefix">email</i>{% endpart %}
+                {% part user_core_form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
+
+            {% endform %}
+
+            {% form form=user_profile_form %}
+
+            {% endform %}
+            <button type="submit" name="submit" class="btn">Submit</button>
+        </form>
+    </div>
+</div>
+
+{% endblock content %}
