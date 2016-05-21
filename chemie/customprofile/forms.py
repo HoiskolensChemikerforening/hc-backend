@@ -27,6 +27,10 @@ class RegisterUserForm(forms.ModelForm):
             raise forms.ValidationError(_('Password does not match'), code='mismatch')
         return self.cleaned_data['password']
 
+    def clean(self):
+        super(RegisterUserForm, self).clean()
+        self.password_matches()
+
 
 class RegisterProfileForm(forms.ModelForm):
     layout = M.Layout(M.Row('grade'),
