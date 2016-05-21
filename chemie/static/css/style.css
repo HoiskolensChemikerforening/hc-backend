@@ -16,6 +16,9 @@ header, main, footer {
   }
 }
 
+.error {
+  color: red;
+}
 
 .icon-block {
   padding: 0 15px;
