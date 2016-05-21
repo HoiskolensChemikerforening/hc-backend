@@ -24,7 +24,7 @@ class RegisterUserForm(forms.ModelForm):
 
     def password_matches(self):
         if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
-            raise forms.ValidationError(_('Password does not match'), code='mismatch')
+            raise forms.ValidationError({'password': ['Password does not match']})
         return self.cleaned_data['password']
 
     def clean(self):
