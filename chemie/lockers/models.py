@@ -57,6 +57,7 @@ class Ownership(models.Model):
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
     is_active = models.BooleanField(default=False)
+    is_confirmed = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
 
     def __str__(self):
@@ -77,6 +78,7 @@ class LockerConfirmation(models.Model):
             ValidationError(_("Du eier allerede skapet."))
 
         # Activating ownership
+        self.ownership.is_confirmed = True
         self.ownership.is_active = True
         # Binding the locker to the ownership
         self.ownership.locker.owner = self.ownership
