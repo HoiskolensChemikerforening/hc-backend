@@ -40,7 +40,7 @@ def bind_user_locker(request, locker, user):
             "ownership": new_ownership,
             "request":request
         }
-        queue_activation_mail(context)
+        queue_activation_mail(context, 'emails/activation.html')
         return render(request, 'lockers/almostDone.html', context)
 
 
@@ -118,3 +118,25 @@ def activate_ownership(request, code):
     }
     return render(request, 'common/feedback.html', context)
 
+def reset_locker_ownerships(request):
+    # Oh boi where to start... definite_owner is the related name between Ownership and
+    # Locker, it lets us collect all Lockers where "owner" definite link is set (__isnull=False).
+    # Finally, we filter all ownerships that are connected to these Lockers (with its "weak" link)
+    ownerships_to_reset = Ownership.objects.filter(definite_owner__owner__isnull=False).prefetch_related("user")
+
+    for ownership in ownerships_to_reset:
+        ownership.is_active = False
+        confirmation_object = LockerConfirmation.objects.create(ownership=ownership)
+        confirmation_object.save()
+
+        context  = {
+            "confirmation": confirmation_object,
+            "locker_user": ownership.user,
+            "ownership": ownership,
+            "request": request
+        }
+        queue_activation_mail(context, 'emails/reactivate.html')
+
+
+def reset_unconfirmed_lockers(request):
+    pass
