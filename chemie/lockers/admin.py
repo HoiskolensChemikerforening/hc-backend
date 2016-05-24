@@ -4,7 +4,7 @@ from .models import Locker, LockerUser, Ownership, LockerConfirmation
 
 class LockerAdmin(admin.ModelAdmin):
     search_fields = ["number"]
-    list_display_links = None
+    #list_display_links = None
 
     class Meta:
         model = Locker

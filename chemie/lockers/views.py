@@ -34,7 +34,7 @@ def bind_user_locker(request, locker, user):
         confirmation_object = LockerConfirmation.objects.create(ownership=new_ownership)
         confirmation_object.save()
 
-        context  = {
+        context = {
             "confirmation": confirmation_object,
             "locker_user": user,
             "ownership": new_ownership,
@@ -129,7 +129,7 @@ def reset_locker_ownerships(request):
         confirmation_object = LockerConfirmation.objects.create(ownership=ownership)
         confirmation_object.save()
 
-        context  = {
+        context = {
             "confirmation": confirmation_object,
             "locker_user": ownership.user,
             "ownership": ownership,
@@ -139,4 +139,5 @@ def reset_locker_ownerships(request):
 
 
 def reset_unconfirmed_lockers(request):
-    pass
+    lockers_to_clean = Locker.objects.filter(indefinite_locker__is_active__isnull=True)
+    
