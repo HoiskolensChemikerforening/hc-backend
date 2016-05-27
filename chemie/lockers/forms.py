@@ -1,23 +1,18 @@
 from django import forms
-from .models import LockerUser, Locker, Ownership
+from .models import LockerUser
 from captcha.fields import ReCaptchaField
-from material import *
+import material as M
+
 
 class RegisterExternalLockerUserForm(forms.ModelForm):
     captcha = ReCaptchaField()
-    layout = Layout(Row('first_name', 'last_name'),
-                    Row('username'),)
+    layout = M.Layout(M.Row('first_name', 'last_name'),
+                      M.Row('username'),)
+
     class Meta:
         model = LockerUser
         fields = [
             "first_name",
             "last_name",
             "username",
-        ]
-
-class RegisterInternalLockerUserForm(forms.ModelForm):
-    class Meta:
-        model = LockerUser
-        fields = [
-            "internal_user"
         ]
