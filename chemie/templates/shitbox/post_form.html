@@ -4,10 +4,24 @@
 {% block content %}
 <body>
     <p></p>
-    <form method='POST'>{% csrf_token %}
-        {% form %}
-        {% endform %}
-        <button type="submit" name="submit" class="btn">Submit</button>
-      </form>
+    <form class="newPost" method='POST'>{% csrf_token %}
+      {{ form.as_p }}
+      <input class ="btn" type ='submit' value = 'Send inn sladder!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
+    </form>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+  $('.newPost').on('submit', function(e){
+    e.preventDefault();
+    console.log("hei");
+    $.ajax({
+      type:'POST',
+      url:'/shitbox/',
+      data: $(this).serialize(),
+    })
+  })
+});
+</script>
 </body>
 {% endblock content %}
