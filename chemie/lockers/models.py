@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 
-VALID_TIME = 7  # 1 Week
+VALID_TIME = 7  # 7 days
 LOCKER_COUNT = 2
 
 
@@ -23,32 +23,26 @@ class Locker(models.Model):
     class Meta:
         ordering = ('number',)
 
+    def reset_idle(self):
+        # Fetch all lockers, where an inactive Ownership (through indefinite_locker) is pointing to a locker.
+        taken_lockers = self.objects.filter(owner__isnull=False)
+        idle_lockers = taken_lockers.filter(indefinite_locker__is_active__exact=False)
+        idle_lockers.update(owner="")
+
 
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, default="")
     last_name = models.CharField(max_length=40, default="")
     username = models.EmailField(blank=True, null = True)
-    internal_user = models.ForeignKey(User, null=True, blank=True)
     created = models.DateField(auto_now=False, auto_now_add=True)
     ownerships = models.ManyToManyField(Locker, through='Ownership')
 
     def __str__(self):
-        if self.internal_user:
-            return str(self.internal_user.profile)
-        else:
-            return self.first_name + " " + self.last_name
-
-    def clean(self):
-        if self.internal_user:
-            if self.first_name or self.last_name or self.username:
-                raise ValidationError(_("Fyll ut enten din interne bruker " +
-                                        "eller navn og brukernavn."))
-        elif not (self.first_name and self.last_name and self.username):
-            raise ValidationError(_("Du må fylle ut alle tre feltene."))
+        return self.first_name + " " + self.last_name
 
     def reached_limit(self):
         user_locker_count = Ownership.objects.filter(user=self, is_active=True).count()
-        return user_locker_count >= 2
+        return user_locker_count >= LOCKER_COUNT
 
 
 class Ownership(models.Model):
@@ -62,6 +56,14 @@ class Ownership(models.Model):
 
     def __str__(self):
         return "Locker {} registered to {}".format(self.locker, self.user)
+
+    def prune_expired(self):
+        self.objects.filter(is_confirmed=False).delete()
+
+    def create_confirmation(self):
+        confirmation_object = LockerConfirmation.objects.create(ownership=self)
+        confirmation_object.save()
+        return confirmation_object
 
 
 class LockerConfirmation(models.Model):
@@ -77,6 +79,9 @@ class LockerConfirmation(models.Model):
         else:
             ValidationError(_("Du eier allerede skapet."))
 
+        if self.ownership.user.reached_limit():
+            raise ValidationError(_("Du har nådd maksgrensen på ", LOCKER_COUNT, " skap."))
+
         # Activating ownership
         self.ownership.is_confirmed = True
         self.ownership.is_active = True
@@ -91,3 +96,7 @@ class LockerConfirmation(models.Model):
 
     def __str__(self):
         return str(self.ownership.locker)
+
+    def prune_expired(self):
+        expired_range = datetime.now() - timedelta(days=VALID_TIME)
+        self.objects.filter(created__lte=expired_range).delete()
