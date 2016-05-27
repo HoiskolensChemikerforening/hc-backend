@@ -65,6 +65,9 @@ class Ownership(models.Model):
         confirmation_object.save()
         return confirmation_object
 
+    def reached_limit(self):
+        return self.user.reached_limit()
+
 
 class LockerConfirmation(models.Model):
     ownership = models.ForeignKey(Ownership)

@@ -25,12 +25,11 @@ def view_lockers(request, page=1):
 
 
 def bind_user_locker(request, locker, user):
-        if user.reached_limit():
-            # User has reached the active locker limit
-            raise Http404
 
         # Create a new ownership for the user
         new_ownership = Ownership.objects.create(locker=locker, user=user)
+        if new_ownership.reached_limit():
+            raise Http404
         new_ownership.save()
 
         # Create confirmation link object
@@ -47,35 +46,30 @@ def bind_user_locker(request, locker, user):
         return render(request, 'lockers/almostDone.html', context)
 
 
-def register_locker_external(request, locker):
-    form = RegisterExternalLockerUserForm(request.POST or None)
-
-    if form.is_valid():
-        # Check if user already exists
-        instance = form.save(commit=False)
-        try:
-            user = LockerUser.objects.get(username=instance.username)
-        except ObjectDoesNotExist:
-            # User not found. Create user
-            instance.save()
-            user = instance
-
-        return bind_user_locker(request, locker, user)
-
-    context = {
-        "form": form,
-    }
-    return render(request, 'lockers/registrer.html', context)
-
-
 def register_locker(request, number):
-        # Fetch requested locker
+    # Fetch requested locker
     locker = Locker.objects.get(number=number)
     if not locker.is_free():
         # Locker was already taken
         raise Http404
     else:
-        return register_locker_external(request, locker)
+        form_data = RegisterExternalLockerUserForm(request.POST or None)
+        if form_data.is_valid():
+            # Check if user already exists
+            instance = form_data.save(commit=False)
+            try:
+                user = LockerUser.objects.get(username=instance.username)
+            except ObjectDoesNotExist:
+                # User not found. Create user
+                instance.save()
+                user = instance
+
+            return bind_user_locker(request, locker, user)
+
+        context = {
+            "form": form_data,
+        }
+        return render(request, 'lockers/registrer.html', context)
 
 
 def activate_ownership(request, code):
