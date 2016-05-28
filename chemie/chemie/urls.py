@@ -31,6 +31,7 @@ urlpatterns = [
     url(r'^calendar/', include('webcalendar.urls')),
     url(r'^profile/', include('customprofile.urls')),
     url(r'^login/$', 'django.contrib.auth.views.login'),
+    url(r'^logout/$', 'django.contrib.auth.views.logout'),
 ]
 
 if settings.DEBUG:
