@@ -3,6 +3,7 @@ from customprofile.models import Profile, GRADES
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404
 from .forms import RegisterUserForm, RegisterProfileForm
+from django.contrib.auth import authenticate, login
 
 
 def register_user(request):
