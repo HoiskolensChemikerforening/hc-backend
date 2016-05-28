@@ -5,7 +5,7 @@ import material as M
 
 
 class RegisterExternalLockerUserForm(forms.ModelForm):
-    captcha = ReCaptchaField()
+    #captcha = ReCaptchaField()
     layout = M.Layout(M.Row('first_name', 'last_name'),
                       M.Row('username'),)
 

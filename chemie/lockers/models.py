@@ -57,8 +57,9 @@ class Ownership(models.Model):
     def __str__(self):
         return "Locker {} registered to {}".format(self.locker, self.user)
 
-    def prune_expired(self):
-        self.objects.filter(is_confirmed=False).delete()
+    @classmethod
+    def prune_expired(cls):
+        Ownership.objects.filter(is_confirmed=False).delete()
 
     def create_confirmation(self):
         confirmation_object = LockerConfirmation.objects.create(ownership=self)
@@ -103,3 +104,8 @@ class LockerConfirmation(models.Model):
     def prune_expired(self):
         expired_range = datetime.now() - timedelta(days=VALID_TIME)
         self.objects.filter(created__lte=expired_range).delete()
+
+    def reactivate(self):
+        self.ownership.is_active = True
+        self.ownership.save()
+        self.delete()
