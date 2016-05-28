@@ -23,7 +23,7 @@ There are {{lockers|length}} locker(s) available:
           {% if locker.is_free %}
             <div class="card cyan">
               <div class="card-content">
-                  <span class="card-title grey-text text-darken-4 modal-trigger" href="#modal1">{{ locker.number }}</span>
+                  <span class="card-title grey-text text-darken-4 modal-trigger" href="#modal1"><a href="registrer/{{locker.number}}/">{{ locker.number }}</a></span>
               </div>
             </div>
           {% else %}
