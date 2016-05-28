@@ -1,4 +1,4 @@
-from .models import Locker, LockerUser, Ownership, LockerConfirmation
+from .models import Locker, LockerUser, Ownership, LockerConfirmation, LockerConfirmationManager, LockerManager, OwnershipManager
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from .forms import RegisterExternalLockerUserForm
@@ -24,27 +24,6 @@ def view_lockers(request, page=1):
     return render(request, 'lockers/list.html', context)
 
 
-def bind_user_locker(request, locker, user):
-
-        # Create a new ownership for the user
-        new_ownership = Ownership(locker=locker, user=user)
-        if new_ownership.reached_limit():
-            raise Http404
-        new_ownership.save()
-
-        # Create confirmation link object
-        confirmation_object = new_ownership.create_confirmation()
-
-        context = {
-            "confirmation": confirmation_object,
-            "locker_user": user,
-            "ownership": new_ownership,
-            "request": request
-        }
-        queue_activation_mail(context, 'emails/activation.html')
-        return render(request, 'lockers/almostDone.html', context)
-
-
 def register_locker(request, number):
     # Fetch requested locker
     locker = Locker.objects.get(number=number)
@@ -63,7 +42,25 @@ def register_locker(request, number):
                 instance.save()
                 user = instance
 
-            return bind_user_locker(request, locker, user)
+            # Create a new ownership for the user
+            new_ownership = Ownership(locker=locker, user=user)
+            if new_ownership.reached_limit():
+                raise Http404
+
+            new_ownership.save()
+
+            # Create confirmation link object
+            confirmation_object = new_ownership.create_confirmation()
+
+            context = {
+                "confirmation": confirmation_object,
+                "locker_user": user,
+                "ownership": new_ownership,
+                "request": request
+            }
+
+            queue_activation_mail(context, 'emails/activation.html')
+            return render(request, 'lockers/almostDone.html', context)
 
         context = {
             "form": form_data,
@@ -104,3 +101,12 @@ def reset_locker_ownerships():
             #"request": request
         }
         #queue_activation_mail(context, 'emails/reactivate.html')
+
+
+def prune_expired_items(request):
+    Ownership.objects.prune_expired()
+    LockerConfirmation.objects.prune_expired()
+
+
+def reset_idle_lockers(request):
+    Locker.objects.reset_idle()
