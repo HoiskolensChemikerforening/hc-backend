@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^news/', include('news.urls')),
     url(r'^calendar/', include('webcalendar.urls')),
     url(r'^profile/', include('customprofile.urls')),
+    url(r'^login/$', 'django.contrib.auth.views.login'),
 ]
 
 if settings.DEBUG:
