@@ -27,14 +27,13 @@ def view_lockers(request, page=1):
 def bind_user_locker(request, locker, user):
 
         # Create a new ownership for the user
-        new_ownership = Ownership.objects.create(locker=locker, user=user)
+        new_ownership = Ownership(locker=locker, user=user)
         if new_ownership.reached_limit():
             raise Http404
         new_ownership.save()
 
         # Create confirmation link object
         confirmation_object = new_ownership.create_confirmation()
-        confirmation_object.save()
 
         context = {
             "confirmation": confirmation_object,
@@ -87,7 +86,7 @@ def activate_ownership(request, code):
     return render(request, 'common/feedback.html', context)
 
 
-def reset_locker_ownerships(request):
+def reset_locker_ownerships():
     # Oh boi where to start... definite_owner is the related name between Ownership and
     # Locker, it lets us collect all Lockers where "owner" definite link is set (__isnull=False).
     # Finally, we filter all ownerships that are connected to these Lockers (with its "weak" link)
@@ -95,12 +94,13 @@ def reset_locker_ownerships(request):
 
     for ownership in ownerships_to_reset:
         ownership.is_active = False
+        ownership.save()
         confirmation_object = ownership.create_confirmation()
 
         context = {
             "confirmation": confirmation_object,
             "locker_user": ownership.user,
             "ownership": ownership,
-            "request": request
+            #"request": request
         }
-        queue_activation_mail(context, 'emails/reactivate.html')
+        #queue_activation_mail(context, 'emails/reactivate.html')
