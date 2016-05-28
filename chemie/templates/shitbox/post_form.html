@@ -12,6 +12,7 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
 <script>
 $(document).ready(function(){
+  var frm = $('.newPost');
   $('.newPost').on('submit', function(e){
     e.preventDefault();
     console.log("hei");
@@ -19,6 +20,13 @@ $(document).ready(function(){
       type:'POST',
       url:'/shitbox/',
       data: $(this).serialize(),
+      success: function(){
+        $(':input', '.newPost')
+        .not(':button, :submit, :reset, :hidden')
+        .val('')
+        .removeAttr('checked')
+        .removeAttr('selected');
+      }
     })
   })
 });
