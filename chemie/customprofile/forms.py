@@ -50,3 +50,7 @@ class RegisterProfileForm(forms.ModelForm):
                   "allergies",
                   "address",
                 ]
+
+class UserLoginForm(forms.Form):
+    layout = M.Layout(M.Row('username',
+                            'password'))
