@@ -24,7 +24,10 @@ class RegisterUserForm(forms.ModelForm):
 
     def password_matches(self):
         if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
-            raise forms.ValidationError({'password': ['Password does not match']})
+            message = 'Password does not match'
+            self.add_error('password', message)
+            self.add_error('password_confirm', message)
+            return False
         return self.cleaned_data['password']
 
     def clean(self):
@@ -38,7 +41,7 @@ class RegisterProfileForm(forms.ModelForm):
                       M.Row('address'),
                       M.Row('access_card'),
                       M.Row('phone_number'),
-                      M.Row('allergies'))
+                      M.Row('allergies', 'relationship_status'))
 
     class Meta:
         model = Profile
@@ -49,4 +52,5 @@ class RegisterProfileForm(forms.ModelForm):
                   "phone_number",
                   "allergies",
                   "address",
+                  "relationship_status"
                 ]

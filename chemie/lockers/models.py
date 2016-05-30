@@ -9,10 +9,20 @@ VALID_TIME = 7  # 7 days
 LOCKER_COUNT = 2
 
 
+class LockerManager(models.Manager):
+    def reset_idle(self):
+        # Fetch all lockers, where an inactive Ownership (through indefinite_locker) is pointing to a locker.
+        taken_lockers = self.filter(owner__isnull=False)
+        idle_lockers = taken_lockers.filter(indefinite_locker__is_active__exact=False)
+        idle_lockers.update(owner="")
+
+
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField(unique=True)
     owner = models.ForeignKey('Ownership', related_name="definite_owner",
                               null=True, blank=True)
+
+    objects = LockerManager()
 
     def __str__(self):
         return str(self.number)
@@ -22,12 +32,6 @@ class Locker(models.Model):
 
     class Meta:
         ordering = ('number',)
-
-    def reset_idle(self):
-        # Fetch all lockers, where an inactive Ownership (through indefinite_locker) is pointing to a locker.
-        taken_lockers = self.objects.filter(owner__isnull=False)
-        idle_lockers = taken_lockers.filter(indefinite_locker__is_active__exact=False)
-        idle_lockers.update(owner="")
 
 
 class LockerUser(models.Model):
@@ -45,6 +49,11 @@ class LockerUser(models.Model):
         return user_locker_count >= LOCKER_COUNT
 
 
+class OwnershipManager(models.Manager):
+    def prune_expired(self):
+        self.filter(is_confirmed=False).delete()
+
+
 class Ownership(models.Model):
     locker = models.ForeignKey(Locker, related_name="indefinite_locker")
     user = models.ForeignKey(LockerUser, related_name="User")
@@ -54,12 +63,10 @@ class Ownership(models.Model):
     is_confirmed = models.BooleanField(default=False)
     is_approved = models.BooleanField(default=False)
 
+    objects = OwnershipManager()
+
     def __str__(self):
         return "Locker {} registered to {}".format(self.locker, self.user)
-
-    @classmethod
-    def prune_expired(cls):
-        Ownership.objects.filter(is_confirmed=False).delete()
 
     def create_confirmation(self):
         confirmation_object = LockerConfirmation.objects.create(ownership=self)
@@ -70,10 +77,18 @@ class Ownership(models.Model):
         return self.user.reached_limit()
 
 
+class LockerConfirmationManager(models.Manager):
+    def prune_expired(self):
+        expired_range = datetime.now() - timedelta(days=VALID_TIME)
+        self.filter(created__lte=expired_range).delete()
+
+
 class LockerConfirmation(models.Model):
     ownership = models.ForeignKey(Ownership)
     key = models.UUIDField(default=uuid4, editable=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    objects = LockerConfirmationManager()
 
     def activate(self):
         # Confirm that the locker is free
@@ -100,10 +115,6 @@ class LockerConfirmation(models.Model):
 
     def __str__(self):
         return str(self.ownership.locker)
-
-    def prune_expired(self):
-        expired_range = datetime.now() - timedelta(days=VALID_TIME)
-        self.objects.filter(created__lte=expired_range).delete()
 
     def reactivate(self):
         self.ownership.is_active = True
