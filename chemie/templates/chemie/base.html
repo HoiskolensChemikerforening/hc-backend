@@ -13,6 +13,11 @@
   <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
   <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 </head>
+<header>
+  {% if user.is_authenticated %}
+  Welcome {{user}}
+  {% endif %}
+</header>
 <body>
   <nav class="light-blue lighten-1" role="navigation">
     <div class="nav-wrapper container">
@@ -24,6 +29,12 @@
         <li><a href="/news/">Nyheter</a></li>
         <li><a href="/admin/">Adminpanel</a></li>
         <li><a href="/calendar/">Kalender</a></li>
+        <li>{% if user.is_authenticated %}
+          <a href="/logout/">Logout</a>
+        {% else %}
+          <a href="/login/">Login</a>
+        {% endif %}
+      </li>
       </ul>
       <ul id="slide-out" class="side-nav fixed">
           <img src="/media/logo.png">

@@ -8,18 +8,22 @@
 
 <form method="post" action="{% url 'django.contrib.auth.views.login' %}">
 {% csrf_token %}
-<table>
-<tr>
-    <td>{{ form.username.label_tag }}</td>
-    <td>{{ form.username }}</td>
-</tr>
-<tr>
-    <td>{{ form.password.label_tag }}</td>
-    <td>{{ form.password }}</td>
-</tr>
-</table>
+<div class="card-content">
 
-<input type="submit" value="login" />
+
+  {{ form.username.label_tag }}
+  {{ form.username }}
+
+  {{ form.password.label_tag }}
+  {{ form.password }}
+
+</div>
+<div class="card-action">
+    <div class="right-align">
+        <button class="btn btn-primary pull-right" type="submit">Logg inn</button>
+    </div>
+</div>
+
 <input type="hidden" name="next" value="{{ next }}" />
 </form>
 
