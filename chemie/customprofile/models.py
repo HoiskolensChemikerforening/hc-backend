@@ -14,7 +14,13 @@ GRADES = Choices(
     ('DONE',   6, 'Ferdig'),
 )
 
-
+RELATIONSHIP_STATUS = Choices(
+    ('SINGLE',  1, 'Singel'),
+    ('TAKEN', 2, 'Opptatt'),
+    ('COMPLICATED',  3, 'Det er komplisert...'),
+    ('GUESS', 4, 'Gjett ;)'),
+    ('NSA',  5, 'Hemmelig!'),
+)
 COMMENCE_YEAR = 1980
 CURRENT_YEAR = datetime.today().year
 STIPULATED_TIME = 5
@@ -27,10 +33,11 @@ class Profile(models.Model):
     user = models.OneToOneField(User)
 
     grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST)
-    allergies = models.CharField(max_length=200)
     start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR)
     end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME)
-
+    allergies = models.CharField(max_length=200)
+    relationship_status = models.PositiveSmallIntegerField(choices=RELATIONSHIP_STATUS,
+                                                           default=RELATIONSHIP_STATUS.SINGLE)
     phone_number = models.PositiveSmallIntegerField()
     access_card = models.CharField(max_length=10, unique=True)
 
