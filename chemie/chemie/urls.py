@@ -17,6 +17,7 @@ from django.conf import settings
 from django.conf.urls import include,url
 from django.conf.urls.static import static
 from django.contrib import admin
+from django.contrib.auth import views
 
 import elections
 urlpatterns = [
@@ -30,8 +31,8 @@ urlpatterns = [
     url(r'^news/', include('news.urls')),
     url(r'^calendar/', include('webcalendar.urls')),
     url(r'^profile/', include('customprofile.urls')),
-    url(r'^login/$', 'django.contrib.auth.views.login'),
-    url(r'^logout/$', 'django.contrib.auth.views.logout'),
+    url(r'^login/$', views.login),
+    url(r'^logout/$', views.logout, {'next_page': '/'}),
 ]
 
 if settings.DEBUG:
