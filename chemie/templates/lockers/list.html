@@ -25,7 +25,7 @@
   <div class="col s6 m3">
         <div class="collection">
       {% for locker in lockers %}
-        {% if forloop.counter0|divisibleby:15 %}</div> <div class="collection">{% endif %}
+        {% if forloop.counter0|divisibleby:5 and not forloop.first%}</div></div> <div class="col s6 m3"> <div class="collection">{% endif %}
               {% if locker.is_free %}
                 <a href="registrer/{{locker.number}}/" class="collection-item waves-effect waves-light">
                     <b>{{ locker.number }}</b>
