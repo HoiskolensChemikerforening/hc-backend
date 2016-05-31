@@ -16,24 +16,34 @@
     {% endif %}
 </ul>
 
-There are {{lockers|length}} locker(s) available:
+<p class="flow-text">
+    Velkommen til bokskapsystemet! Klikk på et skap for å reservere det.
+    Det er {{lockers|length}} skap tilgjengelig.
+</p>
+
 <div class="row">
-  {% for locker in lockers %}
-      <div class="col s3 m2">
-          {% if locker.is_free %}
-            <div class="card cyan">
-              <div class="card-content">
-                  <span class="card-title grey-text text-darken-4 modal-trigger" href="#modal1"><a href="registrer/{{locker.number}}/">{{ locker.number }}</a></span>
-              </div>
-            </div>
-          {% else %}
-            <div class="card pink">
-              <div class="card-content">
-                  <span class="card-title grey-text text-darken-4">{{ locker.number }}</span>
-              </div>
-            </div>
-          {% endif %}
-      </div>
-  {% endfor %}
+  <div class="col s6 m3">
+        <div class="collection">
+      {% for locker in lockers %}
+        {% if forloop.counter0|divisibleby:15 %}</div> <div class="collection">{% endif %}
+              {% if locker.is_free %}
+                <a href="registrer/{{locker.number}}/" class="collection-item waves-effect waves-light">
+                    <b>{{ locker.number }}</b>
+                    <div class="secondary-content">
+                        <i class="material-icons teal-text text-lighten-2">lock_open</i>
+                    </div>
+                </a>
+
+              {% else %}
+                <a href="#" class="collection-item red-text text-lighten-2 waves-effect waves-light">
+                    <b>{{ locker.number }}</b>
+                    <div class="secondary-content">
+                        <i class="material-icons red-text text-lighten-2">lock_outline</i>
+                    </div>
+                </a>
+              {% endif %}
+      {% endfor %}
+  </div>
 </div>
+
 {% endblock content %}
