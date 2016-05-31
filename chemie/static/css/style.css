@@ -30,3 +30,7 @@ header, main, footer {
 .input-field .prefix {
     line-height: 45px;
 }
+
+.waves-effect {
+  overflow: visible;
+}
