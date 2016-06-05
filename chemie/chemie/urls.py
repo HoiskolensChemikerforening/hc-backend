@@ -33,7 +33,6 @@ urlpatterns = [
     url(r'^profile/', include('customprofile.urls')),
     url(r'^login/$', views.login),
     url(r'^logout/$', views.logout, {'next_page': '/'}),
-    url(r'^comittees/', include('committiees.urls')),
 ]
 
 if settings.DEBUG:

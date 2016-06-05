@@ -1,13 +1,14 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404, render
-from .models import Committee, Member
+from django.shortcuts import render_to_response
+from .models import Committee
+
 
 def index(request):
-    committees = Committee.objects.all()
-    members = Member.objects.all()
+    # Fetch all members, who belong to a committee (Member -> Committee)
+    # Group all these members by the committee type
+    committees = Committee.objects.prefetch_related('member_set')
+
     context = {
         'committees': committees,
-        'members': members,
     }
 
-    return render_to_response('committees/detail.html',context)
+    return render_to_response('committees/detail.html', context)
