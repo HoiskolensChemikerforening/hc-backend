@@ -1,10 +1,23 @@
+{% extends 'chemie/base.html' %}
 {% block content %}
-  {% for committee in committee_list %}
-    <h2>{{ committee.name }}</h2>
+  {% for committee in committees %}
+    <h4>{{ committee.title }}</h4>
 
     <ul>
-    {% for person in person.committee_set.all %}
-      <li>{{ person }}</li>
+    {% for member in members %}
+    {%if member.committee == committee%}
+    <ul class="collection">
+        <li class="collection-item avatar">
+          <img src="/media/kjemi.jpg" alt="" class="circle">
+          <span class="title">{{member.user.first_name}} {{member.user.last_name}}</span>
+          <p>{{member.position_info}}
+
+          </p>
+          <a href="#!" class="secondary-content"><i class="material-icons">email</i></a>
+        </li>
+      </ul>
+
+    {%endif%}
     {% endfor %}
     </ul>
   {% endfor %}
