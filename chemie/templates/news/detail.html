@@ -4,15 +4,15 @@
 
 
 
-{% for newspost in newsposts %}
+{% for article in articles %}
 <div class = 'title'>
-    <a href ="/news/{{newspost.slug}}"> {{newspost.title}} </a>
+    <a href ="/news/{{article.slug}}"> {{article.title}} </a>
 </div>
 <div class = 'content'>
-    {{newspost.content}}
+    {{article.content}}
 </div>
 <div class = 'image'>
-  <img  src='{% static newspost.image.url %}' alt ='News image'  style='width:500px'>
+  <img  src='{% static article.image.url %}' alt ='News image'  style='width:500px'>
 </div>
 
 {% endfor %}
