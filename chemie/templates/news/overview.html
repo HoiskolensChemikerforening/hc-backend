@@ -6,7 +6,7 @@
 
 {% for article in articles %}
 <div class = 'title'>
-    <a href ="/news/{{article.slug}}"> {{article.title}} </a>
+    <a href ="/news/{{article.pk}}/"> {{article.title}} </a>
 </div>
 <div class = 'content'>
     {{article.content}}

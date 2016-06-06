@@ -1,8 +1,6 @@
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-from django.template import RequestContext
 from .models import Article
-from .forms import Newsform
+from .forms import NewsForm
 
 
 def index(request):
@@ -13,8 +11,8 @@ def index(request):
     return render(request, 'news/overview.html', context)
 
 
-def display_article(request, slug):
-    article = Article.objects.get(slug=slug)
+def display_article(request, pk):
+    article = get_object_or_404(Article, pk=pk)
     context = {
         'article': article
     }
@@ -22,7 +20,7 @@ def display_article(request, slug):
 
 
 def create_article(request):
-    post = Newsform(request.POST or None)
+    post = NewsForm(request.POST or None)
     if post.is_valid():
         post.save()
         context = {
@@ -35,3 +33,11 @@ def create_article(request):
         "post": post,
     }
     return render(request, 'news/administrer.html', context)
+
+
+def edit_article(request, pk):
+    pass
+
+
+def delete_article(request, pk):
+    pass
