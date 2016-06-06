@@ -2,7 +2,7 @@ from django.db import models
 from django.template.defaultfilters import slugify
 # Create your models here.
 
-class NewsPost(models.Model):
+class Article(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField(null=True, blank=True)
     content = models.TextField()
@@ -16,4 +16,4 @@ class NewsPost(models.Model):
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-        super(NewsPost, self).save(*args, **kwargs)
+        super(Article, self).save(*args, **kwargs)
