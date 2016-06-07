@@ -1,4 +1,4 @@
-from .models import Locker, LockerUser, Ownership, LockerConfirmation, LockerConfirmationManager, LockerManager, OwnershipManager
+from .models import Locker, LockerUser, Ownership, LockerConfirmation
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.shortcuts import render
 from .forms import RegisterExternalLockerUserForm
