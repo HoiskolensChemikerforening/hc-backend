@@ -32,18 +32,33 @@ YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 class Profile(models.Model):
     user = models.OneToOneField(User)
 
-    grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST)
-    start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR)
-    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME)
-    allergies = models.CharField(max_length=200)
+    grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn")
+    start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR, verbose_name="Startår")
+    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME,
+                                                verbose_name="Estimert ferdig")
+
+    allergies = models.CharField(max_length=200, null=True, blank=True, verbose_name="Matallergi")
     relationship_status = models.PositiveSmallIntegerField(choices=RELATIONSHIP_STATUS,
-                                                           default=RELATIONSHIP_STATUS.SINGLE)
-    phone_number = models.PositiveSmallIntegerField()
-    access_card = models.CharField(max_length=10, unique=True)
+                                                           default=RELATIONSHIP_STATUS.SINGLE,
+                                                           verbose_name="Samlivsstatus")
+
+    phone_number = models.PositiveSmallIntegerField(verbose_name="Mobilnummer")
+    access_card = models.CharField(max_length=10, unique=True, verbose_name="Studentkortnummer")
 
     image_primary = ImageField(upload_to='avatars')
     image_secondary = ImageField(upload_to='avatars')
-    address = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, verbose_name="Adresse")
+
+    membership = models.OneToOneField("Membership", null=True, blank=True)
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
+
+
+class Membership(models.Model):
+    start_date = models.DateField(auto_now=False, auto_now_add=True)
+    end_date = models.DateField(auto_now=False, auto_now_add=False)
+    endorser = models.ForeignKey(User)
+
+    def is_active(self):
+        return self.start_date < datetime.now() < self.end_date
