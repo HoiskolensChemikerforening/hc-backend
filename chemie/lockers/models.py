@@ -4,6 +4,9 @@ from datetime import datetime, timedelta
 from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
+from django.core.urlresolvers import reverse
+from .validators import validate_NTNU
+
 
 VALID_TIME = 7  # 7 days
 LOCKER_COUNT = 2
@@ -30,14 +33,17 @@ class Locker(models.Model):
     def is_free(self):
         return self.owner is None
 
+    def get_absolute_url(self):
+        return reverse("bokskap:registrer", kwargs={"number": self.id})
+
     class Meta:
         ordering = ('number',)
 
 
 class LockerUser(models.Model):
-    first_name = models.CharField(max_length=40, default="")
-    last_name = models.CharField(max_length=40, default="")
-    username = models.EmailField(blank=True, null = True)
+    first_name = models.CharField(max_length=40, verbose_name="Fornavn")
+    last_name = models.CharField(max_length=40, verbose_name="Etternavn")
+    username = models.EmailField(validators=[validate_NTNU], verbose_name="NTNU-epost")
     created = models.DateField(auto_now=False, auto_now_add=True)
     ownerships = models.ManyToManyField(Locker, through='Ownership')
 
