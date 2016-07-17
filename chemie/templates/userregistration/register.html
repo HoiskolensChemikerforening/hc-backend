@@ -5,8 +5,8 @@
 
 
 <div class="container">
-    <p class="flow-text">Velkommen til HC! Her kan det stå litt tekst som du kan lese.
-                            Eller ikke.
+    <p class="flow-text">Velkommen til HC, linjeforeningen for Industriell Kjemi og Bioteknologi!
+                         Vi ønsker deg velkommen til oss og NTNU =D
     </p>
     <div class="row">
     <div class="col s12 m12">
@@ -16,12 +16,15 @@
             {% form form=user_core_form %}
                 {% part user_core_form.first_name prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
                 {% part user_core_form.last_name prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part user_core_form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
-
+                {% part user_core_form.email prefix %}<i class="material-icons prefix">contact_mail</i>{% endpart %}
             {% endform %}
 
-            {% form form=user_profile_form %}
 
+            {% form form=user_profile_form %}
+                {% part user_profile_form.address prefix %}<i class="material-icons prefix">home</i>{% endpart %}
+                {% part user_profile_form.access_card prefix %}<i class="material-icons prefix">credit_card</i>{% endpart %}
+                {% part user_profile_form.phone_number prefix %}<i class="material-icons prefix">contact_phone</i>{% endpart %}
+                {% part user_profile_form.allergies prefix %}<i class="material-icons prefix">error_outline</i>{% endpart %}
             {% endform %}
         </div>
         <div class="card-action">

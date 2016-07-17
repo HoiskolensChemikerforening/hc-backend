@@ -32,18 +32,18 @@ YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 class Profile(models.Model):
     user = models.OneToOneField(User)
 
-    grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST)
-    start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR)
-    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME)
-    allergies = models.CharField(max_length=200)
+    grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn")
+    start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR, verbose_name="Startsår")
+    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME, verbose_name="Slutt år")
+    allergies = models.TextField(verbose_name="Allergier")
     relationship_status = models.PositiveSmallIntegerField(choices=RELATIONSHIP_STATUS,
-                                                           default=RELATIONSHIP_STATUS.SINGLE)
+                                                           default=RELATIONSHIP_STATUS.SINGLE, verbose_name="Forhold")
     phone_number = models.PositiveSmallIntegerField()
-    access_card = models.CharField(max_length=10, unique=True)
+    access_card = models.CharField(max_length=10, unique=True, verbose_name="Adgangskortkode")
 
     image_primary = ImageField(upload_to='avatars')
     image_secondary = ImageField(upload_to='avatars')
-    address = models.CharField(max_length=200)
+    address = models.CharField(max_length=200, verbose_name="Adresse")
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
