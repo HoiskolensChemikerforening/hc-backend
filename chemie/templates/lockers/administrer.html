@@ -1,0 +1,40 @@
+{% extends "chemie/base.html" %}
+
+
+{% block content %}
+<div class="row">
+    <p class="flow-text">{% lorem 40 w %}
+        Ved feil og mangler: kontakt EDB.
+    </p>
+
+    <div class="card">
+        <div class="card-content">
+            <table class="highlight">
+                <thead>
+                <tr>
+                    <th data-field="id"><p class="flow-text">Skapnummer</p></th>
+                    <th data-field="name"><p class="flow-text">Eies av</p></th>
+                    <th data-field="price"><p class="flow-text">Tidligere eid av</p></th>
+                </tr>
+                </thead>
+
+                <tbody>
+                {% for locker in lockers %}
+                    <tr>
+                        <td><p class="flow-text">{{ locker.number }}</p></td>
+                        <td><p class="flow-text">{{ locker.owner.user|default_if_none:"Ingen" }}</p></td>
+                        <td>
+                            {% with locker.indefinite_locker.all|first as ownership %}
+                                {% if ownership %}
+                                    <p class="flow-text"><i class="material-icons small">email</i> {{ ownership.user }}, {{ ownership.created|date:"j F Y" }} </p>
+                                {% endif %}
+                            {% endwith %}
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock content %}

@@ -42,7 +42,15 @@
                   <img src="/media/{{profile.image_primary}}">
               </div>
               <div class="card-content">
-                  <span class="card-title">{{ profile }}</span>
+                  <span class="card-title">{{ profile }}
+                      {%if profile.relationship_status == 1%}
+                        <img src="/media/single.png">
+                      {%elif profile.relationship_status == 2%}
+                        <img src="/media/taken.png">
+                        {%else%}
+                        <img src="/media/secret.png">
+                      {%endif%}
+                  </span>
               </div>
             </div>
           </div>

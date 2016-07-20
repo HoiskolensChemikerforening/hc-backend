@@ -1,14 +1,14 @@
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404, render
-from .models import Committee, Member
+from django.shortcuts import render_to_response
+from .models import Committee
+
 
 def index(request):
-    committees = print_sorted_persons(request)
-    return render_to_response('committees/detail.html', {'Committee_list': committees})
-
-def print_sorted_persons(request):
-    # We use prefetch_related to get the related Candidates for each position
-    # Even tho position doesn't have any connection to Candidate (its the
-    # other way around)
+    # Fetch all members, who belong to a committee (Member -> Committee)
+    # Group all these members by the committee type
     committees = Committee.objects.prefetch_related('member_set')
-    return committees
+
+    context = {
+        'committees': committees,
+    }
+
+    return render_to_response('committees/detail.html', context)

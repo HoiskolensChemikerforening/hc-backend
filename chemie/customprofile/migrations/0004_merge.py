@@ -10,6 +10,7 @@ class Migration(migrations.Migration):
     dependencies = [
         ('customprofile', '0003_auto_20160526_1745'),
         ('customprofile', '0003_merge'),
+
     ]
 
     operations = [

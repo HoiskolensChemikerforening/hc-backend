@@ -26,7 +26,7 @@ urlpatterns = [
     url(r'^', include('home.urls'), name='frontpage'),
     url(r'^shitbox/', include('shitbox.urls')),
     url(r'^verv/', include('committiees.urls')),
-    url(r'^bokskap/', include('lockers.urls'), name='bokskap'),
+    url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls')),
     url(r'^calendar/', include('webcalendar.urls')),
