@@ -35,12 +35,7 @@ def register_locker(request, number):
         if form_data.is_valid():
             # Check if user already exists
             instance = form_data.save(commit=False)
-            try:
-                user = LockerUser.objects.get(username=instance.username)
-            except ObjectDoesNotExist:
-                # User not found. Create user
-                instance.save()
-                user = instance
+            user = LockerUser.objects.get_or_create(username=instance.username)
 
             # Create a new ownership for the user
             new_ownership = Ownership(locker=locker, user=user)
@@ -110,3 +105,6 @@ def prune_expired_items(request):
 
 def reset_idle_lockers(request):
     Locker.objects.reset_idle()
+
+def administration_overview(request):
+    Ownership.objects.fetch_all_states()
