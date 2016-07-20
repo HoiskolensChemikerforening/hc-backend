@@ -2,14 +2,14 @@
 {% block content %}
 {% load staticfiles %}
 
-<div class = 'title'>
-    {{newspost.title}}
+<div class='title'>
+    {{ article.title }}
 </div>
-<div class = 'content'>
-    {{newspost.content}}
+<div class='content'>
+    {{ article.content }}
 </div>
-<div class = 'image'>
-  <img src='{% static newspost.image.url %}' alt ='cunt' style='width:500px'>
+<div class='image'>
+  <img  src='{% static article.image.url %}' alt ='her skal det være en artikkel'  style='width:500px'>
 </div>
 
 {% endblock content %}

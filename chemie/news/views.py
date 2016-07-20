@@ -1,21 +1,43 @@
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404, render
-from django.template import RequestContext
-from .models import NewsPost
+from .models import Article
+from .forms import NewsForm
+
 
 def index(request):
-    all_posts = NewsPost.objects.all()
-    for post in all_posts:
-        print(post.content)
-        print(post.slug)
+    all_articles = Article.objects.all()
     context = {
-            'newsposts': all_posts
+        'articles': all_articles
     }
-    return render(request,'news/detail.html', context)
+    return render(request, 'news/overview.html', context)
 
-def singlePost(request, slug):
-    post = get_object_or_404(NewsPost, slug=slug)
+
+def display_article(request, pk):
+    article = get_object_or_404(Article, pk=pk)
     context = {
-        'newspost': post
+        'article': article
     }
     return render(request, 'news/single.html', context)
+
+
+def create_article(request):
+    post = NewsForm(request.POST or None)
+    if post.is_valid():
+        post.save()
+        context = {
+            "title": 'Fullført',
+            "message": 'Artikkelen har blitt postet.',
+            "status": 'success',
+        }
+        return render(request, 'common/feedback.html', context)
+    context = {
+        "post": post,
+    }
+    return render(request, 'news/administrer.html', context)
+
+
+def edit_article(request, pk):
+    pass
+
+
+def delete_article(request, pk):
+    pass

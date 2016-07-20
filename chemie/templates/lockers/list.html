@@ -3,47 +3,47 @@
 
 {% block content %}
 
-<ul class="pagination nav navbar-nav">
-    {% if lockers.has_previous %}
-        <li><a href="group={{ lockers.previous_page_number }}">Prev</a></li>
-    {% endif %}
-    {% for page in lockers.paginator.page_range %}
-        <li class="{% if lockers.number == page  %}active{% endif %}"><a href="group={{page }}">{{ page }}</a></li>
-    {% endfor %}
+    <ul class="pagination nav navbar-nav">
+        {% if lockers.has_previous %}
+            <li><a href="{{ lockers.previous_page_number }}">Prev</a></li>
+        {% endif %}
+        {% for page in lockers.paginator.page_range %}
+            <li class="{% if lockers.number == page  %}active{% endif %}"><a href="{{page }}">{{ page }}</a></li>
+        {% endfor %}
 
-    {% if lockers.has_next %}
-        <li> <a href="group={{ lockers.next_page_number }}">Next</a></li>
-    {% endif %}
-</ul>
+        {% if lockers.has_next %}
+            <li> <a href="{{ lockers.next_page_number }}">Next</a></li>
+        {% endif %}
+    </ul>
 
-<p class="flow-text">
-    Velkommen til bokskapsystemet! Klikk på et skap for å reservere det.
-    Det er {{lockers|length}} skap tilgjengelig.
-</p>
+    <p class="flow-text">
+        Velkommen til bokskapsystemet! Klikk på et skap for å reservere det.
+        Det er {{ free_lockers }} skap tilgjengelig.
+    </p>
 
-<div class="row">
-  <div class="col s6 m3">
+    <div class="row">
+    <div class="col s6 m3">
         <div class="collection">
-      {% for locker in lockers %}
-        {% if forloop.counter0|divisibleby:5 and not forloop.first%}</div></div> <div class="col s6 m3"> <div class="collection">{% endif %}
-              {% if locker.is_free %}
-                <a href="registrer/{{locker.number}}/" class="collection-item waves-effect waves-light">
-                    <b>{{ locker.number }}</b>
-                    <div class="secondary-content">
-                        <i class="material-icons teal-text text-lighten-2">lock_open</i>
-                    </div>
-                </a>
+            {% for locker in lockers %}
+                {% if forloop.counter0|divisibleby:5 and not forloop.first%}</div></div> <div class="col s6 m3"> <div class="collection">{% endif %}
+                {% if locker.is_free %}
+                    <a href="{{ locker.get_absolute_url }}" class="collection-item waves-effect waves-light">
+                        <b>{{ locker.number }}</b>
+                        <div class="secondary-content">
+                            <i class="material-icons teal-text text-lighten-2">lock_open</i>
+                        </div>
+                    </a>
 
-              {% else %}
-                <a href="#" class="collection-item red-text text-lighten-2 waves-effect waves-light">
-                    <b>{{ locker.number }}</b>
-                    <div class="secondary-content">
-                        <i class="material-icons red-text text-lighten-2">lock_outline</i>
-                    </div>
-                </a>
-              {% endif %}
-      {% endfor %}
-  </div>
-</div>
+                {% else %}
+                    <a href="#" class="collection-item disabled red-text text-lighten-2">
+                        <b>{{ locker.number }}</b>
+                        <div class="secondary-content">
+                            <i class="material-icons red-text text-lighten-2">lock_outline</i>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+            </div>
+            </div>
 
 {% endblock content %}
