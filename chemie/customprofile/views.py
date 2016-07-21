@@ -30,3 +30,5 @@ def register_user(request):
         "user_profile_form": user_profile_form,
     }
     return render(request, 'userregistration/register.html', context)
+
+

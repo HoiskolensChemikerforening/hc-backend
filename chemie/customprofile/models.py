@@ -37,7 +37,7 @@ class Profile(models.Model):
     end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME,
                                                 verbose_name="Estimert ferdig")
 
-    allergies = models.CharField(max_length=200, null=True, blank=True, verbose_name="Matallergi")
+    allergies = models.TextField(null=True, blank=True, verbose_name="Matallergi")
     relationship_status = models.PositiveSmallIntegerField(choices=RELATIONSHIP_STATUS,
                                                            default=RELATIONSHIP_STATUS.SINGLE,
                                                            verbose_name="Samlivsstatus")
