@@ -1,11 +1,15 @@
 from django.db import models
 from datetime import datetime
 from sorl.thumbnail import ImageField
+from django.contrib.auth.models import User
+
 
 # Create your models here.
 class Event(models.Model):
     #Name of the event
     title = models.CharField(max_length=40)
+    #Name of person creating event
+    author = models.ForeignKey(User)
     #When the event actually occurs
     date = models.DateTimeField(default=datetime.now())
     created = models.DateField(auto_now=False, auto_now_add=True)
@@ -21,8 +25,8 @@ class Event(models.Model):
     #Describes the event
     description = models.TextField()
     #An image from the event or describing the event
-    image = ImageField(upload_to='events')
-    #Number of slots reserved for the event
+    #image = ImageField(upload_to='events')
+    #Number of sluts cumming to this event
     sluts = models.PositiveSmallIntegerField(default=100)
     #Payment information
     payment_information = models.TextField()

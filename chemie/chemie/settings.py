@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'news',
     'shitbox',
     'committiees',
+    'events',
     'lockers',
     'yearbook',
     'webcalendar',
