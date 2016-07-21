@@ -1,7 +1,28 @@
 {% extends "chemie/base.html" %}
+{% load material_form %}
 {% block content %}
-<form class="newPost" method='POST'>{% csrf_token %}
-      {{ form }}
-      <input class ="btn" type ='submit' value = 'Lag arrangementet!' onclick="Materialize.toast('Takk for at du lagde arrangementet!', 4000)"/>
+{% load staticfiles %}
+
+<div class="container">
+    <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 </p>
+
+     <div class="row">
+        <div class="col s12 m12 l12">
+        <div class="card">
+        <form method='POST'>{% csrf_token %}
+          <div class="card-content">
+                {% form form=form %}
+                {% endform %}
+          <div class="card-action">
+                <div class="right-align">
+                  <input class ="btn btn-primary pull-right" type='submit' value = 'Lag arrangementet!' onclick="Materialize.toast('Takk for at du lagde arrangementet!', 4000)"/>
+                </div>
+          </div>
     </form>
+    </div>
+    </div>
+    </div>
+</div>
+
+
 {% endblock content %}
