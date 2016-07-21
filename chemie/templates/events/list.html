@@ -1,0 +1,7 @@
+{% extends "chemie/base.html" %}
+{% block content %}
+{% for event in events %}
+    <h1><a href="">{{ event.title }}</a></h1>
+    <p>{{event.description}}</p>
+{% endfor %}
+{% endblock content %}
