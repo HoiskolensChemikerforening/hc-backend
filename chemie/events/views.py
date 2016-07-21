@@ -1,11 +1,18 @@
 from django.shortcuts import render
-from . import Event
+from .forms import RegisterEvent
+from django.contrib.auth.decorators import login_required
 # Create your views here.
 
-def RegisterEvent(request):
-    form = request.POST or None
+@login_required
+def register_event(request):
+    form = RegisterEvent(request.POST or None)
     if request.POST:
-        
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.author = request.user
+            instance.save()
 
-    context = []
-    return render(request, 'event/register_event.html', context)
+    context = {
+        'form': form,
+    }
+    return render(request, 'events/register_event.html', context)
