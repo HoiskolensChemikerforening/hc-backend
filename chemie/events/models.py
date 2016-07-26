@@ -4,6 +4,7 @@ from sorl.thumbnail import ImageField
 #from customprofile.models import Profile
 from extended_choices import Choices
 from django.contrib.auth.models import User
+from django.core.urlresolvers import reverse
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED',  1, 'Confirmed'),
@@ -61,14 +62,21 @@ class Event(models.Model):
     def __str__(self):
         return self.title
 
+    def registered_users(self):
+        return self.attendees.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
+
+    def waiting_users(self):
+        return self.attendees.filter(status=REGISTRATION_STATUS.WAITING).count()
+
     def spare_slots(self):
-        attendee_count = self.attendees.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
-        return (self.sluts - attendee_count)
+        return (self.sluts - self.registered_users)
 
     def register_user(self, User):
         if self.spare_slots():
             self.attendees.add(User)
 
+    def get_absolute_url(self):
+        return reverse('events:detail', kwargs={"event_id":self.id})
 
 class Registration(models.Model):
     event = models.ForeignKey(Event)

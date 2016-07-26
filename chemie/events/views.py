@@ -35,6 +35,8 @@ def view_event_details(request, event_id):
     return render(request, "events/detail.html", context)
 
 
+def register_user(request, event_id):
+    pass
 
 #def index(request):
 #    event = request's ID to specific event
