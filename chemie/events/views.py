@@ -3,10 +3,11 @@ from .forms import RegisterEvent
 from django.contrib.auth.decorators import login_required
 from .models import Event
 from datetime import datetime
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 @login_required
-def register_event(request):
+def create_event(request):
     form = RegisterEvent(request.POST or None)
     if request.POST:
         if form.is_valid():
@@ -15,21 +16,31 @@ def register_event(request):
             instance.save()
     context = {
         'form': form,
-    }
+    }           
     return render(request, 'events/register_event.html', context)
 
-def list(request):
+def list_all(request):
     all_events = Event.objects.filter(date__gt=datetime.now())
     context = {
         'events': all_events,
     }
     return render(request, "events/list.html", context)
 
+
+def view_event_details(request, event_id):
+    event = get_object_or_404(Event,pk=event_id)
+    context = {
+        'event' : event
+    }
+    return render(request, "events/detail.html", context)
+
+
+
 #def index(request):
 #    event = request's ID to specific event
 #    context = {
 #        'event': event
-#    return render(request, "events/index.html", context)
+#    return render(request, "events/awd.html", context)
 
 # This view is supposed to view more info about a
 # specific event if you click its title
