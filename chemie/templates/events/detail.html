@@ -1,5 +1,6 @@
 {% extends "chemie/base.html" %}
+{% load staticfiles %}
 {% block content %}
-
-
+    <h1>{{ event.title }}</h1>
+    <p>{{event.description}}</p>
 {% endblock content %}
