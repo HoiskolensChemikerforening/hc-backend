@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^profile/', include('customprofile.urls')),
     url(r'^login/$', views.login),
     url(r'^logout/$', views.logout, {'next_page': '/'}),
-    url(r'^events/', include('events.urls')),
+    url(r'^events/', include('events.urls', namespace='events')),
 ]
 
 if settings.DEBUG:
