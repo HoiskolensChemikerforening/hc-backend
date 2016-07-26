@@ -1,0 +1,15 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block content %}
+{% load staticfiles %}
+    <h2>Påmelding - {{ event.title }}</h2>
+    <h3>{{ event.date|date:"j F Y" }}</h3>
+    <p class="flow-text">Okei folkens! Gløym at dykk ikkje fekk væra me på soleis store slåttemda festen sist gang. Det er no det gjeld!</p>
+    <form method='POST'>{% csrf_token %}
+        {% form form=registration_form %}
+
+        {% endform %}
+            <button class="btn btn-primary" type="submit">Meld meg på!</button>
+    </form>
+
+{% endblock %}

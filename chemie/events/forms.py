@@ -1,8 +1,8 @@
 from django import forms
 import material as M
-from .models import Event
+from .models import Event, Registration
 
-class RegisterEvent(forms.ModelForm):
+class RegisterEventForm(forms.ModelForm):
     layout = M.Layout(M.Row('title'),
                       M.Row('date'),
                       M.Row('register_startdate', 'register_deadline','deregister_deadline'),
@@ -34,5 +34,18 @@ class RegisterEvent(forms.ModelForm):
             "sleepover",
             "night_snack",
             "mail_notification",
+        ]
 
+
+class RegisterUserForm(forms.ModelForm):
+    layout = M.Layout(M.Row('sleepover','night_snack'),
+                      M.Row('companion'))
+
+    class Meta:
+        model = Registration
+
+        fields = [
+            "sleepover",
+            "night_snack",
+            "companion",
         ]

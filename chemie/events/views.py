@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import RegisterEvent
+from .forms import RegisterEventForm, RegisterUserForm
 from django.contrib.auth.decorators import login_required
 from .models import Event
 from datetime import datetime
@@ -8,7 +8,7 @@ from django.shortcuts import get_object_or_404
 
 @login_required
 def create_event(request):
-    form = RegisterEvent(request.POST or None)
+    form = RegisterEventForm(request.POST or None)
     if request.POST:
         if form.is_valid():
             instance = form.save(commit=False)
@@ -36,7 +36,20 @@ def view_event_details(request, event_id):
 
 
 def register_user(request, event_id):
-    pass
+    event = get_object_or_404(Event,pk=event_id)
+
+    registration = RegisterUserForm(request.POST or None)
+    if registration.is_valid():
+        instance = registration.save(commit=False)
+        instance.event = event
+        instance.user = request.user
+        instance.save()
+    context = {
+        "registration_form": registration,
+        "event" : event,
+    }
+    return render(request, "events/register_user.html", context)
+
 
 #def index(request):
 #    event = request's ID to specific event
