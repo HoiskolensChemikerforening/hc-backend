@@ -83,7 +83,3 @@ class Registration(models.Model):
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
     companion = models.CharField(max_length=40)
 
-
-
-
-
