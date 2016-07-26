@@ -8,6 +8,7 @@ class RegisterEvent(forms.ModelForm):
                       M.Row('register_startdate', 'register_deadline','deregister_deadline'),
                       M.Row('location'),
                       M.Row('description'),
+                      M.Row('payment_information'),
                       M.Row('sluts'),
                       M.Row('price_member','price_not_member','price_companion'),
                       M.Row('companion','sleepover', 'night_snack','mail_notification'),)
