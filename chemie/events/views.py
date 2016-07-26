@@ -1,9 +1,11 @@
 from django.shortcuts import render
 from .forms import RegisterEventForm, RegisterUserForm
 from django.contrib.auth.decorators import login_required
-from .models import Event
+from .models import Event, Registration
 from datetime import datetime
 from django.shortcuts import get_object_or_404
+from django.http import Http404
+
 # Create your views here.
 
 @login_required
@@ -37,15 +39,18 @@ def view_event_details(request, event_id):
 
 def register_user(request, event_id):
     event = get_object_or_404(Event,pk=event_id)
-
     registration = RegisterUserForm(request.POST or None)
+
     if registration.is_valid():
         instance = registration.save(commit=False)
         instance.event = event
-        instance.user = request.user
+        registered = Registration.objects.filter(event=event, user=request.user)
+        if registered:
+            raise Http404("Du er allerede påmeldt dette arrangementet.")
         instance.save()
     context = {
         "registration_form": registration,
+        "registered": registered,
         "event" : event,
     }
     return render(request, "events/register_user.html", context)
