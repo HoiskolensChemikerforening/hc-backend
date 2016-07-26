@@ -1,8 +1,9 @@
 from django.db import models
 from datetime import datetime
 from sorl.thumbnail import ImageField
-from django.contrib.auth.models import User
+#from customprofile.models import Profile
 from extended_choices import Choices
+from django.contrib.auth.models import User
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED',  1, 'Confirmed'),
@@ -16,7 +17,8 @@ class Event(models.Model):
     #Name of person creating event
     author = models.ForeignKey(User, related_name="author")
 
-    # When the event occurs, is created and edited
+    #
+    #  When the event occurs, is created and edited
     date = models.DateTimeField(default=datetime.now(), verbose_name="Dato")
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
@@ -72,4 +74,16 @@ class Registration(models.Model):
     event = models.ForeignKey(Event)
     user = models.ForeignKey(User)
     created = models.DateField(auto_now=False, auto_now_add=True)
+    edited = models.DateField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.WAITING)
+    payment_status = models.BooleanField(default=False, verbose_name="Betalt")
+
+    # Optional fields
+    sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
+    night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
+    companion = models.CharField(max_length=40)
+
+
+
+
+
