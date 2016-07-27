@@ -7,6 +7,7 @@ from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.contrib import messages
 
+
 # Create your views here.
 
 @login_required
@@ -54,7 +55,7 @@ def register_user(request, event_id):
             instance.save()
     context = {
         "registration_form": registration or None,
-        "event" : event,
+         "event" : event,
     }
     return render(request, "events/register_user.html", context)
 
