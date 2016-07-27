@@ -12,7 +12,7 @@ from django.contrib import messages
 
 @login_required
 def create_event(request):
-    form = RegisterEventForm(request.POST or None)
+    form = RegisterEventForm(request.POST or None, request.FILES or None)
     if request.POST:
         if form.is_valid():
             instance = form.save(commit=False)
