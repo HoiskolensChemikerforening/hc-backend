@@ -78,6 +78,9 @@ class Event(models.Model):
     def get_absolute_url(self):
         return reverse('events:detail', kwargs={"event_id":self.id})
 
+    def get_absolute_registration_url(self):
+        return reverse('events:register', kwargs={"event_id":self.id})
+
 class Registration(models.Model):
     event = models.ForeignKey(Event)
     user = models.ForeignKey(User)
