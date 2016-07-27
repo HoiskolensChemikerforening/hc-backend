@@ -94,3 +94,5 @@ class Registration(models.Model):
     def __str__(self):
         return '{} - {}'.format(self.event, self.user.get_full_name())
 
+    class Meta:
+        unique_together = ('event', 'user',)
