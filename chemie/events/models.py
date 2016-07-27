@@ -91,3 +91,6 @@ class Registration(models.Model):
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
     companion = models.CharField(max_length=40)
 
+    def __str__(self):
+        return '{} - {}'.format(self.event, self.user.get_full_name())
+
