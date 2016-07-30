@@ -1,4 +1,13 @@
 {% extends "chemie/base.html" %}
+{% block nav_header %}
+Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Oversikt
+{% endblock nav_sub_header %}
+
+
 {% block content %}
 
     {% if perms.events %}
@@ -17,8 +26,6 @@
         </div>
     {% endif %}
 
-    <h2>Arrangementer</h2>
-    <h4>Oversikt</h4>
     <div class="row">
         {% for event in events %}
             <div class="col s12 m10 l6">

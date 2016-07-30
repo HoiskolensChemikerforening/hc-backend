@@ -1,17 +1,23 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
+
+{% block nav_header %}
+Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Opprett påmelding
+{% endblock nav_sub_header %}
+
 {% block content %}
     {% load staticfiles %}
-
-    <h2>Arrangementer</h2>
-    <h4>Opprett påmelding</h4>
     <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 </p>
-
     <div class="row">
         <div class="card">
             <form method="POST" enctype="multipart/form-data">{% csrf_token %}
                 <div class="card-content">
                     {% form form=form %}
+                        {% attr form.date 'widget' class append %}datepicker{% endattr %}
                     {% endform %}
                     <div class="card-action">
                         <div class="right-align">

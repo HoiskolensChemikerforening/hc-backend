@@ -1,5 +1,15 @@
 {% extends "chemie/base.html" %}
 {% load staticfiles %}
+
+{% block nav_header %}
+Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Detaljer
+{% endblock nav_sub_header %}
+
+
 {% block content %}
     <h1>{{ event.title }}</h1>
     <p>{{event.description}}</p>
