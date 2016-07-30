@@ -1,8 +1,17 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
+
+{% block nav_header %}
+Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Påmelding
+{% endblock nav_sub_header %}
+
 {% block content %}
 {% load staticfiles %}
-    <h2>Påmelding - {{ event.title }}</h2>
+    <h2>{{ event.title }}</h2>
     <h3>{{ event.date|date:"j F Y" }}</h3>
     {% if not registration_form %}
         <h4>Du er allerede påmeldt.</h4>

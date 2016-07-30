@@ -7,7 +7,7 @@
  */
 
 header, main, footer {
-  padding-left: 140px;
+  padding-left: 200px;
 }
 
 @media only screen and (max-width : 992px) {
@@ -27,10 +27,67 @@ header, main, footer {
 	font-size: inherit;
 }
 
-.input-field .prefix {
-    line-height: 45px;
+nav.top-nav a.page-title {
+    line-height: 122px;
+    font-size: 38px;
 }
 
-.waves-effect {
-  overflow: visible;
+
+nav.top-nav {
+    height: 122px;
+    box-shadow: none;
+}
+
+ul.side-nav.fixed li.logo {
+    text-align: center;
+    margin-top: 16px;
+    margin-bottom: 40px;
+}
+
+#front-page-logo {
+    display: inline-block;
+    height: 100%;
+    pointer-events: none;
+}
+
+#logo-container {
+    height: 200px;
+    margin-bottom: 32px;
+}
+
+ul.side-nav.fixed ul.collapsible-accordion a.collapsible-header {
+    padding: 0 30px;
+}
+
+ul.side-nav.fixed li {
+    line-height: 44px;
+}
+
+ul.side-nav.fixed li a {
+    font-size: 13px;
+    line-height: 44px;
+    height: 44px;
+    padding: 0 30px;
+}
+
+#heading {
+  font-size: 3.56rem;
+  font-family: "Roboto";
+  font-weight: 300;
+  margin-top: 0.0rem;
+}
+#subheading {
+  font-family: "Roboto Condensed";
+    font-weight: 300;
+    position: absolute;
+    top:1.7em;
+}
+
+section#top-title {
+  padding-top: .1rem;
+}
+
+nav, footer.page-footer {
+  color: #fff;
+  background-color: #FFA000;
 }

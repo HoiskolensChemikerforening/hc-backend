@@ -1,104 +1,113 @@
 {% load staticfiles %}
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-  <title>Starter Template - Materialize</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+    <title>Starter Template - Materialize</title>
 
-  <!-- CSS  -->
-  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <!-- CSS  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+
+    {% block header %}
+    {% endblock header %}
+
 </head>
-<header>
-</header>
 <body>
-  <nav class="light-blue lighten-1" role="navigation">
-    <div class="nav-wrapper container">
-      <ul class="right hide-on-med-and-down">
-        <li><a href="/valg/">Valgsystem</a></li>
-        <li><a href="/shitbox/">Sladreboks</a></li>
-        <li><a href="/bokskap/">Bokskap</a></li>
-        <li><a href="/klassekatalog/">Klassekatalog</a></li>
-        <li><a href="/news/">Nyheter</a></li>
-        <li><a href="/admin/">Adminpanel</a></li>
-        <li><a href="/calendar/">Kalender</a></li>
+
+<header>
+
+    <nav class="top-nav">
+        <div class="container">
+            <div class="nav-wrapper">
+                <div class="section"  id="top-title">
+                  <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse"><i class="material-icons">menu</i></a>
+                  <h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3>
+                  <h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4>
+                </div>
+                </div>
+    </div></nav>
+
+
+<div class="nav-wrapper container">
+    <ul id="slide-out" class="side-nav fixed">
+        <li class="logo">
+            <a id="logo-container" href="/" class="brand-logo">
+                <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
+            </a>
+        </li>
+        <li class="bold"><a href="/valg/" class="waves-effect waves-teal">Valgsystem</a></li>
+        <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal">Sladreboks</a></li>
+        <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal">Bokskap</a></li>
+        <li class="bold"><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
+        <li class="bold"><a href="/news/" class="waves-effect waves-teal">Nyheter</a></li>
+        <li class="bold"><a href="/admin/" class="waves-effect waves-teal">Adminpanel</a></li>
+        <li class="bold"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a></li>
         {% if user.is_authenticated %}
-          <a class="dropdown-button lighten-1" href='#' data-activates="dropdown1">{{user.first_name}} {{user.last_name}}</a>
-              <ul id='dropdown1' class='dropdown-content'>
-                  <li><a href="/logout/">Logg ut</a></li>
-              </ul>
-        {%else%}
-        <li><a href="/login/">Logg inn</a></li>
+            <a class="dropdown-button lighten-1" href='#'
+               data-activates="dropdown1">{{ user.first_name }} {{ user.last_name }}</a>
+            <ul id='dropdown1' class='dropdown-content'>
+                <li><a href="/logout/">Logg ut</a></li>
+            </ul>
+        {% else %}
+            <li class="bold"><a href="/login/">Logg inn</a></li>
         {% endif %}
-      </ul>
-      <ul id="slide-out" class="side-nav fixed">
-          <img src="/media/logo.png">
-          <li><a href="/valg/">Valgsystem</a></li>
-          <li><a href="/shitbox/">Sladreboks</a></li>
-          <li><a href="/bokskap/">Bokskap</a></li>
-          <li><a href="/klassekatalog/">Klassekatalog</a></li>
-          <li><a href="/news/">Nyheter</a></li>
-          <li><a href="/admin/">Adminpanel</a></li>
-          <li><a href="/calendar/">Kalender</a></li>
-      </ul>
-      <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+
+    </ul>
+    <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 
 
-      <ul id="nav-mobile" class="side-nav">
-        <li><a href="/valg/">Valgsystem</a></li>
-        <li><a href="/shitbox/">Sladreboks</a></li>
-        <li><a href="/bokskap/">Bokskap</a></li>
-        <li><a href="/klassekatalog/">Klassekatalog</a></li>
-        <li><a href="/news/">Nyheter</a></li>
-        <li><a href="/admin/">Adminpanel</a></li>
-        <li><a href="/calendar/">Kalender</a></li>
-      </ul>
-      <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+</div>
+</header>
+
+
+<main>
+    <div class="section no-pad-bot" id="index-banner">
+        <div class="container">
+            {% block content %}
+            {% endblock content %}
+            <br><br>
+            <br><br>
+        </div>
     </div>
-  </nav>
-
-  <main>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
-    {% block content %}
-    {% endblock content %}
-      <br><br>
-      <br><br>
-    </div>
-  </div>
 </main>
 
 <footer class="page-footer">
-      <div class="container">
+    <div class="container">
         <div class="row">
-          <div class="col l4 s12">
-            <h5 class="white-text">HC</h5>
-            <p class="grey-text text-lighten-4">We hope you have enjoyed using Materialize! If you feel Materialize has helped you out and want to support the team, send us over a donation! Any amount would help support and continue development on this project and is greatly appreciated.</p>
+            <div class="col l4 s12">
+                <h5 class="white-text">HC</h5>
+                <p class="grey-text text-lighten-4">We hope you have enjoyed using Materialize! If you feel Materialize
+                    has helped you out and want to support the team, send us over a donation! Any amount would help
+                    support and continue development on this project and is greatly appreciated.</p>
 
-          </div>
-          <div class="col l4 s12">
-            <h5 class="white-text">Vi er best!</h5>
-            <p class="grey-text text-lighten-4">YAY</p>
-          </div>
+            </div>
+            <div class="col l4 s12">
+                <h5 class="white-text">Vi er best!</h5>
+                <p class="grey-text text-lighten-4">YAY</p>
+            </div>
         </div>
-      </div>
-      <div class="footer-copyright">
+    </div>
+    <div class="footer-copyright">
         <div class="container">
-        © 1915-2016 HC, All rights reserved.
-        <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT License</a>
+            © 1915-2016 HC, All rights reserved.
+            <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT
+                License</a>
         </div>
-      </div>
+    </div>
 </footer>
 
 
-  <!--  Scripts-->
-  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-  <script src="{% static "js/materialize.js" %}"></script>
-  <script src="{% static "js/init.js" %}"></script>
+<!--  Scripts-->
+<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script src="{% static "js/materialize.js" %}"></script>
+<script src="{% static "js/init.js" %}"></script>
 
-  </body>
+{% block footer_script%}
+{% endblock footer_script %}
+
+</body>
 </html>
