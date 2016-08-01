@@ -11,7 +11,9 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-      <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
+    <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
+
+    <!-- JS -->
     <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="{% static "js/materialize.js" %}"></script>
     <script src="{% static "js/timepicker.js" %}"></script>
@@ -29,50 +31,70 @@
     <nav class="top-nav">
         <div class="container">
             <div class="nav-wrapper">
-                <div class="section"  id="top-title">
-                  <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse"><i class="material-icons">menu</i></a>
-                  <h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3>
-                  <h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4>
+                <div class="section" id="top-title">
+                    <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse"><i
+                            class="material-icons">menu</i></a>
+                    <h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3>
+                    <h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4>
                 </div>
-                </div>
-    </div></nav>
+            </div>
+        </div>
+    </nav>
 
 
-<div class="nav-wrapper container">
-    <ul id="slide-out" class="side-nav fixed">
-        <li class="logo">
-            <a id="logo-container" href="/" class="brand-logo">
-                <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
-            </a>
-        </li>
-        <li class="bold"><a href="/valg/" class="waves-effect waves-teal">Valgsystem</a></li>
-        <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal">Sladreboks</a></li>
-        <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal">Bokskap</a></li>
-        <li class="bold"><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
-        <li class="bold"><a href="/news/" class="waves-effect waves-teal">Nyheter</a></li>
-        <li class="bold"><a href="/admin/" class="waves-effect waves-teal">Adminpanel</a></li>
-        <li class="bold"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a></li>
-        {% if user.is_authenticated %}
-            <a class="dropdown-button lighten-1" href='#'
-               data-activates="dropdown1">{{ user.first_name }} {{ user.last_name }}</a>
-            <ul id='dropdown1' class='dropdown-content'>
-                <li><a href="/logout/">Logg ut</a></li>
-            </ul>
-        {% else %}
-            <li class="bold"><a href="/login/">Logg inn</a></li>
-        {% endif %}
+    <div class="nav-wrapper container">
+        <ul id="slide-out" class="side-nav fixed">
+            <li class="logo">
+                <a id="logo-container" href="/" class="brand-logo">
+                    <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
+                </a>
+            </li>
+            <li class="bold"><a href="/valg/" class="waves-effect waves-teal">Valgsystem</a></li>
+            <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal">Sladreboks</a></li>
+            <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal">Bokskap</a></li>
+            <li class="bold"><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
+            <li class="bold"><a href="/news/" class="waves-effect waves-teal">Nyheter</a></li>
+            <li class="bold"><a href="/admin/" class="waves-effect waves-teal">Adminpanel</a></li>
+            <li class="bold"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a></li>
+            {% if user.is_authenticated %}
+                <a class="dropdown-button lighten-1" href='#'
+                   data-activates="dropdown1">{{ user.first_name }} {{ user.last_name }}</a>
+                <ul id='dropdown1' class='dropdown-content'>
+                    <li><a href="/logout/">Logg ut</a></li>
+                </ul>
+            {% else %}
+                <li class="bold"><a href="/login/">Logg inn</a></li>
+            {% endif %}
 
-    </ul>
-    <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+        </ul>
+        <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 
 
-</div>
+    </div>
 </header>
 
 
 <main>
     <div class="section no-pad-bot" id="index-banner">
         <div class="container">
+            {% if messages %}
+                <div class="row">
+                    {% for message in messages %}
+                        <div class="col s12 m6 l6">
+                            <div class="card {{ message.level_tag }}-message darken-1">
+                                <div class="card-content">
+                              <span class="card-title black-text valign-wrapper" style="clear: both;">
+                                  <i class="material-icons" style="padding-right: 10px;">priority_high</i>
+                                  <h5>{{ message.extra_tags }}</h5>
+                              </span>
+                                    <p class="flow-text black-text">{{ message }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+
             {% block content %}
             {% endblock content %}
             <br><br>
@@ -89,7 +111,6 @@
                 <p class="grey-text text-lighten-4">We hope you have enjoyed using Materialize! If you feel Materialize
                     has helped you out and want to support the team, send us over a donation! Any amount would help
                     support and continue development on this project and is greatly appreciated.</p>
-
             </div>
             <div class="col l4 s12">
                 <h5 class="white-text">Vi er best!</h5>
@@ -111,7 +132,7 @@
 {% block footer_js_files %}
 {% endblock %}
 
-{% block footer_script%}
+{% block footer_script %}
 {% endblock footer_script %}
 
 </body>
