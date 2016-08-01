@@ -21,35 +21,25 @@ class RegisterEventForm(forms.ModelForm):
                       M.Row('price_member','price_not_member','price_companion'),
                       M.Row('companion','sleepover', 'night_snack','mail_notification'),)
 
-    event_date = forms.DateField(initial=str(date.today()))
-    event_time = forms.TimeField(initial='12:00')
-    registration_start_date = forms.DateField(initial=str(date.today()))
-    registration_start_time = forms.TimeField(initial='12:00')
-    register_deadline_date = forms.DateField(initial=str(date.today()))
-    register_deadline_time = forms.TimeField(initial='12:00')
-    deregister_deadline_date = forms.DateField(initial=str(date.today()))
-    deregister_deadline_time = forms.TimeField(initial='12:00')
+    event_date = forms.DateField(required=True)
+    event_time = forms.TimeField(required=True, initial='12:00')
+    registration_start_date = forms.DateField(required=True)
+    registration_start_time = forms.TimeField(required=True, initial='12:00')
+    register_deadline_date = forms.DateField(required=True)
+    register_deadline_time = forms.TimeField(required=True, initial='12:00')
+    deregister_deadline_date = forms.DateField(required=True)
+    deregister_deadline_time = forms.TimeField(required=True, initial='12:00')
 
 
     def clean(self):
         super(RegisterEventForm, self).clean()
+        if not self.is_valid():
+            return
+
         event_date = datetime.combine(self.cleaned_data.get('event_date'), self.cleaned_data.get('event_time'))
         registration_date = datetime.combine(self.cleaned_data.get('registration_start_date'), self.cleaned_data.get('registration_start_time'))
         registration_deadline = datetime.combine(self.cleaned_data.get('register_deadline_date'), self.cleaned_data.get('register_deadline_time'))
         deregister_deadline = datetime.combine(self.cleaned_data.get('deregister_deadline_date'), self.cleaned_data.get('deregister_deadline_time'))
-
-        if not event_date:
-            raise ValidationError({'event_date':["Feltet er påkrevet."]})
-
-        if not registration_date:
-            raise ValidationError({'registration_start_date':["Feltet er påkrevet."]})
-
-        if not registration_deadline:
-            raise ValidationError({'register_deadline_date':["Feltet er påkrevet."]})
-
-        if not deregister_deadline:
-            raise ValidationError({'deregister_deadline_date':["Feltet er påkrevet."]})
-
 
         if event_date < registration_date:
             raise ValidationError({'registration_date':["Påmeldingen må være før arrangementet begynner"]})
@@ -72,16 +62,10 @@ class RegisterEventForm(forms.ModelForm):
         self.cleaned_data['deregister_deadline'] = deregister_deadline
 
 
-
-
     class Meta:
         model = Event
         fields = [
             "title",
-            #"date",
-            #"register_startdate",
-            #"register_deadline",
-            #"deregister_deadline",
             "location",
             "description",
             "image",
@@ -95,7 +79,6 @@ class RegisterEventForm(forms.ModelForm):
             "night_snack",
             "mail_notification",
         ]
-
 
 
 class RegisterUserForm(forms.ModelForm):
