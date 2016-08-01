@@ -1,33 +1,67 @@
 {% extends "chemie/base.html" %}
+{% load staticfiles %}
 {% load material_form %}
 
+{% block header %}
+
+{% endblock header %}
+
 {% block nav_header %}
-Arrangementer
+    Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Opprett påmelding
+    Opprett påmelding
 {% endblock nav_sub_header %}
 
 {% block content %}
     {% load staticfiles %}
     <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 </p>
-    <div class="row">
-        <div class="card">
-            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-                <div class="card-content">
-                    {% form form=form %}
-                        {% attr form.date 'widget' class append %}datepicker{% endattr %}
-                    {% endform %}
-                    <div class="card-action">
-                        <div class="right-align">
-                            <input class="btn btn-primary pull-right" type='submit' value='Lag arrangementet!'
-                                   onclick="Materialize.toast('Takk for at du lagde arrangementet!', 4000)"/>
-                        </div>
+    <div class="card">
+        <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="card-content">
+                {% form form=form %}
+                    {% attr form.event_date 'widget' class append %}datepicker{% endattr %}
+                    {% attr form.event_time 'widget' class append %}timepicker{% endattr %}
+                    {% attr form.registration_start_date 'widget' class append %}datepicker{% endattr %}
+                    {% attr form.registration_start_time 'widget' class append %}timepicker{% endattr %}
+                    {% attr form.register_deadline_date 'widget' class append %}datepicker{% endattr %}
+                    {% attr form.register_deadline_time 'widget' class append %}timepicker{% endattr %}
+                    {% attr form.deregister_deadline_date 'widget' class append %}datepicker{% endattr %}
+                    {% attr form.deregister_deadline_time 'widget' class append %}timepicker{% endattr %}
+                {% endform %}
+                <div class="card-action">
+                    <div class="right-align">
+                        <input class="btn btn-primary pull-right" type='submit' value='Lag arrangementet!'
+                               onclick="Materialize.toast('Takk for at du lagde arrangementet!', 4000)"/>
                     </div>
                 </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 
 {% endblock content %}
+
+{% block footer_script %}
+    <script type="text/javascript">
+        $(".timepicker").clockpicker({
+            placement: 'bottom',
+            autoclose: true,
+            align: 'left',
+            twelvehour: false,
+            vibrate: true,
+        });
+        $('#input_endtime').clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            darktheme: true,
+            twelvehour: false
+        });
+        $('.datepicker').pickadate({
+            selectMonths: true, // Creates a dropdown to control month
+            selectYears: 2, // Creates a dropdown of 15 years to control year
+            formatSubmit: 'yyyy-mm-dd',
+            hiddenName: true
+        });
+    </script>
+{% endblock footer_script %}
