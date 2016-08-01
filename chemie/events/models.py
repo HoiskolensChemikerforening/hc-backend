@@ -1,5 +1,6 @@
 from django.db import models
 from datetime import datetime
+from django.utils import timezone
 from sorl.thumbnail import ImageField
 #from customprofile.models import Profile
 from extended_choices import Choices
@@ -15,29 +16,28 @@ class Event(models.Model):
     # Name of the event
     title = models.CharField(max_length=40, verbose_name='Tittel')
 
-    #Name of person creating event
+    # Name of person creating event
     author = models.ForeignKey(User, related_name="author")
 
-    #
     #  When the event occurs, is created and edited
-    date = models.DateTimeField(default=datetime.now(), verbose_name="Dato")
+    date = models.DateTimeField(default=timezone.now, verbose_name="Dato")
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
 
     # Start time for registration
-    register_startdate = models.DateField(default=datetime.now(), verbose_name="Påmeldingen åpner")
+    register_startdate = models.DateField(default=timezone.now, verbose_name="Påmeldingen åpner")
 
     # Deadline for signing up
-    register_deadline = models.DateField(default=datetime.now(), verbose_name="Påmeldingsfrist")
+    register_deadline = models.DateField(default=timezone.now, verbose_name="Påmeldingsfrist")
 
     # Deadline for changing your mind
-    deregister_deadline = models.DateField(default=datetime.now(), verbose_name="Avmeldingsfrist")
+    deregister_deadline = models.DateField(default=timezone.now, verbose_name="Avmeldingsfrist")
 
     # Location of event
     location = models.TextField(verbose_name="Sted")
 
     # Describes the event
-    description = models.TextField(verbose_name="Beskrivelse")
+    description = models.TextField(verbose_name="Beskrivelse", max_length=400)
 
     # An image from the event or describing the event
     image = ImageField(upload_to='events', verbose_name="Bilde")
@@ -46,7 +46,7 @@ class Event(models.Model):
     sluts = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
 
     # Payment information
-    payment_information = models.TextField(verbose_name="Betalingsinformasjon")
+    payment_information = models.CharField(verbose_name="Betalingsinformasjon", max_length=400)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
     price_not_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, ikke-medlem")
     price_companion = models.PositiveSmallIntegerField(default=0, verbose_name="Pris for følge")
@@ -87,8 +87,8 @@ class Event(models.Model):
 class Registration(models.Model):
     event = models.ForeignKey(Event)
     user = models.ForeignKey(User)
-    created = models.DateField(auto_now=False, auto_now_add=True)
-    edited = models.DateField(auto_now=True, auto_now_add=False)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.WAITING)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
