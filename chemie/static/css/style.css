@@ -51,7 +51,7 @@ ul.side-nav.fixed li.logo {
 }
 
 #logo-container {
-    height: 200px;
+    height: 150px;
     margin-bottom: 32px;
 }
 
@@ -76,6 +76,13 @@ ul.side-nav.fixed li a {
   font-weight: 300;
   margin-top: 0.0rem;
 }
+
+@media screen and (max-width: 690px) {
+    #heading {
+        font-size: 2rem;
+
+    }
+}
 #subheading {
   font-family: "Roboto Condensed";
     font-weight: 300;
@@ -91,3 +98,38 @@ nav, footer.page-footer {
   color: #fff;
   background-color: #FFA000;
 }
+
+.detail-title {
+    font-weight: 700;
+    display: block;
+}
+
+
+.icon-text {
+    vertical-align:middle
+}
+
+.heading {
+  font-size: 5.56rem;
+  color: #FFA000;
+  font-family: "Roboto";
+  font-weight: 200;
+  margin-top: 0.0rem;
+}
+
+.success-message {
+  background-color: #00e676 !important;
+}
+
+.info-message {
+  background-color: #00e5ff !important;
+}
+
+.warning-message {
+  background-color: #ffeb3b !important;
+}
+
+.error-message {
+  background-color: #f44336 !important;
+}
+

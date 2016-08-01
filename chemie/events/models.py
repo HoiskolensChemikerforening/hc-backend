@@ -63,13 +63,16 @@ class Event(models.Model):
         return self.title
 
     def registered_users(self):
-        return self.attendees.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
+        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
 
     def waiting_users(self):
-        return self.attendees.filter(status=REGISTRATION_STATUS.WAITING).count()
+        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).count()
 
     def spare_slots(self):
         return self.sluts - self.registered_users()
+
+    def has_spare_slots(self):
+        return self.spare_slots() > 0
 
     def register_user(self, User):
         if self.spare_slots():
@@ -97,7 +100,10 @@ class Registration(models.Model):
                                  null=True, blank=True)
 
     def __str__(self):
-        return '{} - {}'.format(self.event, self.user.get_full_name())
+        return '{} - {} - {}'.format(self.event, self.user.get_full_name(), self.status)
+
+    def confirm(self):
+        self.status = REGISTRATION_STATUS.CONFIRMED
 
     class Meta:
         unique_together = ('event', 'user',)
