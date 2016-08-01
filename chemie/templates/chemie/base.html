@@ -11,6 +11,12 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+      <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="{% static "js/materialize.js" %}"></script>
+    <script src="{% static "js/timepicker.js" %}"></script>
+    <script src="{% static "js/init.js" %}"></script>
+
 
     {% block header %}
     {% endblock header %}
@@ -102,9 +108,8 @@
 
 
 <!--  Scripts-->
-<script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
-<script src="{% static "js/materialize.js" %}"></script>
-<script src="{% static "js/init.js" %}"></script>
+{% block footer_js_files %}
+{% endblock %}
 
 {% block footer_script%}
 {% endblock footer_script %}

@@ -13,7 +13,7 @@ REGISTRATION_STATUS = Choices(
 
 class Event(models.Model):
     # Name of the event
-    title = models.CharField(max_length=40)
+    title = models.CharField(max_length=40, verbose_name='Tittel')
 
     #Name of person creating event
     author = models.ForeignKey(User, related_name="author")
@@ -69,7 +69,7 @@ class Event(models.Model):
         return self.attendees.filter(status=REGISTRATION_STATUS.WAITING).count()
 
     def spare_slots(self):
-        return (self.sluts - self.registered_users)
+        return self.sluts - self.registered_users()
 
     def register_user(self, User):
         if self.spare_slots():
@@ -92,7 +92,9 @@ class Registration(models.Model):
     # Optional fields
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    companion = models.CharField(max_length=40)
+    companion = models.CharField(max_length=40, verbose_name="Navn på følge",
+                                 help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
+                                 null=True, blank=True)
 
     def __str__(self):
         return '{} - {}'.format(self.event, self.user.get_full_name())
