@@ -61,6 +61,7 @@ def register_user(request, event_id):
 
             if status == REGISTRATION_STATUS.CONFIRMED:
                 messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
+                # Send mail
             elif status == REGISTRATION_STATUS.WAITING:
                 messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.', extra_tags='Venteliste')
             else:
@@ -73,6 +74,17 @@ def register_user(request, event_id):
          "status": status,
     }
     return render(request, "events/register_user.html", context)
+
+
+@login_required()
+def de_register_user(request, event_id):
+    if request.POST:
+        event = Event.objects.get(pk=event_id)
+        registration = Registration.objects.get(event=event, user=request.user)
+        lucky_person = Registration.objects.de_register(event, registration)
+        if lucky_person:
+            # Send mail
+            pass
 
 @transaction.atomic
 def set_user_event_status(event, registration):

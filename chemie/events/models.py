@@ -84,6 +84,15 @@ class Event(models.Model):
     def get_absolute_registration_url(self):
         return reverse('events:register', kwargs={"event_id":self.id})
 
+
+class RegistrationManager(models.Manager):
+    def de_register(self, event, reg_to_be_deleted):
+        reg_to_be_deleted.delete()
+        waiting = self.filter(event=event, status = REGISTRATION_STATUS.WAITING)
+        if waiting:
+            lucky_person = waiting.earliest('created').confirm()
+            return lucky_person
+
 class Registration(models.Model):
     event = models.ForeignKey(Event)
     user = models.ForeignKey(User)
@@ -99,6 +108,7 @@ class Registration(models.Model):
                                  help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
                                  null=True, blank=True)
 
+    objects = None
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.user.get_full_name(), self.status)
 
@@ -107,3 +117,4 @@ class Registration(models.Model):
 
     class Meta:
         unique_together = ('event', 'user',)
+
