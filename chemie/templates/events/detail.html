@@ -1,16 +1,152 @@
 {% extends "chemie/base.html" %}
 {% load staticfiles %}
 
+
+{% block header %}
+
+{% endblock header %}
+
 {% block nav_header %}
-Arrangementer
+    Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Detaljer
+    Detaljer
 {% endblock nav_sub_header %}
 
-
 {% block content %}
-    <h1>{{ event.title }}</h1>
-    <p>{{event.description}}</p>
+    <div class="row">
+        <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+    </div>
+
+    <div class="row">
+        <div class="col l8">
+            <img class="responsive-img" src="/media/{{ event.image }}">
+        </div>
+
+        <div class="col l4 m12 s12">
+            <div class="card">
+                <div class="card-content">
+                    <div class="section">
+                        <div class="valign-wrapper">
+                            <i class="material-icons valign left">location_on</i>
+                            <h5 class="left-align">Hvor</h5>
+                        </div>
+                        <p>{{ event.location }}</p>
+                    </div>
+                    <div class="divider"></div>
+
+                    <div class="section">
+                        <div class="valign-wrapper">
+                            <i class="material-icons valign left">access_time</i>
+                            <h5 class="left-align">Når</h5>
+                        </div>
+                            <p>{{ event.date|date:"j. F - H:i" }}</p>
+                    </div>
+                    <div class="divider"></div>
+
+                    <div class="section">
+                        <div class="valign-wrapper">
+                            <i class="material-icons valign left">attach_money</i>
+                            <h5 class="left-align">Pris</h5>
+                        </div>
+                        <div>
+                            <p class="left valign"><b>Medlem:</b></p>
+                            <p class="right valign">{{ event.price_member }} kr</p>
+                        </div>
+                        <br>
+                        <div>
+                            <p class="left valign"><b>Ikke-medlem: </b></p>
+                            <p class="right valign">{{ event.price_not_member }} kr</p>
+                        </div>
+                        {% if event.companion %}
+                             <div>
+                                <p class="left valign"><b>Eksternt følge: </b></p>
+                                <p class="right valign">{{ event.price_companion }} kr</p>
+                             </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="divider"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card">
+                    <div class="card-content">
+                        <h5>Beskrivelse:</h5>
+                        <p class="flow-text"> {{ event.description }} </p>
+                        </div>
+                </div>
+        </div>
+        <div class="col s12 m12 l12">
+            <div class="card">
+                    <div class="card-content">
+                        <h5>Betalingsinformasjon:</h5>
+                        <p class="flow-text"> {{ event.payment_information }} </p>
+                        </div>
+                </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <h2>Påmeldte</h2>
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th data-field="first-grade">Første</th>
+                <th data-field="second-grade">Andre</th>
+                <th data-field="third-grade">Tredje</th>
+                <th data-field="fourth-grade">Fjerde</th>
+                <th data-field="fifth-grade">Femte</th>
+                <th data-field="third-grade"> xyz</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for first,second,third,fourth,fifth in attendees %}
+                <tr>
+                    <td>{{ first }}</td>
+                    <td>{{ second }}</td>
+                    <td>{{ third }}</td>
+                    <td>{{ fourth }}</td>
+                    <td>{{ fifth }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% if attendees_waiting %}
+    <div class="row">
+        <h2>Venteliste</h2>
+        <table class="responsive-table">
+            <thead>
+            <tr>
+                <th data-field="first-grade">Første</th>
+                <th data-field="second-grade">Andre</th>
+                <th data-field="third-grade">Tredje</th>
+                <th data-field="fourth-grade">Fjerde</th>
+                <th data-field="fifth-grade">Femte</th>
+                <th data-field="third-grade"> xyz</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for first,second,third,fourth,fifth in attendees_waiting %}
+                <tr>
+                    <td>{{ first }}</td>
+                    <td>{{ second }}</td>
+                    <td>{{ third }}</td>
+                    <td>{{ fourth }}</td>
+                    <td>{{ fifth }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
 {% endblock content %}
