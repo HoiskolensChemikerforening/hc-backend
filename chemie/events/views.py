@@ -70,10 +70,29 @@ def register_user(request, event_id):
 
     context = {
         "registration_form": registration or None,
-         "event" : event,
-         "status": status,
+        "event" : event,
+        "status": status,
     }
     return render(request, "events/register_user.html", context)
+
+@login_required
+def view_admin_panel(request, event_id):
+    event = Registration.objects.get(pk=event_id)
+    all_registrations = Registration.objects.filter(
+        status=REGISTRATION_STATUS.CONFIRMED,
+        event=event,
+        ).prefetch_related('user__profile')
+
+    context = {
+        "attendees" : all_registrations,
+    }
+    render(request, "events/admin_list.html", context)
+
+
+
+
+
+
 
 
 @login_required()
