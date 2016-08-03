@@ -1,0 +1,84 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+
+
+{% block header %}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.26.6/js/jquery.tablesorter.min.js"></script>
+    <script>
+        $(function () {
+            $('table').tablesorter();
+        });
+    </script>
+{% endblock header %}
+
+{% block nav_header %}
+    Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Påmeldte
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+    </div>
+    <div class="row">
+        <table id="myTable" class="tablesorter">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Klassetrinn</th>
+                <th>Allergier</th>
+                {% if event.night_snack %}
+                    <td>Nattmat</td>
+                {% endif %}
+                {% if event.companion %}
+                    <td>Følge</td>
+                {% endif %}
+                {% if event.sleepover %}
+                    <th>Overnatting</th>
+                {% endif %}
+                <th>HC-medlemsskap</th>
+                <th>Betalt</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for attendee in attendees %}
+                <tr>
+                    <td>{{ attendee.user.profile }} </td>
+                    <td>{{ attendee.user.profile.grade }}</td>
+                    <td>{{ attendee.user.profile.allergies }}</td>
+                    {% if event.night_snack %}
+                        <td>
+                            {% if attendee.payment_status %}
+                                <i class="material-icons">done</i>
+                            {% endif %}</td>
+                    {% endif %}
+                    {% if attendee.companion %}
+                        <td>
+                            {{ attendee.companion }}
+                        </td>
+                    {% endif %}
+                    {% if event.sleepover %}
+                        <td>
+                            {% if attendee.sleepover %}
+                                <i class="material-icons">done</i>
+                            {% endif %}
+                        </td>
+                    {% endif %}
+
+                    <td>{{ attendee.user.profile.membership.is_active }}</td>
+                    <td>
+                        {% if attendee.payment_status %}
+                            <i class="material-icons">done</i>
+                        {% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+{% endblock content %}

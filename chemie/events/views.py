@@ -77,7 +77,7 @@ def register_user(request, event_id):
 
 @login_required
 def view_admin_panel(request, event_id):
-    event = Registration.objects.get(pk=event_id)
+    event = Event.objects.get(pk=event_id)
     all_registrations = Registration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
         event=event,
@@ -85,14 +85,9 @@ def view_admin_panel(request, event_id):
 
     context = {
         "attendees" : all_registrations,
+        "event" : event,
     }
-    render(request, "events/admin_list.html", context)
-
-
-
-
-
-
+    return render(request, "events/admin_list.html", context)
 
 
 @login_required()
@@ -105,6 +100,7 @@ def de_register_user(request, event_id):
             # Send mail
             pass
 
+
 @transaction.atomic
 def set_user_event_status(event, registration):
     if event.has_spare_slots():
@@ -112,4 +108,3 @@ def set_user_event_status(event, registration):
         registration.save()
         return REGISTRATION_STATUS.CONFIRMED
     return REGISTRATION_STATUS.WAITING
-
