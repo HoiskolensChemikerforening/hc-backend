@@ -21,17 +21,17 @@ class Event(models.Model):
 
     #  When the event occurs, is created and edited
     date = models.DateTimeField(default=timezone.now, verbose_name="Dato")
-    created = models.DateField(auto_now=False, auto_now_add=True)
-    edited = models.DateField(auto_now=True, auto_now_add=False)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     # Start time for registration
-    register_startdate = models.DateField(default=timezone.now, verbose_name="Påmeldingen åpner")
+    register_startdate = models.DateTimeField(default=timezone.now, verbose_name="Påmeldingen åpner")
 
     # Deadline for signing up
-    register_deadline = models.DateField(default=timezone.now, verbose_name="Påmeldingsfrist")
+    register_deadline = models.DateTimeField(default=timezone.now, verbose_name="Påmeldingsfrist")
 
     # Deadline for changing your mind
-    deregister_deadline = models.DateField(default=timezone.now, verbose_name="Avmeldingsfrist")
+    deregister_deadline = models.DateTimeField(default=timezone.now, verbose_name="Avmeldingsfrist")
 
     # Location of event
     location = models.TextField(verbose_name="Sted")
@@ -108,7 +108,8 @@ class Registration(models.Model):
                                  help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
                                  null=True, blank=True)
 
-    objects = None
+    objects = RegistrationManager()
+
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.user.get_full_name(), self.status)
 

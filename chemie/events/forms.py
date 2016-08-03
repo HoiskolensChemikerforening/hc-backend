@@ -60,7 +60,10 @@ class RegisterEventForm(forms.ModelForm):
         self.cleaned_data['register_startdate'] = registration_date
         self.cleaned_data['register_deadline'] = registration_deadline
         self.cleaned_data['deregister_deadline'] = deregister_deadline
-
+        self.instance.date = event_date
+        self.instance.register_startdate = registration_date
+        self.instance.register_deadline = registration_deadline
+        self.instance.deregister_deadline = deregister_deadline
 
     class Meta:
         model = Event
