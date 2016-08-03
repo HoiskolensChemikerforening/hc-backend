@@ -1,5 +1,4 @@
 from django.db import models
-from datetime import datetime
 from django.utils import timezone
 from sorl.thumbnail import ImageField
 #from customprofile.models import Profile
@@ -84,6 +83,9 @@ class Event(models.Model):
     def get_absolute_registration_url(self):
         return reverse('events:register', kwargs={"event_id":self.id})
 
+    @property
+    def is_open(self):
+        return timezone.now() > self.register_startdate
 
 class RegistrationManager(models.Manager):
     def de_register(self, event, reg_to_be_deleted):
