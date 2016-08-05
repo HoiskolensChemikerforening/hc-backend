@@ -85,8 +85,6 @@ class RegisterEventForm(forms.ModelForm):
 
 
 class RegisterUserForm(forms.ModelForm):
-    layout = M.Layout(M.Row('sleepover','night_snack'),
-                      M.Row('companion'))
 
     class Meta:
         model = Registration
@@ -96,3 +94,20 @@ class RegisterUserForm(forms.ModelForm):
             "night_snack",
             "companion",
         ]
+
+    def __init__(self, *args, **kwargs):
+        enable_sleepover = kwargs.pop('enable_sleepover', True)
+        enable_night_snack = kwargs.pop('enable_night_snack', True)
+        enable_companion = kwargs.pop('enable_companion', True)
+        super(RegisterUserForm, self).__init__(*args, **kwargs)
+        if not enable_sleepover:
+            self.fields.pop('sleepover')
+        if not enable_night_snack:
+            self.fields.pop('night_snack')
+        if not enable_companion:
+            self.fields.pop('companion')
+
+
+
+class DeRegisterUserForm(forms.Form):
+    really_sure = forms.BooleanField(required=True, label='Er dette ditt endelige svar')
