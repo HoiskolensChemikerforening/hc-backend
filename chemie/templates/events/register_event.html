@@ -15,7 +15,6 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    {% load staticfiles %}
     <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 </p>
     <div class="card">
         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
@@ -50,12 +49,6 @@
             align: 'left',
             twelvehour: false,
             vibrate: true,
-        });
-        $('#input_endtime').clockpicker({
-            placement: 'bottom',
-            align: 'left',
-            darktheme: true,
-            twelvehour: false
         });
         $('.datepicker').pickadate({
             selectMonths: true, // Creates a dropdown to control month
