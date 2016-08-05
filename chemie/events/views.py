@@ -8,6 +8,8 @@ from django.http import Http404
 from django.contrib import messages
 from itertools import zip_longest
 from django.db import transaction
+from django.views.decorators.csrf import ensure_csrf_cookie
+from django.http import HttpResponse
 from django.views.decorators.cache import cache_page
 
 @login_required
@@ -76,7 +78,11 @@ def register_user(request, event_id):
     return render(request, "events/register_user.html", context)
 
 @login_required
+@ensure_csrf_cookie
 def view_admin_panel(request, event_id):
+    if request.POST:
+        if request.is_ajax():
+            change_payment_status(request, event_id)
     event = Event.objects.get(pk=event_id)
     all_registrations = Registration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
@@ -89,6 +95,14 @@ def view_admin_panel(request, event_id):
     }
     return render(request, "events/admin_list.html", context)
 
+@login_required
+def change_payment_status(request, registration_id):
+    #event = Event.objects.get(pk=event_id)
+    registration = Registration.objects.get(pk=registration_id)
+    payment_status = registration.payment_status
+    registration.payment_status = not registration.payment_status
+    registration.save()
+    return HttpResponse(payment_status, content_type='application/json')
 
 @login_required()
 def de_register_user(request, event_id):
