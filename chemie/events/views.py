@@ -1,14 +1,15 @@
-from django.shortcuts import render
-from .forms import RegisterEventForm, RegisterUserForm
-from django.contrib.auth.decorators import login_required
-from .models import Event, Registration, REGISTRATION_STATUS
 from datetime import datetime
-from django.shortcuts import get_object_or_404
-from django.http import Http404
-from django.contrib import messages
 from itertools import zip_longest
+
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.views.decorators.cache import cache_page
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect
+
+from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
+from .models import Event, Registration, REGISTRATION_STATUS
+
 
 @login_required
 def create_event(request):
@@ -23,6 +24,7 @@ def create_event(request):
     }
     return render(request, 'events/register_event.html', context)
 
+
 def list_all(request):
     all_events = Event.objects.filter(date__gt=datetime.now())
     context = {
@@ -30,50 +32,99 @@ def list_all(request):
     }
     return render(request, "events/list.html", context)
 
-#@cache_page(60 * 15)
+
+# @cache_page(60 * 15)
 def view_event_details(request, event_id):
-    event = get_object_or_404(Event,pk=event_id)
-    attendees = {'first': ['Ida', 'Sevre', 'Erik', 'Ramn'], 'second':['Martin', 'Inger Anna'], 'third': [], 'fourth':['Amanda', 'Peter', 'Bjørn Erik'],
-                 'fifth':['Jonas', 'Jesus', 'Adnan']}
+    event = get_object_or_404(Event, pk=event_id)
+    attendees = {'first': ['Ida', 'Sevre', 'Erik', 'Ramn'], 'second': ['Martin', 'Inger Anna'], 'third': [],
+                 'fourth': ['Amanda', 'Peter', 'Bjørn Erik'],
+                 'fifth': ['Jonas', 'Jesus', 'Adnan']}
     context = {
-        'event' : event,
-        'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'], attendees['fourth'], attendees['fifth'])
+        'event': event,
+        'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'], attendees['fourth'],
+                                 attendees['fifth'])
     }
     return render(request, "events/detail.html", context)
 
+
 @login_required
 def register_user(request, event_id):
-    event = get_object_or_404(Event,pk=event_id)
-    registered =    Registration.objects.filter(event=event, user=request.user)
-    status = None
-    if registered:
-        if request.POST:
-            messages.add_message(request, messages.ERROR, 'Du er allerede påmeldt.', extra_tags='Ulovlig operasjon')
-        registration = None
-    else:
-        registration = RegisterUserForm(request.POST or None)
-        if registration.is_valid():
-            instance = registration.save(commit=False)
-            instance.event = event
-            instance.user = request.user
-            instance.save()
-            status = set_user_event_status(event, instance)
+    event = get_object_or_404(Event, pk=event_id)
+    registration = Registration.objects.filter(event=event, user=request.user).first()
+    form_init = {'enable_sleepover': event.sleepover,
+                         'enable_night_snack': event.night_snack,
+                         'enable_companion': event.companion}
 
-            if status == REGISTRATION_STATUS.CONFIRMED:
-                messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
-                # Send mail
-            elif status == REGISTRATION_STATUS.WAITING:
-                messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.', extra_tags='Venteliste')
-            else:
-                # Denne bør ligge i en try-catch block
-                messages.add_message(request, messages.ERROR, 'En ukjent feil oppstod. Kontakt edb@hc.ntnu.no', extra_tags='Ukjent feil')
+    if request.POST:
+        de_registration_form = DeRegisterUserForm(request.POST or None, prefix='deregister')
+        edit_registration_form = RegisterUserForm(request.POST or None, prefix='edit',**form_init)
+        registration_form = RegisterUserForm(request.POST or None, prefix='registration')
+        if registration:
+            # Change form being displayed as the user is registered
+            registration_form = edit_registration_form
+            if 'register_or_edit' in request.POST:
+                if edit_registration_form.is_valid():
+                    registration.night_snack = edit_registration_form.cleaned_data['night_snack']
+                    registration.sleepover = edit_registration_form.cleaned_data['sleepover']
+                    registration.companion = edit_registration_form.cleaned_data['companion']
+                    registration.save()
+                    messages.add_message(request, messages.SUCCESS, 'Påmeldingsdetaljene ble endret',
+                                         extra_tags='Endringer utført')
+                    return redirect(event)
+
+            elif 'de_register' in request.POST and event.can_de_register:
+                # Populate the registration form with registration data is it was not submitted
+                registration_form = RegisterUserForm(instance=registration, prefix='edit',**form_init)
+                if de_registration_form.is_valid():
+                    lucky_person = Registration.objects.de_register(registration)
+                    if lucky_person:
+                        # Send mail
+                        pass
+                    messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
+                                         extra_tags='Avmeldt')
+                    return redirect(event)
+
+        else:
+            # User is not registered
+            if registration_form.is_valid():
+                instance = edit_registration_form.save(commit=False)
+                instance.event = event
+                instance.user = request.user
+                instance.save()
+                status = set_user_event_status(event, instance)
+
+                if status == REGISTRATION_STATUS.CONFIRMED:
+                    messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
+                    # Send mail
+                elif status == REGISTRATION_STATUS.WAITING:
+                    messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.',
+                                         extra_tags='Venteliste')
+                else:
+                    # Denne bør ligge i en try-catch block
+                    messages.add_message(request, messages.ERROR, 'En ukjent feil oppstod. Kontakt edb@hc.ntnu.no',
+                                         extra_tags='Ukjent feil')
+                # Edit was successful
+                return redirect(event)
+    else:
+        registration_form, de_registration_form = None, None
+        if (registration and event.can_de_register) or event.can_signup:
+        # User can de-register or sign up
+            form_prefix = 'registration' if registration is None else 'edit'
+            registration_form = RegisterUserForm(prefix=form_prefix, instance=registration,
+                                                 **form_init)
+            de_registration_form = DeRegisterUserForm(None, prefix='deregister')
+
+            if not registration:
+                de_registration_form = None
 
     context = {
-        "registration_form": registration or None,
-        "event" : event,
-        "status": status,
+        "registration_form": registration_form,
+        "event": event,
+        "de_registration_form": de_registration_form,
+        "registered": False if registration is None else True
     }
     return render(request, "events/register_user.html", context)
+
 
 @login_required
 def view_admin_panel(request, event_id):
@@ -81,29 +132,18 @@ def view_admin_panel(request, event_id):
     all_registrations = Registration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
         event=event,
-        ).prefetch_related('user__profile')
+    ).prefetch_related('user__profile')
 
     context = {
-        "attendees" : all_registrations,
-        "event" : event,
+        "attendees": all_registrations,
+        "event": event,
     }
     return render(request, "events/admin_list.html", context)
 
 
-@login_required()
-def de_register_user(request, event_id):
-    if request.POST:
-        event = Event.objects.get(pk=event_id)
-        registration = Registration.objects.get(event=event, user=request.user)
-        lucky_person = Registration.objects.de_register(event, registration)
-        if lucky_person:
-            # Send mail
-            pass
-
-
 @transaction.atomic
 def set_user_event_status(event, registration):
-    if event.has_spare_slots():
+    if event.has_spare_slots:
         registration.confirm()
         registration.save()
         return REGISTRATION_STATUS.CONFIRMED
