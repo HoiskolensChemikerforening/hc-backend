@@ -4,8 +4,10 @@ from itertools import zip_longest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
 from .models import Event, Registration, REGISTRATION_STATUS
@@ -52,12 +54,12 @@ def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     registration = Registration.objects.filter(event=event, user=request.user).first()
     form_init = {'enable_sleepover': event.sleepover,
-                         'enable_night_snack': event.night_snack,
-                         'enable_companion': event.companion}
+                 'enable_night_snack': event.night_snack,
+                 'enable_companion': event.companion}
 
     if request.POST:
         de_registration_form = DeRegisterUserForm(request.POST or None, prefix='deregister')
-        edit_registration_form = RegisterUserForm(request.POST or None, prefix='edit',**form_init)
+        edit_registration_form = RegisterUserForm(request.POST or None, prefix='edit', **form_init)
         registration_form = RegisterUserForm(request.POST or None, prefix='registration')
         if registration:
             # Change form being displayed as the user is registered
@@ -74,7 +76,7 @@ def register_user(request, event_id):
 
             elif 'de_register' in request.POST and event.can_de_register:
                 # Populate the registration form with registration data is it was not submitted
-                registration_form = RegisterUserForm(instance=registration, prefix='edit',**form_init)
+                registration_form = RegisterUserForm(instance=registration, prefix='edit', **form_init)
                 if de_registration_form.is_valid():
                     lucky_person = Registration.objects.de_register(registration)
                     if lucky_person:
@@ -108,7 +110,7 @@ def register_user(request, event_id):
     else:
         registration_form, de_registration_form = None, None
         if (registration and event.can_de_register) or event.can_signup:
-        # User can de-register or sign up
+            # User can de-register or sign up
             form_prefix = 'registration' if registration is None else 'edit'
             registration_form = RegisterUserForm(prefix=form_prefix, instance=registration,
                                                  **form_init)
@@ -127,7 +129,11 @@ def register_user(request, event_id):
 
 
 @login_required
+@ensure_csrf_cookie
 def view_admin_panel(request, event_id):
+    if request.POST:
+        if request.is_ajax():
+            change_payment_status(request, event_id)
     event = Event.objects.get(pk=event_id)
     all_registrations = Registration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
@@ -139,6 +145,16 @@ def view_admin_panel(request, event_id):
         "event": event,
     }
     return render(request, "events/admin_list.html", context)
+
+
+@login_required
+def change_payment_status(request, registration_id):
+    # event = Event.objects.get(pk=event_id)
+    registration = Registration.objects.get(pk=registration_id)
+    payment_status = registration.payment_status
+    registration.payment_status = not registration.payment_status
+    registration.save()
+    return HttpResponse(payment_status, content_type='application/json')
 
 
 @transaction.atomic
