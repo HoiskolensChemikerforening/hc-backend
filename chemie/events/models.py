@@ -67,15 +67,13 @@ class Event(models.Model):
     def waiting_users(self):
         return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).count()
 
+    @property
     def spare_slots(self):
         return self.sluts - self.registered_users()
 
+    @property
     def has_spare_slots(self):
-        return self.spare_slots() > 0
-
-    def register_user(self, User):
-        if self.spare_slots():
-            self.attendees.add(User)
+        return self.spare_slots > 0
 
     def get_absolute_url(self):
         return reverse('events:detail', kwargs={"event_id":self.id})
@@ -84,11 +82,18 @@ class Event(models.Model):
         return reverse('events:register', kwargs={"event_id":self.id})
 
     @property
-    def is_open(self):
-        return timezone.now() > self.register_startdate
+    def can_signup(self):
+        return (timezone.now() >= self.register_startdate) and (timezone.now() <= self.register_deadline)
+
+    @property
+    def can_de_register(self):
+        return (timezone.now()<= self.deregister_deadline)
+
+
 
 class RegistrationManager(models.Manager):
-    def de_register(self, event, reg_to_be_deleted):
+    def de_register(self, reg_to_be_deleted):
+        event = reg_to_be_deleted.event
         reg_to_be_deleted.delete()
         waiting = self.filter(event=event, status = REGISTRATION_STATUS.WAITING)
         if waiting:
@@ -120,4 +125,3 @@ class Registration(models.Model):
 
     class Meta:
         unique_together = ('event', 'user',)
-
