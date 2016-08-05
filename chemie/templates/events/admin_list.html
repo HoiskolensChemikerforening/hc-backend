@@ -51,80 +51,100 @@
                     <td>{{ attendee.user.profile }} </td>
                     <td>{{ attendee.user.profile.grade }}</td>
                     <td>{{ attendee.user.profile.allergies }}</td>
-                    {% if event.night_snack %}
-                        <td>
-                            <i class="material-icons">done</i>
-                    {% endif %}
-                    {% if attendee.companion %}
-                        <td>
-                            {{ attendee.companion }}
-                        </td>
-                    {% endif %}
-                    {% if event.sleepover %}
-                        <td>
-                            {% if attendee.sleepover %}
-                                <i class="material-icons">done</i>
-                            {% endif %}
-                        </td>
-                    {% endif %}
 
-                    <td>{{ attendee.user.profile.membership.is_active }}</td>
+                    {% if event.night_snack %}
+                        <td>{% if attendee.night_snack %}
+                            <i class="material-icons">done</i>
+                        {% endif %}</td>{% endif %}
+
+                    {% if event.companion %}
+                        <td>{% if attendee.companion %}
+                            {{ attendee.companion }}
+                        {% endif %}</td>{% endif %}
+
+                    {% if event.sleepover %}
+                        <td>{% if attendee.sleepover %}
+                            <i class="material-icons">done</i>
+                        {% endif %}</td>{% endif %}
+
+                    <td>{% if attendee.user.profile.membership.is_active %}
+                        <i class="material-icons">local_play</i>
+                    {% else %}
+                        -
+                    {% endif %}</td>
+
                     <td>
                         {% if attendee.payment_status %}
                             <a class="payment btn-floating btn-tiny waves-effect waves-light green"
                                id="payment-{{ attendee.id }}"><i class="material-icons">done</i></a>
                         {% else %}
                             <a class="payment btn-floating btn-tiny waves-effect waves-light red"
-                            id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
+                               id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
                         {% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+{% endblock content %}
 
+{% block footer_script %}
     <script>
-    $( document ).ready(function() {
-        $('.payment').on('click', function(event){
-            event.preventDefault();
-            var myID = $(this).attr("id");
-            // using jQuery
-            function getCookie(name) {
-                var cookieValue = null;
-                if (document.cookie && document.cookie !== '') {
-                    var cookies = document.cookie.split(';');
-                    for (var i = 0; i < cookies.length; i++) {
-                        var cookie = jQuery.trim(cookies[i]);
-                        // Does this cookie string begin with the name we want?
-                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                            break;
+        $(document).ready(function () {
+            $('.payment').on('click', function (event) {
+                //$('.payment').live('click', function(event){
+                event.preventDefault();
+                var myID = $(this).attr("id").split('-')[1];
+                // using jQuery
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
                         }
                     }
+                    return cookieValue;
                 }
-                return cookieValue;
-            }
-            var csrftoken = getCookie('csrftoken');
-            console.log(myID);
-            $.ajax({
-                type: "POST",
-                url: "/events/adminlist/paymentstatus/"+myID.split('-')[1],
-                data: {
-                    myID: myID,
-                    csrfmiddlewaretoken: csrftoken,
-                },
 
-                success: function(data){
-                    console.log($(this));
+                function icon_changer(divID, payment_status) {
+                    if (payment_status) {
+                        $(divID).find('i').text('done');
+                        $(divID).removeClass('red');
+                        $(divID).addClass('green');
+                    }
+                    else {
+                        $(divID).find('i').text('error');
+                        $(divID).removeClass('green');
+                        $(divID).addClass('red');
 
-                },
-                error: function(data){
-                    console.log($(this));
-                    $(this).html('hei');
-                },
-            });
-        })
-    });
+                    }
+                }
+
+                var csrftoken = getCookie('csrftoken');
+                $.ajax({
+                    type: "GET",
+                    url: "/events/adminlist/paymentstatus/" + myID,
+                    datatype: "json",
+                    //data: {
+                    //    myID: myID,
+                    //    csrfmiddlewaretoken: csrftoken,
+                    //},
+
+                    success: function (json) {
+                        icon_changer("#payment-" + myID, json.payment_status)
+                    },
+
+                    error: function (xhr, errmsg, err) {
+                        // console.log(xhr.status + ": " + xhr.responseText);
+                    },
+                });
+            })
+        });
     </script>
-
-{% endblock content %}
+{% endblock %}

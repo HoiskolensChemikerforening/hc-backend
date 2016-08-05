@@ -4,7 +4,7 @@ from itertools import zip_longest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -154,7 +154,7 @@ def change_payment_status(request, registration_id):
     payment_status = registration.payment_status
     registration.payment_status = not registration.payment_status
     registration.save()
-    return HttpResponse(payment_status, content_type='application/json')
+    return JsonResponse({'payment_status': registration.payment_status})
 
 
 @transaction.atomic
