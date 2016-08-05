@@ -32,10 +32,10 @@
                 <th>Klassetrinn</th>
                 <th>Allergier</th>
                 {% if event.night_snack %}
-                    <td>Nattmat</td>
+                    <th>Nattmat</th>
                 {% endif %}
                 {% if event.companion %}
-                    <td>Følge</td>
+                    <th>Følge</th>
                 {% endif %}
                 {% if event.sleepover %}
                     <th>Overnatting</th>
@@ -53,9 +53,7 @@
                     <td>{{ attendee.user.profile.allergies }}</td>
                     {% if event.night_snack %}
                         <td>
-                            {% if attendee.payment_status %}
-                                <i class="material-icons">done</i>
-                            {% endif %}</td>
+                            <i class="material-icons">done</i>
                     {% endif %}
                     {% if attendee.companion %}
                         <td>
@@ -73,12 +71,60 @@
                     <td>{{ attendee.user.profile.membership.is_active }}</td>
                     <td>
                         {% if attendee.payment_status %}
-                            <i class="material-icons">done</i>
+                            <a class="payment btn-floating btn-tiny waves-effect waves-light green"
+                               id="payment-{{ attendee.id }}"><i class="material-icons">done</i></a>
+                        {% else %}
+                            <a class="payment btn-floating btn-tiny waves-effect waves-light red"
+                            id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
                         {% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
     </div>
+
+    <script>
+    $( document ).ready(function() {
+        $('.payment').on('click', function(event){
+            event.preventDefault();
+            var myID = $(this).attr("id");
+            // using jQuery
+            function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+            var csrftoken = getCookie('csrftoken');
+            console.log(myID);
+            $.ajax({
+                type: "POST",
+                url: "/events/adminlist/paymentstatus/"+myID.split('-')[1],
+                data: {
+                    myID: myID,
+                    csrfmiddlewaretoken: csrftoken,
+                },
+
+                success: function(data){
+                    console.log($(this));
+
+                },
+                error: function(data){
+                    console.log($(this));
+                    $(this).html('hei');
+                },
+            });
+        })
+    });
+    </script>
 
 {% endblock content %}
