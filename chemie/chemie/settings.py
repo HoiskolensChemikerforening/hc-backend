@@ -50,13 +50,16 @@ INSTALLED_APPS = [
     'customprofile',
     'sorl.thumbnail',
     'material',
-    'mail_templated'
+    'mail_templated',
+    "post_office",
 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    #'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
+    #'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -152,7 +155,8 @@ NOCAPTCHA = True
 
 
 EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_BACKEND = 'post_office.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_PASSWORD = '532TTIuqx4RA' #my gmail password
 EMAIL_HOST_USER = 'edb.ntnu@gmail.com' #my gmail username
