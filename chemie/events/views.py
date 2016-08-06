@@ -11,7 +11,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
 from .models import Event, Registration, REGISTRATION_STATUS
-
+from .email import send_event_mail
 
 @login_required
 def create_event(request):
@@ -80,8 +80,7 @@ def register_user(request, event_id):
                 if de_registration_form.is_valid():
                     lucky_person = Registration.objects.de_register(registration)
                     if lucky_person:
-                        # Send mail
-                        pass
+                        send_event_mail(lucky_person)
                     messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
                                          extra_tags='Avmeldt')
                     return redirect(event)
@@ -97,10 +96,11 @@ def register_user(request, event_id):
 
                 if status == REGISTRATION_STATUS.CONFIRMED:
                     messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
-                    # Send mail
+                    send_event_mail(instance)
                 elif status == REGISTRATION_STATUS.WAITING:
                     messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.',
                                          extra_tags='Venteliste')
+                    send_event_mail(instance)
                 else:
                     # Denne bør ligge i en try-catch block
                     messages.add_message(request, messages.ERROR, 'En ukjent feil oppstod. Kontakt edb@hc.ntnu.no',
