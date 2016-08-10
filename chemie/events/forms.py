@@ -1,8 +1,7 @@
 from django import forms
 import material as M
 from .models import Event, Registration
-from django.utils.dateparse import parse_time
-from datetime import datetime, date
+from datetime import datetime
 from django.core.validators import ValidationError
 
 class RegisterEventForm(forms.ModelForm):
@@ -11,8 +10,6 @@ class RegisterEventForm(forms.ModelForm):
                             M.Column('registration_start_date','registration_start_time', span_columns=1),
                             M.Column('register_deadline_date','register_deadline_time', span_columns=1),
                             M.Column('deregister_deadline_date','deregister_deadline_time', span_columns=1)),
-                      #M.Row('event_date','event_time'),
-                      #M.Row('register_startdate', 'register_deadline','deregister_deadline'),
                       M.Row('location'),
                       M.Row('description'),
                       M.Row('image'),
@@ -42,19 +39,19 @@ class RegisterEventForm(forms.ModelForm):
         deregister_deadline = datetime.combine(self.cleaned_data.get('deregister_deadline_date'), self.cleaned_data.get('deregister_deadline_time'))
 
         if event_date < registration_date:
-            raise ValidationError({'registration_date':["Påmeldingen må være før arrangementet begynner"]})
+            self.add_error(None, ValidationError({'registration_start_date':["Påmeldingen må være før arrangementet begynner"]}))
 
         if event_date < registration_deadline:
-            raise ValidationError({'registration_start_date':["Påmeldingsfristen må være før arrangementet begynner"]})
+            self.add_error(None, ValidationError({'register_deadline_date':["Påmeldingsfristen må være før arrangementet begynner"]}))
 
         if event_date < deregister_deadline:
-            raise ValidationError({'deregister_deadline_date':["Avmeldingsfristen må være før arrangementet begynner"]})
+            self.add_error(None, ValidationError({'deregister_deadline_date':["Avmeldingsfristen må være før arrangementet begynner"]}))
 
         if registration_deadline < registration_date:
-            raise ValidationError({'register_deadline_date':["Påmeldingsfristen må være etter påmeldingen begynner"]})
+            self.add_error(None, ValidationError({'register_deadline_date':["Påmeldingsfristen må være etter påmeldingen begynner"]}))
 
         if deregister_deadline < registration_date:
-            raise ValidationError({'deregister_deadline_date':["Avmeldingsfristen må være etter påmeldingen begynner"]})
+            self.add_error(None, ValidationError({'deregister_deadline_date':["Avmeldingsfristen må være etter påmeldingen begynner"]}))
 
         self.cleaned_data['date'] = event_date
         self.cleaned_data['register_startdate'] = registration_date
@@ -106,7 +103,6 @@ class RegisterUserForm(forms.ModelForm):
             self.fields.pop('night_snack')
         if not enable_companion:
             self.fields.pop('companion')
-
 
 
 class DeRegisterUserForm(forms.Form):
