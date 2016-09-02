@@ -7,6 +7,7 @@ django-jenkins==0.19.0
 django-mail-templated==2.6.2
 django-material==0.8.0
 django-recaptcha==1.0.5
+django-post_office==2.0.8
 djangorestframework==3.4.0
 future==0.15.2
 Markdown==2.6.6
