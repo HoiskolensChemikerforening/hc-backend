@@ -3,7 +3,7 @@ from django.utils.translation import ugettext as _
 from django.contrib.auth.models import User
 from .models import Profile
 import material as M
-
+from django.core.validators import ValidationError
 
 class RegisterUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Password")
@@ -23,12 +23,21 @@ class RegisterUserForm(forms.ModelForm):
                 ]
 
     def password_matches(self):
-        if self.cleaned_data['password'] != self.cleaned_data['password_confirm']:
+        password = self.cleaned_data.get('password')
+        confrimed_password = self.cleaned_data.get('password_confirm')
+
+
+        if not password:
+            self.add_error(None, ValidationError({'password':["Feltet er påkrevd"]}))
+
+        if not confrimed_password:
+            self.add_error(None, ValidationError({'password_confirm':["Feltet er påkrevd"]}))
+
+        if password != confrimed_password:
             message = 'Password does not match'
-            self.add_error('password', message)
-            self.add_error('password_confirm', message)
+            self.add_error(None, ValidationError({'password_confirm':["Passordene stemmer ikke overens"]}))
             return False
-        return self.cleaned_data['password']
+        return password
 
     def clean(self):
         super(RegisterUserForm, self).clean()
