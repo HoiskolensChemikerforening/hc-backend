@@ -1,4 +1,4 @@
-from datetime import datetime
+from django.utils import timezone
 from itertools import zip_longest
 
 from django.contrib import messages
@@ -10,8 +10,9 @@ from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
-from .models import Event, Registration, REGISTRATION_STATUS
+from .models import Event, Registration, REGISTRATION_STATUS, RegistrationMessage
 from .email import send_event_mail
+
 
 @login_required
 def create_event(request):
@@ -28,7 +29,7 @@ def create_event(request):
 
 
 def list_all(request):
-    all_events = Event.objects.filter(date__gt=datetime.now())
+    all_events = Event.objects.filter(date__gt=timezone.now())
     context = {
         'events': all_events,
     }
@@ -81,7 +82,7 @@ def register_user(request, event_id):
                     lucky_person = Registration.objects.de_register(registration)
                     if lucky_person:
                         send_event_mail(lucky_person)
-                    messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
+                    messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.form|at(event.title),
                                          extra_tags='Avmeldt')
                     return redirect(event)
 
@@ -97,6 +98,10 @@ def register_user(request, event_id):
                 if status == REGISTRATION_STATUS.CONFIRMED:
                     messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
                     send_event_mail(instance)
+                    custom_messages = RegistrationMessage.objects.filter(user=instance.user, event=event)
+                    for custom_message in custom_messages:
+                        messages.add_message(request, messages.INFO, custom_message.message, extra_tags='PS')
+
                 elif status == REGISTRATION_STATUS.WAITING:
                     messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.',
                                          extra_tags='Venteliste')
