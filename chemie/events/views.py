@@ -82,7 +82,7 @@ def register_user(request, event_id):
                     lucky_person = Registration.objects.de_register(registration)
                     if lucky_person:
                         send_event_mail(lucky_person)
-                    messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.form|at(event.title),
+                    messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
                                          extra_tags='Avmeldt')
                     return redirect(event)
 
