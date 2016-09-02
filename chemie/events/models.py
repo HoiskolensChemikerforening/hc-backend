@@ -125,3 +125,12 @@ class Registration(models.Model):
 
     class Meta:
         unique_together = ('event', 'user',)
+
+
+class RegistrationMessage(models.Model):
+    user = models.ForeignKey(User)
+    event = models.ForeignKey(Event)
+    message = models.TextField()
+
+    def __str__(self):
+        return '{}, {}: {}'.format(self.event, self.user, self.message)
