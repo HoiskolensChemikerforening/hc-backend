@@ -38,7 +38,7 @@ def register_locker(request, number):
         if form_data.is_valid():
             # Check if user already exists
             instance = form_data.save(commit=False)
-            user = LockerUser.objects.get_or_create(username=instance.username)
+            user, _ = LockerUser.objects.get_or_create(username=instance.username)
 
             # Create a new ownership for the user
             new_ownership = Ownership(locker=locker, user=user)
