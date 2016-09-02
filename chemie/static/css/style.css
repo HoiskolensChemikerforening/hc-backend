@@ -133,3 +133,12 @@ nav, footer.page-footer {
   background-color: #f44336 !important;
 }
 
+i.icon-green {
+    color: green;
+}
+i.icon-red {
+    color: red;
+}
+i.icon-gray {
+    color: gray;
+}
