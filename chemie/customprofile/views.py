@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from customprofile.models import Profile, GRADES
 from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect, Http404
@@ -32,3 +32,23 @@ def register_user(request):
     return render(request, 'userregistration/register.html', context)
 
 
+def editprofile(request):
+    custom_profile = request.user.profile
+    user_profile = custom_profile.user
+    user_form = RegisterUserForm(instance=user_profile)
+    profile_form = RegisterProfileForm(instance=custom_profile)
+    if request.method == 'POST':
+        if user_form.is_valid() and profile_form.is_valid():
+            user_form.save()
+            profile_form.save()
+        return render(request, 'common/feedback.html', context)
+        context = {
+        "title": 'Fullførst',
+        "message": 'Endringene har blitt registrert',
+        "status": 'success',
+        }
+    context = {
+    "user_form": user_form,
+    "profile_form": profile_form
+    }
+    return render(request, 'userregistration/editprofile.html', context)
