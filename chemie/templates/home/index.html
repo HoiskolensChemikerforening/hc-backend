@@ -1,4 +1,14 @@
 {% extends "chemie/base.html" %}
+{% block nav_header %}
+    Forsiden
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Velkommen!
+{% endblock nav_sub_header %}
+
 {% block content %}
+
+{% include "events/list_events.html" with events=events %}
 
 {% endblock content %}
