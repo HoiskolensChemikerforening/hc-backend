@@ -48,6 +48,34 @@
                 <a id="logo-container" href="/" class="brand-logo">
                     <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
                 </a>
+                <h5 class="logo-text">Høiskolens Chemikerforening</h5>
+            </li>
+            <li>
+                {% if user.is_authenticated %}
+                    <li>
+                        <div class="collapsible-header">
+                            <span style="padding-left: 50px;">{{ request.user.get_full_name }}</span>
+                            <img src="{% static "imgs/hannesul_alt.jpg" %}" alt="" class="circle">
+                        </div>
+                        <div class="collapsible-body"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a>
+                        </div>
+                    </li>
+                    <!--<ul class="collection dropdown-button" href='#' data-activates='dropdown1'>
+                        <li class="collection-item avatar">
+                            <img src="{% static "imgs/hannesul_alt.jpg" %}" alt="" class="circle">
+                            <span class="title">{{ request.user.get_full_name }}</span>
+
+                            <p style="line-height: 24px;">Profil<br>
+                               Logg ut
+                            </p>
+                            <<a href="#!" class="secondary-content">test<i class="material-icons">grade</i></a>
+                        </li>
+                    </ul>-->
+
+                {% else %}
+
+                {% endif %}
+
             </li>
             <li class="bold"><a href="/valg/" class="waves-effect waves-teal">Valgsystem</a></li>
             <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal">Sladreboks</a></li>
@@ -67,6 +95,23 @@
                 <li class="bold"><a href="/login/">Logg inn</a></li>
             {% endif %}
 
+            <li>
+                <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
+                        <div class="collapsible-body"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a>
+                        </div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
+                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                    </li>
+                    <li>
+                        <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
+                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                    </li>
+                </ul>
+            </li>
         </ul>
         <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 
