@@ -1,4 +1,5 @@
 {% load staticfiles %}
+{% load thumbnail %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -56,7 +57,9 @@
                     <li>
                         <div class="collapsible-header">
                             <span style="padding-left: 50px;">{{ request.user.get_full_name }}</span>
-                            <img src="{% static "imgs/hannesul_alt.jpg" %}" alt="" class="circle">
+                            {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
+                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="" class="circle profile-circle">
+                            {% endthumbnail %}
                         </div>
                         <div class="collapsible-body"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a>
                         </div>
