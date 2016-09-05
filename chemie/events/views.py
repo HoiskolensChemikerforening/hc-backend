@@ -13,6 +13,8 @@ from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
 from .models import Event, Registration, REGISTRATION_STATUS, RegistrationMessage
 from .email import send_event_mail
 
+from customprofile.models import Profile
+
 
 @login_required
 def create_event(request):
@@ -39,16 +41,37 @@ def list_all(request):
 # @cache_page(60 * 15)
 def view_event_details(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    attendees = {'first': ['Ida', 'Sevre', 'Erik', 'Ramn'], 'second': ['Martin', 'Inger Anna'], 'third': [],
-                 'fourth': ['Amanda', 'Peter', 'Bjørn Erik'],
-                 'fifth': ['Jonas', 'Jesus', 'Adnan']}
+    first = Profile.objects.filter(grade='1')
+    second = Profile.objects.filter(grade='2')
+    third = Profile.objects.filter(grade='3')
+    fourth = Profile.objects.filter(grade='4')
+    fifth = Profile.objects.filter(grade='5')
+    done = Profile.objects.filter(grade='6')
+
+    attendees = {
+        'first': first,
+        'second': second,
+        'third': third,
+        'fourth': fourth,
+        'fifth': fifth,
+        'done': done,
+    }
+
     context = {
         'event': event,
-        'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'], attendees['fourth'],
-                                 attendees['fifth'])
+        'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'],
+                                 attendees['fourth'], attendees['fifth'], attendees['done'],),
     }
     return render(request, "events/detail.html", context)
 
+
+#attendees = {'first': ['Ida', 'Sevre', 'Erik', 'Ramn'], 'second': ['Martin', 'Inger Anna'], 'third': [],
+#             'fourth': ['Amanda', 'Peter', 'Bjørn Erik'],
+#             'fifth': ['Jonas', 'Jesus', 'Adnan']}
+#context = {
+#    'event': event,
+#    'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'], attendees['fourth'],
+#                             attendees['fifth'])
 
 @login_required
 def register_user(request, event_id):

@@ -103,18 +103,19 @@
                 <th data-field="third-grade">Tredje</th>
                 <th data-field="fourth-grade">Fjerde</th>
                 <th data-field="fifth-grade">Femte</th>
-                <th data-field="third-grade"> xyz</th>
+                <th data-field="third-grade"> Ferdig</th>
             </tr>
             </thead>
 
             <tbody>
-            {% for first,second,third,fourth,fifth in attendees %}
+            {% for first,second,third,fourth,fifth,done in attendees %}
                 <tr>
-                    <td>{{ first }}</td>
-                    <td>{{ second }}</td>
-                    <td>{{ third }}</td>
-                    <td>{{ fourth }}</td>
-                    <td>{{ fifth }}</td>
+                    <td>{% if first %}{{ first }}{% endif %}</td>
+                    <td>{% if second %}{{ second }}{% endif %}</td>
+                    <td>{% if third %}{{ third }}{% endif %}</td>
+                    <td>{% if fourth %}{{ fourth }}{% endif %}</td>
+                    <td>{% if fifth %}{{ fifth }}{% endif %}</td>
+                    <td>{% if done %}{{ done }}{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
@@ -139,11 +140,12 @@
             <tbody>
             {% for first,second,third,fourth,fifth in attendees_waiting %}
                 <tr>
-                    <td>{{ first }}</td>
-                    <td>{{ second }}</td>
-                    <td>{{ third }}</td>
-                    <td>{{ fourth }}</td>
-                    <td>{{ fifth }}</td>
+                    <td>{% if first %}{{ first }}{% endif %}</td>
+                    <td>{% if second %}{{ second }}{% endif %}</td>
+                    <td>{% if third %}{{ third }}{% endif %}</td>
+                    <td>{% if fourth %}{{ fourth }}{% endif %}</td>
+                    <td>{% if fifth %}{{ fifth }}{% endif %}</td>
+                    <td>{% if done %}{{ done }}{% endif %}</td>
                 </tr>
             {% endfor %}
             </tbody>
