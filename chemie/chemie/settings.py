@@ -162,3 +162,5 @@ EMAIL_HOST_PASSWORD = '532TTIuqx4RA' #my gmail password
 EMAIL_HOST_USER = 'edb.ntnu@gmail.com' #my gmail username
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+THUMBNAIL_DEBUG=True

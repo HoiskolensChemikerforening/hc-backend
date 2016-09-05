@@ -56,7 +56,7 @@
                 {% if user.is_authenticated %}
                     <li>
                         <div class="collapsible-header">
-                            <span style="padding-left: 50px;">{{ request.user.get_full_name }}</span>
+                            <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
                             {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
                                 <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="" class="circle profile-circle">
                             {% endthumbnail %}
