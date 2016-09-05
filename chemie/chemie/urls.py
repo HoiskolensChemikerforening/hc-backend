@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls'), name='frontpage'),
     url(r'^shitbox/', include('shitbox.urls')),
-    url(r'^verv/', include('committiees.urls')),
+    url(r'^verv/', include('committees.urls')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls')),
