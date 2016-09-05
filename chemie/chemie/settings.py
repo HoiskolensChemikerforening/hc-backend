@@ -35,7 +35,7 @@ INSTALLED_APPS = [
     'home',
     'news',
     'shitbox',
-    'committiees',
+    'committees',
     'events',
     'lockers',
     'yearbook',
@@ -72,7 +72,7 @@ ROOT_URLCONF = 'chemie.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ['templates'],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
