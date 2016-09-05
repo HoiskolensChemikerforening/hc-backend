@@ -142,3 +142,8 @@ i.icon-red {
 i.icon-gray {
     color: gray;
 }
+
+img.profile-circle {
+    width: 20%;
+    height: 20%;
+}
