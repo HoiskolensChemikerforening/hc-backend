@@ -90,9 +90,9 @@ def register_user(request, event_id):
             registration_form = edit_registration_form
             if 'register_or_edit' in request.POST:
                 if edit_registration_form.is_valid():
-                    registration.night_snack = edit_registration_form.cleaned_data['night_snack']
-                    registration.sleepover = edit_registration_form.cleaned_data['sleepover']
-                    registration.companion = edit_registration_form.cleaned_data['companion']
+                    registration.night_snack = edit_registration_form.cleaned_data.get('night_snack') or 0
+                    registration.sleepover = edit_registration_form.cleaned_data.get('sleepover') or 0
+                    registration.companion = edit_registration_form.cleaned_data.get('companion')
                     registration.save()
                     messages.add_message(request, messages.SUCCESS, 'Påmeldingsdetaljene ble endret',
                                          extra_tags='Endringer utført')
@@ -112,7 +112,7 @@ def register_user(request, event_id):
         else:
             # User is not registered
             if registration_form.is_valid():
-                instance = edit_registration_form.save(commit=False)
+                instance = registration_form.save(commit=False)
                 instance.event = event
                 instance.user = request.user
                 instance.save()
