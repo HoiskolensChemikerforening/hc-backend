@@ -18,8 +18,10 @@ from django.conf.urls import include,url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views
+from django_nyt.urls import get_pattern as get_nyt_pattern
+from wiki.urls import get_pattern as get_wiki_pattern
 
-import elections
+
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
@@ -34,6 +36,8 @@ urlpatterns = [
     url(r'^login/$', views.login),
     url(r'^logout/$', views.logout, {'next_page': '/'}),
     url(r'^events/', include('events.urls', namespace='events')),
+    url(r'^notifications/', get_nyt_pattern()),
+    url(r'^wiki/', get_wiki_pattern()),
 ]
 
 if settings.DEBUG:
