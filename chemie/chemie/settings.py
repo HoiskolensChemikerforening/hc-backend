@@ -31,6 +31,7 @@ LOGIN_REDIRECT_URL = '/'
 # Application definition
 
 INSTALLED_APPS = [
+    'django.contrib.sites',
     'elections',
     'home',
     'news',
@@ -52,6 +53,15 @@ INSTALLED_APPS = [
     'material',
     'mail_templated',
     "post_office",
+    'wiki',
+    'django.contrib.humanize',
+    'django_nyt',
+    'mptt',
+    'sekizai',
+    'wiki.plugins.attachments',
+    'wiki.plugins.notifications',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -80,6 +90,14 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'django.template.context_processors.i18n',
+                'django.template.context_processors.media',
+                'django.template.context_processors.request',
+                'django.template.context_processors.static',
+                'django.template.context_processors.tz',
+                'django.contrib.messages.context_processors.messages',
+                "sekizai.context_processors.sekizai",
+
             ],
         },
     },
@@ -164,3 +182,5 @@ EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 THUMBNAIL_DEBUG=True
+
+SITE_ID = 1
