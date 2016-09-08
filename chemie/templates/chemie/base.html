@@ -29,7 +29,6 @@
 <body>
 
 <header>
-
     <nav class="top-nav">
         <div class="container">
             <div class="nav-wrapper">
@@ -45,74 +44,86 @@
 
 
     <div class="nav-wrapper container">
-        <ul id="slide-out" class="side-nav fixed">
+        <ul id="slide-out" class="side-nav fixed" style="overflow-y:scroll;">
             <li class="logo">
                 <a id="logo-container" href="/" class="brand-logo">
                     <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
                 </a>
-                <h5 class="logo-text">Høiskolens Chemikerforening</h5>
+                <h4 class="logo-text">Høiskolens Chemikerforening</h4>
+                <div class="divider"></div>
             </li>
-            <li>
-                {% if user.is_authenticated %}
+
+            {% if user.is_authenticated %}
+                <li>
+                    <ul class="collapsible" data-collapsible="accordion">
                     <li>
                         <div class="collapsible-header">
-                            <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
-                            {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
-                                <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="" class="circle profile-circle">
-                            {% endthumbnail %}
+                            <div class="valign-wrapper">
+                                <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
+                                {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
+                                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt=""
+                                         class="circle profile-circle">
+                                {% endthumbnail %}
+                            </div>
                         </div>
-                        <div class="collapsible-body"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="/profile/edit" class="waves-effect waves-teal">Endre profil</a></li>
+                                <li><a href="/logout/" class="waves-effect waves-teal">Logg ut</a></li>
+                            </ul>
                         </div>
                     </li>
-                    <!--<ul class="collection dropdown-button" href='#' data-activates='dropdown1'>
-                        <li class="collection-item avatar">
-                            <img src="{% static "imgs/hannesul_alt.jpg" %}" alt="" class="circle">
-                            <span class="title">{{ request.user.get_full_name }}</span>
+                    </ul>
+                </li>
 
-                            <p style="line-height: 24px;">Profil<br>
-                               Logg ut
-                            </p>
-                            <<a href="#!" class="secondary-content">test<i class="material-icons">grade</i></a>
-                        </li>
-                    </ul>-->
-
-                {% else %}
-
-                {% endif %}
-
-            </li>
-            <li class="bold"><a href="/valg/" class="waves-effect waves-teal">Valgsystem</a></li>
-            <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal">Sladreboks</a></li>
-            <li class="bold"><a href="/events/" class="waves-effect waves-teal">Arrangementer</a></li>
-            <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal">Bokskap</a></li>
-            <li class="bold"><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
-            <li class="bold"><a href="/news/" class="waves-effect waves-teal">Nyheter</a></li>
-            <li class="bold"><a href="/admin/" class="waves-effect waves-teal">Adminpanel</a></li>
-            <li class="bold"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a></li>
-            {% if user.is_authenticated %}
-                <a class="dropdown-button lighten-1" href='#'
-                   data-activates="dropdown1">{{ user.first_name }} {{ user.last_name }}</a>
-                <ul id='dropdown1' class='dropdown-content'>
-                    <li><a href="/logout/">Logg ut</a></li>
-                </ul>
             {% else %}
                 <li class="bold"><a href="/login/">Logg inn</a></li>
             {% endif %}
 
+
+            <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal">Sladreboks</a></li>
+            <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal">Bokskap</a></li>
+
+
             <li>
                 <ul class="collapsible" data-collapsible="accordion">
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>First</div>
-                        <div class="collapsible-body"><a href="/calendar/" class="waves-effect waves-teal">Kalender</a>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>Sosialt</div>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="#" class="waves-effect waves-teal">Bedrpess</a></li>
+                                <li><a href="/events/" class="waves-effect waves-teal">Arrangementer</a></li>
+                            </ul>
                         </div>
                     </li>
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">place</i>Second</div>
-                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>Internt</div>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Send inn bilder</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Søk kontortilgang</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Søknad om cash</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Retningslinjer for e-post</a></li>
+
+                            </ul>
+                        </div>
                     </li>
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">whatshot</i>Third</div>
-                        <div class="collapsible-body"><p>Lorem ipsum dolor sit amet.</p></div>
+                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>Undergrupper</div>
+                        <div class="collapsible-body">
+                            <ul>
+                                <li><a href="#" class="waves-effect waves-teal">Mange</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Undergrupper</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Her</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Mange</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Undergrupper</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Her</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Mange</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Undergrupper</a></li>
+                                <li><a href="#" class="waves-effect waves-teal">Her</a></li>
+                            </ul>
+                        </div>
                     </li>
                 </ul>
             </li>
