@@ -3,22 +3,27 @@ from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
 from extended_choices import Choices
 from datetime import datetime
+from django.db.models import Q
+from functools import reduce
 
 # TODO: Decide how to handle weird students aka "PI" / 6th ++ year students
 GRADES = Choices(
-    ('FIRST',  1, 'Første'),
+    ('FIRST', 1, 'Første'),
     ('SECOND', 2, 'Andre'),
-    ('THIRD',  3, 'Tredje'),
+    ('THIRD', 3, 'Tredje'),
     ('FOURTH', 4, 'Fjerde'),
-    ('FIFTH',  5, 'Femte'),
-    ('DONE',   6, 'Ferdig'),
+    ('FIFTH', 5, 'Femte'),
+    ('DONE', 6, 'Ferdig'),
 )
 
 RELATIONSHIP_STATUS = Choices(
-    ('SINGLE',  1, 'Singel'),
+    ('SINGLE', 1, 'Singel'),
     ('TAKEN', 2, 'Opptatt'),
-    ('NSA',  5, 'Hemmelig!'),
+    ('COMPLICATED', 3, 'Det er komplisert...'),
+    ('GUESS', 4, 'Gjett ;)'),
+    ('NSA', 5, 'Hemmelig!'),
 )
+
 COMMENCE_YEAR = 1980
 CURRENT_YEAR = datetime.today().year
 STIPULATED_TIME = 5
@@ -27,12 +32,19 @@ FINISH_YEAR = CURRENT_YEAR + STIPULATED_TIME + 3
 YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 
 
+class ProfileManager(models.Manager):
+    def search_name(self, list):
+        result = self.filter(reduce(lambda x, y: x | y,
+                    [Q(user__first_name__contains=word) | Q(user__last_name__contains=word) for word in list]))
+        return result
+
+
 class Profile(models.Model):
     user = models.OneToOneField(User)
 
     grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn")
     start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR, verbose_name="Startår")
-    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR+STIPULATED_TIME,
+    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR + STIPULATED_TIME,
                                                 verbose_name="Estimert ferdig")
 
     allergies = models.TextField(null=True, blank=True, verbose_name="Matallergi")
@@ -48,6 +60,8 @@ class Profile(models.Model):
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
     membership = models.OneToOneField("Membership", null=True, blank=True)
+
+    objects = ProfileManager()
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
