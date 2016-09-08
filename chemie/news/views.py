@@ -1,43 +1,28 @@
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
+
+
 from .models import Article
-from .forms import NewsForm
+from .forms import NewsPost
 
+def create_post(request):
+    post = NewsPost(request.POST or None)
+    if request.POST:
+        instance = post.save(commit=False)
+        instance.author = request.user
+        instance.save()
 
-def index(request):
-    all_articles = Article.objects.all()
     context = {
-        'articles': all_articles
+        'post': post
     }
-    return render(request, 'news/overview.html', context)
+    return render(request, 'news/create_post.html', context)
 
+def news_details(request, article_id):
+    article = Article.objects.get(year__gt=datetime.now())
 
-def display_article(request, pk):
-    article = get_object_or_404(Article, pk=pk)
+def list_all(request):
+    all_posts = Article.objects.all()
     context = {
-        'article': article
+        'posts': all_posts,
     }
-    return render(request, 'news/single.html', context)
-
-
-def create_article(request):
-    post = NewsForm(request.POST or None)
-    if post.is_valid():
-        post.save()
-        context = {
-            "title": 'Fullført',
-            "message": 'Artikkelen har blitt postet.',
-            "status": 'success',
-        }
-        return render(request, 'common/feedback.html', context)
-    context = {
-        "post": post,
-    }
-    return render(request, 'news/administrer.html', context)
-
-
-def edit_article(request, pk):
-    pass
-
-
-def delete_article(request, pk):
-    pass
+    return render(request, 'news/list_all', context)

@@ -3,9 +3,7 @@ from django.conf.urls import url
 from . import views
 
 urlpatterns = [
-    url(r'^$', views.index, name='index'),
-    url(r'^new', views.create_article, name='newnews'),
-    url(r'(?P<pk>[0-9]+)/$', views.display_article, name='blog_detail'),
-    url(r'^(?P<pk>[0-9]+)/edit$', views.edit_article, name='blog_detail'),
-    url(r'^(?P<pk>[0-9]+)/delete$', views.delete_article, name='blog_detail'),
+    url(r'^$', views.list_all),
+    url(r'^detail/(?P<article_id>[0-9]+)/[\w0-9/]+', views.news_details),
+    url(r'^create', views.create_post),
 ]

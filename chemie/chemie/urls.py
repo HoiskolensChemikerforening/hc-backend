@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^verv/', include('committees.urls')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
     url(r'^klassekatalog/', include('yearbook.urls')),
-    url(r'^news/', include('news.urls')),
+    url(r'^news/', include('news.urls', namespace='news')),
     url(r'^calendar/', include('webcalendar.urls')),
     url(r'^profile/', include('customprofile.urls')),
     url(r'^login/$', views.login),

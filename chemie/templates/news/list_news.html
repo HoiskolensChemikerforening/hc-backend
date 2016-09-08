@@ -1,0 +1,27 @@
+<div class="row">
+    {% for post in posts %}
+        <div class="col s12 m10 l6">
+            <div class="card small">
+                <div class="card-image">
+                    <a href="{{ post.get_absolute_registration_url }}">
+                        <img src="/media/{{ event.image }}">
+                    </a>
+                    <span class="card-title">
+                      <h4>{{ post.title }}</h4>
+                      <h5>{{ post.date|date:"j F - H:i" }}</h5>
+                    </span>
+                </div>
+                <div class="card-content">
+                    <p class="flow-text">
+                        {{ post.content }}
+                    </p>
+                </div>
+<!--                <div class="card-action">
+                    <a href="{{ post.get_absolute_url }}">Detaljer</a>
+                    <a href="{{ post.get_absolute_registration_url }}">Til påmelding</a>
+                </div>
+!-->
+            </div>
+        </div>
+    {% endfor %}
+</div>
