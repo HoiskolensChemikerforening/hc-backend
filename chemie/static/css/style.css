@@ -40,8 +40,8 @@ nav.top-nav {
 
 ul.side-nav.fixed li.logo {
     text-align: center;
-    margin-top: 16px;
-    margin-bottom: 40px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 #front-page-logo {
@@ -51,8 +51,14 @@ ul.side-nav.fixed li.logo {
 }
 
 #logo-container {
-    height: 150px;
-    margin-bottom: 32px;
+    height: 130px;
+    margin-bottom: 16px;
+}
+
+.logo-text {
+    font-family: "Roboto Condensed";
+    font-weight: 300;
+    margin-top: 5px;
 }
 
 ul.side-nav.fixed ul.collapsible-accordion a.collapsible-header {
