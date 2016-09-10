@@ -10,22 +10,22 @@ Oversikt
 
 {% block content %}
 
-    {% if perms.events %}
+    {% if perms.news %}
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
             <a class="btn-floating btn-large red">
                 <i class="large material-icons">edit</i>
             </a>
             <ul>
-                {% if perms.events.can_delete %}
+                {% if perms.news.can_delete %}
                     <li><a class="btn-floating red" href="delete/"><i class="material-icons">delete_forever</i></a></li>
                 {% endif %}
-                {% if perms.events.can_add %}
+                {% if perms.news.can_add %}
                     <li><a class="btn-floating blue" href="create/"><i class="material-icons">add</i></a></li>
                 {% endif %}
             </ul>
         </div>
     {% endif %}
 
-    {% include "news/list_news" %}
+    {% include "news/list_news.html" %}
 
 {% endblock content %}
