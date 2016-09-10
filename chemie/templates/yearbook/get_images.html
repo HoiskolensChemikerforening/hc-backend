@@ -11,27 +11,31 @@
 }
 
 </style>
-
-<div class='klassetrinn'>
-    <nav class="light-blue lighten-1" role="navigation">
-        <div class="nav-wrapper container">
-          <a class="brand-logo"></a>
-          <ul id="nav-mobile" class="left hide-on-med-and-down">
-              {% for year_number, year_text in grades %}
+    <div class="row">
+<div class="klassetrinn">
+<div class="col s6 m6 l4">
+        <a class='dropdown-button light-blue lighten-1 btn-large' href='#' data-activates='dropdown1' role="navigation">Klassetrinn</a>
+        <ul id='dropdown1' class='dropdown-content'>
+            {% for year_number, year_text in grades %}
             <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
             {% endfor %}
-          </ul>
-          <ul id="yearbook-mobile" class="side-nav">
-               {% for year_number, year_text in grades %}
-            <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
-            {% endfor %}
-          </ul>
-          <a href="#" data-activates="yearbook-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
-        </div>
-      </nav>
+        </ul>
 </div>
-
-
+<div class="col s6 m6 l8">
+<nav>
+    <div class="nav-wrapper">
+      <form>
+        <div class="input-field light-blue lighten-1">
+          <input id="search" type="search" required >
+          <label for="search"><i class="material-icons">search</i></label>
+          <i class="material-icons">close</i>
+        </div>
+      </form>
+    </div>
+  </nav>
+</div>
+    </div>
+</div>
 
 
   <div class="row">
