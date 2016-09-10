@@ -40,7 +40,7 @@ nav.top-nav {
 
 ul.side-nav.fixed li.logo {
     text-align: center;
-    margin-top: 10px;
+    margin-top: 5px;
     margin-bottom: 10px;
 }
 
@@ -52,7 +52,6 @@ ul.side-nav.fixed li.logo {
 
 #logo-container {
     height: 130px;
-    margin-bottom: 16px;
 }
 
 .logo-text {
@@ -69,11 +68,11 @@ ul.side-nav.fixed li {
     line-height: 44px;
 }
 
-ul.side-nav.fixed li a {
-    font-size: 13px;
+ul.side-nav.fixed a {
+    font-size: 14px;
     line-height: 44px;
     height: 44px;
-    padding: 0 30px;
+    font-weight: 400;
 }
 
 #heading {
@@ -153,4 +152,19 @@ img.profile-circle {
     margin-left: 10px;
     width: 20%;
     height: 20%;
+}
+
+.side-nav li > a > i.material-icons {
+    color: rgb(0, 0, 0);
+        width: 2rem;
+    font-size: 1.6rem;
+    line-height: 3rem;
+    display: block;
+    float: left;
+    text-align: center;
+    margin-right: 1rem;
+}
+
+.side-nav .collapsible-body li a, .side-nav.fixed .collapsible-body li a {
+    padding: 0 23.5px 0 45px;
 }
