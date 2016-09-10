@@ -1,11 +1,12 @@
-from .models import Locker, LockerUser, Ownership, LockerConfirmation
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.shortcuts import render
-from .forms import RegisterExternalLockerUserForm
-from django.http import Http404
-from django.core.exceptions import ObjectDoesNotExist
-from .email import queue_activation_mail
 from django.contrib.auth.decorators import permission_required
+from django.core.exceptions import ObjectDoesNotExist
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+from django.http import Http404, HttpResponseRedirect
+from django.shortcuts import render
+
+from .email import queue_activation_mail, send_my_lockers_mail
+from .forms import RegisterExternalLockerUserForm, MyLockersForm
+from .models import Locker, LockerUser, Ownership, LockerConfirmation
 
 
 def view_lockers(request, page=1):
@@ -26,6 +27,20 @@ def view_lockers(request, page=1):
     }
     return render(request, 'lockers/list.html', context)
 
+def my_lockers(request):
+    form = MyLockersForm(request.POST or None)
+    if request.POST:
+        email = form.data.get('email')
+        if form.is_valid():
+            locker_user = LockerUser.objects.get(username=email)
+            lockers = locker_user.fetch_lockers()
+            send_my_lockers_mail(email, lockers, locker_user)
+            return HttpResponseRedirect('/')
+    context = {
+        'form': form,
+    }
+    return render(request, 'lockers/mineskap.html', context)
+
 
 def register_locker(request, number):
     # Fetch requested locker
@@ -37,8 +52,11 @@ def register_locker(request, number):
         form_data = RegisterExternalLockerUserForm(request.POST or None)
         if form_data.is_valid():
             # Check if user already exists
-            instance = form_data.save(commit=False)
-            user, _ = LockerUser.objects.get_or_create(username=instance.username)
+            user = form_data.save(commit=False)
+            try:
+                user = LockerUser.objects.get(username=user.username)
+            except ObjectDoesNotExist:
+                user.save()
 
             # Create a new ownership for the user
             new_ownership = Ownership(locker=locker, user=user)
