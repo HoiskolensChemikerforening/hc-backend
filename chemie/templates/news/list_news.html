@@ -3,8 +3,8 @@
         <div class="col s12 m10 l6">
             <div class="card small">
                 <div class="card-image">
-                    <a href="{{ post.get_absolute_registration_url }}">
-                        <img src="/media/{{ event.image }}">
+                    <a href="{{ post.get_absolute_url }}">
+                        <img src="/media/{{ post.image }}">
                     </a>
                     <span class="card-title">
                       <h4>{{ post.title }}</h4>
@@ -16,11 +16,9 @@
                         {{ post.content }}
                     </p>
                 </div>
-<!--                <div class="card-action">
-                    <a href="{{ post.get_absolute_url }}">Detaljer</a>
-                    <a href="{{ post.get_absolute_registration_url }}">Til påmelding</a>
+                <div class="card-action">
+                    <a href="{{ post.get_absolute_url }}">Til artikkelen</a>
                 </div>
-!-->
             </div>
         </div>
     {% endfor %}
