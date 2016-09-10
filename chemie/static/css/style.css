@@ -115,7 +115,6 @@ nav, footer.page-footer {
 }
 
 .heading {
-  font-size: 5.56rem;
   color: #FFA000;
   font-family: "Roboto";
   font-weight: 200;
@@ -167,4 +166,26 @@ img.profile-circle {
 
 .side-nav .collapsible-body li a, .side-nav.fixed .collapsible-body li a {
     padding: 0 23.5px 0 45px;
+}
+
+.card-event {
+        margin: 0rem 0 1rem 0;
+}
+
+
+.text-background {
+    position:absolute;
+    top:250px;
+    left:140px;
+    width:500px;
+    height:50px;
+    background-color:black;
+    z-index:0;
+    opacity:0.5;
+}
+
+.card-event-title {
+    padding: 0px 10px;
+    background-color: rgba(0,0,0,.2);
+    width: 100%;
 }
