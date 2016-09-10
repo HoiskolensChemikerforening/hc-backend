@@ -54,6 +54,9 @@ class LockerUser(models.Model):
         user_locker_count = Ownership.objects.filter(user=self, is_active=True).count()
         return user_locker_count >= LOCKER_COUNT
 
+    def fetch_lockers(self):
+        return Locker.objects.filter(owner__user=self)
+
 
 class OwnershipManager(models.Manager):
     def prune_expired(self):

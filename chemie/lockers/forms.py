@@ -16,3 +16,7 @@ class RegisterExternalLockerUserForm(forms.ModelForm):
             "last_name",
             "username",
         ]
+
+class MyLockersForm(forms.Form):
+    email = forms.EmailField()
+    layout = M.Layout(M.Row('email'),)
