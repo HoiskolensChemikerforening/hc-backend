@@ -4,7 +4,7 @@ from itertools import zip_longest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.views.decorators.csrf import ensure_csrf_cookie
@@ -14,6 +14,8 @@ from .models import Event, Registration, REGISTRATION_STATUS, RegistrationMessag
 from .email import send_event_mail
 
 from customprofile.models import Profile
+from django.http import HttpResponseRedirect
+from django.core.urlresolvers import reverse
 
 
 @login_required
@@ -24,6 +26,7 @@ def create_event(request):
             instance = form.save(commit=False)
             instance.author = request.user
             instance.save()
+            return HttpResponseRedirect(reverse('events:index'))
     context = {
         'form': form,
     }
