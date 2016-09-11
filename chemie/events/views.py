@@ -44,12 +44,21 @@ def list_all(request):
 # @cache_page(60 * 15)
 def view_event_details(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    first = Profile.objects.filter(grade='1')
-    second = Profile.objects.filter(grade='2')
-    third = Profile.objects.filter(grade='3')
-    fourth = Profile.objects.filter(grade='4')
-    fifth = Profile.objects.filter(grade='5')
-    done = Profile.objects.filter(grade='6')
+    first, second, third, fourth, fifth, done = [], [], [], [], [], []
+    registrations = Registration.objects.filter(event=event, status=1)
+    for registration in registrations:
+        if registration.user.profile.grade == 1:
+            first.append(registration.user.get_full_name())
+        if registration.user.profile.grade == 2:
+            second.append(registration.user.get_full_name())
+        if registration.user.profile.grade == 3:
+            third.append(registration.user.get_full_name())
+        if registration.user.profile.grade == 4:
+            fourth.append(registration.user.get_full_name())
+        if registration.user.profile.grade == 5:
+            fifth.append(registration.user.get_full_name())
+        if registration.user.profile.grade == 6:
+            done.append(registration.user.get_full_name())
 
     attendees = {
         'first': first,
