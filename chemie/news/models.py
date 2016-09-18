@@ -10,7 +10,7 @@ from django.db.models.signals import pre_save
 class Article(models.Model):
     title = models.CharField(max_length=120)
     slug = models.SlugField()
-    content = models.TextField()
+    content = models.TextField(verbose_name='Innhold', max_length=400)
     published_date = models.DateTimeField(auto_now_add=True)
     image = ImageField(upload_to='news', verbose_name="Bilde")
     author = models.ForeignKey(User)
