@@ -40,6 +40,23 @@ def list_all(request):
     }
     return render(request, "events/list.html", context)
 
+def list_with_delete(request):
+    all_events = Event.objects.filter(date__gt=timezone.now())
+    context = {
+        'events': all_events,
+    }
+    return render(request, "events/delete.html", context)
+
+
+def delete_event(request, event_id):
+    if request.method == 'POST':
+        event = get_object_or_404(Event, id=event_id)
+        event.delete()
+        messages.add_message(request, messages.SUCCESS, 'Arrangementet er slettet.')
+        return HttpResponseRedirect(reverse('events:delete'))
+    messages.add_message(request, messages.ERROR, 'Yiiiihaaa.')
+    return render(request, 'events/delete.html')
+
 
 # @cache_page(60 * 15)
 def view_event_details(request, event_id):

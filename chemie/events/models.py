@@ -36,7 +36,7 @@ class Event(models.Model):
     location = models.TextField(verbose_name="Sted")
 
     # Describes the event
-    description = models.TextField(verbose_name="Beskrivelse", max_length=400)
+    description = models.TextField(verbose_name="Beskrivelse", max_length=500)
 
     # An image from the event or describing the event
     image = ImageField(upload_to='events', verbose_name="Bilde")
@@ -45,7 +45,7 @@ class Event(models.Model):
     sluts = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
 
     # Payment information
-    payment_information = models.CharField(verbose_name="Betalingsinformasjon", max_length=400)
+    payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
     price_not_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, ikke-medlem")
     price_companion = models.PositiveSmallIntegerField(default=0, verbose_name="Pris for følge")
