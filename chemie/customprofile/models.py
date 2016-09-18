@@ -1,10 +1,16 @@
-from django.db import models
-from django.contrib.auth.models import User
-from sorl.thumbnail import ImageField
-from extended_choices import Choices
-from datetime import datetime
-from django.db.models import Q
+import uuid
+from datetime import timedelta
 from functools import reduce
+
+from django.contrib.auth.models import User
+from django.db import models
+from django.db.models import Q
+from django.utils import timezone
+from extended_choices import Choices
+from sorl.thumbnail import ImageField
+
+# Time the activation is valid in hours
+VALID_TIME = 2
 
 # TODO: Decide how to handle weird students aka "PI" / 6th ++ year students
 GRADES = Choices(
@@ -25,7 +31,7 @@ RELATIONSHIP_STATUS = Choices(
 )
 
 COMMENCE_YEAR = 1980
-CURRENT_YEAR = datetime.today().year
+CURRENT_YEAR = timezone.now().year
 STIPULATED_TIME = 5
 # The last, valid year you can select. 3 years behind the current stipulated year seems reasonable
 FINISH_YEAR = CURRENT_YEAR + STIPULATED_TIME + 3
@@ -73,4 +79,33 @@ class Membership(models.Model):
     endorser = models.ForeignKey(User)
 
     def is_active(self):
-        return self.start_date < datetime.now() < self.end_date
+        return self.start_date < timezone.now() < self.end_date
+
+
+class UserAuthenticationManager(models.Manager):
+    def prune_expired(self):
+        self.filter(created__lt=timezone.now() - timedelta(hours=VALID_TIME)).delete()
+
+
+class UserAuthentication(models.Model):
+    user = models.ForeignKey(User)
+    key = models.UUIDField(default=uuid.uuid4, editable=False)
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    objects = UserAuthenticationManager()
+
+    # Activates the user and deletes the authentication object
+    def activate(self):
+        self.user.is_active = True
+        self.user.save()
+        self.delete()
+
+    # Set the password and deletes the authentication object
+    def set_password(self, password):
+        self.user.set_password(password)
+        self.user.save()
+        self.delete()
+
+    # Checks if the authentication object is expired
+    def expired(self):
+        return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
