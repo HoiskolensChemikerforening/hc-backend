@@ -1,8 +1,8 @@
 from threading import Thread
+
 from django.core.mail import send_mail
 from mail_templated import send_mail
 from post_office import mail
-from django.contrib.auth.models import User
 
 DEFAULT_FROM_EMAIL = 'Webkom@hc.ntnu.no'
 

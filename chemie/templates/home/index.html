@@ -8,7 +8,13 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-
-{% include "news/list_news.html" with posts=posts %}
+    {% if events %}
+        <h3>Arrangementer</h3>
+        {% include 'events/list_events.html' with events=events %}
+    {% endif %}
+    {% if posts %}
+        <h3>Nyheter</h3>
+        {% include 'news/list_news.html' with posts=posts %}
+    {% endif %}
 
 {% endblock content %}
