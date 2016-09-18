@@ -1,0 +1,20 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% block nav_header %}
+    Feil ved lasting av side
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% block content %}
+<p class="flow-text">
+Siden finnes ikke!
+</p>
+
+<div class="row">
+    <div class="col l4 m6 s12"><br><img class ="responsive-img" src="{{bilde.picture.url}}"></div>
+</div>
+
+{% endblock content %}
