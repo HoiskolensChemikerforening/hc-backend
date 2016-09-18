@@ -82,17 +82,17 @@ class Membership(models.Model):
         return self.start_date < timezone.now() < self.end_date
 
 
-class UserAuthenticationManager(models.Manager):
+class UserTokenManager(models.Manager):
     def prune_expired(self):
         self.filter(created__lt=timezone.now() - timedelta(hours=VALID_TIME)).delete()
 
 
-class UserAuthentication(models.Model):
+class UserToken(models.Model):
     user = models.ForeignKey(User)
     key = models.UUIDField(default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
-    objects = UserAuthenticationManager()
+    objects = UserTokenManager()
 
     # Activates the user and deletes the authentication object
     def activate(self):
