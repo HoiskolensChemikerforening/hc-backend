@@ -43,3 +43,7 @@ urlpatterns = [
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+    from chemie.views import show_404
+
+    urlpatterns += [url(r'test404', show_404, name='404 ')]
