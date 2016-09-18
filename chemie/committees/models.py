@@ -11,13 +11,16 @@ class Committee(models.Model):
         return self.title
 
 
-class Member(models.Model):
+class Position(models.Model):
+    position_name = models.CharField(max_length=100, verbose_name="Stillingsnavn")
+    epost = models.EmailField(null=True, blank=True, verbose_name="Epost")
     committee = models.ForeignKey(Committee)
-    email = models.EmailField(null=True, blank=True, verbose_name="Epost for vervet")
-    user = models.ForeignKey(Profile)
-    start = models.DateTimeField(verbose_name="Startdato")
-    end = models.DateTimeField(verbose_name="Sluttdato")
-    position_title = models.CharField(max_length=150, default="Medlem", verbose_name="Tittel på stilling")
 
     def __str__(self):
         return str(self.user)
+
+class Member(models.Model):
+    position = models.ForeignKey(Position)
+    user = models.ForeignKey(Profile)
+    start = models.DateTimeField(verbose_name="Startdato")
+    end = models.DateTimeField(verbose_name="Sluttdato")
