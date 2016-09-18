@@ -124,3 +124,41 @@ class ChangePasswordForm(forms.ModelForm):
         def clean(self):
             super(ChangePasswordForm, self).clean()
             self.password_matches()
+
+
+class ForgotPassword(forms.ModelForm):
+    email = forms.CharField(widget=forms.EmailInput)
+    layout = M.Layout(M.Row('email'))
+
+    class Meta:
+        model = User
+        fields = ['email']
+
+
+class SetNewPassword(forms.ModelForm):
+    password_new = forms.CharField(widget=forms.PasswordInput, label="New password")
+    password_new_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm new password")
+    layout = M.Layout(M.Row('password_new'),
+                      M.Row('password_new_confirm'))
+
+    class Meta:
+        model = User
+        fields = ['password_new',
+                  'password_new_confirm',
+                  ]
+
+    def password_matches(self):
+        password_new = self.cleaned_data.get('password_new')
+        password_new_confirm = self.cleaned_data.get('password_new_confirm')
+        if not password_new:
+            self.add_error(None, ValidationError({'password_new': ["Feltet er påkrevd"]}))
+        if not password_new_confirm:
+            self.add_error(None, ValidationError({'password_new_confirm': ["Feltet er påkrevd"]}))
+        if password_new != password_new_confirm:
+            self.add_error(None, ValidationError({'password_new_confirm': ["Passordene stemmer ikke overens"]}))
+            return False
+        return password_new
+
+    def clean(self):
+        super(SetNewPassword, self).clean()
+        self.password_matches()

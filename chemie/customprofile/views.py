@@ -2,11 +2,14 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
-from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
 
-from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm
+from .email import send_forgot_password_mail
+from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword
+from .models import UserToken
 
 
 def register_user(request):
@@ -69,3 +72,38 @@ def change_password(request):
         'change_password_form': new_password_form,
     }
     return render(request, 'userregistration/changepassword.html', context)
+
+
+def forgot_password(request):
+    form = ForgotPassword(request.POST or None)
+    if request.POST:
+        email = form.data.get('email')
+        if form.is_valid():
+            user = User.objects.get(email=email)
+            if user:
+                token = UserToken.objects.create(user=user)
+                send_forgot_password_mail(request, email, user, token)
+                HttpResponseRedirect('/')
+    context = {
+        'email': form,
+    }
+    return render(request, 'userregistration/forgot_password.html', context)
+
+
+def activate_password(request, code):
+    try:
+        activator = UserToken.objects.get(key=code)
+    except ObjectDoesNotExist:
+        raise Http404
+    password_form = SetNewPassword(request.POST or None)
+    if request.POST:
+        if password_form.is_valid():
+            password = password_form.data.get('password_new')
+            activator.set_password(password)
+            messages.add_message(request, messages.SUCCESS, 'Ditt passord ble endret', extra_tags='Suksess')
+            return HttpResponseRedirect('/')
+
+    context = {
+        'form': password_form,
+    }
+    return render(request, 'userregistration/setforgottenpassword.html', context)
