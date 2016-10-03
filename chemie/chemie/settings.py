@@ -24,6 +24,7 @@ if os.environ.get("DEBUG") == "False":
     ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = False
+    ADMINS = [('Carl Johan Hambro', 'carljohan.hambro@gmail.com')]
 else:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'd)%%e$l#xa7xtvro#(%n)q)h$_399wth0i1^@hxrruqz$0&@zx'
@@ -178,10 +179,10 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "chemie/static"),
 ]
-print(STATICFILES_DIRS)
+
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-print(STATIC_ROOT)
+
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
