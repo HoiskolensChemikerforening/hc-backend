@@ -18,13 +18,18 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'd)%%e$l#xa7xtvro#(%n)q)h$_399wth0i1^@hxrruqz$0&@zx'
-
-# SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = []
+if os.environ.get("DEBUG") == "False":
+    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
+    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
+    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
+    SECRET_KEY = os.environ.get('SECRET_KEY')
+    DEBUG = False
+else:
+    # SECURITY WARNING: keep the secret key used in production secret!
+    SECRET_KEY = 'd)%%e$l#xa7xtvro#(%n)q)h$_399wth0i1^@hxrruqz$0&@zx'
+    # SECURITY WARNING: don't run with debug turned on in production!
+    DEBUG = True
+    ALLOWED_HOSTS = ['*']
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -87,9 +92,9 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+                'django.contrib.auth.context_processors.auth',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
-                'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
                 'django.template.context_processors.i18n',
                 'django.template.context_processors.media',
@@ -110,12 +115,26 @@ WSGI_APPLICATION = 'chemie.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+
+if DEBUG:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        }
     }
-}
+else:
+    print('PRODUCTION DATABASE')
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': os.environ.get('POSTGRES_DB'),
+            'USER': os.environ.get('POSTGRES_USER'),
+            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
+            'HOST': 'database',
+            'PORT': '5432',
+        }
+    }
 
 
 # Password validation
@@ -157,15 +176,15 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    BASE_DIR+'/static/',
+    os.path.join(BASE_DIR, "chemie/static"),
 ]
-# TODO: Remove STATIC_ROOT if it has no use
-#STATIC_ROOT = os.path.join(os.path.dirname(BASE_DIR), "static")
+print(STATICFILES_DIRS)
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static")
+print(STATIC_ROOT)
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
-#todo, gjøre slik at bilde havner i /media/"appname"
 
 RECAPTCHA_PUBLIC_KEY = '6Lc-VB8TAAAAAD7HwjcKbpfOOiU8X0_NRcp91g54'
 RECAPTCHA_PRIVATE_KEY = '6Lc-VB8TAAAAAIDtd6vJ_cO1Vy7q6AzSEXt1OcDA'
@@ -185,3 +204,8 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 THUMBNAIL_DEBUG=True
 
 SITE_ID = 1
+
+
+WIKI_ACCOUNT_SIGNUP_ALLOWED = False
+WIKI_ANONYMOUS_WRITE = False
+WIKI_ANONYMOUS_CREATE = False
