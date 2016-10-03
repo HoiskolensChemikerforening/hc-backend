@@ -1,0 +1,46 @@
+version: '2'
+services:
+  database:
+    restart: always
+    image: postgres:9.5.2
+    env_file: .env
+    volumes:
+      - "db-data:/var/lib/postgresql/data"
+#      - ./dbdata/etc:/etc/postgresql
+      - ./logs/db:/var/log/postgresql
+#      - ./dbdata/lib:/var/lib/postgresql
+  website:
+    restart: always
+    build: ./chemie
+    volumes:
+      - ./chemie:/code
+      - ./logs/gunicorn:/gunicorn-logfiles
+    depends_on:
+      - database
+    env_file: .env
+    expose:
+      - "8000"
+  proxy:
+    build: ./nginx
+    ports:
+      - "1337:80"
+    volumes:
+      - /www/static
+      - /etc/localtime:/etc/localtime:ro
+    volumes_from:
+      - website
+    links:
+      - website:website
+  backupjob:
+    build: ./backupjob
+    volumes:
+      - ./backup_chemie:/etc/ssl/private/backup/chemiebackup
+    volumes_from:
+      - website
+    env_file: .env
+    links:
+      - database:database
+
+
+volumes:
+  db-data:
