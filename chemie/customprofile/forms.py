@@ -6,8 +6,8 @@ import material as M
 from django.core.validators import ValidationError
 
 class RegisterUserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label="Password")
-    password_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm password")
+    password = forms.CharField(widget=forms.PasswordInput, label="Passord")
+    password_confirm = forms.CharField(widget=forms.PasswordInput, label="Gjenta passord")
 
     layout = M.Layout(M.Row('first_name', 'last_name'),
                       M.Row('email'),
