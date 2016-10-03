@@ -25,9 +25,7 @@ GRADES = Choices(
 RELATIONSHIP_STATUS = Choices(
     ('SINGLE', 1, 'Singel'),
     ('TAKEN', 2, 'Opptatt'),
-    ('COMPLICATED', 3, 'Det er komplisert...'),
-    ('GUESS', 4, 'Gjett ;)'),
-    ('NSA', 5, 'Hemmelig!'),
+    ('NSA', 3, 'Hemmelig!'),
 )
 
 COMMENCE_YEAR = 1980
