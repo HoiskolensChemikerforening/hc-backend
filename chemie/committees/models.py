@@ -1,8 +1,9 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
-from django.db.models.signals import pre_save, pre_delete, post_init
+from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from smart_selects.db_fields import ChainedForeignKey
+from sorl.thumbnail import ImageField
 
 from customprofile.models import Profile
 
@@ -10,15 +11,15 @@ from customprofile.models import Profile
 class Committee(models.Model):
     title = models.CharField(max_length=100)
     email = models.EmailField()
-    #image =
+    image = ImageField(upload_to='kommiteer')
 
     def __str__(self):
         return self.title
 
 
 class Position(models.Model):
-    position_name = models.CharField(max_length=100, verbose_name="Stillingsnavn")
-    epost = models.EmailField(null=True, blank=True, verbose_name="Epost")
+    title = models.CharField(max_length=100, verbose_name="Stillingsnavn")
+    email = models.EmailField(null=True, blank=True, verbose_name="Epost")
     committee = models.ForeignKey(Committee)
     permission_group = models.ForeignKey(Group)
 
@@ -53,14 +54,12 @@ class Member(models.Model):
         super(Member, self).__init__(*args, **kwargs)
         self.initial_user = self.user
 
-
     def save(self, *args, **kwargs):
-        old = Member.objects.get(pk=self.pk).user
-        new = self.user
         if self.pk:
-            #Member exists and is changed
+            old = Member.objects.get(pk=self.pk).user
             self.remove_from_group(old)
-        self.add_to_group(new)
+        if self.user:
+            self.add_to_group(self.user)
         super(Member, self).save()
 
 
