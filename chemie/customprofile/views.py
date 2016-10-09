@@ -6,10 +6,12 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render
-
+from django.utils import timezone
+from datetime import timedelta
+from django.http import JsonResponse
 from .email import send_forgot_password_mail
-from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword
-from .models import UserToken
+from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword, LifeTimeMember
+from .models import UserToken, Profile, Membership
 
 
 def register_user(request):
@@ -107,3 +109,27 @@ def activate_password(request, code):
         'form': password_form,
     }
     return render(request, 'userregistration/setforgottenpassword.html', context)
+
+def change_membership_status(request, id):
+    person = User.objects.get(pk=id).profile
+    person.membership = Membership(
+        start_date = timezone.now(),
+        end_date = timezone.now() + timedelta(365*5),
+        endorser = request.user
+        )
+    person.membership.save()
+    person.save()
+    membership_status = person.membership.is_active()
+    return JsonResponse({'membership_status': membership_status})
+
+def manage_memberships(request):
+    form = LifeTimeMember(request.POST or None)
+    if request.POST:
+        if request.is_ajax():
+            change_membership_status(request)
+    users = Profile.objects.all()
+    context = {
+        "users": users,
+        "form": form,
+    }
+    return render(request, "userregistration/memberships.html", context)
