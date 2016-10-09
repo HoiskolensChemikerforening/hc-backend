@@ -13,6 +13,7 @@ django-nyt==0.9.9
 django-post-office==2.0.8
 django-recaptcha==1.0.5
 django-sekizai==0.10.0
+django-smart-selects==1.2.2
 djangorestframework==3.4.7
 future==0.15.2
 gunicorn==19.6.0
