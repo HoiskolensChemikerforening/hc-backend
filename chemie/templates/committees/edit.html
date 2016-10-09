@@ -1,0 +1,25 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load staticfiles %}
+
+{% block content %}
+<body>
+    <p></p>
+    <form class="newPost" method='POST'>{% csrf_token %}
+      {{ form.as_p }}
+      <input class ="btn" type ='submit' value = 'Send!'/>
+    </form>
+{% endblock content %}
+
+
+
+{% block footer_script %}
+<script>
+    $(document).ready(function(){
+        $('select').change(function(){
+            $(this).material_select();
+        });
+    });
+</script>
+{% endblock footer_script %}
+

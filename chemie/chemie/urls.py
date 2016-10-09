@@ -38,6 +38,7 @@ urlpatterns = [
     url(r'^events/', include('events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
+    url(r'^chaining/', include('smart_selects.urls')),
 ]
 
 if settings.DEBUG:
