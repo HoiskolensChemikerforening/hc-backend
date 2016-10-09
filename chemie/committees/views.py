@@ -1,5 +1,6 @@
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from .models import Committee
+from .forms import EditCommittees
 
 
 def index(request):
@@ -11,4 +12,14 @@ def index(request):
         'committees': committees,
     }
 
-    return render_to_response('committees/detail.html', context)
+    return render(request, 'committees/detail.html', context)
+
+def edit(request):
+    form = EditCommittees(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            pass
+    context = {
+        'form': form,
+    }
+    return render(request, 'committees/edit.html', context)

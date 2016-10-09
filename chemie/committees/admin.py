@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Committee, Member, Position
+from .models import Committee, Position, Member
 
 admin.site.register(Committee)
 admin.site.register(Member)

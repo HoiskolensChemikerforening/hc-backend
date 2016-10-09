@@ -69,6 +69,7 @@ INSTALLED_APPS = [
     'wiki.plugins.images',
     'wiki.plugins.macros',
     'chemie',
+    'smart_selects',
 ]
 
 MIDDLEWARE_CLASSES = [
