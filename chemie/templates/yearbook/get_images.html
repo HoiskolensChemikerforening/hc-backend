@@ -24,11 +24,10 @@
 <div class="col s6 m6 l8">
 <nav>
     <div class="nav-wrapper">
-      <form>
+      <form method='post' action='/klassekatalog/sok/'>{% csrf_token %}
         <div class="input-field light-blue lighten-1">
-          <input id="search" type="search" required >
-          <label for="search"><i class="material-icons">search</i></label>
-          <i class="material-icons">close</i>
+            {{ search_form }}
+          <label for="search_field"><i class="material-icons">search</i></label>
         </div>
       </form>
     </div>
