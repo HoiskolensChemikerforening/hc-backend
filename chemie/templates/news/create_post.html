@@ -5,7 +5,8 @@
 <body>
     <p></p>
     <form class="newPost" enctype="multipart/form-data" method='POST'>{% csrf_token %}
-      {{ post.as_p }}
+        {{ post.media }}
+        {{ post.as_p }}
       <input class ="btn" type ='submit' value = 'Lag artikkelen!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
     </form>
 {% endblock content %}

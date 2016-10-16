@@ -1,7 +1,7 @@
+from dal import autocomplete
 from django import forms
 
-from .models import Member, Committee, Position
-from dal import autocomplete
+from .models import Member
 
 
 class EditCommittees(forms.ModelForm):
