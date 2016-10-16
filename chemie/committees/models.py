@@ -1,11 +1,9 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
-from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from smart_selects.db_fields import ChainedForeignKey
 from sorl.thumbnail import ImageField
-
-from customprofile.models import Profile
 
 
 class Committee(models.Model):
@@ -61,6 +59,43 @@ class Member(models.Model):
         if self.user:
             self.add_to_group(self.user)
         super(Member, self).save()
+
+
+@receiver(pre_delete, sender=Member)
+def update_position_member_groups_on_save(sender, instance, *args, **kwargs):
+    instance.remove_from_group(instance.user)
+
+    committee = models.ForeignKey(Committee)
+    position = ChainedForeignKey(
+        Position,
+        chained_field="committee",
+        chained_model_field="committee",
+        show_all=False,
+        auto_choose=True
+    )
+    user = models.ForeignKey(User, blank=True, null=True)
+
+    def __str__(self):
+        if self.user:
+            return self.user.get_full_name()
+        else:
+            return "Ledig"
+
+    def remove_from_group(self, user):
+        self.position.permission_group.user_set.remove(user)
+
+    def add_to_group(self, user):
+        self.position.permission_group.user_set.add(user)
+
+
+@receiver(pre_save, sender=Member)
+def update_position_member_groups_on_save(sender, instance, *args, **kwargs):
+    """ Update post rating """
+    if instance.id:
+        old_member = Member.objects.get(pk=instance.pk).user
+        instance.remove_from_group(old_member)
+    if instance.user:
+        instance.add_to_group(instance.user)
 
 
 @receiver(pre_delete, sender=Member)
