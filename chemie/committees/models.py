@@ -1,23 +1,22 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
-from django.db.models.signals import pre_save, pre_delete, post_init
+from django.db.models.signals import pre_save, pre_delete
 from django.dispatch import receiver
 from smart_selects.db_fields import ChainedForeignKey
-
-from customprofile.models import Profile
+from sorl.thumbnail import ImageField
 
 
 class Committee(models.Model):
     title = models.CharField(max_length=100)
     email = models.EmailField()
-    #image =
+    image = ImageField(upload_to='kommiteer')
 
     def __str__(self):
         return self.title
 
 
 class Position(models.Model):
-    position_name = models.CharField(max_length=100, verbose_name="Stillingsnavn")
+    title = models.CharField(max_length=100, verbose_name="Stillingsnavn")
     email = models.EmailField(null=True, blank=True, verbose_name="Epost")
     committee = models.ForeignKey(Committee)
     permission_group = models.ForeignKey(Group)
@@ -59,16 +58,11 @@ class Member(models.Model):
             #Member exists and is changed
             old = Member.objects.get(pk=self.pk).user
             self.remove_from_group(old)
-        self.add_to_group(new)
+        if new:
+            self.add_to_group(self.user)
         super(Member, self).save()
 
 
 @receiver(pre_delete, sender=Member)
 def update_position_member_groups_on_save(sender, instance, *args, **kwargs):
     instance.remove_from_group(instance.user)
-
-class Usr(models.Model):
-    user = models.ForeignKey(User)
-
-    def __str__(self):
-        return self.user
