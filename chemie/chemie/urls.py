@@ -19,8 +19,8 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views
 from django_nyt.urls import get_pattern as get_nyt_pattern
+from machina.app import board
 from wiki.urls import get_pattern as get_wiki_pattern
-
 
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
@@ -38,6 +38,9 @@ urlpatterns = [
     url(r'^events/', include('events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
+    url(r'^markdown/', include( 'django_markdown.urls')),
+    url(r'^forum/', include(board.urls)),
+    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
 ]
 

@@ -1,3 +1,5 @@
+from datetime import timedelta
+
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -5,10 +7,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404, HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 from django.utils import timezone
-from datetime import timedelta
-from django.http import JsonResponse
+
 from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword, LifeTimeMember
 from .models import UserToken, Profile, Membership
