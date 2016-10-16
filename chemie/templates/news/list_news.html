@@ -12,9 +12,7 @@
                     </span>
                 </div>
                 <div class="card-content">
-                    <p class="flow-text">
                         {{ post.content|safe }}
-                    </p>
                 </div>
                 <div class="card-action">
                     <a href="{{ post.get_absolute_url }}">Til artikkelen</a>
@@ -23,3 +21,14 @@
         </div>
     {% endfor %}
 </div>
+
+
+{% block footer_script %}
+    <script>
+        $(function () {
+            $(".card-content").each(function () {
+                $(this).children().addClass("flow-text");
+            });
+        });
+    </script>
+{% endblock footer_script %}
