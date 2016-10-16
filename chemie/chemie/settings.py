@@ -40,54 +40,54 @@ LOGIN_REDIRECT_URL = '/'
 # Application definition
 
 INSTALLED_APPS = [
-    'django.contrib.sites',
-    'elections',
-    'home',
-    'news',
-    'shitbox',
-    'committees',
-    'events',
-    'lockers',
-    'yearbook',
-    'webcalendar',
-    'dal',
-    'dal_select2',
-    'django.contrib.admin',
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'captcha',
-    'customprofile',
-    'sorl.thumbnail',
-    'material',
-    'mail_templated',
-    "post_office",
-    'wiki',
-    'django.contrib.humanize',
-    'django_nyt',
-    'sekizai',
-    'wiki.plugins.attachments',
-    'wiki.plugins.notifications',
-    'wiki.plugins.images',
-    'wiki.plugins.macros',
-    'chemie',
-     'mptt',
-     'haystack',
-     'widget_tweaks',
-     'django_markdown',
-     'rest_framework',
-    'smart_selects',
-] + get_machina_apps()
-
+                     'django.contrib.sites',
+                     'elections',
+                     'home',
+                     'news',
+                     'shitbox',
+                     'committees',
+                     'events',
+                     'lockers',
+                     'yearbook',
+                     'webcalendar',
+                     'dal',
+                     'dal_select2',
+                     'django.contrib.admin',
+                     'django.contrib.auth',
+                     'django.contrib.contenttypes',
+                     'django.contrib.sessions',
+                     'django.contrib.messages',
+                     'django.contrib.staticfiles',
+                     'captcha',
+                     'customprofile',
+                     'sorl.thumbnail',
+                     'material',
+                     'mail_templated',
+                     "post_office",
+                     'wiki',
+                     'django.contrib.humanize',
+                     'django_nyt',
+                     'sekizai',
+                     'wiki.plugins.attachments',
+                     'wiki.plugins.notifications',
+                     'wiki.plugins.images',
+                     'wiki.plugins.macros',
+                     'chemie',
+                     'mptt',
+                     'haystack',
+                     'widget_tweaks',
+                     'django_markdown',
+                     'rest_framework',
+                     'smart_selects',
+                     'ckeditor',
+                 ] + get_machina_apps()
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #'django.middleware.cache.UpdateCacheMiddleware',
+    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    #'django.middleware.cache.FetchFromCacheMiddleware',
+    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
@@ -125,7 +125,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'chemie.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/1.9/ref/settings/#databases
 
@@ -149,7 +148,6 @@ else:
             'PORT': '5432',
         }
     }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/1.9/ref/settings/#auth-password-validators
@@ -206,7 +204,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
 
@@ -217,9 +214,7 @@ STATICFILES_DIRS = [
     MACHINA_MAIN_STATIC_DIR,
 ]
 
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
-
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
@@ -229,20 +224,18 @@ RECAPTCHA_PRIVATE_KEY = '6Lc-VB8TAAAAAIDtd6vJ_cO1Vy7q6AzSEXt1OcDA'
 
 NOCAPTCHA = True
 
-
 EMAIL_USE_TLS = True
-#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'post_office.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = '532TTIuqx4RA' #my gmail password
-EMAIL_HOST_USER = 'edb.ntnu@gmail.com' #my gmail username
+EMAIL_HOST_PASSWORD = '532TTIuqx4RA'  # my gmail password
+EMAIL_HOST_USER = 'edb.ntnu@gmail.com'  # my gmail username
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
-THUMBNAIL_DEBUG=True
+THUMBNAIL_DEBUG = True
 
 SITE_ID = 1
-
 
 WIKI_ACCOUNT_SIGNUP_ALLOWED = False
 WIKI_ANONYMOUS_WRITE = False
