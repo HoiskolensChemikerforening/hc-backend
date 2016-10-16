@@ -18,7 +18,7 @@ class Committee(models.Model):
 
 class Position(models.Model):
     position_name = models.CharField(max_length=100, verbose_name="Stillingsnavn")
-    epost = models.EmailField(null=True, blank=True, verbose_name="Epost")
+    email = models.EmailField(null=True, blank=True, verbose_name="Epost")
     committee = models.ForeignKey(Committee)
     permission_group = models.ForeignKey(Group)
 
@@ -53,12 +53,11 @@ class Member(models.Model):
         super(Member, self).__init__(*args, **kwargs)
         self.initial_user = self.user
 
-
     def save(self, *args, **kwargs):
-        old = Member.objects.get(pk=self.pk).user
         new = self.user
         if self.pk:
             #Member exists and is changed
+            old = Member.objects.get(pk=self.pk).user
             self.remove_from_group(old)
         self.add_to_group(new)
         super(Member, self).save()
@@ -67,3 +66,9 @@ class Member(models.Model):
 @receiver(pre_delete, sender=Member)
 def update_position_member_groups_on_save(sender, instance, *args, **kwargs):
     instance.remove_from_group(instance.user)
+
+class Usr(models.Model):
+    user = models.ForeignKey(User)
+
+    def __str__(self):
+        return self.user
