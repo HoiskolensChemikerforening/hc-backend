@@ -25,3 +25,7 @@ six==1.10.0
 sorl-thumbnail==12.3
 sqlparse==0.2.1
 wiki==0.1.2
+smart_selects
+django-machina==0.3.0
+django-haystack==2.5.0
+django-autocomplete-light==3.2.0
