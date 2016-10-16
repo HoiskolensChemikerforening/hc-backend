@@ -1,6 +1,7 @@
 from django import forms
 
-from .models import Member
+from .models import Member, Committee, Position
+from dal import autocomplete
 
 
 class EditCommittees(forms.ModelForm):
@@ -11,3 +12,6 @@ class EditCommittees(forms.ModelForm):
             'position',
             'user',
         ]
+        widgets = {
+            'user': autocomplete.ModelSelect2(url='user-autocomplete')
+                   }

@@ -1,6 +1,10 @@
 from django.shortcuts import render
-from .models import Committee
+from .models import Committee, Position, Member
 from .forms import EditCommittees
+from dal import autocomplete
+from django.contrib.auth.models import User
+from django.contrib import messages
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def index(request):
@@ -14,12 +18,43 @@ def index(request):
 
     return render(request, 'committees/detail.html', context)
 
+
 def edit(request):
     form = EditCommittees(request.POST or None)
     if request.method == 'POST':
         if form.is_valid():
-            pass
+            committee = form.cleaned_data.get('committee')
+            position = form.cleaned_data.get('position')
+            new_user = form.cleaned_data.get('user')
+            try:
+                current_member = Member.objects.get(committee=committee,
+                                                position=position)
+            except ObjectDoesNotExist:
+                current_member = None
+            if current_member is not None:
+                current_member.delete()
+            new_member = Member(committee=committee,
+                                position=position,
+                                user=new_user)
+            new_member.save()
+            messages.add_message(request, messages.SUCCESS, 'Brukeren er lagt til i vervet og tidligere bruker er slettet!',
+                                 extra_tags='Flott!',
+                                )
     context = {
         'form': form,
     }
     return render(request, 'committees/edit.html', context)
+
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated():
+            return User.objects.none()
+
+        qs = User.objects.all()
+
+        if self.q:
+            qs = qs.filter(username__icontains=self.q)
+
+        return qs
