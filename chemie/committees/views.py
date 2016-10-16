@@ -1,10 +1,11 @@
-from django.shortcuts import render
-from .models import Committee, Position, Member
-from .forms import EditCommittees
 from dal import autocomplete
-from django.contrib.auth.models import User
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import render
+
+from .forms import EditCommittees
+from .models import Committee, Member
 
 
 def index(request):

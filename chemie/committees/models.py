@@ -1,6 +1,6 @@
 from django.contrib.auth.models import Group, User
 from django.db import models
-from django.db.models.signals import pre_save, pre_delete
+from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from smart_selects.db_fields import ChainedForeignKey
 from sorl.thumbnail import ImageField

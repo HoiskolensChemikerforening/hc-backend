@@ -4,13 +4,14 @@ from django.core.urlresolvers import reverse
 from django.utils.text import slugify
 from sorl.thumbnail import ImageField
 from django.db.models.signals import pre_save
+from ckeditor.fields import RichTextField
 
 
 
 class Article(models.Model):
-    title = models.CharField(max_length=120)
+    title = models.CharField(max_length=100)
     slug = models.SlugField()
-    content = models.TextField(verbose_name='Innhold', max_length=400)
+    content = RichTextField()
     published_date = models.DateTimeField(auto_now_add=True)
     image = ImageField(upload_to='news', verbose_name="Bilde")
     author = models.ForeignKey(User)
