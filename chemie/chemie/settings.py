@@ -80,6 +80,7 @@ INSTALLED_APPS = [
                      'rest_framework',
                      'smart_selects',
                      'ckeditor',
+                     'django.contrib.flatpages',
                  ] + get_machina_apps()
 
 MIDDLEWARE_CLASSES = [
@@ -235,8 +236,19 @@ DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 THUMBNAIL_DEBUG = True
 
-SITE_ID = 1
+SITE_ID = 3
 
 WIKI_ACCOUNT_SIGNUP_ALLOWED = False
 WIKI_ANONYMOUS_WRITE = False
 WIKI_ANONYMOUS_CREATE = False
+
+CKEDITOR_CONFIGS = {
+    'news_events': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+        ]
+    },
+}
