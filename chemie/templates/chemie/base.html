@@ -215,6 +215,14 @@
 
 
 <!--  Scripts-->
+
+<!-- All cards with a paragraph tag will get larger text -->
+    <script>
+    $('.card-content').each(function(){
+       $(this).children('p').addClass('flow-text')
+    });
+    </script>
+
 {% block footer_js_files %}
 {% endblock %}
 
