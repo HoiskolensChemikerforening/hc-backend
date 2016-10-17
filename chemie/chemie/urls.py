@@ -17,10 +17,12 @@ from django.conf import settings
 from django.conf.urls import include,url
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.auth import views
+import django.contrib.auth.views as auth_views
 from django_nyt.urls import get_pattern as get_nyt_pattern
 from machina.app import board
 from wiki.urls import get_pattern as get_wiki_pattern
+import django.contrib.flatpages.views as flat_views
+
 
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
@@ -33,8 +35,8 @@ urlpatterns = [
     url(r'^news/', include('news.urls', namespace='news')),
     url(r'^calendar/', include('webcalendar.urls')),
     url(r'^profile/', include('customprofile.urls')),
-    url(r'^login/$', views.login),
-    url(r'^logout/$', views.logout, {'next_page': '/'}),
+    url(r'^login/$', auth_views.login),
+    url(r'^logout/$', auth_views.logout, {'next_page': '/'}),
     url(r'^events/', include('events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
@@ -44,6 +46,10 @@ urlpatterns = [
     url(r'^chaining/', include('smart_selects.urls')),
 ]
 
+urlpatterns += [
+    url(r'^about-us/$', flat_views.flatpage, {'url': '/about-us/'}, name='about'),
+    url(r'^license/$', flat_views.flatpage, {'url': '/license/'}, name='license'),
+]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
