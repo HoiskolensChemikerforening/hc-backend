@@ -9,7 +9,7 @@ from sorl.thumbnail import ImageField
 class Committee(models.Model):
     title = models.CharField(max_length=100)
     email = models.EmailField()
-    image = ImageField(upload_to='kommiteer')
+    image = ImageField(upload_to='komiteer')
 
     def __str__(self):
         return self.title

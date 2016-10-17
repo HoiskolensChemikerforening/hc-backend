@@ -1,3 +1,4 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
@@ -32,10 +33,16 @@ def my_lockers(request):
     if request.POST:
         email = form.data.get('email')
         if form.is_valid():
-            locker_user = LockerUser.objects.get(username=email)
-            lockers = locker_user.fetch_lockers()
-            send_my_lockers_mail(email, lockers, locker_user)
-            return HttpResponseRedirect('/')
+            try:
+                locker_user = LockerUser.objects.get(username=email)
+                lockers = locker_user.fetch_lockers()
+                send_my_lockers_mail(email, lockers, locker_user)
+                messages.add_message(request, messages.SUCCESS, 'Eposten ble sendt!')
+                return HttpResponseRedirect('/')
+            except ObjectDoesNotExist:
+                messages.add_message(request, messages.ERROR, 'Skapet har soleis inga skap på vevseposten',
+                                     extra_tags="Bra jobba!")
+
     context = {
         'form': form,
     }
@@ -133,12 +140,15 @@ def reset_locker_ownerships(request):
 
 @permission_required('lockers.can_delete')
 def prune_expired_items(request):
+    # Remove unconfirmed ownerships
     Ownership.objects.prune_expired()
+    # Clear old tokens
     LockerConfirmation.objects.prune_expired()
 
 
 @permission_required('lockers.can_delete')
 def reset_idle_lockers(request):
+    # Remove ownerships that are inactive
     Locker.objects.reset_idle()
 
 
