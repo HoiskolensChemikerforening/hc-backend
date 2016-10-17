@@ -1,10 +1,10 @@
-from django.db import models
-from django.utils import timezone
-from sorl.thumbnail import ImageField
-#from customprofile.models import Profile
-from extended_choices import Choices
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
+from django.db import models
+from django.utils import timezone
+from extended_choices import Choices
+from sorl.thumbnail import ImageField
+from ckeditor.fields import RichTextField
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED',  1, 'Confirmed'),
@@ -36,7 +36,8 @@ class Event(models.Model):
     location = models.TextField(verbose_name="Sted")
 
     # Describes the event
-    description = models.TextField(verbose_name="Beskrivelse", max_length=500)
+    description = RichTextField(verbose_name='Beskrivelse', config_name='news_events')
+
 
     # An image from the event or describing the event
     image = ImageField(upload_to='events', verbose_name="Bilde")

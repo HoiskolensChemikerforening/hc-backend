@@ -11,7 +11,7 @@ from ckeditor.fields import RichTextField
 class Article(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField()
-    content = RichTextField()
+    content = RichTextField(verbose_name='Beskrivelse', config_name='news_events')
     published_date = models.DateTimeField(auto_now_add=True)
     image = ImageField(upload_to='news', verbose_name="Bilde")
     author = models.ForeignKey(User)
