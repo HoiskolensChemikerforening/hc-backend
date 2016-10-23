@@ -2,9 +2,10 @@ from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponseRedirect
 
-from .forms import EditCommittees
+from .forms import EditCommittees, EditDescription
 from .models import Committee, Member
 
 
@@ -45,6 +46,27 @@ def edit(request):
         'form': form,
     }
     return render(request, 'committees/edit.html', context)
+
+def view_committee(request, slug):
+    committee = get_object_or_404(Committee, slug=slug)
+    context = {
+        'committee': committee,
+    }
+    return render(request, 'committees/view_committee.html', context)
+
+def edit_description(request, slug):
+    committee = get_object_or_404(Committee, slug=slug)
+    form = EditDescription(request.POST or None, instance=committee)
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return HttpResponseRedirect(committee.get_absolute_url())
+    context = {
+        'committee': committee,
+        'form': form,
+    }
+    return render(request, 'committees/edit_description.html', context)
 
 
 class UserAutocomplete(autocomplete.Select2QuerySetView):

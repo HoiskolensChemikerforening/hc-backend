@@ -1,4 +1,4 @@
-from django.conf.urls import url
+from django.conf.urls import include, url
 
 from . import views
 
@@ -10,4 +10,8 @@ urlpatterns = [
         views.UserAutocomplete.as_view(),
         name='user-autocomplete',
     ),
+    url(r'^(?P<slug>[\w-]+)/', include([
+        url(r'^$',  views.view_committee, name='view'),
+        url(r'^edit/', views.edit_description, name='edit_desc'),
+    ])),
 ]
