@@ -1,0 +1,20 @@
+{% extends 'chemie/base.html' %}
+
+{% block nav_header %}
+    Komiteer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    {{ committee.title }}
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <a>
+        <img src="/media/{{ committee.image }}" height="250">
+    </a>
+    {{ committee.description|safe }}
+
+    {% if request.user.is_authenticated %}
+    <a href="edit/">Trykk her for å redigere innhold</a>
+    {% endif %}
+{% endblock content %}

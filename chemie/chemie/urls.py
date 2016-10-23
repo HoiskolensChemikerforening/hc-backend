@@ -13,8 +13,10 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import django.contrib.auth.views as auth_views
+import django.contrib.flatpages.views as flat_views
 from django.conf import settings
-from django.conf.urls import include,url
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 import django.contrib.auth.views as auth_views
@@ -29,7 +31,7 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls'), name='frontpage'),
     url(r'^shitbox/', include('shitbox.urls')),
-    url(r'^verv/', include('committees.urls')),
+    url(r'^verv/', include('committees.urls', namespace='verv')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls', namespace='news')),

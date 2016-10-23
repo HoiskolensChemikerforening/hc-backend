@@ -4,15 +4,24 @@ from django.db.models.signals import pre_delete
 from django.dispatch import receiver
 from smart_selects.db_fields import ChainedForeignKey
 from sorl.thumbnail import ImageField
+from ckeditor.fields import RichTextField
+from django.utils.text import slugify
+from django.core.urlresolvers import reverse
+from django.db.models.signals import pre_save
 
 
 class Committee(models.Model):
-    title = models.CharField(max_length=100)
+    title = models.CharField(max_length=100, unique=True)
     email = models.EmailField()
     image = ImageField(upload_to='komiteer')
+    slug = models.SlugField(null=True, blank=True)
+    description = RichTextField(verbose_name='Beskrivelse', config_name='news_events')
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        return reverse('verv:view', kwargs={'slug':self.slug})
 
 
 class Position(models.Model):
@@ -66,3 +75,10 @@ class Member(models.Model):
 @receiver(pre_delete, sender=Member)
 def update_position_member_groups_on_save(sender, instance, *args, **kwargs):
     instance.remove_from_group(instance.user)
+
+
+def pre_save_committee_receiver(sender, instance, *args, **kwargs):
+    slug = slugify(instance.title)
+    instance.slug = slug
+
+pre_save.connect(pre_save_committee_receiver, sender=Committee)

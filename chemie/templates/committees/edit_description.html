@@ -1,0 +1,18 @@
+{% extends 'chemie/base.html' %}
+
+{% block nav_header %}
+    Komiteer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    {{ committee.title }}
+{% endblock nav_sub_header %}
+
+{% block content %}
+<body>
+    <form class="editContent" method='POST'>{% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class ="btn" type ='submit' value = 'Endre innhold!'/>
+    </form>
+{% endblock content %}
