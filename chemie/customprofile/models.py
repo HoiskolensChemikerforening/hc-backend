@@ -63,7 +63,7 @@ class Profile(models.Model):
     image_secondary = ImageField(upload_to='avatars')
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
-    membership = models.OneToOneField("Membership", null=True, blank=True)
+    membership = models.OneToOneField("Membership", null=True, blank=True,related_name="membership")
 
     objects = ProfileManager()
 

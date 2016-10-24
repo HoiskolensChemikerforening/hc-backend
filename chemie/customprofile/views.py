@@ -12,7 +12,7 @@ from django.shortcuts import render
 from django.utils import timezone
 
 from .email import send_forgot_password_mail
-from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword, LifeTimeMember
+from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword
 from .models import UserToken, Profile, Membership
 
 
@@ -65,18 +65,6 @@ def edit_profile(request):
     }
     return render(request, 'userregistration/editprofile.html', context)
 
-@login_required
-def change_password(request):
-    user = request.user
-    new_password_form = PasswordChangeForm(user=user)
-    if request.method == 'POST':
-        form = PasswordChangeForm(user=user, data=request.POST)
-
-    context = {
-        'change_password_form': new_password_form,
-    }
-    return render(request, 'userregistration/changepassword.html', context)
-
 
 def forgot_password(request):
     form = ForgotPassword(request.POST or None)
@@ -112,26 +100,25 @@ def activate_password(request, code):
     }
     return render(request, 'userregistration/setforgottenpassword.html', context)
 
-def change_membership_status(request, id):
-    person = User.objects.get(pk=id).profile
-    person.membership = Membership(
-        start_date = timezone.now(),
-        end_date = timezone.now() + timedelta(365*5),
-        endorser = request.user
-        )
-    person.membership.save()
-    person.save()
-    membership_status = person.membership.is_active()
-    return JsonResponse({'membership_status': membership_status})
 
-def manage_memberships(request):
-    form = LifeTimeMember(request.POST or None)
-    if request.POST:
-        if request.is_ajax():
-            change_membership_status(request)
-    users = Profile.objects.all()
+def view_memberships(request):
+    profiles = Profile.objects.all()
     context = {
-        "users": users,
-        "form": form,
+        "profiles": profiles,
     }
     return render(request, "userregistration/memberships.html", context)
+
+
+def change_membership_status(request, profile_id):
+    person = Profile.objects.get(pk=profile_id)
+    if person.membership is None:
+        membership = Membership(
+            start_date=timezone.now(),
+            end_date=timezone.now() + timedelta(365*5),
+            endorser=request.user
+            )
+        membership.save()
+        person.membership = membership
+        person.save()
+    membership_status = person.membership.is_active()
+    return JsonResponse({'membership_status': membership_status})

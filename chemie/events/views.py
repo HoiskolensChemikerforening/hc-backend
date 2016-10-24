@@ -188,15 +188,11 @@ def register_user(request, event_id):
 @login_required
 @ensure_csrf_cookie
 def view_admin_panel(request, event_id):
-    if request.POST:
-        if request.is_ajax():
-            change_payment_status(request, event_id)
     event = Event.objects.get(pk=event_id)
     all_registrations = Registration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
         event=event,
-    ).prefetch_related('user__profile')
-
+    )
     context = {
         "attendees": all_registrations,
         "event": event,
@@ -206,9 +202,7 @@ def view_admin_panel(request, event_id):
 
 @login_required
 def change_payment_status(request, registration_id):
-    # event = Event.objects.get(pk=event_id)
     registration = Registration.objects.get(pk=registration_id)
-    payment_status = registration.payment_status
     registration.payment_status = not registration.payment_status
     registration.save()
     return JsonResponse({'payment_status': registration.payment_status})

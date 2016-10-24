@@ -163,5 +163,3 @@ class SetNewPassword(forms.ModelForm):
         super(SetNewPassword, self).clean()
         self.password_matches()
 
-class LifeTimeMember(forms.Form):
-    lifetime = forms.BooleanField(required=True, label='Livstid')
