@@ -1,0 +1,116 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+
+
+{% block header %}
+    <script type="text/javascript"
+            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.26.6/js/jquery.tablesorter.min.js"></script>
+    <script>
+        $(function () {
+            $('table').tablesorter();
+        });
+    </script>
+{% endblock header %}
+
+{% block nav_header %}
+    Medlemskap
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Administrering
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+    </div>
+    <div class="row">
+        <table id="myTable" class="tablesorter">
+            <thead>
+            <tr>
+                <th>Navn</th>
+                <th>Klassetrinn</th>
+                <th>HC-medlemsskap</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            {% for profile in profiles %}
+                <tr>
+                    <td>{{ profile }} </td>
+                    <td>{{ profile.grade }}</td>
+
+                    <td>{% if profile.membership.is_active %}
+                        <a class="member btn-floating btn-tiny waves-effect waves-light green"
+                           id="member-{{ profile.id }}"><i class="material-icons">done</i></a>
+                    {% else %}
+                        <a class="member btn-floating btn-tiny waves-effect waves-light red"
+                               id="member-{{ profile.id }}"><i class="material-icons">error</i></a>
+                    {% endif %}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock content %}
+
+{% block footer_script %}
+    <script>
+        $(document).ready(function () {
+            $('.member').on('click', function (event) {
+                //$('.payment').live('click', function(event){
+                event.preventDefault();
+                var myID = $(this).attr("id").split('-')[1];
+                // using jQuery
+                function getCookie(name) {
+                    var cookieValue = null;
+                    if (document.cookie && document.cookie !== '') {
+                        var cookies = document.cookie.split(';');
+                        for (var i = 0; i < cookies.length; i++) {
+                            var cookie = jQuery.trim(cookies[i]);
+                            // Does this cookie string begin with the name we want?
+                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                                break;
+                            }
+                        }
+                    }
+                    return cookieValue;
+                }
+
+                function icon_changer(divID, payment_status) {
+                    if (payment_status) {
+                        $(divID).find('i').text('done');
+                        $(divID).removeClass('red');
+                        $(divID).addClass('green');
+                    }
+                    else {
+                        $(divID).find('i').text('error');
+                        $(divID).removeClass('green');
+                        $(divID).addClass('red');
+
+                    }
+                }
+
+                var csrftoken = getCookie('csrftoken');
+                $.ajax({
+                    type: "GET",
+                    url: "medlemmer/endre/" + myID,
+                    datatype: "json",
+                    //data: {
+                    //    myID: myID,
+                    //    csrfmiddlewaretoken: csrftoken,
+                    //},
+
+                    success: function (json) {
+                        icon_changer("#member-" + myID, json.membership_status)
+                    },
+
+                    error: function (xhr, errmsg, err) {
+                        console.log(xhr.status + ": " + xhr.responseText);
+                    },
+                });
+            })
+        });
+    </script>
+{% endblock %}
