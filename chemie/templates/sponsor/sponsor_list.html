@@ -1,4 +1,4 @@
-{% load sponsor_tags %}
+{% load chemie_tags %}
 {% for sponsor in sponsors %}
-    <div><a href="{{ sponsor.href }}" target="_blank"><img src="/media/{{ sponsor.image }}" width="100%"></a></div>
+    <a href="{{ sponsor.href }}"><img class="responsive-img" src="/media/{{ sponsor.image }}"></a>
 {% endfor %}

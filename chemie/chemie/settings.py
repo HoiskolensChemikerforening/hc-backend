@@ -80,7 +80,6 @@ INSTALLED_APPS = [
                      'rest_framework',
                      'smart_selects',
                      'ckeditor',
-                     'sponsor',
                      'django.contrib.flatpages',
 
                  ] + get_machina_apps()
