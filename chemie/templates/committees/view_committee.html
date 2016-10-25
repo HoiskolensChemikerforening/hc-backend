@@ -5,16 +5,49 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    {{ committee.title }}
+    Detaljer
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <a>
-        <img src="/media/{{ committee.image }}" height="250">
-    </a>
+    <div class="row">
+        <h1 class="heading">{{ committee.title }}</h1>
+        <div class="col s12 m12 l8">
+            <img class="responsive-img materialboxed" src="/media/{{ committee.image }}">
+        </div>
+        <div class="col s12 m12 l4">
+            <div class="card card-event">
+                <div class="card-content amber darken-2">
+                    <div class="section" style="padding-top: 0;">
+                        <div class="valign-wrapper">
+                            <i class="material-icons valign left">people</i>
+                            <h5 class="left-align">Medlemmer</h5>
+                        </div>
+                        {% for member in members %}
+                            <div class="valign-wrapper">
+                                <i class="material-icons valign left tiny">email</i>
+                                <p> {{ member.position.title }} : {{ member.user.get_full_name }}</p>
+                            </div>
+                        {% endfor %}
+                    </div>
+                    {% if committee.email %}
+                        <div class="divider grey"></div>
+                        <div class="section">
+                            <div class="valign-wrapper">
+                                <i class="material-icons valign left tiny">email</i>
+                                <p class="left-align"></p>
+                            </div>
+                            <p>{{ event.date|date:"j. F - H:i" }}</p>
+                        </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     {{ committee.description|safe }}
 
     {% if request.user.is_authenticated %}
-    <a href="edit/">Trykk her for å redigere innhold</a>
+        <a href="edit/">Trykk her for å redigere innhold</a>
     {% endif %}
 {% endblock content %}
