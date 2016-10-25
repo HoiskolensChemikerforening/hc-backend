@@ -19,12 +19,9 @@ from django.conf import settings
 from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
-import django.contrib.auth.views as auth_views
 from django_nyt.urls import get_pattern as get_nyt_pattern
 from machina.app import board
 from wiki.urls import get_pattern as get_wiki_pattern
-import django.contrib.flatpages.views as flat_views
-
 
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),

@@ -3,6 +3,7 @@ from sorl.thumbnail import ImageField
 from django.contrib.auth.models import User
 
 
+
 class pictures_for_404(models.Model):
     picture = ImageField(upload_to='404', verbose_name='tullebilde')
 
