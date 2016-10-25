@@ -1,0 +1,4 @@
+{% load sponsor_tags %}
+{% for sponsor in sponsors %}
+    <div><a href="{{ sponsor.href }}" target="_blank"><img src="/media/{{ sponsor.image }}" width="100%"></a></div>
+{% endfor %}
