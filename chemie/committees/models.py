@@ -1,18 +1,18 @@
+from ckeditor.fields import RichTextField
 from django.contrib.auth.models import Group, User
+from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_delete
+from django.db.models.signals import pre_save
 from django.dispatch import receiver
+from django.utils.text import slugify
 from smart_selects.db_fields import ChainedForeignKey
 from sorl.thumbnail import ImageField
-from ckeditor.fields import RichTextField
-from django.utils.text import slugify
-from django.core.urlresolvers import reverse
-from django.db.models.signals import pre_save
 
 
 class Committee(models.Model):
     title = models.CharField(max_length=100, unique=True)
-    email = models.EmailField()
+    email = models.EmailField(null=True, blank=True)
     image = ImageField(upload_to='komiteer')
     slug = models.SlugField(null=True, blank=True)
     description = RichTextField(verbose_name='Beskrivelse', config_name='news_events')
@@ -31,7 +31,7 @@ class Position(models.Model):
     permission_group = models.ForeignKey(Group)
 
     def __str__(self):
-        return str(self.position_name)
+        return str(self.title)
 
 
 class Member(models.Model):

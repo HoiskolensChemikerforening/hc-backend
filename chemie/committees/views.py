@@ -49,8 +49,10 @@ def edit(request):
 
 def view_committee(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
+    members = Member.objects.filter(committee=committee)
     context = {
         'committee': committee,
+        'members': members
     }
     return render(request, 'committees/view_committee.html', context)
 
