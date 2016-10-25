@@ -80,7 +80,9 @@ INSTALLED_APPS = [
                      'rest_framework',
                      'smart_selects',
                      'ckeditor',
+                     'sponsor',
                      'django.contrib.flatpages',
+
                  ] + get_machina_apps()
 
 MIDDLEWARE_CLASSES = [
@@ -252,3 +254,4 @@ CKEDITOR_CONFIGS = {
         ]
     },
 }
+GOOGLE_MAPS_API_KEY = ''
