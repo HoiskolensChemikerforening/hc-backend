@@ -13,7 +13,7 @@ class EditCommittees(forms.ModelForm):
             'user',
         ]
         widgets = {
-            'user': autocomplete.ModelSelect2(url='user-autocomplete')
+            'user': autocomplete.ModelSelect2(url='verv:user-autocomplete')
                    }
 
 

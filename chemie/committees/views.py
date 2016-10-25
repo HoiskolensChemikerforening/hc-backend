@@ -2,8 +2,8 @@ from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.shortcuts import render, get_object_or_404
 
 from .forms import EditCommittees, EditDescription
 from .models import Committee, Member
@@ -47,6 +47,7 @@ def edit(request):
     }
     return render(request, 'committees/edit.html', context)
 
+
 def view_committee(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
     members = Member.objects.filter(committee=committee)
@@ -55,6 +56,7 @@ def view_committee(request, slug):
         'members': members
     }
     return render(request, 'committees/view_committee.html', context)
+
 
 def edit_description(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
