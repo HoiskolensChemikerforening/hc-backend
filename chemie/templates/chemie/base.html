@@ -1,5 +1,6 @@
 {% load staticfiles %}
 {% load thumbnail %}
+{% load sponsor_tags %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -199,8 +200,10 @@
                     support and continue development on this project and is greatly appreciated.</p>
             </div>
             <div class="col l4 s12">
-                <h5 class="white-text">Vi er best!</h5>
-                <p class="grey-text text-lighten-4">YAY</p>
+                {% show_sponsors %}
+            </div>
+            <div class="col l4 s12">
+            
             </div>
         </div>
     </div>
