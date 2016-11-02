@@ -28,6 +28,7 @@ def view_lockers(request, page=1):
     }
     return render(request, 'lockers/list.html', context)
 
+
 def my_lockers(request):
     form = MyLockersForm(request.POST or None)
     if request.POST:
@@ -109,47 +110,12 @@ def activate_ownership(request, code):
 @permission_required('lockers.can_delete')
 def manage_lockers(request):
     lockers = Locker.objects.prefetch_related('indefinite_locker__is_confirmed__exact=True').prefetch_related(
-         'indefinite_locker__user')
+        'indefinite_locker__user')
     context = {
         "request": request,
         "lockers": lockers
     }
     return render(request, 'lockers/administrer.html', context)
-
-
-@permission_required('lockers.can_delete')
-def reset_locker_ownerships(request):
-    # Oh boi where to start... definite_owner is the related name between Ownership and
-    # Locker, (Ownership -> Locker) it lets us collect all Lockers where "owner" definite link is set (__isnull=False).
-    # Finally, we filter all ownerships that are connected to these Lockers (with its "weak" link)
-    ownerships_to_reset = Ownership.objects.filter(definite_owner__owner__isnull=False).prefetch_related("user")
-
-    for ownership in ownerships_to_reset:
-        ownership.is_active = False
-        ownership.save()
-        confirmation_object = ownership.create_confirmation()
-
-        context = {
-            "confirmation": confirmation_object,
-            "locker_user": ownership.user,
-            "ownership": ownership,
-            "request": request
-        }
-        queue_activation_mail(context, 'emails/reactivate.html')
-
-
-@permission_required('lockers.can_delete')
-def prune_expired_items(request):
-    # Remove unconfirmed ownerships
-    Ownership.objects.prune_expired()
-    # Clear old tokens
-    LockerConfirmation.objects.prune_expired()
-
-
-@permission_required('lockers.can_delete')
-def reset_idle_lockers(request):
-    # Remove ownerships that are inactive
-    Locker.objects.reset_idle()
 
 
 def administration_overview(request):
