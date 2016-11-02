@@ -30,7 +30,7 @@ def edit(request):
             new_user = form.cleaned_data.get('user')
             try:
                 current_member = Member.objects.get(committee=committee,
-                                                position=position)
+                                                    position=position)
             except ObjectDoesNotExist:
                 current_member = None
             if current_member is not None:

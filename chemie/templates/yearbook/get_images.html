@@ -12,29 +12,32 @@
 
 </style>
     <div class="row">
-<div class="klassetrinn">
-<div class="col s6 m6 l4">
-        <a class='dropdown-button light-blue lighten-1 btn-large' href='#' data-activates='dropdown1' role="navigation">Klassetrinn</a>
-        <ul id='dropdown1' class='dropdown-content'>
-            {% for year_number, year_text in grades %}
-            <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
-            {% endfor %}
-        </ul>
-</div>
-<div class="col s6 m6 l8">
-<nav>
-    <div class="nav-wrapper">
-      <form method='post' action='/klassekatalog/sok/'>{% csrf_token %}
-        <div class="input-field light-blue lighten-1">
-            {{ search_form }}
-          <label for="search_field"><i class="material-icons">search</i></label>
+        <div class="klassetrinn">
+            <div class="col s6 m6 l4">
+                    <a class='dropdown-button light-blue lighten-1 btn-large' href='#' data-activates='dropdown1' role="navigation">Klassetrinn</a>
+                    <ul id='dropdown1' class='dropdown-content'>
+                        {% for year_number, year_text in grades %}
+                        <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
+                        {% endfor %}
+                    </ul>
+            </div>
+            <div class="col s6 m6 l8">
+                <nav>
+                    <div class="nav-wrapper">
+                        <form method='post' class="newPost">{% csrf_token %}
+                            <div class="input-field light-blue lighten-1">
+                                {{ search_form }}
+                                <label for="search_field"><i class="material-icons">search</i></label>
+                            </div>
+                        </form>
+                    </div>
+                </nav>
+            </div>
         </div>
-      </form>
     </div>
-  </nav>
-</div>
-    </div>
-</div>
+
+
+
 
 
   <div class="row">
@@ -61,3 +64,4 @@
         </div>
 
 {% endblock content %}
+
