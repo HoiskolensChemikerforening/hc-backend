@@ -1,12 +1,11 @@
 from django.db import models
 from uuid import uuid4
-from datetime import datetime, timedelta
-from django.contrib.auth.models import User
+from datetime import timedelta
+from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
 from django.core.urlresolvers import reverse
 from .validators import validate_NTNU
-
 
 VALID_TIME = 7  # 7 days
 LOCKER_COUNT = 2
@@ -17,8 +16,9 @@ class LockerManager(models.Manager):
         # Fetch all lockers, where an inactive Ownership (through indefinite_locker) is pointing to a locker.
         taken_lockers = self.filter(owner__isnull=False)
         idle_lockers = taken_lockers.filter(indefinite_locker__is_active__exact=False)
-        idle_lokers_count = idle_lockers.update(owner="").count()
-        return idle_lokers_count
+        idle_lockers_count = idle_lockers.update(owner="")
+        return idle_lockers_count
+
 
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField(unique=True)
@@ -92,7 +92,7 @@ class Ownership(models.Model):
 
 class LockerConfirmationManager(models.Manager):
     def prune_expired(self):
-        expired_range = datetime.now() - timedelta(days=VALID_TIME)
+        expired_range = timezone.now() - timedelta(days=VALID_TIME)
         self.filter(created__lte=expired_range).delete()
 
 
@@ -124,7 +124,7 @@ class LockerConfirmation(models.Model):
         self.delete()
 
     def expired(self):
-        return not datetime.now() < timedelta(days=VALID_TIME) + self.created
+        return not timezone.now() < timedelta(days=VALID_TIME) + self.created
 
     def __str__(self):
         return str(self.ownership.locker)
