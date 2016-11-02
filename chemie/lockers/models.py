@@ -67,6 +67,7 @@ class OwnershipManager(models.Manager):
         taken_lockers = taken_lockers.prefetch_related("user")
         return taken_lockers
 
+
 class Ownership(models.Model):
     locker = models.ForeignKey(Locker, related_name="indefinite_locker")
     user = models.ForeignKey(LockerUser, related_name="User")
