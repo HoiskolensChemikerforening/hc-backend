@@ -245,29 +245,38 @@ WIKI_ANONYMOUS_CREATE = False
 
 CKEDITOR_CONFIGS = {
     'news': {
-        'skin': 'flat',
+        'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', '-', 'Undo', 'Redo'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
-            ['Link', 'Unlink'],
-        ]
+            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['NumberedList', 'BulletedList', '-', 'Link'],
+            ['Maximize', 'Find', 'Replace']
+        ],
+        'customConfig': '/static/js/ckeditor_config.js',
     },
+
     'events': {
+        'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline'],
-            ['Link', 'Unlink'],
-        ]
+            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['NumberedList', 'BulletedList', '-', 'Link'],
+            ['Maximize', 'Find', 'Replace']
+        ],
+        'customConfig': '/static/js/ckeditor_config.js',
     },
+
     'committees': {
+        'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline'],
-            ['Link', 'Unlink'],
-        ]
+            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['NumberedList', 'BulletedList', '-', 'Link'],
+            ['Maximize', 'Find', 'Replace']
+        ],
+        'customConfig': '/static/js/ckeditor_config.js',
     },
 }
-DEFAULT_CONFIG = CKEDITOR_CONFIGS
 
+DEFAULT_CONFIG = CKEDITOR_CONFIGS
 GOOGLE_MAPS_API_KEY = ''
