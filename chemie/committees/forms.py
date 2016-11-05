@@ -21,5 +21,6 @@ class EditDescription(forms.ModelForm):
     class Meta:
         model = Committee
         fields = [
-            'description'
+            'description',
+            'image'
         ]
