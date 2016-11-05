@@ -244,13 +244,30 @@ WIKI_ANONYMOUS_WRITE = False
 WIKI_ANONYMOUS_CREATE = False
 
 CKEDITOR_CONFIGS = {
-    'news_events': {
+    'news': {
+        'skin': 'flat',
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', '-', 'Undo', 'Redo'],
+            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent'],
+            ['Link', 'Unlink'],
+        ]
+    },
+    'events': {
         'toolbar': 'Custom',
         'toolbar_Custom': [
             ['Bold', 'Italic', 'Underline'],
-            ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock'],
+            ['Link', 'Unlink'],
+        ]
+    },
+    'committees': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline'],
             ['Link', 'Unlink'],
         ]
     },
 }
+DEFAULT_CONFIG = CKEDITOR_CONFIGS
+
 GOOGLE_MAPS_API_KEY = ''
