@@ -23,19 +23,23 @@
                             <h5 class="left-align">Medlemmer</h5>
                         </div>
                         {% for member in members %}
-                            <div class="valign-wrapper">
-                                <i class="material-icons valign left tiny">email</i>
-                                <p> {{ member.position.title }} : {{ member.user.get_full_name }}</p>
-                            </div>
+                            <a href="mailto:{% if member.position.email %}{{ member.position.email }}{% else %}{{ member.user.email }}{% endif %}">
+                                <div class="valign-wrapper">
+                                    <i class="material-icons valign left tiny">email</i>
+                                    <p class="black-text"> {{ member.position.title }} : {{ member.user.get_full_name }}</p>
+                                </div>
+                            </a>
                         {% endfor %}
                     </div>
                     {% if committee.email %}
                         <div class="divider grey"></div>
                         <div class="section">
+                            <a href="mailto:{{ committee.email }}">
                             <div class="valign-wrapper">
                                 <i class="material-icons valign left tiny">email</i>
-                                <p class="left-align"></p>
+                                <p class="left-align black-text">Mail oss</p>
                             </div>
+                            </a>
                             <p>{{ event.date|date:"j. F - H:i" }}</p>
                         </div>
                     {% endif %}
