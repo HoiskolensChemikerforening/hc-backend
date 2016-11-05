@@ -74,7 +74,7 @@
             <div class="card">
                     <div class="card-content">
                         <h5>Beskrivelse:</h5>
-                        <p class="flow-text"> {{ event.description|linebreaksbr }} </p>
+                        <p class="flow-text"> {{ event.description|safe}} </p>
                         </div>
                 </div>
         </div>
@@ -82,7 +82,7 @@
             <div class="card">
                     <div class="card-content">
                         <h5>Betalingsinformasjon:</h5>
-                        <p class="flow-text"> {{ event.payment_information|linebreaksbr }} </p>
+                        <p class="flow-text"> {{ event.payment_information }} </p>
                         </div>
                 </div>
         </div>
