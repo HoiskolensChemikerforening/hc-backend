@@ -1,10 +1,10 @@
+from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
-from ckeditor.fields import RichTextField
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED',  1, 'Confirmed'),
@@ -36,7 +36,7 @@ class Event(models.Model):
     location = models.TextField(verbose_name="Sted")
 
     # Describes the event
-    description = RichTextField(verbose_name='Beskrivelse', config_name='news_events')
+    description = RichTextField(verbose_name='Beskrivelse', config_name='events')
 
 
     # An image from the event or describing the event
@@ -133,5 +133,6 @@ class RegistrationMessage(models.Model):
     event = models.ForeignKey(Event)
     message = models.TextField()
 
+    # TODO: legge til author
     def __str__(self):
         return '{}, {}: {}'.format(self.event, self.user, self.message)
