@@ -15,7 +15,7 @@ class Committee(models.Model):
     email = models.EmailField(null=True, blank=True)
     image = ImageField(upload_to='komiteer')
     slug = models.SlugField(null=True, blank=True)
-    description = RichTextField(verbose_name='Beskrivelse', config_name='news_events')
+    description = RichTextField(verbose_name='Beskrivelse', config_name='committees')
 
     def __str__(self):
         return self.title
@@ -35,7 +35,7 @@ class Position(models.Model):
 
 
 class Member(models.Model):
-    committee = models.ForeignKey(Committee)
+    committee = models.ForeignKey(Committee, related_name="members")
     position = ChainedForeignKey(
         Position,
         chained_field="committee",
