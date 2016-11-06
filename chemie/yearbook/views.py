@@ -1,8 +1,9 @@
+from django.contrib.auth.models import User
+from django.db.models import Q
 from django.shortcuts import render
+
 from customprofile.models import Profile, GRADES
 from .forms import NameSearchForm
-from django.db.models import Q
-from django.contrib.auth.models import User
 
 
 def index(request, year=1):
@@ -26,7 +27,7 @@ def index(request, year=1):
         'grades': GRADES,
         'search_form': form,
     }
-    return render(request, 'yearbook/get_images.html', context)
+    return render(request, 'customprofile/get_images.html', context)
 
 
 def find_user_by_name(query_name):

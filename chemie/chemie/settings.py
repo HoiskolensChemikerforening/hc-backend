@@ -41,6 +41,7 @@ LOGIN_REDIRECT_URL = '/'
 
 INSTALLED_APPS = [
                      'django.contrib.sites',
+                     'chemie',
                      'elections',
                      'home',
                      'news',
@@ -72,7 +73,6 @@ INSTALLED_APPS = [
                      'wiki.plugins.notifications',
                      'wiki.plugins.images',
                      'wiki.plugins.macros',
-                     'chemie',
                      'mptt',
                      'haystack',
                      'widget_tweaks',

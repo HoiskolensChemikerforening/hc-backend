@@ -1,8 +1,9 @@
 from django.shortcuts import render
-from django.template import RequestContext
+from django.utils import timezone
+
 from events.models import Event
 from news.models import Article
-from django.utils import timezone
+
 
 def index(request):
     all_events = Event.objects.filter(date__gt=timezone.now())
@@ -11,4 +12,4 @@ def index(request):
         'events': all_events,
         'posts': all_posts,
     }
-    return render(request, 'home/index.html', context)
+    return render(request, 'chemie/index.html', context)
