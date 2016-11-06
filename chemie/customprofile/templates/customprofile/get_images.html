@@ -19,7 +19,7 @@
                 <nav>
                     <div class="nav-wrapper">
                         <form method='post' class="newPost">{% csrf_token %}
-                            <div class="input-field">
+                            <div class="input-field light-blue lighten-1">
                                 <input id="{{ search_form.search_field.id_for_label }}"
                                        type="search" required name="{{ search_form.search_field.html_name }}"
                                        value="{{ search_form.search_field.value|default:"" }}">
