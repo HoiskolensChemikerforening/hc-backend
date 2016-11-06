@@ -1,33 +1,30 @@
 {% extends "chemie/base.html" %}
 
 {% block content %}
-{% load staticfiles %}
-<style>
-.all_avatars {
-  position: relative;
-}
-.avatar {
-  float: left;
-}
+    {% load staticfiles %}
 
-</style>
+
     <div class="row">
         <div class="klassetrinn">
             <div class="col s6 m6 l4">
-                    <a class='dropdown-button light-blue lighten-1 btn-large' href='#' data-activates='dropdown1' role="navigation">Klassetrinn</a>
-                    <ul id='dropdown1' class='dropdown-content'>
-                        {% for year_number, year_text in grades %}
+                <a class='dropdown-button light-blue lighten-1 btn-large' href='#' data-activates='dropdown1'
+                   role="navigation">Klassetrinn</a>
+                <ul id='dropdown1' class='dropdown-content'>
+                    {% for year_number, year_text in grades %}
                         <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
-                        {% endfor %}
-                    </ul>
+                    {% endfor %}
+                </ul>
             </div>
             <div class="col s6 m6 l8">
                 <nav>
                     <div class="nav-wrapper">
                         <form method='post' class="newPost">{% csrf_token %}
-                            <div class="input-field light-blue lighten-1">
-                                {{ search_form }}
-                                <label for="search_field"><i class="material-icons">search</i></label>
+                            <div class="input-field">
+                                <input id="{{ search_form.search_field.id_for_label }}"
+                                       type="search" required name="{{ search_form.search_field.html_name }}"
+                                       value="{{ search_form.search_field.value|default:"" }}">
+                                <label for="{{ search_form.search_field.id_for_label }}"><i class="material-icons">search</i></label>
+                                <i class="material-icons">close</i>
                             </div>
                         </form>
                     </div>
@@ -40,28 +37,29 @@
 
 
 
-  <div class="row">
-       {% for profile in profiles %}
-          <div class="col s10 m4">
-            <div class="card">
-              <div class="card-image">
-                  <img src="/media/{{profile.image_primary}}">
-              </div>
-              <div class="card-content">
+
+    <div class="row">
+        {% for profile in profiles %}
+            <div class="col s10 m4">
+                <div class="card">
+                    <div class="card-image">
+                        <img src="/media/{{ profile.image_primary }}">
+                    </div>
+                    <div class="card-content">
                   <span class="card-title">{{ profile }}
-                      {%if profile.relationship_status == 1%}
-                      <i class="material-icons icon-green">favorite</i>
-                      {%elif profile.relationship_status == 2%}
-                      <i class="material-icons icon-red">favorite</i>
-                        {%else%}
-                        <i class="large material-icons icon-gray">favorite</i>
-                      {%endif%}
+                      {% if profile.relationship_status == 1 %}
+                          <i class="material-icons icon-green">favorite</i>
+                      {% elif profile.relationship_status == 2 %}
+                          <i class="material-icons icon-red">favorite</i>
+                      {% else %}
+                          <i class="large material-icons icon-gray">favorite</i>
+                      {% endif %}
                   </span>
-              </div>
+                    </div>
+                </div>
             </div>
-          </div>
-          {% endfor %}
-        </div>
+        {% endfor %}
+    </div>
 
 {% endblock content %}
 
