@@ -33,14 +33,18 @@ def register_user(request):
         "user_core_form": user_core_form,
         "user_profile_form": user_profile_form,
     }
-    return render(request, 'userregistration/register.html', context)
+    return render(request, 'customprofile/register.html', context)
 
 @login_required
 def edit_profile(request):
     user = request.user
     new_password_form = PasswordChangeForm(user=user, data=request.POST or None)
     user_form = EditUserForm(request.POST or None, instance=request.user)
-    profile_form = EditProfileForm(request.POST or None, instance=request.user.profile)
+    try:
+        current_profile = request.user.profile
+    except:
+        current_profile = Profile(user=user)
+    profile_form = EditProfileForm(request.POST or None, instance=current_profile)
     if request.POST:
         if user_form.is_valid() and profile_form.is_valid():
             user_form.save()
@@ -63,7 +67,7 @@ def edit_profile(request):
         "profile_form": profile_form,
         'change_password_form': new_password_form,
     }
-    return render(request, 'userregistration/editprofile.html', context)
+    return render(request, 'customprofile/editprofile.html', context)
 
 
 def forgot_password(request):
@@ -79,7 +83,7 @@ def forgot_password(request):
     context = {
         'email': form,
     }
-    return render(request, 'userregistration/forgot_password.html', context)
+    return render(request, 'customprofile/forgot_password.html', context)
 
 
 def activate_password(request, code):
@@ -98,7 +102,7 @@ def activate_password(request, code):
     context = {
         'form': password_form,
     }
-    return render(request, 'userregistration/setforgottenpassword.html', context)
+    return render(request, 'customprofile/setforgottenpassword.html', context)
 
 
 def view_memberships(request):
@@ -106,7 +110,7 @@ def view_memberships(request):
     context = {
         "profiles": profiles,
     }
-    return render(request, "userregistration/memberships.html", context)
+    return render(request, "customprofile/memberships.html", context)
 
 
 def change_membership_status(request, profile_id):
