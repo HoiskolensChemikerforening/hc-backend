@@ -5,15 +5,14 @@ from django.db import models
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
-from customprofile.models import GRADES
 
 REGISTRATION_STATUS = Choices(
-    ('CONFIRMED',  1, 'Confirmed'),
+    ('CONFIRMED', 1, 'Confirmed'),
     ('WAITING', 2, 'Waiting'),
 )
 
 
-class Event(models.Model):
+class BaseEvent(models.Model):
     # Name of the event
     title = models.CharField(max_length=40, verbose_name='Tittel')
 
@@ -40,24 +39,11 @@ class Event(models.Model):
     # Describes the event
     description = RichTextField(verbose_name='Beskrivelse', config_name='events')
 
-
     # An image from the event or describing the event
     image = ImageField(upload_to='events', verbose_name="Bilde")
 
     # Number of slots reserved for the event
     sluts = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
-
-    # Payment information
-    payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
-    price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
-    price_not_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, ikke-medlem")
-    price_companion = models.PositiveSmallIntegerField(default=0, verbose_name="Pris for følge")
-
-    # Boolean fields
-    companion = models.BooleanField(default=False, verbose_name="Følge")
-    sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
-    night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    mail_notification = models.BooleanField(default=False, verbose_name="Epostbekreftelse")
 
     attendees = models.ManyToManyField(User, through='Registration')
 
@@ -71,6 +57,28 @@ class Event(models.Model):
         return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).count()
 
     @property
+    def can_signup(self):
+        return (timezone.now() >= self.register_startdate) and (timezone.now() <= self.register_deadline)
+
+    @property
+    def can_de_register(self):
+        return timezone.now() <= self.deregister_deadline
+
+
+class Event(BaseEvent, models.Model):
+    # Payment information
+    payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
+    price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
+    price_not_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, ikke-medlem")
+    price_companion = models.PositiveSmallIntegerField(default=0, verbose_name="Pris for følge")
+
+    # Boolean fields
+    companion = models.BooleanField(default=False, verbose_name="Følge")
+    sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
+    night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
+    mail_notification = models.BooleanField(default=False, verbose_name="Epostbekreftelse")
+
+    @property
     def spare_slots(self):
         return self.sluts - self.registered_users()
 
@@ -79,10 +87,10 @@ class Event(models.Model):
         return self.spare_slots > 0
 
     def get_absolute_url(self):
-        return reverse('events:detail', kwargs={"event_id":self.id})
+        return reverse('events:detail', kwargs={"event_id": self.id})
 
     def get_absolute_registration_url(self):
-        return reverse('events:register', kwargs={"event_id":self.id})
+        return reverse('events:register', kwargs={"event_id": self.id})
 
     @property
     def can_signup(self):
@@ -91,6 +99,10 @@ class Event(models.Model):
     @property
     def can_de_register(self):
         return timezone.now() <= self.deregister_deadline
+
+
+class CompanyEvent(Event, models.Model):
+    event = models.ForeignKey(BaseEvent)
 
 
 class RegistrationManager(models.Manager):
@@ -105,22 +117,12 @@ class RegistrationManager(models.Manager):
             return lucky_person
 
 
-class Registration(models.Model):
-    event = models.ForeignKey(Event, related_name="event_registration")
+class BaseRegistration(models.Model):
     user = models.ForeignKey(User)
+    event = models.ForeignKey(BaseEvent)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.WAITING)
-    payment_status = models.BooleanField(default=False, verbose_name="Betalt")
-
-    # Optional fields
-    sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
-    night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    companion = models.CharField(max_length=40, verbose_name="Navn på følge",
-                                 help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
-                                 null=True, blank=True)
-
-    objects = RegistrationManager()
 
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.user.get_full_name(), self.status)
@@ -131,6 +133,19 @@ class Registration(models.Model):
 
     class Meta:
         unique_together = ('event', 'user',)
+
+
+class Registration(BaseRegistration, models.Model):
+    payment_status = models.BooleanField(default=False, verbose_name="Betalt")
+
+    # Optional fields
+    sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
+    night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
+    companion = models.CharField(max_length=40, verbose_name="Navn på følge",
+                                 help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
+                                 null=True, blank=True)
+
+    objects = RegistrationManager()
 
 
 class RegistrationMessage(models.Model):
