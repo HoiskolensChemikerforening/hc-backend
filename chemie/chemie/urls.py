@@ -46,9 +46,9 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    url(r'^about-us/$', flat_views.flatpage, {'url': '/about-us/'}, name='about'),
-    url(r'^license/$', flat_views.flatpage, {'url': '/license/'}, name='license'),
+    url(r'^s/', include('django.contrib.flatpages.urls')),
 ]
+
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
