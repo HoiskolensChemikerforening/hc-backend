@@ -7,6 +7,6 @@ from django import forms
 
 class Submission(models.Model):
     """docstring for submission"""
-    content = models.TextField(max_length = 2000)
+    content = models.TextField(max_length = 2000, verbose_name="Sladder")
     date = models.DateTimeField(auto_now_add=True)
     author = models.ForeignKey(User, verbose_name = 'Innsender')

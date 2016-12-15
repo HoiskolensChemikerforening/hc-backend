@@ -1,35 +1,54 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
 
-{% block content %}
-<body>
-    <p></p>
-    <form class="newPost" method='POST'>{% csrf_token %}
-      {{ form.as_p }}
-      <input class ="btn" type ='submit' value = 'Send inn sladder!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
-    </form>
+{% block nav_header %}
+    Sladreboksen
+{% endblock nav_header %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-<script>
-$(document).ready(function(){
-  var frm = $('.newPost');
-  $('.newPost').on('submit', function(e){
-    e.preventDefault();
-    console.log("hei");
-    $.ajax({
-      type:'POST',
-      url:'/shitbox/',
-      data: $(this).serialize(),
-      success: function(){
-        $(':input', '.newPost')
-        .not(':button, :submit, :reset, :hidden')
-        .val('')
-        .removeAttr('checked')
-        .removeAttr('selected');
-      }
-    })
-  })
-});
-</script>
-</body>
+{% block nav_sub_header %}
+    Send innslag
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m12 l8">
+            <p class="flow-text">
+                Sitter du på noen gullkorn, eller har du noe sladder om dine medstudenter?
+                Send det inn her, så havner det kanskje i neste utgave av Sugepumpa.
+                Du forblir anonym.
+            </p>
+
+
+            <form class="newPost" method='POST'>{% csrf_token %}
+                {% form form=form %}
+                {% endform %}
+                <input class="btn" type='submit' value='Send inn sladder!'
+                       onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            var frm = $('.newPost');
+            $('.newPost').on('submit', function (e) {
+                e.preventDefault();
+                console.log("hei");
+                $.ajax({
+                    type: 'POST',
+                    url: '/shitbox/',
+                    data: $(this).serialize(),
+                    success: function () {
+                        $(':input', '.newPost')
+                            .not(':button, :submit, :reset, :hidden')
+                            .val('')
+                            .removeAttr('checked')
+                            .removeAttr('selected');
+                    }
+                })
+            })
+        });
+    </script>
+    </body>
 {% endblock content %}
