@@ -1,4 +1,5 @@
 {% extends 'chemie/base.html' %}
+{% load thumbnail %}
 
 {% block nav_header %}
     Komiteer
@@ -15,10 +16,17 @@
                 <i class="large material-icons">menu</i>
             </a>
             <ul>
-                    <li><a class="btn-floating blue" href="edit/"><i class="material-icons">edit</i></a></li>
-                    {% if perms.member.can_edit %}
-                        <li><a class="btn-floating blue" href="{%  url "verv:edit" %}"><i class="material-icons">edit</i></a></li>
-                    {% endif %}
+                <li>
+                    <a class="btn-floating blue" href="edit/"><i class="material-icons">edit</i></a>
+                    <a class="btn-floating mobile-fab-tip">Endre beskrivelse</a>
+                </li>
+                {% if perms.member.can_edit %}
+                    <li>
+                        <a class="btn-floating blue" href="{% url "verv:edit" %}"><i
+                                class="material-icons">person_add</i></a>
+                        <a class="btn-floating mobile-fab-tip">Endre medlemmer</a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     {% endif %}
@@ -27,7 +35,9 @@
     <div class="row">
         <h1 class="heading">{{ committee.title }}</h1>
         <div class="col s12 m12 l8">
-            <img class="responsive-img materialboxed" src="/media/{{ committee.image }}">
+            {% thumbnail committee.image "1600" crop="center" as im %}
+                <img class="responsive-img materialboxed" src="{{ im.url }}">
+            {% endthumbnail %}
         </div>
         <div class="col s12 m12 l4">
             <div class="card card-event">
@@ -38,10 +48,13 @@
                             <h5 class="left-align">Medlemmer</h5>
                         </div>
                         {% for member in members %}
-                            <a href="mailto:{% if member.position.email %}{{ member.position.email }}{% else %}{{ member.user.email }}{% endif %}">
+                            <a href="mailto:
+
+                                    {% if member.position.email %}{{ member.position.email }}{% else %}{{ member.user.email }}{% endif %}">
                                 <div class="valign-wrapper">
                                     <i class="material-icons valign left tiny">email</i>
-                                    <p class="black-text"> {{ member.position.title }} : {{ member.user.get_full_name }}</p>
+                                    <p class="black-text"> {{ member.position.title }}
+                                        : {{ member.user.get_full_name }}</p>
                                 </div>
                             </a>
                         {% endfor %}
@@ -50,10 +63,10 @@
                         <div class="divider grey"></div>
                         <div class="section">
                             <a href="mailto:{{ committee.email }}">
-                            <div class="valign-wrapper">
-                                <i class="material-icons valign left tiny">email</i>
-                                <p class="left-align black-text">Mail oss</p>
-                            </div>
+                                <div class="valign-wrapper">
+                                    <i class="material-icons valign left tiny">email</i>
+                                    <p class="left-align black-text">Mail oss</p>
+                                </div>
                             </a>
                             <p>{{ event.date|date:"j. F - H:i" }}</p>
                         </div>
