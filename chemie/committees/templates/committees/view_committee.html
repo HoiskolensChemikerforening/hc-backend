@@ -9,6 +9,21 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+    {% if perms.committees %}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">menu</i>
+            </a>
+            <ul>
+                    <li><a class="btn-floating blue" href="edit/"><i class="material-icons">edit</i></a></li>
+                    {% if perms.member.can_edit %}
+                        <li><a class="btn-floating blue" href="{%  url "verv:edit" %}"><i class="material-icons">edit</i></a></li>
+                    {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+
+
     <div class="row">
         <h1 class="heading">{{ committee.title }}</h1>
         <div class="col s12 m12 l8">
@@ -48,10 +63,6 @@
         </div>
     </div>
 
-
     {{ committee.description|safe }}
 
-    {% if request.user.is_authenticated %}
-        <a href="edit/">Trykk her for å redigere innhold</a>
-    {% endif %}
 {% endblock content %}

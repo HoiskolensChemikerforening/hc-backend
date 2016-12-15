@@ -15,14 +15,13 @@
 
 {% block footer_script %}
 <script>
-    $(document).ready(function(){
-        $('select').change(function(){
-            $(this).material_select();
-        });
-    });
+  $(document).ready(function() {
+    $('select').material_select();
+  });
+
 </script>
 
-{{ form.media }}
+
 
 {% endblock footer_script %}
 
