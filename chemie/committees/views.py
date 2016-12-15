@@ -18,7 +18,7 @@ def index(request):
         'committees': committees,
     }
 
-    return render(request, 'committees/detail.html', context)
+    return render(request, 'committees/list_committees.html', context)
 
 
 def edit(request):
@@ -65,6 +65,7 @@ def edit_description(request, slug):
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
+            messages.add_message(request, messages.SUCCESS, '{} har blitt endret!'.format(committee.title), extra_tags='Supert')
             return HttpResponseRedirect(committee.get_absolute_url())
     context = {
         'committee': committee,

@@ -22,5 +22,6 @@ class EditDescription(forms.ModelForm):
         model = Committee
         fields = [
             'description',
-            'image'
+            'one_liner',
+            'image',
         ]

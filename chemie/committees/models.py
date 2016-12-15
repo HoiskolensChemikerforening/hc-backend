@@ -15,6 +15,7 @@ class Committee(models.Model):
     email = models.EmailField(null=True, blank=True)
     image = ImageField(upload_to='komiteer')
     slug = models.SlugField(null=True, blank=True)
+    one_liner = models.CharField(max_length=30, verbose_name="Lynbeskrivelse")
     description = RichTextField(verbose_name='Beskrivelse', config_name='committees')
 
     def __str__(self):
