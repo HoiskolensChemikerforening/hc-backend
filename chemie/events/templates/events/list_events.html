@@ -1,10 +1,14 @@
+{% load thumbnail %}
 <div class="row">
     {% for event in events %}
         <div class="col s12 m10 l6">
             <div class="card medium">
                 <div class="card-image">
                     <a href="{{ event.get_absolute_registration_url }}">
-                        <img src="/media/{{ event.image }}">
+                        {% thumbnail event.image "400x300" crop="center" as im %}
+                            <img src="{{ im.url }}">
+                        {% endthumbnail %}
+
                     </a>
                     <span class="card-title card-event-title">
                       <h4>{{ event.title }}</h4>

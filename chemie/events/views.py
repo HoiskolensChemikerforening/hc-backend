@@ -1,21 +1,19 @@
-from django.utils import timezone
 from itertools import zip_longest
 
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
+from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
+from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 
+from .email import send_event_mail
 from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
 from .models import Event, Registration, REGISTRATION_STATUS, RegistrationMessage
-from .email import send_event_mail
-
-from customprofile.models import Profile
-from django.http import HttpResponseRedirect
-from django.core.urlresolvers import reverse
 
 
 @login_required
@@ -35,10 +33,15 @@ def create_event(request):
 
 def list_all(request):
     all_events = Event.objects.filter(date__gt=timezone.now())
+    my_events = None
+    if request.user:
+        my_events = Event.objects.filter(attendees__username__exact=request.user)
     context = {
         'events': all_events,
+        'my_events': my_events,
     }
-    return render(request, "events/list.html", context)
+    return render(request, "events/overview.html", context)
+
 
 def list_with_delete(request):
     all_events = Event.objects.filter(date__gt=timezone.now())
@@ -89,15 +92,15 @@ def view_event_details(request, event_id):
     context = {
         'event': event,
         'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'],
-                                 attendees['fourth'], attendees['fifth'], attendees['done'],),
+                                 attendees['fourth'], attendees['fifth'], attendees['done'], ),
     }
     return render(request, "events/detail.html", context)
 
 
-#attendees = {'first': ['Ida', 'Sevre', 'Erik', 'Ramn'], 'second': ['Martin', 'Inger Anna'], 'third': [],
+# attendees = {'first': ['Ida', 'Sevre', 'Erik', 'Ramn'], 'second': ['Martin', 'Inger Anna'], 'third': [],
 #             'fourth': ['Amanda', 'Peter', 'Bjørn Erik'],
 #             'fifth': ['Jonas', 'Jesus', 'Adnan']}
-#context = {
+# context = {
 #    'event': event,
 #    'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'], attendees['fourth'],
 #                             attendees['fifth'])
@@ -201,6 +204,7 @@ def view_admin_panel(request, event_id):
 
 
 @login_required
+@permission_required('registration.can_delete')
 def change_payment_status(request, registration_id):
     registration = Registration.objects.get(pk=registration_id)
     registration.payment_status = not registration.payment_status
