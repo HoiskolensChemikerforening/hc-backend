@@ -131,10 +131,6 @@
                     type: "GET",
                     url: "/events/adminlist/paymentstatus/" + myID,
                     datatype: "json",
-                    //data: {
-                    //    myID: myID,
-                    //    csrfmiddlewaretoken: csrftoken,
-                    //},
 
                     success: function (json) {
                         icon_changer("#payment-" + myID, json.payment_status)

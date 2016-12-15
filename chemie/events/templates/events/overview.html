@@ -1,0 +1,51 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Oversikt
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+
+    {% if perms.events %}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">edit</i>
+            </a>
+            <ul>
+                {% if perms.events.can_delete %}
+                    <li><a class="btn-floating red" href="delete/"><i class="material-icons">delete_forever</i></a></li>
+                {% endif %}
+                {% if perms.events.can_add %}
+                    <li><a class="btn-floating blue" href="create/"><i class="material-icons">add</i></a></li>
+                {% endif %}
+            </ul>
+        </div>
+    {% endif %}
+
+
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs z-depth-1" >
+                <li class="tab col s3"><a class="active" href="#allEvents">Alle arrangementer</a></li>
+                <li class="tab col s3"><a href="#myEvents">Mine festeligheter</a></li>
+            </ul>
+            <div id="allEvents" class="col s12">
+                {% include "events/list_events.html" %}
+                {% if not events %}
+                    <p class="flow-text">Det er ingen aktive arrangementer nå. Finn på noe kult da vel!</p>
+                {% endif %}
+            </div>
+            <div id="myEvents" class="col s12">
+                {% include "events/list_events.html" with events=my_events %}
+                {% if not my_events %}
+                    <p class="flow-text">Du er ikke påmeldt noen arrangementer. Finn på noe sprell!</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
