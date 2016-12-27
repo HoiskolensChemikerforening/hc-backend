@@ -10,10 +10,13 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-<body>
-    <form class="editContent" method='POST'>{% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
-        <input class ="btn" type ='submit' value = 'Endre innhold!'/>
-    </form>
+    <div class="col s12 m12 l12">
+        <div class="row">
+            <form class="editContent" method='POST'>{% csrf_token %}
+                {{ form.media }}
+                {{ form.as_p }}
+                <input class="btn" type='submit' value='Endre innhold!'/>
+            </form>
+        </div>
+    </div>
 {% endblock content %}
