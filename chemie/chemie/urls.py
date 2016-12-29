@@ -26,7 +26,7 @@ from wiki.urls import get_pattern as get_wiki_pattern
 urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('home.urls'), name='frontpage'),
+    url(r'^', include('home.urls', namespace='frontpage')),
     url(r'^shitbox/', include('shitbox.urls')),
     url(r'^verv/', include('committees.urls', namespace='verv')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
