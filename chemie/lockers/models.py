@@ -36,6 +36,11 @@ class Locker(models.Model):
     def get_absolute_url(self):
         return reverse("bokskap:registrer", kwargs={"number": self.id})
 
+    def clear(self):
+        self.owner.is_active = False
+        self.owner.save()
+        self.owner = None
+
     class Meta:
         ordering = ('number',)
 
