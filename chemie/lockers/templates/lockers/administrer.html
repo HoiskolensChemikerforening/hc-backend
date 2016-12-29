@@ -1,46 +1,72 @@
 {% extends "chemie/base.html" %}
 {% block nav_header %}
-Bokskap
+    Bokskap
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Administrasjon
+    Administrasjon
 {% endblock nav_sub_header %}
 
 {% block content %}
-<div class="row">
-    <p class="flow-text">{% lorem 40 w %}
-        Ved feil og mangler: kontakt EDB.
-    </p>
+    <div class="row">
+        <p class="flow-text">
+        Kontakt Webkom for å soft-resette bokskap. Dette krever at alle bokskap-eiere må bekrefte at de vil beholde skapet.
+        Etter en uke skal bokskapene gjennomgåes og lapper (advarsler) henges på uregistrerte skap.
+        Etter to uker skal alle gjenværende skap tømmes.
 
-    <div class="card">
-        <div class="card-content">
-            <table class="highlight">
-                <thead>
-                <tr>
-                    <th data-field="id"><p class="flow-text">Skapnummer</p></th>
-                    <th data-field="name"><p class="flow-text">Eies av</p></th>
-                    <th data-field="price"><p class="flow-text">Tidligere eid av</p></th>
-                </tr>
-                </thead>
+        Ved feil og mangler: kontakt Webkom.
+        </p>
 
-                <tbody>
-                {% for locker in lockers %}
+        <div class="card">
+            <div class="card-content">
+                <table class="highlight">
+                    <thead>
                     <tr>
-                        <td><p class="flow-text">{{ locker.number }}</p></td>
-                        <td><p class="flow-text">{{ locker.owner.user|default_if_none:"Ingen" }}</p></td>
-                        <td>
-                            {% with locker.indefinite_locker.all|first as ownership %}
-                                {% if ownership %}
-                                    <p class="flow-text"><i class="material-icons small">email</i> {{ ownership.user }}, {{ ownership.created|date:"j F Y" }} </p>
-                                {% endif %}
-                            {% endwith %}
-                        </td>
+                        <th data-field="id"><p class="flow-text">Skapnummer</p></th>
+                        <th data-field="name"><p class="flow-text">Eies av</p></th>
+                        <th data-field="price"><p class="flow-text">Tidligere eid av</p></th>
                     </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for locker in lockers %}
+                        <tr>
+                            <td><a name="locker{{ locker.number }}"></a>
+                                <p class="flow-text">{{ locker.number }}</p></td>
+                            <td>
+                                <div class="valign-wrapper">
+                                    {% if locker.owner %}
+                                        <i class="material-icons valign left"
+                                           onclick=remove_and_redirect({{ locker.id }}) href="#">remove_circle</i>
+                                        <p class="flow-text valign">{{ locker.owner.user }}</p>
+                                    {% else %} - {% endif %}
+                                </div>
+                            </td>
+                            <td>
+                                {% with locker.indefinite_locker.all|first as ownership %}
+                                    {% if ownership %}
+                                        <a href="mailto:{{ ownership.user.email }}">
+                                            <div class="valign-wrapper">
+                                                <i class="material-icons valign left">email</i>
+                                                <p class="flow-text valign">{{ ownership.user }}, {{ ownership.created|date:"j F Y" }} </p>
+                                            </div>
+                                        </a>
+                                    {% endif %}
+                                {% endwith %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
+        <a name="test"></a>
     </div>
-</div>
+    <script>
+        function remove_and_redirect(id) {
+            if (confirm("Bekreft sletting av skap nr " + id)) {
+                window.location = "/bokskap/administrer/slett/" + id + "/";
+            } else {
+            }
+        }
+    </script>
 {% endblock content %}

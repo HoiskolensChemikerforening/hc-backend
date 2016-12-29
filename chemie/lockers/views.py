@@ -3,11 +3,13 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 
 from .email import queue_activation_mail, send_my_lockers_mail
 from .forms import RegisterExternalLockerUserForm, MyLockersForm
 from .models import Locker, LockerUser, Ownership, LockerConfirmation
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 
 def view_lockers(request, page=1):
@@ -84,7 +86,12 @@ def register_locker(request, number):
             }
 
             queue_activation_mail(context, 'emails/activation.html')
-            return render(request, 'lockers/almostDone.html', context)
+            messages.add_message(request, messages.SUCCESS,
+                                 'Bokskapet er nesten reservert! '
+                                 'En epost har blitt sendt til deg med videre instrukser for å bekrefte epostaddressen din.',
+                                 extra_tags='Boskap - reservasjon')
+
+            return redirect(reverse('frontpage:home'))
 
         context = {
             "form": form_data,
@@ -99,13 +106,10 @@ def activate_ownership(request, code):
     except ObjectDoesNotExist:
         raise Http404
 
-    context = {
-        "title": 'Fullført',
-        "message": 'Bokskapet er nå ditt =D',
-        "status": 'success',
-    }
-    return render(request, 'common/feedback.html', context)
+    messages.add_message(request, messages.SUCCESS, 'Bokskapet ble aktivert og er nå ditt =D',
+                         extra_tags='Fullført')
 
+    return redirect(reverse('frontpage:home'))
 
 @permission_required('lockers.can_delete')
 def manage_lockers(request):
@@ -118,5 +122,11 @@ def manage_lockers(request):
     return render(request, 'lockers/administrer.html', context)
 
 
-def administration_overview(request):
-    Ownership.objects.fetch_all_states()
+@permission_required('lockers.can_delete')
+def clear_locker(request, locker_id):
+    locker = get_object_or_404(Locker, pk=locker_id)
+    if locker.owner:
+        locker.clear()
+        locker.save()
+
+    return redirect(reverse('bokskap:administrate') + '#locker{}'.format(locker_id))
