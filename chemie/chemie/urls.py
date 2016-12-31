@@ -39,10 +39,10 @@ urlpatterns = [
     url(r'^events/', include('events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/', get_wiki_pattern()),
-    url(r'^markdown/', include( 'django_markdown.urls')),
     url(r'^forum/', include(board.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
+    url(r'^kontakt/', include('home.urls', namespace="kontakt")),
 ]
 
 urlpatterns += [
