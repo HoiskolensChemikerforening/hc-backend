@@ -1,7 +1,8 @@
 from django.conf.urls import url
 
-from . import views
+from .views import index, contact
 
 urlpatterns = [
-    url(r'^$', views.index)
+    url(r'^$', index, name="home"),
+    url(r'^kontakt/', contact, name="kontakt"),
 ]
