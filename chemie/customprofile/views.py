@@ -6,16 +6,17 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.core.validators import ValidationError
 from django.http import Http404, HttpResponseRedirect
 from django.http import JsonResponse
+from django.shortcuts import redirect
 from django.shortcuts import render
-
 from django.utils import timezone
 
 from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword
 from .models import UserToken, Profile, Membership
-
 
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
@@ -76,13 +77,19 @@ def forgot_password(request):
     if request.POST:
         email = form.data.get('email')
         if form.is_valid():
-            user = User.objects.get(email=email)
-            if user:
-                token = UserToken.objects.create(user=user)
-                send_forgot_password_mail(request, email, user, token)
-                HttpResponseRedirect('/')
+            try:
+                user = User.objects.get(email=email)
+
+            except ObjectDoesNotExist:
+                form.add_error(None, ValidationError(
+                    {'email': ["Vi finner ingen bruker med denne e-posten"]}))
+            token = UserToken.objects.create(user=user)
+            send_forgot_password_mail(request, email, user, token)
+            messages.add_message(request, messages.SUCCESS, 'Sjekk {} for videre detaljer'.format(email),
+                                 extra_tags='Tilbakestille passord')
+            return redirect(reverse('frontpage:home'))
     context = {
-        'email': form,
+        'form': form,
     }
     return render(request, 'customprofile/forgot_password.html', context)
 
@@ -98,12 +105,12 @@ def activate_password(request, code):
             password = password_form.data.get('password_new')
             activator.set_password(password)
             messages.add_message(request, messages.SUCCESS, 'Ditt passord ble endret', extra_tags='Suksess')
-            return HttpResponseRedirect('/')
+            return redirect(reverse('frontpage:home'))
 
     context = {
         'form': password_form,
     }
-    return render(request, 'customprofile/setforgottenpassword.html', context)
+    return render(request, 'customprofile/set_forgotten_password.html', context)
 
 
 def view_memberships(request):
