@@ -23,8 +23,19 @@
     <script src="{% static "js/init.js" %}"></script>
     <script src="{% static 'smart-selects/admin/js/chainedfk.js' %}"></script>
 
+    <style>
+        {% block style %}
+        {% endblock style %}
+    </style>
+
     {% block header %}
     {% endblock header %}
+    <meta name="theme-color" content="#d81b60">
+    <!-- Windows Phone -->
+    <meta name="msapplication-navbutton-color" content="#4285f4">
+    <!-- iOS Safari -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 </head>
 <body>
@@ -33,13 +44,11 @@
     <nav class="top-nav">
         <div class="container">
             <div class="nav-wrapper">
-                <div class="section" id="top-title">
                     <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse">
                         <i class="material-icons">menu</i></a>
-                    <h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3>
-                    <h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4>
+                    <div><h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3></div>
+                    <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
                 </div>
-            </div>
         </div>
     </nav>
 
@@ -59,7 +68,7 @@
                     <ul class="collapsible" data-collapsible="accordion">
                         <li>
                             <div class="collapsible-header">
-                                <div class="valign-wrapper">
+                                <div class="valign-wrapper" style="padding-top: 10px; padding-bottom: 10px;">
                                     <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
                                     {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
                                         <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt=""
@@ -83,18 +92,17 @@
             <li>
                 <ul class="collapsible" data-collapsible="accordion">
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">info</i>Om HC</div>
+                        <div class="collapsible-header"><i class="material-icons micon">info</i>Om HC</div>
                         <div class="collapsible-body">
                             <ul>
-                                <li><a href="#" class="waves-effect waves-teal">Linjeforeningen</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Kontoret</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Kjellern</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">HCs lover</a></li>
+                                <li><a href="/s/om/" class="waves-effect waves-teal">Linjeforeningen</a></li>
+                                <li><a href="/s/kontoret/" class="waves-effect waves-teal">Kontoret</a></li>
+                                <li><a href="/s/kjelleren" class="waves-effect waves-teal">Kjellern</a></li>
                             </ul>
                         </div>
                     </li>
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">local_drink</i>Sosialt</div>
+                        <div class="collapsible-header"><i class="material-icons micon">local_drink</i>Sosialt</div>
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="#" class="waves-effect waves-teal">Bedrpess</a></li>
@@ -104,21 +112,21 @@
                     </li>
                 </ul>
             </li>
-            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons">local_drink</i>Ny
+            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons micon">local_drink</i>Ny
                 student</a></li>
-            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons">business</i>For
-                bedrifter</a></li>
-            <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal"><i class="material-icons">hearing</i>Sladreboks</a>
+            <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i class="material-icons micon">business</i>
+                For bedrifter</a></li>
+            <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal"><i class="material-icons micon">hearing</i>Sladreboks</a>
             </li>
-            <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal"><i class="material-icons">inbox</i>Bokskap</a>
+            <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal"><i class="material-icons micon">inbox</i>Bokskap</a>
             </li>
-            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons">contact_mail</i>Kontakt</a>
+            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons micon">contact_mail</i>Kontakt</a>
             </li>
             <li>
                 <ul class="collapsible" data-collapsible="accordion">
 
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">people</i>Internt</div>
+                        <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
@@ -133,26 +141,7 @@
                     </li>
                 </ul>
             </li>
-            <li>
-                <ul class="collapsible" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons">filter_drama</i>Undergrupper</div>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="#" class="waves-effect waves-teal">Mange</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Undergrupper</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Her</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Mange</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Undergrupper</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Her</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Mange</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Undergrupper</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Her</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
+            <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect waves-teal"><i class="material-icons micon">filter_drama</i>Undergrupper</a></li>
         </ul>
         <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 
