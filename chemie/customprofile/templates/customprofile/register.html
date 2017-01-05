@@ -1,11 +1,19 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
+{% block nav_header %}
+    Bruker
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Registrasjon
+{% endblock nav_sub_header %}
+
 {% block content %}
-    {% load staticfiles %}
+{% load staticfiles %}
 
 
     <div class="container">
-        <p class="flow-text">Velkommen til HC, linjeforeningen for Industriell Kjemi og Bioteknologi!
+        <p class="flow-text">Velkommen til HC, linjeforeningen for Industriell Kjemi og Bioteknologi!<br>
             Vi ønsker deg velkommen til oss og NTNU =D
         </p>
         <div class="row">
