@@ -136,7 +136,7 @@ def register_user(request, event_id):
                 if de_registration_form.is_valid():
                     lucky_person = Registration.objects.de_register(registration)
                     if lucky_person:
-                        send_event_mail(lucky_person)
+                        send_event_mail(lucky_person, event)
                     messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
                                          extra_tags='Avmeldt')
                     return redirect(event)
@@ -152,7 +152,7 @@ def register_user(request, event_id):
 
                 if status == REGISTRATION_STATUS.CONFIRMED:
                     messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
-                    send_event_mail(instance)
+                    send_event_mail(instance, event)
                     custom_messages = RegistrationMessage.objects.filter(user=instance.user, event=event)
                     for custom_message in custom_messages:
                         messages.add_message(request, messages.INFO, custom_message.message, extra_tags='PS')
@@ -160,7 +160,7 @@ def register_user(request, event_id):
                 elif status == REGISTRATION_STATUS.WAITING:
                     messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.',
                                          extra_tags='Venteliste')
-                    send_event_mail(instance)
+                    send_event_mail(instance, event)
                 else:
                     # Denne bør ligge i en try-catch block
                     messages.add_message(request, messages.ERROR, 'En ukjent feil oppstod. Kontakt edb@hc.ntnu.no',
