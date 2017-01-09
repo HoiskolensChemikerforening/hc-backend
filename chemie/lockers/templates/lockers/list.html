@@ -1,10 +1,16 @@
 {% extends "chemie/base.html" %}
+{% block style %}
+    .collection-item {
+    overflow: initial !important;
+    }
+{% endblock %}
+
 {% block nav_header %}
-Bokskap
+    Bokskap
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Oversikt
+    Oversikt
 {% endblock nav_sub_header %}
 
 {% block content %}
@@ -14,11 +20,11 @@ Oversikt
             <li><a href="{{ lockers.previous_page_number }}">Prev</a></li>
         {% endif %}
         {% for page in lockers.paginator.page_range %}
-            <li class="{% if lockers.number == page  %}active{% endif %}"><a href="{{page }}">{{ page }}</a></li>
+            <li class="{% if lockers.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
         {% endfor %}
 
         {% if lockers.has_next %}
-            <li> <a href="{{ lockers.next_page_number }}">Next</a></li>
+            <li><a href="{{ lockers.next_page_number }}">Next</a></li>
         {% endif %}
     </ul>
 
@@ -28,10 +34,12 @@ Oversikt
     </p>
 
     <div class="row">
-    <div class="col s6 m3">
+    <div class="col s12 m3">
         <div class="collection">
             {% for locker in lockers %}
-                {% if forloop.counter0|divisibleby:5 and not forloop.first%}</div></div> <div class="col s6 m3"> <div class="collection">{% endif %}
+                {% if forloop.counter0|divisibleby:5 and not forloop.first %}</div></div>
+                    <div class="col s12 m3">
+                    <div class="collection">{% endif %}
                 {% if locker.is_free %}
                     <a href="{{ locker.get_absolute_url }}" class="collection-item waves-effect waves-light">
                         <b>{{ locker.number }}</b>
@@ -53,3 +61,4 @@ Oversikt
             </div>
 
 {% endblock content %}
+
