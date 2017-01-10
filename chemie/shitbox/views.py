@@ -1,9 +1,10 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
 from django.contrib.auth.decorators import login_required
-
-# Create your views here.
+from django.contrib import messages
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 from .forms import Postform
+
 
 @login_required
 def post_votes(request):
@@ -12,7 +13,12 @@ def post_votes(request):
         instance = form.save(commit=False)
         instance.author = request.user
         instance.save()
+        messages.add_message(request, messages.SUCCESS,
+                             'Sladderet ble mottatt, tusen takk!',
+                             extra_tags='Du sladret')
+        return redirect(reverse('frontpage:home'))
     context = {
         "form": form,
     }
+
     return render(request, "shitbox/post_form.html", context)

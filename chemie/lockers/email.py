@@ -3,8 +3,9 @@ from threading import Thread
 from django.core.mail import send_mail
 from mail_templated import send_mail
 from post_office import mail
-
-DEFAULT_FROM_EMAIL = 'Webkom@hc.ntnu.no'
+from django.conf import settings
+from django.core.urlresolvers import reverse
+from django.shortcuts import redirect
 
 
 def queue_activation_mail(context, template):
@@ -15,7 +16,7 @@ def queue_activation_mail(context, template):
 
 def send_activation_mail(context, user_mail, template):
     print("SENDING MAIL")
-    send_mail(template, context, DEFAULT_FROM_EMAIL, [user_mail])
+    send_mail(template, context, settings.DEFAULT_FROM_EMAIL, [user_mail])
     print("MAIL SENT")
 
 def send_my_lockers_mail(email, lockers, user):
@@ -23,7 +24,8 @@ def send_my_lockers_mail(email, lockers, user):
 
     mail.send(
         email,  # List of email addresses also accepted
-        DEFAULT_FROM_EMAIL,
+        settings.DEFAULT_FROM_EMAIL,
         template=template,  # Could be an EmailTemplate instance or name
         context={'user': user, 'email': email, 'lockers': lockers},
         )
+    return redirect(reverse('frontpage:home'))

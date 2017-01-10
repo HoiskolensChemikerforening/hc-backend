@@ -19,36 +19,13 @@
             </p>
 
 
-            <form class="newPost" method='POST'>{% csrf_token %}
+            <form class="editContent" method='POST'>{% csrf_token %}
                 {% form form=form %}
                 {% endform %}
-                <input class="btn" type='submit' value='Send inn sladder!'
-                       onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
+                <input class="btn" type='submit' value='Send inn sladder!'/>
             </form>
         </div>
     </div>
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.min.js"></script>
-    <script>
-        $(document).ready(function () {
-            var frm = $('.newPost');
-            $('.newPost').on('submit', function (e) {
-                e.preventDefault();
-                console.log("hei");
-                $.ajax({
-                    type: 'POST',
-                    url: '/shitbox/',
-                    data: $(this).serialize(),
-                    success: function () {
-                        $(':input', '.newPost')
-                            .not(':button, :submit, :reset, :hidden')
-                            .val('')
-                            .removeAttr('checked')
-                            .removeAttr('selected');
-                    }
-                })
-            })
-        });
-    </script>
-    </body>
+
 {% endblock content %}

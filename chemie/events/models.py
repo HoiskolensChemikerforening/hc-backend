@@ -102,7 +102,7 @@ class RegistrationManager(models.Manager):
             return lucky_person
 
 class Registration(models.Model):
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Event, related_name="event_registration")
     user = models.ForeignKey(User)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
@@ -132,6 +132,8 @@ class RegistrationMessage(models.Model):
     user = models.ForeignKey(User)
     event = models.ForeignKey(Event)
     message = models.TextField()
+    author = models.ForeignKey(User, related_name="event_message")
+
 
     # TODO: legge til author
     def __str__(self):

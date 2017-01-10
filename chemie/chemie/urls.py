@@ -33,7 +33,7 @@ urlpatterns = [
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls', namespace='news')),
     url(r'^calendar/', include('webcalendar.urls')),
-    url(r'^profile/', include('customprofile.urls')),
+    url(r'^profile/', include('customprofile.urls', namespace="profile")),
     url(r'^login/$', auth_views.login),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}),
     url(r'^events/', include('events.urls', namespace='events')),

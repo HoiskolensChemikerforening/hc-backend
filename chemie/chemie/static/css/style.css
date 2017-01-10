@@ -1,37 +1,41 @@
-/* Custom Stylesheet */
-/**
- * Use this file to override Materialize files so you can update
- * the core Materialize files in the future
- *
- * Made By MaterializeCSS.com
- */
-
-header, main, footer {
-  padding-left: 200px;
+html, body {
+    height: 100%;
 }
 
-@media only screen and (max-width : 992px) {
-  header, main, footer {
-    padding-left: 0;
-  }
+header, main, footer {
+    padding-left: 300px;
+}
+
+@media only screen and (max-width: 992px) {
+    header, main, footer {
+        padding-left: 0;
+    }
+}
+
+main {
+    min-height: 90%;
+    min-height: -webkit-calc(100% - 437px);
+    min-height: -moz-calc(100% - 437px);
+    min-height: calc(100% - 437px);
+    background-color: #fafafa;
 }
 
 .error {
-  color: red;
+    color: red;
 }
 
 .icon-block {
-  padding: 0 15px;
+    padding: 0 15px;
 }
+
 .icon-block .material-icons {
-	font-size: inherit;
+    font-size: inherit;
 }
 
 nav.top-nav a.page-title {
     line-height: 122px;
     font-size: 38px;
 }
-
 
 nav.top-nav {
     height: 122px;
@@ -76,32 +80,35 @@ ul.side-nav.fixed a {
 }
 
 #heading {
-  font-size: 3.56rem;
-  font-family: "Roboto";
-  font-weight: 300;
-  margin-top: 0.0rem;
+    font-size: 3.56rem;
+    font-family: "Roboto";
+    font-weight: 300;
+    margin-top: 0.0rem;
+    padding-top: 0.5rem;
 }
 
 @media screen and (max-width: 690px) {
     #heading {
-        font-size: 2rem;
-
+        font-size: 3.0rem;
+        display: inline-block;
+        line-height: inherit;
     }
 }
+
 #subheading {
-  font-family: "Roboto Condensed";
+    font-family: "Roboto Condensed";
     font-weight: 300;
     position: absolute;
-    top:1.7em;
+    top: 1.7em;
 }
 
 section#top-title {
-  padding-top: .1rem;
+    padding-top: .1rem;
 }
 
 nav, footer.page-footer {
-  color: #fff;
-  background-color: #FFA000;
+    color: #fff;
+    background-color: #d81b60;
 }
 
 .detail-title {
@@ -109,40 +116,41 @@ nav, footer.page-footer {
     display: block;
 }
 
-
 .icon-text {
-    vertical-align:middle
+    vertical-align: middle
 }
 
 .heading {
-  color: #FFA000;
-  font-family: "Roboto";
-  font-weight: 200;
-  margin-top: 0.0rem;
+    color: #d81b60;
+    font-family: "Roboto";
+    font-weight: 200;
+    margin-top: 0.0rem;
 }
 
 .success-message {
-  background-color: #00e676 !important;
+    background-color: #7CE267 !important;
 }
 
 .info-message {
-  background-color: #00e5ff !important;
+    background-color: #00e5ff !important;
 }
 
 .warning-message {
-  background-color: #ffeb3b !important;
+    background-color: #F8DC4D !important;
 }
 
 .error-message {
-  background-color: #f44336 !important;
+    background-color: #f44336 !important;
 }
 
 i.icon-green {
     color: green;
 }
+
 i.icon-red {
     color: red;
 }
+
 i.icon-gray {
     color: gray;
 }
@@ -155,7 +163,7 @@ img.profile-circle {
 
 .side-nav li > a > i.material-icons {
     color: rgb(0, 0, 0);
-        width: 2rem;
+    width: 2rem;
     font-size: 1.6rem;
     line-height: 3rem;
     display: block;
@@ -169,23 +177,143 @@ img.profile-circle {
 }
 
 .card-event {
-        margin: 0rem 0 1rem 0;
+    margin: 0rem 0 1rem 0;
 }
 
-
 .text-background {
-    position:absolute;
-    top:250px;
-    left:140px;
-    width:500px;
-    height:50px;
-    background-color:black;
-    z-index:0;
-    opacity:0.5;
+    position: absolute;
+    top: 250px;
+    left: 140px;
+    width: 500px;
+    height: 50px;
+    background-color: black;
+    z-index: 0;
+    opacity: 0.5;
 }
 
 .card-event-title {
     padding: 0px 10px;
-    background-color: rgba(0,0,0,.2);
+    background-color: rgba(0, 0, 0, .2);
     width: 100%;
+}
+
+@media only screen and (min-width: 993px) {
+    .container {
+        width: 85%
+    }
+}
+
+.container {
+    margin: 0 auto;
+    max-width: 1280px;
+    width: 90%
+}
+
+@media only screen and (max-width: 600px) {
+    footer.page-footer {
+        padding-top: 20px;
+        bottom: 0;
+        margin: 0px;
+
+    }
+
+}
+
+@media only screen and (min-width: 601px) {
+    .container {
+        width: 85%
+    }
+
+    footer.page-footer {
+        padding-top: 20px;
+        bottom: 0;
+        margin: 0px;
+
+    }
+}
+
+.container .row {
+    margin-left: -0.75rem;
+    margin-right: -0.75rem
+}
+
+@media only screen and (min-width: 993px) {
+    .container {
+        width: 85%
+    }
+
+    footer.page-footer {
+        padding-left: 0px;
+        margin-left: 300px;
+    }
+}
+
+p {
+    -webkit-font-smoothing: antialiased;
+    overflow-wrap: break-word;
+
+}
+
+.mobile-fab-tip, .mobile-fab-tip:hover {
+    position: fixed;
+    right: 85px;
+    padding: 0px 0.5rem;
+    text-align: right;
+    background-color: #323232;
+    border-radius: 2px;
+    color: #FFF;
+    width: auto;
+    cursor: default
+}
+
+.django-ckeditor-widget {
+    display: inherit !important;
+}
+
+#cke_id_description {
+    width: 100%;
+}
+
+i {
+    color: #d81b60;
+}
+
+i .micon {
+    color: #0486A5;
+}
+
+.micon {
+    color: #0486A5 !important;
+}
+
+nav, footer {
+    background-image: url('/static/images/blur.png') !important;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+    color: #0486A5;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
+    color: #83c6d3;
+}
+
+.btn {
+    background-color: #0486A5;
+}
+
+.btn-floating {
+    background-color: #0486A5 !important;
+}
+
+.prefix.active {
+    color: #0486A5 !important;
+}
+
+.flow-text {
+    overflow-wrap: break-word;
+}
+
+.section.no-pad-bot {
+    padding-top: 2rem;
 }
