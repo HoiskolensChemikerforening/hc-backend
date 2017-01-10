@@ -275,6 +275,8 @@ CKEDITOR_CONFIGS = {
             ['Maximize', 'Find', 'Replace']
         ],
         'customConfig': '/static/js/ckeditor_config.js',
+        'width': '100%'
+
     },
 }
 

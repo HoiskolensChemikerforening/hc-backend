@@ -1,12 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User
-from datetime import datetime
-from django import forms
-# Create your models here.
+from sorl.thumbnail import ImageField
 
 
 class Submission(models.Model):
-    """docstring for submission"""
-    content = models.TextField(max_length = 2000, verbose_name="Sladder")
+    content = models.TextField(max_length=2000, verbose_name='Sladder')
+    image = ImageField(upload_to='shitbox', blank=True, null=True, verbose_name="Bilde")
     date = models.DateTimeField(auto_now_add=True)
-    author = models.ForeignKey(User, verbose_name = 'Innsender')
+    author = models.ForeignKey(User, verbose_name='Innsender')

@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from .models import Profile
 import material as M
 from django.core.validators import ValidationError
+from captcha.fields import ReCaptchaField
 
 class RegisterUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Passord")
@@ -127,8 +128,10 @@ class ChangePasswordForm(forms.ModelForm):
 
 
 class ForgotPassword(forms.ModelForm):
-    email = forms.CharField(widget=forms.EmailInput)
-    layout = M.Layout(M.Row('email'))
+    email = forms.CharField(widget=forms.EmailInput, label="E-post")
+    captcha = ReCaptchaField()
+    layout = M.Layout(M.Row('email'),
+                      M.Row('captcha'))
 
     class Meta:
         model = User
@@ -136,8 +139,8 @@ class ForgotPassword(forms.ModelForm):
 
 
 class SetNewPassword(forms.ModelForm):
-    password_new = forms.CharField(widget=forms.PasswordInput, label="New password")
-    password_new_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm new password")
+    password_new = forms.CharField(widget=forms.PasswordInput, label="Nytt passord")
+    password_new_confirm = forms.CharField(widget=forms.PasswordInput, label="Bekreft nytt passord")
     layout = M.Layout(M.Row('password_new'),
                       M.Row('password_new_confirm'))
 

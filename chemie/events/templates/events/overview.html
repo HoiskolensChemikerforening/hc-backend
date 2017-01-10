@@ -1,10 +1,10 @@
 {% extends "chemie/base.html" %}
 {% block nav_header %}
-Arrangementer
+    Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Oversikt
+    Oversikt
 {% endblock nav_sub_header %}
 
 
@@ -17,10 +17,16 @@ Oversikt
             </a>
             <ul>
                 {% if perms.events.can_delete %}
-                    <li><a class="btn-floating red" href="delete/"><i class="material-icons">delete_forever</i></a></li>
+                    <li>
+                        <a class="btn-floating red" href="{% url "events:delete" %}"><i class="material-icons">delete_forever</i></a>
+                        <a class="btn-floating mobile-fab-tip">Slett</a>
+                    </li>
                 {% endif %}
                 {% if perms.events.can_add %}
-                    <li><a class="btn-floating blue" href="create/"><i class="material-icons">add</i></a></li>
+                    <li>
+                        <a class="btn-floating blue" href="{% url "events:create" %}"><i class="material-icons">add</i></a>
+                        <a class="btn-floating mobile-fab-tip">Ny</a>
+                    </li>
                 {% endif %}
             </ul>
         </div>
@@ -29,7 +35,7 @@ Oversikt
 
     <div class="row">
         <div class="col s12">
-            <ul class="tabs z-depth-1" >
+            <ul class="tabs z-depth-1">
                 <li class="tab col s3"><a class="active" href="#allEvents">Alle arrangementer</a></li>
                 <li class="tab col s3"><a href="#myEvents">Mine festeligheter</a></li>
             </ul>

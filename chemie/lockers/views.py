@@ -10,6 +10,9 @@ from .forms import RegisterExternalLockerUserForm, MyLockersForm
 from .models import Locker, LockerUser, Ownership, LockerConfirmation
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
+from django.conf import settings
+
+from post_office import mail
 
 
 def view_lockers(request, page=1):
@@ -78,14 +81,13 @@ def register_locker(request, number):
             # Create confirmation link object
             confirmation_object = new_ownership.create_confirmation()
 
-            context = {
-                "confirmation": confirmation_object,
-                "locker_user": user,
-                "ownership": new_ownership,
-                "request": request
-            }
-
-            queue_activation_mail(context, 'emails/activation.html')
+            mail.send(
+                user.username,
+                settings.DEFAULT_FROM_EMAIL,
+                template='lockers_activate',
+                context={'user': user, 'email': user.username, 'ownership': new_ownership, "request": request,
+                         "confirmation": confirmation_object},
+            )
             messages.add_message(request, messages.SUCCESS,
                                  'Bokskapet er nesten reservert! '
                                  'En epost har blitt sendt til deg med videre instrukser for å bekrefte epostaddressen din.',
@@ -110,6 +112,7 @@ def activate_ownership(request, code):
                          extra_tags='Fullført')
 
     return redirect(reverse('frontpage:home'))
+
 
 @permission_required('lockers.can_delete')
 def manage_lockers(request):
