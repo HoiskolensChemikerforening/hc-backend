@@ -21,7 +21,6 @@
     <script src="{% static "js/materialize.js" %}"></script>
     <script src="{% static "js/timepicker.js" %}"></script>
     <script src="{% static "js/init.js" %}"></script>
-    <script src="{% static 'smart-selects/admin/js/chainedfk.js' %}"></script>
 
     <style>
         {% block style %}
@@ -116,11 +115,11 @@
                 student</a></li>
             <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i class="material-icons micon">business</i>
                 For bedrifter</a></li>
-            <li class="bold"><a href="/shitbox/" class="waves-effect waves-teal"><i class="material-icons micon">hearing</i>Sladreboks</a>
+            <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal"><i class="material-icons micon">hearing</i>Sladreboks</a>
             </li>
-            <li class="bold"><a href="/bokskap/" class="waves-effect waves-teal"><i class="material-icons micon">inbox</i>Bokskap</a>
+            <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect waves-teal"><i class="material-icons micon">inbox</i>Bokskap</a>
             </li>
-            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons micon">contact_mail</i>Kontakt</a>
+            <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect waves-teal"><i class="material-icons micon">contact_mail</i>Kontakt</a>
             </li>
             <li>
                 <ul class="collapsible" data-collapsible="accordion">
@@ -130,11 +129,8 @@
                         <div class="collapsible-body">
                             <ul>
                                 <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Send inn bilder</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Søk kontortilgang</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Søknad om cash</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Retningslinjer for e-post</a></li>
-                                <li><a href="#" class="waves-effect waves-teal">Effektsalg</a></li>
+                                <li><a href="{% url "wiki:root" %}" class="waves-effect waves-teal">Wiki</a></li>
+
 
                             </ul>
                         </div>
