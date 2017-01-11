@@ -27,12 +27,11 @@ urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls', namespace='frontpage')),
-    url(r'^shitbox/', include('shitbox.urls')),
+    url(r'^shitbox/', include('shitbox.urls', namespace='shitbox')),
     url(r'^verv/', include('committees.urls', namespace='verv')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
     url(r'^klassekatalog/', include('yearbook.urls')),
     url(r'^news/', include('news.urls', namespace='news')),
-    url(r'^calendar/', include('webcalendar.urls')),
     url(r'^profile/', include('customprofile.urls', namespace="profile")),
     url(r'^login/$', auth_views.login),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}),
@@ -42,7 +41,6 @@ urlpatterns = [
     url(r'^forum/', include(board.urls)),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^kontakt/', include('home.urls', namespace="kontakt")),
 ]
 
 urlpatterns += [
