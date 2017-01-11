@@ -43,3 +43,7 @@ def contact(request):
         return render(request, 'chemie/contact.html', {
             'form': form_data,
         })
+
+
+def calendar(request):
+    return render(request, 'chemie/calendar.html')

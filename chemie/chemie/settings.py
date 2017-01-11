@@ -27,13 +27,14 @@ if os.environ.get("DEBUG") == "False":
     ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = False
-    ADMINS = [('Carl Johan Hambro', 'carljohan.hambro@gmail.com')]
 else:
     # SECURITY WARNING: keep the secret key used in production secret!
     SECRET_KEY = 'd)%%e$l#xa7xtvro#(%n)q)h$_399wth0i1^@hxrruqz$0&@zx'
     # SECURITY WARNING: don't run with debug turned on in production!
     DEBUG = True
     ALLOWED_HOSTS = ['*']
+
+ADMINS = [('Carl Johan Hambro', 'carljohan.hambro@gmail.com')]
 
 LOGIN_REDIRECT_URL = '/'
 
@@ -50,7 +51,6 @@ INSTALLED_APPS = [
                      'events',
                      'lockers',
                      'yearbook',
-                     'webcalendar',
                      'dal',
                      'dal_select2',
                      'django.contrib.admin',
@@ -70,13 +70,11 @@ INSTALLED_APPS = [
                      'django_nyt',
                      'sekizai',
                      'wiki.plugins.attachments',
-                     'wiki.plugins.notifications',
                      'wiki.plugins.images',
                      'wiki.plugins.macros',
                      'mptt',
                      'haystack',
                      'widget_tweaks',
-                     'django_markdown',
                      'rest_framework',
                      'smart_selects',
                      'ckeditor',
@@ -221,8 +219,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-RECAPTCHA_PUBLIC_KEY = '6Lc-VB8TAAAAAD7HwjcKbpfOOiU8X0_NRcp91g54'
-RECAPTCHA_PRIVATE_KEY = '6Lc-VB8TAAAAAIDtd6vJ_cO1Vy7q6AzSEXt1OcDA'
+RECAPTCHA_PUBLIC_KEY = ''
+RECAPTCHA_PRIVATE_KEY = ''
 
 NOCAPTCHA = True
 
@@ -230,10 +228,11 @@ EMAIL_USE_TLS = True
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'post_office.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = '532TTIuqx4RA'  # my gmail password
+EMAIL_HOST_PASSWORD = ''  # my gmail password
 EMAIL_HOST_USER = 'edb.ntnu@gmail.com'  # my gmail username
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+DEFAULT_FROM_EMAIL = 'webkom@hc.ntnu.no'
 
 THUMBNAIL_DEBUG = True
 

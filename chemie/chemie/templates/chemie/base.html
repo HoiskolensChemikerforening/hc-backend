@@ -16,11 +16,17 @@
     <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
     <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
 
+    {% block extra_css %}
+    {% endblock %}
+
     <!-- JS -->
-    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
     <script src="{% static "js/materialize.js" %}"></script>
     <script src="{% static "js/timepicker.js" %}"></script>
     <script src="{% static "js/init.js" %}"></script>
+
+    {% block extra_js %}
+    {% endblock %}
 
     <style>
         {% block style %}
@@ -43,11 +49,11 @@
     <nav class="top-nav">
         <div class="container">
             <div class="nav-wrapper">
-                    <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse">
-                        <i class="material-icons">menu</i></a>
-                    <div><h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3></div>
-                    <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
-                </div>
+                <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse">
+                    <i class="material-icons">menu</i></a>
+                <div><h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3></div>
+                <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
+            </div>
         </div>
     </nav>
 
@@ -115,11 +121,14 @@
                 student</a></li>
             <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i class="material-icons micon">business</i>
                 For bedrifter</a></li>
-            <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal"><i class="material-icons micon">hearing</i>Sladreboks</a>
+            <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal"><i
+                    class="material-icons micon">hearing</i>Sladreboks</a>
             </li>
-            <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect waves-teal"><i class="material-icons micon">inbox</i>Bokskap</a>
+            <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect waves-teal"><i
+                    class="material-icons micon">inbox</i>Bokskap</a>
             </li>
-            <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect waves-teal"><i class="material-icons micon">contact_mail</i>Kontakt</a>
+            <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect waves-teal"><i
+                    class="material-icons micon">contact_mail</i>Kontakt</a>
             </li>
             <li>
                 <ul class="collapsible" data-collapsible="accordion">
@@ -137,7 +146,8 @@
                     </li>
                 </ul>
             </li>
-            <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect waves-teal"><i class="material-icons micon">filter_drama</i>Undergrupper</a></li>
+            <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect waves-teal"><i
+                    class="material-icons micon">filter_drama</i>Undergrupper</a></li>
         </ul>
         <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 
@@ -156,7 +166,7 @@
                             <div class="card {{ message.level_tag }}-message darken-1">
                                 <div class="card-content">
                               <span class="card-title black-text valign-wrapper" style="clear: both;">
-                                  <i class="material-icons" style="padding-right: 10px;">priority_high</i>
+                                  <i class="material-icons black-text" style="padding-right: 10px;">priority_high</i>
                                   <h5>{{ message.extra_tags }}</h5>
                               </span>
                                     <p class="flow-text black-text">{{ message }}</p>
