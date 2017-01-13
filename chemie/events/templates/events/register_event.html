@@ -15,7 +15,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 </p>
+    <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 {{ form.event_date.value }}</p>
     <div class="card">
         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="card-content">
@@ -56,5 +56,17 @@
             formatSubmit: 'yyyy-mm-dd',
             hiddenName: true
         });
+        {% if form.event_date.value %}
+            var $edate = $('#id_event_date').pickadate().pickadate('picker').set('select', "{{ form.event_date.value }}", {format: 'yyyy-mm-dd'});
+        {% endif %}
+        {% if form.registration_start_date.value %}
+            var $sreg = $('#id_registration_start_date').pickadate().pickadate('picker').set('select', "{{ form.registration_start_date.value }}", {format: 'yyyy-mm-dd'});
+        {% endif %}
+        {% if form.register_deadline_date.value %}
+            var $ereg = $('#id_register_deadline_date').pickadate().pickadate('picker').set('select', "{{ form.register_deadline_date.value }}", {format: 'yyyy-mm-dd'});
+        {% endif %}
+        {% if form.deregister_deadline_date.value %}
+            var $dereg = $('#id_deregister_deadline_date').pickadate().pickadate('picker').set('select', "{{ form.deregister_deadline_date.value }}", {format: 'yyyy-mm-dd'});
+        {% endif %}
     </script>
 {% endblock footer_script %}
