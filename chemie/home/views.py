@@ -1,7 +1,8 @@
 from django.contrib import messages
 from django.shortcuts import redirect
-from django.shortcuts import render, reverse
+from django.shortcuts import render
 from django.utils import timezone
+from django.core.urlresolvers import reverse
 
 from events.models import Event
 from news.models import Article

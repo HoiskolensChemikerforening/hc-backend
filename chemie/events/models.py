@@ -88,8 +88,7 @@ class Event(models.Model):
 
     @property
     def can_de_register(self):
-        return (timezone.now()<= self.deregister_deadline)
-
+        return timezone.now() <= self.deregister_deadline
 
 
 class RegistrationManager(models.Manager):
@@ -100,6 +99,7 @@ class RegistrationManager(models.Manager):
         if waiting:
             lucky_person = waiting.earliest('created').confirm()
             return lucky_person
+
 
 class Registration(models.Model):
     event = models.ForeignKey(Event, related_name="event_registration")
@@ -133,7 +133,6 @@ class RegistrationMessage(models.Model):
     event = models.ForeignKey(Event)
     message = models.TextField()
     author = models.ForeignKey(User, related_name="event_message")
-
 
     # TODO: legge til author
     def __str__(self):
