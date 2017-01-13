@@ -91,6 +91,9 @@
         </div>
     </div>
     <a class="waves-effect waves-light btn" href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
+    {% if perms.events %}
+        <a class="waves-effect waves-light btn" href="{%url 'events:adminlist' event.id %}">Påmeldte personer</a>
+    {%endif%}
     <div class="row">
         <h2>Påmeldte</h2>
         <table class="responsive-table">
