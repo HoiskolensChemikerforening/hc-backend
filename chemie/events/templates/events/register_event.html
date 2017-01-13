@@ -15,7 +15,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <p class="flow-text">Her finner du de beste arrangementene på gløs!!11 {{ form.event_date.value }}</p>
+    <p class="flow-text">Her finner du de beste arrangementene på Gløs!</p>
     <div class="card">
         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
             <div class="card-content">
@@ -31,8 +31,7 @@
                 {% endform %}
                 <div class="card-action">
                     <div class="right-align">
-                        <input class="btn btn-primary pull-right" type='submit' value='Lag arrangementet!'
-                               onclick="Materialize.toast('Takk for at du lagde arrangementet!', 4000)"/>
+                        <input class="btn btn-primary pull-right" type='submit' value='Lag arrangementet!'/>
                     </div>
                 </div>
             </div>
