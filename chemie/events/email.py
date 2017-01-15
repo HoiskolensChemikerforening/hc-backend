@@ -11,6 +11,7 @@ def send_event_mail(registration, event):
         context={
             'event': registration.event,
             'user': registration.user,
-            'subject': event.title
+            'subject': event.title,
+            'registration': registration,
         },
     )
