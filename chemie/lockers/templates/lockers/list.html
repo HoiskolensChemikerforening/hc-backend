@@ -14,17 +14,30 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+    {% if perms.lockers %}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">menu</i>
+            </a>
+            <ul>
+                <li>
+                    <a class="btn-floating blue" href="{% url "bokskap:administrate" %}"><i class="material-icons">edit</i></a>
+                    <a class="btn-floating mobile-fab-tip">Administrer</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
 
     <ul class="pagination nav navbar-nav">
         {% if lockers.has_previous %}
-            <li><a href="{{ lockers.previous_page_number }}">Prev</a></li>
+            <li><a href="{{ lockers.previous_page_number }}">Forrige</a></li>
         {% endif %}
         {% for page in lockers.paginator.page_range %}
             <li class="{% if lockers.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
         {% endfor %}
 
         {% if lockers.has_next %}
-            <li><a href="{{ lockers.next_page_number }}">Next</a></li>
+            <li><a href="{{ lockers.next_page_number }}">Neste</a></li>
         {% endif %}
     </ul>
 

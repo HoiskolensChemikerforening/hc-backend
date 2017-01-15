@@ -10,6 +10,20 @@
     {% load staticfiles %}
 
 
+    {% if perms.customprofile %}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large red">
+                <i class="large material-icons">menu</i>
+            </a>
+            <ul>
+                <li>
+                    <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i class="material-icons">edit</i></a>
+                    <a class="btn-floating mobile-fab-tip">Se medlemsoversikt</a>
+                </li>
+            </ul>
+        </div>
+    {% endif %}
+
     <div class="row">
         <div class="klassetrinn">
             <div class="col s6 m6 l4">
