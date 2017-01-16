@@ -45,6 +45,7 @@ class BaseEvent(models.Model):
     # Describes the event
     description = RichTextField(verbose_name='Beskrivelse', config_name='events')
 
+
     # An image from the event or describing the event
     image = ImageField(upload_to='events', verbose_name="Bilde")
 
@@ -85,6 +86,17 @@ class Event(BaseEvent):
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
     mail_notification = models.BooleanField(default=False, verbose_name="Epostbekreftelse")
+
+    attendees = models.ManyToManyField(User, through='Registration')
+
+    def __str__(self):
+        return self.title
+
+    def registered_users(self):
+        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
+
+    def waiting_users(self):
+        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).count()
 
     @property
     def spare_slots(self):
@@ -165,3 +177,8 @@ class RegistrationMessage(models.Model):
     # TODO: legge til author
     def __str__(self):
         return '{}, {}: {}'.format(self.event, self.user, self.message)
+
+
+class CompanyEvent(Event, models.Model):
+    pass
+    #restrictions =
