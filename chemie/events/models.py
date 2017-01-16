@@ -5,11 +5,17 @@ from django.db import models
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
+from customprofile.models import GRADES
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED', 1, 'Confirmed'),
     ('WAITING', 2, 'Waiting'),
 )
+
+
+class Limitation(models.Model):
+    grade = models.PositiveSmallIntegerField(choices=GRADES, verbose_name="Klassetrinn")
+    slots = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
 
 
 class BaseEvent(models.Model):
@@ -45,7 +51,9 @@ class BaseEvent(models.Model):
     # Number of slots reserved for the event
     sluts = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
 
-    attendees = models.ManyToManyField(User, through='Registration')
+    attendees = models.ManyToManyField(User, through='BaseRegistration')
+
+    limitations = models.ManyToManyField(Limitation, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -65,7 +73,7 @@ class BaseEvent(models.Model):
         return timezone.now() <= self.deregister_deadline
 
 
-class Event(BaseEvent, models.Model):
+class Event(BaseEvent):
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
@@ -101,8 +109,8 @@ class Event(BaseEvent, models.Model):
         return timezone.now() <= self.deregister_deadline
 
 
-class CompanyEvent(Event, models.Model):
-    event = models.ForeignKey(BaseEvent)
+class CompanyEvent(Event):
+    pass
 
 
 class RegistrationManager(models.Manager):
@@ -124,6 +132,8 @@ class BaseRegistration(models.Model):
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.WAITING)
 
+    objects = RegistrationManager()
+
     def __str__(self):
         return '{} - {} - {}'.format(self.event, self.user.get_full_name(), self.status)
 
@@ -135,7 +145,7 @@ class BaseRegistration(models.Model):
         unique_together = ('event', 'user',)
 
 
-class Registration(BaseRegistration, models.Model):
+class EventRegistration(BaseRegistration):
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
     # Optional fields
@@ -144,8 +154,6 @@ class Registration(BaseRegistration, models.Model):
     companion = models.CharField(max_length=40, verbose_name="Navn på følge",
                                  help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
                                  null=True, blank=True)
-
-    objects = RegistrationManager()
 
 
 class RegistrationMessage(models.Model):
