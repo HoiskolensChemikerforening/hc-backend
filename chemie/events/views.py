@@ -13,7 +13,7 @@ from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .email import send_event_mail
 from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
-from .models import Event, Registration, REGISTRATION_STATUS, RegistrationMessage
+from .models import Event, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, BaseRegistration
 
 
 @login_required
@@ -65,7 +65,7 @@ def delete_event(request, event_id):
 def view_event_details(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     first, second, third, fourth, fifth, done = [], [], [], [], [], []
-    registrations = Registration.objects.filter(event=event, status=1)
+    registrations = BaseRegistration.objects.filter(event=event, status=1)
     for registration in registrations:
         if registration.user.profile.grade == 1:
             first.append(registration.user.get_full_name())
@@ -108,7 +108,7 @@ def view_event_details(request, event_id):
 @login_required
 def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    registration = Registration.objects.filter(event=event, user=request.user).first()
+    registration = BaseRegistration.objects.filter(event=event, user=request.user).first()
     form_init = {'enable_sleepover': event.sleepover,
                  'enable_night_snack': event.night_snack,
                  'enable_companion': event.companion}
@@ -134,7 +134,7 @@ def register_user(request, event_id):
                 # Populate the registration form with registration data is it was not submitted
                 registration_form = RegisterUserForm(instance=registration, prefix='edit', **form_init)
                 if de_registration_form.is_valid():
-                    lucky_person = Registration.objects.de_register(registration)
+                    lucky_person = BaseRegistration.objects.de_register(registration)
                     if lucky_person:
                         send_event_mail(lucky_person, event)
                     messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),

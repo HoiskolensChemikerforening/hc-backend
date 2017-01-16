@@ -1,6 +1,6 @@
 from django import forms
 import material as M
-from .models import Event, Registration
+from .models import Event, EventRegistration
 from datetime import datetime
 from django.core.validators import ValidationError
 
@@ -91,7 +91,7 @@ class RegisterEventForm(forms.ModelForm):
 
 class RegisterUserForm(forms.ModelForm):
     class Meta:
-        model = Registration
+        model = EventRegistration
 
         fields = [
             "sleepover",
