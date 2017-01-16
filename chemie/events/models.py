@@ -99,10 +99,11 @@ class RegistrationManager(models.Manager):
         reg_to_be_deleted.delete()
         waiting = self.filter(event=event, status=REGISTRATION_STATUS.WAITING)
         if waiting:
-            sorted_waiting = waiting.order_by('created')
-            lucky_person = sorted_waiting[0]
-            lucky_person.confirm()
-            return lucky_person
+            if event.has_spare_slots:
+                sorted_waiting = waiting.order_by('created')
+                lucky_person = sorted_waiting[0]
+                lucky_person.confirm()
+                return lucky_person
 
 
 class Registration(models.Model):
