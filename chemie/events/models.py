@@ -5,11 +5,13 @@ from django.db import models
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
+from customprofile.models import GRADES
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED',  1, 'Confirmed'),
     ('WAITING', 2, 'Waiting'),
 )
+
 
 class Event(models.Model):
     # Name of the event
@@ -95,9 +97,11 @@ class RegistrationManager(models.Manager):
     def de_register(self, reg_to_be_deleted):
         event = reg_to_be_deleted.event
         reg_to_be_deleted.delete()
-        waiting = self.filter(event=event, status = REGISTRATION_STATUS.WAITING)
+        waiting = self.filter(event=event, status=REGISTRATION_STATUS.WAITING)
         if waiting:
-            lucky_person = waiting.earliest('created').confirm()
+            sorted_waiting = waiting.order_by('created')
+            lucky_person = sorted_waiting[0]
+            lucky_person.confirm()
             return lucky_person
 
 
@@ -123,6 +127,7 @@ class Registration(models.Model):
 
     def confirm(self):
         self.status = REGISTRATION_STATUS.CONFIRMED
+        self.save()
 
     class Meta:
         unique_together = ('event', 'user',)
