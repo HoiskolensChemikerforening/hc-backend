@@ -54,7 +54,7 @@ class BaseEvent(models.Model):
 
     attendees = models.ManyToManyField(User, through='BaseRegistration')
 
-    limitations = models.ManyToManyField(Limitation, null=True, blank=True)
+    limitations = models.ManyToManyField(Limitation, blank=True)
 
     def __str__(self):
         return self.title
@@ -73,6 +73,9 @@ class BaseEvent(models.Model):
     def can_de_register(self):
         return timezone.now() <= self.deregister_deadline
 
+    class Meta:
+        abstract = True
+
 
 class Event(BaseEvent):
     # Payment information
@@ -87,7 +90,7 @@ class Event(BaseEvent):
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
     mail_notification = models.BooleanField(default=False, verbose_name="Epostbekreftelse")
 
-    attendees = models.ManyToManyField(User, through='Registration')
+    attendees = models.ManyToManyField(User, through='EventRegistration')
 
     def __str__(self):
         return self.title
@@ -121,8 +124,8 @@ class Event(BaseEvent):
         return timezone.now() <= self.deregister_deadline
 
 
-class CompanyEvent(Event):
-    pass
+#class CompanyEvent(BaseEvent):
+#    pass
 
 
 class RegistrationManager(models.Manager):
@@ -154,10 +157,13 @@ class BaseRegistration(models.Model):
         self.save()
 
     class Meta:
+        abstract = True
         unique_together = ('event', 'user',)
 
 
 class EventRegistration(BaseRegistration):
+    event = models.ForeignKey(Event)
+    user = models.ForeignKey(User)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
     # Optional fields
@@ -177,8 +183,3 @@ class RegistrationMessage(models.Model):
     # TODO: legge til author
     def __str__(self):
         return '{}, {}: {}'.format(self.event, self.user, self.message)
-
-
-class CompanyEvent(Event, models.Model):
-    pass
-    #restrictions =

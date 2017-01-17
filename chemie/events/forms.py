@@ -1,6 +1,6 @@
 from django import forms
 import material as M
-from .models import Event, EventRegistration
+from .models import Event, EventRegistration, Limitation
 from datetime import datetime
 from django.core.validators import ValidationError
 
@@ -86,6 +86,17 @@ class RegisterEventForm(forms.ModelForm):
             "sleepover",
             "night_snack",
             "mail_notification",
+        ]
+
+
+class RegisterLimitations(forms.ModelForm):
+    layout = M.Layout(M.Row('grade', 'slots'), )
+
+    class Meta:
+        model = Limitation
+        fields = [
+            'grade',
+            'slots',
         ]
 
 
