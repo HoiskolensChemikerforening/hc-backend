@@ -5,11 +5,10 @@ chemie.no
 pip install -r requirements.txt
 
 # Database
-python manage.py makemigrations
-python manage.py migrate
+python manage_migrations.py
 
 # Default user
-python manage.py createsuperuser
+Made through python manage_migrations.py above. Run only once
 
 # Send mail
 If a mail is sent with postoffice, it is queued and not yet sent.
