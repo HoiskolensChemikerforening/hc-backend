@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
 from django.db import transaction
+from django.forms import formset_factory
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
@@ -12,14 +13,15 @@ from django.utils import timezone
 from django.views.decorators.csrf import ensure_csrf_cookie
 
 from .email import send_event_mail
-from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm
-from .models import Event, Registration, REGISTRATION_STATUS, RegistrationMessage
+from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm, RegisterLimitations
+from .models import Event, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, BaseRegistration
 
 
 @login_required
 def create_event(request):
     form = RegisterEventForm(request.POST or None, request.FILES or None)
-    if request.POST:
+    limitation_formset = formset_factory(RegisterLimitations)
+    if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
             instance.author = request.user
@@ -27,6 +29,7 @@ def create_event(request):
             return HttpResponseRedirect(reverse('events:index'))
     context = {
         'form': form,
+        'formset': limitation_formset,
     }
     return render(request, 'events/register_event.html', context)
 
@@ -65,7 +68,7 @@ def delete_event(request, event_id):
 def view_event_details(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     first, second, third, fourth, fifth, done = [], [], [], [], [], []
-    registrations = Registration.objects.filter(event=event, status=1)
+    registrations = EventRegistration.objects.filter(event=event, status=1)
     for registration in registrations:
         if registration.user.profile.grade == 1:
             first.append(registration.user.get_full_name())
@@ -108,7 +111,7 @@ def view_event_details(request, event_id):
 @login_required
 def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
-    registration = Registration.objects.filter(event=event, user=request.user).first()
+    registration = EventRegistration.objects.filter(event=event, user=request.user).first()
     form_init = {'enable_sleepover': event.sleepover,
                  'enable_night_snack': event.night_snack,
                  'enable_companion': event.companion}
@@ -134,7 +137,7 @@ def register_user(request, event_id):
                 # Populate the registration form with registration data is it was not submitted
                 registration_form = RegisterUserForm(instance=registration, prefix='edit', **form_init)
                 if de_registration_form.is_valid():
-                    lucky_person = Registration.objects.de_register(registration)
+                    lucky_person = EventRegistration.objects.de_register(registration)
                     if lucky_person:
                         send_event_mail(lucky_person, event)
                     messages.add_message(request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
@@ -192,7 +195,7 @@ def register_user(request, event_id):
 @ensure_csrf_cookie
 def view_admin_panel(request, event_id):
     event = Event.objects.get(pk=event_id)
-    all_registrations = Registration.objects.filter(
+    all_registrations = EventRegistration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
         event=event,
     )
@@ -206,7 +209,7 @@ def view_admin_panel(request, event_id):
 @login_required
 @permission_required('registration.can_delete')
 def change_payment_status(request, registration_id):
-    registration = Registration.objects.get(pk=registration_id)
+    registration = EventRegistration.objects.get(pk=registration_id)
     registration.payment_status = not registration.payment_status
     registration.save()
     return JsonResponse({'payment_status': registration.payment_status})
