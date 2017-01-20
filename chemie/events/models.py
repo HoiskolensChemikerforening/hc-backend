@@ -123,6 +123,8 @@ class Event(BaseEvent):
     def can_de_register(self):
         return timezone.now() <= self.deregister_deadline
 
+    def registration_has_opened(self):
+        return timezone.now() >= self.register_startdate
 
 #class CompanyEvent(BaseEvent):
 #    pass

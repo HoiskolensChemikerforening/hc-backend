@@ -172,7 +172,7 @@ def register_user(request, event_id):
                 return redirect(event)
     else:
         registration_form, de_registration_form = None, None
-        if (registration and event.can_de_register) or event.can_signup:
+        if (registration and event.can_de_register) or (event.can_signup and not registration):
             # User can de-register or sign up
             form_prefix = 'registration' if registration is None else 'edit'
             registration_form = RegisterUserForm(prefix=form_prefix, instance=registration,
