@@ -74,6 +74,8 @@
         {% else %}
             {% if registered %}
                 Avmeldingsfristen har passert.
+            {% elif not event.registration_has_opened %}
+                Påmeldingen åpner om {{ event.register_startdate|timeuntil }}
             {% else %}
                 Påmeldingsfristen har passert.
             {% endif %}
