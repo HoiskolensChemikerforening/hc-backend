@@ -79,15 +79,16 @@ def forgot_password(request):
         if form.is_valid():
             try:
                 user = User.objects.get(email=email)
+                token = UserToken.objects.create(user=user)
+                send_forgot_password_mail(request, email, user, token)
+                messages.add_message(request, messages.SUCCESS, 'Sjekk {} for videre detaljer'.format(email),
+                                     extra_tags='Tilbakestille passord')
+                return redirect(reverse('frontpage:home'))
 
             except ObjectDoesNotExist:
                 form.add_error(None, ValidationError(
                     {'email': ["Vi finner ingen bruker med denne e-posten"]}))
-            token = UserToken.objects.create(user=user)
-            send_forgot_password_mail(request, email, user, token)
-            messages.add_message(request, messages.SUCCESS, 'Sjekk {} for videre detaljer'.format(email),
-                                 extra_tags='Tilbakestille passord')
-            return redirect(reverse('frontpage:home'))
+
     context = {
         'form': form,
     }
