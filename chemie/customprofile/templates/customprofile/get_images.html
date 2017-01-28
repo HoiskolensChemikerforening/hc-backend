@@ -17,7 +17,8 @@
             </a>
             <ul>
                 <li>
-                    <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i class="material-icons">edit</i></a>
+                    <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i
+                            class="material-icons">edit</i></a>
                     <a class="btn-floating mobile-fab-tip">Se medlemsoversikt</a>
                 </li>
             </ul>
@@ -55,15 +56,12 @@
 
 
 
-
-
-
     <div class="row">
         {% for profile in profiles %}
             <div class="col s10 m4">
                 <div class="card">
                     <div class="card-image">
-                        <img src="/media/{{ profile.image_primary }}">
+                        <img src="/media/{{ profile.image_primary }}" {% if profile.image_secondary %}data-alt-src="/media/{{ profile.image_secondary }}"{% endif %}>
                     </div>
                     <div class="card-content">
                   <span class="card-title">{{ profile }}
@@ -82,4 +80,21 @@
     </div>
 
 {% endblock content %}
+
+{% block footer_script %}
+    <script>
+        var sourceSwap = function () {
+            var $this = $(this);
+            var newSource = $this.data('alt-src');
+            $this.data('alt-src', $this.attr('src'));
+            $this.attr('src', newSource);
+        };
+
+        $(function () {
+            $('img[data-alt-src]').each(function () {
+                new Image().src = $(this).data('alt-src');
+            }).hover(sourceSwap, sourceSwap);
+        });
+    </script>
+{% endblock %}
 
