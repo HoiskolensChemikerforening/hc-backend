@@ -10,4 +10,4 @@ def show_404(request):
     except IndexError:
         random_image = None
 
-    return render(request, 'chemie/404.html', context={'bilde': random_image}, status=404)
+    return render(request, '404.html', context={'bilde': random_image}, status=404)
