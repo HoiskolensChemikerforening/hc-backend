@@ -21,8 +21,10 @@ def initial_migrations():
             execute_from_command_line(["manage.py", "migrate", appname])
         except:
             continue
-    print("\n\nNow creating admin user. Please follow instructions below (you can press enter to skip email when prompted)")
-    execute_from_command_line(["manage.py", "createsuperuser"])
+        execute_from_command_line(["manage.py", "makemigrations", "thumbnail"])
+        execute_from_command_line(["manage.py", "migrate", "thumbnail"])
+    #print("\n\nNow creating admin user. Please follow instructions below (you can press enter to skip email when prompted)")
+    #execute_from_command_line(["manage.py", "createsuperuser"])
 
 
 if __name__ == '__main__':
