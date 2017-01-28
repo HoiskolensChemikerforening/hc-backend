@@ -52,5 +52,7 @@ if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
     from chemie.views import show_404
+    from django.views.defaults import server_error
 
     urlpatterns += [url(r'test404', show_404, name='404 ')]
+    urlpatterns += [url(r'test500', server_error, name='404 ')]
