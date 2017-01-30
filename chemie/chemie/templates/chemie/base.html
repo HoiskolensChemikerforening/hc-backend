@@ -57,9 +57,8 @@
     </div>
   </nav>
 
-
   <div class="nav-wrapper container">
-    <ul id="slide-out" class="side-nav fixed" style="overflow-y:scroll;">
+    <ul id="slide-out" class="side-nav fixed">
       <li class="logo">
         <a id="logo-container" href="/" class="brand-logo">
           <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
@@ -101,6 +100,7 @@
             <div class="collapsible-header"><i class="material-icons micon">info</i>Om HC</div>
             <div class="collapsible-body">
               <ul>
+                <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
                 <li><a href="/s/om/" class="waves-effect waves-teal">Linjeforeningen</a></li>
                 <li><a href="/s/kontoret/" class="waves-effect waves-teal">Kontoret</a></li>
                 <li><a href="/s/kjelleren" class="waves-effect waves-teal">Kjellern</a></li>
@@ -141,15 +141,12 @@
               <ul>
                 <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
                 <li><a href="{% url "wiki:root" %}" class="waves-effect waves-teal">Wiki</a></li>
-
-
               </ul>
             </div>
           </li>
         </ul>
       </li>
-      <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect waves-teal"><i
-          class="material-icons micon">filter_drama</i>Undergrupper</a></li>
+      <li class="bold"><a href="{% url "frontpage:calendar" %}"><i class="material-icons micon">date_range</i>Kalender</a></li>
     </ul>
     <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
 
