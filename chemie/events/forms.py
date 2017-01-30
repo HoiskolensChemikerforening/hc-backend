@@ -57,10 +57,6 @@ class RegisterEventForm(forms.ModelForm):
             self.add_error(None, ValidationError(
                 {'register_deadline_date': ["Påmeldingsfristen må være etter påmeldingen begynner"]}))
 
-        if deregister_deadline < registration_date:
-            self.add_error(None, ValidationError(
-                {'deregister_deadline_date': ["Avmeldingsfristen må være etter påmeldingen begynner"]}))
-
         self.cleaned_data['date'] = event_date
         self.cleaned_data['register_startdate'] = registration_date
         self.cleaned_data['register_deadline'] = registration_deadline
@@ -90,7 +86,7 @@ class RegisterEventForm(forms.ModelForm):
 
 
 class RegisterLimitations(forms.ModelForm):
-    layout = M.Layout(M.Row('grade', 'slots'), )
+    #layout = M.Layout(M.Row('grade', 'slots'), )
 
     class Meta:
         model = Limitation
