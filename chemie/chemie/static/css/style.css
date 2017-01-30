@@ -44,8 +44,7 @@ nav.top-nav {
 
 ul.side-nav.fixed li.logo {
     text-align: center;
-    margin-top: 5px;
-    margin-bottom: 10px;
+    margin-top: 10px;
 }
 
 #front-page-logo {
@@ -55,13 +54,14 @@ ul.side-nav.fixed li.logo {
 }
 
 #logo-container {
-    height: 130px;
+    height: 120px;
+    margin-bottom: 5px;
 }
 
 .logo-text {
     font-family: "Roboto Condensed";
     font-weight: 300;
-    margin-top: 5px;
+    margin-top: 10px;
 }
 
 ul.side-nav.fixed ul.collapsible-accordion a.collapsible-header {
@@ -279,11 +279,11 @@ i {
 }
 
 i .micon {
-    color: #0486A5;
+    color: #263238;
 }
 
 .micon {
-    color: #0486A5 !important;
+    color: #263238 !important;
 }
 
 nav, footer {

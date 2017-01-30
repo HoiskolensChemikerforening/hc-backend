@@ -5,227 +5,229 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
-    <title>Høiskolens Chemikerforening</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
+  <title>Høiskolens Chemikerforening</title>
 
-    <!-- CSS  -->
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400" rel="stylesheet">
-    <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-    <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400" rel="stylesheet">
+  <link href="{% static "css/materialize.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
 
-    {% block extra_css %}
-    {% endblock %}
+  {% block extra_css %}
+  {% endblock %}
 
-    <!-- JS -->
-    <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
-    <script src="{% static "js/materialize.js" %}"></script>
-    <script src="{% static "js/timepicker.js" %}"></script>
-    <script src="{% static "js/init.js" %}"></script>
+  <!-- JS -->
+  <script src="//code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="{% static "js/materialize.js" %}"></script>
+  <script src="{% static "js/timepicker.js" %}"></script>
+  <script src="{% static "js/init.js" %}"></script>
 
-    {% block extra_js %}
-    {% endblock %}
+  {% block extra_js %}
+  {% endblock %}
 
-    <style>
-        {% block style %}
-        {% endblock style %}
-    </style>
+  <style>
+    {% block style %}
+    {% endblock style %}
+  </style>
 
-    {% block header %}
-    {% endblock header %}
-    <meta name="theme-color" content="#d81b60">
-    <!-- Windows Phone -->
-    <meta name="msapplication-navbutton-color" content="#4285f4">
-    <!-- iOS Safari -->
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  {% block header %}
+  {% endblock header %}
+  <meta name="theme-color" content="#d81b60">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#4285f4">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 </head>
 <body>
 
 <header>
-    <nav class="top-nav">
-        <div class="container">
-            <div class="nav-wrapper">
-                <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse">
-                    <i class="material-icons">menu</i></a>
-                <div><h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3></div>
-                <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
-            </div>
-        </div>
-    </nav>
-
-
-    <div class="nav-wrapper container">
-        <ul id="slide-out" class="side-nav fixed" style="overflow-y:scroll;">
-            <li class="logo">
-                <a id="logo-container" href="/" class="brand-logo">
-                    <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
-                </a>
-                <h4 class="logo-text">Høiskolens Chemikerforening</h4>
-                <div class="divider"></div>
-            </li>
-
-            {% if user.is_authenticated %}
-                <li>
-                    <ul class="collapsible" data-collapsible="accordion">
-                        <li>
-                            <div class="collapsible-header">
-                                <div class="valign-wrapper" style="padding-top: 10px; padding-bottom: 10px;">
-                                    <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
-                                    {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
-                                        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt=""
-                                             class="circle profile-circle">
-                                    {% endthumbnail %}
-                                </div>
-                            </div>
-                            <div class="collapsible-body">
-                                <ul>
-                                    <li><a href="/profile/edit" class="waves-effect waves-teal">Endre profil</a></li>
-                                    <li><a href="/logout/" class="waves-effect waves-teal">Logg ut</a></li>
-                                </ul>
-                            </div>
-                        </li>
-                    </ul>
-                </li>
-
-            {% else %}
-                <li class="bold"><a href="/login/">Logg inn</a></li>
-            {% endif %}
-            <li>
-                <ul class="collapsible" data-collapsible="accordion">
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons micon">info</i>Om HC</div>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="/s/om/" class="waves-effect waves-teal">Linjeforeningen</a></li>
-                                <li><a href="/s/kontoret/" class="waves-effect waves-teal">Kontoret</a></li>
-                                <li><a href="/s/kjelleren" class="waves-effect waves-teal">Kjellern</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons micon">local_drink</i>Sosialt</div>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="#" class="waves-effect waves-teal">Bedrpess</a></li>
-                                <li><a href="/events/" class="waves-effect waves-teal">Arrangementer</a></li>
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-            <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons micon">local_drink</i>Ny
-                student</a></li>
-            <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i class="material-icons micon">business</i>
-                For bedrifter</a></li>
-            <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal"><i
-                    class="material-icons micon">hearing</i>Sladreboks</a>
-            </li>
-            <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect waves-teal"><i
-                    class="material-icons micon">inbox</i>Bokskap</a>
-            </li>
-            <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect waves-teal"><i
-                    class="material-icons micon">contact_mail</i>Kontakt</a>
-            </li>
-            <li>
-                <ul class="collapsible" data-collapsible="accordion">
-
-                    <li>
-                        <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
-                        <div class="collapsible-body">
-                            <ul>
-                                <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
-                                <li><a href="{% url "wiki:root" %}" class="waves-effect waves-teal">Wiki</a></li>
-
-
-                            </ul>
-                        </div>
-                    </li>
-                </ul>
-            </li>
-            <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect waves-teal"><i
-                    class="material-icons micon">filter_drama</i>Undergrupper</a></li>
-        </ul>
-        <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
-
-
+  <nav class="top-nav">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="#" data-activates="slide-out" style="padding-right: 20px;" class="button-collapse">
+          <i class="material-icons white-text">menu</i></a>
+        <div><h3 id="heading">{% block nav_header %}{% endblock nav_header %}</h3></div>
+        <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
+      </div>
     </div>
+  </nav>
+
+
+  <div class="nav-wrapper container">
+    <ul id="slide-out" class="side-nav fixed" style="overflow-y:scroll;">
+      <li class="logo">
+        <a id="logo-container" href="/" class="brand-logo">
+          <object id="front-page-logo" type="image/jpg" data="/media/logo.png"></object>
+        </a>
+        <h4 class="logo-text">Høiskolens Chemikerforening</h4>
+        <div class="divider"></div>
+      </li>
+
+      {% if user.is_authenticated %}
+        <li>
+          <ul class="collapsible" data-collapsible="accordion">
+            <li>
+              <div class="collapsible-header">
+                <div class="valign-wrapper" style="padding-top: 10px; padding-bottom: 10px;">
+
+                  <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
+                  {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
+                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt=""
+                         class="circle profile-circle">
+                  {% endthumbnail %}
+                </div>
+              </div>
+              <div class="collapsible-body">
+                <ul>
+                  <li><a href="/profile/edit" class="waves-effect waves-teal">Endre profil</a></li>
+                  <li><a href="/logout/" class="waves-effect waves-teal">Logg ut</a></li>
+                </ul>
+              </div>
+            </li>
+          </ul>
+        </li>
+
+      {% else %}
+        <li class="bold"><a href="/login/">Logg inn</a></li>
+      {% endif %}
+      <li>
+        <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">info</i>Om HC</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/s/om/" class="waves-effect waves-teal">Linjeforeningen</a></li>
+                <li><a href="/s/kontoret/" class="waves-effect waves-teal">Kontoret</a></li>
+                <li><a href="/s/kjelleren" class="waves-effect waves-teal">Kjellern</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">local_drink</i>Sosialt</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="#" class="waves-effect waves-teal">Bedrpess</a></li>
+                <li><a href="/events/" class="waves-effect waves-teal">Arrangementer</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="bold"><a href="#" class="waves-effect waves-teal"><i class="material-icons micon">local_drink</i>Ny
+        student</a></li>
+      <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i
+          class="material-icons micon">business</i>
+        For bedrifter</a></li>
+      <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal"><i
+          class="material-icons micon">hearing</i>Sladreboks</a>
+      </li>
+      <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect waves-teal"><i
+          class="material-icons micon">inbox</i>Bokskap</a>
+      </li>
+      <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect waves-teal"><i
+          class="material-icons micon">contact_mail</i>Kontakt</a>
+      </li>
+      <li>
+        <ul class="collapsible" data-collapsible="accordion">
+
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
+                <li><a href="{% url "wiki:root" %}" class="waves-effect waves-teal">Wiki</a></li>
+
+
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
+      <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect waves-teal"><i
+          class="material-icons micon">filter_drama</i>Undergrupper</a></li>
+    </ul>
+    <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+
+
+  </div>
 </header>
 
 
 <main>
-    <div class="section no-pad-bot" id="index-banner">
-        <div class="container">
-            {% if messages %}
-                <div class="row">
-                    {% for message in messages %}
-                        <div class="col s12 m6 l6">
-                            <div class="card {{ message.level_tag }}-message darken-1">
-                                <div class="card-content">
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+      {% if messages %}
+        <div class="row">
+          {% for message in messages %}
+            <div class="col s12 m6 l6">
+              <div class="card {{ message.level_tag }}-message darken-1">
+                <div class="card-content">
                               <span class="card-title black-text valign-wrapper" style="clear: both;">
                                   <i class="material-icons black-text" style="padding-right: 10px;">priority_high</i>
                                   <h5>{{ message.extra_tags }}</h5>
                               </span>
-                                    <p class="flow-text black-text">{{ message }}</p>
-                                </div>
-                            </div>
-                        </div>
-                    {% endfor %}
+                  <p class="flow-text black-text">{{ message }}</p>
                 </div>
-            {% endif %}
-
-            {% block content %}
-            {% endblock content %}
-            <br><br>
-            <br><br>
+              </div>
+            </div>
+          {% endfor %}
         </div>
+      {% endif %}
+
+      {% block content %}
+      {% endblock content %}
+      <br><br>
+      <br><br>
     </div>
+  </div>
 </main>
 
 <footer class="page-footer">
+  <div class="container">
+    <div class="row">
+      <div class="col s12 m6 l4">
+        <h5 class="white-text">Om oss</h5>
+        <p class="grey-text text-lighten-4">
+          Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
+        </p>
+      </div>
+      <div class="col s12 m6 l4">
+        <h5 class="white-text">Sosialt</h5>
+        <div class="valign-wrapper">
+          <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+            <path fill="#FFF"
+                  d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"/>
+          </svg>
+          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
+            <p class="left-align white-text">Facebook</p>
+          </a>
+        </div>
+        <div class="valign-wrapper">
+          <i class="material-icons valign left white-text">email</i>
+          <a href="mailto:styret@hc.ntnu.no">
+            <p class="left-align white-text">Epost</p>
+          </a>
+        </div>
+        <p>Kontakt oss!</p>
+      </div>
+      <div class="col s12 m6 l4">
+        <h5 class="white-text">Sponsorer</h5>
+        {% show_sponsors %}
+      </div>
+    </div>
+  </div>
+  <div class="footer-copyright">
     <div class="container">
-        <div class="row">
-            <div class="col s12 m6 l4">
-                <h5 class="white-text">Om oss</h5>
-                <p class="grey-text text-lighten-4">
-                    Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
-                </p>
-            </div>
-            <div class="col s12 m6 l4">
-                <h5 class="white-text">Sosialt</h5>
-                <div class="valign-wrapper">
-                    <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                        <path fill="#FFF"
-                              d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"/>
-                    </svg>
-                    <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-                        <p class="left-align">Facebook</p>
-                    </a>
-                </div>
-                <div class="valign-wrapper">
-                    <i class="material-icons valign left white-text">email</i>
-                    <a href="mailto:styret@hc.ntnu.no">
-                        <p class="left-align">Epost</p>
-                    </a>
-                </div>
-                <p>Kontakt oss!</p>
-            </div>
-            <div class="col s12 m6 l4">
-                <h5 class="white-text">Sponsorer</h5>
-                {% show_sponsors %}
-            </div>
-        </div>
+      © 1915-2016 HC, All rights reserved.
+      <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT
+        License</a>
     </div>
-    <div class="footer-copyright">
-        <div class="container">
-            © 1915-2016 HC, All rights reserved.
-            <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT
-                License</a>
-        </div>
-    </div>
+  </div>
 </footer>
 
 
