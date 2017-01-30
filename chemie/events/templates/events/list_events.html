@@ -1,30 +1,35 @@
 {% load thumbnail %}
 <div class="row">
-    {% for event in events %}
-        <div class="col s12 m10 l6">
-            <div class="card medium">
-                <div class="card-image">
-                    <a href="{{ event.get_absolute_registration_url }}">
-                        {% thumbnail event.image "400x300" crop="center" as im %}
-                            <img src="{{ im.url }}">
-                        {% endthumbnail %}
+  {% for event in events %}
+    <div class="col s12 m10 l6">
+      <div class="card medium">
+        <div class="card-image">
+          <a href="{{ event.get_absolute_registration_url }}">
+            {% thumbnail event.image "400x300" crop="center" as im %}
+              <img src="{{ im.url }}">
+            {% endthumbnail %}
+          </a>
 
-                    </a>
-                    <span class="card-title card-event-title">
-                      <h4>{{ event.title }}</h4>
-                      <h5>{{ event.date|date:"j F - H:i" }}</h5>
-                    </span>
-                </div>
-                <div class="card-content">
-                    <p class="flow-text">
-                        {{ event.description|safe }}
-                    </p>
-                </div>
-                <div class="card-action">
-                    <a href="{{ event.get_absolute_url }}">Detaljer</a>
-                    <a href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
-                </div>
-            </div>
+          <span class="card-title card-event-title">
+            <h4>{{ event.title }}</h4>
+            <h5>{{ event.date|date:"j F - H:i" }}</h5>
+          </span>
+
         </div>
-    {% endfor %}
+        <div class="card-content">
+          <p class="flow-text">
+            {{ event.description|safe }}
+          </p>
+          <p>{{ event.attendees.count }} av {{ event.sluts }} påmeldte</p>
+          <div class="progress">
+            <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
+          </div>
+        </div>
+        <div class="card-action">
+          <a href="{{ event.get_absolute_url }}">Detaljer</a>
+          <a href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 </div>

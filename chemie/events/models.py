@@ -73,6 +73,9 @@ class BaseEvent(models.Model):
     def can_de_register(self):
         return timezone.now() <= self.deregister_deadline
 
+    def percentage_filled(self):
+        return (self.attendees.all().count() / self.sluts) * 100
+
     class Meta:
         abstract = True
 
