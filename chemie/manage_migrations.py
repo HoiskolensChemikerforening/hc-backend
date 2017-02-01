@@ -10,7 +10,6 @@ from django.core.management import execute_from_command_line
 os.environ['DJANGO_SETTINGS_MODULE'] = 'chemie.settings'
 
 
-
 def initial_migrations():
     execute_from_command_line(["manage.py", "migrate"])
     apps = []
