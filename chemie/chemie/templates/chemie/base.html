@@ -111,7 +111,7 @@
             <div class="collapsible-header"><i class="material-icons micon">local_drink</i>Sosialt</div>
             <div class="collapsible-body">
               <ul>
-                <li><a href="#" class="waves-effect waves-teal">Bedrpess</a></li>
+                <li><a href="#" class="waves-effect waves-teal">Bedpress</a></li>
                 <li><a href="/events/" class="waves-effect waves-teal">Arrangementer</a></li>
               </ul>
             </div>
@@ -207,12 +207,14 @@
                     </a>
                 </div>
                 <div class="valign-wrapper">
+                    <a href="mailto:styret@hc.ntnu.no">
                     <i class="material-icons valign left white-text">email</i>
+                    </a>
                     <a href="mailto:styret@hc.ntnu.no">
                         <p class="left-align white-text">Epost</p>
                     </a>
                 </div>
-                <p>Kontakt oss!</p>
+                <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
             </div>
             <div class="col s12 m6 l4">
                 <h5 class="white-text">Sponsorer</h5>
@@ -226,20 +228,6 @@
             <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT
                 License</a>
         </div>
-        <p>Kontakt oss!</p>
-      </div>
-      <div class="col s12 m6 l4">
-        <h5 class="white-text">Sponsorer</h5>
-        {% show_sponsors %}
-      </div>
-    </div>
-  </div>
-  <div class="footer-copyright">
-    <div class="container">
-      © 1915-2016 HC, All rights reserved.
-      <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT
-        License</a>
-    </div>
   </div>
 </footer>
 
