@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
-from machina import MACHINA_MAIN_TEMPLATE_DIR, MACHINA_MAIN_STATIC_DIR
-from machina import get_apps as get_machina_apps
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -80,20 +78,17 @@ INSTALLED_APPS = [
                      'ckeditor',
                      'django.contrib.flatpages',
 
-                 ] + get_machina_apps()
+                 ]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    # 'django.middleware.cache.UpdateCacheMiddleware',
     'django.middleware.common.CommonMiddleware',
-    # 'django.middleware.cache.FetchFromCacheMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.auth.middleware.SessionAuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'machina.apps.forum_permission.middleware.ForumPermissionMiddleware',
 ]
 
 ROOT_URLCONF = 'chemie.urls'
@@ -101,7 +96,7 @@ ROOT_URLCONF = 'chemie.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates'), MACHINA_MAIN_TEMPLATE_DIR],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,8 +111,6 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
-                'machina.core.context_processors.metadata',
-
             ],
         },
     },
@@ -133,7 +126,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'NAME': os.path.join(BASE_DIR, 'db1.sqlite3'),
         }
     }
 else:
@@ -182,10 +175,6 @@ CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
     },
-    'machina_attachments': {
-        'BACKEND': 'django.core.cache.backends.filebased.FileBasedCache',
-        'LOCATION': '/tmp',
-    }
 }
 
 REST_FRAMEWORK = {
@@ -222,7 +211,6 @@ STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "chemie/static"),
-    MACHINA_MAIN_STATIC_DIR,
 ]
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static")
@@ -239,7 +227,7 @@ EMAIL_USE_TLS = True
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'post_office.EmailBackend'
 EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = 'EWplmBTbVq0g'  # my gmail password
+EMAIL_HOST_PASSWORD = ''  # my gmail password
 EMAIL_HOST_USER = 'edb.ntnu@gmail.com'  # my gmail username
 EMAIL_PORT = 587
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
