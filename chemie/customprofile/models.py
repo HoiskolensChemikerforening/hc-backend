@@ -57,7 +57,7 @@ class Profile(models.Model):
                                                            verbose_name="Samlivsstatus")
 
     phone_number = models.BigIntegerField(verbose_name="Mobilnummer")
-    access_card = models.CharField(max_length=10, unique=True, verbose_name="Studentkortnummer")
+    access_card = models.CharField(max_length=20, blank=True, null=True, verbose_name="Studentkortnummer")
 
     image_primary = ImageField(upload_to='avatars')
     image_secondary = ImageField(upload_to='avatars')
