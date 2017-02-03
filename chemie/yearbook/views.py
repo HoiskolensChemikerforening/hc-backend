@@ -1,11 +1,13 @@
 from django.contrib.auth.models import User
 from django.db.models import Q
 from django.shortcuts import render
+from django.contrib.auth.decorators import login_required
 
 from customprofile.models import Profile, GRADES
 from .forms import NameSearchForm
 
 
+@login_required
 def index(request, year=1):
     year = int(year)
     if year not in GRADES:
@@ -30,6 +32,7 @@ def index(request, year=1):
     return render(request, 'customprofile/get_images.html', context)
 
 
+@login_required
 def find_user_by_name(query_name):
     qs = User.objects.all()
     for term in query_name.split():
