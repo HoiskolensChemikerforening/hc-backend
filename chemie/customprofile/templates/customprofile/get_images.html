@@ -10,6 +10,14 @@
   Oversikt
 {% endblock nav_sub_header %}
 
+{% block extra_css %}
+  <style>
+    .card .card-content {
+      height: 11em;
+    }
+  </style>
+{% endblock %}
+
 {% block content %}
   {% if perms.customprofile %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -60,25 +68,25 @@
       <div class="col s10 m4">
         <div class="card">
           <div class="card-image">
-            {% thumbnail profile.image_primary "412x551" crop="center" as im %}
-              <img src="{{ im.url }}"
+            {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
+              <img src="{{ primary.url }}"
+                  {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
+                   data-alt-src="{{ secondary.url }}"
+                  {% endthumbnail %}>
+            {% empty %}
+              <img src="{% static "images/blank_person.png" %}">
             {% endthumbnail %}
-            {% if profile.image_secondary %}
-              {% thumbnail profile.image_secondary "412x551" crop="center" as im %}
-                   data-alt-src="{{ im.url }}">
-              {% endthumbnail %}
-            {% endif %}
           </div>
           <div class="card-content">
-                  <span class="card-title">{{ profile }}
-                    {% if profile.relationship_status == 1 %}
-                      <i class="material-icons icon-green">favorite</i>
-                    {% elif profile.relationship_status == 2 %}
-                      <i class="material-icons icon-red">favorite</i>
-                    {% else %}
-                      <i class="large material-icons icon-gray">favorite</i>
-                    {% endif %}
-                  </span>
+            <span class="card-title">{{ profile }}
+              {% if profile.relationship_status == 1 %}
+                <i class="material-icons icon-green">favorite</i>
+              {% elif profile.relationship_status == 2 %}
+                <i class="material-icons icon-red">favorite</i>
+              {% else %}
+                <i class="material-icons icon-gray">favorite</i>
+              {% endif %}
+            </span>
           </div>
         </div>
       </div>
@@ -89,17 +97,17 @@
 
 {% block footer_script %}
   <script>
-    var sourceSwap = function () {
-      var $this = $(this);
-      var newSource = $this.data('alt-src');
-      $this.data('alt-src', $this.attr('src'));
-      $this.attr('src', newSource);
-    };
+      var sourceSwap = function () {
+          var $this = $(this);
+          var newSource = $this.data('alt-src');
+          $this.data('alt-src', $this.attr('src'));
+          $this.attr('src', newSource);
+      };
 
-    $(function () {
-      $('img[data-alt-src]').each(function () {
-        new Image().src = $(this).data('alt-src');
-      }).hover(sourceSwap, sourceSwap);
-    });
+      $(function () {
+          $('img[data-alt-src]').each(function () {
+              new Image().src = $(this).data('alt-src');
+          }).hover(sourceSwap, sourceSwap);
+      });
   </script>
 {% endblock %}
