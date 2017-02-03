@@ -73,3 +73,4 @@ webencodings==0.5
 wiki==0.2
 psycopg2==2.6.2
 django-hashers-passlib==0.3
+setuptools==34.1.0
