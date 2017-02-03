@@ -32,7 +32,7 @@ else:
 ADMINS = [('Carl Johan Hambro', 'carljohan.hambro@gmail.com')]
 
 LOGIN_REDIRECT_URL = '/'
-LOGIN_URL = '/login'
+LOGIN_URL = '/login/'
 
 # Application definition
 
