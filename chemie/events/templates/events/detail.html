@@ -1,6 +1,7 @@
 {% extends "chemie/base.html" %}
 {% load thumbnail %}
 {% load staticfiles %}
+{% load event_extras %}
 
 {% block nav_header %}
   Arrangementer
@@ -48,18 +49,18 @@
             </div>
             <div>
               <p class="left valign"><b>Medlem:</b></p>
-              <p class="right valign">{{ event.price_member }} kr</p>
+              <p class="right valign">{{ event.price_member|price }}</p>
             </div>
             <br>
             <div>
               <p class="left valign"><b>Ikke-medlem: </b></p>
-              <p class="right valign">{{ event.price_not_member }} kr</p>
+              <p class="right valign">{{ event.price_not_member|price }}</p>
             </div>
             <br>
             {% if event.companion %}
               <div>
                 <p class="left valign"><b>Eksternt følge: </b></p>
-                <p class="right valign">{{ event.price_companion }} kr</p>
+                <p class="right valign">{{ event.price_companion|price }}</p>
               </div>
             {% endif %}
           </div>
