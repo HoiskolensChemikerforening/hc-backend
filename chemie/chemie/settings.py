@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/1.9/ref/settings/
 
 import os
 
-
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
@@ -20,8 +19,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 if os.environ.get("DEBUG") == "False":
-    EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER')
-    EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD')
     ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
     SECRET_KEY = os.environ.get('SECRET_KEY')
     DEBUG = False
@@ -35,50 +32,51 @@ else:
 ADMINS = [('Carl Johan Hambro', 'carljohan.hambro@gmail.com')]
 
 LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/login'
 
 # Application definition
 
 INSTALLED_APPS = [
-                     'django.contrib.sites',
-                     'chemie',
-                     'elections',
-                     'home',
-                     'news',
-                     'shitbox',
-                     'committees',
-                     'events',
-                     'lockers',
-                     'yearbook',
-                     'dal',
-                     'dal_select2',
-                     'django.contrib.admin',
-                     'django.contrib.auth',
-                     'django.contrib.contenttypes',
-                     'django.contrib.sessions',
-                     'django.contrib.messages',
-                     'django.contrib.staticfiles',
-                     'captcha',
-                     'customprofile',
-                     'sorl.thumbnail',
-                     'material',
-                     'mail_templated',
-                     "post_office",
-                     'wiki',
-                     'django.contrib.humanize',
-                     'django_nyt',
-                     'sekizai',
-                     'wiki.plugins.attachments',
-                     'wiki.plugins.images',
-                     'wiki.plugins.macros',
-                     'mptt',
-                     'haystack',
-                     'widget_tweaks',
-                     'rest_framework',
-                     'smart_selects',
-                     'ckeditor',
-                     'django.contrib.flatpages',
+    'django.contrib.sites',
+    'chemie',
+    'elections',
+    'home',
+    'news',
+    'shitbox',
+    'committees',
+    'events',
+    'lockers',
+    'yearbook',
+    'dal',
+    'dal_select2',
+    'django.contrib.admin',
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.messages',
+    'django.contrib.staticfiles',
+    'captcha',
+    'customprofile',
+    'sorl.thumbnail',
+    'material',
+    'mail_templated',
+    "post_office",
+    'wiki',
+    'django.contrib.humanize',
+    'django_nyt',
+    'sekizai',
+    'wiki.plugins.attachments',
+    'wiki.plugins.images',
+    'wiki.plugins.macros',
+    'mptt',
+    'haystack',
+    'widget_tweaks',
+    'rest_framework',
+    'smart_selects',
+    'ckeditor',
+    'django.contrib.flatpages',
 
-                 ]
+]
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
@@ -130,7 +128,6 @@ if DEBUG:
         }
     }
 else:
-    print('PRODUCTION DATABASE')
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -218,19 +215,18 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
-RECAPTCHA_PUBLIC_KEY = ''
-RECAPTCHA_PRIVATE_KEY = ''
+RECAPTCHA_PUBLIC_KEY = os.environ.get('RECAPTCHA_PUBLIC_KEY') or ''
+RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY') or ''
 
 NOCAPTCHA = True
 
 EMAIL_USE_TLS = True
 # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'post_office.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_PASSWORD = ''  # my gmail password
-EMAIL_HOST_USER = 'edb.ntnu@gmail.com'  # my gmail username
-EMAIL_PORT = 587
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+EMAIL_HOST = os.environ.get('EMAIL_HOST') or ''
+EMAIL_PORT = os.environ.get('EMAIL_PORT') or 587
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') or ''
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
 DEFAULT_FROM_EMAIL = 'webkom@hc.ntnu.no'
 
 THUMBNAIL_DEBUG = True
@@ -280,5 +276,3 @@ CKEDITOR_CONFIGS = {
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
 GOOGLE_MAPS_API_KEY = ''
-
-LOGIN_URL = '/login'
