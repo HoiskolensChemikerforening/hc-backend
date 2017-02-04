@@ -32,7 +32,6 @@ def index(request, year=1):
     return render(request, 'customprofile/get_images.html', context)
 
 
-@login_required
 def find_user_by_name(query_name):
     qs = User.objects.all()
     for term in query_name.split():
