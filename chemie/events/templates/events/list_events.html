@@ -1,4 +1,9 @@
 {% load thumbnail %}
+<style>
+  .card .card-image .card-title {
+    padding: 10px;
+  }
+</style>
 <div class="row">
   {% for event in events %}
     <div class="col s12 m10 l6">
@@ -9,16 +14,13 @@
               <img src="{{ im.url }}">
             {% endthumbnail %}
           </a>
-
           <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
-            <h4>{{ event.title }}</h4>
-            <h5>{{ event.date|date:"j F - H:i" }}</h5>
+            <h5 style="font-size: 1.34rem;">{{ event.date|date:"j F - H:i" }}</h5>
           </a>
-
         </div>
         <div class="card-content">
-          <p class="flow-text">
-            {{ event.description|safe }}
+          <p class="flow-text truncate">
+            {{ event.title }}
           </p>
           <p>{{ event.attendees.count }} av {{ event.sluts }} påmeldte</p>
           <div class="progress">
