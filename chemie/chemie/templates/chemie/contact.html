@@ -1,95 +1,95 @@
 {% extends "chemie/base.html" %}
 {% load staticfiles %}
+
 {% block nav_header %}
-    Kontakt
+  Kontakt
 {% endblock nav_header %}
+
 {% block nav_sub_header %}
-    Grenseflatene våres
+  Grenseflatene våres
 {% endblock nav_sub_header %}
 {% load material_form %}
 
 {% block content %}
-    {% load staticfiles %}
-    <div class="row">
-        <div class="col s12 m12 l10">
-            <p class="flow-text">
-                Har du noen tilbakemeldinger; kritikk, ros, eller forslag til forbedringer angående hva som helst
-                som
-                bedrives i Høiskolens Chemikerforening?<br>
-                Du kan enten sede epost til hovedstyret på <a href="mailto:styret@hc.ntnu.no">styret@hc.ntnu.no</a>,
-                eller benytte deg av kontaktskjemaet
-                nedenfor.
-                Her kan du skrive hva DU mener.<br>
-            </p>
-        </div>
+  {% load staticfiles %}
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <p class="flow-text">
+        Har du noen tilbakemeldinger; kritikk, ros, eller forslag til forbedringer angående hva som helst
+        som
+        bedrives i Høiskolens Chemikerforening?<br>
+        Kontakt Styret på <a href="mailto:styret@hc.ntnu.no">styret@hc.ntnu.no</a>, eller send dem en melding med
+        kontaktskjemaet nedenfor. Her kan du skrive hva DU mener.<br>
+      </p>
     </div>
-    <div class="row">
-        <div class="col s12 m12 l10">
-            <div class="card">
-                <div class="card-content">
-                    <p class="flow-text">
-                        Oppgi gyldig epostadresse dersom du ønsker videre kommunikasjon, ellers forblir innslaget
-                        anonymt.
-                    </p>
-                    <form method='POST'>{% csrf_token %}
-                        {% form %}
-                            {% part form.contact_name prefix %}<i class="material-icons prefix">account_circle</i>
-                            {% endpart %}
-                            {% part form.contact_email prefix %}<i class="material-icons prefix">contact_mail</i>
-                            {% endpart %}
-                            {% part form.content prefix %}<i class="material-icons prefix">message</i>{% endpart %}
-                        {% endform %}
-                        <div class="row">
-                            {{ form.captcha }}
-                        </div>
-                        <button type="submit" name="submit" class="btn">Submit</button>
-                    </form>
-                </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <div class="card">
+        <div class="card-content">
+          <p class="flow-text">
+            Oppgi gyldig epostadresse dersom du ønsker videre kommunikasjon med Styret, ellers forblir innslaget
+            anonymt.
+          </p>
+          <form method='POST'>{% csrf_token %}
+            {% form %}
+              {% part form.contact_name prefix %}<i class="material-icons prefix">account_circle</i>
+              {% endpart %}
+              {% part form.contact_email prefix %}<i class="material-icons prefix">contact_mail</i>
+              {% endpart %}
+              {% part form.content prefix %}<i class="material-icons prefix">message</i>{% endpart %}
+            {% endform %}
+            <div class="row">
+              {{ form.captcha }}
             </div>
+            <button type="submit" name="submit" class="btn">Submit</button>
+          </form>
         </div>
+      </div>
     </div>
-    <div class="row">
-        <div class="col s12 m12 l12">
-            <h3 class="heading">Informasjon</h3>
-        </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l12">
+      <h3 class="heading">Informasjon</h3>
     </div>
-    <div class="row">
-        <div class="col s12 m6 l4">
-            <div class="card">
-                <div class="card-content">
-                    <p>
-                        <b>Post/faktureringsadresse</b><br>
-                        Høiskolens Chemikerforening<br>
-                        Fakultet for naturvitenskap og teknologi<br>
-                        Høyskoleringen 5<br>
-                        N-7491 Trondheim<br>
-                    </p>
-                </div>
-            </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m6 l4">
+      <div class="card">
+        <div class="card-content">
+          <p>
+            <b>Post/faktureringsadresse</b><br>
+            Høiskolens Chemikerforening<br>
+            Fakultet for naturvitenskap og teknologi<br>
+            Høyskoleringen 5<br>
+            N-7491 Trondheim<br>
+          </p>
         </div>
-        <div class="col s12 m6 l4">
-            <div class="card">
-                <div class="card-content">
-                    <p>
-                        <b>Besøksadresse</b><br>
-                        Kjemi sydfløy, rom 109<br>
-                        Sem Sælandsvei 10<br>
-                        NTNU Gløshaugen<br>
-                    </p>
-                </div>
-            </div>
-        </div>
-        <div class="col s12 m6 l4">
-            <div class="card">
-                <div class="card-content">
-                    <p>
-                        <b>Organisasjonsnummer:</b> 990833761 MVA<br>
-                        <b>Telefon:</b> 735 94186<br>
-                        <b>Telefax:</b> 735 91410<br>
-                        <b>Kontonummer:</b> 8601.64.87181<br>
-                    </p>
-                </div>
-            </div>
-        </div>
+      </div>
     </div>
+    <div class="col s12 m6 l4">
+      <div class="card">
+        <div class="card-content">
+          <p>
+            <b>Besøksadresse</b><br>
+            Kjemi sydfløy, rom 109<br>
+            Sem Sælandsvei 10<br>
+            NTNU Gløshaugen<br>
+          </p>
+        </div>
+      </div>
+    </div>
+    <div class="col s12 m6 l4">
+      <div class="card">
+        <div class="card-content">
+          <p>
+            <b>Organisasjonsnummer:</b> 990833761 MVA<br>
+            <b>Telefon:</b> 735 94186<br>
+            <b>Telefax:</b> 735 91410<br>
+            <b>Kontonummer:</b> 8601.64.87181<br>
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

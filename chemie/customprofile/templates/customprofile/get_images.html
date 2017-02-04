@@ -78,7 +78,7 @@
             {% endthumbnail %}
           </div>
           <div class="card-content">
-            <span class="card-title">{{ profile }}
+            <a class="card-title" href="mailto:{{ profile.user.email }}">{{ profile }}</a>
               {% if profile.relationship_status == 1 %}
                 <i class="material-icons icon-green">favorite</i>
               {% elif profile.relationship_status == 2 %}
@@ -86,7 +86,7 @@
               {% else %}
                 <i class="material-icons icon-gray">favorite</i>
               {% endif %}
-            </span>
+            </a>
           </div>
         </div>
       </div>
