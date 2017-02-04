@@ -7,77 +7,84 @@
 {% endblock header %}
 
 {% block nav_header %}
-    Arrangementer
+  Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Påmelding
+  Påmelding
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="row">
-        <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+        <a href="{% url "events:index" %}" class="breadcrumb">Arrangementer</a>
+        <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{event.title}}</a>
+        <a class="breadcrumb">Påmelding</a>
     </div>
-<div class="row">
+  <div class="row">
+    <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+  </div>
+  <div class="row">
     <div class="col l6 m12 s12">
-        <div class="card">
-            <div class="card-content">
-                <div class="valign-wrapper">
-                    <i class="material-icons valign left">date_range</i>
-                    <h5 class="left-align">Datoer</h5>
-                </div>
-                <div>
-                    {% if event.is_open %}
-                        <p class="left valign"><b>Påmeldingen er åpen!</b></p>
-                    {% else %}
-                        <p class="left valign"><b>Påmeldingen åpner:</b></p>
-                        <p class="right valign">{{ event.register_startdate|date:"j. F - H:i" }}</p>
-                    {% endif %}
-                </div>
-                <br>
-                <div>
-                    <p class="left valign"><b>Påmeldingsfrist: </b></p>
-                    <p class="right valign">{{ event.register_deadline|date:"j. F - H:i" }}</p>
-                </div>
-                <br>
-                <div>
-                    <p class="left valign"><b>Avmeldingsfrist: </b></p>
-                    <p class="right valign">{{ event.deregister_deadline|date:"j. F - H:i" }}</p>
-                </div>
-                <br>
-            </div>
-        </div>
-    </div>
-</div>
-        {% if de_registration_form %}
-            <h4>Du er påmeldt</h4>
-            <form method='POST'>{% csrf_token %}
-
-                {% form form=de_registration_form %}
-
-                {% endform %}
-                <button class="waves-effect waves-light btn btn-primary red" name="de_register" type="submit">Meld meg av</button>
-            </form>
-        {% endif %}
-
-        {% if registration_form %}
-            <p class="flow-text">Okei folkens! Gløym at dykk ikkje fekk væra me på soleis store slåttemda festen sist
-                gang. Det er no det gjeld!</p>
-            <form method='POST'>{% csrf_token %}
-
-                {% form form=registration_form %}
-
-                {% endform %}
-
-                <button class="waves-effect waves-light btn btn-primary" name="register_or_edit" type="submit">{% if registered %}Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
-            </form>
-        {% else %}
-            {% if registered %}
-                Avmeldingsfristen har passert.
-            {% elif not event.registration_has_opened %}
-                Påmeldingen åpner om {{ event.register_startdate|timeuntil }}
+      <div class="card">
+        <div class="card-content">
+          <div class="valign-wrapper">
+            <i class="material-icons valign left">date_range</i>
+            <h5 class="left-align">Datoer</h5>
+          </div>
+          <div>
+            {% if event.is_open %}
+              <p class="left valign"><b>Påmeldingen er åpen!</b></p>
             {% else %}
-                Påmeldingsfristen har passert.
+              <p class="left valign"><b>Påmeldingen åpner:</b></p>
+              <p class="right valign">{{ event.register_startdate|date:"j. F - H:i" }}</p>
             {% endif %}
-        {% endif %}
+          </div>
+          <br>
+          <div>
+            <p class="left valign"><b>Påmeldingsfrist: </b></p>
+            <p class="right valign">{{ event.register_deadline|date:"j. F - H:i" }}</p>
+          </div>
+          <br>
+          <div>
+            <p class="left valign"><b>Avmeldingsfrist: </b></p>
+            <p class="right valign">{{ event.deregister_deadline|date:"j. F - H:i" }}</p>
+          </div>
+          <br>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if de_registration_form %}
+    <h4>Du er påmeldt</h4>
+    <form method='POST'>{% csrf_token %}
+
+      {% form form=de_registration_form %}
+
+      {% endform %}
+      <button class="waves-effect waves-light btn btn-primary red" name="de_register" type="submit">Meld meg av</button>
+    </form>
+  {% endif %}
+
+  {% if registration_form %}
+    <p class="flow-text">Okei folkens! Gløym at dykk ikkje fekk væra me på soleis store slåttemda festen sist
+      gang. Det er no det gjeld!</p>
+    <form method='POST'>{% csrf_token %}
+
+      {% form form=registration_form %}
+
+      {% endform %}
+
+      <button class="waves-effect waves-light btn btn-primary" name="register_or_edit" type="submit">{% if registered %}
+        Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
+    </form>
+  {% else %}
+    {% if registered %}
+      Avmeldingsfristen har passert.
+    {% elif not event.registration_has_opened %}
+      Påmeldingen åpner om {{ event.register_startdate|timeuntil }}
+    {% else %}
+      Påmeldingsfristen har passert.
+    {% endif %}
+  {% endif %}
 {% endblock %}

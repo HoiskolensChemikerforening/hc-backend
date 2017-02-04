@@ -317,3 +317,18 @@ nav, footer {
 .section.no-pad-bot {
     padding-top: 2rem;
 }
+
+
+.breadcrumb:last-child {
+    color: #263238 !important;
+    font-weight: bold;
+}
+
+.breadcrumb {
+    font-size: 18px;
+    color: rgba(38,50,56, 0.7);
+}
+
+.breadcrumb:before {
+    color: rgba(38,50,56, 0.7) !important;
+}

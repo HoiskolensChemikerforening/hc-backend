@@ -10,10 +10,10 @@
             {% endthumbnail %}
           </a>
 
-          <span class="card-title card-event-title">
+          <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
             <h4>{{ event.title }}</h4>
             <h5>{{ event.date|date:"j F - H:i" }}</h5>
-          </span>
+          </a>
 
         </div>
         <div class="card-content">
