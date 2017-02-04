@@ -116,36 +116,34 @@
               </ul>
             </div>
           </li>
+          <li>
+            <ul class="collapsible" data-collapsible="accordion">
+              <li>
+                <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
+                <div class="collapsible-body">
+                  <ul>
+                    <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
+                    <li><a href="{% url "wiki:root" %}" class="waves-effect waves-teal">Wiki</a></li>
+                  </ul>
+                </div>
+              </li>
+            </ul>
+          </li>
         </ul>
       </li>
-      <li class="bold"><a href="/wiki/velkommen" class="waves-effect waves-teal"><i class="material-icons micon">local_drink</i>Ny
-        student</a></li>
-      <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i
-          class="material-icons micon">business</i>
-        For bedrifter</a></li>
       <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal"><i
           class="material-icons micon">hearing</i>Sladreboks</a>
       </li>
       <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect waves-teal"><i
           class="material-icons micon">inbox</i>Bokskap</a>
       </li>
+      <li class="bold"><a href="/s/bedrift/" class="waves-effect waves-teal"><i
+          class="material-icons micon">business</i>
+        For bedrifter</a></li>
       <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect waves-teal"><i
           class="material-icons micon">contact_mail</i>Kontakt</a>
       </li>
-      <li>
-        <ul class="collapsible" data-collapsible="accordion">
 
-          <li>
-            <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
-            <div class="collapsible-body">
-              <ul>
-                <li><a href="/klassekatalog/" class="waves-effect waves-teal">Klassekatalog</a></li>
-                <li><a href="{% url "wiki:root" %}" class="waves-effect waves-teal">Wiki</a></li>
-              </ul>
-            </div>
-          </li>
-        </ul>
-      </li>
       <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
           class="material-icons micon">date_range</i>Kalender</a></li>
     </ul>
