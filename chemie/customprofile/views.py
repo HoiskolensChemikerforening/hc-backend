@@ -48,21 +48,22 @@ def edit_profile(request):
         current_profile = Profile(user=user)
     profile_form = EditProfileForm(request.POST or None, instance=current_profile)
     if request.POST:
-        if user_form.is_valid() and profile_form.is_valid():
-            user_form.save()
-            profile_form.save()
-            if not new_password_form.has_changed():
-                # har ikke fyllt inn noen felter i passord formen
+        if new_password_form.has_changed():
+            # The user has filled in something in at least one field
+            if new_password_form.is_valid():
+                new_password_form.save()
+                update_session_auth_hash(request, new_password_form.user)
                 new_password_form = PasswordChangeForm(user=user, data=None)
-                messages.add_message(request, messages.SUCCESS, 'Bra jobba! Dine endringer er lagret!', extra_tags='OBS! Sarkastisk melding')
-                return HttpResponseRedirect('/')
-            else:
-                # brukeren har fyllt inn minst ett felt i passord formen
-                if new_password_form.is_valid():
-                    new_password_form.save()
-                    update_session_auth_hash(request, new_password_form.user)
-                    messages.add_message(request, messages.SUCCESS, 'Passordet ble endret', extra_tags='Suksess')
-                    return HttpResponseRedirect('/')
+        else:
+            # Reset the password form because of the errors it throws, being empty raises errors
+            new_password_form = PasswordChangeForm(user=user)
+        if user_form.has_changed() or profile_form.has_changed():
+            if user_form.is_valid() and profile_form.is_valid():
+                user_form.save()
+                profile_form.save()
+
+        if not (user_form.errors or profile_form.errors or new_password_form.errors):
+            messages.add_message(request, messages.SUCCESS, 'Bra jobba! Dine endringer er lagret!', extra_tags='OBS! Sarkastisk melding')
 
     context = {
         "user_form": user_form,
