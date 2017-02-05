@@ -95,7 +95,7 @@ TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
         'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': True,
+        'APP_DIRS': False,
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -109,6 +109,12 @@ TEMPLATES = [
                 'django.template.context_processors.tz',
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
+            ],
+            'loaders': [
+                ('django.template.loaders.cached.Loader', [
+                    'django.template.loaders.filesystem.Loader',
+                    'django.template.loaders.app_directories.Loader',
+                ]),
             ],
         },
     },
@@ -136,6 +142,7 @@ else:
             'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
             'HOST': 'database',
             'PORT': '5432',
+            'CONN_MAX_AGE': 600,
         }
     }
 
@@ -276,3 +283,4 @@ CKEDITOR_CONFIGS = {
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
 GOOGLE_MAPS_API_KEY = ''
+THUMBNAIL_PRESERVE_FORMAT = True

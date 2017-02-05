@@ -6,7 +6,7 @@ def send_event_mail(registration, event):
     template = 'event'
     mail.send(
         registration.user.email,  # List of email addresses also accepted
-        'festkom@hc.ntnu.no',
+        'pHaestkom <festkom@hc.ntnu.no>',
         template=template,  # Could be an EmailTemplate instance or name
         context={
             'event': registration.event,
