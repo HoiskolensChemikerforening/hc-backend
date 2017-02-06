@@ -2,13 +2,11 @@ version: '2'
 services:
   database:
     restart: always
-    image: postgres:9.5.2
+    image: postgres:latest
     env_file: .env
     volumes:
-      - "db-data:/var/lib/postgresql/data"
-#      - ./dbdata/etc:/etc/postgresql
       - ./logs/db:/var/log/postgresql
-#      - ./dbdata/lib:/var/lib/postgresql
+      - ./dbdata/data:/var/lib/postgresql/data
   website:
     restart: always
     build: ./chemie
@@ -23,7 +21,7 @@ services:
   proxy:
     build: ./nginx
     ports:
-      - "1337:80"
+      - "1338:80"
     volumes:
       - /www/static
       - /etc/localtime:/etc/localtime:ro
@@ -42,5 +40,5 @@ services:
       - database:database
 
 
-volumes:
-  db-data:
+#volumes:
+#  dbdata:
