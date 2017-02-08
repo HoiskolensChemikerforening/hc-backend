@@ -31,7 +31,6 @@ django-widget-tweaks==1.4.1
 djangorestframework==3.5.3
 Fabric==1.13.1
 future==0.16.0
-gnureadline==6.3.3
 gunicorn==19.6.0
 html5lib==0.9999999
 idna==2.2
