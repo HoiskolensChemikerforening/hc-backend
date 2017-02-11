@@ -1,0 +1,27 @@
+  <mj-section mj-class="tertiaryColor">
+    <mj-column>
+      <mj-text align="center" font-size="16px" color="black">Spørsmål, kommentarer eller bekymringer? <br>
+        Kontakt oss på <a href="mailto:styret@hc.ntnu.no" class="blink">styret@hc.ntnu.no</a>
+      </mj-text>
+    </mj-column>
+  </mj-section>
+  
+  <mj-section mj-class="primaryColor" padding-bottom="0" padding-top="0">
+    <mj-column width="100%">
+      <mj-social display="facebook:url twitter:url google:url"
+      facebook-href="My facebook page" facebook-content=""
+      google-href="My google+ page" google-content=""
+      twitter-href="My tweet+ page" twitter-content=""/>
+    </mj-column>
+  </mj-section>
+  
+  <mj-section padding-bottom="20px" padding-top="20px">
+    <mj-column width="100%">
+      <mj-text align="center" padding-top="0px" font-weight="700" font-size="18px">Webansvarlig</mj-text>
+      <mj-button href="mailto:webkom@hc.ntnu.no" font-size="16px" font-weight="300" color="white" padding-top="0" padding-bottom="5px" inner-padding="5px 5px">
+        webkom@hc.ntnu.no
+      </mj-button>
+    </mj-column>
+  </mj-section>
+</mj-container>
+</mj-body>
