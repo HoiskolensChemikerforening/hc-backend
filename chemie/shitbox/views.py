@@ -8,7 +8,7 @@ from .forms import Postform
 
 @login_required
 def post_votes(request):
-    form = Postform(request.POST or None)
+    form = Postform(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.author = request.user
