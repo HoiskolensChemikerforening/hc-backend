@@ -12,12 +12,12 @@ Endre
 {% block content %}
 
 <div class="row">
-    <div class="col m4 l3">{% thumbnail request.user.profile.image_primary "103x138" crop="center" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="">
+    <div class="col m4 l3">{% thumbnail request.user.profile.image_primary "412x551" crop="center" as im %}
+        <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138" alt="">
         {% endthumbnail %}
     </div>
-    <div class="col m4 l3">{% thumbnail request.user.profile.image_secondary "103x138" crop="center" as im %}
-        <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt="">
+    <div class="col m4 l3">{% thumbnail request.user.profile.image_secondary "412x551" crop="center" as im %}
+        <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138" alt="">
         {% endthumbnail %}
     </div>
     <div class="col m4 l6">
