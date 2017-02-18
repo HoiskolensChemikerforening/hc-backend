@@ -1,53 +1,7 @@
 <mjml>
-<mj-head>
- <mj-font name="Open Sans" href="https://chemie.no/font/proximanova.css" />
- <mj-attributes>
-   <mj-class name="primaryColor" background-color="#d81b60"></mj-class>
-   <mj-class name="secondaryColor" background-color="#0486A5"></mj-class>
-   <mj-class name="tertiaryColor" background-color="white"></mj-class>
-   <mj-class name="notice" color="white" font-size="12"></mj-class>
-   <mj-class name="heading" font-weight="700" font-size="25px" color="#FFFFFF"></mj-class>
-   <mj-class name="readable" color="white" font-size="18" font-weight="300" padding-left="4%"></mj-class>
-   <mj-class name="button" background-color="#FFFFFF" color="#d81b60" font-size="20" font-weight="700" inner-padding="17px 30px" padding-bottom="20"></mj-class>
-   <mj-class name="border" border-width="3px" border-style="dashed" border-color="rgba(80,80,80,0.3)"></mj-class>
-   <mj-class name="transparency" background-color="rgba(80,80,80,0.4)"></mj-class>
-   <mj-class name="smallHeader" font-weight="bold" color="#FFFFFF" font-size="20px"></mj-class>
-   <mj-class name="readableGrey" color="#e0e0e0" font-size="18px"></mj-class>
-   <mj-all font-family="'Proxima Nova', ProximaNova,Proxima-Nova, Helvetica, Arial, sans-serif" font-weight="300" color="white"/></mj-all>
- </mj-attributes>
- <mj-style>
-     .blink {
-      font-weight: bold;
-      text-decoration:none !important;
-      color:#000000;
-     }
+ <mj-include path="./header.mjml" />
 
-   </mj-style>
-   <mj-title>{{ subject }}</mj-title>
-</mj-head>
-<mj-body>
-<mj-container mj-class="secondaryColor">
-  <mj-raw>
-    {% load staticfiles %}
-    {% load thumbnail %}
-  </mj-raw>
-  <mj-section>
-
-  </mj-section>
-
-  <mj-section mj-class="tertiaryColor" padding-top="40px" padding-bottom="40px">
-    <mj-column width="100%">
-      <mj-image src="https://chemie.no/email/logorgb.png" padding-top="0" width="120%" href="https://chemie.no"></mj-image>
-    </mj-column>
-    <mj-column width="100%">
-  <mj-text align="center" padding-left="0px" padding-right="0px" font-weight="300" font-size="33px" line-height="33px" padding-bottom="0px">
-    <a style="text-decoration:none !important; color:#000000;" href="https://chemie.no">Hoiskolens Chemikerforening</a>
-    </mj-text>
-  </mj-column>
-  </mj-section>
-  
-  
-  <mj-section padding-left="0px" padding-right="0px" padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
+ <mj-section padding-left="0px" padding-right="0px" padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
   
     <mj-column mj-class="transparency" >
       <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="45px" padding-bottom="45px">
@@ -60,39 +14,14 @@
       <mj-text mj-class="smallHeader">Hei {{ locker_user }}!<br></mj-text>
       <mj-text mj-class="readableGrey">Du har nesten fått skap nr <strong>{{ ownership.locker }}</strong>! 
           Du er bare få klikk unna den beste bokskap-opplevelsen på NTNU.</p> </mj-text>
-        <mj-button mj-class="button" href="http://{{ request.get_host }}/bokskap/aktiver/{{ confirmation.key.hex }}">
+        <mj-button mj-class="button" href="https://{{ request.get_host }}/bokskap/aktiver/{{ confirmation.key.hex }}">
         Aktiver bokskap!
       </mj-button>
       <mj-divider mj-class="border" />
-      <mj-text mj-class="notice">Noen har forsøkt å registrere et bokskap på denne e-postadressen (<span class="blink" style="color:'white'">{{ email }}</span>). Se bort i fra denne eposten dersom du ikke utførte denne handlingen.</mj-text>
+      <mj-text mj-class="notice">Noen har forsøkt å registrere et bokskap på denne e-postadressen (<span class="blink" style="color:'white'">{{ email }}</span>). Se bort i fra denne e-posten dersom du ikke utførte denne handlingen.</mj-text>
     </mj-column>
 
     </mj-column>
   </mj-section>
-  <mj-section mj-class="tertiaryColor">
-    <mj-column>
-      <mj-text align="center" font-size="16px" color="black">Spørsmål, kommentarer eller bekymringer? <br>
-        Kontakt oss på <a href="mailto:styret@hc.ntnu.no" class="blink">styret@hc.ntnu.no</a>
-      </mj-text>
-    </mj-column>
-  </mj-section>
-  
-  <mj-section mj-class="primaryColor" padding-bottom="0" padding-top="0">
-    <mj-column width="100%">
-      <mj-social display="facebook:url twitter:url google:url"
-      facebook-href="My facebook page" facebook-content=""
-      google-href="My google+ page" google-content=""
-      twitter-href="My tweet+ page" twitter-content=""/>
-    </mj-column>
-  </mj-section>
-  
-  <mj-section padding-bottom="20px" padding-top="20px">
-    <mj-column width="100%">
-      <mj-text align="center" padding-top="0px" font-weight="700" font-size="18px">Webansvarlig</mj-text>
-      <mj-button href="mailto:webkom@hc.ntnu.no" font-size="16px" font-weight="300" color="white" padding-top="0" padding-bottom="5px" inner-padding="5px 5px">
-        webkom@hc.ntnu.no
-      </mj-button>
-    </mj-column>
-  </mj-section>
-</mj-container>
-</mj-body>
+
+<mj-include path="./footer.mjml" />
