@@ -7,6 +7,8 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 from customprofile.models import GRADES
 
+from .email import send_event_mail
+
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED', 1, 'Confirmed'),
     ('WAITING', 2, 'Waiting'),
@@ -97,6 +99,18 @@ class Event(BaseEvent):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        super(Event, self).save(*args, **kwargs)
+        self.bump_waiting()
+
+    def bump_waiting(self):
+        if self.waiting_users():
+            if self.has_spare_slots:
+                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('id')[:self.spare_slots]
+                for attendee in attendees:
+                    attendee.confirm()
+                    send_event_mail(attendee, self)
 
     def registered_users(self):
         return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
