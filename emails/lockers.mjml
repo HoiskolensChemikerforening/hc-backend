@@ -1,16 +1,16 @@
 <mjml>
  <mj-include path="./header.mjml" />
 
- <mj-section padding-left="0px" padding-right="0px" padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
-  
+<mj-section padding-left="0px" padding-right="0px" background-url="https://chemie.no/email/lockers.png"
+  padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
     <mj-column mj-class="transparency" >
-      <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="45px" padding-bottom="45px">
+      <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="65px" padding-bottom="65px">
         Bekreft bokskap #{{ ownership.locker }}
       </mj-text>
     </mj-column>
   </mj-section>
   <mj-section mj-class="primaryColor" padding-top="20">
-    <mj-column width="95%">
+    <mj-column width="80%">
       <mj-text mj-class="smallHeader">Hei {{ locker_user }}!<br></mj-text>
       <mj-text mj-class="readableGrey">Du har nesten fått skap nr <strong>{{ ownership.locker }}</strong>! 
           Du er bare få klikk unna den beste bokskap-opplevelsen på NTNU.</p> </mj-text>
