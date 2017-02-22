@@ -1,5 +1,4 @@
 from post_office import mail
-from .models import REGISTRATION_STATUS
 
 
 def send_event_mail(registration, event):
