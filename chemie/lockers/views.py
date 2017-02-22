@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
@@ -107,6 +107,11 @@ def activate_ownership(request, code):
         activator.activate()
     except ObjectDoesNotExist:
         raise Http404
+    except ValidationError:
+        messages.add_message(request, messages.ERROR,
+                             'Bokskapet ble reservert før du rakk å reservere det.',
+                             extra_tags='Boskap - opptatt')
+        return redirect(reverse('bokskap:index'))
 
     messages.add_message(request, messages.SUCCESS, 'Bokskapet ble aktivert og er nå ditt =D',
                          extra_tags='Fullført')
