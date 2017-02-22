@@ -36,6 +36,7 @@ urlpatterns = [
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}),
     url(r'^events/', include('events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
+    url(r'^wiki/_accounts/sign-up/', auth_views.login),
     url(r'^wiki/', get_wiki_pattern()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
