@@ -42,8 +42,9 @@
     </ul>
 
     <p class="flow-text">
-        Velkommen til bokskapsystemet! Klikk på et skap for å reservere det.
-        Det er {{ free_lockers }} skap tilgjengelig.
+        Velkommen til bokskapsystemet! <br>
+        Klikk på ett av de {{ free_lockers }} ledige skapene for å reservere det.<br>
+        <a href="{% url "bokskap:mineskap" %}">Gå her</a> for å se hvilke skap som er dine.
     </p>
 
     <div class="row">

@@ -43,11 +43,11 @@ def my_lockers(request):
                 locker_user = LockerUser.objects.get(username=email)
                 lockers = locker_user.fetch_lockers()
                 send_my_lockers_mail(email, lockers, locker_user)
-                messages.add_message(request, messages.SUCCESS, 'Eposten ble sendt!')
+                messages.add_message(request, messages.SUCCESS, 'Eposten ble sendt!', extra_tags="Dine skap")
                 return HttpResponseRedirect('/')
             except ObjectDoesNotExist:
-                messages.add_message(request, messages.ERROR, 'Skapet har soleis inga skap på vevseposten',
-                                     extra_tags="Bra jobba!")
+                messages.add_message(request, messages.ERROR, 'Ingen bokskap ble funnet på denne eposten.',
+                                     extra_tags="Ikke funnet")
 
     context = {
         'form': form,
