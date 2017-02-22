@@ -1,20 +1,38 @@
 {% extends 'chemie/base.html' %}
+{% load material_form %}
 
 {% block nav_header %}
-Bokskap
+  Bokskap
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Glemt skap
+  Glemt skap
 {% endblock nav_sub_header %}
 
 {% load material_form %}
 
 {% block content %}
-<body>
-    <p></p>
-    <form class="mail" method='POST'>{% csrf_token %}
-      {{ form.as_p }}
-      <input class ="btn" type ='submit' value = 'Send!' onclick="Materialize.toast('Du får nå en mail!', 4000)"/>
-    </form>
+  <div class="row">
+    <div class="col s12 s12 m10">
+      <div class="card">
+        <form class="mail" method='POST'>{% csrf_token %}
+          <div class="card-content">
+            <div class="row">
+              <div class="col">
+                <p class="flow-text">Glemt hvilket skap som var ditt? <br>
+                  Oppgi NTNU-mailen din under og du vil bli tilsendt en påminnelses-epost.</p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s12 m12 l12">
+                {% form form=form %}
+                {% endform %}
+              </div>
+            </div>
+            <input class="btn" type='submit' value='Send!'/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 {% endblock content %}

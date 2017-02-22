@@ -19,6 +19,7 @@ def send_activation_mail(context, user_mail, template):
     send_mail(template, context, settings.DEFAULT_FROM_EMAIL, [user_mail])
     print("MAIL SENT")
 
+
 def send_my_lockers_mail(email, lockers, user):
     template = 'lockers_mine_skap'
 
