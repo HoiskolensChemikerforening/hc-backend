@@ -1,0 +1,29 @@
+/*
+
+This is the style sheet for the detail view in yearbook.
+
+Creation Date: 24th Feb 2017
+
+*/
+
+.card .card-content {
+        height: 11em;
+    }
+
+.modal {
+    max-height: 65%;
+    width: 45%;
+}
+
+.modal .modal-content {
+    padding: 24px;
+    line-height: 1em;
+}
+
+.rcorners6 {
+    border-radius: 15px 50px;
+    background: #73AD21;
+    padding: 0px;
+    width: 200px;
+    height: 150px;
+}
