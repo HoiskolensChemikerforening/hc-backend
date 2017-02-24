@@ -70,6 +70,28 @@ class Profile(models.Model):
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
+    def get_nice_grade(self):
+        if self.grade == 1:
+            return '1. Klasse'
+        elif self.grade == 2:
+            return '2. Klasse'
+        elif self.grade == 2:
+            return '3. Klasse'
+        elif self.grade == 2:
+            return '4. Klasse'
+        elif self.grade == 2:
+            return '5. Klasse'
+        else:
+            return 'Ferdig'
+
+    def get_nice_relationship_status(self):
+        if self.relationship_status == 1:
+            return "Singel"
+        elif self.relationship_status == 2:
+            return "Opptatt"
+        else:
+            return "Hemmelig!"
+
 
 class Membership(models.Model):
     start_date = models.DateTimeField(auto_now=False, auto_now_add=True)
