@@ -102,20 +102,24 @@ Oversikt
         <div class="modal-content">
 
             <!-- Picture in detail view -->
-            <div class="col s4">
-                {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
-                 <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
-                      href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
-                {% endthumbnail %}
+            <div class="center-align">
+                <div class="col s12 m4 l4">
+                    {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
+                     <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
+                          href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
+                    {% endthumbnail %}
+                </div>
             </div>
 
             <!-- All text in view-->
-            <div class="col s8 center-align">
-                <h4 class=" #212121 grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
-                <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
-                <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
-                <p>Mobilnummer: {{ profile.phone_number }}</p>
-                <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
+            <div class="col s12 m8 l8">
+                <div class="center-align">
+                    <h4 class="grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
+                    <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
+                    <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
+                    <p>Mobilnummer: {{ profile.phone_number }}</p>
+                    <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
+                </div>
             </div>
         </div>
 

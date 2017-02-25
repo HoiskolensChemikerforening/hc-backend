@@ -6,14 +6,40 @@ Creation Date: 24th Feb 2017
 
 */
 
+/*
+Mobile Devices <= 600px
+Tablet Devices <= 992px
+Desktop Devices > 992px
+ */
+
+/* Desktop devices */
+@media only screen and (min-width: 992px) {
+    .modal {
+        width: 45%;
+        max-height: 65%;
+    }
+}
+
+/* Tablet devices */
+@media only screen and (max-width: 992px) {
+    .modal {
+        width: 70%;
+        max-height: 40%;
+    }
+}
+
+/* Mobile devices */
+@media only screen and (max-width: 600px) {
+    .modal {
+        width: 90%;
+        max-height: 100%;
+    }
+}
+
+
 .card .card-content {
         height: 11em;
     }
-
-.modal {
-    max-height: 65%;
-    width: 45%;
-}
 
 .modal .modal-content {
     padding: 24px;
