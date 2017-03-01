@@ -60,7 +60,7 @@ def view_committee(request, slug):
 
 def edit_description(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
-    form = EditDescription(request.POST or None, instance=committee)
+    form = EditDescription(request.POST or None, request.FILES or None, instance=committee)
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
