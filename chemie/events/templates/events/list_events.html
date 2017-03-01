@@ -9,7 +9,7 @@
     <div class="col s12 m10 l6">
       <div class="card medium">
         <div class="card-image">
-          <a href="{{ event.get_absolute_registration_url }}">
+          <a href="{{ event.get_absolute_url }}">
             {% thumbnail event.image "630x400" crop="center" as im %}
               <img src="{{ im.url }}">
             {% endthumbnail %}
