@@ -1,0 +1,13 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+    Aktiver bokskap
+{% endblock nav_header %}
+
+{% block content %}
+    <div class="row">
+        <p class="flow-text">
+        Du har snart registrert bokskapet ditt. Trykk på knappen for å bekrefte registreringen.
+        </p>
+    </div>
+    <a class="btn" href="{{ activator.get_absolute_url }}">Trykk her</a>
+{% endblock content %}

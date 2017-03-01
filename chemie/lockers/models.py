@@ -139,3 +139,6 @@ class LockerConfirmation(models.Model):
         self.ownership.is_active = True
         self.ownership.save()
         self.delete()
+
+    def get_absolute_url(self):
+        return reverse('bokskap:activate', kwargs={'code': self.key.hex})

@@ -118,6 +118,12 @@ def activate_ownership(request, code):
 
     return redirect(reverse('frontpage:home'))
 
+def activate_button(request, code):
+    activator = LockerConfirmation.objects.get(key=code)
+    context = {
+        "activator": activator,
+    }
+    return render(request, 'lockers/activate_button.html', context)
 
 @permission_required('lockers.can_delete')
 def manage_lockers(request):
