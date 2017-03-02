@@ -110,15 +110,16 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
             ],
-            'loaders': [
-                ('django.template.loaders.cached.Loader', [
-                    'django.template.loaders.filesystem.Loader',
-                    'django.template.loaders.app_directories.Loader',
-                ]),
-            ],
+            'loaders': ['django.template.loaders.filesystem.Loader',
+                        'django.template.loaders.app_directories.Loader']
         },
-    },
+    }
 ]
+
+if not DEBUG:
+    TEMPLATES[0]['OPTIONS']['loaders'] = [('django.template.loaders.cached.Loader',
+                                           ['django.template.loaders.filesystem.Loader',
+                                            'django.template.loaders.app_directories.Loader'])]
 
 WSGI_APPLICATION = 'chemie.wsgi.application'
 
