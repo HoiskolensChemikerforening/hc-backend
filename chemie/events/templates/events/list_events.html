@@ -22,7 +22,7 @@
           <p class="flow-text truncate">
             {{ event.title }}
           </p>
-          <p>{{ event.attendees.count }} av {{ event.sluts }} påmeldte</p>
+          <p>{{ event.registered_users|default_if_none:0 }} av {{ event.sluts }} påmeldte</p>
           <div class="progress">
             <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
           </div>

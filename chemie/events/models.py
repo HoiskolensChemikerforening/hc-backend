@@ -62,10 +62,10 @@ class BaseEvent(models.Model):
         return self.title
 
     def registered_users(self):
-        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED).count()
+        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED, event=self).count()
 
     def waiting_users(self):
-        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).count()
+        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING, event=self).count()
 
     @property
     def can_signup(self):
