@@ -183,6 +183,7 @@ def register_user(request, event_id):
                 de_registration_form = None
 
     context = {
+        "registration": registration,
         "registration_form": registration_form,
         "event": event,
         "de_registration_form": de_registration_form,
