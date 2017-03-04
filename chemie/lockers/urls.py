@@ -11,5 +11,4 @@ urlpatterns = [
     url(r'^administrer', views.manage_lockers, name='administrate'),
     url(r'^administrer/#(?P<anchor>[-_\w]+)$', views.manage_lockers, name="administrate"),
     url(r'^mine-skap', views.my_lockers, name='mineskap'),
-    url(r'^aktiver-skap/(?P<code>[a-z0-9]{32})/?', views.activate_button, name='activate-button'),
 ]
