@@ -1,0 +1,69 @@
+{% extends "chemie/base.html" %}
+{% load thumbnail %}
+
+{% block nav_header %}
+    Sladreboksen
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Innsendinger
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <style>
+    img.responsive-img, video.responsive-video {
+      height: auto;
+      width: auto;
+      max-width: 300px;
+    }
+  </style>
+  <div class="row">
+    <ul class="pagination nav navbar-nav">
+      {% if submissions.has_previous %}
+        <li><a href="{{ submissions.previous_page_number }}">Forrige</a></li>
+      {% else %}
+        <li class="disabled"><a class="grey-text text-lighten-1">Forrige</a></li>
+      {% endif %}
+
+      {% for page in submissions.paginator.page_range %}
+        <li class="{% if submissions.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+      {% endfor %}
+
+      {% if submissions.has_next %}
+        <li><a href="{{ submissions.next_page_number }}">Neste</a></li>
+      {% else %}
+        <li class="disabled"><a class="grey-text text-lighten-1">Neste</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  <div class="row">
+  <div class="card">
+  <div class="card-content">
+    <table class="responsive-table bordered">
+      <thead>
+      <tr>
+        <th data-field="who">Innsender</th>
+        <th data-field="date">Dato</th>
+        <th data-field="gold">Gullkorn</th>
+        <th data-field="image">Bilde</th>
+      </tr>
+      </thead>
+      <tbody>
+      {% for submission in submissions %}
+        <tr>
+          <td><p>{{ submission.author.profile }}</p> </td>
+          <td><p>{{ submission.date|date:"j. F" }}</p> </td>
+          <td><p>{{ submission.content }}</p> <td>
+          <td>
+            {% if submission.image %}
+              <img  class="responsive-img materialboxed" src="{{ submission.image.url }}">
+            {% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  </div>
+  </div>
+{% endblock content %}
