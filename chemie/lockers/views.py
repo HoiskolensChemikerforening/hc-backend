@@ -6,7 +6,7 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
 from .email import queue_activation_mail, send_my_lockers_mail
-from .forms import RegisterExternalLockerUserForm, MyLockersForm
+from .forms import RegisterExternalLockerUserForm, MyLockersForm, ConfirmOwnershipForm
 from .models import Locker, LockerUser, Ownership, LockerConfirmation
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
@@ -102,28 +102,27 @@ def register_locker(request, number):
 
 
 def activate_ownership(request, code):
-    try:
-        activator = LockerConfirmation.objects.get(key=code)
-        activator.activate()
-    except ObjectDoesNotExist:
-        raise Http404
-    except ValidationError:
-        messages.add_message(request, messages.ERROR,
-                             'Bokskapet ble reservert før du rakk å reservere det.',
-                             extra_tags='Boskap - opptatt')
-        return redirect(reverse('bokskap:index'))
+    agreed_to_terms = ConfirmOwnershipForm(request.POST or None)
+    if request.method == 'POST':
+        if agreed_to_terms.is_valid():
+            try:
+                activator = LockerConfirmation.objects.get(key=code)
+                activator.activate()
+            except ObjectDoesNotExist:
+                raise Http404
+            except ValidationError:
+                messages.add_message(request, messages.ERROR,
+                                     'Bokskapet ble reservert før du rakk å reservere det.',
+                                     extra_tags='Boskap - opptatt')
+                return redirect(reverse('bokskap:index'))
 
-    messages.add_message(request, messages.SUCCESS, 'Bokskapet ble aktivert og er nå ditt =D',
-                         extra_tags='Fullført')
+            messages.add_message(request, messages.SUCCESS, 'Bokskapet ble aktivert og er nå ditt =D',
+                                 extra_tags='Fullført')
 
-    return redirect(reverse('frontpage:home'))
+            return redirect(reverse('frontpage:home'))
 
-def activate_button(request, code):
-    activator = LockerConfirmation.objects.get(key=code)
-    context = {
-        "activator": activator,
-    }
-    return render(request, 'lockers/activate_button.html', context)
+    return render(request, 'lockers/confirm_locker.html', context={'form':agreed_to_terms})
+
 
 @permission_required('lockers.can_delete')
 def manage_lockers(request):

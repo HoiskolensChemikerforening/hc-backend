@@ -1,0 +1,43 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Aktiver bokskap
+{% endblock nav_header %}
+{% load material_form %}
+{% load static %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 s12 m10">
+      <div class="card">
+        <form class="mail" method='POST'>{% csrf_token %}
+          <div class="card-content">
+            <div class="row">
+              <div class="col">
+                <p class="flow-text">Reglene for bruk av bokskap må bekreftes av deg før det blir reservert. <br>
+                  <a href="{% static 'lockers/reglement.pdf' %}">Her</a> kan du lese reglementet.
+                </p>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col s12 m12 l12">
+                {% form form=form %}
+                {% endform %}
+              </div>
+            </div>
+            <input class="btn" type='submit' value='Bekreft'/>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+{% endblock content %}
