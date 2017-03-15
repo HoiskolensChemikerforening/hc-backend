@@ -71,6 +71,7 @@ def post_funds_form(request):
         messages.add_message(request,
                              messages.SUCCESS,
                              'Søknaden ble sendt',
+                             extra_tags='Søknad om midler',
                              )
         return redirect(reverse('frontpage:home'))
     context = {

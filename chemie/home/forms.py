@@ -25,7 +25,10 @@ class PostFundsForm(forms.ModelForm):
 
     class Meta:
         model = FundsApplicationModel
-        widgets = {'price_range': forms.RadioSelect}
+        widgets = {'price_range': forms.RadioSelect,
+                   'description': forms.Textarea(attrs={'placeholder': 'Beskrivelse av formålet, dato, hvor, hvor mye midler det søkes på, hva pengene skal brukes på, osv.'}),
+                   'purpose': forms.TextInput(attrs={'placeholder': 'Kort beskrivelse av det det søkes midler til'})}
+
         fields = [
             "applier",
             "bank_account_holder",
