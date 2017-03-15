@@ -25,7 +25,7 @@
     </div>
 {{myForm.get_price_range_display}}
     <div class="col s12 m12 l8">
-        <form method='POST'>{% csrf_token %}
+        <form method='POST' enctype="multipart/form-data">{% csrf_token %}
             <div class="card-content">
                 {% form form=funds_form %}
 

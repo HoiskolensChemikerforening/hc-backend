@@ -3,6 +3,7 @@ import material as M
 from captcha.fields import ReCaptchaField
 from .models import FundsApplicationModel
 
+
 class ContactForm(forms.Form):
     layout = M.Layout(M.Row('contact_name', 'contact_email'),
                       M.Row('content'),
@@ -14,14 +15,13 @@ class ContactForm(forms.Form):
     content = forms.CharField(required=True, widget=forms.Textarea, label="Melding")
 
 
-# TODO: Sende e-post med søknaden til den som skal ha den. Sende bilder med søknad.
 class PostFundsForm(forms.ModelForm):
     layout = M.Layout(M.Row('applier','bank_account_holder'),
                       M.Row('price_range','bank_account_id'),
                       M.Row('purpose'),
                       M.Row('description'),
+                      M.Row('receipt'),
                       )
-
 
     class Meta:
         model = FundsApplicationModel
@@ -33,6 +33,7 @@ class PostFundsForm(forms.ModelForm):
             "bank_account_id",
             "purpose",
             "description",
+            "receipt",
         ]
 
 
