@@ -1,7 +1,7 @@
-from django.db import models
-from sorl.thumbnail import ImageField
 from django.contrib.auth.models import User
+from django.db import models
 from .validators import validate_http
+from sorl.thumbnail import ImageField
 
 
 class pictures_for_404(models.Model):
