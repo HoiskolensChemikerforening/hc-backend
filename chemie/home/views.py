@@ -58,6 +58,16 @@ def post_funds_form(request):
         instance = funds_form.save(commit=False)
         instance.author = request.user
         instance.save()
+
+        _, mail_to = zip(*settings.ADMINS)
+        mail.send(
+            mail_to,                # List of email addresses also accepted
+            'Webkom <webkom@hc.ntnu.no>',
+            template='funds_request_form',
+            context={
+                'form_data': instance
+            },
+        )
         messages.add_message(request,
                              messages.SUCCESS,
                              'Søknaden ble sendt',
