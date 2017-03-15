@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Locker, LockerUser, Ownership, LockerConfirmation
+from .models import Locker, LockerUser, Ownership, LockerToken
 
 
 class LockerAdmin(admin.ModelAdmin):
@@ -45,10 +45,10 @@ class OwnershipAdmin(admin.ModelAdmin):
 class ConfirmationAdmin(admin.ModelAdmin):
 
     class Meta:
-        model = LockerConfirmation
+        model = LockerToken
 
 
-admin.site.register(LockerConfirmation, ConfirmationAdmin)
+admin.site.register(LockerToken, ConfirmationAdmin)
 admin.site.register(Locker, LockerAdmin)
 admin.site.register(LockerUser, LockerUserAdmin)
 admin.site.register(Ownership, OwnershipAdmin)

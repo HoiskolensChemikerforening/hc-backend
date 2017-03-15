@@ -88,7 +88,7 @@ class Ownership(models.Model):
         return "Locker {} registered to {}".format(self.locker, self.user)
 
     def create_confirmation(self):
-        confirmation_object = LockerConfirmation.objects.create(ownership=self)
+        confirmation_object = LockerToken.objects.create(ownership=self)
         confirmation_object.save()
         return confirmation_object
 
@@ -102,7 +102,7 @@ class LockerConfirmationManager(models.Manager):
         self.filter(created__lte=expired_range).delete()
 
 
-class LockerConfirmation(models.Model):
+class LockerToken(models.Model):
     ownership = models.ForeignKey(Ownership)
     key = models.UUIDField(default=uuid4, editable=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)

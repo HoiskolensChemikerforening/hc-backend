@@ -5,9 +5,9 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
 
-from .email import queue_activation_mail, send_my_lockers_mail
+from .email import send_my_lockers_mail
 from .forms import RegisterExternalLockerUserForm, MyLockersForm, ConfirmOwnershipForm
-from .models import Locker, LockerUser, Ownership, LockerConfirmation
+from .models import Locker, LockerUser, Ownership, LockerToken
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect
 from django.conf import settings
@@ -106,7 +106,7 @@ def activate_ownership(request, code):
     if request.method == 'POST':
         if agreed_to_terms.is_valid():
             try:
-                activator = LockerConfirmation.objects.get(key=code)
+                activator = LockerToken.objects.get(key=code)
                 activator.activate()
             except ObjectDoesNotExist:
                 raise Http404

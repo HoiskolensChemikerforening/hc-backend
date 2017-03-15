@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from lockers.models import Ownership, LockerConfirmation
+from lockers.models import Ownership, LockerToken
 
 
 class Command(BaseCommand):
@@ -10,5 +10,5 @@ class Command(BaseCommand):
         # Remove unconfirmed ownerships
         Ownership.objects.prune_expired()
         # Clear old tokens
-        LockerConfirmation.objects.prune_expired()
+        LockerToken.objects.prune_expired()
         self.stdout.write(self.style.SUCCESS('Pruning complete.'))
