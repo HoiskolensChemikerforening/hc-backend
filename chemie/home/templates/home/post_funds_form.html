@@ -29,9 +29,12 @@
             <div class="card-content">
                 {% form form=funds_form %}
 
-                {% part funds_form.applier prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part funds_form.purpose prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part funds_form.description prefix %}<i class="material-icons prefix">home</i>{% endpart %}
+                {% part funds_form.applier prefix %}<i class="material-icons prefix">recent_actors</i>{% endpart %}
+                {% part funds_form.bank_account_holder prefix %}<i class="material-icons prefix">assignment_ind</i>{% endpart %}
+                {% part funds_form.price_range prefix %}<i class="material-icons prefix">shopping_cart</i>{% endpart %}
+                {% part funds_form.bank_account_id prefix %}<i class="material-icons prefix">play_for_work</i>{% endpart %}
+                {% part funds_form.purpose prefix %}<i class="material-icons prefix">label</i>{% endpart %}
+                {% part funds_form.description prefix %}<i class="material-icons prefix">description</i>{% endpart %}
 
                 {% endform %}
             </div>
