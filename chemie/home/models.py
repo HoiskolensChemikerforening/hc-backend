@@ -21,10 +21,10 @@ class FundsApplicationModel(models.Model):
     purpose = models.CharField(max_length=2000, verbose_name='Formål')
 
     # Detailed description of purpose
-    description = models.TextField(verbose_name='Beskrivelse')
+    description = models.TextField(verbose_name='Beskrivelse',)
 
     # To which bank account the money would be sent to
-    bank_account_id = models.CharField(max_length=11, verbose_name="Bankkonto",
+    bank_account_id = models.CharField(max_length=11, verbose_name="Kontonummer",
                                        validators=[RegexValidator(
                                            regex='^\d{11}$', message='Kun tall, 11 siffer', code='nomatch')])
 
