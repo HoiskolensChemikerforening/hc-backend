@@ -10,6 +10,9 @@ from .forms import ContactForm
 from post_office import mail
 from django.conf import settings
 
+from .forms import PostFundsForm
+from django.contrib.auth.decorators import login_required
+
 
 def index(request):
     all_events = Event.objects.filter(date__gt=timezone.now())
@@ -48,3 +51,22 @@ def contact(request):
 
 def calendar(request):
     return render(request, 'chemie/calendar.html')
+
+
+@login_required
+def post_funds_form(request):
+    funds_form = PostFundsForm(request.POST or None, request.FILES or None)
+    if funds_form.is_valid():
+        instance = funds_form.save(commit=False)
+        instance.author = request.user
+        instance.save()
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             'Søknaden ble sendt',
+                             )
+        return redirect(reverse('frontpage:home'))
+    context = {
+        "funds_form": funds_form,
+    }
+
+    return render(request, "home/post_funds_form.html", context)

@@ -1,0 +1,45 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+    Sladreboksen
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Send innslag
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m12 l8">
+            <p class="flow-text">
+                Formålet med den økonomiske støtteordningen er å gi alle medlemmer i Høiskolens Chemikerforening økt
+                mulighet til å gjennomføre sine ideer ved å tilby hel- eller delfinansiering av aktiviteter eller andre
+                tiltak som gagner en betydelig andel av medlemsmassen.
+                Alle medlemmer av Høiskolens Chemikerforening kan søke om støtte. Det kan ikke søkes om penger til innkjøp av alkohol.
+                Styret bedømmer samlet hver enkelt søknad, og et flertall bestemmer om den godkjennes eller forkastes. Søknader kan
+                leveres på forhånd eller i ettertid av gjennomført tiltak.
+                Felt markert med * er obligatoriske.
+            </p>
+
+            <form method='POST'>{% csrf_token %}
+                <div class="card-content">
+                    {% form form=funds_form %}
+
+                    {% part funds_form.purpose prefix %}<i class="material-icons prefix">account_circle</i>{% endpart %}
+                    {% part funds_form.description prefix %}<i class="material-icons prefix">home</i>{% endpart %}
+
+                    {% endform %}
+                </div>
+
+                <div class="card-action">
+                    <div class="right-align">
+                        <button class="btn btn-primary pull-right" type="submit">Send søknad</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock content %}
