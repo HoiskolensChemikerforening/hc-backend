@@ -278,7 +278,18 @@ CKEDITOR_CONFIGS = {
         ],
         'customConfig': '/static/js/ckeditor_config.js',
         'width': '100%'
+    },
 
+    'forms': {
+        'skin': 'bootstrapck',
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['NumberedList', 'BulletedList', '-', 'Link'],
+            ['Maximize', 'Find', 'Replace']
+        ],
+        'customConfig': '/static/js/ckeditor_config.js',
+        'width': '100%'
     },
 }
 

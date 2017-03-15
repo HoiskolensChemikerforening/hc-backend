@@ -49,25 +49,3 @@ class Vote(models.Model):
     @transaction.atomic
     def add_vote(request):
         pass
-# Create your models here.
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
