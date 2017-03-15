@@ -96,7 +96,7 @@ class Event(BaseEvent):
     companion = models.BooleanField(default=False, verbose_name="Følge")
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    mail_notification = models.BooleanField(default=False, verbose_name="Epostbekreftelse")
+    mail_notification = models.BooleanField(default=False, verbose_name="E-postbekreftelse")
 
     attendees = models.ManyToManyField(User, through='EventRegistration')
 

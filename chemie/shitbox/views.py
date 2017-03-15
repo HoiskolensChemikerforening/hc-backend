@@ -6,12 +6,12 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from .forms import Postform
+from .forms import PostForm
 from .models import Submission
 
 @login_required
 def post_votes(request):
-    form = Postform(request.POST or None, request.FILES or None)
+    form = PostForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
         instance.author = request.user
