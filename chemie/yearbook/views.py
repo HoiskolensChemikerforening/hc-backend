@@ -23,7 +23,7 @@ def index(request, year=1):
             users = find_user_by_name(search_field)
             profiles = Profile.objects.filter(user__in=users)
     else:
-        profiles = Profile.objects.filter(grade=year)
+        profiles = Profile.objects.filter(grade=year).order_by('user__last_name')
     context = {
         'profiles': profiles,
         'grades': GRADES,
