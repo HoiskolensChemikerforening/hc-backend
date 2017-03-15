@@ -3,15 +3,13 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
 from django.core.urlresolvers import reverse
+from django.contrib.auth.decorators import login_required
+from django.conf import settings
+from post_office import mail
 
 from events.models import Event
 from news.models import Article
-from .forms import ContactForm
-from post_office import mail
-from django.conf import settings
-
-from .forms import PostFundsForm
-from django.contrib.auth.decorators import login_required
+from .forms import ContactForm, PostFundsForm
 
 
 def index(request):
