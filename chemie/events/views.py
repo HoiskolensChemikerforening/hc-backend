@@ -154,7 +154,7 @@ def register_user(request, event_id):
                 status = set_user_event_status(event, instance)
 
                 if status == REGISTRATION_STATUS.CONFIRMED:
-                    messages.add_message(request, messages.SUCCESS, 'Du er påmeld arrangementet.', extra_tags='Påmeldt')
+                    messages.add_message(request, messages.SUCCESS, 'Du er påmeldt arrangementet.', extra_tags='Påmeldt')
                     send_event_mail(instance, event)
                     custom_messages = RegistrationMessage.objects.filter(user=instance.user, event=event)
                     for custom_message in custom_messages:

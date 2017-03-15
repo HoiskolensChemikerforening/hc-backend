@@ -4,8 +4,8 @@ from django.core.validators import RegexValidator
 
 
 PRICE_RANGE_CHOICES = (
-        ('1', 'Under 500 kr'),
-        ('2', 'Over 500 kr'),
+        (1, 'Under 500 kr'),
+        (2, 'Over 500 kr'),
     )
 
 
@@ -32,10 +32,9 @@ class FundsApplicationModel(models.Model):
     bank_account_holder = models.CharField(max_length=2000, verbose_name='Bankkonto innehaver')
 
     # Price range
-    price_range = models.CharField(max_length=10, choices=PRICE_RANGE_CHOICES, default="1",
-                                   verbose_name='Prisklasse')
+    price_range = models.IntegerField(choices=PRICE_RANGE_CHOICES, default=1, verbose_name='Prisklasse')
 
-    #  When application is sent
+    # When application is sent
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 
