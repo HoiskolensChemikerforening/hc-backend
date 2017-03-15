@@ -2,30 +2,44 @@
 {% load material_form %}
 
 {% block nav_header %}
-    Sladreboksen
+  Sladreboksen
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Send innslag
+  Send innslag
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="row">
-        <div class="col s12 m12 l8">
-            <p class="flow-text">
-                Sitter du på noen gullkorn, eller har du noe sladder om dine medstudenter?
-                Send det inn her, så havner det kanskje i neste utgave av Sugepumpa.
-                Du forblir anonym.
-            </p>
-
-
-            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-                {% form form=form %}
-                {% endform %}
-                <input class="btn" type='submit' value='Send inn sladder!'/>
-            </form>
-        </div>
+  <!-- Administration button -->
+  {% if perms.shitbox %}
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large blue">
+        <i class="large material-icons">mode_edit</i>
+      </a>
+      <ul>
+        <li>
+          <a class="btn-floating red" href="{% url "shitbox:list" %}"><i class="material-icons">format_quote</i></a>
+          <a class="btn-floating mobile-fab-tip" href="{% url "shitbox:list" %}">Slett</a>
+        </li>
+      </ul>
     </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col s12 m12 l8">
+      <p class="flow-text">
+        Sitter du på noen gullkorn, eller har du noe sladder om dine medstudenter?
+        Send det inn her, så havner det kanskje i neste utgave av Sugepumpa.
+        Du forblir anonym.
+      </p>
+
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        {% form form=form %}
+        {% endform %}
+        <input class="btn" type='submit' value='Send inn sladder!'/>
+      </form>
+    </div>
+  </div>
 
 
 {% endblock content %}
