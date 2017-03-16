@@ -67,11 +67,13 @@ def post_funds_form(request):
             context={
                 'form_data': instance
             },
+            attachments= {'kvittering': instance.receipt}     # må eller burde (vet ikke) ha extension. Men vet jo ikke hva vi får inn.
+            # Mulig å bruke original filnavnet på en eller annen måte?
         )
         messages.add_message(request,
                              messages.SUCCESS,
-                             'Søknaden ble sendt',
-                             extra_tags='Søknad om midler',
+                             'Din søknad om støtte er sendt, og du vil få svar så snart den er behandlet.',
+                             extra_tags='Søknad sendt!',
                              )
         return redirect(reverse('frontpage:home'))
     context = {

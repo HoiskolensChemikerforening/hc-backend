@@ -113,7 +113,7 @@ def activate_ownership(request, code):
             except ValidationError:
                 messages.add_message(request, messages.ERROR,
                                      'Bokskapet ble reservert før du rakk å reservere det.',
-                                     extra_tags='Boskap - opptatt')
+                                     extra_tags='Bokskap - opptatt')
                 return redirect(reverse('bokskap:index'))
 
             messages.add_message(request, messages.SUCCESS, 'Bokskapet ble aktivert og er nå ditt =D',
