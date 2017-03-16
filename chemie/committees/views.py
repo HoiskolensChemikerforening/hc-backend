@@ -12,8 +12,7 @@ from .models import Committee, Member
 def index(request):
     # Fetch all members, who belong to a committee (Member -> Committee)
     # Group all these members by the committee type
-    committees = Committee.objects.prefetch_related('members')
-
+    committees = Committee.objects.prefetch_related('members').order_by('title')
     context = {
         'committees': committees,
     }
