@@ -58,7 +58,7 @@ def post_funds_form(request):
         instance = funds_form.save(commit=False)
         instance.author = request.user
         instance.save()
-
+        filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
         _, mail_to = zip(*settings.ADMINS)
         mail.send(
             mail_to,                # List of email addresses also accepted
@@ -67,8 +67,7 @@ def post_funds_form(request):
             context={
                 'form_data': instance
             },
-            attachments= {'kvittering': instance.receipt}     # må eller burde (vet ikke) ha extension. Men vet jo ikke hva vi får inn.
-            # Mulig å bruke original filnavnet på en eller annen måte?
+            attachments={filename: instance.receipt.path}
         )
         messages.add_message(request,
                              messages.SUCCESS,
