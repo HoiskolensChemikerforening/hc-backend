@@ -1,5 +1,5 @@
 from django.test import TestCase
-from lockers.models import LockerUser, Locker, LockerConfirmation, Ownership
+from lockers.models import LockerUser, Locker, LockerToken, Ownership
 from lockers.models import LOCKER_COUNT
 
 
@@ -10,7 +10,7 @@ def create_user_with_locker(count):
     for i in range(count):
         locker = Locker.objects.create(number=i)
         ownership = Ownership.objects.create(locker=locker, user=user)
-        token = LockerConfirmation.objects.create(ownership=ownership)
+        token = LockerToken.objects.create(ownership=ownership)
         token.activate()
 
 
@@ -28,10 +28,11 @@ class LockerUserLimitTest(TestCase):
 
         locker = Locker.objects.create(number=LOCKER_COUNT)
         ownership = Ownership.objects.create(locker=locker, user=user)
-        token = LockerConfirmation.objects.create(ownership=ownership)
+        token = LockerToken.objects.create(ownership=ownership)
         token.activate()
 
         self.assertEqual(ownership.reached_limit(), True)
+
 
 class ActivationTokenTest(TestCase):
     def setUp(self):
@@ -40,7 +41,7 @@ class ActivationTokenTest(TestCase):
                                          username='glenny')
         locker = Locker.objects.create(number=1)
         ownership = Ownership.objects.create(locker=locker, user=user)
-        token = LockerConfirmation.objects.create(ownership=ownership)
+        token = LockerToken.objects.create(ownership=ownership)
 
     def test_locker_inactive(self):
         locker = Locker.objects.get(number=1)
@@ -52,7 +53,7 @@ class ActivationTokenTest(TestCase):
     def test_locker_taken(self):
         locker = Locker.objects.get(number=1)
         ownership = Ownership.objects.get(locker=locker)
-        token = LockerConfirmation.objects.get(ownership=ownership)
+        token = LockerToken.objects.get(ownership=ownership)
         token.activate()
 
         ownership = Ownership.objects.get(locker=locker)
