@@ -34,7 +34,7 @@ class Locker(models.Model):
         return self.owner is None
 
     def get_absolute_url(self):
-        return reverse("bokskap:registrer", kwargs={"number": self.id})
+        return reverse("bokskap:registrer", kwargs={"number": self.number})
 
     def clear(self):
         self.owner.is_active = False
