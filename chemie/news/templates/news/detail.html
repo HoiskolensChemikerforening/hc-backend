@@ -1,5 +1,5 @@
 {% extends 'chemie/base.html' %}
-
+{% load thumbnail %}
 {% load staticfiles %}
 
 {% block nav_header %}
@@ -18,7 +18,9 @@
     <div class="col l7 m12">
       <div class="material-placeholder">
         <img class="responsive-img materialboxed"
-             src="/media/{{ article.image }}">
+             {% thumbnail article.image "1600" crop="center" as im %}
+              src="{{ im.url }}">
+            {% endthumbnail %}
       </div>
     </div>
   </div>
