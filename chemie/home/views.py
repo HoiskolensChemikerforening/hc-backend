@@ -23,9 +23,9 @@ def index(request):
 
 
 def contact(request):
-    form_data = ContactForm(request.POST or None)
+    contact_submission = ContactForm(request.POST or None)
 
-    if form_data.is_valid():
+    if contact_submission.is_valid():
         messages.add_message(request, messages.SUCCESS, 'Meldingen ble motatt. Takk for at du tar kontakt!',
                              extra_tags="Mottatt!")
 
@@ -35,15 +35,15 @@ def contact(request):
             mail_to,
             settings.DEFAULT_FROM_EMAIL,
             template='contact_email',
-            context={'message': form_data.cleaned_data.get('content'),
-                     'contact_name': form_data.cleaned_data.get('contact_name'),
-                     'contact_email': form_data.cleaned_data.get('contact_email')
+            context={'message': contact_submission.cleaned_data.get('content'),
+                     'contact_name': contact_submission.cleaned_data.get('contact_name'),
+                     'contact_email': contact_submission.cleaned_data.get('contact_email')
                      },
         )
         return redirect(reverse('frontpage:home'))
     else:
         return render(request, 'chemie/contact.html', {
-            'form': form_data,
+            'form': contact_submission,
         })
 
 
@@ -52,13 +52,18 @@ def calendar(request):
 
 
 @login_required
-def post_funds_form(request):
+def request_funds(request):
     funds_form = PostFundsForm(request.POST or None, request.FILES or None)
     if funds_form.is_valid():
         instance = funds_form.save(commit=False)
         instance.author = request.user
         instance.save()
-        filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
+        receipt = instance.receipt
+        attachments = None
+        if receipt.name is not None:
+            filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
+            attachment = receipt.path
+            attachments = {filename: attachment}
         _, mail_to = zip(*settings.ADMINS)
         mail.send(
             mail_to,                # List of email addresses also accepted
@@ -67,11 +72,11 @@ def post_funds_form(request):
             context={
                 'form_data': instance
             },
-            attachments={filename: instance.receipt.path}
+            attachments=attachments
         )
         messages.add_message(request,
                              messages.SUCCESS,
-                             'Din søknad om støtte er sendt, og du vil få svar så snart den er behandlet.',
+                             'Din søknad er motatt og vil behandles snart.',
                              extra_tags='Søknad sendt!',
                              )
         return redirect(reverse('frontpage:home'))

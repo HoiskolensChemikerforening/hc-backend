@@ -1,7 +1,7 @@
 from django import forms
 import material as M
 from captcha.fields import ReCaptchaField
-from .models import FundsApplicationModel
+from .models import FundsApplication
 
 
 class ContactForm(forms.Form):
@@ -24,7 +24,7 @@ class PostFundsForm(forms.ModelForm):
                       )
 
     class Meta:
-        model = FundsApplicationModel
+        model = FundsApplication
         widgets = {'price_range': forms.RadioSelect,
                    'description': forms.Textarea(attrs={'placeholder': 'Beskrivelse av formålet, dato, hvor, hvor mye midler det søkes på, hva pengene skal brukes på, osv.'}),
                    'purpose': forms.TextInput(attrs={'placeholder': 'Kort beskrivelse av det det søkes midler til'})}
