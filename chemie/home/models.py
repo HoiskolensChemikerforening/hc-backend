@@ -9,7 +9,7 @@ PRICE_RANGE_CHOICES = (
     )
 
 
-class FundsApplicationModel(models.Model):
+class FundsApplication(models.Model):
 
     # Application on behalf of ...
     applier = models.CharField(max_length=2000, verbose_name='Søker på vegne av',)

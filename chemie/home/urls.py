@@ -1,9 +1,9 @@
 from django.conf.urls import url
-from .views import index, contact, calendar, post_funds_form
+from .views import index, contact, calendar, request_funds
 
 urlpatterns = [
     url(r'^$', index, name="home"),
     url(r'^kontakt/', contact, name="kontakt"),
     url(r'^kalender/', calendar, name="calendar"),
-    url(r'^funds/', post_funds_form, name="fundsapplication"),
+    url(r'^funds/', request_funds, name="fundsapplication"),
 ]
