@@ -229,13 +229,12 @@ RECAPTCHA_PRIVATE_KEY = os.environ.get('RECAPTCHA_PRIVATE_KEY') or ''
 NOCAPTCHA = True
 
 EMAIL_USE_TLS = True
-# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_BACKEND = 'post_office.EmailBackend'
 EMAIL_HOST = os.environ.get('EMAIL_HOST') or ''
 EMAIL_PORT = os.environ.get('EMAIL_PORT') or 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') or ''
-EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or ''
-DEFAULT_FROM_EMAIL = 'webkom@hc.ntnu.no'
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or None
+DEFAULT_FROM_EMAIL = '<webkom@hc.ntnu.no> Webkom'
 
 THUMBNAIL_DEBUG = True
 
