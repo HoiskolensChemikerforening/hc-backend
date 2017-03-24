@@ -13,10 +13,10 @@
 
 {% block content %}
 
-    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-        <a href="{% url "events:index" %}" class="breadcrumb">Arrangementer</a>
-        <a class="breadcrumb">{{event.title}}</a>
-    </div>
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "events:index" %}" class="breadcrumb">Arrangementer</a>
+    <a class="breadcrumb">{{ event.title }}</a>
+  </div>
 
   <div class="row">
     <div class="col s12 m12 l12"><h1 class="heading">{{ event.title }}</h1></div>
@@ -91,7 +91,7 @@
 
     </div>
   </div>
-
+  <a class="waves-effect waves-light btn" href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
   <div class="row">
     <div class="col s12 m12 l12">
       <div class="card">
@@ -110,7 +110,7 @@
       </div>
     </div>
   </div>
-  <a class="waves-effect waves-light btn" href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
+
   {% if perms.events %}
     <a class="waves-effect waves-light btn" href="{% url 'events:adminlist' event.id %}">Påmeldte personer</a>
   {% endif %}
