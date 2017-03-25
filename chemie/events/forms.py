@@ -17,7 +17,7 @@ class RegisterEventForm(forms.ModelForm):
                       M.Row('payment_information'),
                       M.Row('sluts'),
                       M.Row('price_member', 'price_not_member', 'price_companion'),
-                      M.Row('companion', 'sleepover', 'night_snack', 'mail_notification'), )
+                      M.Row('companion', 'sleepover', 'night_snack'), )
 
     event_date = forms.DateField(required=True, label='Arrangemantsdato')
     event_time = forms.TimeField(required=True, initial='12:00', label='Arrangemantstid')
@@ -81,7 +81,6 @@ class RegisterEventForm(forms.ModelForm):
             "companion",
             "sleepover",
             "night_snack",
-            "mail_notification",
         ]
 
 
