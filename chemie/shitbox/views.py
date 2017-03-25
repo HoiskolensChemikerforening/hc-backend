@@ -19,7 +19,7 @@ def post_votes(request):
         messages.add_message(request, messages.SUCCESS,
                              'Sladderet ble mottatt, tusen takk!',
                              extra_tags='Du sladret')
-        return redirect(reverse('frontpage:home'))
+        return redirect(reverse('shitbox:index'))
     context = {
         "form": form,
     }

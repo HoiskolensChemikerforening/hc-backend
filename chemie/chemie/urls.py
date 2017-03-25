@@ -25,7 +25,7 @@ urlpatterns = [
     url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls', namespace='frontpage')),
-    url(r'^shitbox/', include('shitbox.urls', namespace='shitbox')),
+    url(r'^sladreboks/', include('shitbox.urls', namespace='shitbox')),
     url(r'^verv/', include('committees.urls', namespace='verv')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
     url(r'^klassekatalog/', include('yearbook.urls')),
