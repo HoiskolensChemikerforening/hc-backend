@@ -14,9 +14,9 @@ class LockerAdmin(admin.ModelAdmin):
 
 
 class LockerUserAdmin(admin.ModelAdmin):
-    list_display = ["username"]
+    list_display = ["email"]
     list_filter = ["created"]
-    search_fields = ["username"]
+    search_fields = ["email"]
     list_display_links = None
 
     class Meta:
@@ -27,10 +27,10 @@ class OwnershipAdmin(admin.ModelAdmin):
     list_display = ["get_locker_number", "get_user"]
 
     def get_user(self, obj):
-        return obj.user.username
+        return obj.user.email
 
     get_user.short_description = 'User'
-    get_user.admin_order_field = 'locker__username'
+    get_user.admin_order_field = 'locker__email'
 
     def get_locker_number(self, obj):
         return obj.locker.number

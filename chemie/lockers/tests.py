@@ -6,7 +6,7 @@ from lockers.models import LOCKER_COUNT
 def create_user_with_locker(count):
     user = LockerUser.objects.create(first_name="Glenn",
                                      last_name="Gregor",
-                                     username='glenny')
+                                     email='glenny')
     for i in range(count):
         locker = Locker.objects.create(number=i)
         ownership = Ownership.objects.create(locker=locker, user=user)
@@ -19,11 +19,11 @@ class LockerUserLimitTest(TestCase):
         create_user_with_locker(LOCKER_COUNT-1)
 
     def test_not_reached_limit(self):
-        ownership = Ownership.objects.filter(user__username='glenny')[0]
+        ownership = Ownership.objects.filter(user__email='glenny')[0]
         self.assertEqual(ownership.reached_limit(), False)
 
     def test_reached_limit(self):
-        ownership = Ownership.objects.filter(user__username='glenny')[0]
+        ownership = Ownership.objects.filter(user__email='glenny')[0]
         user = ownership.user
 
         locker = Locker.objects.create(number=LOCKER_COUNT)
@@ -38,7 +38,7 @@ class ActivationTokenTest(TestCase):
     def setUp(self):
         user = LockerUser.objects.create(first_name="Glenn",
                                          last_name="Gregor",
-                                         username='glenny')
+                                         email='glenny')
         locker = Locker.objects.create(number=1)
         ownership = Ownership.objects.create(locker=locker, user=user)
         token = LockerToken.objects.create(ownership=ownership)

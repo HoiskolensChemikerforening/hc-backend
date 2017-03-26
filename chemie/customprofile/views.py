@@ -18,6 +18,7 @@ from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword
 from .models import UserToken, Profile, Membership
 
+
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
     user_profile_form = RegisterProfileForm(request.POST or None)
@@ -81,7 +82,7 @@ def forgot_password(request):
             try:
                 user = User.objects.get(email=email)
                 token = UserToken.objects.create(user=user)
-                send_forgot_password_mail(request, email, user, token)
+                send_forgot_password_mail(email, user, token)
                 messages.add_message(request, messages.SUCCESS, 'Sjekk {} for videre detaljer'.format(email),
                                      extra_tags='Tilbakestille passord')
                 return redirect(reverse('frontpage:home'))
