@@ -286,6 +286,8 @@ i .micon {
     color: #263238 !important;
 }
 
+
+/* Top nav background image */
 nav, footer {
     background-image: url('/static/images/blur.png') !important;
 }
@@ -341,3 +343,69 @@ nav, footer {
       font-size: 2.224rem;
   }
 }
+
+
+/* CSS For konami code animation */
+@keyframes rotate {
+  100% {transform: rotate(360deg);}
+}
+@-webkit-keyframes rotate {
+  100% {-webkit-transform: rotate(360deg);}
+}
+
+@-webkit-keyframes crazyAnimation {
+  0% {color: #ff0000; background-color: #ff0080;}
+  10% {color: #ff8000; background-color: #8000ff;}
+  20% {color: #ffff00; background-color: #0000ff;}
+  30% {color: #80ff00; background-color: #0080ff;}
+  40% {color: #00ff00; background-color: #00ffff;}
+  50% {color: #00ff80; background-color: #00ff80;}
+  60% {color: #00ffff; background-color: #00ff00;}
+  70% {color: #0080ff; background-color: #80ff00;}
+  80% {color: #0000ff; background-color: #ffff00;}
+  90% {color: #8000ff; background-color: #ff8000;}
+  100% {color: #ff0080; background-color: #ff0000; -webkit-transform: rotate(360deg);}
+}
+
+@keyframes crazyAnimation {
+  0% {color: #ff0000; background-color: #ff0080;}
+  10% {color: #ff8000; background-color: #8000ff;}
+  20% {color: #ffff00; background-color: #0000ff;}
+  30% {color: #80ff00; background-color: #0080ff;}
+  40% {color: #00ff00; background-color: #00ffff;}
+  50% {color: #00ff80; background-color: #00ff80;}
+  60% {color: #00ffff; background-color: #00ff00;}
+  70% {color: #0080ff; background-color: #80ff00;}
+  80% {color: #0000ff; background-color: #ffff00;}
+  90% {color: #8000ff; background-color: #ff8000;}
+  100% {color: #ff0080; background-color: #ff0000; transform: rotate(360deg);}
+}
+
+@-webkit-keyframes BgcrazyAnimation {
+  0% {color: #ff0000; background-color: #ff0080;}
+  10% {color: #ff8000; background-color: #8000ff;}
+  20% {color: #ffff00; background-color: #0000ff;}
+  30% {color: #80ff00; background-color: #0080ff;}
+  40% {color: #00ff00; background-color: #00ffff;}
+  50% {color: #00ff80; background-color: #00ff80;}
+  60% {color: #00ffff; background-color: #00ff00;}
+  70% {color: #0080ff; background-color: #80ff00;}
+  80% {color: #0000ff; background-color: #ffff00;}
+  90% {color: #8000ff; background-color: #ff8000;}
+  100% {color: #ff0080; background-color: #ff0000; }
+}
+
+@keyframes BgcrazyAnimation {
+  0% {color: #ff0000; background-color: #ff0080;}
+  10% {color: #ff8000; background-color: #8000ff;}
+  20% {color: #ffff00; background-color: #0000ff;}
+  30% {color: #80ff00; background-color: #0080ff;}
+  40% {color: #00ff00; background-color: #00ffff;}
+  50% {color: #00ff80; background-color: #00ff80;}
+  60% {color: #00ffff; background-color: #00ff00;}
+  70% {color: #0080ff; background-color: #80ff00;}
+  80% {color: #0000ff; background-color: #ffff00;}
+  90% {color: #8000ff; background-color: #ff8000;}
+  100% {color: #ff0080; background-color: #ff0000;}
+}
+/* End konami code animation css */

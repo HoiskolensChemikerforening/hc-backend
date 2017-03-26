@@ -3,7 +3,7 @@
  <mj-raw>
   {% load event_extras %}
  </mj-raw>
-  <mj-section padding-left="0px" padding-right="0px" background-url="https://carbon.chemie.no/{% thumbnail event.image '1200' crop='center' colorspace='GRAY' as im %}{{ im.url }}{% endthumbnail %}"
+  <mj-section padding-left="0px" padding-right="0px" background-url="https://{{ root_url }}/{% thumbnail event.image '1200' crop='center' colorspace='GRAY' as im %}{{ im.url }}{% endthumbnail %}"
   padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
     <mj-column mj-class="transparency">
       <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="75px">
@@ -21,7 +21,7 @@
   <mj-section mj-class="primaryColor" padding-top="20">
       <mj-group>
       <mj-column width="100%">
-        <mj-image width="30px" padding="0" src="https://chemie.no/email/date.png" padding-top="10px"/>
+        <mj-image width="30px" padding="0" src="https://{{ root_url }}/email/date.png" padding-top="10px"/>
         <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
           Tid
         </mj-text>
@@ -33,7 +33,7 @@
 
       <mj-group>
       <mj-column >
-        <mj-image width="30px" padding="0" src="https://chemie.no/email/place.png" padding-top="10px" />
+        <mj-image width="30px" padding="0" src="https://{{ root_url }}/email/place.png" padding-top="10px" />
         <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
           Sted
           </mj-text>
@@ -46,7 +46,7 @@
 
        <mj-group>
       <mj-column>
-        <mj-image width="30px" padding="0" src="https://chemie.no/email/deadline.png" padding-top="10px"/>
+        <mj-image width="30px" padding="0" src="https://{{ root_url }}/email/deadline.png" padding-top="10px"/>
         <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
           Avmeldingsfrist
         </mj-text>
@@ -72,5 +72,5 @@
     </mj-column>
     </mj-column>
   </mj-section>
- 
+
  <mj-include path="./footer.mjml" />
