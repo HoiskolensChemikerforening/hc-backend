@@ -3,144 +3,144 @@
 
 
 {% block header %}
-    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.26.6/js/jquery.tablesorter.min.js"></script>
-    <script>
-        $(function () {
-            $('table').tablesorter();
-        });
-    </script>
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.26.6/js/jquery.tablesorter.min.js"></script>
+  <script>
+      $(function () {
+          $('table').tablesorter();
+      });
+  </script>
 {% endblock header %}
 
 {% block nav_header %}
-    Arrangementer
+  Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Påmeldte
+  Påmeldte
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="row">
-        <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
-    </div>
-    <div class="row">
-        <table id="myTable" class="tablesorter">
-            <thead>
-            <tr>
-                <th>Navn</th>
-                <th>Klassetrinn</th>
-                <th>Allergier</th>
-                {% if event.night_snack %}
-                    <th>Nattmat</th>
-                {% endif %}
-                {% if event.companion %}
-                    <th>Følge</th>
-                {% endif %}
-                {% if event.sleepover %}
-                    <th>Overnatting</th>
-                {% endif %}
-                <th>HC-medlemsskap</th>
-                <th>Betalt</th>
-            </tr>
-            </thead>
+  <div class="row">
+    <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+  </div>
+  <div class="row">
+    <table id="myTable" class="tablesorter">
+      <thead>
+      <tr>
+        <th>Navn</th>
+        <th>Klassetrinn</th>
+        <th>Allergier</th>
+        {% if event.night_snack %}
+          <th>Nattmat</th>
+        {% endif %}
+        {% if event.companion %}
+          <th>Følge</th>
+        {% endif %}
+        {% if event.sleepover %}
+          <th>Overnatting</th>
+        {% endif %}
+        <th>HC-medlemsskap</th>
+        <th>Betalt</th>
+      </tr>
+      </thead>
 
-            <tbody>
-            {% for attendee in attendees %}
-                <tr>
-                    <td>{{ attendee.user.profile }} </td>
-                    <td>{{ attendee.user.profile.grade }}</td>
-                    <td>{{ attendee.user.profile.allergies }}</td>
+      <tbody>
+      {% for attendee in attendees %}
+        <tr>
+          <td>{{ attendee.user.profile }} </td>
+          <td>{{ attendee.user.profile.grade }}</td>
+          <td>{{ attendee.user.profile.allergies }}</td>
 
-                    {% if event.night_snack %}
-                        <td>{% if attendee.night_snack %}
-                            <i class="material-icons">done</i>
-                        {% endif %}</td>{% endif %}
+          {% if event.night_snack %}
+            <td>{% if attendee.night_snack %}
+              <i class="material-icons">done</i>
+            {% endif %}</td>{% endif %}
 
-                    {% if event.companion %}
-                        <td>{% if attendee.companion %}
-                            {{ attendee.companion }}
-                        {% endif %}</td>{% endif %}
+          {% if event.companion %}
+            <td>{% if attendee.companion %}
+              {{ attendee.companion }}
+            {% endif %}</td>{% endif %}
 
-                    {% if event.sleepover %}
-                        <td>{% if attendee.sleepover %}
-                            <i class="material-icons">done</i>
-                        {% endif %}</td>{% endif %}
+          {% if event.sleepover %}
+            <td>{% if attendee.sleepover %}
+              <i class="material-icons">done</i>
+            {% endif %}</td>{% endif %}
 
-                    <td>{% if attendee.user.profile.membership.is_active %}
-                        <i class="material-icons">local_play</i>
-                    {% else %}
-                        -
-                    {% endif %}</td>
+          <td>{% if attendee.user.profile.membership.is_active %}
+            <i class="material-icons">local_play</i>
+          {% else %}
+            -
+          {% endif %}</td>
 
-                    <td>
-                        {% if attendee.payment_status %}
-                            <a class="payment btn-floating btn-tiny waves-effect waves-light green"
-                               id="payment-{{ attendee.id }}"><i class="material-icons">done</i></a>
-                        {% else %}
-                            <a class="payment btn-floating btn-tiny waves-effect waves-light red"
-                               id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
-                        {% endif %}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    </div>
+          <td>
+            {% if attendee.payment_status %}
+              <a class="payment btn-floating btn-tiny waves-effect waves-light green"
+                 id="payment-{{ attendee.id }}"><i class="material-icons">done</i></a>
+            {% else %}
+              <a class="payment btn-floating btn-tiny waves-effect waves-light red"
+                 id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
+            {% endif %}</td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
 {% endblock content %}
 
 {% block footer_script %}
-    <script>
-        $(document).ready(function () {
-            $('.payment').on('click', function (event) {
-                //$('.payment').live('click', function(event){
-                event.preventDefault();
-                var myID = $(this).attr("id").split('-')[1];
-                // using jQuery
-                function getCookie(name) {
-                    var cookieValue = null;
-                    if (document.cookie && document.cookie !== '') {
-                        var cookies = document.cookie.split(';');
-                        for (var i = 0; i < cookies.length; i++) {
-                            var cookie = jQuery.trim(cookies[i]);
-                            // Does this cookie string begin with the name we want?
-                            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                                break;
-                            }
-                        }
-                    }
-                    return cookieValue;
-                }
+  <script>
+      $(document).ready(function () {
+          $('.payment').on('click', function (event) {
+              //$('.payment').live('click', function(event){
+              event.preventDefault();
+              var myID = $(this).attr("id").split('-')[1];
+              // using jQuery
+              function getCookie(name) {
+                  var cookieValue = null;
+                  if (document.cookie && document.cookie !== '') {
+                      var cookies = document.cookie.split(';');
+                      for (var i = 0; i < cookies.length; i++) {
+                          var cookie = jQuery.trim(cookies[i]);
+                          // Does this cookie string begin with the name we want?
+                          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                              break;
+                          }
+                      }
+                  }
+                  return cookieValue;
+              }
 
-                function icon_changer(divID, payment_status) {
-                    if (payment_status) {
-                        $(divID).find('i').text('done');
-                        $(divID).removeClass('red');
-                        $(divID).addClass('green');
-                    }
-                    else {
-                        $(divID).find('i').text('error');
-                        $(divID).removeClass('green');
-                        $(divID).addClass('red');
+              function icon_changer(divID, payment_status) {
+                  if (payment_status) {
+                      $(divID).find('i').text('done');
+                      $(divID).removeClass('red');
+                      $(divID).addClass('green');
+                  }
+                  else {
+                      $(divID).find('i').text('error');
+                      $(divID).removeClass('green');
+                      $(divID).addClass('red');
 
-                    }
-                }
+                  }
+              }
 
-                var csrftoken = getCookie('csrftoken');
-                $.ajax({
-                    type: "GET",
-                    url: "/events/adminlist/paymentstatus/" + myID,
-                    datatype: "json",
+              var csrftoken = getCookie('csrftoken');
+              $.ajax({
+                  type: "GET",
+                  url: "/events/adminlist/paymentstatus/" + myID,
+                  datatype: "json",
 
-                    success: function (json) {
-                        icon_changer("#payment-" + myID, json.payment_status)
-                    },
+                  success: function (json) {
+                      icon_changer("#payment-" + myID, json.payment_status)
+                  },
 
-                    error: function (xhr, errmsg, err) {
-                        // console.log(xhr.status + ": " + xhr.responseText);
-                    },
-                });
-            })
-        });
-    </script>
+                  error: function (xhr, errmsg, err) {
+                      // console.log(xhr.status + ": " + xhr.responseText);
+                  },
+              });
+          })
+      });
+  </script>
 {% endblock %}

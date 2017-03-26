@@ -2,51 +2,54 @@
 {% load material_form %}
 
 {% block nav_header %}
-    Søknad om midler
+  Søknad om midler
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Send søknad
+  Send søknad
 {% endblock nav_sub_header %}
 
 {% block content %}
-<div class="row">
+  <div class="row">
     <div class="col s12 m12 l12">
-        <p class="flow-text">
-            Formålet med den økonomiske støtteordningen er å gi alle medlemmer i Høiskolens Chemikerforening økt
-            mulighet til å gjennomføre sine ideer ved å tilby hel- eller delfinansiering av aktiviteter eller andre
-            tiltak som gagner en betydelig andel av medlemsmassen.
-        </p>
-        <p class="flow-text">
-            Alle medlemmer av Høiskolens Chemikerforening kan søke om støtte. Det kan ikke søkes om penger til innkjøp av alkohol.
-        </p>
-        <p class="flow-text">
-            Styret bedømmer samlet hver enkelt søknad, og et flertall bestemmer om den godkjennes eller forkastes. Søknader kan
-            leveres på forhånd eller i ettertid av gjennomført tiltak.
-        </p>
+      <p class="flow-text">
+        Formålet med den økonomiske støtteordningen er å gi alle medlemmer i Høiskolens Chemikerforening økt
+        mulighet til å gjennomføre sine ideer ved å tilby hel- eller delfinansiering av aktiviteter eller andre
+        tiltak som gagner en betydelig andel av medlemsmassen.
+      </p>
+      <p class="flow-text">
+        Alle medlemmer av Høiskolens Chemikerforening kan søke om støtte. Det kan ikke søkes om penger til innkjøp av
+        alkohol.
+      </p>
+      <p class="flow-text">
+        Styret bedømmer samlet hver enkelt søknad, og et flertall bestemmer om den godkjennes eller forkastes. Søknader
+        kan
+        leveres på forhånd eller i ettertid av gjennomført tiltak.
+      </p>
     </div>
-{{myForm.get_price_range_display}}
+    {{ myForm.get_price_range_display }}
     <div class="col s12 m12 l8">
-        <form method='POST' enctype="multipart/form-data">{% csrf_token %}
-            <div class="card-content">
-                {% form form=funds_form %}
+      <form method='POST' enctype="multipart/form-data">{% csrf_token %}
+        <div class="card-content">
+          {% form form=funds_form %}
 
-                {% part funds_form.applier prefix %}<i class="material-icons prefix">recent_actors</i>{% endpart %}
-                {% part funds_form.bank_account_holder prefix %}<i class="material-icons prefix">assignment_ind</i>{% endpart %}
-                {% part funds_form.price_range prefix %}<i class="material-icons prefix">shopping_cart</i>{% endpart %}
-                {% part funds_form.bank_account_id prefix %}<i class="material-icons prefix">play_for_work</i>{% endpart %}
-                {% part funds_form.purpose prefix %}<i class="material-icons prefix">label</i>{% endpart %}
-                {% part funds_form.description prefix %}<i class="material-icons prefix">description</i>{% endpart %}
+            {% part funds_form.applier prefix %}<i class="material-icons prefix">recent_actors</i>{% endpart %}
+            {% part funds_form.bank_account_holder prefix %}<i class="material-icons prefix">assignment_ind</i>
+            {% endpart %}
+            {% part funds_form.price_range prefix %}<i class="material-icons prefix">shopping_cart</i>{% endpart %}
+            {% part funds_form.bank_account_id prefix %}<i class="material-icons prefix">play_for_work</i>{% endpart %}
+            {% part funds_form.purpose prefix %}<i class="material-icons prefix">label</i>{% endpart %}
+            {% part funds_form.description prefix %}<i class="material-icons prefix">description</i>{% endpart %}
 
-                {% endform %}
-            </div>
+          {% endform %}
+        </div>
 
-            <div class="card-action">
-                <div class="right-align">
-                    <button class="btn btn-primary pull-right" type="submit">Send søknad</button>
-                </div>
-            </div>
-        </form>
+        <div class="card-action">
+          <div class="right-align">
+            <button class="btn btn-primary pull-right" type="submit">Send søknad</button>
+          </div>
+        </div>
+      </form>
     </div>
-</div>
+  </div>
 {% endblock content %}

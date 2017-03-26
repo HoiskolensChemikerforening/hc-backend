@@ -2,75 +2,74 @@
 {% load static %}
 
 {% block nav_header %}
-    Kalender
+  Kalender
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Oversikt
+  Oversikt
 {% endblock nav_sub_header %}
 
 {% block extra_css %}
-    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" rel="stylesheet">
-    <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css" media='print'
-          rel="stylesheet">
-    <link href="{% static "css/materialFullCalendar.css" %}" rel="stylesheet"/>
+  <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.css" rel="stylesheet">
+  <link href="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.print.css" media='print'
+        rel="stylesheet">
+  <link href="{% static "css/materialFullCalendar.css" %}" rel="stylesheet"/>
 
 
 {% endblock %}
 
 {% block extra_js %}
-    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js" type='text/javascript'></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
-    <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/locale/nb.js"></script>
-    <script src="{% static "js/gcal.js" %}" type='text/javascript'></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.17.1/moment.min.js" type='text/javascript'></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/fullcalendar.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.1.0/locale/nb.js"></script>
+  <script src="{% static "js/gcal.js" %}" type='text/javascript'></script>
 {% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="col m12 s12 l12">
-            <h3 class="heading">Kommende datoer</h3>
-            <div class="card">
-                <div class="card-content">
-                    <p class="flow-text">
-                        Her er datoene for ting du må få med deg i HC!
-                        <b><a href="{% url "frontpage:kontakt" %}"><br>
-                        Ta kontakt</a></b> ved feil og mangler
-                    </p>
-                </div>
-            </div>
-            <div class="card">
-                <div class="card-content">
-                    <div id='calendar'></div>
-
-                    <div class="card-action">
-                        <div class="left-align">
-                            <a href="https://calendar.google.com/calendar/ical/fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com/public/basic.ics">Kalenderfeed</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+  <div class="row">
+    <div class="col m12 s12 l12">
+      <h3 class="heading">Kommende datoer</h3>
+      <div class="card">
+        <div class="card-content">
+          <p class="flow-text">
+            Her er datoene for ting du må få med deg i HC!
+            <b><a href="{% url "frontpage:kontakt" %}"><br>
+              Ta kontakt</a></b> ved feil og mangler
+          </p>
         </div>
+      </div>
+      <div class="card">
+        <div class="card-content">
+          <div id='calendar'></div>
+          <div class="card-action">
+            <div class="left-align">
+              <a href="https://calendar.google.com/calendar/ical/fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com/public/basic.ics">Kalenderfeed</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 {% endblock content %}
 
 {% block footer_script %}
-    <script type='text/javascript'>
-        $(document).ready(function () {
-            $('#calendar').fullCalendar({
-                googleCalendarApiKey: 'AIzaSyAQoiOzjTmpYL-sK_aftNx5tWi94PDzvlw',
-                events: {
-                    googleCalendarId: 'fse1dddq3jjn4qu9qnf2cgfm08@group.calendar.google.com'
-                },
-                editable: false, // Don't allow editing of events
-                handleWindowResize: true,
-                displayEventTime: true, // Display event time
-                displayEventEnd: true,
-                timeFormat: 'H:mm',
-                locale: 'nb',
-                monthNames: ['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli',
-                             'August', 'September', 'Oktober', 'November', 'Desember'],
-                height: 'auto'
-            });
-        });
-    </script>
+  <script type='text/javascript'>
+      $(document).ready(function () {
+          $('#calendar').fullCalendar({
+              googleCalendarApiKey: 'AIzaSyAQoiOzjTmpYL-sK_aftNx5tWi94PDzvlw',
+              events: {
+                  googleCalendarId: 'fse1dddq3jjn4qu9qnf2cgfm08@group.calendar.google.com'
+              },
+              editable: false, // Don't allow editing of events
+              handleWindowResize: true,
+              displayEventTime: true, // Display event time
+              displayEventEnd: true,
+              timeFormat: 'H:mm',
+              locale: 'nb',
+              monthNames: ['Januar', 'Februar', 'Mars', 'April', 'Mai', 'Juni', 'Juli',
+                  'August', 'September', 'Oktober', 'November', 'Desember'],
+              height: 'auto'
+          });
+      });
+  </script>
 {% endblock footer_script %}

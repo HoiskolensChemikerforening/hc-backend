@@ -10,11 +10,11 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-<body>
-    <p></p>
-    <form class="newPost" enctype="multipart/form-data" method='POST'>{% csrf_token %}
-        {{ post.media }}
-        {{ post.as_p }}
-      <input class ="btn" type ='submit' value = 'Lag artikkelen!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
-    </form>
+  <body>
+  <p></p>
+  <form class="newPost" enctype="multipart/form-data" method='POST'>{% csrf_token %}
+    {{ post.media }}
+    {{ post.as_p }}
+    <input class="btn" type='submit' value='Lag artikkelen!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
+  </form>
 {% endblock content %}

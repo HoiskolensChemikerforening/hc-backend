@@ -4,12 +4,12 @@
 {% block wiki_site_title %} - HC Wiki {% endblock %}
 
 {% block wiki_header_branding %}
-<a class="navbar-brand" href="/">
+  <a class="navbar-brand" href="/">
     <img style="float: left; margin-right: 4px; margin-top: -13px;  height: 50px;" src="/media/logo.png"> HC WIKI </a>
 {% endblock %}
 
 {% block wiki_header_navlinks %}
-<ul class="nav navbar-nav">
-  <li class="active"><a href="{% url 'wiki:root' %}">Wiki</a></li>
-</ul>
+  <ul class="nav navbar-nav">
+    <li class="active"><a href="{% url 'wiki:root' %}">Wiki</a></li>
+  </ul>
 {% endblock %}

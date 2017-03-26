@@ -2,11 +2,11 @@
 {% load thumbnail %}
 
 {% block nav_header %}
-    Sladreboksen
+  Sladreboksen
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Innsendinger
+  Innsendinger
 {% endblock nav_sub_header %}
 
 {% block content %}
@@ -37,33 +37,34 @@
     </ul>
   </div>
   <div class="row">
-  <div class="card">
-  <div class="card-content">
-    <table class="responsive-table bordered">
-      <thead>
-      <tr>
-        <th data-field="who">Innsender</th>
-        <th data-field="date">Dato</th>
-        <th data-field="gold">Gullkorn</th>
-        <th data-field="image">Bilde</th>
-      </tr>
-      </thead>
-      <tbody>
-      {% for submission in submissions %}
-        <tr>
-          <td><p>{{ submission.author.profile }}</p> </td>
-          <td><p>{{ submission.date|date:"j. F" }}</p> </td>
-          <td><p>{{ submission.content }}</p> <td>
-          <td>
-            {% if submission.image %}
-              <img  class="responsive-img materialboxed" src="{{ submission.image.url }}">
-            {% endif %}
-          </td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
-  </div>
-  </div>
+    <div class="card">
+      <div class="card-content">
+        <table class="responsive-table bordered">
+          <thead>
+          <tr>
+            <th data-field="who">Innsender</th>
+            <th data-field="date">Dato</th>
+            <th data-field="gold">Gullkorn</th>
+            <th data-field="image">Bilde</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for submission in submissions %}
+            <tr>
+              <td><p>{{ submission.author.profile }}</p></td>
+              <td><p>{{ submission.date|date:"j. F" }}</p></td>
+              <td><p>{{ submission.content }}</p>
+              <td>
+              <td>
+                {% if submission.image %}
+                  <img class="responsive-img materialboxed" src="{{ submission.image.url }}">
+                {% endif %}
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
   </div>
 {% endblock content %}
