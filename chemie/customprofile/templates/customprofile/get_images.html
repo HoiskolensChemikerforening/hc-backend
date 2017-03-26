@@ -5,150 +5,150 @@
 {% load staticfiles %}
 
 {% block nav_header %}
-Klassekatalog
+  Klassekatalog
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Oversikt
+  Oversikt
 {% endblock nav_sub_header %}
 
 {% block extra_css %}
-    <link href="{% static "css/detailview.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/detailview.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 {% endblock %}
 
 {% block content %}
-{% if perms.customprofile %}
-<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <a class="btn-floating btn-large red">
+  {% if perms.customprofile %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
         <i class="large material-icons">menu</i>
-    </a>
-    <ul>
+      </a>
+      <ul>
         <li>
-            <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i
-                class="material-icons">edit</i></a>
-            <a class="btn-floating mobile-fab-tip">Se medlemsoversikt</a>
+          <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i
+              class="material-icons">edit</i></a>
+          <a class="btn-floating mobile-fab-tip">Se medlemsoversikt</a>
         </li>
-    </ul>
-</div>
-{% endif %}
-
-<div class="row">
-    <div class="klassetrinn">
-        <div class="col s6 m6 l4">
-            <a class='dropdown-button light-blue lighten-1 btn-large' href='#' data-activates='dropdown1'
-               role="navigation">Klassetrinn</a>
-            <ul id='dropdown1' class='dropdown-content'>
-                {% for year_number, year_text in grades %}
-                <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
-                {% endfor %}
-            </ul>
-        </div>
-        <div class="col s6 m6 l8">
-            <nav>
-                <div class="nav-wrapper">
-                    <form method='post' class="newPost">{% csrf_token %}
-                        <div class="input-field light-blue lighten-1">
-                            <input id="{{ search_form.search_field.id_for_label }}"
-                                   type="search" required name="{{ search_form.search_field.html_name }}"
-                                   value="{{ search_form.search_field.value|default:"" }}">
-                            <label for="{{ search_form.search_field.id_for_label }}"><i
-                                    class="material-icons">search</i></label>
-                            <i class="material-icons">close</i>
-                        </div>
-                    </form>
-                </div>
-            </nav>
-        </div>
+      </ul>
     </div>
-</div>
+  {% endif %}
 
-<!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
-<div class="row">
+  <div class="row">
+    <div class="klassetrinn">
+      <div class="col s6 m6 l4">
+        <a class='dropdown-button btn-large' href='#' data-activates='dropdown1'
+           role="navigation">Klassetrinn</a>
+        <ul id='dropdown1' class='dropdown-content'>
+          {% for year_number, year_text in grades %}
+            <li><a href="/klassekatalog/{{ year_number }}">{{ year_text }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col s6 m6 l8">
+        <nav>
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <div class="input-field">
+                <input id="{{ search_form.search_field.id_for_label }}"
+                       type="search" required name="{{ search_form.search_field.html_name }}"
+                       value="{{ search_form.search_field.value|default:"" }}">
+                <label for="{{ search_form.search_field.id_for_label }}"><i
+                    class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
+  <div class="row">
     {% for profile in profiles %}
-    <div class="col s10 m4">
+      <div class="col s10 m4">
         <!-- When card is pressed, a detail view pops up. -->
         <div class="card hoverable modal-trigger" href="#modal-{{ profile.pk }}">
-            <!-- Showing the pictures. -->
-            <div class="card-image">
-                {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
-                <img src="{{ primary.url }}"
-                {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
-                data-alt-src="{{ secondary.url }}"
-                {% endthumbnail %}>
-                {% empty %}
-                <img src="{% static "images/blank_avatar.png" %}">
-                {% endthumbnail %}
-            </div>
+          <!-- Showing the pictures. -->
+          <div class="card-image">
+            {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
+              <img src="{{ primary.url }}"
+                  {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
+                   data-alt-src="{{ secondary.url }}"
+                  {% endthumbnail %}>
+            {% empty %}
+              <img src="{% static "images/blank_avatar.png" %}">
+            {% endthumbnail %}
+          </div>
 
-            <!-- The box under each picture -->
-            <div class="card-content">
-                <a class="card-title">{{ profile }}</a>
-                {% if profile.relationship_status == 1 %}
-                <i class="material-icons icon-green">favorite</i>
-                {% elif profile.relationship_status == 2 %}
-                <i class="material-icons icon-red">favorite</i>
-                {% else %}
-                <i class="material-icons icon-gray">favorite</i>
-                {% endif %}
-                </a>
-            </div>
+          <!-- The box under each picture -->
+          <div class="card-content">
+            <a class="card-title">{{ profile }}</a>
+            {% if profile.relationship_status == 1 %}
+              <i class="material-icons icon-green">favorite</i>
+            {% elif profile.relationship_status == 2 %}
+              <i class="material-icons icon-red">favorite</i>
+            {% else %}
+              <i class="material-icons icon-gray">favorite</i>
+            {% endif %}
+            </a>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- Detail view in yearbook -->
-    <div id="modal-{{ profile.pk }}" class="modal modal-fixed-footer">
+      <!-- Detail view in yearbook -->
+      <div id="modal-{{ profile.pk }}" class="modal modal-fixed-footer">
 
         <!-- All content in popup goes here -->
         <div class="modal-content">
 
-            <!-- Picture in detail view -->
-            <div class="center-align">
-                <div class="col s12 m4 l4">
-                    {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
-                     <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
-                          href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
-                    {% endthumbnail %}
-                </div>
+          <!-- Picture in detail view -->
+          <div class="center-align">
+            <div class="col s12 m4 l4">
+              {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
+                <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
+                     href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
+              {% endthumbnail %}
             </div>
+          </div>
 
-            <!-- All text in view-->
-            <div class="col s12 m8 l8">
-                <div class="center-align">
-                    <h4 class="grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
-                    <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
-                    <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
-                    <p>Mobilnummer: {{ profile.phone_number }}</p>
-                    <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
-                </div>
+          <!-- All text in view-->
+          <div class="col s12 m8 l8">
+            <div class="center-align">
+              <h4 class="grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
+              <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
+              <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
+              <p>Mobilnummer: {{ profile.phone_number }}</p>
+              <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
             </div>
+          </div>
         </div>
 
         <!-- Footer on popup. Contains closing button. -->
         <div class="modal-footer">
-        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Lukk</a>
-        <a href="mailto:{{ profile.user.email }}"
-           class="modal-action modal-close waves-effect waves-green btn-flat">Send e-post</a>
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Lukk</a>
+          <a href="mailto:{{ profile.user.email }}"
+             class="modal-action modal-close waves-effect waves-green btn-flat">Send e-post</a>
         </div>
-    </div>
+      </div>
 
     {% endfor %}
-</div>
+  </div>
 
 {% endblock content %}
 
 {% block footer_script %}
-<script>
-    var sourceSwap = function () {
-        var $this = $(this);
-        var newSource = $this.data('alt-src');
-        $this.data('alt-src', $this.attr('src'));
-        $this.attr('src', newSource);
-    };
+  <script>
+      var sourceSwap = function () {
+          var $this = $(this);
+          var newSource = $this.data('alt-src');
+          $this.data('alt-src', $this.attr('src'));
+          $this.attr('src', newSource);
+      };
 
-    $(function () {
-        $('img[data-alt-src]').each(function () {
-            new Image().src = $(this).data('alt-src');
-        }).hover(sourceSwap, sourceSwap);
-    });
-</script>
+      $(function () {
+          $('img[data-alt-src]').each(function () {
+              new Image().src = $(this).data('alt-src');
+          }).hover(sourceSwap, sourceSwap);
+      });
+  </script>
 {% endblock %}

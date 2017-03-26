@@ -1,23 +1,23 @@
 {% extends "chemie/base.html" %}
 {% load staticfiles %}
 {% block nav_header %}
-    Auda!
+  Auda!
 {% endblock nav_header %}
 {% block nav_sub_header %}
-    Alvorlig feil ved lasting av side
+  Alvorlig feil ved lasting av side
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="row">
-        <div class="col s12 m12 l10">
-            <h3 class="heading">Oisann!</h3>
-            <p class="flow-text">
-                En svært uventet feil har oppstått. Webkom er kontaktet og vil undersøke hendelsen.
-                <b><a href="{% url "frontpage:kontakt" %}">Kontakt oss</a></b> for næremere detaljer.
-            </p>
-            <div class="row">
-                <div class="col l4 m6 s12"><br><img class="responsive-img" src="{{ bilde.picture.url }}"></div>
-            </div>
-        </div>
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <h3 class="heading">Oisann!</h3>
+      <p class="flow-text">
+        En svært uventet feil har oppstått. Webkom er kontaktet og vil undersøke hendelsen.
+        <b><a href="{% url "frontpage:kontakt" %}">Kontakt oss</a></b> for næremere detaljer.
+      </p>
+      <div class="row">
+        <div class="col l4 m6 s12"><br><img class="responsive-img" src="{{ bilde.picture.url }}"></div>
+      </div>
     </div>
+  </div>
 {% endblock content %}

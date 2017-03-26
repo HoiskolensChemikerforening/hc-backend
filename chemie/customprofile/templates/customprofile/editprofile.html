@@ -3,70 +3,72 @@
 {% load staticfiles %}
 {% load thumbnail %}
 {% block nav_header %}
-Profil
+  Profil
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Endre
+  Endre
 {% endblock nav_sub_header %}
 {% block content %}
 
-<div class="row">
+  <div class="row">
     <div class="col m4 l3">{% thumbnail request.user.profile.image_primary "412x551" crop="center" as im %}
-        <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138" alt="">
-        {% endthumbnail %}
+      <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138"
+           alt="">
+    {% endthumbnail %}
     </div>
     <div class="col m4 l3">{% thumbnail request.user.profile.image_secondary "412x551" crop="center" as im %}
-        <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138" alt="">
-        {% endthumbnail %}
+      <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138"
+           alt="">
+    {% endthumbnail %}
     </div>
     <div class="col m4 l6">
-        <p class="flow-text">Rediger profilen din her. <a href="{% url "frontpage:kontakt" %}" >Kontakt</a> oss ved
-            manglende
-            profilbilde eller feil klassetrinn.
-        </p>
+      <p class="flow-text">Rediger profilen din her. <a href="{% url "frontpage:kontakt" %}">Kontakt</a> oss ved
+        manglende
+        profilbilde eller feil klassetrinn.
+      </p>
     </div>
-</div>
-<div class="row">
+  </div>
+  <div class="row">
     <div class="col s12 m12">
-        <div class="card">
-            <form method='POST'>{% csrf_token %}
-                <div class="card-content">
-                    {% form form=user_form %}
-                    {% part user_form.first_name prefix %}
-                    <i class="material-icons prefix">account_circle</i>{% endpart %}
-                    {% part user_form.last_name prefix %}
-                    <i class="material-icons prefix">account_circle</i>{% endpart %}
-                    {% part user_form.email prefix %}<i class="material-icons prefix">contact_mail</i>
-                    {% endpart %}
-                    {% endform %}
+      <div class="card">
+        <form method='POST'>{% csrf_token %}
+          <div class="card-content">
+            {% form form=user_form %}
+              {% part user_form.first_name prefix %}
+                <i class="material-icons prefix">account_circle</i>{% endpart %}
+              {% part user_form.last_name prefix %}
+                <i class="material-icons prefix">account_circle</i>{% endpart %}
+              {% part user_form.email prefix %}<i class="material-icons prefix">contact_mail</i>
+              {% endpart %}
+            {% endform %}
 
 
-                    {% form form=profile_form %}
-                    {% part profile_form.address prefix %}<i class="material-icons prefix">home</i>
-                    {% endpart %}
-                    {% part profile_form.access_card prefix %}
-                    <i class="material-icons prefix">credit_card</i>{% endpart %}
-                    {% part profile_form.phone_number prefix %}
-                    <i class="material-icons prefix">contact_phone</i>{% endpart %}
-                    {% part profile_form.allergies prefix %}
-                    <i class="material-icons prefix">error_outline</i>{% endpart %}
-                    {% endform %}
-                    {% form form=change_password_form %}
-                    {% part form.new_password1 help_text %}
-                    <small class="help-block">{{ form.new_password1.help_text|safe }}</small>
-                    {% endpart %}
-                    {% endform %}
-                </div>
-                <div class="card-action">
-                    <div class="right-align">
-                        <button class="btn btn-primary pull-right" type="submit">Lagre endringer</button>
-                    </div>
-                </div>
-            </form>
-        </div>
+            {% form form=profile_form %}
+              {% part profile_form.address prefix %}<i class="material-icons prefix">home</i>
+              {% endpart %}
+              {% part profile_form.access_card prefix %}
+                <i class="material-icons prefix">credit_card</i>{% endpart %}
+              {% part profile_form.phone_number prefix %}
+                <i class="material-icons prefix">contact_phone</i>{% endpart %}
+              {% part profile_form.allergies prefix %}
+                <i class="material-icons prefix">error_outline</i>{% endpart %}
+            {% endform %}
+            {% form form=change_password_form %}
+              {% part form.new_password1 help_text %}
+                <small class="help-block">{{ form.new_password1.help_text|safe }}</small>
+              {% endpart %}
+            {% endform %}
+          </div>
+          <div class="card-action">
+            <div class="right-align">
+              <button class="btn btn-primary pull-right" type="submit">Lagre endringer</button>
+            </div>
+          </div>
+        </form>
+      </div>
     </div>
-</div>
-</div>
+  </div>
+  </div>
 
 {% endblock content %}

@@ -1,3 +1,151 @@
+/*  COLOR OPTIONS */
+:root {
+  --primary-color:      #0B3954;
+  --secondary-color:    #6288A5;
+  --sec-txt-color:      #6288A5;
+  --active-color:       #3C91E6;
+  --sidetext-color:     #1F2D3D;
+  --side-bg-color:      #FEFEFD;
+}
+
+.btn:hover, .btn-large:hover {
+    background-color: var(--active-color);
+}
+
+nav, footer.page-footer {
+    color: #fff;
+    background-color: var(--primary-color);
+}
+
+.heading {
+    color: var(--primary-color);
+    font-family: "Roboto";
+    font-weight: 200;
+    margin-top: 0.0rem;
+}
+
+div > i {
+    color: var(--secondary-color);
+}
+
+
+i .micon {
+    color: var(--sidetext-color);
+}
+
+.micon {
+    color: var(--sidetext-color) !important;
+}
+
+ul.side-nav.fixed a {
+    font-size: 14px;
+    line-height: 44px;
+    height: 44px;
+    color: var(--sidetext-color);
+    font-weight: 400;
+    padding: 0 16px;
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
+    color: var(--sec-txt-color);
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+    color: var(--sec-txt-color);
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating):hover {
+    color: var(--active-color);
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
+    color: var(--sec-txt-color);
+}
+
+.btn {
+    background-color: var(--secondary-color);
+}
+
+.btn, .btn-large {
+    background-color: var(--secondary-color);
+}
+
+.btn-floating {
+    background-color: var(--secondary-color); !important;
+}
+
+.prefix.active {
+    color: var(--secondary-color); !important;
+}
+
+.dropdown-content li > a, .dropdown-content li > span {
+    color: var(--sidetext-color);
+}
+
+
+div.collapsible-header {
+    color: var(--sidetext-color);
+}
+
+#slide-out {
+    background-color: var(--side-bg-color);
+}
+
+input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid var(--active-color);
+    box-shadow: 0 1px 0 0 var(--active-color);
+}
+
+input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label, input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label, input[type=datetime]:focus:not([readonly]) + label, input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label, input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+    color: var(--active-color);
+}
+
+.tabs .tab a:hover {
+    color: var(--active-color);
+}
+
+.input-field .prefix.active {
+    color: var(--active-color);
+}
+
+.tabs .tab a {
+    color: var(--primary-color);
+}
+
+.tabs .indicator {
+    background-color: var(--active-color);
+}
+
+.success-message {
+    background-color: #7CE267 !important;
+}
+
+.info-message {
+    background-color: #00e5ff !important;
+}
+
+.warning-message {
+    background-color: #F8DC4D !important;
+}
+
+.error-message {
+    background-color: #f44336 !important;
+}
+
+i.icon-green {
+    color: green;
+}
+
+i.icon-red {
+    color: red;
+}
+
+i.icon-gray {
+    color: gray;
+}
+
+/* END COLOR OPTIONS */
+
 html, body {
     height: 100%;
 }
@@ -72,13 +220,6 @@ ul.side-nav.fixed li {
     line-height: 44px;
 }
 
-ul.side-nav.fixed a {
-    font-size: 14px;
-    line-height: 44px;
-    height: 44px;
-    font-weight: 400;
-}
-
 #heading {
     font-size: 3.56rem;
     font-family: "Roboto";
@@ -106,11 +247,6 @@ section#top-title {
     padding-top: .1rem;
 }
 
-nav, footer.page-footer {
-    color: #fff;
-    background-color: #d81b60;
-}
-
 .detail-title {
     font-weight: 700;
     display: block;
@@ -118,41 +254,6 @@ nav, footer.page-footer {
 
 .icon-text {
     vertical-align: middle
-}
-
-.heading {
-    color: #d81b60;
-    font-family: "Roboto";
-    font-weight: 200;
-    margin-top: 0.0rem;
-}
-
-.success-message {
-    background-color: #7CE267 !important;
-}
-
-.info-message {
-    background-color: #00e5ff !important;
-}
-
-.warning-message {
-    background-color: #F8DC4D !important;
-}
-
-.error-message {
-    background-color: #f44336 !important;
-}
-
-i.icon-green {
-    color: green;
-}
-
-i.icon-red {
-    color: red;
-}
-
-i.icon-gray {
-    color: gray;
 }
 
 img.profile-circle {
@@ -274,43 +375,14 @@ p {
     width: 100%;
 }
 
-i {
-    color: #d81b60;
-}
-
-i .micon {
-    color: #263238;
-}
-
-.micon {
-    color: #263238 !important;
-}
 
 
-/* Top nav background image */
+
+/* Top nav background image*/
 nav, footer {
     background-image: url('/static/images/blur.png') !important;
 }
 
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
-    color: #0486A5;
-}
-
-.card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
-    color: #83c6d3;
-}
-
-.btn {
-    background-color: #0486A5;
-}
-
-.btn-floating {
-    background-color: #0486A5 !important;
-}
-
-.prefix.active {
-    color: #0486A5 !important;
-}
 
 .flow-text {
     overflow-wrap: break-word;

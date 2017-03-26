@@ -1,5 +1,7 @@
-from django.shortcuts import render
 from random import choice
+
+from django.shortcuts import render
+
 from .models import pictures_for_404
 
 

@@ -2,17 +2,17 @@
 
 
 {% block content %}
-    <div class="row">
+  <div class="row">
     <p class="flow-text">Registering plz</p>
     <form method="POST" class="viewform">{% csrf_token %}
 
-        {% form %}
-            {% part form.username prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
-            {% part form.email prefix %}<i class="mdi-communication-email prefix"></i>{% endpart %}
-            {% part form.password prefix %}<i class="mdi-action-lock-open prefix"></i>{% endpart %}
-        {% endform %}
+      {% form %}
+        {% part form.username prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
+        {% part form.email prefix %}<i class="mdi-communication-email prefix"></i>{% endpart %}
+        {% part form.password prefix %}<i class="mdi-action-lock-open prefix"></i>{% endpart %}
+      {% endform %}
 
-        <button type="submit" name="_submit" class="btn btn-primary btn-lg">Submit</button>
+      <button type="submit" name="_submit" class="btn btn-primary btn-lg">Submit</button>
     </form>
-    </div>
-{%endblock content%}
+  </div>
+{% endblock content %}
