@@ -10,6 +10,7 @@ from post_office import mail
 from events.models import Event
 from news.models import Article
 from .forms import ContactForm, PostFundsForm
+from django.contrib.sites.shortcuts import get_current_site
 
 
 def index(request):
@@ -66,11 +67,12 @@ def request_funds(request):
             attachments = {filename: attachment}
         _, mail_to = zip(*settings.ADMINS)
         mail.send(
-            mail_to,                # List of email addresses also accepted
+            mail_to,
             'Webkom <webkom@hc.ntnu.no>',
             template='funds_request_form',
             context={
-                'form_data': instance
+                'form_data': instance,
+                'root_url': get_current_site(None),
             },
             attachments=attachments
         )

@@ -2,17 +2,14 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from django.http import Http404, HttpResponseRedirect
+from django.core.urlresolvers import reverse
+from django.http import Http404
+from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 
-from .email import send_my_lockers_mail
+from .email import send_my_lockers_mail, send_activation_email
 from .forms import RegisterExternalLockerUserForm, MyLockersForm, ConfirmOwnershipForm
 from .models import Locker, LockerUser, Ownership, LockerToken
-from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
-from django.conf import settings
-
-from post_office import mail
 
 
 def view_lockers(request, page=1):
@@ -40,11 +37,14 @@ def my_lockers(request):
         email = form.data.get('email')
         if form.is_valid():
             try:
-                locker_user = LockerUser.objects.get(username=email)
+                locker_user = LockerUser.objects.get(email=email)
                 lockers = locker_user.fetch_lockers()
+                if not len(lockers):
+                    raise ObjectDoesNotExist
+
                 send_my_lockers_mail(email, lockers, locker_user)
                 messages.add_message(request, messages.SUCCESS, 'Eposten ble sendt!', extra_tags="Dine skap")
-                return HttpResponseRedirect('/')
+                return redirect(reverse('frontpage:home'))
             except ObjectDoesNotExist:
                 messages.add_message(request, messages.ERROR, 'Ingen bokskap ble funnet på denne eposten.',
                                      extra_tags="Ikke funnet")
@@ -67,7 +67,7 @@ def register_locker(request, number):
             # Check if user already exists
             user = form_data.save(commit=False)
             try:
-                user = LockerUser.objects.get(username=user.username)
+                user = LockerUser.objects.get(email=user.email)
             except ObjectDoesNotExist:
                 user.save()
 
@@ -79,15 +79,8 @@ def register_locker(request, number):
             new_ownership.save()
 
             # Create confirmation link object
-            confirmation_object = new_ownership.create_confirmation()
-
-            mail.send(
-                user.username,
-                settings.DEFAULT_FROM_EMAIL,
-                template='lockers_activate',
-                context={'user': user, 'email': user.username, 'ownership': new_ownership, "request": request,
-                         "confirmation": confirmation_object},
-            )
+            token = new_ownership.create_confirmation()
+            send_activation_email(user, token)
             messages.add_message(request, messages.SUCCESS,
                                  'Bokskapet er nesten reservert! '
                                  'En epost har blitt sendt til deg med videre instrukser for å bekrefte epostaddressen din.',

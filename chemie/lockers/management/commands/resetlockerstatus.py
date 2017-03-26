@@ -1,8 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from lockers.models import Ownership
-from lockers.email import queue_activation_mail
-from django.conf import settings
-from post_office import mail
+from lockers.email import send_activation_email
 
 
 class Command(BaseCommand):
@@ -42,13 +40,7 @@ def reset_locker_ownerships():
     for ownership in ownerships_to_reset:
         ownership.is_active = False
         ownership.save()
-        confirmation_object = ownership.create_confirmation()
+        token = ownership.create_confirmation()
 
         user = ownership.user
-        mail.send(
-            user.username,
-            settings.DEFAULT_FROM_EMAIL,
-            template='lockers_reactivate',
-            context={'user': user, 'email': user.username, 'ownership': ownership,
-                     "confirmation": confirmation_object},
-        )
+        send_activation_email(user, token, reactivation=True)
