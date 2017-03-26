@@ -1,5 +1,5 @@
 <mj-head>
- <mj-font name="Open Sans" href="https://chemie.no/font/proximanova.css" />
+ <mj-font name="Open Sans" href="https://{{ root_url }}/font/proximanova.css" />
  <mj-attributes>
    <mj-class name="primaryColor" background-color="#ba1978"></mj-class>
    <mj-class name="secondaryColor" background-color="#eeeeee"></mj-class>
@@ -39,11 +39,11 @@
 
   <mj-section mj-class="tertiaryColor" padding-top="40px" padding-bottom="40px">
     <mj-column width="100%">
-      <mj-image src="https://chemie.no/email/logorgb.png" padding-top="0" width="120%" href="https://chemie.no"></mj-image>
+      <mj-image src="https://{{ root_url }}/email/logorgb.png" padding-top="0" width="120%" href="https://{{ root_url }}"></mj-image>
     </mj-column>
     <mj-column width="100%">
   <mj-text align="center" padding-left="0px" padding-right="0px" font-weight="300" font-size="33px" line-height="33px" padding-bottom="0px">
-    <a style="text-decoration:none !important; color:#000000;" href="https://chemie.no">Hoiskolens Chemikerforening</a>
+    <a style="text-decoration:none !important; color:#000000;" href="https://{{ root_url }}">Hoiskolens Chemikerforening</a>
     </mj-text>
   </mj-column>
-</mj-section>   
+</mj-section>
