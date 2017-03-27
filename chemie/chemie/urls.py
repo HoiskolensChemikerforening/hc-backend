@@ -39,6 +39,7 @@ urlpatterns = [
     url(r'^wiki/', get_wiki_pattern()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
+    url(r'^carousel/', include('picturecarousel.urls', namespace='carousel'))
 ]
 
 urlpatterns += [

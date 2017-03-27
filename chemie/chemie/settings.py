@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sites',
     'chemie',
     'elections',
+    'picturecarousel',
     'home',
     'news',
     'shitbox',

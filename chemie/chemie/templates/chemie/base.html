@@ -124,6 +124,7 @@
                     <li><a href="/klassekatalog/" class="waves-effect">Klassekatalog</a></li>
                     <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
                     <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                    <li><a href="/carousel/" class="waves-effect waves-teal">Bildekarusel</a></li>
                   </ul>
                 </div>
               </li>
@@ -228,12 +229,11 @@
   </div>
 </footer>
 
-
-
 {% block footer_js_files %}
-{% endblock %}
+{% endblock footer_js_files %}
 
 {% block footer_script %}
+
 {% endblock footer_script %}
 
 <script>
