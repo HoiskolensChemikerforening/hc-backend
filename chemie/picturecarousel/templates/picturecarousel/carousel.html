@@ -35,9 +35,8 @@
 <div class="slider">
    <ul class="slides">
        {%for picture in pictures%}
-       {%if picture.approved%}
      <li>
-         {% thumbnail picture.picture "840x400" crop="center" as pic %}
+         {% thumbnail picture.file "840x400" crop="center" as pic %}
        <img src="{{pic.url}}"> <!-- random image -->
        <div class="caption center-align">
          <h3>{{picture.description}}</h3>
@@ -45,12 +44,14 @@
 
        </div>
      </li>
-     {%endif%}
      {%endfor%}
    </ul>
  </div>
- <script>
-$('.slider').slider();
- </script>
+<script>
+    $(document).ready(function(){
+      $('.slider').slider();
+    });
+
+</script>
 
 {% endblock content %}

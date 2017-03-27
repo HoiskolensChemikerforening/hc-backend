@@ -3,13 +3,14 @@ from django.contrib.auth.models import User
 from .models import Picture
 import material as M
 
+
 class Pictureform(forms.ModelForm):
-    layout = M.Layout(M.Row('picture'),
+    layout = M.Layout(M.Row('file'),
                       M.Row('description'))
 
     class Meta:
         model = Picture
         fields = [
-            "picture",
+            "file",
             "description"
         ]
