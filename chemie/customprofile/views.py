@@ -64,7 +64,7 @@ def edit_profile(request):
                 profile_form.save()
 
         if not (user_form.errors or profile_form.errors or new_password_form.errors):
-            messages.add_message(request, messages.SUCCESS, 'Bra jobba! Dine endringer er lagret!', extra_tags='OBS! Sarkastisk melding')
+            messages.add_message(request, messages.SUCCESS, 'Dine endringer har blitt lagret!')
 
     context = {
         "user_form": user_form,
