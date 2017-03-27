@@ -45,8 +45,7 @@ class BaseEvent(models.Model):
     location = models.TextField(verbose_name="Sted")
 
     # Describes the event
-    description = RichTextField(verbose_name='Beskrivelse', config_name='events')
-
+    description = models.TextField(verbose_name='Beskrivelse')
 
     # An image from the event or describing the event
     image = ImageField(upload_to='events', verbose_name="Bilde")
@@ -96,7 +95,6 @@ class Event(BaseEvent):
     companion = models.BooleanField(default=False, verbose_name="Følge")
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    #mail_notification = models.BooleanField(default=False, verbose_name="E-postbekreftelse")
 
     attendees = models.ManyToManyField(User, through='EventRegistration')
 
@@ -145,9 +143,6 @@ class Event(BaseEvent):
 
     def registration_has_opened(self):
         return timezone.now() >= self.register_startdate
-
-#class CompanyEvent(BaseEvent):
-#    pass
 
 
 class RegistrationManager(models.Manager):

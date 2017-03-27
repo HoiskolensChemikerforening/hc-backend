@@ -24,12 +24,12 @@ class FundsApplication(models.Model):
     description = models.TextField(verbose_name='Beskrivelse',)
 
     # To which bank account the money would be sent to
-    bank_account_id = models.CharField(max_length=11, verbose_name="Kontonummer",
+    bank_account_id = models.BigIntegerField(verbose_name="Kontonummer",
                                        validators=[RegexValidator(
                                            regex='^\d{11}$', message='Kun tall, 11 siffer', code='nomatch')])
 
     # Name of bank account holder
-    bank_account_holder = models.CharField(max_length=2000, verbose_name='Bankkonto innehaver')
+    bank_account_holder = models.CharField(max_length=100, verbose_name='Bankkonto innehaver')
 
     # Price range
     price_range = models.IntegerField(choices=PRICE_RANGE_CHOICES, default=1, verbose_name='Prisklasse')

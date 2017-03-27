@@ -32,11 +32,11 @@
     </div>
 {% endif %}
 
-<div class="slider">
+<div class="slider fullscreen">
    <ul class="slides">
        {%for picture in pictures%}
      <li>
-         {% thumbnail picture.file "840x400" crop="center" as pic %}
+         {% thumbnail picture.file "1920" padding=True as pic %}
        <img src="{{pic.url}}"> <!-- random image -->
        <div class="caption center-align">
          <h3>{{picture.description}}</h3>
@@ -50,8 +50,8 @@
 <script>
     $(document).ready(function(){
       $('.slider').slider();
+      $('.side-nav').hide();
     });
-
 </script>
 
 {% endblock content %}
