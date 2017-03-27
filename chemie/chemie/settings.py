@@ -29,7 +29,10 @@ else:
     DEBUG = True
     ALLOWED_HOSTS = ['*']
 
-ADMINS = [('Carl Johan Hambro', 'carljohan.hambro@gmail.com')]
+ADMINS = [('Webkom', 'webkom@hc.ntnu.no'),
+          ('Carl Johan Hambro', 'carljohan.hambro@gmail.com')
+          ]
+CONTACTS = [('Styret', 'styret@hc.ntnu.no')]
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
@@ -235,6 +238,7 @@ EMAIL_PORT = os.environ.get('EMAIL_PORT') or 587
 EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER') or ''
 EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD') or None
 DEFAULT_FROM_EMAIL = '<webkom@hc.ntnu.no> Webkom'
+SERVER_EMAIL = 'webkom@hc.ntnu.no'
 
 THUMBNAIL_DEBUG = True
 

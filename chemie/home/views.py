@@ -30,7 +30,7 @@ def contact(request):
         messages.add_message(request, messages.SUCCESS, 'Meldingen ble motatt. Takk for at du tar kontakt!',
                              extra_tags="Mottatt!")
 
-        _, mail_to = zip(*settings.ADMINS)
+        _, mail_to = zip(*settings.CONTACTS)
 
         mail.send(
             mail_to,
@@ -65,7 +65,7 @@ def request_funds(request):
             filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
             attachment = receipt.path
             attachments = {filename: attachment}
-        _, mail_to = zip(*settings.ADMINS)
+        _, mail_to = zip(*settings.CONTACTS)
         mail.send(
             mail_to,
             'Webkom <webkom@hc.ntnu.no>',
