@@ -1,16 +1,14 @@
 from django import forms
 from django.contrib.auth.models import User
-from .models import Picture
+from .models import Submission
 import material as M
 
 
 class Pictureform(forms.ModelForm):
-    layout = M.Layout(M.Row('file'),
-                      M.Row('description'))
+    layout = M.Layout(M.Row('file'))
 
     class Meta:
-        model = Picture
+        model = Submission
         fields = [
-            "file",
-            "description"
+            "image",
         ]

@@ -5,7 +5,7 @@ from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from .forms import Pictureform
-from .models import Picture
+from .models import Submission
 
 
 @login_required
@@ -27,7 +27,7 @@ def post_pic(request):
 
 
 def view_carousel(request):
-    pictures = Picture.objects.filter(approved=True)
+    pictures = Submission.objects.filter(approved=True)
     context = {
     "pictures": pictures
     }
@@ -35,7 +35,7 @@ def view_carousel(request):
 
 
 def view_pic_approve(request):
-    pictures = Picture.objects.all()
+    pictures = Submission.objects.all()
     context = {
     "pictures": pictures
     }
@@ -44,7 +44,7 @@ def view_pic_approve(request):
 
 def approve(request, picture_id):
     if request.method == 'POST':
-        pic = get_object_or_404(Picture, id=picture_id)
+        pic = get_object_or_404(Submission, id=picture_id)
         if 'approve' in request.POST:
             pic.approve()
             pic.save()

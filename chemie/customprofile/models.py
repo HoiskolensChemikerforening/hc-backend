@@ -82,7 +82,6 @@ class Membership(models.Model):
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False)
     endorser = models.ForeignKey(User)
 
-
     def is_active(self):
         return self.start_date < timezone.now() < self.end_date
 

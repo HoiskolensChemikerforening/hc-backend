@@ -1,12 +1,10 @@
-from django.db import models
 from django.contrib.auth.models import User
+from django.db import models
 from sorl.thumbnail import ImageField
-from django.core.urlresolvers import reverse
 
 
-class Picture(models.Model):
-    file = ImageField(upload_to='kontorbilder')
-    description = models.TextField(max_length=2000, verbose_name='Description')
+class Submission(models.Model):
+    image = ImageField(upload_to='kontorbilder')
     approved = models.BooleanField(default=False, verbose_name="Approved")
     author = models.ForeignKey(User, verbose_name='Author')
     date = models.DateTimeField(auto_now_add=True)

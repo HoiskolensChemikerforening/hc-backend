@@ -80,7 +80,6 @@ class Ownership(models.Model):
     edited = models.DateField(auto_now=True, auto_now_add=False)
     is_active = models.BooleanField(default=False)
     is_confirmed = models.BooleanField(default=False)
-    is_approved = models.BooleanField(default=False)
 
     objects = OwnershipManager()
 
