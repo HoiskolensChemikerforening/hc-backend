@@ -1,0 +1,56 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% block nav_header %}
+    Bilder
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Venter på godkjenning
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+    <div class="row">
+        {% for picture in pictures %}
+            {%if picture.approved == 0%}
+                <div class="col s6 m6 l4">
+                    <div class="card medium">
+                        <div class="card-image">
+                            <a>
+                                {% thumbnail picture.picture "400x300" crop="center" as im %}
+                                    <img src="{{ im.url }}">
+                                    {% endthumbnail %}
+                                </a>
+                                <span class="card-title card-event-title">
+                                    <h4>{{ picture.description }}</h4>
+                                </span>
+                            </div>
+                            <div class="card-content">
+                                <p>
+                                    {{ picture.date }}
+                                    Postet av {{ picture.author }}
+                                </p>
+                            </div>
+                            <div class="card-action">
+                                <form action="/carousel/approve/" method="POST"/>{% csrf_token %}
+                                  <button class="waves-effect waves-light btn btn-primary" name="approve" type="submit" value = "{{picture.id}}">
+                                    Godkjenn</button>
+                                </form>
+                                <form method='POST'>{% csrf_token %}
+                                  <button class="waves-effect waves-light btn btn-primary" name="delete" type="submit">
+                                    Slett</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                {%endif%}
+        {% endfor %}
+    </div>
+
+{% endblock %}
+
+<form action="/your-name/" method="post">
+    <label for="your_name">Your name: </label>
+    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
+    <input type="submit" value="OK">
+</form>

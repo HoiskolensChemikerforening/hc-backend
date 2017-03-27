@@ -1,0 +1,29 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+    Bildekarusell
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Send inn bilder
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div class="row">
+        <div class="col s12 m12 l8">
+            <p class="flow-text">
+                Her kan du sende inn bilder til bildekarusellen på kontoret!
+            </p>
+
+
+            <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
+                {% form form=form %}
+                {% endform %}
+                <input class="btn" type='submit' value='Send inn bilder!'/>
+            </form>
+        </div>
+    </div>
+
+
+{% endblock content %}
