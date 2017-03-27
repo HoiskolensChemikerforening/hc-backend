@@ -21,7 +21,7 @@
   <mj-section mj-class="primaryColor" padding-top="20">
       <mj-group>
       <mj-column width="100%">
-        <mj-image width="30px" padding="0" src="https://{{ root_url }}/email/date.png" padding-top="10px"/>
+        <mj-image width="30px" padding="0" src="https://{{ root_url }}{% static 'images/email/date.png' %}" padding-top="10px"/>
         <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
           Tid
         </mj-text>
@@ -33,7 +33,7 @@
 
       <mj-group>
       <mj-column >
-        <mj-image width="30px" padding="0" src="https://{{ root_url }}/email/place.png" padding-top="10px" />
+        <mj-image width="30px" padding="0" src="https://{{ root_url }}{% static 'images/email/place.png' %}" padding-top="10px" />
         <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
           Sted
           </mj-text>
@@ -46,7 +46,7 @@
 
        <mj-group>
       <mj-column>
-        <mj-image width="30px" padding="0" src="https://{{ root_url }}/email/deadline.png" padding-top="10px"/>
+        <mj-image width="30px" padding="0" src="https://{{ root_url }}{% static 'images/email/deadline.png' %}" padding-top="10px"/>
         <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
           Avmeldingsfrist
         </mj-text>
