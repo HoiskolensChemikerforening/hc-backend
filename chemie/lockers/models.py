@@ -84,7 +84,7 @@ class Ownership(models.Model):
     objects = OwnershipManager()
 
     def __str__(self):
-        return "Locker {} registered to {}".format(self.locker, self.user)
+        return "Locker {} registered to {}".format(self.locker.number, self.user)
 
     def create_confirmation(self):
         confirmation_object = LockerToken.objects.create(ownership=self)
