@@ -2,7 +2,8 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
-from django.shortcuts import redirect
+from django.shortcuts import redirect, get_object_or_404
+from django.http import HttpResponseRedirect
 from .forms import Pictureform
 from .models import Picture
 
@@ -17,15 +18,16 @@ def post_pic(request):
         messages.add_message(request, messages.SUCCESS,
                              'Bilde har blitt sendt inn!',
                              extra_tags='Bilde ble sendt')
-        return redirect(reverse('frontpage:home'))
+        return redirect(reverse('carousel:view'))
     context = {
         "form": form,
     }
 
     return render(request, "picturecarousel/post_pic.html", context)
 
+
 def view_carousel(request):
-    pictures = Picture.objects.all()
+    pictures = Picture.objects.filter(approved=True)
     context = {
     "pictures": pictures
     }
@@ -44,11 +46,12 @@ def approve(request, picture_id):
     if request.method == 'POST':
         pic = get_object_or_404(Picture, id=picture_id)
         if 'approve' in request.POST:
-            pic.approved == 1
-            messages.add_message(request, messages.SUCCESS, 'Bildet er godkjent!')
-            return HttpResponseRedirect()
+            pic.approve()
+            pic.save()
+            messages.add_message(request, messages.SUCCESS, 'Bildet er godkjent!', extra_tags="Suksess!")
+            return HttpResponseRedirect(reverse('carousel:approve'))
         if 'delete' in request.POST:
             pic.delete()
             messages.add_message(request, messages.SUCCESS, 'Bildet er slettet.')
-            return HttpResponseRedirect()
+            return HttpResponseRedirect(reverse('carousel:approve'))
     return render(request, 'picturecarousel/approve.html')
