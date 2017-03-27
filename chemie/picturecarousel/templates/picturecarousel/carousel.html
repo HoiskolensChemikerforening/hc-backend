@@ -36,7 +36,7 @@
    <ul class="slides">
        {%for picture in pictures%}
      <li>
-         {% thumbnail picture.file "1920" padding=True as pic %}
+         {% thumbnail picture.image "1920" padding=True as pic %}
        <img src="{{pic.url}}"> <!-- random image -->
        <div class="caption center-align">
          <h3>{{picture.description}}</h3>

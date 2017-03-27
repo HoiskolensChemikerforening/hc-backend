@@ -16,8 +16,8 @@ def post_pic(request):
         instance.author = request.user
         instance.save()
         messages.add_message(request, messages.SUCCESS,
-                             'Bilde har blitt sendt inn!',
-                             extra_tags='Bilde ble sendt')
+                             'Bildet har blitt sendt inn!',
+                             extra_tags='Bildet ble sendt')
         return redirect(reverse('carousel:view'))
     context = {
         "form": form,
