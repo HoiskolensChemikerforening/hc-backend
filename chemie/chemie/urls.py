@@ -22,7 +22,6 @@ from django_nyt.urls import get_pattern as get_nyt_pattern
 from wiki.urls import get_pattern as get_wiki_pattern
 
 urlpatterns = [
-    url(r'^valg/', include('elections.urls')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls', namespace='frontpage')),
     url(r'^sladreboks/', include('shitbox.urls', namespace='shitbox')),
