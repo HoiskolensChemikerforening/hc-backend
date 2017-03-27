@@ -36,11 +36,10 @@ LOGIN_URL = '/login/'
 
 # Application definition
 
+
 INSTALLED_APPS = [
     'django.contrib.sites',
     'chemie',
-    'elections',
-    'picturecarousel',
     'home',
     'news',
     'shitbox',
@@ -76,9 +75,9 @@ INSTALLED_APPS = [
     'smart_selects',
     'ckeditor',
     'django.contrib.flatpages',
+    'picturecarousel',
 
 ]
-
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
@@ -266,6 +265,8 @@ CKEDITOR_CONFIGS = {
             ['Maximize', 'Find', 'Replace']
         ],
         'customConfig': '/static/js/ckeditor_config.js',
+        'extraPlugins': ','.join(
+            ['specialchar']),
     },
 
     'committees': {
