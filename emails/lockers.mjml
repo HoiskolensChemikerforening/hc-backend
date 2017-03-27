@@ -1,7 +1,7 @@
 <mjml>
  <mj-include path="./header.mjml" />
 
-<mj-section padding-left="0px" padding-right="0px" background-url="https://{{ root_url }}/email/lockers.png"
+<mj-section padding-left="0px" padding-right="0px" background-url="https://{{ root_url }}{% static 'images/email/lockers.png' %}"
   padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
     <mj-column mj-class="transparency" >
       <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="65px" padding-bottom="65px">
