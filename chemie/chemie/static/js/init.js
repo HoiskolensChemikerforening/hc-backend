@@ -6,6 +6,15 @@
   }); // end of document ready
 })(jQuery); // end of jQuery name space
 
+(function($){
+  $(function(){
+
+   // The rest above this is hidden
+
+   $('.slider').slider();
+
+  }); // end of document ready
+})(jQuery); // end of jQuery name space
 
 $(document).ready(function() {
   $('select').material_select();
@@ -20,5 +29,3 @@ $(document).ready(function() {
       //complete: function() { alert('Closed'); } // Callback for Modal close
     }
   );
-
-
