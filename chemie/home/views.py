@@ -15,7 +15,7 @@ from django.contrib.sites.shortcuts import get_current_site
 
 def index(request):
     all_events = Event.objects.filter(date__gt=timezone.now())
-    all_posts = Article.objects.all()
+    all_posts = Article.objects.all().order_by('-published_date')
     context = {
         'events': all_events,
         'posts': all_posts,
