@@ -35,7 +35,7 @@ def create_event(request):
 
 
 def list_all(request):
-    all_events = Event.objects.filter(date__gt=timezone.now())
+    all_events = Event.objects.filter(date__gt=timezone.now()).order_by('date')
     my_events = None
     if request.user:
         my_events = Event.objects.filter(attendees__username__exact=request.user)
