@@ -16,17 +16,17 @@
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.events.can_delete %}
+        {% if perms.events.delete_event %}
           <li>
             <a class="btn-floating red" href="{% url "events:delete" %}"><i
                 class="material-icons">delete_forever</i></a>
             <a class="btn-floating mobile-fab-tip">Slett</a>
           </li>
         {% endif %}
-        {% if perms.events.can_add %}
+        {% if perms.events.add_event %}
           <li>
             <a class="btn-floating blue" href="{% url "events:create" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Ny</a>
+            <a class="btn-floating mobile-fab-tip">Nytt arrangement</a>
           </li>
         {% endif %}
       </ul>
