@@ -29,7 +29,7 @@ def news_details(request, article_id, slug):
 
 
 def list_all(request):
-    all_posts = Article.objects.all()
+    all_posts = Article.objects.all().order_by('-published_date')
     context = {
         'posts': all_posts,
     }
