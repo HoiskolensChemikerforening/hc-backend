@@ -37,7 +37,7 @@
                 <div class="valign-wrapper">
                   {% if locker.owner %}
                     <i class="material-icons valign left"
-                       onclick=remove_and_redirect({{ locker.id }}) href="#">remove_circle</i>
+                       onclick=remove_and_redirect({{ locker.number }}) href="#">remove_circle</i>
                     <p class="flow-text valign">{{ locker.owner.user }}</p>
                   {% else %} - {% endif %}
                 </div>
@@ -63,9 +63,9 @@
     <a name="test"></a>
   </div>
   <script>
-      function remove_and_redirect(id) {
-          if (confirm("Bekreft sletting av skap nr " + id)) {
-              window.location = "/bokskap/administrer/slett/" + id + "/";
+      function remove_and_redirect(number) {
+          if (confirm("Bekreft sletting av skap nr " + number)) {
+              window.location = "/bokskap/administrer/slett/" + number + "/";
           } else {
           }
       }
