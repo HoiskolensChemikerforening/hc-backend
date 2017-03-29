@@ -62,12 +62,16 @@
       <mj-text mj-class="readableGrey"> {{ event.description|striptags}}</mj-text>
       <mj-text mj-class="smallHeader"> Betalingsinformasjon:</mj-text>
       <mj-text mj-class="readableGrey"> {{ event.payment_information|striptags }}</mj-text>
-      <mj-text mj-class="smallHeader"> Medlemspris: {{ event.price_member|price }} kr </mj-text>
-      <mj-text mj-class="readableGrey"> Ikke-medlem: {{ event.price_not_member|price }} kr </mj-text>
-        {% if event.companion %}
+      <mj-text mj-class="smallHeader"> Medlemspris: {{ event.price_member|price }} </mj-text>
+      <mj-text mj-class="readableGrey"> Ikke-medlem: {{ event.price_not_member|price }} </mj-text>
+        <mj-raw>
+          {% if event.companion %}
+        </mj-raw>
          <mj-text mj-class="smallHeader"> Pris for følge: </mj-text>
-         <mj-text mj-class="smallHeader"> {{ event.price_companion|price }} kr </mj-text>
-        {% endif %}
+         <mj-text mj-class="smallHeader"> {{ event.price_companion|price }} </mj-text>
+        <mj-raw>
+          {% endif %}
+        </mj-raw>
       </mj-text>
     </mj-column>
     </mj-column>
