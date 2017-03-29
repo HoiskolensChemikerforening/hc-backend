@@ -1,55 +1,112 @@
 {% extends 'chemie/base.html' %}
 {% load thumbnail %}
 {% block nav_header %}
-    Bilder
+  Bilder
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Venter på godkjenning
+  Venter på godkjenning
 {% endblock nav_sub_header %}
 
 
 {% block content %}
-    <div class="row">
-        {% for picture in pictures %}
-            {%if picture.approved == 0%}
-                <div class="col s6 m6 l4">
-                    <div class="card medium">
-                        <div class="card-image">
-                            <a>
-                                {% thumbnail picture.image "400x300" crop="center" as im %}
-                                    <img src="{{ im.url }}">
-                                    {% endthumbnail %}
-                                </a>
-                                <span class="card-title card-event-title">
-                                    <h4>{{ picture.description }}</h4>
-                                </span>
-                            </div>
-                            <div class="card-content">
-                                <p>
-                                    {{ picture.date }}
-                                    Postet av {{ picture.author }}
-                                </p>
-                            </div>
-                            <div class="card-action">
-                                <form action="{{ picture.id }}" method="POST"/>{% csrf_token %}
-                                  <button class="waves-effect waves-light btn btn-primary" name="approve" type="submit">
-                                    Godkjenn</button>
-
-                                  <button class="waves-effect waves-light btn btn-primary" name="delete" type="submit">
-                                    Slett</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                {%endif%}
-        {% endfor %}
+  {% if perms.picturecarousel %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.picturecarousel %}
+          <li>
+            <a class="btn-floating blue" href="{% url "carousel:overview" %}"><i class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip">Godkjenn</a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
-
+  {% endif %}
+  <div class="row">
+    <h3>Avventer godkjenning</h3>
+    <div class="card">
+      <div class="card-content">
+        <table class="responsive-table bordered">
+          <thead>
+          <tr>
+            <th data-field="who">Innsender</th>
+            <th data-field="date">Dato</th>
+            <th data-field="image">Bilde</th>
+            <th data-field="approve">Godkjenning</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for picture in awaiting_approval %}
+            <tr>
+              <td><p>{{ picture.author }}</p></td>
+              <td><p>{{ picture.date|date:"j. F" }}</p></td>
+              <td>
+                <img class="responsive-img materialboxed" src="{{ picture.image.url }}">
+              </td>
+              <td>
+                <form action="{{ picture.id }}" method="POST"/>
+                {% csrf_token %}
+                {% if picture.approved %}
+                  <button class="waves-effect btn btn-primary" name="delete" type="submit">
+                    Slett
+                  </button>
+                {% else %}
+                  <button class="waves-effect btn btn-primary" name="approve" type="submit">
+                    Godkjenn
+                  </button>
+                {% endif %}
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+    <h3>Aktive bilder</h3>
+    <div class="card">
+      <div class="card-content">
+        <table class="responsive-table bordered">
+          <thead>
+          <tr>
+            <th data-field="who">Innsender</th>
+            <th data-field="date">Dato</th>
+            <th data-field="image">Bilde</th>
+            <th data-field="approve">Godkjenning</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for picture in approved %}
+            <tr>
+              <td><p>{{ picture.author }}</p></td>
+              <td><p>{{ picture.date|date:"j. F" }}</p></td>
+              <td>
+                <img class="responsive-img materialboxed" src="{{ picture.image.url }}">
+              </td>
+              <td>
+                <form action="{{ picture.id }}" method="POST"/>
+                {% csrf_token %}
+                {% if picture.approved %}
+                  <button class="waves-effect btn btn-primary" name="delete" type="submit">
+                    Slett
+                  </button>
+                {% else %}
+                  <button class="waves-effect btn btn-primary" name="approve" type="submit">
+                    Godkjenn
+                  </button>
+                {% endif %}
+                </form>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
 {% endblock %}
-
-<form action="/your-name/" method="post">
-    <label for="your_name">Your name: </label>
-    <input id="your_name" type="text" name="your_name" value="{{ current_name }}">
-    <input type="submit" value="OK">
-</form>

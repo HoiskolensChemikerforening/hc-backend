@@ -12,25 +12,6 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-{% if perms.picturecarousel %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-        <a class="btn-floating btn-large red">
-            <i class="large material-icons">edit</i>
-        </a>
-        <ul>
-                <li>
-                    <a class="btn-floating red" href="{% url "carousel:create" %}"><i class="material-icons">add</i></a>
-                    <a class="btn-floating mobile-fab-tip">Send inn</a>
-                </li>
-                {%if perms.picturecarousel%}
-                <li>
-                    <a class="btn-floating blue" href="{% url "carousel:approve" %}"><i class="material-icons">thumbs_up_down</i></a>
-                    <a class="btn-floating mobile-fab-tip">Godkjenn</a>
-                </li>
-                {%endif%}
-        </ul>
-    </div>
-{% endif %}
 
 <div class="slider fullscreen">
    <ul class="slides">
@@ -41,7 +22,6 @@
        <div class="caption center-align">
          <h3>{{picture.description}}</h3>
          {%endthumbnail%}
-
        </div>
      </li>
      {%endfor%}
