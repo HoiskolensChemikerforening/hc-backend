@@ -18,7 +18,7 @@ def post_pic(request):
         messages.add_message(request, messages.SUCCESS,
                              'Bildet har blitt sendt inn!',
                              extra_tags='Bildet ble sendt')
-        return redirect(reverse('carousel:view'))
+        return redirect(reverse('carousel:submit'))
     context = {
         "form": form,
     }
