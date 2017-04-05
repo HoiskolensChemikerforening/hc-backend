@@ -1,10 +1,12 @@
-from django import forms
-from django.utils.translation import ugettext as _
-from django.contrib.auth.models import User
-from .models import Profile
 import material as M
-from django.core.validators import ValidationError
 from captcha.fields import ReCaptchaField
+from django import forms
+from django.contrib.auth.models import User
+from django.core.validators import ValidationError
+from chemie.settings import REGISTRATION_KEY
+
+from .models import Profile
+
 
 class RegisterUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Passord")
@@ -21,12 +23,11 @@ class RegisterUserForm(forms.ModelForm):
                   "last_name",
                   "email",
                   "username",
-                ]
+                  ]
 
     def password_matches(self):
         password = self.cleaned_data.get('password')
         confrimed_password = self.cleaned_data.get('password_confirm')
-
 
         if not password:
             self.add_error(None, ValidationError({'password':["Feltet er påkrevd"]}))
@@ -46,12 +47,14 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class RegisterProfileForm(forms.ModelForm):
+    registration_key = forms.CharField(max_length=40, required=True)
     layout = M.Layout(M.Row('grade'),
                       M.Row('start_year', 'end_year'),
                       M.Row('address'),
                       M.Row('access_card'),
                       M.Row('phone_number'),
-                      M.Row('allergies', 'relationship_status'))
+                      M.Row('allergies', 'relationship_status'),
+                      M.Row('registration_key'),)
 
     class Meta:
         model = Profile
@@ -63,7 +66,13 @@ class RegisterProfileForm(forms.ModelForm):
                   "allergies",
                   "address",
                   "relationship_status"
-                ]
+                  ]
+
+    def clean_registration_key(self):
+        registration_key = self.cleaned_data.get('registration_key')
+        if not registration_key == REGISTRATION_KEY:
+            self.add_error(None, ValidationError({'registration_key': ["Har du kode eller har du ikke kode? Du må ha kode."]}))
+        return registration_key
 
 
 class EditUserForm(forms.ModelForm):
