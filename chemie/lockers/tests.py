@@ -1,6 +1,11 @@
+from datetime import timedelta
+
+from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
-from lockers.models import LockerUser, Locker, LockerToken, Ownership
+from django.utils import timezone
+
 from lockers.models import LOCKER_COUNT
+from lockers.models import LockerUser, Locker, LockerToken, Ownership
 
 
 def create_user_with_locker(count):
@@ -34,7 +39,7 @@ class LockerUserLimitTest(TestCase):
         self.assertEqual(ownership.reached_limit(), True)
 
 
-class ActivationTokenTest(TestCase):
+class TokenTest(TestCase):
     def setUp(self):
         user = LockerUser.objects.create(first_name="Glenn",
                                          last_name="Gregor",
@@ -63,3 +68,15 @@ class ActivationTokenTest(TestCase):
         self.assertEqual(ownership.is_active, True)
         self.assertEqual(ownership.is_confirmed, True)
         self.assertEqual(token.pk, None)
+
+    def test_prune_expired(self):
+        locker = Locker.objects.get(number=1)
+        ownership = Ownership.objects.get(locker=locker)
+        token = LockerToken.objects.get(ownership=ownership)
+        # Locker was tried taken without confirming 8 days ago
+        token.created = timezone.now() - timedelta(days=8)
+        token.save()
+        LockerToken.objects.prune_expired()
+        # Try to get the recently pruned locker token,
+        # but it raises an object does not exist since it was just pruned.
+        self.assertRaises(ObjectDoesNotExist, LockerToken.objects.get, ownership=ownership)
