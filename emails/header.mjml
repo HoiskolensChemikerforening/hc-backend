@@ -43,7 +43,7 @@
     </mj-column>
     <mj-column width="100%">
   <mj-text align="center" padding-left="0px" padding-right="0px" font-weight="300" font-size="33px" line-height="33px" padding-bottom="0px">
-    <a style="text-decoration:none !important; color:#000000;" href="https://{{ root_url }}">Hoiskolens Chemikerforening</a>
+    <a style="text-decoration:none !important; color:#000000;" href="https://{{ root_url }}">Høiskolens Chemikerforening</a>
     </mj-text>
   </mj-column>
 </mj-section>

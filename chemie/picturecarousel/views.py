@@ -18,7 +18,7 @@ def post_pic(request):
         messages.add_message(request, messages.SUCCESS,
                              'Bildet har blitt sendt inn!',
                              extra_tags='Bildet ble sendt')
-        return redirect(reverse('carousel:view'))
+        return redirect(reverse('carousel:submit'))
     context = {
         "form": form,
     }
@@ -35,9 +35,11 @@ def view_carousel(request):
 
 
 def view_pic_approve(request):
-    pictures = Contribution.objects.all()
+    awaiting_approval = Contribution.objects.filter(approved=False)
+    approved = Contribution.objects.filter(approved=True)
     context = {
-    "pictures": pictures
+    "awaiting_approval": awaiting_approval,
+    "approved": approved,
     }
     return render(request, "picturecarousel/approve.html", context)
 
@@ -48,10 +50,10 @@ def approve(request, picture_id):
         if 'approve' in request.POST:
             pic.approve()
             pic.save()
-            messages.add_message(request, messages.SUCCESS, 'Bildet er godkjent!', extra_tags="Suksess!")
-            return HttpResponseRedirect(reverse('carousel:approve'))
+            messages.add_message(request, messages.SUCCESS, 'Bildet er godkjent', extra_tags="Yay!")
+            return HttpResponseRedirect(reverse('carousel:overview'))
         if 'delete' in request.POST:
             pic.delete()
-            messages.add_message(request, messages.SUCCESS, 'Bildet er slettet.')
-            return HttpResponseRedirect(reverse('carousel:approve'))
+            messages.add_message(request, messages.SUCCESS, 'Bildet ble slettet', extra_tags='Slettet!')
+            return HttpResponseRedirect(reverse('carousel:overview'))
     return render(request, 'picturecarousel/approve.html')

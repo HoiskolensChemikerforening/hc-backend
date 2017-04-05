@@ -12,7 +12,7 @@
   <mj-section mj-class="primaryColor" padding-top="20">
     <mj-column width="80%">
       <mj-text mj-class="smallHeader">Hei {{ user }}!<br></mj-text>
-      <mj-text mj-class="readableGrey">Du har nesten fått skap nr <strong>{{ ownership.locker }}</strong>!
+      <mj-text mj-class="readableGrey">Du har nesten fått skap nr. <strong>{{ ownership.locker }}</strong>!
           Du er bare få klikk unna den beste bokskap-opplevelsen på NTNU.</p> </mj-text>
         <mj-button mj-class="button" href="https://{{ root_url }}/bokskap/aktiver/{{ token.key.hex }}">
         Aktiver bokskap!
@@ -20,9 +20,6 @@
       <mj-divider mj-class="border" />
       <mj-text mj-class="notice">Noen har forsøkt å registrere et bokskap på denne e-postadressen (<span class="blink" style="color:'white'">{{ email }}</span>). Se bort i fra denne e-posten dersom du ikke utførte denne handlingen.</mj-text>
     </mj-column>
-
-    </mj-column>
   </mj-section>
-
 <mj-include path="./footer.mjml" />
 </mlml>

@@ -129,10 +129,10 @@ def manage_lockers(request):
 
 
 @permission_required('lockers.can_delete')
-def clear_locker(request, locker_id):
-    locker = get_object_or_404(Locker, pk=locker_id)
+def clear_locker(request, locker_number):
+    locker = get_object_or_404(Locker, number=locker_number)
     if locker.owner:
         locker.clear()
         locker.save()
 
-    return redirect(reverse('bokskap:administrate') + '#locker{}'.format(locker_id))
+    return redirect(reverse('bokskap:administrate') + '#locker{}'.format(locker_number))

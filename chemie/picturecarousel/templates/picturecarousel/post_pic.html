@@ -2,28 +2,43 @@
 {% load material_form %}
 
 {% block nav_header %}
-    Bildekarusell
+  Bildekarusell
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-    Send inn bilder
+  Send inn bilder
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="row">
-        <div class="col s12 m12 l8">
-            <p class="flow-text">
-                Her kan du sende inn bilder til bildekarusellen på kontoret!
-            </p>
-
-
-            <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
-                {% form form=form %}
-                {% endform %}
-                <input class="btn" type='submit' value='Send inn bilder!'/>
-            </form>
-        </div>
+    {% if perms.picturecarousel %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.picturecarousel %}
+          <li>
+            <a class="btn-floating blue" href="{% url "carousel:overview" %}"><i class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip">Godkjenn</a>
+          </li>
+        {% endif %}
+      </ul>
     </div>
+  {% endif %}
+  <div class="row">
+    <div class="col s12 m12 l8">
+      <a class="waves-effect btn" href="{% url "carousel:display" %}"><i class="material-icons left">view_carousel</i>Til karusellen!</a>
+      <p class="flow-text">
+        Her kan du sende inn bilder til bildekarusellen på kontoret! <br>
+      </p>
+
+      <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
+        {% form form=form %}
+        {% endform %}
+        <input class="btn" type='submit' value='Send inn bilder!'/>
+      </form>
+    </div>
+  </div>
 
 
 {% endblock content %}
