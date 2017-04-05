@@ -16,7 +16,7 @@ class LockerManager(models.Manager):
         # Fetch all lockers, where an inactive Ownership (through indefinite_locker) is pointing to a locker.
         taken_lockers = self.filter(owner__isnull=False)
         idle_lockers = taken_lockers.filter(indefinite_locker__is_active__exact=False)
-        idle_lockers_count = idle_lockers.update(owner="")
+        idle_lockers_count = idle_lockers.update(owner=None)
         return idle_lockers_count
 
 
