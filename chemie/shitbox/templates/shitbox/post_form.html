@@ -11,7 +11,7 @@
 
 {% block content %}
   <!-- Administration button -->
-  {% if perms.shitbox %}
+  {% if perms.shitbox.add_submission %}
     <div class="fixed-action-btn">
       <a class="btn-floating btn-large">
         <i class="large material-icons">mode_edit</i>
