@@ -80,3 +80,21 @@ class TokenTest(TestCase):
         # Try to get the recently pruned locker token,
         # but it raises an object does not exist since it was just pruned.
         self.assertRaises(ObjectDoesNotExist, LockerToken.objects.get, ownership=ownership)
+
+    def test_reset_idle(self):
+        locker = Locker.objects.get(number=1)
+        user = LockerUser.objects.get(email='glenny')
+        ownership = Ownership.objects.get(locker=locker, user=user)
+        token = LockerToken.objects.get(ownership=ownership)
+        token.activate()
+
+        ownership.refresh_from_db()
+        ownership.is_active = False
+        ownership.save()
+        Locker.objects.reset_idle()
+        locker.refresh_from_db()
+        self.assertEqual(locker.owner, None)
+        self.assertEqual(locker.number, 1)
+        self.assertEqual(user.email, 'glenny')
+        self.assertEqual(ownership.locker.number, 1)
+        self.assertEqual(ownership.user.email, 'glenny')
