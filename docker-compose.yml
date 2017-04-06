@@ -6,39 +6,43 @@ services:
     env_file: .env
     volumes:
       - ./logs/db:/var/log/postgresql
-      - ./dbdata/data:/var/lib/postgresql/data
+      - dbdata:/var/lib/postgresql/data
+
   website:
     restart: always
     build: ./chemie
     volumes:
       - ./chemie:/code
       - ./logs/gunicorn:/gunicorn-logfiles
+      - media:/code/media
+      - static:/code/static
     depends_on:
       - database
     env_file: .env
     expose:
       - "8000"
+
   proxy:
     build: ./nginx
     ports:
-      - "1338:80"
+      - "1339:80"
     volumes:
-      - /www/static
+      - static:/code/static
+      - media:/code/media
       - /etc/localtime:/etc/localtime:ro
-    volumes_from:
-      - website
     links:
       - website:website
   backupjob:
     build: ./backupjob
     volumes:
       - ./backup_chemie:/etc/ssl/private/backup/chemiebackup
-    volumes_from:
-      - website
+      - media:/code/media
     env_file: .env
     links:
       - database:database
 
 
-#volumes:
-#  dbdata:
+volumes:
+  dbdata:
+  media:
+  static:
