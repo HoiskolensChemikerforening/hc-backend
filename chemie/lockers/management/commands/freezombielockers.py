@@ -26,4 +26,4 @@ class Command(BaseCommand):
             self.stdout.write(self.style.NOTICE('Silent treatment received.'))
 
         idle_lockers_count = Locker.objects.reset_idle()
-        self.stdout.write(self.style.SUCCESS('{} ockers freed!'.format(idle_lockers_count)))
+        self.stdout.write(self.style.SUCCESS('{} lockers freed!'.format(idle_lockers_count)))
