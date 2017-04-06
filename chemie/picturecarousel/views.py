@@ -27,7 +27,7 @@ def submit_picture(request):
 
 
 def view_carousel(request):
-    pictures = Contribution.objects.filter(approved=True)
+    pictures = Contribution.objects.get_all_shuffled()
     context = {
     "pictures": pictures
     }
