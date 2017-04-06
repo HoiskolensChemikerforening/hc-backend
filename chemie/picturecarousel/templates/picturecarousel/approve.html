@@ -10,6 +10,13 @@
 
 
 {% block content %}
+  <style>
+    img.responsive-img, video.responsive-video {
+      height: auto;
+      width: auto;
+      max-width: 300px;
+    }
+  </style>
   {% if perms.picturecarousel %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -32,32 +39,33 @@
         <table class="responsive-table bordered">
           <thead>
           <tr>
+            <th data-field="image">Bilde</th>
             <th data-field="who">Innsender</th>
             <th data-field="date">Dato</th>
-            <th data-field="image">Bilde</th>
             <th data-field="approve">Godkjenning</th>
           </tr>
           </thead>
           <tbody>
           {% for picture in awaiting_approval %}
             <tr>
-              <td><p>{{ picture.author }}</p></td>
-              <td><p>{{ picture.date|date:"j. F" }}</p></td>
               <td>
                 <img class="responsive-img materialboxed" src="{{ picture.image.url }}">
               </td>
+              <td><p>{{ picture.author }}</p></td>
+              <td><p>{{ picture.date|date:"j. F" }}</p></td>
               <td>
-                <form action="{{ picture.id }}" method="POST"/>
-                {% csrf_token %}
-                {% if picture.approved %}
-                  <button class="waves-effect btn btn-primary" name="delete" type="submit">
-                    Slett
+                <form action="{% url "carousel:deny" picture.id %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn waves-effect waves-light" type="submit" name="action">Slett
+                    <i class="material-icons right">delete</i>
                   </button>
-                {% else %}
-                  <button class="waves-effect btn btn-primary" name="approve" type="submit">
-                    Godkjenn
+                </form>
+                <br>
+                <form action="{% url "carousel:approve" picture.id %}" method="POST">
+                  {% csrf_token %}
+                  <button class="btn waves-effect waves-light" type="submit" name="action">Godkjenn
+                    <i class="material-icons right">check</i>
                   </button>
-                {% endif %}
                 </form>
               </td>
             </tr>
@@ -74,32 +82,26 @@
         <table class="responsive-table bordered">
           <thead>
           <tr>
+            <th data-field="image">Bilde</th>
             <th data-field="who">Innsender</th>
             <th data-field="date">Dato</th>
-            <th data-field="image">Bilde</th>
             <th data-field="approve">Godkjenning</th>
           </tr>
           </thead>
           <tbody>
           {% for picture in approved %}
             <tr>
-              <td><p>{{ picture.author }}</p></td>
-              <td><p>{{ picture.date|date:"j. F" }}</p></td>
               <td>
                 <img class="responsive-img materialboxed" src="{{ picture.image.url }}">
               </td>
+              <td><p>{{ picture.author }}</p></td>
+              <td><p>{{ picture.date|date:"j. F" }}</p></td>
               <td>
-                <form action="{{ picture.id }}" method="POST"/>
-                {% csrf_token %}
-                {% if picture.approved %}
+                <form action="{% url "carousel:deny" picture.id %}" method="POST">
+                  {% csrf_token %}
                   <button class="waves-effect btn btn-primary" name="delete" type="submit">
                     Slett
                   </button>
-                {% else %}
-                  <button class="waves-effect btn btn-primary" name="approve" type="submit">
-                    Godkjenn
-                  </button>
-                {% endif %}
                 </form>
               </td>
             </tr>

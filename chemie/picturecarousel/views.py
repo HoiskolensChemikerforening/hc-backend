@@ -9,7 +9,7 @@ from .models import Contribution
 
 
 @login_required
-def post_pic(request):
+def submit_picture(request):
     form = Pictureform(request.POST or None, request.FILES or None)
     if form.is_valid():
         instance = form.save(commit=False)
@@ -23,7 +23,7 @@ def post_pic(request):
         "form": form,
     }
 
-    return render(request, "picturecarousel/post_pic.html", context)
+    return render(request, "picturecarousel/submit_picture.html", context)
 
 
 def view_carousel(request):
@@ -34,7 +34,7 @@ def view_carousel(request):
     return render(request, "picturecarousel/carousel.html", context)
 
 
-def view_pic_approve(request):
+def approve_pictures(request):
     awaiting_approval = Contribution.objects.filter(approved=False)
     approved = Contribution.objects.filter(approved=True)
     context = {
@@ -44,16 +44,15 @@ def view_pic_approve(request):
     return render(request, "picturecarousel/approve.html", context)
 
 
-def approve(request, picture_id):
+def approve_deny(request, picture_id, deny=False):
     if request.method == 'POST':
-        pic = get_object_or_404(Contribution, id=picture_id)
-        if 'approve' in request.POST:
-            pic.approve()
-            pic.save()
+        picture = get_object_or_404(Contribution, id=picture_id)
+        if not deny:
+            picture.approve()
+            picture.save()
             messages.add_message(request, messages.SUCCESS, 'Bildet er godkjent', extra_tags="Yay!")
-            return HttpResponseRedirect(reverse('carousel:overview'))
-        if 'delete' in request.POST:
-            pic.delete()
+        else:
+            picture.delete()
             messages.add_message(request, messages.SUCCESS, 'Bildet ble slettet', extra_tags='Slettet!')
-            return HttpResponseRedirect(reverse('carousel:overview'))
-    return render(request, 'picturecarousel/approve.html')
+        return HttpResponseRedirect(reverse('carousel:overview'))
+    return HttpResponseRedirect(reverse('carousel:overview'))
