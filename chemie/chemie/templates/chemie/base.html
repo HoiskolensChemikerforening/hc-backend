@@ -102,9 +102,23 @@
             <div class="collapsible-header"><i class="material-icons micon">info</i>Om HC</div>
             <div class="collapsible-body">
               <ul>
-                <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
                 <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
+                <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
                 <li><a href="/s/kontoret/" class="waves-effect">Kontoret</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">stars</i>Ny student</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/s/velkommen/" class="waves-effect">Velkommen!</a></li>
+                <li><a href="/s/praktisk/" class="waves-effect">Praktisk info</a></li>
+                <li><a href="/s/fadderperioden/" class="waves-effect">Fadderperioden</a></li>
+                <li><a href="/s/teknostart/" class="waves-effect">Teknostart</a></li>
+                <li><a href="/s/HC/" class="waves-effect">Høiskolens Chemikerforening</a></li>
+                <li><a href="{% url "frontpage:calendar" %}" class="waves-effect">Kalender</a></li>
+                <li><a href="/s/kontakt/" class="waves-effect">Kontaktinfo</a></li>
               </ul>
             </div>
           </li>
