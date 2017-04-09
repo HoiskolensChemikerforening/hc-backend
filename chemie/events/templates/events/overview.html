@@ -37,13 +37,20 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs z-depth-1">
-        <li class="tab col s6"><a class="active" href="#allEvents">Alle arrangementer</a></li>
-        <li class="tab col s6"><a href="#myEvents">Mine festeligheter</a></li>
+        <li class="tab col s4"><a class="active" href="#allEvents">Kommende arrangementer</a></li>
+        <li class="tab col s4"><a href="#myEvents">Mine festeligheter</a></li>
+        <li class="tab col s4"><a class="active" href="#pastEvents">Tidligere arrangementer</a></li>
       </ul>
       <div id="allEvents" class="col s12">
         {% include "events/list_events.html" %}
         {% if not events %}
           <p class="flow-text">Det er ingen aktive arrangementer nå. Finn på noe kult da vel!</p>
+        {% endif %}
+      </div>
+      <div id="pastEvents" class="col s12">
+        {% include "events/list_events.html" with events=past_events%}
+        {% if not past_events %}
+          <p class="flow-text">Det er fins ingen tidligere arrangementer.</p>
         {% endif %}
       </div>
       <div id="myEvents" class="col s12">
