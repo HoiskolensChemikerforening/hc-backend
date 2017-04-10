@@ -34,18 +34,25 @@ def create_event(request):
     return render(request, 'events/register_event.html', context)
 
 
-def list_all(request):
-    all_events = Event.objects.filter(date__gt=timezone.now()).order_by('date')
-    past_events = Event.objects.filter(date__lte=timezone.now()).order_by('date')
+def list_events(request):
+    future_events = Event.objects.filter(date__gt=timezone.now()).order_by('date')
     my_events = None
     if request.user:
         my_events = Event.objects.filter(attendees__username__exact=request.user)
     context = {
-        'events': all_events,
+        'events': future_events,
         'my_events': my_events,
-        'past_events': past_events,
     }
     return render(request, "events/overview.html", context)
+
+
+def list_past_events(request):
+    past_events = Event.objects.filter(date__lte=timezone.now()).order_by('date')
+
+    context = {
+        'events': past_events,
+    }
+    return render(request, "events/overview_past.html", context)
 
 
 def list_with_delete(request):

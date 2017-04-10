@@ -19,8 +19,8 @@ class RegisterEventForm(forms.ModelForm):
                       M.Row('price_member', 'price_not_member', 'price_companion'),
                       M.Row('companion', 'sleepover', 'night_snack'), )
 
-    event_date = forms.DateField(required=True, label='Arrangemantsdato')
-    event_time = forms.TimeField(required=True, initial='12:00', label='Arrangemantstid')
+    event_date = forms.DateField(required=True, label='Arrangementsdato')
+    event_time = forms.TimeField(required=True, initial='12:00', label='Arrangementstid')
     registration_start_date = forms.DateField(required=True, label='Åpningsdato')
     registration_start_time = forms.TimeField(required=True, initial='12:00', label='Åpningstid')
     register_deadline_date = forms.DateField(required=True, label='Påmeldingsfristdato')
@@ -119,4 +119,4 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class DeRegisterUserForm(forms.Form):
-    really_sure = forms.BooleanField(required=True, label='Er dette ditt endelige svar')
+    really_sure = forms.BooleanField(required=True, label='Er dette ditt endelige svar?')
