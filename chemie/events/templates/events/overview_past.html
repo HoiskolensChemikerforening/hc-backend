@@ -37,8 +37,8 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs z-depth-1">
-        <li class="tab col s4"><a target="_self" href="/events/">Kommende arrangementer</a></li>
-        <li class="tab col s4"><a target="_self" href="/events/">Mine festeligheter</a></li>
+        <li class="tab col s4"><a target="_self" href="{% url "events:index" %}#futureEvents">Kommende arrangementer</a></li>
+        <li class="tab col s4"><a target="_self" href="{% url "events:index" %}#myEvents">Mine festeligheter</a></li>
         <li class="tab col s4"><a class="active" href="#pastEvents">Tidligere arrangementer</a></li>
       </ul>
       <div id="pastEvents" class="col s12">
