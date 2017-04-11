@@ -6,18 +6,19 @@ RUN wget --quiet -O - \
     https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
     apt-key add -
 RUN apt-get update && apt-get install -y \
-    postgresql-client-9.4 \
+    postgresql-client-9.6 \
     postfix \
-    zip
+    zip \
+    rsync
 
-COPY chemie-backup /etc/cron.d/
+RUN mkdir /ssh
+COPY ssh_key /ssh/key
+
+COPY backup-cron /etc/cron.d/
 RUN chmod -R 0644 /etc/cron.d/
 
-COPY daily_backup.sh /daily_backup.sh
-RUN chmod +x /daily_backup.sh
-
-COPY weekly_backup.sh /weekly_backup.sh
-RUN chmod +x /weekly_backup.sh
+COPY run_backup.sh /run_backup.sh
+RUN chmod +x /run_backup.sh
 
 COPY backup_entrypoint.sh /etc/service/backup/run
 RUN chmod +x /etc/service/backup/run

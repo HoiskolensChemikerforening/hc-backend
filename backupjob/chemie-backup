@@ -1,2 +1,0 @@
-0 3 * * * root bash /daily_backup.sh
-30 3 * * 1 root bash /weekly_backup.sh

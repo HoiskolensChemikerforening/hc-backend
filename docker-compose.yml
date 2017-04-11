@@ -32,11 +32,11 @@ services:
       - /etc/localtime:/etc/localtime:ro
     links:
       - website:website
-  backupjob:
+
+  backup:
     build: ./backupjob
     volumes:
-      - ./backup_chemie:/etc/ssl/private/backup/chemiebackup
-      - media:/code/media
+      - media:/code/media:ro
     env_file: .env
     links:
       - database:database
