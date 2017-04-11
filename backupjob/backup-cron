@@ -1,0 +1,3 @@
+0 3 * * * root bash /run_backup.sh daily
+0 4 * * 1 root bash /run_backup.sh weekly
+0 5 1 * * root bash /run_backup.sh monthly
