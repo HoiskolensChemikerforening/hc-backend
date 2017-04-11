@@ -34,7 +34,7 @@ then
     NOW=$(date +\%a)
     mkdir /tmp/backup/$NOW -p
     cd /tmp/backup
-    /usr/bin/pg_dump -U $PGUSER -Fc $POSTGRES_DB > $NOW/backup.gz 2>> /var/log/syslog
+    /usr/bin/pg_dump -h database -U $PGUSER -Fc $POSTGRES_DB > $NOW/backup.gz 2>> /var/log/syslog
     DBFILE=$REMOTE_BACKUP_DIR/database/$BACKUP_DIR/$TIME_PREFIX.gz
     MD5=($(md5sum $NOW/backup.gz))
     scp -r -o StrictHostKeyChecking=no -i /ssh/key $NOW/backup.gz $REMOTE_SSH_USER@$REMOTE_HOST:$DBFILE
