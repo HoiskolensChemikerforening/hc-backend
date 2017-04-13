@@ -35,8 +35,8 @@ def view_carousel(request):
 
 
 def approve_pictures(request):
-    awaiting_approval = Contribution.objects.filter(approved=False)
-    approved = Contribution.objects.filter(approved=True)
+    awaiting_approval = Contribution.objects.filter(approved=False).prefetch_related('author')
+    approved = Contribution.objects.filter(approved=True).prefetch_related('author')
     context = {
     "awaiting_approval": awaiting_approval,
     "approved": approved,

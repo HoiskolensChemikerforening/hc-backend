@@ -30,7 +30,7 @@ def post_votes(request):
 @login_required
 @permission_required('shitbox.add_submission')
 def submissions_overview(request, page=1):
-    all_submissions = Submission.objects.all().order_by('-date')
+    all_submissions = Submission.objects.all().order_by('-date').prefetch_related('author__profile')
     paginator = Paginator(all_submissions, 20)
 
     try:

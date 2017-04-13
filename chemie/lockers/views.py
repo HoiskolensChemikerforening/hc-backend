@@ -13,7 +13,7 @@ from .models import Locker, LockerUser, Ownership, LockerToken
 
 
 def view_lockers(request, page=1):
-    locker_list = Locker.objects.all()
+    locker_list = Locker.objects.all().prefetch_related('owner')
     free_lockers = Locker.objects.filter(owner__isnull=True).count()
     paginator = Paginator(locker_list, 40)
 
@@ -119,8 +119,9 @@ def activate_ownership(request, code):
 
 @permission_required('lockers.can_delete')
 def manage_lockers(request):
-    lockers = Locker.objects.prefetch_related('indefinite_locker__is_confirmed__exact=True').prefetch_related(
-        'indefinite_locker__user')
+    lockers = Locker.objects.prefetch_related('indefinite_locker__user')\
+        .prefetch_related('indefinite_locker__is_confirmed__exact=True')\
+        .select_related('owner__user')
     context = {
         "request": request,
         "lockers": lockers
