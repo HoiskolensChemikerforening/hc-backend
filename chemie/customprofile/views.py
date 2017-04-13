@@ -117,7 +117,7 @@ def activate_password(request, code):
 
 
 def view_memberships(request):
-    profiles = Profile.objects.all()
+    profiles = Profile.objects.all().select_related('user', 'membership')
     context = {
         "profiles": profiles,
     }
@@ -125,7 +125,7 @@ def view_memberships(request):
 
 
 def change_membership_status(request, profile_id):
-    person = Profile.objects.get(pk=profile_id)
+    person = Profile.objects.get(pk=profile_id).select_related('user', 'membership')
     if person.membership is None:
         membership = Membership(
             start_date=timezone.now(),
