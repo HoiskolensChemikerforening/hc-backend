@@ -1,6 +1,7 @@
 {% load staticfiles %}
 {% load thumbnail %}
 {% load chemie_tags %}
+{% load cache %}
 
 <!DOCTYPE html>
 <html lang="no">
@@ -227,19 +228,17 @@
       </div>
 
       <!-- Sponsors -->
-      <div class="col s12 m6 l4">
-        <h5 class="white-text">Sponsorer</h5>
+      {% cache 86400 sponsors %}
         {% show_sponsors %}
+      {% endcache %}
+    </div>
+
+    <!-- Copyright -->
+    <div class="footer-copyright">
+      <div class="container">
+        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
       </div>
     </div>
-  </div>
-
-  <!-- Copyright -->
-  <div class="footer-copyright">
-    <div class="container">
-      <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
-    </div>
-  </div>
 </footer>
 
 {% block footer_js_files %}
