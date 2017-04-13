@@ -77,7 +77,7 @@ def delete_event(request, event_id):
 def view_event_details(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     first, second, third, fourth, fifth, done = [], [], [], [], [], []
-    registrations = EventRegistration.objects.filter(event=event, status=1)
+    registrations = EventRegistration.objects.filter(event=event, status=1).prefetch_related('user__profile')
     for registration in registrations:
         if registration.user.profile.grade == 1:
             first.append(registration.user.get_full_name())
@@ -213,7 +213,7 @@ def view_admin_panel(request, event_id):
     all_registrations = EventRegistration.objects.filter(
         status=REGISTRATION_STATUS.CONFIRMED,
         event=event,
-    )
+    ).select_related('user__profile__membership')
     context = {
         "attendees": all_registrations,
         "event": event,

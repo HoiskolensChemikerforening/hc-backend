@@ -12,7 +12,7 @@ from .models import Committee, Member
 def index(request):
     # Fetch all members, who belong to a committee (Member -> Committee)
     # Group all these members by the committee type
-    committees = Committee.objects.prefetch_related('members').order_by('title')
+    committees = Committee.objects.prefetch_related('members').prefetch_related('members__user').order_by('title')
     context = {
         'committees': committees,
     }
@@ -49,7 +49,7 @@ def edit(request):
 
 def view_committee(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
-    members = Member.objects.filter(committee=committee)
+    members = Member.objects.filter(committee=committee).prefetch_related('user')
     context = {
         'committee': committee,
         'members': members
