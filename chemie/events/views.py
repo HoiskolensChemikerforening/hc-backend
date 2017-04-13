@@ -121,6 +121,10 @@ def view_event_details(request, event_id):
 def register_user(request, event_id):
     event = get_object_or_404(Event, pk=event_id)
     registration = EventRegistration.objects.filter(event=event, user=request.user).first()
+    queue_position = None
+    if registration:
+        queue_position = EventRegistration.objects.filter(event=registration.event, created__lt=registration.created).count() + 1
+
     form_init = {'enable_sleepover': event.sleepover,
                  'enable_night_snack': event.night_snack,
                  'enable_companion': event.companion}
@@ -193,6 +197,7 @@ def register_user(request, event_id):
 
     context = {
         "registration": registration,
+        "queue_position": queue_position,
         "registration_form": registration_form,
         "event": event,
         "de_registration_form": de_registration_form,
