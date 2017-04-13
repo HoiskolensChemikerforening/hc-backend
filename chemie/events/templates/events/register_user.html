@@ -55,14 +55,14 @@
       </div>
     </div>
   </div>
-  {% if de_registration_form %}
-    <h4>
+  {% if registration %}
+    <h5>
       {% if registration.status == 1 %}
-        Du er påmeldt
-      {% else %}
-        Du er på ventelisten til
+        Du er påmeldt.
+      {% elif registration.status == 2 %}
+        Du er på ventelisten og er nr. {{ queue_position }} i køen
       {% endif %}
-    </h4>
+    </h5>
     <form method='POST'>{% csrf_token %}
 
       {% form form=de_registration_form %}
