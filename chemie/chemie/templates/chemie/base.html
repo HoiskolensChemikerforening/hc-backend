@@ -6,7 +6,7 @@
 <html lang="no">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0"/>
   <title>Høiskolens Chemikerforening</title>
 
@@ -36,9 +36,9 @@
 
   {% block header %}
   {% endblock header %}
-  <meta name="theme-color" content="#d81b60">
+  <meta name="theme-color" content="#3C91E6">
   <!-- Windows Phone -->
-  <meta name="msapplication-navbutton-color" content="#4285f4">
+  <meta name="msapplication-navbutton-color" content="#3C91E6">
   <!-- iOS Safari -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -163,10 +163,10 @@
             <div class="col s12 m6 l6">
               <div class="card {{ message.level_tag }}-message darken-1">
                 <div class="card-content">
-                              <span class="card-title black-text valign-wrapper" style="clear: both;">
-                                  <i class="material-icons black-text" style="padding-right: 10px;">priority_high</i>
-                                  <h5>{{ message.extra_tags }}</h5>
-                              </span>
+                  <span class="card-title black-text valign-wrapper" style="clear: both;">
+                      <i class="material-icons black-text" style="padding-right: 10px;">priority_high</i>
+                      <h5>{{ message.extra_tags }}</h5>
+                  </span>
                   <p class="flow-text black-text">{{ message }}</p>
                 </div>
               </div>
@@ -186,19 +186,29 @@
 <footer class="page-footer">
   <div class="container">
     <div class="row">
+
+      <!-- About -->
       <div class="col s12 m6 l4">
         <h5 class="white-text">Om oss</h5>
         <p class="grey-text text-lighten-4">
           Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
         </p>
+
+        <a href="https://github.com/HoiskolensChemikerforening/website">
+          <img src="{% static "images/github.svg" %}" alt="Github"
+               style="display: inline-block;vertical-align: middle;">
+          <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
+        </a>
       </div>
+
+      <!-- Media/Social -->
       <div class="col s12 m6 l4">
         <h5 class="white-text">Sosialt</h5>
         <div class="valign-wrapper">
           <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
               <path fill="#FFF"
-                    d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"/>
+                    d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"></path>
             </svg>
           </a>
           <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
@@ -215,17 +225,19 @@
         </div>
         <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
       </div>
+
+      <!-- Sponsors -->
       <div class="col s12 m6 l4">
         <h5 class="white-text">Sponsorer</h5>
         {% show_sponsors %}
       </div>
     </div>
   </div>
+
+  <!-- Copyright -->
   <div class="footer-copyright">
     <div class="container">
-      © 1915-2017 HC, All rights reserved.
-      <a class="grey-text text-lighten-4 right" href="https://github.com/Dogfalo/materialize/blob/master/LICENSE">MIT
-        License</a>
+      <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
     </div>
   </div>
 </footer>
