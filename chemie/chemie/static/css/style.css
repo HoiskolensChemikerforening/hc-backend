@@ -112,9 +112,15 @@ input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([rea
     color: var(--primary-color);
 }
 
+.tabs .tab a.active {
+    background-color: transparent;
+    color: var(--primary-color);
+}
+
 .tabs .indicator {
     background-color: var(--active-color);
 }
+
 
 .success-message {
     background-color: #7CE267 !important;
@@ -374,8 +380,6 @@ p {
 #cke_id_description {
     width: 100%;
 }
-
-
 
 
 /* Top nav background image*/
