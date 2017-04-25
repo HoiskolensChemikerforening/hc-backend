@@ -18,7 +18,7 @@
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.events.add_event %}
+        {% if perms.events.change_eventregistration %}
           <li>
             <a class="btn-floating blue" href="{% url 'events:adminlist' event.id %}"><i class="material-icons">list</i></a>
             <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist' event.id %}">Se påmeldte</a>

@@ -222,7 +222,7 @@ def view_admin_panel(request, event_id):
 
 
 @login_required
-@permission_required('registration.can_delete')
+@permission_required('events.change_eventregistration')
 def change_payment_status(request, registration_id):
     registration = EventRegistration.objects.get(pk=registration_id)
     registration.payment_status = not registration.payment_status
