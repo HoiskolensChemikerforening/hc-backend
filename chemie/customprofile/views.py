@@ -125,7 +125,7 @@ def view_memberships(request):
 
 
 def change_membership_status(request, profile_id):
-    person = Profile.objects.get(pk=profile_id).select_related('user', 'membership')
+    person = Profile.objects.get(pk=profile_id)
     if person.membership is None:
         membership = Membership(
             start_date=timezone.now(),

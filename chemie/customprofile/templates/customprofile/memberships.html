@@ -22,13 +22,16 @@
 
 {% block content %}
   <div class="row">
-    <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+    <div class="col s12 m12 l12">
+      <h5 class="heading">Klikk på et rødt ikon for å tildele 5 års medlemsskap fra dagens dato</h5>
+    </div>
   </div>
   <div class="row">
     <table id="myTable" class="tablesorter">
       <thead>
       <tr>
         <th>Navn</th>
+        <th>Brukernavn</th>
         <th>Klassetrinn</th>
         <th>HC-medlemsskap</th>
       </tr>
@@ -38,6 +41,7 @@
       {% for profile in profiles %}
         <tr>
           <td>{{ profile }} </td>
+          <td>{{ profile.user.username }} </td>
           <td>{{ profile.grade }}</td>
 
           <td>{% if profile.membership.is_active %}
