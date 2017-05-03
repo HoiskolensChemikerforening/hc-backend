@@ -123,7 +123,9 @@ def register_user(request, event_id):
     registration = EventRegistration.objects.filter(event=event, user=request.user).first()
     queue_position = None
     if registration:
-        queue_position = EventRegistration.objects.filter(event=registration.event, created__lt=registration.created).count() + 1
+        queue_position = EventRegistration.objects.filter(event=registration.event,
+                                                          created__lt=registration.created,
+                                                          status=REGISTRATION_STATUS.WAITING).count() + 1
 
     form_init = {'enable_sleepover': event.sleepover,
                  'enable_night_snack': event.night_snack,
