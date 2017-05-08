@@ -49,17 +49,3 @@
   </div>
 
 {% endblock %}
-
-
-<ul class="collection">
-  {% for member in committee.members.all %}
-    <li class="collection-item avatar">
-      <img src="/media/{{ committee.image }}" alt="" class="circle">
-      <span class="title">{{ member.user }}</span>
-      <p>{{ member.position_info }}</p>
-      <p>Fra: {{ member.start|date:"j F Y" }} . Til: {{ member.start|date:"j F Y" }}</p>
-
-      <a href="#!" class="secondary-content"><i class="material-icons">email</i></a>
-    </li>
-  {% endfor %}
-</ul>
