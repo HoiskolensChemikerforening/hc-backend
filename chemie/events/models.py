@@ -98,9 +98,6 @@ class Event(BaseEvent):
 
     attendees = models.ManyToManyField(User, through='EventRegistration')
 
-    def __str__(self):
-        return self.title
-
     def save(self, *args, **kwargs):
         super(Event, self).save(*args, **kwargs)
         self.bump_waiting()
@@ -112,12 +109,6 @@ class Event(BaseEvent):
                 for attendee in attendees:
                     attendee.confirm()
                     send_event_mail(attendee, self)
-
-    def registered_users(self):
-        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED, event=self).count()
-
-    def waiting_users(self):
-        return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING, event=self).count()
 
     @property
     def spare_slots(self):
@@ -132,14 +123,6 @@ class Event(BaseEvent):
 
     def get_absolute_registration_url(self):
         return reverse('events:register', kwargs={"event_id": self.id})
-
-    @property
-    def can_signup(self):
-        return (timezone.now() >= self.register_startdate) and (timezone.now() <= self.register_deadline)
-
-    @property
-    def can_de_register(self):
-        return timezone.now() <= self.deregister_deadline
 
     def registration_has_opened(self):
         return timezone.now() >= self.register_startdate
