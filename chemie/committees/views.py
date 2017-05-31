@@ -4,7 +4,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import HttpResponseRedirect
 from django.shortcuts import render, get_object_or_404
-
+from django.contrib.auth.decorators import login_required, permission_required
 from .forms import EditCommittees, EditDescription
 from .models import Committee, Member
 
@@ -20,6 +20,7 @@ def index(request):
     return render(request, 'committees/list_committees.html', context)
 
 
+@permission_required('committees.edit_position')
 def edit(request):
     form = EditCommittees(request.POST or None)
     if request.method == 'POST':
@@ -57,6 +58,7 @@ def view_committee(request, slug):
     return render(request, 'committees/view_committee.html', context)
 
 
+@permission_required('committees.edit_committee')
 def edit_description(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
     form = EditDescription(request.POST or None, request.FILES or None, instance=committee)

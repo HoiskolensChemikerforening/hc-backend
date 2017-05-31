@@ -17,7 +17,7 @@ from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm, Regi
 from .models import Event, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, BaseRegistration
 
 
-@login_required
+@permission_required('events.add_event')
 def create_event(request):
     form = RegisterEventForm(request.POST or None, request.FILES or None)
     limitation_formset = formset_factory(RegisterLimitations)
@@ -55,6 +55,7 @@ def list_past_events(request):
     return render(request, "events/overview_past.html", context)
 
 
+@permission_required('events.delete_event')
 def list_with_delete(request):
     all_events = Event.objects.filter(date__gt=timezone.now())
     context = {
@@ -63,6 +64,7 @@ def list_with_delete(request):
     return render(request, "events/delete.html", context)
 
 
+@permission_required('events.delete_event')
 def delete_event(request, event_id):
     if request.method == 'POST':
         event = get_object_or_404(Event, id=event_id)
@@ -208,8 +210,8 @@ def register_user(request, event_id):
     return render(request, "events/register_user.html", context)
 
 
-@login_required
 @ensure_csrf_cookie
+@permission_required('events.change_eventregistration')
 def view_admin_panel(request, event_id):
     event = Event.objects.get(pk=event_id)
     all_registrations = EventRegistration.objects.filter(
@@ -223,7 +225,6 @@ def view_admin_panel(request, event_id):
     return render(request, "events/admin_list.html", context)
 
 
-@login_required
 @permission_required('events.change_eventregistration')
 def change_payment_status(request, registration_id):
     registration = EventRegistration.objects.get(pk=registration_id)

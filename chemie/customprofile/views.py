@@ -13,6 +13,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
+from django.contrib.auth.decorators import login_required, permission_required
 
 from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, SetNewPassword
@@ -37,6 +38,7 @@ def register_user(request):
         "user_profile_form": user_profile_form,
     }
     return render(request, 'customprofile/register.html', context)
+
 
 @login_required
 def edit_profile(request):
@@ -116,6 +118,7 @@ def activate_password(request, code):
     return render(request, 'customprofile/set_forgotten_password.html', context)
 
 
+@permission_required('customprofile.change_membership')
 def view_memberships(request):
     profiles = Profile.objects.all().select_related('user', 'membership')
     context = {
@@ -124,6 +127,7 @@ def view_memberships(request):
     return render(request, "customprofile/memberships.html", context)
 
 
+@permission_required('customprofile.change_membership')
 def change_membership_status(request, profile_id):
     person = Profile.objects.get(pk=profile_id)
     if person.membership is None:

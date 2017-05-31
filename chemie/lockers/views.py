@@ -117,7 +117,7 @@ def activate_ownership(request, code):
     return render(request, 'lockers/confirm_locker.html', context={'form':agreed_to_terms})
 
 
-@permission_required('lockers.can_delete')
+@permission_required('lockers.delete_locker')
 def manage_lockers(request):
     lockers = Locker.objects.prefetch_related('indefinite_locker__user')\
         .prefetch_related('indefinite_locker__is_confirmed__exact=True')\
@@ -129,7 +129,7 @@ def manage_lockers(request):
     return render(request, 'lockers/administrer.html', context)
 
 
-@permission_required('lockers.can_delete')
+@permission_required('lockers.delete_locker')
 def clear_locker(request, locker_number):
     locker = get_object_or_404(Locker, number=locker_number)
     if locker.owner:

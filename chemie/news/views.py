@@ -1,11 +1,13 @@
 from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
+from django.contrib.auth.decorators import permission_required
 
 from .models import Article
 from .forms import NewsPost
 
 
+@permission_required('news.add_article')
 def create_post(request):
     post = NewsPost(request.POST or None, request.FILES or None)
     if request.POST:

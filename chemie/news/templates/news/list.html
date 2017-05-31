@@ -16,10 +16,10 @@
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.news.can_delete %}
+        {% if perms.news.delete_article %}
           <li><a class="btn-floating red" href="delete/"><i class="material-icons">delete_forever</i></a></li>
         {% endif %}
-        {% if perms.news.can_add %}
+        {% if perms.news.add_article %}
           <li><a class="btn-floating blue" href="create/"><i class="material-icons">add</i></a></li>
         {% endif %}
       </ul>
