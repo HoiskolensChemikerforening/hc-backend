@@ -95,14 +95,18 @@ def register_locker(request, number):
 
 
 def activate_ownership(request, code):
+    try:
+        activator = LockerToken.objects.get(key=code)
+    except ObjectDoesNotExist:
+        messages.add_message(request, messages.ERROR,
+                                     'Aktiveringsnøkkelen er allerede brukt eller har utgått.',
+                                     extra_tags='Ugyldig nøkkel')
+        raise Http404
     agreed_to_terms = ConfirmOwnershipForm(request.POST or None)
     if request.method == 'POST':
         if agreed_to_terms.is_valid():
             try:
-                activator = LockerToken.objects.get(key=code)
                 activator.activate()
-            except ObjectDoesNotExist:
-                raise Http404
             except ValidationError:
                 messages.add_message(request, messages.ERROR,
                                      'Bokskapet ble reservert før du rakk å reservere det.',
