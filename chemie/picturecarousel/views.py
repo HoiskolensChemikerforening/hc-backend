@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.core.urlresolvers import reverse
 from django.shortcuts import redirect, get_object_or_404
@@ -29,21 +29,23 @@ def submit_picture(request):
 def view_carousel(request):
     pictures = Contribution.objects.get_all_shuffled()
     context = {
-    "pictures": pictures
+        "pictures": pictures
     }
     return render(request, "picturecarousel/carousel.html", context)
 
 
+@permission_required('picturecarousel.change_contribution')
 def approve_pictures(request):
     awaiting_approval = Contribution.objects.filter(approved=False).prefetch_related('author')
     approved = Contribution.objects.filter(approved=True).prefetch_related('author')
     context = {
-    "awaiting_approval": awaiting_approval,
-    "approved": approved,
+        "awaiting_approval": awaiting_approval,
+        "approved": approved,
     }
     return render(request, "picturecarousel/approve.html", context)
 
 
+@permission_required('picturecarousel.change_contribution')
 def approve_deny(request, picture_id, deny=False):
     if request.method == 'POST':
         picture = get_object_or_404(Contribution, id=picture_id)

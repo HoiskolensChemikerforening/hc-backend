@@ -27,8 +27,7 @@ def post_votes(request):
     return render(request, "shitbox/post_form.html", context)
 
 
-@login_required
-@permission_required('shitbox.add_submission')
+@permission_required('shitbox.change_submission')
 def submissions_overview(request, page=1):
     all_submissions = Submission.objects.all().order_by('-date').prefetch_related('author__profile')
     paginator = Paginator(all_submissions, 20)

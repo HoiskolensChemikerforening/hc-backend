@@ -14,7 +14,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-  {% if perms.lockers %}
+  {% if perms.lockers.delete_locker %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
         <i class="large material-icons">menu</i>
