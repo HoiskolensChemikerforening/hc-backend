@@ -86,7 +86,7 @@ class TokenTest(TestCase):
 
     def test_reset_idle(self):
         locker = Locker.objects.get(number=1)
-        user = LockerUser.objects.get(email='glenny')
+        user = LockerUser.objects.get(email='glenny@test.no')
         ownership = Ownership.objects.get(locker=locker, user=user)
         token = LockerToken.objects.get(ownership=ownership)
         token.activate()
@@ -98,9 +98,9 @@ class TokenTest(TestCase):
         locker.refresh_from_db()
         self.assertEqual(locker.owner, None)
         self.assertEqual(locker.number, 1)
-        self.assertEqual(user.email, 'glenny')
+        self.assertEqual(user.email, 'glenny@test.no')
         self.assertEqual(ownership.locker.number, 1)
-        self.assertEqual(ownership.user.email, 'glenny')
+        self.assertEqual(ownership.user.email, 'glenny@test.no')
 
 
     def test_reset_locker_ownerships(self):
