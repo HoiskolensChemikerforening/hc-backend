@@ -130,4 +130,10 @@ class TokenTest(TestCase):
         self.assertEqual(ownership.is_confirmed, True)
         self.assertEqual(locker.owner, ownership)
         self.assertEqual(ownership.locker, locker)
-        
+
+        token = LockerToken.objects.create(ownership=ownership)
+        token.activate()
+        self.assertEqual(ownership.is_active, True)
+        self.assertEqual(ownership.is_confirmed, True)
+        self.assertEqual(locker.owner, ownership)
+        self.assertEqual(ownership.locker, locker)

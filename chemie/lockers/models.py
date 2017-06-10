@@ -113,8 +113,6 @@ class LockerToken(models.Model):
         if self.ownership.locker.owner is not None:
             if self.ownership.locker.owner != self.ownership:
                 raise ValidationError(_("Skapet er tatt"))
-            else:
-                raise ValidationError(_("Du eier allerede skapet."))
 
         if self.ownership.user.reached_limit():
             raise ValidationError(_("Du har nådd maksgrensen på ", LOCKER_COUNT, " skap."))
