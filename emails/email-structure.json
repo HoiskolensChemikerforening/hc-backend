@@ -1,0 +1,58 @@
+[
+{
+"name": "event",
+"description": "Bekreftelsesepost om påmeldelse",
+"subject":"{{ event.title }} - HC",
+"path":"event/event"
+},
+
+
+{
+"name": "contact_email",
+"description": "Kontakt-epost",
+"subject":"Kontaktskjema - chemie.no",
+"path":"misc/contact_email"
+},
+
+{
+"name": "profile_forgot_password",
+"description": "Glemt passord epost",
+"subject":"Lag nytt passord - HC",
+"path":"misc/forgot_password"
+},
+
+{
+"name": "funds_request_form",
+"description": "Søknad om penger",
+"subject":"Refusjon - {{ form_data.applier }} har søkt om penger!",
+"path":"misc/funds_request_form"
+},
+
+{
+"name": "lockers_activate",
+"description": "Aktiveringsmail for bokskap",
+"subject":"Aktiver bokskap #{{ ownership.locker }} - HC",
+"path":"lockers/lockers_activate"
+},
+
+{
+"name": "lockers_my_lockers",
+"description": "Dine bokskap",
+"subject":"Dine bokskap  - HC",
+"path":"lockers/my_lockers"
+},
+
+{
+"name": "lockers_reactivate",
+"description": "Re-aktiver boksap",
+"subject":"Vil du beholde bokskap # {{ ownership.locker }}?",
+"path":"lockers/lockers_reactivate"
+},
+
+{
+"name": "lockers_final_warning",
+"description": "Siste påminnelse om boskap",
+"subject":"Skap #{{ ownership.locker }} klippes og tømmes snart!",
+"path":"lockers/lockers_final_warning"
+}
+]

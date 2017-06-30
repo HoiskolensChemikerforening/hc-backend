@@ -1,7 +1,7 @@
   <mj-section mj-class="tertiaryColor">
     <mj-column>
       <mj-text align="center" font-size="16px" color="black">Spørsmål, kommentarer eller bekymringer? <br>
-        Kontakt oss på <a href="mailto:styret@hc.ntnu.no" class="blink">styret@hc.ntnu.no</a>
+        Kontakt oss på <a href="mailto:styret@hc.ntnu.no" class="blink" style="color:black">styret@hc.ntnu.no</a>
       </mj-text>
     </mj-column>
   </mj-section>
@@ -23,5 +23,3 @@
       </mj-button>
     </mj-column>
   </mj-section>
-</mj-container>
-</mj-body>

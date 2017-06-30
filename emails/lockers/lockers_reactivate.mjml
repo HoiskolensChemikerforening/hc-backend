@@ -1,0 +1,38 @@
+<mjml>
+  <mj-head>
+    <mj-include path="../style.mjml" />
+    <mj-title>{{ subject }}
+    </mj-title>
+  </mj-head>
+  <mj-body>
+    <mj-container mj-class="secondaryColor">
+      <mj-include path="../header.mjml" />
+      <mj-section padding-left="0px" padding-right="0px" background-url="https://{{ root_url }}{% static 'images/email/lockers.png' %}"
+                  padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
+        <mj-column mj-class="transparency" >
+          <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="65px" padding-bottom="65px">
+            Vil du beholde skap #{{ ownership.locker }}?
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section mj-class="primaryColor" padding-top="20">
+        <mj-column width="80%">
+          <mj-text mj-class="smallHeader">Hei {{ user }}!
+            <br>
+              </mj-text>
+            <mj-text mj-class="readableGrey">
+
+Den store oppryddingen i bokskap er kommet og du må derfor bekrefte ditt bokskap #{{ ownership.locker }} om du vil beholde dette videre. Skaplåsen blir klippet og innholdet kastet om du ikke bekrefter forlengelsen innen 14 dager.
+          </mj-text>
+          <mj-button mj-class="button" href="https://{{ root_url }}{% url 'bokskap:activate' token.key.hex  %}">
+            Behold bokskap!
+          </mj-button>
+          <mj-divider mj-class="border" />
+          <mj-text mj-class="notice">Se bort i fra denne e-posten dersom du ikke ønsker å beholde bokskapet.
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-include path="../footer.mjml" />
+    </mj-container>
+  </mj-body>
+</mjml>

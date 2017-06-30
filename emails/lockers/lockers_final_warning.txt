@@ -1,0 +1,4 @@
+Hei {{ user }}! 
+Vi har ikke motatt bekreftelse på at du vil beholde bokskap #{{ ownership.locker }}. Dette er den siste advarselen før låsen klippes og innholdet kastes. Vennligst følg lenken under om du vil beholdet skapet.
+
+https://{{ root_url }}{% url 'bokskap:activate' token.key.hex %}

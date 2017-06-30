@@ -43,4 +43,4 @@ def reset_locker_ownerships():
         token = ownership.create_confirmation()
 
         user = ownership.user
-        send_activation_email(user, token, reactivation=True)
+        send_activation_email(user, token, activation_type='re-activate')

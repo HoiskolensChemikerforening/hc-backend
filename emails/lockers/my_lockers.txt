@@ -1,0 +1,4 @@
+Du har følgende bokskap: <br>
+{% for locker in lockers %}
+#{{ locker }}   
+{% endfor %}

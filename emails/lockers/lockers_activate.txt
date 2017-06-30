@@ -1,0 +1,7 @@
+Hei {{ user }}!
+Du har nesten fått skap nr {{ ownership.locker }}! 
+Du er bare få klikk unna den beste bokskap-opplevelsen på NTNU. Aktiver bokskapet ved å besøke lenken under. 
+https://{{ root_url }}/bokskap/aktiver/{{ token.key.hex }}
+
+
+Noen har forsøkt å registrere et bokskap på denne e-postadressen ({{ email }}). Se bort i fra denne e-posten dersom du ikke utførte denne handlingen.

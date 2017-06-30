@@ -1,0 +1,13 @@
+HC har fått en søknad om penger!
+
+Søker: {{ user.get_full_name }}
+Søkers e-post: {{ user.email }}
+Søknad datert {{ form_data.created}}
+
+Søker på vegne av: {{ form_data.applier }}
+Bankkonto eier: {{ form_data.bank_account_holder }}
+Bankkonto nummer: {{ form_data.bank_account_id }}
+
+Formål: {{ form_data.purpose }}
+Prisklasse: {{ form_data.get_nice_price_range }}
+Beskrivelse: {{ form_data.description}}

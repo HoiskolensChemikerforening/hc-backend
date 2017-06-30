@@ -1,0 +1,14 @@
+{% load event_extras %}
+{% if registration.status == 1 %} Du er påmeldt {% else %} Du er på ventelisten til {% endif %} {{ event.title }}. 
+Tid:	{{ event.date|date:"j. F - H:i" }}
+Avmeldingsfrist:	{{ event.deregister_deadline}}
+Sted: {{ event.location }}
+
+Beskrivelse: 
+{{ event.description|striptags}} 
+
+Betalingsinformasjon: 
+{{ event.payment_information|striptags }} 
+
+Medlemspris: {{ event.price_member|price }}. Ikke-medlem: {{ event.price_not_member|price }}. 
+{% if event.companion %} Pris for følge: {{ event.price_companion|price }} {% endif %}

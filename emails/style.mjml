@@ -1,0 +1,38 @@
+<mj-font name="Open Sans" href="https://{{ root_url }}/font/proximanova.css" />
+<mj-attributes>
+  <mj-class name="primaryColor" background-color="#0B3954">
+  </mj-class>
+  <mj-class name="secondaryColor" background-color="#fcfcff">
+  </mj-class>
+  <mj-class name="tertiaryColor" background-color="white">
+  </mj-class>
+  <mj-class name="notice" color="white" font-size="12">
+  </mj-class>
+  <mj-class name="heading" font-weight="700" font-size="25px" color="#FFFFFF">
+  </mj-class>
+  <mj-class name="readable" color="white" font-size="18" font-weight="300" padding-left="4%">
+  </mj-class>
+  <mj-class name="button" background-color="#FFFFFF" color="#3C91E6" font-size="20" font-weight="700" inner-padding="17px 30px" padding-bottom="20">
+  </mj-class>
+  <mj-class name="border" border-width="3px" border-style="dashed" border-color="rgba(252,252,255,0.3)">
+  </mj-class>
+  <mj-class name="transparency" background-color="rgba(125,125,125,0.3)">
+  </mj-class>
+  <mj-class name="grayBackground" background-color="#757575">
+  </mj-class>
+  <mj-class name="smallHeader" font-weight="bold" color="#FFFFFF" font-size="20px">
+  </mj-class>
+  <mj-class name="readableGrey" color="#eeeeee" font-size="18px">
+  </mj-class>
+  <mj-class name="offBlack" color="#263238">
+  </mj-class>
+  <mj-all font-family="'Proxima Nova', ProximaNova,Proxima-Nova, Helvetica, Arial, sans-serif" font-weight="300" color="white"/>
+  </mj-all>
+</mj-attributes>
+<mj-style>
+  .blink {
+  font-weight: bold;
+  text-decoration:none !important;
+  color:#FFFFFF;
+  }
+</mj-style>

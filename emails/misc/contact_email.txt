@@ -1,0 +1,8 @@
+HC har blitt kontaktet!
+
+Hvem: {{ contact_name|default_if_none:"Ikke oppgitt" }}
+E-post: {{ contact_email|default_if_none:"Ikke oppgitt" }}
+Når: {% now "j. F - H:i" %}
+
+Melding:
+{{ message }}

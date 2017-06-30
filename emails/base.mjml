@@ -1,0 +1,14 @@
+<mjml>
+  <mj-head>
+    <mj-include path="./style.mjml" />
+    <mj-title>{{ subject }}
+    </mj-title>
+  </mj-head>
+  <mj-body>
+    <mj-container mj-class="secondaryColor">
+      <mj-include path="./header.mjml" />
+      <mj-section></mj-section>
+      <mj-include path="./footer.mjml" />
+    </mj-container>
+  </mj-body>
+</mjml>
