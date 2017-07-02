@@ -7,7 +7,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 
-from .email import send_my_lockers_mail, send_activation_email
+from .email import send_my_lockers_mail, send_activation_mail
 from .forms import RegisterExternalLockerUserForm, MyLockersForm, ConfirmOwnershipForm
 from .models import Locker, LockerUser, Ownership, LockerToken
 
@@ -80,7 +80,7 @@ def register_locker(request, number):
 
             # Create confirmation link object
             token = new_ownership.create_confirmation()
-            send_activation_email(user, token)
+            send_activation_mail(user, token)
             messages.add_message(request, messages.SUCCESS,
                                  'Bokskapet er nesten reservert! '
                                  'En epost har blitt sendt til deg med videre instrukser for å bekrefte epostaddressen din.',

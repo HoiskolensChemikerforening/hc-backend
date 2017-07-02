@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from lockers.models import Ownership
-from lockers.email import send_activation_email
+from lockers.email import send_re_activation_mail
 
 
 class Command(BaseCommand):
@@ -27,8 +27,8 @@ class Command(BaseCommand):
         else:
             self.stdout.write(self.style.NOTICE('Silent treatment received.'))
 
-        reset_locker_ownerships()
-        self.stdout.write(self.style.SUCCESS('Lockers reset'))
+        lockers_reset = reset_locker_ownerships()
+        self.stdout.write(self.style.SUCCESS('{} lockers reset'.format(lockers_reset)))
 
 
 def reset_locker_ownerships():
@@ -43,4 +43,6 @@ def reset_locker_ownerships():
         token = ownership.create_confirmation()
 
         user = ownership.user
-        send_activation_email(user, token, activation_type='re-activate')
+        send_re_activation_mail(user, token)
+
+    return len(ownerships_to_reset)
