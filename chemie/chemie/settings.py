@@ -300,8 +300,36 @@ CKEDITOR_CONFIGS = {
         'customConfig': '/static/js/ckeditor_config.js',
         'width': '100%'
     },
+
+    'flatpages': {
+        'skin': 'bootstrapck',
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            {'name': 'clipboard', 'items': ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo']},
+            {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
+            '/',
+            {'name': 'basicstyles',
+             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+            {'name': 'paragraph',
+             'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
+                       'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
+                       'Language']},
+            {'name': 'links', 'items': ['Link', 'Unlink', 'Anchor']},
+            {'name': 'insert',
+             'items': ['Image', 'Table', 'HorizontalRule', 'Smiley', 'SpecialChar', 'PageBreak']},
+            '/',
+            {'name': 'styles', 'items': ['Format', 'FontSize']},
+            {'name': 'colors', 'items': ['TextColor', 'BGColor']},
+            {'name': 'tools', 'items': ['Maximize', 'ShowBlocks']},
+            '/',  # put this to force next toolbar on new line
+        ],
+        'customConfig': '/static/js/ckeditor_config.js',
+        'width': '100%'
+    },
+
 }
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
 GOOGLE_MAPS_API_KEY = ''
 THUMBNAIL_PRESERVE_FORMAT = True
+INTERNAL_IPS = '127.0.0.1'

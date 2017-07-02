@@ -42,7 +42,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    url(r'^s/', include('django.contrib.flatpages.urls')),
+    url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
 ]
 
 if settings.DEBUG:

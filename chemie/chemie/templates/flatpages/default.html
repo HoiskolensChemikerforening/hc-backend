@@ -31,6 +31,24 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+    {% if perms.flatpages %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">menu</i>
+      </a>
+      <ul>
+        {% if perms.flatpages.change_flatpage %}
+          <li>
+            <a class="btn-floating blue" href="{% url "frontpage:edit_flatpage" flatpage.url %}"><i
+                class="material-icons">edit</i></a>
+            <a class="btn-floating mobile-fab-tip">Endre side</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+
   <div class="row">
     <div class="col m12 s12 l10">
       {{ flatpage.content }}

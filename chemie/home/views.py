@@ -1,16 +1,19 @@
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.shortcuts import render
-from django.utils import timezone
-from django.core.urlresolvers import reverse
-from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.flatpages.models import FlatPage
+from django.contrib.sites.shortcuts import get_current_site
+from django.core.urlresolvers import reverse
+from django.http import Http404
+from django.shortcuts import redirect
+from django.shortcuts import render, get_object_or_404
+from django.utils import timezone
 from post_office import mail
 
 from events.models import Event
+from home.forms import FlatpageEditForm
 from news.models import Article
 from .forms import ContactForm, PostFundsForm
-from django.contrib.sites.shortcuts import get_current_site
 
 
 def index(request):
@@ -87,3 +90,33 @@ def request_funds(request):
     }
 
     return render(request, "home/post_funds_form.html", context)
+
+
+@permission_required('flatpages.change_flatpage')
+def edit_flatpage(request, url):
+    if not url.startswith('/'):
+        url = '/' + url
+    site_id = get_current_site(request).id
+    try:
+        flatpage = get_object_or_404(FlatPage, url=url, sites=site_id)
+    except Http404:
+        if not url.endswith('/') and settings.APPEND_SLASH:
+            url += '/'
+            flatpage = get_object_or_404(FlatPage, url=url, sites=site_id)
+        else:
+            raise
+
+    form = FlatpageEditForm(request.POST or None, instance=flatpage)
+
+    if request.method == 'POST':
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            messages.add_message(request, messages.SUCCESS, '{} har blitt endret!'.format(flatpage.title),
+                                 extra_tags='Supert')
+            return redirect(reverse('flatpages:django.contrib.flatpages.views.flatpage', kwargs={'url': flatpage.url[1:]}))
+    context = {
+        'flatpage': flatpage,
+        'form': form,
+    }
+    return render(request, 'flatpage/edit_flatpage.html', context)
