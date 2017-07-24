@@ -23,7 +23,7 @@
             <mj-text mj-class="readableGrey">
               Du har følgende bokskap: <br>
 								{% for locker in lockers %}
-									<strong>#{{ locker }}</strong><br>
+									<strong>#{{ locker }} </strong> {% if not locker.owner.is_active %} : ikke aktivert - se tidligere e-post {% endif %}<br>
 								{% endfor %}
           </mj-text>
           <mj-divider mj-class="border" />

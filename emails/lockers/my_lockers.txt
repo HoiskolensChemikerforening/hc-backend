@@ -1,4 +1,4 @@
 Du har følgende bokskap: <br>
 {% for locker in lockers %}
-#{{ locker }}   
+#{{ locker }} {% if not locker.owner.is_active %} : ikke aktivert - se tidligere e-post {% endif %}   
 {% endfor %}
