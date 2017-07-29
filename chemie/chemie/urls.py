@@ -15,11 +15,12 @@ Including another URLconf
 """
 import django.contrib.auth.views as auth_views
 from django.conf import settings
-from django.conf.urls import include, url
+from django.conf.urls import include, url, handler404
 from django.conf.urls.static import static
 from django.contrib import admin
 from django_nyt.urls import get_pattern as get_nyt_pattern
 from wiki.urls import get_pattern as get_wiki_pattern
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -41,6 +42,8 @@ urlpatterns = [
     url(r'^carousel/', include('picturecarousel.urls', namespace='carousel'))
 ]
 
+handler404 = 'chemie.views.page_not_found'
+
 urlpatterns += [
     url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
 ]
@@ -49,8 +52,8 @@ if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-    from chemie.views import show_404
+    from chemie.views import page_not_found
     from django.views.defaults import server_error
 
-    urlpatterns += [url(r'test404', show_404, name='404 ')]
+    urlpatterns += [url(r'test404', page_not_found, name='404 ')]
     urlpatterns += [url(r'test500', server_error, name='404 ')]
