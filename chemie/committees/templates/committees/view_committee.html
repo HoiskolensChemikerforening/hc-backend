@@ -17,12 +17,13 @@
       </a>
       <ul>
         <li>
-          <a class="btn-floating blue" href="{% url "verv:edit_description" committee.slug %}"><i class="material-icons">edit</i></a>
+          <a class="btn-floating blue" href="{% url "verv:edit_description" committee.slug %}"><i
+              class="material-icons">edit</i></a>
           <a class="btn-floating mobile-fab-tip">Endre beskrivelse</a>
         </li>
-        {% if perms.committees.edit_member %}
+        {% if perms.committees.change_member %}
           <li>
-            <a class="btn-floating blue" href="{% url "verv:edit_memberships" %}"><i
+            <a class="btn-floating blue" href="{% url  "verv:edit_memberships" committee.slug %}"><i
                 class="material-icons">person_add</i></a>
             <a class="btn-floating mobile-fab-tip">Endre medlemmer</a>
           </li>
@@ -47,17 +48,31 @@
               <i class="material-icons valign left">people</i>
               <h5 class="left-align">Medlemmer</h5>
             </div>
-            {% for member in members %}
-              <a href="mailto:
+            {% for position in positions %}
+              <div style="padding-bottom: 10px;">
+                {% for member in position.users.all %}
+                <!-- Membership title in case of multiple members -->
 
-                  {% if member.position.email %}{{ member.position.email }}{% else %}{{ member.user.email }}{% endif %}">
-                <div class="valign-wrapper">
-                  <i class="material-icons valign left tiny">email</i>
-                  <p class="black-text"> {{ member.position.title }}: {{ member.user.get_full_name }}</p>
-                </div>
-              </a>
+                  <!-- Membership title in case of multiple members -->
+                  {% if forloop.first %}
+                    <div class="valign-wrapper">
+                      <p class="black-text"> {{ position.title }}:</p>
+                    </div>
+                  {% endif %}
+
+                  <!-- Member, with the possibility of being part of a group (multiple members for one position) -->
+                  <a href="mailto:{% if position.email %}{{ position.email }}{% else %}{{ member.email }}{% endif %}">
+                    <div class="valign-wrapper"
+                         style="padding-left: 15px;">
+                      <i class="material-icons valign left tiny">email</i>
+                      <p class="black-text">{{ member.get_full_name }}</p>
+                    </div>
+                  </a>
+                {% endfor %}
+              </div>
             {% endfor %}
           </div>
+
           {% if committee.email %}
             <div class="divider grey"></div>
             <div class="section">

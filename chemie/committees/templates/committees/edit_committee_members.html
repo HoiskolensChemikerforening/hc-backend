@@ -7,7 +7,7 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Endre medlemmer
+  Endre medlemmer - {{ committee }}
 {% endblock nav_sub_header %}
 
 {% block header %}
@@ -21,15 +21,32 @@
   <script src="/static/autocomplete_light/vendor/select2/dist/js/select2.full.js" defer></script>
   <script type="text/javascript" src="/static/autocomplete_light/forward.js"></script>
   <script src="/static/autocomplete_light/select2.js" defer></script>
+
+  <style>
+    .select2-container {
+      width: inherit !important;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-  <div class="col s12 m12 l12">
+  <div class="col s12 m8 l8">
     <div class="row">
-      <form class="form" method='POST'>{% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn" type='submit' value='Send!'/>
-      </form>
+      <div class="card">
+        <div class="card-content">
+
+          <form class="form" method='POST'>{% csrf_token %}
+            {{ formset.management_form }}
+            {% for form in formset %}
+              <h5>{{ form.instance.title }} ({{ form.instance.max_members }} stk)</h5>
+              {{ form }}
+              <br>
+            {% endfor %}
+            <br>
+            <input class="btn" type='submit' value='Lagre!'/>
+          </form>
+        </div>
+      </div>
     </div>
   </div>
 
