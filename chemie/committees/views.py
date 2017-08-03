@@ -1,18 +1,21 @@
 from dal import autocomplete
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.urlresolvers import reverse
+from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
-from django.contrib.auth.decorators import login_required, permission_required
-from .forms import EditCommittees, EditDescription
-from .models import Committee, Member
+
+from .forms import EditDescription
+from .models import Committee, Position
 
 
 def index(request):
     # Fetch all members, who belong to a committee (Member -> Committee)
     # Group all these members by the committee type
-    committees = Committee.objects.prefetch_related('members').prefetch_related('members__user').order_by('title')
+    committees = Committee.objects.order_by('title')
     context = {
         'committees': committees,
     }
@@ -20,53 +23,35 @@ def index(request):
     return render(request, 'committees/list_committees.html', context)
 
 
-@permission_required('committees.edit_position')
-def edit(request):
-    form = EditCommittees(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            committee = form.cleaned_data.get('committee')
-            position = form.cleaned_data.get('position')
-            new_user = form.cleaned_data.get('user')
-            try:
-                current_member = Member.objects.get(committee=committee,
-                                                    position=position)
-            except ObjectDoesNotExist:
-                current_member = None
-            if current_member is not None:
-                current_member.delete()
-            new_member = Member(committee=committee,
-                                position=position,
-                                user=new_user)
-            new_member.save()
-            messages.add_message(request, messages.SUCCESS, 'Brukeren er lagt til i vervet og tidligere bruker er slettet!',
-                                 extra_tags='Flott!',
-                                )
-    context = {
-        'form': form,
-    }
-    return render(request, 'committees/edit.html', context)
-
-
 def view_committee(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
-    members = Member.objects.filter(committee=committee).prefetch_related('user')
+    positions = Position.objects.filter(committee=committee).prefetch_related('users')
     context = {
         'committee': committee,
-        'members': members
+        'positions': positions
     }
     return render(request, 'committees/view_committee.html', context)
 
 
-@permission_required('committees.edit_committee')
+@permission_required('committees.change_committee')
 def edit_description(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
+    managers = Position.objects.filter(can_manage_committee=True, committee=committee)
+    admin_of_this_group = any([request.user in p.users.all() for p in managers])
+    if not (admin_of_this_group or request.user.has_perm('committees.add_committee')):
+        messages.add_message(request, messages.ERROR,
+                             'Du har bare lov å endre egne undergrupper.',
+                             extra_tags='Manglende rettigheter!',
+                             )
+        return redirect(reverse('verv:committee_detail', kwargs={'slug': slug}))
+
     form = EditDescription(request.POST or None, request.FILES or None, instance=committee)
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
-            messages.add_message(request, messages.SUCCESS, '{} har blitt endret!'.format(committee.title), extra_tags='Supert')
+            messages.add_message(request, messages.SUCCESS, '{} har blitt endret!'.format(committee.title),
+                                 extra_tags='Supert')
             return HttpResponseRedirect(committee.get_absolute_url())
     context = {
         'committee': committee,
@@ -84,6 +69,47 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
         qs = User.objects.all()
 
         if self.q:
-            qs = qs.filter(username__icontains=self.q)
+            qs = qs.filter(username__icontains=self.q) | \
+                 qs.filter(first_name__icontains=self.q) | \
+                 qs.filter(last_name__icontains=self.q)
 
         return qs
+
+
+@permission_required('committees.change_committee')
+def edit_committee_memberships(request, slug):
+    positions = Position.objects.filter(committee__slug=slug)
+    managers = positions.filter(can_manage_committee=True)
+
+    # A user may have change_committee permission, but must have "add_position" to edit all committees or be
+    # an administrator of the committee
+    admin_of_this_group = any([request.user in p.users.all() for p in managers])
+    if not (admin_of_this_group or request.user.has_perm('committees.add_position')):
+        messages.add_message(request, messages.ERROR,
+                             'Du har bare lov å endre egne undergrupper.',
+                             extra_tags='Manglende rettigheter!',
+                             )
+        return redirect(reverse('verv:committee_detail', kwargs={'slug': slug}))
+
+    MemberFormSet = modelformset_factory(Position,
+                                         fields=('users',),
+                                         widgets={
+                                             'users': autocomplete.ModelSelect2Multiple(
+                                                 url='verv:user-autocomplete',
+                                                 attrs={"data-maximum-selection-length": 1, })},
+                                         extra=0)
+
+    formset = MemberFormSet(request.POST or None, request.FILES or None, queryset=positions)
+
+    if request.method == 'POST':
+        if formset.is_valid():
+            formset.save()
+            messages.add_message(request, messages.SUCCESS,
+                                 'Endringene ble lagret.',
+                                 extra_tags='Flott!',
+                                 )
+    else:
+        for form in formset:
+            # Dynamicly change each max-selected-items according to the positions' max_members
+            form.fields.get('users').widget.attrs['data-maximum-selection-length'] = form.instance.max_members
+    return render(request, 'committees/edit_committee_members.html', {'formset': formset, 'committee': slug})

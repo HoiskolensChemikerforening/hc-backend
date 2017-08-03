@@ -3,10 +3,9 @@ from django.contrib.auth.models import Group, User
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_delete
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.text import slugify
-from smart_selects.db_fields import ChainedForeignKey
 from sorl.thumbnail import ImageField
 
 
@@ -22,64 +21,48 @@ class Committee(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('verv:view', kwargs={'slug':self.slug})
+        return reverse('verv:committee_detail', kwargs={'slug': self.slug})
 
 
 class Position(models.Model):
     title = models.CharField(max_length=100, verbose_name="Stillingsnavn")
     email = models.EmailField(null=True, blank=True, verbose_name="Epost")
-    committee = models.ForeignKey(Committee)
+    committee = models.ForeignKey(Committee, )
     permission_group = models.ForeignKey(Group)
+    max_members = models.PositiveSmallIntegerField(default=1, verbose_name='Antall medlemmer')
+    can_manage_committee = models.BooleanField(default=False)
+    users = models.ManyToManyField(User, blank=True, null=True, verbose_name='medlem')
+
+    def remove_from_group(self, users):
+        for user in users:
+            self.permission_group.user_set.remove(user)
+
+    def add_to_group(self, users):
+        for user in users:
+            self.permission_group.user_set.add(user)
+
+    # Signal for adding and removing users from a permission group as they are added/removed to a Position
+    # https://stackoverflow.com/a/4571362
+    @staticmethod
+    def consistent_permissions(sender, instance, action, reverse, model, pk_set, **kwargs):
+        if action == 'post_add':
+            instance.add_to_group(instance.users.all())
+        elif action == 'pre_remove':
+            instance.remove_from_group(instance.users.all())
 
     def __str__(self):
         return str(self.title)
 
 
-class Member(models.Model):
-    committee = models.ForeignKey(Committee, related_name="members")
-    position = ChainedForeignKey(
-        Position,
-        chained_field="committee",
-        chained_model_field="committee",
-        show_all=False,
-        auto_choose=True
-    )
-    user = models.ForeignKey(User, blank=True, null=True)
-
-    def __str__(self):
-        if self.user:
-            return self.user.get_full_name()
-        else:
-            return "Ledig"
-
-    def remove_from_group(self, user):
-        self.position.permission_group.user_set.remove(user)
-
-    def add_to_group(self, user):
-        self.position.permission_group.user_set.add(user)
-
-    def __init__(self, *args, **kwargs):
-        super(Member, self).__init__(*args, **kwargs)
-        self.initial_user = self.user
-
-    def save(self, *args, **kwargs):
-        new = self.user
-        if self.pk:
-            #Member exists and is changed
-            old = Member.objects.get(pk=self.pk).user
-            self.remove_from_group(old)
-        if new:
-            self.add_to_group(self.user)
-        super(Member, self).save()
+@receiver(pre_delete, sender=Position)
+def update_position_member_groups_on_delete(sender, instance, *args, **kwargs):
+    instance.remove_from_group(instance.users.all())
 
 
-@receiver(pre_delete, sender=Member)
-def update_position_member_groups_on_save(sender, instance, *args, **kwargs):
-    instance.remove_from_group(instance.user)
-
-
+@receiver(pre_save, sender=Committee)
 def pre_save_committee_receiver(sender, instance, *args, **kwargs):
     slug = slugify(instance.title)
     instance.slug = slug
 
-pre_save.connect(pre_save_committee_receiver, sender=Committee)
+
+m2m_changed.connect(receiver=Position.consistent_permissions, sender=Position.users.through)

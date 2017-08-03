@@ -1,20 +1,7 @@
 from dal import autocomplete
 from django import forms
 
-from .models import Committee, Member
-
-
-class EditCommittees(forms.ModelForm):
-    class Meta:
-        model = Member
-        fields = [
-            'committee',
-            'position',
-            'user',
-        ]
-        widgets = {
-            'user': autocomplete.ModelSelect2(url='verv:user-autocomplete')
-                   }
+from .models import Committee
 
 
 class EditDescription(forms.ModelForm):
