@@ -7,8 +7,9 @@ from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
+from django.views.generic.edit import FormView
 
-from .forms import EditDescription
+from .forms import EditDescription, EditPositionForm
 from .models import Committee, Position
 
 
@@ -91,12 +92,7 @@ def edit_committee_memberships(request, slug):
                              )
         return redirect(reverse('verv:committee_detail', kwargs={'slug': slug}))
 
-    MemberFormSet = modelformset_factory(Position,
-                                         fields=('users',),
-                                         widgets={
-                                             'users': autocomplete.ModelSelect2Multiple(
-                                                 url='verv:user-autocomplete',
-                                                 attrs={"data-maximum-selection-length": 1, })},
+    MemberFormSet = modelformset_factory(Position, form=EditPositionForm,
                                          extra=0)
 
     formset = MemberFormSet(request.POST or None, request.FILES or None, queryset=positions)
@@ -110,6 +106,6 @@ def edit_committee_memberships(request, slug):
                                  )
     else:
         for form in formset:
-            # Dynamicly change each max-selected-items according to the positions' max_members
+            # Dynamically change each max-selected-items according to the positions' max_members
             form.fields.get('users').widget.attrs['data-maximum-selection-length'] = form.instance.max_members
     return render(request, 'committees/edit_committee_members.html', {'formset': formset, 'committee': slug})
