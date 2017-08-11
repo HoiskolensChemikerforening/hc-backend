@@ -37,10 +37,10 @@
   <div class="col s12 m8 l8">
     <div class="row">
       <div class="card">
+      <!-- Edit committee members -->
         <div class="card-content">
           <p class="flow-text">Har kan man legge til og fjerne gruppemedlemmer.
             Kontakt Webkom for endring av epostlister.</p>
-
           <form class="form" method='POST'>{% csrf_token %}
             {{ formset.management_form }}
             {% for form in formset %}

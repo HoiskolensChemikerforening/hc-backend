@@ -7,6 +7,7 @@ from django.db.models.signals import pre_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.text import slugify
 from sorl.thumbnail import ImageField
+from django.core.exceptions import ValidationError
 
 
 class Committee(models.Model):
@@ -28,7 +29,7 @@ class Position(models.Model):
     title = models.CharField(max_length=100, verbose_name="Stillingsnavn")
     email = models.EmailField(null=True, blank=True, verbose_name="Epost")
     committee = models.ForeignKey(Committee, )
-    permission_group = models.ForeignKey(Group)
+    permission_group = models.ForeignKey(Group, null=True)
     max_members = models.PositiveSmallIntegerField(default=1, verbose_name='Antall medlemmer')
     can_manage_committee = models.BooleanField(default=False)
     users = models.ManyToManyField(User, blank=True, null=True, verbose_name='medlem')
@@ -45,6 +46,11 @@ class Position(models.Model):
     # https://stackoverflow.com/a/4571362
     @staticmethod
     def consistent_permissions(sender, instance, action, reverse, model, pk_set, **kwargs):
+
+        if action == 'pre_add':
+            if len(pk_set) + instance.users.count() > instance.max_members:
+                raise ValidationError('This only holds {} members.'.format(instance.max_members))
+
         if action == 'post_add':
             instance.add_to_group(instance.users.all())
         elif action == 'pre_remove':
@@ -52,6 +58,11 @@ class Position(models.Model):
 
     def __str__(self):
         return str(self.title)
+
+    def clean_fields(self, exclude=None):
+        super().clean_fields(exclude)
+        if self.users.count() > self.max_members:
+            raise ValidationError('This only holds {} members.'.format(self.max_members))
 
 
 @receiver(pre_delete, sender=Position)
