@@ -1,5 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import Group, User
+from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_delete
@@ -7,7 +8,6 @@ from django.db.models.signals import pre_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.text import slugify
 from sorl.thumbnail import ImageField
-from django.core.exceptions import ValidationError
 
 
 class Committee(models.Model):
@@ -58,11 +58,6 @@ class Position(models.Model):
 
     def __str__(self):
         return str(self.title)
-
-    def clean_fields(self, exclude=None):
-        super().clean_fields(exclude)
-        if self.users.count() > self.max_members:
-            raise ValidationError('This only holds {} members.'.format(self.max_members))
 
 
 @receiver(pre_delete, sender=Position)
