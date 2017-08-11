@@ -16,9 +16,9 @@ class PositionTest(TestCase):
         self.low_permission_position = LowPermissionPositionFactory()
         self.high_permission_position = HighPermissionPositionFactory()
 
-        committee = self.low_permission_position.committee
-        self.edit_committee = reverse('verv:edit_description', kwargs={'slug': committee.slug})
-        self.edit_members = reverse('verv:edit_memberships', kwargs={'slug': committee.slug})
+        self.low_committee = self.low_permission_position.committee
+        self.edit_committee = lambda c: reverse('verv:edit_description', kwargs={'slug': c.slug})
+        self.edit_members = lambda c: reverse('verv:edit_memberships', kwargs={'slug': c.slug})
 
     def login_user(self):
         client_users = [Client() for x in range(0, self.usercount)]
@@ -51,26 +51,35 @@ class PositionTest(TestCase):
 
     def test_position_can_manage_committee(self):
         self.login_user()
-        response = self.no_perms_user.get(self.edit_committee, follow=False)
+        response = self.no_perms_user.get(self.edit_committee(self.low_committee), follow=False)
         self.assertEqual(response.status_code, 302)
 
-        response = self.no_perms_user.get(self.edit_members, follow=False)
+        response = self.no_perms_user.get(self.edit_members(self.low_committee), follow=False)
         self.assertEqual(response.status_code, 302)
 
         self.low_permission_position.users.add(self.users[0])
+        committee = self.low_permission_position.committee
         self.login_user()
         self.low_permission_position.can_manage_committee = True
         self.low_permission_position.save()
 
-        response = self.low_user.get(self.edit_committee, follow=True)
+        response = self.low_user.get(self.edit_committee(committee), follow=True)
         self.assertContains(response, '<!-- Edit committee page -->')
-        response = self.low_user.get(self.edit_members, follow=True)
+        response = self.low_user.get(self.edit_members(committee), follow=True)
         self.assertContains(response, '<!-- Edit committee members -->')
+
+    def test_position_denied_manage_other_committees(self):
+        self.low_permission_position.users.add(self.low_user)
+        self.login_user()
+        response = self.low_user.get(self.edit_committee(self.high_permission_position.committee), follow=True)
+        self.assertContains(response, 'Manglende rettigheter!')
+        response = self.low_user.get(self.edit_members(self.high_permission_position.committee), follow=True)
+        self.assertContains(response, 'Manglende rettigheter!')
 
     def test_super_position_can_manage_committee(self):
         self.high_permission_position.users.add(self.high_user)
         self.login_user()
-        response = self.high_user.get(self.edit_members, follow=True)
+        response = self.high_user.get(self.edit_members(self.high_permission_position.committee), follow=True)
         self.assertContains(response, '<!-- Edit committee members -->')
 
     def test_delete_position(self):
