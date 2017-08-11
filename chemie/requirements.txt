@@ -72,3 +72,4 @@ psycopg2==2.6.2
 django-hashers-passlib==0.3
 setuptools==34.1.0
 uwsgi
+factory-boy==2.9.2
