@@ -80,11 +80,15 @@ class BaseEvent(models.Model):
         except ZeroDivisionError:
             return "N/A"
 
+    def registration_has_opened(self):
+        return timezone.now() >= self.register_startdate
+
     class Meta:
         abstract = True
 
 
 class Event(BaseEvent):
+    author = models.ForeignKey(User, related_name='event_author')
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
@@ -119,14 +123,30 @@ class Event(BaseEvent):
         return self.spare_slots > 0
 
     def get_absolute_url(self):
-        return reverse('events:detail', kwargs={"event_id": self.id})
+        return reverse('events:detail', kwargs={"pk": self.pk})
 
     def get_absolute_registration_url(self):
-        return reverse('events:register', kwargs={"event_id": self.id})
+        return reverse('events:register', kwargs={"pk": self.pk})
 
-    def registration_has_opened(self):
-        return timezone.now() >= self.register_startdate
 
+class Bedpres(BaseEvent):
+    author = models.ForeignKey(User, related_name='bedpres_author')
+    attendees = models.ManyToManyField(User, through='BedpresRegistration')
+
+    @property
+    def limitations_exceeds_total_slots(self):
+        ctr = 0
+        for limitation in self.limitations.all():
+            ctr += limitation.slots
+            if ctr > self.sluts:
+                return True
+        return False
+
+    def get_absolute_url(self):
+        return reverse('events:detail_bedpres', kwargs={"event_id": self.id})
+
+    def get_absolute_registration_url(self):
+        return reverse('events:register_bedpres', kwargs={"event_id": self.id})
 
 class RegistrationManager(models.Manager):
     def de_register(self, reg_to_be_deleted):
@@ -164,7 +184,7 @@ class BaseRegistration(models.Model):
 
 class EventRegistration(BaseRegistration):
     event = models.ForeignKey(Event)
-    user = models.ForeignKey(User)
+    #user = models.ForeignKey(User)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
     # Optional fields
@@ -173,6 +193,10 @@ class EventRegistration(BaseRegistration):
     companion = models.CharField(max_length=40, verbose_name="Navn på følge",
                                  help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
                                  null=True, blank=True)
+
+
+class BedpresRegistration(BaseRegistration):
+    event = models.ForeignKey(Bedpres)
 
 
 class RegistrationMessage(models.Model):
