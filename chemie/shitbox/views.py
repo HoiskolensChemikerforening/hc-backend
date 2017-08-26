@@ -31,7 +31,7 @@ def post_votes(request):
 def submissions_overview(request, page=1):
     page = int(page)
     all_submissions = Submission.objects.all().order_by('-date').prefetch_related('author__profile')
-    paginator = Paginator(all_submissions, 1)
+    paginator = Paginator(all_submissions, 20)
 
     try:
         submissions = paginator.page(page)
