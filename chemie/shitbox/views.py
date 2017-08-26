@@ -54,13 +54,11 @@ def submissions_overview(request, page=1):
     if page+2 in paginator.page_range:
         limit_useful_page_range.append(page+2)
 
-    len_range = len(list(submissions.paginator.page_range))
     submissions.paginator.first_page = paginator.page(useful_page_range[0]).number
     submissions.paginator.last_page = paginator.page(useful_page_range[-1]).number
 
     context = {
         'submissions': submissions,
-        'len_range': len_range,
         'limit_useful_page_range': limit_useful_page_range,
         'page': page,
     }
