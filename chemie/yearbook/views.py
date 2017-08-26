@@ -10,6 +10,7 @@ from .forms import NameSearchForm
 @login_required
 def index(request, year=1):
     year = int(year)
+    # If url arg year is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:
             year = GRADES.FIFTH.value
@@ -23,7 +24,7 @@ def index(request, year=1):
             users = find_user_by_name(search_field)
             profiles = Profile.objects.filter(user__in=users)
     else:
-        profiles = Profile.objects.filter(grade=year).select_related('user').order_by('user__last_name')
+        profiles = Profile.objects.filter(grade=year, user__is_active=True).order_by('user__last_name')
     context = {
         'profiles': profiles,
         'grades': GRADES,
