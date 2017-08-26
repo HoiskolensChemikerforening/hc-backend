@@ -17,18 +17,26 @@
       max-width: 300px;
     }
   </style>
-  <div class="row">
+  <div class="row center">
     <ul class="pagination nav navbar-nav">
       {% if submissions.has_previous %}
         <li><a href="{{ submissions.previous_page_number }}">Forrige</a></li>
       {% else %}
         <li class="disabled"><a class="grey-text text-lighten-1">Forrige</a></li>
       {% endif %}
+      {% if page %}
+        <li><a class="grey-text text-darken-1" href="{{ submissions.paginator.first_page }}">Første</a></li>
+      {% endif %}
 
-      {% for page in submissions.paginator.page_range %}
-        <li class="{% if submissions.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+      {% for page in limit_useful_page_range %}
+          {% if page %}
+            <li class="{% if submissions.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+          {% endif %}
       {% endfor %}
 
+        {% if page %}
+        <li><a class="grey-text text-darken-1" href="{{ submissions.paginator.last_page }}">Siste</a></li>
+      {% endif %}
       {% if submissions.has_next %}
         <li><a href="{{ submissions.next_page_number }}">Neste</a></li>
       {% else %}
