@@ -8,8 +8,10 @@ from django.db.models import Q
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
+from django.core.exceptions import ObjectDoesNotExist
+from django.http import Http404
 
-# Time the activation is valid in hours
+# Time the activation is valid in hourse
 VALID_TIME = 2
 
 # TODO: Decide how to handle weird students aka "PI" / 6th ++ year students
@@ -41,6 +43,34 @@ class ProfileManager(models.Manager):
         result = self.filter(reduce(lambda x, y: x | y,
                     [Q(user__first_name__contains=word) | Q(user__last_name__contains=word) for word in list]))
         return result
+
+    def get_profile_from_em(self, code):
+        try:
+            profile = self.filter(access_card=code).first()
+        except ObjectDoesNotExist:
+            return None
+        except None:
+            return None
+        except:
+            raise Http404
+        return profile
+
+    @staticmethod
+    def rfid_to_em(code):
+        # Convert to binary and strip the "0b" prefix
+        binary = bin(int(code))[2:]
+
+        # Pad with zeroes on left side
+        padded = '0' * (8 - len(binary) % 8) + binary
+
+        # Split into 8-bit groups
+        chunked = [padded[(i * 8):(i + 1) * 8] for i in range(0, len(padded) // 8)]
+
+        # Reverse all elements in each group, join groups together
+        reversed = ''.join([ci[::-1] for ci in chunked])
+
+        # Convert binary back to int
+        return int(reversed, 2)
 
 
 class Profile(models.Model):
