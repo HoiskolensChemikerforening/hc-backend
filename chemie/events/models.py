@@ -25,7 +25,7 @@ class BaseEvent(models.Model):
     title = models.CharField(max_length=40, verbose_name='Tittel')
 
     # Name of person creating event
-    author = models.ForeignKey(User, related_name="author")
+    author = models.ForeignKey(User, related_name="baseevent")
 
     #  When the event occurs, is created and edited
     date = models.DateTimeField(default=timezone.now, verbose_name="Dato")
@@ -143,10 +143,11 @@ class Bedpres(BaseEvent):
         return False
 
     def get_absolute_url(self):
-        return reverse('events:detail_bedpres', kwargs={"event_id": self.id})
+        return reverse('events:detail_bedpres', kwargs={"pk": self.pk})
 
     def get_absolute_registration_url(self):
-        return reverse('events:register_bedpres', kwargs={"event_id": self.id})
+        return reverse('events:register_bedpres', kwargs={"pk": self.pk})
+
 
 class RegistrationManager(models.Manager):
     def de_register(self, reg_to_be_deleted):
