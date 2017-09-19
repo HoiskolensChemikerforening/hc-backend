@@ -10,17 +10,16 @@ from django.http import JsonResponse, Http404
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.utils import timezone
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views import View
-from django.views.generic.edit import DeleteView
-from django.urls import reverse_lazy
+from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.detail import SingleObjectMixin
-from .extras import MultiFormsView
-
+from django.views.generic.edit import DeleteView
 
 from .email import send_event_mail
+from .extras import MultiFormsView
 from .forms import RegisterEventForm, RegisterUserForm, DeRegisterUserForm, RegisterLimitations, RegisterBedpresForm
-from .models import Event, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, BaseRegistration, Limitation, Bedpres, BedpresRegistration
+from .models import Event, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Limitation, Bedpres, \
+    BedpresRegistration
 
 
 class CreateEventView(View):
@@ -103,18 +102,26 @@ class ListEventsView(View):
     def get(self, request):
         event_or_bedpres = self.event_or_bedpres
         template_name = self.template_name
+        # Arrangement or bedpres to let HTML know what to fill in.
+        event_text = ''
+        isbedpres = None
         if event_or_bedpres == 'event':
             future_events = Event.objects.filter(date__gt=timezone.now()).order_by('date')
             my_events = Event.objects.filter(attendees__username__exact=request.user)
+            event_text = 'arrangement'
         elif event_or_bedpres == 'bedpres':
             future_events = Bedpres.objects.filter(date__gt=timezone.now()).order_by('date')
             my_events = Bedpres.objects.filter(attendees__username__exact=request.user)
+            isbedpres = 'bedpres'
+            event_text = 'bedpres'
         else:
             future_events = None
             my_events = None
         context = {
             'events': future_events,
             'my_events': my_events,
+            'isbedpres': isbedpres,
+            'event_text': event_text,
         }
         return render(request, template_name, context)
 
@@ -126,14 +133,21 @@ class ListPastEventsView(View):
     def get(self, request):
         event_or_bedpres = self.event_or_bedpres
         template_name = self.template_name
+        isbedpres = None
+        event_text = ''
         if event_or_bedpres == 'event':
             past_events = Event.objects.filter(date__lte=timezone.now()).order_by('date')
+            event_text = 'arrangement'
         elif event_or_bedpres == 'bedpres':
             past_events = Bedpres.objects.filter(date__lte=timezone.now()).order_by('date')
+            isbedpres = 'bedpres'
+            event_text = 'bedpres'
         else:
             past_events = None
         context = {
             'events': past_events,
+            'isbedpres': isbedpres,
+            'event_text': event_text,
         }
         return render(request, template_name, context)
 
@@ -178,6 +192,7 @@ class ViewEventDetailsView(View):
             event = get_object_or_404(Event, pk=pk)
             registrations = EventRegistration.objects.filter(event=event, status=1).prefetch_related('user__profile')
         elif self.event_or_bedpres == 'bedpres':
+            # TODO: Define self.template_name for bedpres. Event and bedpres are too different to use the same template
             event = get_object_or_404(Bedpres, pk=pk)
             registrations = BedpresRegistration.objects.filter(event=event, status=1).prefetch_related('user__profile')
         else:
@@ -354,7 +369,7 @@ class EditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
     def deregister_form_valid(self, form):
         event = self.object
 
-        # Register the current user and give a slot to the first user in the event queue
+        # Deregister the current user and give a slot to the first user in the event queue
         if event.can_de_register:
             registration = EventRegistration.objects.filter(event=event, user=self.request.user).first()
             lucky_person = EventRegistration.objects.de_register(registration)
@@ -382,7 +397,7 @@ class EditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
 
 
 @login_required
-def register_user_bedpres(request, event_id):
+def register_user_bedpres(request, pk):
     pass
 
 @login_required
