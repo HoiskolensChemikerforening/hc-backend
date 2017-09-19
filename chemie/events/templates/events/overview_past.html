@@ -1,6 +1,6 @@
 {% extends "chemie/base.html" %}
 {% block nav_header %}
-  Arrangementer
+  <div style = "text-transform: capitalize">{{ event_text }}er</div>
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
@@ -9,6 +9,19 @@
 
 
 {% block content %}
+  {% if isbedpres == None %}
+  {% url "events:index" as index %}
+  {% url "events:create" as create %}
+  {% url "events:delete" as delete %}
+  {% url "events:past" as past %}
+
+  {% else %}
+  {% url "events:index_bedpres" as index %}
+  {% url "events:create_bedpres" as create %}
+  {% url "events:delete_bedpres" as delete %}
+  {% url "events:past_bedpres" as past %}
+  {% endif %}
+
 
   {% if perms.events %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -18,15 +31,15 @@
       <ul>
         {% if perms.events.delete_event %}
           <li>
-            <a class="btn-floating red" href="{% url "events:delete" %}"><i
+            <a class="btn-floating red" href="{{ delete }}"><i
                 class="material-icons">delete_forever</i></a>
             <a class="btn-floating mobile-fab-tip">Slett</a>
           </li>
         {% endif %}
         {% if perms.events.add_event %}
           <li>
-            <a class="btn-floating blue" href="{% url "events:create" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Nytt arrangement</a>
+            <a class="btn-floating blue" href="{{ create }}"><i class="material-icons">add</i></a>
+            <a class="btn-floating mobile-fab-tip">Nytt {{ event_text }}</a>
           </li>
         {% endif %}
       </ul>
@@ -37,14 +50,14 @@
   <div class="row">
     <div class="col s12">
       <ul class="tabs z-depth-1">
-        <li class="tab col s4"><a target="_self" href="{% url "events:index" %}#futureEvents">Kommende arrangementer</a></li>
-        <li class="tab col s4"><a target="_self" href="{% url "events:index" %}#myEvents">Mine festeligheter</a></li>
-        <li class="tab col s4"><a class="active" href="#pastEvents">Tidligere arrangementer</a></li>
+        <li class="tab col s4"><a target="_self" href="{{ index }}#futureEvents">Kommende {{ event_text }}er</a></li>
+        <li class="tab col s4"><a target="_self" href="{{ index }}#myEvents">Mine festeligheter</a></li>
+        <li class="tab col s4"><a class="active" href="#pastEvents">Tidligere {{ event_text }}er</a></li>
       </ul>
       <div id="pastEvents" class="col s12">
         {% include "events/list_events.html" %}
         {% if not events %}
-          <p class="flow-text">Det fins ingen tidligere arrangementer.</p>
+          <p class="flow-text">Det finnes ingen tidligere {{ event_text }}er.</p>
         {% endif %}
       </div>
     </div>

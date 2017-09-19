@@ -8,7 +8,7 @@
 {% endblock nav_sub_header %}
 {% block content %}
 
-  {% if perms.events %}
+  {% if perms.events.delete_event or perms.events.delete_bedpres %}
     <div class="row">
       {% for event in events %}
         <div class="col s12 m10 l6">
@@ -30,7 +30,7 @@
             <div class="card-action">
               <a href="{{ event.get_absolute_url }}">Detaljer</a>
               <a href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
-              <form action="{{ event.id }}" class="material-icons" method="POST">{% csrf_token %}
+              <form method="POST" action="{% url 'events:event_id_bedpres' pk=event.id %}">{% csrf_token %}
                 <button type="submit"><i class="material-icons">delete</i></button>
               </form>
             </div>
