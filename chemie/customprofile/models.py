@@ -87,13 +87,13 @@ class Profile(models.Model):
                                                            verbose_name="Samlivsstatus")
 
     phone_number = models.BigIntegerField(verbose_name="Mobilnummer")
-    access_card = models.CharField(max_length=20, blank=True, null=True, verbose_name="Studentkortnummer")
+    access_card = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Studentkortnummer")
 
     image_primary = ImageField(upload_to='avatars')
     image_secondary = ImageField(upload_to='avatars')
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
-    membership = models.OneToOneField("Membership", null=True, blank=True,related_name="membership")
+    membership = models.OneToOneField("Membership", blank=True, related_name="membership")
 
     objects = ProfileManager()
 
@@ -105,6 +105,12 @@ class Profile(models.Model):
 
     def get_nice_relationship_status(self):
         return self.get_relationship_status_display()
+
+    def save(self, *args, **kwargs):
+        if self.access_card is '':
+            self.access_card = f'{self.pk} - UGYLDIG KORTNUMMER'
+
+        return super().save(*args, **kwargs)
 
 
 class Membership(models.Model):
@@ -143,3 +149,5 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
+
+
