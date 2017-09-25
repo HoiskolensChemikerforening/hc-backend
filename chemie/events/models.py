@@ -83,7 +83,7 @@ class BaseEvent(models.Model):
     def bump_waiting(self):
         if self.waiting_users():
             if self.has_spare_slots:
-                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('id')[:self.spare_slots]
+                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('created')[:self.spare_slots]
                 for attendee in attendees:
                     attendee.confirm()
                     send_event_mail(attendee, self)

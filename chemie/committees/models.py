@@ -32,7 +32,7 @@ class Position(models.Model):
     permission_group = models.ForeignKey(Group, null=True)
     max_members = models.PositiveSmallIntegerField(default=1, verbose_name='Antall medlemmer')
     can_manage_committee = models.BooleanField(default=False)
-    users = models.ManyToManyField(User, blank=True, null=True, verbose_name='medlem')
+    users = models.ManyToManyField(User, blank=True, verbose_name='medlem')
 
     def remove_from_group(self, users):
         for user in users:
