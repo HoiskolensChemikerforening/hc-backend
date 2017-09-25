@@ -95,6 +95,20 @@ class BaseEvent(models.Model):
     def registration_has_opened(self):
         return timezone.now() >= self.register_startdate
 
+<<<<<<< HEAD
+=======
+    def bump_waiting(self):
+        if self.waiting_users():
+            if self.has_spare_slots:
+                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('id')[:self.spare_slots]
+                for attendee in attendees:
+                    attendee.confirm()
+                    send_event_mail(attendee, self)
+
+    def save(self, *args, **kwargs):
+        self.bump_waiting()
+        super(BaseEvent, self).save(*args, **kwargs)
+>>>>>>> Fixed bumping. Django's save function is LIFO, so bump_waiting must be called first.
 
     class Meta:
         abstract = True
