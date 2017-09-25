@@ -80,6 +80,18 @@ class BaseEvent(models.Model):
         except ZeroDivisionError:
             return "N/A"
 
+    def bump_waiting(self):
+        if self.waiting_users():
+            if self.has_spare_slots:
+                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('id')[:self.spare_slots]
+                for attendee in attendees:
+                    attendee.confirm()
+                    send_event_mail(attendee, self)
+
+    def save(self, *args, **kwargs):
+        self.bump_waiting()
+        super(BaseEvent, self).save(*args, **kwargs)
+
     class Meta:
         abstract = True
 
@@ -97,18 +109,6 @@ class Event(BaseEvent):
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
 
     attendees = models.ManyToManyField(User, through='EventRegistration')
-
-    def save(self, *args, **kwargs):
-        super(Event, self).save(*args, **kwargs)
-        self.bump_waiting()
-
-    def bump_waiting(self):
-        if self.waiting_users():
-            if self.has_spare_slots:
-                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('id')[:self.spare_slots]
-                for attendee in attendees:
-                    attendee.confirm()
-                    send_event_mail(attendee, self)
 
     @property
     def spare_slots(self):
