@@ -21,7 +21,7 @@
               class="material-icons">edit</i></a>
           <a class="btn-floating mobile-fab-tip">Endre beskrivelse</a>
         </li>
-        {% if perms.committees.change_member %}
+        {% if perms.committees.change_position %}
           <li>
             <a class="btn-floating blue" href="{% url  "verv:edit_memberships" committee.slug %}"><i
                 class="material-icons">person_add</i></a>
