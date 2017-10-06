@@ -7,6 +7,15 @@ class DropdownFilter(RelatedFieldListFilter):
     template = 'admin/dropdown_filter.html'
 
 
+@admin.register(Event)
+class EventAdmin(admin.ModelAdmin):
+    list_filter = ('date',)
+    ordering = ('-date',)
+    search_fields = ('title',)
+    list_display = ('title', 'sluts', 'date', 'created', 'edited',
+                    'companion', 'sleepover', 'night_snack')
+
+
 @admin.register(EventRegistration)
 class RegistrationAdmin(admin.ModelAdmin):
     list_filter = ('status', 'payment_status', ('event', DropdownFilter))
@@ -16,5 +25,5 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(RegistrationMessage)
-admin.site.register(Event)
+#admin.site.register(Event)
 #admin.site.register(CompanyEvent)
