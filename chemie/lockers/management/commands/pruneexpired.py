@@ -3,7 +3,7 @@ from lockers.models import Ownership, LockerToken
 
 
 class Command(BaseCommand):
-    help = "Command for freeing inactive lockers that aren't (re)activated."
+    help = "Command for freeing inactive lockers that are never activated."
 
     def handle(self, *args, **options):
         self.stdout.write(self.style.NOTICE('Pruning unconfirmed ownerships and tokens'))
