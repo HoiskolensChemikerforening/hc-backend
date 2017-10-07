@@ -1,0 +1,122 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% load material_form %}
+
+{% block header %}
+
+{% endblock header %}
+
+{% block nav_header %}
+  Bedpres
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Opprett bedpres
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <p class="flow-text">Her finner du de beste bedriftpresentasjonene på Gløs!</p>
+  <div class="card">
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <div class="card-content">
+        {% form form=regform %}
+          {% attr form.event_date 'widget' class append %}datepicker{% endattr %}
+          {% attr form.event_time 'widget' class append %}timepicker{% endattr %}
+          {% attr form.registration_start_date 'widget' class append %}datepicker{% endattr %}
+          {% attr form.registration_start_time 'widget' class append %}timepicker{% endattr %}
+          {% attr form.register_deadline_date 'widget' class append %}datepicker{% endattr %}
+          {% attr form.register_deadline_time 'widget' class append %}timepicker{% endattr %}
+          {% attr form.deregister_deadline_date 'widget' class append %}datepicker{% endattr %}
+          {% attr form.deregister_deadline_time 'widget' class append %}timepicker{% endattr %}
+        {% endform %}
+        <h5>Klassebegrensninger</h5>
+        <form method="post" action="">
+          {{ formset.management_form }}
+          <div class="table">
+            <table>
+              {% for form in formset %}
+                {{ form }}
+              {% endfor %}
+            </table>
+          </div>
+        </form>
+        <input type="button" value="Add More" id="add_more">
+        <script>
+            $('#add_more').click(function () {
+                cloneMore('div.table:last', 'form');
+            });
+        </script>
+        <div class="card-action">
+          <div class="right-align">
+            <input class="btn btn-primary pull-right" type='submit' value='Lag arrangementet!'/>
+          </div>
+        </div>
+      </div>
+    </form>
+  </div>
+
+{% endblock content %}
+
+{% block footer_script %}
+    <script type="text/javascript">
+      $(document).ready(function () {
+          $(".timepicker").clockpicker({
+              placement: 'bottom',
+              autoclose: true,
+              align: 'left',
+              twelvehour: false,
+              vibrate: true,
+          });
+          $('.datepicker').pickadate({
+              selectMonths: true, // Creates a dropdown to control month
+              selectYears: 2, // Creates a dropdown of 15 years to control year
+              formatSubmit: 'yyyy-mm-dd',
+              hiddenName: true
+          });
+      });
+
+      {% if form.event_date.value %}
+          var $edate = $('#id_event_date').pickadate().pickadate('picker').set('select', "{{ form.event_date.value }}", {format: 'yyyy-mm-dd'});
+      {% endif %}
+      {% if form.registration_start_date.value %}
+          var $sreg = $('#id_registration_start_date').pickadate().pickadate('picker').set('select', "{{ form.registration_start_date.value }}", {format: 'yyyy-mm-dd'});
+      {% endif %}
+      {% if form.register_deadline_date.value %}
+          var $ereg = $('#id_register_deadline_date').pickadate().pickadate('picker').set('select', "{{ form.register_deadline_date.value }}", {format: 'yyyy-mm-dd'});
+      {% endif %}
+      {% if form.deregister_deadline_date.value %}
+          var $dereg = $('#id_deregister_deadline_date').pickadate().pickadate('picker').set('select', "{{ form.deregister_deadline_date.value }}", {format: 'yyyy-mm-dd'});
+      {% endif %}
+  </script>
+
+    <script>
+      function cloneMore(selector, type) {
+          var newElement = $(selector).clone(true);
+          var total = $('#id_' + type + '-TOTAL_FORMS').val();
+          newElement.find(':input').each(function () {
+              console.log($(this));
+              try {
+                  var name = $(this)
+                      .attr('name')
+                      .replace('-' + (total - 1) + '-', '-' + total + '-');
+              }
+              catch (err) {
+                  return true;
+                  //console.log($(this));
+                  //console.log(err);
+              }
+              var id = 'id_' + name;
+              $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
+          });
+          newElement.find('label').each(function () {
+              var newFor = $(this).attr('for').replace('-' + (total - 1) + '-', '-' + total + '-');
+              $(this).attr('for', newFor);
+          });
+          total++;
+          $('#id_' + type + '-TOTAL_FORMS').val(total);
+          $(selector).after(newElement);
+          // IMPORTANT FUCKING SHIT!!!!!!
+          $('select').material_select();
+      }
+    </script>
+{% endblock footer_script %}
