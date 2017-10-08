@@ -1,4 +1,3 @@
-{% extends "events/social/social_base.html" %}
 {% load thumbnail %}
 {% load staticfiles %}
 {% load event_extras %}
@@ -11,6 +10,7 @@
 {% block permissions %}
   {% include "events/social/permissions_object.html" %}
 {% endblock %}
+
 
 {% block breadcrumbs %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
@@ -145,7 +145,7 @@
     </div>
   {% endif %}
 
-{% endblock %}
+{% endblock maincontent %}
 
 {% block footer_js_files %}
   <script src="{% static "events/transpose_table.js" %}"></script>
