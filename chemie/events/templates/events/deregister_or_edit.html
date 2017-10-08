@@ -1,0 +1,51 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% load material_form %}
+
+{% block header %}
+
+{% endblock header %}
+
+{% block nav_header %}
+    Arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    Påmelding
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+    {% include 'events/registration_header.html' with event=event %}
+
+    <h5>
+        {% if registration.status == 1 %}
+            Du er påmeldt.
+        {% elif registration.status == 2 %}
+            Du er på ventelisten og er nr. {{ queue_position }} i køen
+        {% endif %}
+    </h5>
+
+    <div class="row">
+    <form class="deregister" method="POST">{% csrf_token %}
+        {% form form=forms.deregister %}{% endform %}
+        <button name='action' value='deregister' type="submit"
+                class="waves-effect waves-light btn btn-primary red">Meld meg av
+        </button>
+    </form>
+    </div>
+
+    <div class="row">
+    {% if forms.edit %}
+        <form class="edit" method="POST">{% csrf_token %}
+            {% form form=forms.edit %}{% endform %}
+            <button name='action' value='edit' type="submit"
+                    class="waves-effect waves-light btn btn-primary blue">Endre registrasjon
+            </button>
+        </form>
+    {% else %}
+        Avmeldingsfristen har passert.
+    {% endif %}
+    </div>
+
+{% endblock content %}
