@@ -31,7 +31,6 @@ def make_all_access_cards_unique(app, schema_editor):
         duplicate.access_card = f'{duplicate.pk} - UGYLDIG KORTNUMMER'
         duplicate.save()
 
-    print('NETTKOM')
 
 class Migration(migrations.Migration):
     operations = [

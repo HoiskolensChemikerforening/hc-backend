@@ -1,0 +1,41 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Sosiale arrangementer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+
+  {% include 'events/social/permissions.html' %}
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s4"><a class="active" href="#futureEvents">Kommende sosiale arrangementer</a></li>
+        <li class="tab col s4"><a href="#myEvents">Mine festeligheter</a></li>
+        <li class="tab col s4"><a target="_self" href="{% url "events:past_social" %}">Tidligere sosiale arrangementer</a></li>
+      </ul>
+      <div id="futureEvents" class="col s12">
+        {% include "events/list_events.html" %}
+        {% if not events %}
+          <p class="flow-text">Det er ingen aktive sosiale arrangementer nå. Finn på noe kult da vel!</p>
+        {% endif %}
+      </div>
+      <div id="myEvents" class="col s12">
+        {% include "events/list_events.html" with events=my_events %}
+        {% if user.is_authenticated %}
+          {% if not my_events %}
+            <p class="flow-text">Du er ikke påmeldt noen sosiale arrangementer. Finn på noe sprell!</p>
+          {% endif %}
+        {% else %}
+          <p class="flow-text">Vennligs <a href="{% url "login" %}">logg inn</a> for å se dine aktive sosiale arrangementer.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

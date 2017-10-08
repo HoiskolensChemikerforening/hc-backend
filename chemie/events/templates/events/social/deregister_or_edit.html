@@ -15,8 +15,13 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+      <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
+      <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{ event.title }}</a>
+      <a class="breadcrumb">Påmelding</a>
+  </div>
 
-    {% include 'events/registration_header.html' with event=event %}
+    {% include 'events/registration_header.html' with event=object %}
 
     <h5>
         {% if registration.status == 1 %}
@@ -36,7 +41,7 @@
     </div>
 
     <div class="row">
-    {% if forms.edit %}
+    {% if forms.deregister and forms.edit %}
         <form class="edit" method="POST">{% csrf_token %}
             {% form form=forms.edit %}{% endform %}
             <button name='action' value='edit' type="submit"

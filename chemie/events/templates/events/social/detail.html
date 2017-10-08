@@ -12,6 +12,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+
   {% if perms.events %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -20,8 +21,8 @@
       <ul>
         {% if perms.events.change_eventregistration %}
           <li>
-            <a class="btn-floating blue" href="{% url 'events:adminlist' event.id %}"><i class="material-icons">list</i></a>
-            <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist' event.id %}">Se påmeldte</a>
+            <a class="btn-floating blue" href="{% url 'events:adminlist_social' event.id %}"><i class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist_social' event.id %}">Se påmeldte</a>
           </li>
         {% endif %}
       </ul>
@@ -29,7 +30,7 @@
   {% endif %}
 
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "events:index" %}" class="breadcrumb">Arrangementer</a>
+    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
     <a class="breadcrumb">{{ event.title }}</a>
   </div>
 

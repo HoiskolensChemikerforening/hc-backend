@@ -15,6 +15,9 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+
+  {% include 'events/bedpres/permissions.html' %}
+
   <p class="flow-text">Her finner du de beste bedriftpresentasjonene på Gløs!</p>
   <div class="card">
     <form method="POST" enctype="multipart/form-data">{% csrf_token %}
@@ -29,6 +32,7 @@
           {% attr form.deregister_deadline_date 'widget' class append %}datepicker{% endattr %}
           {% attr form.deregister_deadline_time 'widget' class append %}timepicker{% endattr %}
         {% endform %}
+
         <h5>Klassebegrensninger</h5>
         <form method="post" action="">
           {{ formset.management_form }}

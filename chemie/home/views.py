@@ -10,17 +10,20 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from post_office import mail
 
-from events.models import Event
+from events.models import Social, Bedpres
 from home.forms import FlatpageEditForm
 from news.models import Article
 from .forms import ContactForm, PostFundsForm
 
 
 def index(request):
-    all_events = Event.objects.filter(date__gt=timezone.now()).order_by('date')
+    all_social = Social.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
+    all_bedpres = Bedpres.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
     all_posts = Article.objects.all().order_by('-published_date')
+
     context = {
-        'events': all_events,
+        'social': all_social,
+        'bedpres': all_bedpres,
         'posts': all_posts,
     }
     return render(request, 'chemie/index.html', context)
@@ -116,7 +119,8 @@ def edit_flatpage(request, url):
             instance.save()
             messages.add_message(request, messages.SUCCESS, '{} har blitt endret!'.format(flatpage.title),
                                  extra_tags='Supert')
-            return redirect(reverse('flatpages:django.contrib.flatpages.views.flatpage', kwargs={'url': flatpage.url[1:]}))
+            return redirect(
+                reverse('flatpages:django.contrib.flatpages.views.flatpage', kwargs={'url': flatpage.url[1:]}))
     context = {
         'flatpage': flatpage,
         'form': form,

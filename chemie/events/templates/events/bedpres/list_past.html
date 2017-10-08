@@ -1,0 +1,31 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Bedpres
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+
+ {% include 'events/bedpres/permissions.html' %}
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s4"><a target="_self" href="{% url "events:index_bedpres" %}#futureEvents">Kommende bedpreser</a></li>
+        <li class="tab col s4"><a target="_self" href="{% url "events:index_bedpres" %}#myEvents">Mine festeligheter</a></li>
+        <li class="tab col s4"><a class="active" href="#pastEvents">Tidligere bedpreser</a></li>
+      </ul>
+      <div id="pastEvents" class="col s12">
+        {% include "events/list_events.html" %}
+        {% if not events %}
+          <p class="flow-text">Det finnes ingen tidligere bedpreser.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

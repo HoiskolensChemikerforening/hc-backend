@@ -82,7 +82,7 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Påmeldte
+  Påmeldte - {{ object.title }}
 {% endblock nav_sub_header %}
 
 {% block content %}
@@ -108,8 +108,9 @@
           <th class="filter-select filter-exact">Klassetrinn</th>
           <th>Allergier</th>
           <th class="filter-select filter-exact">HC-medlemsskap</th>
-          <th class="filter-select filter-exact">Betalingsstatus</th>
-          <th class="filter-select filter-exact">Påmeldingsstatus</th>
+          {% if social %}
+            <th class="filter-select filter-exact">Betalingsstatus</th>
+          {% endif %}
            {% if event.night_snack %}
               <th>Nattmat</th>
             {% endif %}
@@ -134,21 +135,18 @@
           {% else %}
             -
           {% endif %}</td>
-          <td>
-            {% if attendee.payment_status %}
+          {% if attendee.payment_status is not None %}
+            <td>
+            {% if social %}
               <a class="payment btn-floating btn-tiny waves-effect waves-light green"
                  id="payment-{{ attendee.id }}"><i class="material-icons">done</i></a>
             {% else %}
               <a class="payment btn-floating btn-tiny waves-effect waves-light red"
                  id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
-            {% endif %}</td>
-            <td>
-            {% if attendee.status == 1 %}
-              <i class="material-icons small green-text">done</i>
-            {% else %}
-              <i class="material-icons red-text">error</i>
             {% endif %}
             </td>
+          {% endif %}
+
             {% if event.night_snack %}
               <td>{% if attendee.night_snack %}
                 <i class="material-icons">done</i>

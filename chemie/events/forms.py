@@ -4,7 +4,7 @@ import material as M
 from django import forms
 from django.core.validators import ValidationError
 
-from .models import Event, EventRegistration, Limitation, Bedpres, BaseEvent
+from .models import Social, EventRegistration, Limitation, Bedpres, BedpresRegistration, BaseEvent
 
 
 class BaseRegisterEventForm(forms.ModelForm):
@@ -143,7 +143,7 @@ class RegisterEventForm(BaseRegisterEventForm):
                       M.Row('companion', 'sleepover', 'night_snack'), )
 
     class Meta(BaseRegisterEventForm.Meta):
-        model = Event
+        model = Social
         fields = BaseRegisterEventForm.Meta.fields.copy()
         fields += [
             "payment_information",
@@ -154,44 +154,6 @@ class RegisterEventForm(BaseRegisterEventForm):
             "sleepover",
             "night_snack",
         ]
-
-
-class RegisterLimitations(forms.ModelForm):
-    layout = M.Layout(M.Row('grade', 'slots'), )
-
-    class Meta:
-        model = Limitation
-        fields = [
-            'grade',
-            'slots',
-        ]
-
-
-class RegisterUserForm(forms.ModelForm):
-    class Meta:
-        model = EventRegistration
-
-        fields = [
-            "sleepover",
-            "night_snack",
-            "companion",
-        ]
-
-    def __init__(self, *args, **kwargs):
-        enable_sleepover = kwargs.pop('enable_sleepover', True)
-        enable_night_snack = kwargs.pop('enable_night_snack', True)
-        enable_companion = kwargs.pop('enable_companion', True)
-        super(RegisterUserForm, self).__init__(*args, **kwargs)
-        if not enable_sleepover:
-            self.fields.pop('sleepover')
-        if not enable_night_snack:
-            self.fields.pop('night_snack')
-        if not enable_companion:
-            self.fields.pop('companion')
-
-
-class DeRegisterUserForm(forms.Form):
-    really_sure = forms.BooleanField(required=True, label='Er dette ditt endelige svar?')
 
 
 class RegisterBedpresForm(BaseRegisterEventForm):
@@ -208,3 +170,47 @@ class RegisterBedpresForm(BaseRegisterEventForm):
     class Meta:
         model = Bedpres
         fields = BaseRegisterEventForm.Meta.fields.copy()
+
+
+class RegisterLimitations(forms.ModelForm):
+    layout = M.Layout(M.Row('grade', 'slots'), )
+
+    class Meta:
+        model = Limitation
+        fields = [
+            'grade',
+            'slots',
+        ]
+
+
+class SocialRegisterUserForm(forms.ModelForm):
+    class Meta:
+        model = EventRegistration
+
+        fields = [
+            "sleepover",
+            "night_snack",
+            "companion",
+        ]
+
+    def __init__(self, *args, **kwargs):
+        enable_sleepover = kwargs.pop('enable_sleepover', True)
+        enable_night_snack = kwargs.pop('enable_night_snack', True)
+        enable_companion = kwargs.pop('enable_companion', True)
+        super(SocialRegisterUserForm, self).__init__(*args, **kwargs)
+        if not enable_sleepover:
+            self.fields.pop('sleepover')
+        if not enable_night_snack:
+            self.fields.pop('night_snack')
+        if not enable_companion:
+            self.fields.pop('companion')
+
+
+class BedpresRegisterUserForm(forms.ModelForm):
+    class Meta:
+        model = BedpresRegistration
+        fields = ()
+
+
+class DeRegisterUserForm(forms.Form):
+    really_sure = forms.BooleanField(required=True, label='Er dette ditt endelige svar?')
