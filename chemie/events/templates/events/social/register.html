@@ -11,10 +11,13 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Opprett påmelding
+  Opprett sosial påmelding
 {% endblock nav_sub_header %}
 
 {% block content %}
+
+  {% include 'events/social/permissions.html' %}
+
   <p class="flow-text">Her finner du de beste arrangementene på Gløs!</p>
   <div class="card">
     <form method="POST" enctype="multipart/form-data">{% csrf_token %}

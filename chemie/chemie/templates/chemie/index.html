@@ -18,7 +18,7 @@
       <ul>
         {% if perms.events.add_event %}
           <li>
-            <a class="btn-floating blue" href="{% url "events:create" %}"><i class="material-icons">add</i></a>
+            <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett arrangement</a>
           </li>
         {% endif %}
@@ -42,7 +42,8 @@
   {% if events %}
     {% cache 60 active_events %}
       <h3 class="heading">Arrangementer</h3>
-      {% include 'events/list_events.html' with events=events %}
+      {% include 'events/social/list.html' with events=events %}
+      {% include 'events/social/list.html' with events=bedpres %}
     {% endcache %}
   {% endif %}
 

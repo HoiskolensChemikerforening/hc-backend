@@ -2,11 +2,11 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 
 from .email import send_event_mail
-from .models import Event, EventRegistration, REGISTRATION_STATUS
+from .models import Social, EventRegistration, REGISTRATION_STATUS
 from .views import set_user_event_status
 
 
-@receiver(post_save, sender=Event)
+@receiver(post_save, sender=Social)
 def post_save_event_receiver(sender, instance, *args, **kwargs):
     free_slots = instance.spare_slots
     potential_free = EventRegistration.objects.filter(event=instance, status=REGISTRATION_STATUS.WAITING)
@@ -18,4 +18,4 @@ def post_save_event_receiver(sender, instance, *args, **kwargs):
             send_event_mail(lucky_registration, instance)
 
 
-post_save.connect(post_save_event_receiver, sender=Event)
+post_save.connect(post_save_event_receiver, sender=Social)

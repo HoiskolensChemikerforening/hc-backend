@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.utils import timezone
 
 from chemie import settings
-from events.models import Event, EventRegistration
+from events.models import Social, EventRegistration
 
 
 # Create your tests here.
@@ -24,21 +24,21 @@ class TestEventAndRegistration(TestCase):
         dereg_deadline = timezone.now() + timezone.timedelta(days=2)
         image_path = os.path.join(settings.BASE_DIR, 'media/events/blank_person.png')
         image = File(image_path)
-        Event.objects.create(title='Indok er helt ok',
-                             author=user,
-                             date=date,
-                             register_startdate=start_date,
-                             register_deadline=reg_deadline,
-                             deregister_deadline=dereg_deadline,
-                             location='Samfundet',
-                             description='Litta fest',
-                             image=image,
-                             sluts=40,
-                             payment_information='Alle maa benytte Vipps til aa betale',
-                             )
+        Social.objects.create(title='Indok er helt ok',
+                              author=user,
+                              date=date,
+                              register_startdate=start_date,
+                              register_deadline=reg_deadline,
+                              deregister_deadline=dereg_deadline,
+                              location='Samfundet',
+                              description='Litta fest',
+                              image=image,
+                              sluts=40,
+                              payment_information='Alle maa benytte Vipps til aa betale',
+                              )
 
     def test_event_registration_exceeding_max_slots(self):
-        event = Event.objects.get(title='Indok er helt ok')
+        event = Social.objects.get(title='Indok er helt ok')
         for i in range(event.sluts + 5):
             user = User.objects.create(username=i,
                                        email='test@mail.com',

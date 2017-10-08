@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Event, EventRegistration, RegistrationMessage#, CompanyEvent
+from .models import Social, EventRegistration, RegistrationMessage, Bedpres
 from django.contrib.admin.filters import AllValuesFieldListFilter, RelatedFieldListFilter, ChoicesFieldListFilter
 
 
@@ -7,7 +7,7 @@ class DropdownFilter(RelatedFieldListFilter):
     template = 'admin/dropdown_filter.html'
 
 
-@admin.register(Event)
+@admin.register(Social)
 class EventAdmin(admin.ModelAdmin):
     list_filter = ('date',)
     ordering = ('-date',)
@@ -25,5 +25,5 @@ class RegistrationAdmin(admin.ModelAdmin):
 
 
 admin.site.register(RegistrationMessage)
-#admin.site.register(Event)
-#admin.site.register(CompanyEvent)
+admin.site.register(Social)
+admin.site.register(Bedpres)

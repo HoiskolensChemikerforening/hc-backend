@@ -1,0 +1,22 @@
+{% if perms.events %}
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large">
+      <i class="large material-icons">edit</i>
+    </a>
+    <ul>
+      {% if perms.events.delete_social %}
+        <li>
+          <a class="btn-floating red" href="{% url "events:delete_list_social" %}"><i
+              class="material-icons">delete_forever</i></a>
+          <a class="btn-floating mobile-fab-tip">Slett</a>
+        </li>
+      {% endif %}
+      {% if perms.events.add_social %}
+        <li>
+          <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
+          <a class="btn-floating mobile-fab-tip">Nytt sosialt arrangement</a>
+        </li>
+      {% endif %}
+    </ul>
+  </div>
+{% endif %}

@@ -1,7 +1,3 @@
-from threading import Thread
-
-from django.core.mail import send_mail
-from mail_templated import send_mail
 from post_office import mail
 from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings

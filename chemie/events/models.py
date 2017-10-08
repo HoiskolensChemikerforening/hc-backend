@@ -57,6 +57,8 @@ class BaseEvent(models.Model):
 
     limitations = models.ManyToManyField(Limitation, blank=True)
 
+    published = models.BooleanField(default=True, verbose_name='publisert')
+
     def __str__(self):
         return self.title
 
@@ -88,33 +90,18 @@ class BaseEvent(models.Model):
                     attendee.confirm()
                     send_event_mail(attendee, self)
 
-    def save(self, *args, **kwargs):
-        self.bump_waiting()
-        super(BaseEvent, self).save(*args, **kwargs)
-
     def registration_has_opened(self):
         return timezone.now() >= self.register_startdate
 
-<<<<<<< HEAD
-=======
-    def bump_waiting(self):
-        if self.waiting_users():
-            if self.has_spare_slots:
-                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('id')[:self.spare_slots]
-                for attendee in attendees:
-                    attendee.confirm()
-                    send_event_mail(attendee, self)
-
     def save(self, *args, **kwargs):
-        self.bump_waiting()
         super(BaseEvent, self).save(*args, **kwargs)
->>>>>>> Fixed bumping. Django's save function is LIFO, so bump_waiting must be called first.
+        self.bump_waiting()
 
     class Meta:
         abstract = True
 
 
-class Event(BaseEvent):
+class Social(BaseEvent):
     author = models.ForeignKey(User, related_name='event_author')
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
@@ -138,22 +125,24 @@ class Event(BaseEvent):
         return self.spare_slots > 0
 
     def get_absolute_url(self):
-        return reverse('events:detail', kwargs={"pk": self.pk})
+        return reverse('events:detail_social', kwargs={"pk": self.pk})
 
     def get_absolute_registration_url(self):
-        return reverse('events:register', kwargs={"pk": self.pk})
+        return reverse('events:register_social', kwargs={"pk": self.pk})
 
+    def get_absolute_delete_url(self):
+        return reverse('events:delete_social', kwargs={"pk": self.pk})
 
 class Bedpres(BaseEvent):
-    author = models.ForeignKey(User, related_name='bedpres_author')
-    attendees = models.ManyToManyField(User, through='BedpresRegistration')
+    author = models.ForeignKey(User, related_name='+')
+    attendees = models.ManyToManyField(User, through='BedpresRegistration', related_name='listed_bedpres')
 
     @property
     def limitations_exceeds_total_slots(self):
-        ctr = 0
+        restricted_slots_count = 0
         for limitation in self.limitations.all():
-            ctr += limitation.slots
-            if ctr > self.sluts:
+            restricted_slots_count += limitation.slots
+            if restricted_slots_count > self.sluts:
                 return True
         return False
 
@@ -163,6 +152,16 @@ class Bedpres(BaseEvent):
     def get_absolute_registration_url(self):
         return reverse('events:register_bedpres', kwargs={"pk": self.pk})
 
+    def get_absolute_delete_url(self):
+        return reverse('events:delete_bedpres', kwargs={"pk": self.pk})
+
+    def can_de_register(self):
+        # TODO: Must have weird logic for bumping only people from the correct grade
+        return True
+
+    def has_spare_slots(self):
+        # TODO: INCOMPLETE
+        return True
 
 class RegistrationManager(models.Manager):
     def de_register(self, reg_to_be_deleted):
@@ -199,7 +198,7 @@ class BaseRegistration(models.Model):
 
 
 class EventRegistration(BaseRegistration):
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Social)
     #user = models.ForeignKey(User)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
@@ -217,7 +216,7 @@ class BedpresRegistration(BaseRegistration):
 
 class RegistrationMessage(models.Model):
     user = models.ForeignKey(User)
-    event = models.ForeignKey(Event)
+    event = models.ForeignKey(Social)
     message = models.TextField()
     author = models.ForeignKey(User, related_name="event_message")
 

@@ -1,0 +1,25 @@
+<table class="responsive-table">
+  <thead>
+  <tr>
+    <th data-field="first-grade">Første</th>
+    <th data-field="second-grade">Andre</th>
+    <th data-field="third-grade">Tredje</th>
+    <th data-field="fourth-grade">Fjerde</th>
+    <th data-field="fifth-grade">Femte</th>
+    <th data-field="third-grade"> xyz</th>
+  </tr>
+  </thead>
+
+  <tbody>
+  {% for first,second,third,fourth,fifth in user_list %}
+    <tr>
+      <td>{% if first %}{{ first }}{% endif %}</td>
+      <td>{% if second %}{{ second }}{% endif %}</td>
+      <td>{% if third %}{{ third }}{% endif %}</td>
+      <td>{% if fourth %}{{ fourth }}{% endif %}</td>
+      <td>{% if fifth %}{{ fifth }}{% endif %}</td>
+      <td>{% if done %}{{ done }}{% endif %}</td>
+    </tr>
+  {% endfor %}
+  </tbody>
+</table>
