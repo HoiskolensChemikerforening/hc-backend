@@ -215,9 +215,9 @@ def register_user(request, event_id):
 def view_admin_panel(request, event_id):
     event = Event.objects.get(pk=event_id)
     all_registrations = EventRegistration.objects.filter(
-        status=REGISTRATION_STATUS.CONFIRMED,
         event=event,
     ).select_related('user__profile__membership')
+
     context = {
         "attendees": all_registrations,
         "event": event,
