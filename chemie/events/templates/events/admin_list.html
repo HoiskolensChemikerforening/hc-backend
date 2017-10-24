@@ -144,12 +144,11 @@
             {% endif %}</td>
             <td>
             {% if attendee.status == 1 %}
-              <a class="btn-floating btn-tiny waves-effect waves-light green">
-              <i class="material-icons">done</i></a>
+              <i class="material-icons small green-text">done</i>
             {% else %}
-              <a class="btn-floating btn-tiny waves-effect waves-light red">
-              <i class="material-icons">error</i></a>
-            {% endif %}</td>
+              <i class="material-icons red-text">error</i>
+            {% endif %}
+            </td>
             {% if event.night_snack %}
               <td>{% if attendee.night_snack %}
                 <i class="material-icons">done</i>
