@@ -37,6 +37,10 @@
                       4: [ // Payment column
                           {value: 'done', 'data-class': 'ui-icon-image', text: 'Betalt'},
                           {value: 'error', 'data-class': 'ui-icon-image', text: 'Ikke betalt'}
+                      ],
+                      5: [ // Registrations status column
+                          {value: 'done', 'data-class': 'ui-icon-image', text: 'Bekreftet'},
+                          {value: 'error', 'data-class': 'ui-icon-image', text: 'Venteliste'}
                       ]
                   }
               }
@@ -105,6 +109,7 @@
           <th>Allergier</th>
           <th class="filter-select filter-exact">HC-medlemsskap</th>
           <th class="filter-select filter-exact">Betalingsstatus</th>
+          <th class="filter-select filter-exact">Påmeldingsstatus</th>
            {% if event.night_snack %}
               <th>Nattmat</th>
             {% endif %}
@@ -137,7 +142,14 @@
               <a class="payment btn-floating btn-tiny waves-effect waves-light red"
                  id="payment-{{ attendee.id }}"><i class="material-icons">error</i></a>
             {% endif %}</td>
-
+            <td>
+            {% if attendee.status == 1 %}
+              <a class="btn-floating btn-tiny waves-effect waves-light green">
+              <i class="material-icons">done</i></a>
+            {% else %}
+              <a class="btn-floating btn-tiny waves-effect waves-light red">
+              <i class="material-icons">error</i></a>
+            {% endif %}</td>
             {% if event.night_snack %}
               <td>{% if attendee.night_snack %}
                 <i class="material-icons">done</i>
