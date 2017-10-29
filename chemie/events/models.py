@@ -89,8 +89,8 @@ class BaseEvent(models.Model):
                     send_event_mail(attendee, self)
 
     def save(self, *args, **kwargs):
-        self.bump_waiting()
         super(BaseEvent, self).save(*args, **kwargs)
+        self.bump_waiting()
 
     class Meta:
         abstract = True
