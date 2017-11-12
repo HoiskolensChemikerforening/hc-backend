@@ -26,7 +26,7 @@ class FundsApplication(models.Model):
     # To which bank account the money would be sent to
     bank_account_id = models.BigIntegerField(verbose_name="Kontonummer",
                                        validators=[RegexValidator(
-                                           regex='^\d{11}$', message='Kun tall, 11 siffer', code='nomatch')])
+                                           regex='^(\d{10}|\d{11})$', message='Kun tall, 11 siffer', code='nomatch')])
 
     # Name of bank account holder
     bank_account_holder = models.CharField(max_length=100, verbose_name='Bankkonto innehaver')
