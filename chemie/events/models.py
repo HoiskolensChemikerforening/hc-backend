@@ -1,23 +1,18 @@
-from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
+from django.contrib.postgres.fields import ArrayField
 from django.core.urlresolvers import reverse
 from django.db import models
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
-from customprofile.models import GRADES
 
+from customprofile.models import GRADES
 from .email import send_event_mail
 
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED', 1, 'Confirmed'),
     ('WAITING', 2, 'Waiting'),
 )
-
-
-class Limitation(models.Model):
-    grade = models.PositiveSmallIntegerField(choices=GRADES, verbose_name="Klassetrinn")
-    slots = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
 
 
 class BaseEvent(models.Model):
@@ -55,7 +50,9 @@ class BaseEvent(models.Model):
 
     attendees = models.ManyToManyField(User, through='BaseRegistration')
 
-    limitations = models.ManyToManyField(Limitation, blank=True)
+    allowed_grades = ArrayField(
+        models.PositiveSmallIntegerField(choices=GRADES), null=True,
+    )
 
     published = models.BooleanField(default=True, verbose_name='publisert')
 
@@ -133,6 +130,7 @@ class Social(BaseEvent):
     def get_absolute_delete_url(self):
         return reverse('events:delete_social', kwargs={"pk": self.pk})
 
+
 class Bedpres(BaseEvent):
     author = models.ForeignKey(User, related_name='+')
     attendees = models.ManyToManyField(User, through='BedpresRegistration', related_name='listed_bedpres')
@@ -162,6 +160,7 @@ class Bedpres(BaseEvent):
     def has_spare_slots(self):
         # TODO: INCOMPLETE
         return True
+
 
 class RegistrationManager(models.Manager):
     def de_register(self, reg_to_be_deleted):

@@ -4,7 +4,8 @@ import material as M
 from django import forms
 from django.core.validators import ValidationError
 
-from .models import Social, EventRegistration, Limitation, Bedpres, BedpresRegistration, BaseEvent
+from customprofile.models import GRADES
+from .models import Social, EventRegistration, Bedpres, BedpresRegistration, BaseEvent
 
 
 class BaseRegisterEventForm(forms.ModelForm):
@@ -16,6 +17,10 @@ class BaseRegisterEventForm(forms.ModelForm):
     register_deadline_time = forms.TimeField(required=True, initial='12:00', label='Påmeldingsfristtidspunkt')
     deregister_deadline_date = forms.DateField(required=True, label='Avmeldingsdato')
     deregister_deadline_time = forms.TimeField(required=True, initial='12:00', label='Avmeldingstidspunkt')
+    allowed_grades = forms.MultipleChoiceField(
+            widget=forms.CheckboxSelectMultiple,
+            choices=GRADES,
+        )
 
     def clean(self):
         super(BaseRegisterEventForm, self).clean()
@@ -55,6 +60,16 @@ class BaseRegisterEventForm(forms.ModelForm):
         self.instance.register_deadline = registration_deadline
         self.instance.deregister_deadline = deregister_deadline
 
+    def clean_allowed_grades(self):
+        try:
+            grades = self.cleaned_data.get('allowed_grades')
+            grades = [int(grade) for grade in grades]
+            [GRADES.values[int(grade)] for grade in grades]
+            return grades
+        except (ValueError, KeyError):
+            self.add_error(None, ValidationError(
+                {'allowed_grades': ["Tillatte klassetrinn er ikke akseptert"]}))
+
     class Meta:
         abstract = True
         model = BaseEvent
@@ -64,6 +79,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             "description",
             "image",
             "sluts",
+            "allowed_grades",
         ]
 
 
@@ -165,22 +181,13 @@ class RegisterBedpresForm(BaseRegisterEventForm):
                       M.Row('location'),
                       M.Row('description'),
                       M.Row('image'),
-                      M.Row('sluts'), )
+                      M.Row('sluts'),
+                      M.Row('allowed_grades'),
+                      )
 
     class Meta:
         model = Bedpres
         fields = BaseRegisterEventForm.Meta.fields.copy()
-
-
-class RegisterLimitations(forms.ModelForm):
-    layout = M.Layout(M.Row('grade', 'slots'), )
-
-    class Meta:
-        model = Limitation
-        fields = [
-            'grade',
-            'slots',
-        ]
 
 
 class SocialRegisterUserForm(forms.ModelForm):
