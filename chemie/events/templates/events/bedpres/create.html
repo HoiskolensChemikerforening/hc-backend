@@ -33,23 +33,6 @@
           {% attr form.deregister_deadline_time 'widget' class append %}timepicker{% endattr %}
         {% endform %}
 
-        <h5>Klassebegrensninger</h5>
-        <form method="post" action="">
-          {{ formset.management_form }}
-          <div class="table">
-            <table>
-              {% for form in formset %}
-                {{ form }}
-              {% endfor %}
-            </table>
-          </div>
-        </form>
-        <input type="button" value="Add More" id="add_more">
-        <script>
-            $('#add_more').click(function () {
-                cloneMore('div.table:last', 'form');
-            });
-        </script>
         <div class="card-action">
           <div class="right-align">
             <input class="btn btn-primary pull-right" type='submit' value='Lag arrangementet!'/>
@@ -93,34 +76,4 @@
       {% endif %}
   </script>
 
-    <script>
-      function cloneMore(selector, type) {
-          var newElement = $(selector).clone(true);
-          var total = $('#id_' + type + '-TOTAL_FORMS').val();
-          newElement.find(':input').each(function () {
-              console.log($(this));
-              try {
-                  var name = $(this)
-                      .attr('name')
-                      .replace('-' + (total - 1) + '-', '-' + total + '-');
-              }
-              catch (err) {
-                  return true;
-                  //console.log($(this));
-                  //console.log(err);
-              }
-              var id = 'id_' + name;
-              $(this).attr({'name': name, 'id': id}).val('').removeAttr('checked');
-          });
-          newElement.find('label').each(function () {
-              var newFor = $(this).attr('for').replace('-' + (total - 1) + '-', '-' + total + '-');
-              $(this).attr('for', newFor);
-          });
-          total++;
-          $('#id_' + type + '-TOTAL_FORMS').val(total);
-          $(selector).after(newElement);
-          // IMPORTANT FUCKING SHIT!!!!!!
-          $('select').material_select();
-      }
-    </script>
 {% endblock footer_script %}

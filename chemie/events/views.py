@@ -3,10 +3,9 @@ from itertools import zip_longest
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.urlresolvers import reverse
-from django.db import transaction, IntegrityError
-from django.forms import formset_factory
+from django.db import transaction
 from django.http import HttpResponseRedirect
-from django.http import JsonResponse, Http404
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.utils import timezone
@@ -17,8 +16,9 @@ from django.views.generic.edit import DeleteView
 
 from .email import send_event_mail
 from .extras import MultiFormsView
-from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm, RegisterLimitations, RegisterBedpresForm, BedpresRegisterUserForm
-from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Limitation, Bedpres, \
+from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm, RegisterBedpresForm, \
+    BedpresRegisterUserForm
+from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
 
 
@@ -48,49 +48,25 @@ class CreateEventView(View):
 
 class CreateBedpresView(View):
     bedpres_form = RegisterBedpresForm
-    limitation_form = formset_factory(RegisterLimitations, extra=1)
     initial = None
     template_name = 'events/bedpres/create.html'
 
     def get(self, request):
         context = {
             'regform': self.bedpres_form,
-            'formset': self.limitation_form,
         }
         return render(request, self.template_name, context)
 
     def post(self, request):
-        form = self.bedpres_form(request.POST, request.FILES)
-        limitations = self.limitation_form(request.POST)
-        if form.is_valid():
-            instance = form.save(commit=False)
+        bedpres_form = RegisterBedpresForm(request.POST, request.FILES)
+        if bedpres_form.is_valid():
+            allowed_grades = bedpres_form.cleaned_data.get('allowed_grades')
+            instance = bedpres_form.save(commit=False)
             instance.author = request.user
             instance.save()
-            for limitation in limitations:
-                if not limitation.is_valid():
-                    context = {
-                        'regform': form,
-                        'formset': limitations,
-                    }
-                    return render(request, self.template_name, context)
-                slots = limitation.cleaned_data.get('slots')
-                grade = limitation.cleaned_data.get('grade')
-                try:
-                    lim_instance = Limitation.objects.create(slots=slots, grade=grade)
-                    instance.limitations.add(lim_instance)
-                except IntegrityError:
-                    continue
-            if instance.limitations_exceeds_total_slots:
-                Bedpres.objects.get(pk=instance.id).delete()
-                context = {
-                    'regform': form,
-                    'formset': limitations,
-                }
-                return render(request, self.template_name, context)
-            return HttpResponseRedirect(reverse('events:index_bedpres'))
+            return redirect(reverse('events:index_bedpres'))
         context = {
-            'regform': form,
-            'formset': limitations,
+            'regform': bedpres_form,
         }
         return render(request, self.template_name, context)
 
