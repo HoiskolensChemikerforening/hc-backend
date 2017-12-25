@@ -12,6 +12,7 @@ from .email import send_event_mail
 REGISTRATION_STATUS = Choices(
     ('CONFIRMED', 1, 'Confirmed'),
     ('WAITING', 2, 'Waiting'),
+    ('INTERESTED', 3, 'Interested')
 )
 
 
@@ -23,18 +24,18 @@ class BaseEvent(models.Model):
     author = models.ForeignKey(User, related_name="baseevent")
 
     #  When the event occurs, is created and edited
-    date = models.DateTimeField(default=timezone.now, verbose_name="Dato")
+    date = models.DateTimeField(verbose_name="Dato")
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
 
     # Start time for registration
-    register_startdate = models.DateTimeField(default=timezone.now, verbose_name="Påmeldingen åpner")
+    register_startdate = models.DateTimeField(verbose_name="Påmeldingen åpner")
 
     # Deadline for signing up
-    register_deadline = models.DateTimeField(default=timezone.now, verbose_name="Påmeldingsfrist")
+    register_deadline = models.DateTimeField(verbose_name="Påmeldingsfrist")
 
     # Deadline for changing your mind
-    deregister_deadline = models.DateTimeField(default=timezone.now, verbose_name="Avmeldingsfrist")
+    deregister_deadline = models.DateTimeField(verbose_name="Avmeldingsfrist")
 
     # Location of event
     location = models.TextField(verbose_name="Sted")
@@ -51,10 +52,14 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through='BaseRegistration')
 
     allowed_grades = ArrayField(
-        models.PositiveSmallIntegerField(choices=GRADES), null=True,
+        models.PositiveSmallIntegerField(choices=GRADES), null=True, blank=True,
     )
 
     published = models.BooleanField(default=True, verbose_name='publisert')
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.allowed_grades_previous = self.allowed_grades
 
     def __str__(self):
         return self.title
@@ -82,7 +87,8 @@ class BaseEvent(models.Model):
     def bump_waiting(self):
         if self.waiting_users():
             if self.has_spare_slots:
-                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by('created')[:self.spare_slots]
+                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by(
+                    'created')[:self.spare_slots]
                 for attendee in attendees:
                     attendee.confirm()
                     send_event_mail(attendee, self)
@@ -90,16 +96,33 @@ class BaseEvent(models.Model):
     def registration_has_opened(self):
         return timezone.now() >= self.register_startdate
 
+    @property
+    def spare_slots(self):
+        return self.sluts - self.registered_users()
+
+    @property
+    def has_spare_slots(self):
+        return self.spare_slots > 0
+
     def save(self, *args, **kwargs):
         super(BaseEvent, self).save(*args, **kwargs)
         self.bump_waiting()
+        if self.allowed_grades_previous:
+            new_grades = set(self.allowed_grades) - set(self.allowed_grades_previous)
+            if new_grades:
+                # Update all relevant attendees
+                self.attendees.through.objects.filter(user__profile__grade__in=new_grades,
+                                      status=REGISTRATION_STATUS.INTERESTED). \
+                    update(status=REGISTRATION_STATUS.WAITING)
+                # Bump once more in case the slot-count was increased as well
+                self.bump_waiting()
 
     class Meta:
         abstract = True
 
 
 class Social(BaseEvent):
-    author = models.ForeignKey(User, related_name='event_author')
+    author = models.ForeignKey(User, related_name='social_author')
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
@@ -113,13 +136,8 @@ class Social(BaseEvent):
 
     attendees = models.ManyToManyField(User, through='EventRegistration')
 
-    @property
-    def spare_slots(self):
-        return self.sluts - self.registered_users()
-
-    @property
-    def has_spare_slots(self):
-        return self.spare_slots > 0
+    def allowed_grade(self, user):
+        return True
 
     def get_absolute_url(self):
         return reverse('events:detail_social', kwargs={"pk": self.pk})
@@ -133,16 +151,10 @@ class Social(BaseEvent):
 
 class Bedpres(BaseEvent):
     author = models.ForeignKey(User, related_name='+')
-    attendees = models.ManyToManyField(User, through='BedpresRegistration', related_name='listed_bedpres')
+    attendees = models.ManyToManyField(User, through='BedpresRegistration')
 
-    @property
-    def limitations_exceeds_total_slots(self):
-        restricted_slots_count = 0
-        for limitation in self.limitations.all():
-            restricted_slots_count += limitation.slots
-            if restricted_slots_count > self.sluts:
-                return True
-        return False
+    def allowed_grade(self, user):
+        return user.profile.grade in self.allowed_grades
 
     def get_absolute_url(self):
         return reverse('events:detail_bedpres', kwargs={"pk": self.pk})
@@ -152,14 +164,6 @@ class Bedpres(BaseEvent):
 
     def get_absolute_delete_url(self):
         return reverse('events:delete_bedpres', kwargs={"pk": self.pk})
-
-    def can_de_register(self):
-        # TODO: Must have weird logic for bumping only people from the correct grade
-        return True
-
-    def has_spare_slots(self):
-        # TODO: INCOMPLETE
-        return True
 
 
 class RegistrationManager(models.Manager):
@@ -180,7 +184,7 @@ class BaseRegistration(models.Model):
     event = models.ForeignKey(BaseEvent)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
-    status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.WAITING)
+    status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED)
 
     objects = RegistrationManager()
 
@@ -191,6 +195,10 @@ class BaseRegistration(models.Model):
         self.status = REGISTRATION_STATUS.CONFIRMED
         self.save()
 
+    def waiting(self):
+        self.status = REGISTRATION_STATUS.WAITING
+        self.save()
+
     class Meta:
         abstract = True
         unique_together = ('event', 'user',)
@@ -198,7 +206,7 @@ class BaseRegistration(models.Model):
 
 class EventRegistration(BaseRegistration):
     event = models.ForeignKey(Social)
-    #user = models.ForeignKey(User)
+    # user = models.ForeignKey(User)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
     # Optional fields
@@ -211,6 +219,7 @@ class EventRegistration(BaseRegistration):
 
 class BedpresRegistration(BaseRegistration):
     event = models.ForeignKey(Bedpres)
+    status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED)
 
 
 class RegistrationMessage(models.Model):

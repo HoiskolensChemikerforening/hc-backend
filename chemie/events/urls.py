@@ -6,32 +6,82 @@ from . import views
 
 # Events
 urlpatterns = [
-    url(r'^social/$', views.ListSocialView.as_view(), name='index_social'),
-    url(r'^social/social/past', views.ListPastSocialView.as_view(), name='past_social'),
+    url(r'^social/$',
+        views.ListSocialView.as_view(),
+        name='index_social'),
+
+    url(r'^social/past',
+        views.ListPastSocialView.as_view(),
+        name='past_social'),
+
     url(r'^social/create',
-        permission_required('events.add_event')(views.CreateEventView.as_view()), name='create_social'),
-    url(r'^social/(?P<pk>[0-9]+)', views.ViewSocialDetailsView.as_view(), name='detail_social'),
-    url(r'^social/register/(?P<pk>[0-9]+)', login_required(views.SocialBaseRegisterUserView.as_view()), name='register_social'),
-    url(r'^social/adminlist/(?P<pk>[0-9]+)', views.SocialEnlistedUsersView.as_view(), name='adminlist_social'),
-    url(r'^social/adminlist/paymentstatus/(?P<registration_id>[0-9]+)', views.change_payment_status, name='payment_status_social'),
+        views.CreateSocialView.as_view(),
+        name='create_social'),
+
+    url(r'^social/edit/(?P<pk>[0-9]+)/$',
+        views.EditSocialView.as_view(),
+        name='edit_social'),
+
+    url(r'^social/(?P<pk>[0-9]+)',
+        views.ViewSocialDetailsView.as_view(),
+        name='detail_social'),
+
+    url(r'^social/register/(?P<pk>[0-9]+)',
+        views.SocialBaseRegisterUserView.as_view(),
+        name='register_social'),
+
+    url(r'^social/adminlist/(?P<pk>[0-9]+)',
+        views.SocialEnlistedUsersView.as_view(),
+        name='adminlist_social'),
+
+    url(r'^social/adminlist/paymentstatus/(?P<registration_id>[0-9]+)',
+        views.change_payment_status,
+        name='payment_status_social'),
+
     url(r'^social/delete/(?P<pk>[0-9]+)',
-        permission_required('events.delete_event')(views.DeleteSocialView.as_view()), name='delete_social'),
+        views.DeleteSocialView.as_view(),
+        name='delete_social'),
+
     url(r'^social/delete/',
-        permission_required('events.delete_event')(views.ListSocialDeleteView.as_view()), name='delete_list_social'),
+        permission_required('events.delete_event')(
+            views.ListSocialDeleteView.as_view()),
+        name='delete_list_social'),
 ]
 
 # Bedpres
 urlpatterns += [
     url(r'^bedpres/$',
-        views.ListBedpresView.as_view(), name='index_bedpres'),
-    url(r'^bedpres/past', views.ListPastBedpresView.as_view(), name='past_bedpres'),
+        views.ListBedpresView.as_view(),
+        name='index_bedpres'),
+
+    url(r'^bedpres/past',
+        views.ListPastBedpresView.as_view(),
+        name='past_bedpres'),
     url(r'^bedpres/create',
-        permission_required('events.add_bedpres')(views.CreateBedpresView.as_view()), name='create_bedpres'),
-    url(r'^bedpres/(?P<pk>[0-9]+)', views.ViewBedpresDetailsView.as_view(), name='detail_bedpres'),
-    url(r'^bedpres/register/(?P<pk>[0-9]+)', login_required(views.BedpresBaseRegisterUserView.as_view()), name='register_bedpres'),
-    url(r'^bedpres/adminlist/(?P<pk>[0-9]+)', views.BedpresEnlistedUsersView.as_view(), name='adminlist_bedpres'),
+            views.CreateBedpresView.as_view(),
+        name='create_bedpres'),
+
+    url(r'^bedpres/edit/(?P<pk>[0-9]+)/$',
+        views.EditBedpresView.as_view(),
+        name='edit_bedpres'),
+
+    url(r'^bedpres/(?P<pk>[0-9]+)',
+        views.ViewBedpresDetailsView.as_view(),
+        name='detail_bedpres'),
+
+    url(r'^bedpres/register/(?P<pk>[0-9]+)',
+        views.BedpresBaseRegisterUserView.as_view(),
+        name='register_bedpres'),
+
+    url(r'^bedpres/adminlist/(?P<pk>[0-9]+)',
+        views.BedpresEnlistedUsersView.as_view(),
+        name='adminlist_bedpres'),
+
     url(r'^bedpres/delete/(?P<pk>[0-9]+)',
-        permission_required('events.delete_bedpres')(views.DeleteBedpresView.as_view()), name='delete_bedpres'),
+        views.DeleteBedpresView.as_view(),
+        name='delete_bedpres'),
+
     url(r'^bedpres/delete',
-        permission_required('events.delete_bedpres')(views.ListBedpresDeleteView.as_view()), name='delete_list_bedpres'),
+        views.ListBedpresDeleteView.as_view(),
+        name='delete_list_bedpres'),
 ]

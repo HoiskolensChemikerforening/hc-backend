@@ -1,11 +1,10 @@
 from post_office import mail
 from django.contrib.sites.shortcuts import get_current_site
 
-def send_event_mail(registration, event):
-    template = 'event'
+def send_event_mail(registration, event, template):
     mail.send(
         registration.user.email,
-        'pHaestkom <festkom@hc.ntnu.no>',
+        'HC <noreply@hc.ntnu.no>',
         template=template,
         context={
             'event': registration.event,

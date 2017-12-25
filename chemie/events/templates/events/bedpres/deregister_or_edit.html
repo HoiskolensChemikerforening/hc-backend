@@ -28,6 +28,9 @@
             Du er påmeldt.
         {% elif registration.status == 2 %}
             Du er på ventelisten og er nr. {{ queue_position }} i køen
+        {% elif registration.status == 3 %}
+            Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse.<br>
+            Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.
         {% endif %}
     </h5>
 

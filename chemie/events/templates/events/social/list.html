@@ -20,13 +20,13 @@
         <li class="tab col s4"><a target="_self" href="{% url "events:past_social" %}">Tidligere sosiale arrangementer</a></li>
       </ul>
       <div id="futureEvents" class="col s12">
-        {% include "events/list_events.html" %}
+        {% include "events/list_events.html" with object_list=events %}
         {% if not events %}
           <p class="flow-text">Det er ingen aktive sosiale arrangementer nå. Finn på noe kult da vel!</p>
         {% endif %}
       </div>
       <div id="myEvents" class="col s12">
-        {% include "events/list_events.html" with events=my_events %}
+        {% include "events/list_events.html" with object_list=my_events %}
         {% if user.is_authenticated %}
           {% if not my_events %}
             <p class="flow-text">Du er ikke påmeldt noen sosiale arrangementer. Finn på noe sprell!</p>

@@ -15,12 +15,25 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+      <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
+      <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{ event.title }}</a>
+      <a class="breadcrumb">Påmelding</a>
+  </div>
+
+
 
 {% include 'events/registration_header.html' with event=event %}
 
   {% if registration_form %}
     <p class="flow-text">Okei folkens! Gløym at dykk ikkje fekk væra me på soleis store slåttemda festen sist
       gang. Det er no det gjeld!</p>
+    {% if not allowed_grade %}
+      <p class="flow-text">
+        Ditt klassetrinn er ikke invitert til dette arrangementet.
+        Du kan fortsatt melde din interesse dersom det åpnes plasser.
+      </p>
+      {% endif %}
     <form method='POST'>{% csrf_token %}
 
       {% form form=registration_form %}
