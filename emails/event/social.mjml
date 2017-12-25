@@ -56,7 +56,7 @@
             Avmeldingsfrist
           </mj-text>
           <mj-text mj-class="readableGrey" align="center">
-            {{ event.deregister_deadline}}
+            {{ event.deregister_deadline|date:"j. F - H:i" }}
           </mj-text>
         </mj-column>
       </mj-group>

@@ -1,0 +1,77 @@
+<mjml>
+  <mj-head>
+    <mj-include path="../style.mjml" />
+    <mj-title>{{ subject }}
+    </mj-title>
+  </mj-head>
+  <mj-body>
+    <mj-container mj-class="secondaryColor">
+      <mj-include path="../header.mjml" />
+      <mj-raw>
+        {% load event_extras %}
+      </mj-raw>
+      <mj-section padding-left="0px" padding-right="0px" background-url="https://{{ root_url }}/{% thumbnail event.image '1200' crop='center' colorspace='GRAY' as im %}{{ im.url }}{% endthumbnail %}"
+                  padding-top="0" padding-bottom="0" vertical-align="middle" background-size="cover" background-repeat="no-repeat">
+        <mj-column mj-class="transparency">
+          <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-top="75px">
+            {% if registration.status == 1 %} Du er påmeldt
+            {% elif registration.status == 2 %} Du er på ventelisten til
+            {% elif registration.status == 3 %} Du har meldt interesse for
+            {% endif %}
+          </mj-text>
+          <mj-text mj-class="heading" align="center" color="#FFFFFF" padding-bottom="75px">
+            {{ event.title }}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-section mj-class="primaryColor" padding-top="20">
+        <mj-group>
+          <mj-column width="100%">
+            <mj-image width="30px" padding="0" src="https://{{ root_url }}{% static 'images/email/date.png' %}" padding-top="10px"/>
+            <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
+              Tid
+            </mj-text>
+            <mj-text mj-class="readableGrey" align="center">
+              {{ event.date|date:"j. F - H:i" }}
+            </mj-text>
+          </mj-column>
+        </mj-group>
+        <mj-group>
+          <mj-column >
+            <mj-image width="30px" padding="0" src="https://{{ root_url }}{% static 'images/email/place.png' %}" padding-top="10px" />
+            <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
+              Sted
+            </mj-text>
+            <mj-text mj-class="readableGrey" align="center">
+              {{ event.location }}
+            </mj-text>
+            </mj-text>
+          </mj-column>
+        </mj-group>
+      <mj-group>
+        <mj-column>
+          <mj-image width="30px" padding="0" src="https://{{ root_url }}{% static 'images/email/deadline.png' %}" padding-top="10px"/>
+          <mj-text mj-class="smallHeader" align="center" padding-bottom="0px">
+            Avmeldingsfrist
+          </mj-text>
+          <mj-text mj-class="readableGrey" align="center">
+            {{ event.deregister_deadline|date:"j. F - H:i"}}
+          </mj-text>
+        </mj-column>
+      </mj-group>
+      </mj-section>
+    <mj-section mj-class="primaryColor">
+      <mj-column width="95%">
+        <mj-text mj-class="smallHeader">
+          Beskrivelse: <br>
+        </mj-text>
+        <mj-text mj-class="readableGrey">
+          {{ event.description|striptags}}
+        </mj-text>
+      </mj-column>
+      </mj-column>
+    </mj-section>
+  <mj-include path="../footer.mjml" />
+  </mj-container>
+</mj-body>
+</mjml>

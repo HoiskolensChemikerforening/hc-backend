@@ -1,0 +1,13 @@
+{% load event_extras %}
+{% if registration.status == 1 %} Du er påmeldt
+{% elif registration.status == 2 %} Du er på ventelisten til
+{% elif registration.status == 3 %} Du har meldt interesse for arrangementet, men klassetrinnet ditt er ikke invitert.
+Du vil automatisk bli påmeldt og tilsendt e-post dersom dette endres.
+{% endif %}
+Bedpres: {{ event.title }}.
+Tid:	{{ event.date|date:"j. F - H:i" }}
+Avmeldingsfrist:	{{ event.deregister_deadline|date:"j. F - H:i"}}
+Sted: {{ event.location }}
+
+Beskrivelse: 
+{{ event.description|striptags}} 
