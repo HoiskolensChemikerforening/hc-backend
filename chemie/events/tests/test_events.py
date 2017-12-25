@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from chemie import settings
 from events.models import Social, EventRegistration
-
+from ..views import set_user_event_status
 
 # Create your tests here.
 
@@ -33,7 +33,7 @@ class TestEventAndRegistration(TestCase):
                               location='Samfundet',
                               description='Litta fest',
                               image=image,
-                              sluts=40,
+                              sluts=10,
                               payment_information='Alle maa benytte Vipps til aa betale',
                               )
 
@@ -46,6 +46,7 @@ class TestEventAndRegistration(TestCase):
             registration = EventRegistration(event=event,
                                              user=user,
                                              )
+            set_user_event_status(event, registration)
             registration.save()
             # Bumping all users on wait list by
             # calling overridden save function

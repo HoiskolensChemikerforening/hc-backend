@@ -7,11 +7,11 @@
 {% endblock header %}
 
 {% block nav_header %}
-  Bedpres
+  Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Opprett bedpres
+  Opprett sosialt arrangement
 {% endblock nav_sub_header %}
 
 {% block extra_js %}
@@ -20,9 +20,9 @@
 
 {% block content %}
 
-  {% include 'events/bedpres/permissions.html' %}
+  {% include 'events/social/permissions.html' %}
 
-  <p class="flow-text">Her finner du de beste bedriftpresentasjonene på Gløs!</p>
+  <p class="flow-text">Her lager du de beste arrangementene på Gløs!</p>
   <div class="card">
     <form method="POST" enctype="multipart/form-data">{% csrf_token %}
       <div class="card-content">
@@ -39,9 +39,6 @@
     </form>
   </div>
 
-{% endblock content %}
-
-{% block footer_script %}
   <script type="text/javascript">
       $(document).ready(function () {
           $(".timepicker").clockpicker({
@@ -69,4 +66,6 @@
           });
       });
   </script>
-{% endblock footer_script %}
+
+{% endblock content %}
+

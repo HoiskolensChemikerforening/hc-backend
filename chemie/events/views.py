@@ -2,7 +2,7 @@ from itertools import zip_longest
 
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.urlresolvers import reverse
+from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -12,71 +12,67 @@ from django.utils import timezone
 from django.views import View
 from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.detail import SingleObjectMixin, DetailView
-from django.views.generic.edit import DeleteView
-
+from django.views.generic.list import ListView
+from django.views.generic.edit import DeleteView, UpdateView
+from django.views.generic.edit import FormMixin, CreateView
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm, RegisterBedpresForm, \
     BedpresRegisterUserForm
 from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
+from django.views.generic.edit import FormView
 
 
-class CreateEventView(View):
-    event_form = RegisterEventForm
-    initial = None
-    template_name = 'events/social/register.html'
+class SocialFormView(FormView):
+    template_name = 'events/social/create.html'
+    form_class = RegisterEventForm
 
-    def get(self, request):
-        context = {
-            'form': self.event_form,
-        }
-        return render(request, self.template_name, context)
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-    def post(self, request):
-        form = self.event_form(request.POST, request.FILES)
-        if form.is_valid():
-            instance = form.save(commit=False)
-            instance.author = request.user
-            instance.save()
-            return HttpResponseRedirect(reverse('events:index_social'))
-        context = {
-            'form': form,
-        }
-        return render(request, self.template_name, context)
+    class Meta:
+        abstract = True
 
 
-class CreateBedpresView(View):
-    bedpres_form = RegisterBedpresForm
-    initial = None
+class CreateSocialView(PermissionRequiredMixin, SocialFormView, CreateView):
+    success_url = reverse_lazy('events:index_social')
+    permission_required = 'events.add_event'
+    # TODO: Couple the allowed grades with GRADES enum from customprofile models
+    initial = {'allowed_grades': [1, 2, 3, 4, 5, 6]}
+
+
+class EditSocialView(PermissionRequiredMixin, SocialFormView, UpdateView):
+    permission_required = 'events.change_event'
+    # Can't edit past events
+    queryset = Social.objects.filter(date__gte=timezone.now())
+
+
+class BedpresFormView(SocialFormView):
     template_name = 'events/bedpres/create.html'
+    form_class = RegisterBedpresForm
 
-    def get(self, request):
-        context = {
-            'regform': self.bedpres_form,
-        }
-        return render(request, self.template_name, context)
 
-    def post(self, request):
-        bedpres_form = RegisterBedpresForm(request.POST, request.FILES)
-        if bedpres_form.is_valid():
-            allowed_grades = bedpres_form.cleaned_data.get('allowed_grades')
-            instance = bedpres_form.save(commit=False)
-            instance.author = request.user
-            instance.save()
-            return redirect(reverse('events:index_bedpres'))
-        context = {
-            'regform': bedpres_form,
-        }
-        return render(request, self.template_name, context)
+class CreateBedpresView(PermissionRequiredMixin, BedpresFormView, CreateView):
+    success_url = reverse_lazy('events:index_bedpres')
+    permission_required = 'events.add_bedpres'
+
+
+class EditBedpresView(PermissionRequiredMixin, UpdateView, BedpresFormView ):
+    permission_required = 'events.change_bedpres'
+    # Can't edit past events
+    queryset = Bedpres.objects.filter(date__gte=timezone.now())
 
 
 class ListSocialView(View):
     template_name = 'events/social/list.html'
+    model = Social
 
     def get_objects(self, request):
-        future_events = Social.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
-        my_events = Social.objects.filter(attendees__username__exact=request.user)
+        future_events = self.model.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
+        my_events = self.model.objects.filter(attendees__username__exact=request.user)
         return future_events, my_events
 
     def get(self, request):
@@ -90,73 +86,55 @@ class ListSocialView(View):
 
 class ListBedpresView(ListSocialView):
     template_name = 'events/bedpres/list.html'
-
-    def get_objects(self, request):
-        future_events = Bedpres.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
-        my_events = Bedpres.objects.filter(attendees__username__exact=request.user)
-        return future_events, my_events
+    model = Bedpres
 
 
-class ListPastSocialView(View):
+class ListPastSocialView(ListView):
     template_name = 'events/social/list_past.html'
+    model = Social
 
-    def get_objects(self):
-        return Social.objects.filter(date__lte=timezone.now()).order_by('date')
-
-    def get(self, request):
-        past_events = self.get_objects().filter(published=True)
-        context = {
-            'events': past_events,
-        }
-        return render(request, self.template_name, context)
+    def queryset(self):
+        return self.model.objects.filter(date__lte=timezone.now()).order_by('date')
 
 
 class ListPastBedpresView(ListPastSocialView):
     template_name = 'events/bedpres/list_past.html'
-
-    def get_objects(self):
-        return Bedpres.objects.filter(date__lte=timezone.now()).order_by('date')
+    model = Bedpres
 
 
-class ListSocialDeleteView(View):
+class ListSocialDeleteView(PermissionRequiredMixin, ListView):
     template_name = 'events/social/delete.html'
+    permission_required = 'events.delete_event'
+    model = Social
 
-    def get_objects(self):
-        return Social.objects.filter(date__gt=timezone.now())
-
-    def get(self, request):
-        all_events = self.get_objects().filter(published=True)
-        context = {
-            'events': all_events,
-        }
-        return render(request, self.template_name, context)
+    def queryset(self):
+        return self.model.objects.filter(date__gt=timezone.now(),
+                                         published=True)
 
 
 class ListBedpresDeleteView(ListSocialDeleteView):
-    def get_objects(self):
-        return Bedpres.objects.filter(date__gt=timezone.now())
+    model = Bedpres
+    permission_required = 'events.delete_bedpres'
 
 
-class DeleteSocialView(DeleteView):
+class DeleteSocialView(PermissionRequiredMixin, DeleteView):
     model = Social
-
-    def get_success_url(self):
-        return reverse('events:delete_list_social')
+    permission_required = 'events.delete_event'
+    success_url = 'events:delete_list_social'
 
     def delete(self, request, *args, **kwargs):
-        self.object = self.get_object()
+        object = self.get_object()
         success_url = self.get_success_url()
-        self.object.published = False
-        self.object.save()
+        object.published = False
+        object.save()
         messages.add_message(request, messages.WARNING, 'Arrangementet ble slettet', extra_tags='Slettet')
         return HttpResponseRedirect(success_url)
 
 
 class DeleteBedpresView(DeleteSocialView):
     model = Bedpres
-
-    def get_success_url(self):
-        return reverse('events:delete_list_bedpres')
+    success_url = 'events:delete_list_bedpres'
+    permission_required = 'events.delete_bedpres'
 
 
 class ViewSocialDetailsView(View):
@@ -218,6 +196,7 @@ class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
     form_classes = {'deregister': DeRegisterUserForm,
                     'edit': SocialRegisterUserForm}
     success_url = 'event:register'
+    email_template = 'social'
 
     registration = None
     object = None
@@ -242,6 +221,7 @@ class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(super().get_context_data(**kwargs))
+        # Todo: Make it possible to remove registration whenever, IF it is of "interest" type
 
         # Remove the forms whenever the deadline has passed
         if not self.object.can_de_register:
@@ -252,10 +232,13 @@ class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
         # Add queue position
         registration = self.registration
         if registration:
-            queue_position = self.registration_model.objects.filter(event=registration.event,
-                                                              created__lt=registration.created,
-                                                              status=REGISTRATION_STATUS.WAITING).count() + 1
-            context.update({'queue_position': queue_position})
+            if registration.status == REGISTRATION_STATUS.WAITING:
+                queue_position = self.registration_model.objects.filter(event=registration.event,
+                                                                        created__lt=registration.created,
+                                                                        status=REGISTRATION_STATUS.WAITING).count() + 1
+                context.update({'queue_position': queue_position})
+
+        context['registration'] = registration
         return context
 
     def deregister_form_valid(self, form):
@@ -266,7 +249,7 @@ class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
             registration = self.registration_model.objects.filter(event=event, user=self.request.user).first()
             lucky_person = self.registration_model.objects.de_register(registration)
             if lucky_person:
-                send_event_mail(lucky_person, event)
+                send_event_mail(lucky_person, event, self.email_template)
             messages.add_message(self.request, messages.WARNING, 'Du er nå avmeldt {}'.format(event.title),
                                  extra_tags='Avmeldt')
         return redirect(event.get_absolute_registration_url())
@@ -293,6 +276,7 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
     registration_model = BedpresRegistration
     template_name = 'events/bedpres/deregister_or_edit.html'
     form_classes = {'deregister': DeRegisterUserForm}
+    email_template = 'bedpres'
 
     def get_edit_initial(self):
         return {'instance': self.registration}
@@ -301,10 +285,15 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
 class SocialRegisterUserView(SingleObjectMixin, View):
     template_name = "events/register_user.html"
     model = Social
+
     registration_form = SocialRegisterUserForm
+    email_template = 'social'
 
     pk = None
     object = None
+
+    def get_success_url(self):
+        return reverse('events:register_social', kwargs={'pk': self.pk})
 
     def dispatch(self, request, *args, **kwargs):
         # Set event and registration on the whole object. This is run very early
@@ -330,6 +319,7 @@ class SocialRegisterUserView(SingleObjectMixin, View):
         context = {
             "registration_form": registration_form,
             "event": self.object,
+            "allowed_grade": self.object.allowed_grade(request.user)
         }
         return render(request, self.template_name, context)
 
@@ -343,36 +333,48 @@ class SocialRegisterUserView(SingleObjectMixin, View):
             instance.save()
             status = set_user_event_status(event, instance)
             self.set_status_message(request, status, instance, event)
-            return redirect(reverse('events:register_social', kwargs={'pk': pk}))
+            return redirect(self.get_success_url())
         context = {
             'registration_form': registration_form,
             'event': event,
         }
         return render(request, self.template_name, context)
 
-    @staticmethod
-    def set_status_message(request, status, instance, event):
+    def set_status_message(self, request, status, instance, event):
         if status == REGISTRATION_STATUS.CONFIRMED:
-            messages.add_message(request, messages.SUCCESS, 'Du er påmeldt arrangementet.', extra_tags='Påmeldt')
-            send_event_mail(instance, event)
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Du er påmeldt arrangementet.',
+                                 extra_tags='Påmeldt')
+
+
             custom_messages = RegistrationMessage.objects.filter(user=instance.user, event=event)
             for custom_message in custom_messages:
-                messages.add_message(request, messages.INFO, custom_message.message, extra_tags='PS')
+                messages.add_message(request,
+                                     messages.INFO,
+                                     custom_message.message,
+                                     extra_tags='PS')
 
         elif status == REGISTRATION_STATUS.WAITING:
-            messages.add_message(request, messages.WARNING, 'Arrangementet er fullt, men du er på venteliste.',
+            messages.add_message(request,
+                                 messages.WARNING,
+                                 'Arrangementet er fullt, men du er på venteliste.',
                                  extra_tags='Venteliste')
-            send_event_mail(instance, event)
-        else:
-            # Denne bør ligge i en try-catch block
-            messages.add_message(request, messages.ERROR, 'En ukjent feil oppstod. Kontakt edb@hc.ntnu.no',
-                                 extra_tags='Ukjent feil')
+
+        elif status == REGISTRATION_STATUS.INTERESTED:
+            messages.add_message(request,
+                                 messages.INFO,
+                                 'Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse. '
+                                 'Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.',
+                                 extra_tags='Interessert')
+
+        send_event_mail(instance, event, self.email_template)
 
 
 class BedpresRegisterUserView(SocialRegisterUserView):
     template_name = 'events/register_user.html'
     model = Bedpres
-
+    email_template = 'bedpres'
 
     registration_form = BedpresRegisterUserForm
 
@@ -380,7 +382,7 @@ class BedpresRegisterUserView(SocialRegisterUserView):
         return {}
 
 
-class SocialBaseRegisterUserView(SingleObjectMixin, View):
+class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     model = Social
     registration_model = EventRegistration
     registration_view_edit = SocialEditRemoveUserRegistration
@@ -398,7 +400,7 @@ class SocialBaseRegisterUserView(SingleObjectMixin, View):
         registration = self.registration_model.objects.filter(event=event, user=request.user).first()
 
         if registration:
-                return self.registration_view_edit.as_view()(self.request, object=event, registration=registration)
+            return self.registration_view_edit.as_view()(self.request, object=event, registration=registration)
         else:
             if request.method == 'POST':
                 return self.registration_view_register.post(self.registration_view_register(), request, self.object.pk)
@@ -416,33 +418,20 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
     registration_view_register = BedpresRegisterUserView
 
 
-@login_required
-@ensure_csrf_cookie
-def view_admin_panel(request, pk):
-    event = Social.objects.get(pk=pk)
-    all_registrations = EventRegistration.objects.filter(
-        event=event,
-    ).select_related('user__profile__membership')
 
-    context = {
-        "attendees": all_registrations,
-        "event": event,
-    }
-    return render(request, "events/admin_list.html", context)
-
-
-class SocialEnlistedUsersView(DetailView, View):
+class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = 'events/admin_list.html'
     model = Social
     registration_model = EventRegistration
+    permission_required = 'event.change_eventregistration'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
             context['attendees'] = self.registration_model.objects.filter(
-            status=REGISTRATION_STATUS.CONFIRMED,
-            event=self.object,
-        ).select_related('user__profile__membership')
+                status=REGISTRATION_STATUS.CONFIRMED,
+                event=self.object,
+            ).select_related('user__profile__membership')
 
         return context
 
@@ -451,6 +440,7 @@ class BedpresEnlistedUsersView(SocialEnlistedUsersView):
     template_name = 'events/admin_list.html'
     model = Bedpres
     registration_model = BedpresRegistration
+    permission_required = 'event.change_bedpresregistration'
 
 
 @login_required
@@ -464,8 +454,13 @@ def change_payment_status(request, registration_id):
 
 @transaction.atomic
 def set_user_event_status(event, registration):
-    if event.has_spare_slots:
-        registration.confirm()
-        registration.save()
-        return REGISTRATION_STATUS.CONFIRMED
-    return REGISTRATION_STATUS.WAITING
+    if event.allowed_grade(registration.user):
+        if event.has_spare_slots:
+            registration.confirm()
+            registration.save()
+            return REGISTRATION_STATUS.CONFIRMED
+        else:
+            registration.waiting()
+            return REGISTRATION_STATUS.WAITING
+    else:
+        return REGISTRATION_STATUS.INTERESTED
