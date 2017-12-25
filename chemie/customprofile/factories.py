@@ -24,13 +24,13 @@ class RandomProfileFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(RandomUserFactory)
 
     # https: // faker.readthedocs.io / en / latest / locales / no_NO.html
-    grade = factory.Iterator(GRADES)
+    grade = factory.Iterator(GRADES.values.keys())
     start_year = CURRENT_YEAR
     end_year = FINISH_YEAR
-    allergies = factory.Faker('lorem', nb_words=6, variable_nb_words=True, ext_word_list=None)
-    relationship_status = factory.Iterator(RELATIONSHIP_STATUS)
-    phone_number = factory.Faker('phone_number')
-    access_card = factory.Faker('password', legth=10)
+    allergies = factory.Sequence(lambda n: "Allergen_%d" % n)
+    relationship_status = factory.Iterator(RELATIONSHIP_STATUS.values.keys())
+    phone_number = factory.sequence(lambda p: p)
+    access_card = factory.Faker('password', length=10)
 
     image_primary = factory.django.ImageField(color='blue')
     image_secondary = factory.django.ImageField(color='red')
