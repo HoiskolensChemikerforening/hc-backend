@@ -264,8 +264,7 @@ section#top-title {
 
 img.profile-circle {
     margin-left: 10px;
-    width: 20%;
-    height: 20%;
+    transform: scale(0.6);
 }
 
 .side-nav li > a > i.material-icons {

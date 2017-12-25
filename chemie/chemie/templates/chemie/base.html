@@ -19,16 +19,15 @@
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.98.1/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-  <link type="text/css" rel="stylesheet" href="{% static "css/timepicker.css" %}" media="screen,projection"/>
   <script type="text/javascript" src="{% static 'js/konami-code.js' %}"></script>
   {% block extra_css %}
   {% endblock %}
 
   <!-- JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js" defer></script>
   <script src="{% static "js/timepicker.js" %}"></script>
   <script src="{% static "js/init.js" %}" defer></script>
 
@@ -79,11 +78,11 @@
           <ul class="collapsible" data-collapsible="accordion">
             <li>
               <div class="collapsible-header">
-                <div class="valign-wrapper" style="padding-top: 10px; padding-bottom: 10px;">
+                <div class="valign-wrapper">
 
-                  <span style="padding-left: 50px; vertical-align: 20px;">{{ request.user.get_full_name }}</span>
+                  <span style="padding-left: 20px; vertical-align: 20px; line-height: 20px;">{{ request.user.get_full_name }}</span>
                   {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}" height="{{ im.height }}" alt=""
+                    <img src="{{ im.url }}" width="{{ im.width }}px" height="{{ im.height }}px" alt=""
                          class="circle profile-circle">
                   {% endthumbnail %}
                 </div>
@@ -185,7 +184,8 @@
                 <div class="card-content">
                   <span class="card-title black-text valign-wrapper" style="clear: both;">
 
-                      <h5><i class="material-icons black-text" style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+                      <h5><i class="material-icons black-text"
+                             style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
                   </span>
                   <p class="flow-text black-text">{{ message }}</p>
                 </div>
@@ -253,10 +253,11 @@
       {% endcache %}
     </div>
 
-  <!-- Copyright -->
-  <div class="footer-copyright">
-    <div class="container">
-      <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+    <!-- Copyright -->
+    <div class="footer-copyright">
+      <div class="container">
+        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+      </div>
     </div>
   </div>
 </footer>
@@ -272,8 +273,8 @@
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
         a = s.createElement(o),
             m = s.getElementsByTagName(o)[0];
         a.async = 1;
