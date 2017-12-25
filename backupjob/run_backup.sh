@@ -37,7 +37,7 @@ then
     /usr/bin/pg_dump -h database -U $PGUSER -Fc $POSTGRES_DB > $NOW/backup.gz 2>> /var/log/syslog
     DBFILE=$REMOTE_BACKUP_DIR/database/$BACKUP_DIR/$TIME_PREFIX.gz
     MD5=($(md5sum $NOW/backup.gz))
-    scp -r -o StrictHostKeyChecking=no -i /ssh/key $NOW/backup.gz $REMOTE_SSH_USER@$REMOTE_HOST:$DBFILE
+    scp -P $REMOTE_PORT -r -o StrictHostKeyChecking=no -i /ssh/key $NOW/backup.gz $REMOTE_SSH_USER@$REMOTE_HOST:$DBFILE
     MD5_SERVER=$(ssh $REMOTE_SSH_USER@$REMOTE_HOST -i /ssh/key -o StrictHostKeyChecking=no DBFILE=$DBFILE 'md5=($(md5sum $DBFILE)); echo $md5')
     rm -r $NOW
     REMOTE_PATH=$REMOTE_BACKUP_DIR/media/$BACKUP_DIR/$TIME_PREFIX
