@@ -27,9 +27,11 @@ class RandomProfileFactory(factory.DjangoModelFactory):
     grade = factory.Iterator(GRADES.values.keys())
     start_year = CURRENT_YEAR
     end_year = FINISH_YEAR
+
     allergies = factory.Faker('word')
     relationship_status = factory.Iterator(RELATIONSHIP_STATUS.values.keys())
     phone_number = 12345678
+
     access_card = factory.Faker('password', length=10)
 
     image_primary = factory.django.ImageField(color='blue')
