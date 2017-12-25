@@ -1,11 +1,17 @@
 [
 {
-"name": "event",
+"name": "social",
 "description": "Bekreftelsesepost om påmeldelse",
 "subject":"{{ event.title }} - HC",
-"path":"event/event"
+"path":"event/social"
 },
 
+{
+"name": "bedpres",
+"description": "Bekreftelsesepost om påmeldelse",
+"subject":"{{ event.title }} - HC",
+"path":"event/bedpres"
+},
 
 {
 "name": "contact_email",
