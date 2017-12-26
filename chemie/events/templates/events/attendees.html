@@ -1,25 +1,11 @@
+{% regroup attendees by user.profile.get_grade_display as attendees_list %}
 <table class="responsive-table">
-  <thead>
-  <tr>
-    <th data-field="first-grade">Første</th>
-    <th data-field="second-grade">Andre</th>
-    <th data-field="third-grade">Tredje</th>
-    <th data-field="fourth-grade">Fjerde</th>
-    <th data-field="fifth-grade">Femte</th>
-    <th data-field="third-grade"> xyz</th>
-  </tr>
-  </thead>
-
-  <tbody>
-  {% for first,second,third,fourth,fifth in user_list %}
+  {% for grade in attendees_list %}
     <tr>
-      <td>{% if first %}{{ first }}{% endif %}</td>
-      <td>{% if second %}{{ second }}{% endif %}</td>
-      <td>{% if third %}{{ third }}{% endif %}</td>
-      <td>{% if fourth %}{{ fourth }}{% endif %}</td>
-      <td>{% if fifth %}{{ fifth }}{% endif %}</td>
-      <td>{% if done %}{{ done }}{% endif %}</td>
+      <th data-field="first-grade">{{ grade.grouper }}</th>
+      {% for item in grade.list %}
+        <td>{{ item.user.get_full_name }}</td>
+      {% endfor %}
     </tr>
   {% endfor %}
-  </tbody>
 </table>

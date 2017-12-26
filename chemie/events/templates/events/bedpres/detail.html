@@ -21,26 +21,32 @@
       <ul>
         {% if perms.events.change_eventregistration %}
           <li>
-            <a class="btn-floating blue" href="{% url 'events:adminlist_bedpres' event.id %}"><i class="material-icons">list</i></a>
-            <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist_bedpres' event.id %}">Se påmeldte</a>
+            <a class="btn-floating blue" href="{% url 'events:adminlist_bedpres' bedpres.id %}"><i class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist_bedpres' bedpres.id %}">Se påmeldte</a>
           </li>
         {% endif %}
+      {% if perms.events.change_bedpres %}
+          <li>
+            <a class="btn-floating blue" href="{% url 'events:edit_bedpres' bedpres.id %}"><i class="material-icons">mode_edit</i></a>
+            <a class="btn-floating mobile-fab-tip" href="{% url 'events:edit_bedpres' bedpres.id %}">Endre</a>
+          </li>
+      {% endif %}
       </ul>
     </div>
   {% endif %}
 
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Bedpreser</a>
-    <a class="breadcrumb">{{ event.title }}</a>
+    <a class="breadcrumb">{{ bedpres.title }}</a>
   </div>
 
   <div class="row">
-    <div class="col s12 m12 l12"><h1 class="heading">{{ event.title }}</h1></div>
+    <div class="col s12 m12 l12"><h1 class="heading">{{ bedpres.title }}</h1></div>
   </div>
 
   <div class="row">
     <div class="col l7 m12">
-      {% thumbnail event.image "1600" crop="center" as im %}
+      {% thumbnail bedpres.image "1600" crop="center" as im %}
         <img class="responsive-img materialboxed" src="{{ im.url }}">
       {% endthumbnail %}
     </div>
@@ -55,14 +61,14 @@
               <i class="material-icons valign left">location_on</i>
               <h5 class="left-align">Hvor</h5>
             </div>
-            <p>{{ event.location }}</p>
+            <p>{{ bedpres.location }}</p>
           </div>
           <div class="section">
             <div class="valign-wrapper">
               <i class="material-icons valign left">access_time</i>
               <h5 class="left-align">Når</h5>
             </div>
-            <p>{{ event.date|date:"j. F - H:i" }}</p>
+            <p>{{ bedpres.date|date:"j. F - H:i" }}</p>
           </div>
 
           <!-- Total and remaining slots bar -->
@@ -74,11 +80,11 @@
             </div>
             <div>
               <p class="left valign"><b>Påmeldte:</b></p>
-              <p class="right valign">{{ event.registered_users|default_if_none:0 }} av {{ event.sluts }}</p>
+              <p class="right valign">{{ bedpres.registered_users|default_if_none:0 }} av {{ bedpres.sluts }}</p>
             </div>
             <br>
             <div class="progress">
-              <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
+              <div class="determinate" style="width: {{ bedpres.percentage_filled }}%"></div>
             </div>
           </div>
 
@@ -90,7 +96,7 @@
   </div>
 
   <!-- Button for signup page -->
-  <a class="waves-effect waves-light btn" href="{{ event.get_absolute_registration_url }}">Til påmelding</a>
+  <a class="waves-effect waves-light btn" href="{{ bedpres.get_absolute_registration_url }}">Til påmelding</a>
 
   <!-- Desription info -->
   <div class="row">
@@ -98,7 +104,7 @@
       <div class="card">
         <div class="card-content">
           <h5>Beskrivelse:</h5>
-          <p class="flow-text"> {{ event.description|safe }} </p>
+          <p class="flow-text"> {{ bedpres.description|safe }} </p>
         </div>
       </div>
     </div>
@@ -107,38 +113,19 @@
   <!-- List of attending users -->
   <div class="row">
     <h2>Påmeldte</h2>
-    <table class="responsive-table">
-      <thead>
-      <tr>
-        <th data-field="first-grade">Første</th>
-        <th data-field="second-grade">Andre</th>
-        <th data-field="third-grade">Tredje</th>
-        <th data-field="fourth-grade">Fjerde</th>
-        <th data-field="fifth-grade">Femte</th>
-        <th data-field="third-grade"> Ferdig</th>
-      </tr>
-      </thead>
-
-      <tbody>
-      {% for first,second,third,fourth,fifth,done in attendees %}
-        <tr>
-          <td>{% if first %}{{ first }}{% endif %}</td>
-          <td>{% if second %}{{ second }}{% endif %}</td>
-          <td>{% if third %}{{ third }}{% endif %}</td>
-          <td>{% if fourth %}{{ fourth }}{% endif %}</td>
-          <td>{% if fifth %}{{ fifth }}{% endif %}</td>
-          <td>{% if done %}{{ done }}{% endif %}</td>
-        </tr>
-      {% endfor %}
-      </tbody>
-    </table>
+    {% include "events/attendees.html" with user_list=attendees %}
   </div>
 
   <!-- List of users on waiting list -->
   {% if attendees_waiting %}
     <div class="row">
       <h2>Venteliste</h2>
-        {% include "events/attendees.html" with user_list=attendees %}
+      {% include "events/attendees.html" with user_list=attendees_waiting %}
     </div>
   {% endif %}
+
 {% endblock content %}
+
+{% block footer_js_files %}
+  <script src="{% static "events/transpose_table.js" %}"></script>
+{% endblock footer_js_files %}

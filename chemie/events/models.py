@@ -91,7 +91,7 @@ class BaseEvent(models.Model):
                     'created')[:self.spare_slots]
                 for attendee in attendees:
                     attendee.confirm()
-                    send_event_mail(attendee, self)
+                    send_event_mail(attendee, self, self._meta.model_name)
 
     def registration_has_opened(self):
         return timezone.now() >= self.register_startdate
