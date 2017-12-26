@@ -10,9 +10,7 @@ from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views import View
 from django.views.generic.detail import SingleObjectMixin, DetailView
-from django.views.generic.edit import CreateView
-from django.views.generic.edit import DeleteView, UpdateView
-from django.views.generic.edit import FormView
+from django.views.generic.edit import CreateView, FormView, DeleteView, UpdateView
 from django.views.generic.list import ListView
 
 from .email import send_event_mail
@@ -22,6 +20,15 @@ from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm
 from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
 
+
+class SuccessMessageMixin(object):
+    message_content = '', '', ''
+
+    def form_valid(self, form):
+        response = super(SuccessMessageMixin, self).form_valid(form)
+        message_type, message, heading = self.message_content
+        messages.add_message(self.request, message_type, message, extra_tags=heading)
+        return response
 
 class SocialFormView(FormView):
     template_name = 'events/social/create.html'
@@ -35,17 +42,21 @@ class SocialFormView(FormView):
         abstract = True
 
 
-class CreateSocialView(PermissionRequiredMixin, SocialFormView, CreateView):
+class CreateSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormView, CreateView):
     success_url = reverse_lazy('events:index_social')
     permission_required = 'events.add_event'
     # TODO: Couple the allowed grades with GRADES enum from customprofile models
     initial = {'allowed_grades': [1, 2, 3, 4, 5, 6]}
+    success_message = "%(name)s was created successfully"
+    message_content = messages.SUCCESS, 'Arrangementet ble opprettet', 'Opprettet'
 
 
-class EditSocialView(PermissionRequiredMixin, SocialFormView, UpdateView):
+class EditSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormView, UpdateView, ):
     permission_required = 'events.change_event'
     # Can't edit past events
     queryset = Social.objects.filter(date__gte=timezone.now())
+    success_message = "%(name)s was created successfully"
+    message_content = messages.SUCCESS, 'Arrangementet ble endret', 'Endret'
 
 
 class BedpresFormView(SocialFormView):
@@ -53,33 +64,32 @@ class BedpresFormView(SocialFormView):
     form_class = RegisterBedpresForm
 
 
-class CreateBedpresView(PermissionRequiredMixin, BedpresFormView, CreateView):
+class CreateBedpresView(PermissionRequiredMixin, SuccessMessageMixin, BedpresFormView, CreateView):
     success_url = reverse_lazy('events:index_bedpres')
     permission_required = 'events.add_bedpres'
+    message_content = messages.SUCCESS, 'Bedpresen ble opprettet', 'Opprettet'
 
 
-class EditBedpresView(PermissionRequiredMixin, UpdateView, BedpresFormView):
+class EditBedpresView(PermissionRequiredMixin, SuccessMessageMixin, BedpresFormView, UpdateView):
     permission_required = 'events.change_bedpres'
     # Can't edit past events
     queryset = Bedpres.objects.filter(date__gte=timezone.now())
+    message_content = messages.SUCCESS, 'Bedpresen ble endret', 'Endret'
 
 
-class ListSocialView(View):
+class ListSocialView(ListView):
     template_name = 'events/social/list.html'
     model = Social
 
-    def get_objects(self, request):
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         future_events = self.model.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
-        my_events = self.model.objects.filter(attendees__username__exact=request.user)
-        return future_events, my_events
-
-    def get(self, request):
-        future_events, my_events = self.get_objects(request)
-        context = {
+        my_events = self.model.objects.filter(attendees__username__exact=self.request.user)
+        context.update({
             'events': future_events,
-            'my_events': my_events,
-        }
-        return render(request, self.template_name, context)
+            'my_events': my_events
+        })
+        return context
 
 
 class ListBedpresView(ListSocialView):
