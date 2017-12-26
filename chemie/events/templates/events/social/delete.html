@@ -10,9 +10,9 @@
 
   {% include 'events/social/permissions.html' %}
 
-  {% if perms.events.delete_social or perms.events.delete_bedpres %}
+  {% if perms.events.delete_social %}
     <div class="row">
-      {% for event in events %}
+      {% for event in object_list %}
         <div class="col s12 m10 l6">
           <div class="card">
             <div class="card-image">

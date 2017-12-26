@@ -15,7 +15,8 @@
 {% endblock nav_sub_header %}
 
 {% block extra_js %}
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/compressed/translations/no_NO.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/compressed/translations/no_NO.js"
+          defer></script>
 {% endblock %}
 
 {% block content %}
@@ -38,7 +39,9 @@
       </div>
     </form>
   </div>
+{% endblock content %}
 
+{% block footer_script %}
   <script type="text/javascript">
       $(document).ready(function () {
           $(".timepicker").clockpicker({
@@ -57,7 +60,7 @@
 
           // Incorrect date format is set on the datepickers when the form is returned to the user (with errors)
           // This loops over the fields and "converts" the format
-          $(".datepicker").each(function() {
+          $(".datepicker").each(function () {
               var date = document.getElementById(this.id).value;
               console.log(this)
               if (date !== "") {
@@ -66,6 +69,5 @@
           });
       });
   </script>
-
-{% endblock content %}
+{% endblock footer_script %}
 

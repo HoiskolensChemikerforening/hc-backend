@@ -1,7 +1,6 @@
-from itertools import zip_longest
-
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.db import transaction
 from django.http import HttpResponseRedirect
@@ -10,20 +9,18 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect
 from django.utils import timezone
 from django.views import View
-from django.views.decorators.csrf import ensure_csrf_cookie
 from django.views.generic.detail import SingleObjectMixin, DetailView
-from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView
 from django.views.generic.edit import DeleteView, UpdateView
-from django.views.generic.edit import FormMixin, CreateView
-from django.contrib.auth.mixins import PermissionRequiredMixin, LoginRequiredMixin
+from django.views.generic.edit import FormView
+from django.views.generic.list import ListView
+
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm, RegisterBedpresForm, \
     BedpresRegisterUserForm
 from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
-from django.views.generic.edit import FormView
-from operator import itemgetter
 
 
 class SocialFormView(FormView):
@@ -61,7 +58,7 @@ class CreateBedpresView(PermissionRequiredMixin, BedpresFormView, CreateView):
     permission_required = 'events.add_bedpres'
 
 
-class EditBedpresView(PermissionRequiredMixin, UpdateView, BedpresFormView ):
+class EditBedpresView(PermissionRequiredMixin, UpdateView, BedpresFormView):
     permission_required = 'events.change_bedpres'
     # Can't edit past events
     queryset = Bedpres.objects.filter(date__gte=timezone.now())
@@ -114,6 +111,7 @@ class ListSocialDeleteView(PermissionRequiredMixin, ListView):
 
 
 class ListBedpresDeleteView(ListSocialDeleteView):
+    template_name = 'events/bedpres/delete.html'
     model = Bedpres
     permission_required = 'events.delete_bedpres'
 
@@ -121,20 +119,19 @@ class ListBedpresDeleteView(ListSocialDeleteView):
 class DeleteSocialView(PermissionRequiredMixin, DeleteView):
     model = Social
     permission_required = 'events.delete_event'
-    success_url = 'events:delete_list_social'
+    success_url = reverse_lazy('events:delete_list_social')
 
     def delete(self, request, *args, **kwargs):
         object = self.get_object()
-        success_url = self.get_success_url()
         object.published = False
         object.save()
         messages.add_message(request, messages.WARNING, 'Arrangementet ble slettet', extra_tags='Slettet')
-        return HttpResponseRedirect(success_url)
+        return HttpResponseRedirect(self.success_url)
 
 
 class DeleteBedpresView(DeleteSocialView):
     model = Bedpres
-    success_url = 'events:delete_list_bedpres'
+    success_url = reverse_lazy('events:delete_list_bedpres')
     permission_required = 'events.delete_bedpres'
 
 
@@ -146,8 +143,8 @@ class ViewSocialDetailsView(DetailView):
         context = super().get_context_data(**kwargs)
 
         Registration = self.model.attendees.through
-        attendees = Registration.objects.\
-            prefetch_related('user__profile').\
+        attendees = Registration.objects. \
+            prefetch_related('user__profile'). \
             order_by('user__profile__grade', 'user__first_name')
 
         confirmed = attendees.filter(event=self.object, status=REGISTRATION_STATUS.CONFIRMED)
@@ -318,7 +315,6 @@ class SocialRegisterUserView(SingleObjectMixin, View):
                                  messages.SUCCESS,
                                  'Du er påmeldt arrangementet.',
                                  extra_tags='Påmeldt')
-
 
             custom_messages = RegistrationMessage.objects.filter(user=instance.user, event=event)
             for custom_message in custom_messages:
