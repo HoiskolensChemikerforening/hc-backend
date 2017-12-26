@@ -23,6 +23,7 @@ from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm
 from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
 from django.views.generic.edit import FormView
+from operator import itemgetter
 
 
 class SocialFormView(FormView):
@@ -137,56 +138,27 @@ class DeleteBedpresView(DeleteSocialView):
     permission_required = 'events.delete_bedpres'
 
 
-class ViewSocialDetailsView(View):
+class ViewSocialDetailsView(DetailView):
     template_name = 'events/social/detail.html'
+    model = Social
 
-    def get_objects(self, pk):
-        event = get_object_or_404(Social, pk=pk)
-        registrations = EventRegistration.objects.filter(event=event, status=1).prefetch_related('user__profile')
-        return event, registrations
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
 
-    def get(self, request, pk):
-        event, registrations = self.get_objects(pk)
+        Registration = self.model.attendees.through
+        attendees = Registration.objects.\
+            prefetch_related('user__profile').\
+            order_by('user__profile__grade', 'user__first_name')
 
-        first, second, third, fourth, fifth, done = [], [], [], [], [], []
-        for registration in registrations:
-            if registration.user.profile.grade == 1:
-                first.append(registration.user.get_full_name())
-            if registration.user.profile.grade == 2:
-                second.append(registration.user.get_full_name())
-            if registration.user.profile.grade == 3:
-                third.append(registration.user.get_full_name())
-            if registration.user.profile.grade == 4:
-                fourth.append(registration.user.get_full_name())
-            if registration.user.profile.grade == 5:
-                fifth.append(registration.user.get_full_name())
-            if registration.user.profile.grade == 6:
-                done.append(registration.user.get_full_name())
-
-        attendees = {
-            'first': first,
-            'second': second,
-            'third': third,
-            'fourth': fourth,
-            'fifth': fifth,
-            'done': done,
-        }
-
-        context = {
-            'event': event,
-            'attendees': zip_longest(attendees['first'], attendees['second'], attendees['third'],
-                                     attendees['fourth'], attendees['fifth'], attendees['done'], ),
-        }
-        return render(request, self.template_name, context)
+        confirmed = attendees.filter(event=self.object, status=REGISTRATION_STATUS.CONFIRMED)
+        waiting = attendees.filter(event=self.object, status=REGISTRATION_STATUS.WAITING)
+        context.update({'attendees': confirmed, 'waiting_list': waiting})
+        return context
 
 
 class ViewBedpresDetailsView(ViewSocialDetailsView):
     template_name = 'events/bedpres/detail.html'
-
-    def get_objects(self, pk):
-        event = get_object_or_404(Bedpres, pk=pk)
-        registrations = BedpresRegistration.objects.filter(event=event, status=1).prefetch_related('user__profile')
-        return event, registrations
+    model = Bedpres
 
 
 class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
