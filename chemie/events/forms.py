@@ -63,6 +63,9 @@ class BaseRegisterEventForm(forms.ModelForm):
             "deregister_deadline",
             "published"
         ]
+
+        # Override field type from DateTimeField to SplitDateTimeField
+        # Note that this field loads the widget from chemie/templates/material/fields/django_splitdatetimewidget.html
         field_classes = {
             'date': forms.SplitDateTimeField,
             'register_startdate': forms.SplitDateTimeField,
@@ -101,7 +104,7 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 
 class RegisterBedpresForm(BaseRegisterEventForm):
-    layout = M.Layout(M.Row(M.Column('published','title', )),
+    layout = M.Layout(M.Row('published', 'title'),
                       M.Row(M.Column('date', span_columns=1),
                             M.Column('register_startdate', span_columns=1),
                             M.Column('register_deadline', span_columns=1),
