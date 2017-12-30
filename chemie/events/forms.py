@@ -61,6 +61,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             "register_startdate",
             "register_deadline",
             "deregister_deadline",
+            "published"
         ]
         field_classes = {
             'date': forms.SplitDateTimeField,
@@ -71,7 +72,7 @@ class BaseRegisterEventForm(forms.ModelForm):
 
 
 class RegisterEventForm(BaseRegisterEventForm):
-    layout = M.Layout(M.Row('title'),
+    layout = M.Layout(M.Row(M.Column('published','title', )),
                       M.Row(M.Column('date', span_columns=1),
                             M.Column('register_startdate', span_columns=1),
                             M.Column('register_deadline', span_columns=1),
@@ -100,7 +101,7 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 
 class RegisterBedpresForm(BaseRegisterEventForm):
-    layout = M.Layout(M.Row('title'),
+    layout = M.Layout(M.Row(M.Column('published','title', )),
                       M.Row(M.Column('date', span_columns=1),
                             M.Column('register_startdate', span_columns=1),
                             M.Column('register_deadline', span_columns=1),
