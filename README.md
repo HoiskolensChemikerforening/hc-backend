@@ -12,7 +12,7 @@ To create a local database with default settings:
 python manage_migrations.py
 ```
 #### Load environment variables
-Check our secrets and paste them into Pycharm.
+Check our secrets in production and paste them into Pycharm.
 
 #### Load fixtures
 ```shell
