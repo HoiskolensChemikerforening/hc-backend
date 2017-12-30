@@ -12,7 +12,7 @@ from django.views import View
 from django.views.generic.detail import SingleObjectMixin, DetailView
 from django.views.generic.edit import CreateView, FormView, DeleteView, UpdateView
 from django.views.generic.list import ListView
-
+from django.db.models import Q
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm, RegisterBedpresForm, \
@@ -29,6 +29,7 @@ class SuccessMessageMixin(object):
         message_type, message, heading = self.message_content
         messages.add_message(self.request, message_type, message, extra_tags=heading)
         return response
+
 
 class SocialFormView(FormView):
     template_name = 'events/social/create.html'
@@ -84,7 +85,13 @@ class ListSocialView(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         future_events = self.model.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
-        my_events = self.model.objects.filter(attendees__username__exact=self.request.user)
+
+        my_events = None
+        if self.request.user.is_authenticated:
+            attending_events = Q(attendees__username__exact=self.request.user)
+            authored_events = Q(author=self.request.user)
+            my_events = self.model.objects.filter(attending_events | authored_events).distinct()
+
         context.update({
             'events': future_events,
             'my_events': my_events
