@@ -15,6 +15,13 @@ REGISTRATION_STATUS = Choices(
     ('INTERESTED', 3, 'Interested')
 )
 
+ARRIVAL_STATUS = Choices(
+    ('NONE',1, 'Ikke satt'),
+    ('PRESENT', 2, 'Møtt'),
+    ('TRUANT', 3, 'Ikke møtt'),
+)
+
+
 
 class BaseEvent(models.Model):
     # Name of the event
@@ -117,6 +124,9 @@ class BaseEvent(models.Model):
                 # Bump once more in case the slot-count was increased as well
                 self.bump_waiting()
 
+    def allowed_grade(self, user):
+        return user.profile.grade in self.allowed_grades
+
     class Meta:
         abstract = True
 
@@ -136,9 +146,6 @@ class Social(BaseEvent):
 
     attendees = models.ManyToManyField(User, through='EventRegistration')
 
-    def allowed_grade(self, user):
-        return True
-
     def get_absolute_url(self):
         return reverse('events:detail_social', kwargs={"pk": self.pk})
 
@@ -152,9 +159,6 @@ class Social(BaseEvent):
 class Bedpres(BaseEvent):
     author = models.ForeignKey(User, related_name='+')
     attendees = models.ManyToManyField(User, through='BedpresRegistration')
-
-    def allowed_grade(self, user):
-        return user.profile.grade in self.allowed_grades
 
     def get_absolute_url(self):
         return reverse('events:detail_bedpres', kwargs={"pk": self.pk})
@@ -185,6 +189,7 @@ class BaseRegistration(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED)
+    arrival_status = models.IntegerField(choices=ARRIVAL_STATUS, default=ARRIVAL_STATUS.NONE)
 
     objects = RegistrationManager()
 
