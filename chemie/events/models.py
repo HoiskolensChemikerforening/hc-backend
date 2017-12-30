@@ -52,7 +52,7 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through='BaseRegistration')
 
     allowed_grades = ArrayField(
-        models.PositiveSmallIntegerField(choices=GRADES), null=True, blank=True,
+        models.PositiveSmallIntegerField(choices=GRADES)
     )
 
     published = models.BooleanField(default=True, verbose_name='publisert')
