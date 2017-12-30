@@ -6,8 +6,10 @@ from django.test import TestCase
 from django.utils import timezone
 
 from chemie import settings
+from customprofile.factories import RandomProfileFactory
 from events.models import Social, EventRegistration
 from ..views import set_user_event_status
+
 
 # Create your tests here.
 
@@ -35,16 +37,16 @@ class TestEventAndRegistration(TestCase):
                               image=image,
                               sluts=10,
                               payment_information='Alle maa benytte Vipps til aa betale',
+                              allowed_grades=[1, 2, 3, 4, 5, 6]
                               )
 
     def test_event_registration_exceeding_max_slots(self):
         event = Social.objects.get(title='Indok er helt ok')
         for i in range(event.sluts + 5):
-            user = User.objects.create(username=i,
-                                       email='test@mail.com',
-                                       )
+            profile = RandomProfileFactory.create()
+            profile.save()
             registration = EventRegistration(event=event,
-                                             user=user,
+                                             user=profile.user,
                                              )
             set_user_event_status(event, registration)
             registration.save()
