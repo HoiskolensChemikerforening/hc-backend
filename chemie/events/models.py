@@ -22,7 +22,6 @@ ARRIVAL_STATUS = Choices(
 )
 
 
-
 class BaseEvent(models.Model):
     # Name of the event
     title = models.CharField(max_length=40, verbose_name='Tittel')
@@ -59,7 +58,7 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through='BaseRegistration')
 
     allowed_grades = ArrayField(
-        models.PositiveSmallIntegerField(choices=GRADES)
+        models.IntegerField(choices=GRADES)
     )
 
     published = models.BooleanField(default=True, verbose_name='publisert')
@@ -229,10 +228,20 @@ class BedpresRegistration(BaseRegistration):
 
 class RegistrationMessage(models.Model):
     user = models.ForeignKey(User)
-    event = models.ForeignKey(Social)
     message = models.TextField()
-    author = models.ForeignKey(User, related_name="event_message")
+    author = models.ForeignKey(User, related_name='+')
 
     # TODO: legge til author
     def __str__(self):
         return '{}, {}: {}'.format(self.event, self.user, self.message)
+
+    class Meta:
+        abstract = True
+
+
+class SocialEventMessage(RegistrationMessage):
+    event = models.ForeignKey(Social, related_name='custom_message')
+
+
+class BedpresEventMessage(RegistrationMessage):
+    event = models.ForeignKey(Bedpres, related_name='custom_message')
