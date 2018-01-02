@@ -40,5 +40,5 @@ class EventAdmin(admin.ModelAdmin):
     list_display = ('title', 'sluts', 'date', 'created', 'edited', 'published')
 
 
-admin.site.register(RegistrationMessage)
+#admin.site.register(RegistrationMessage)
 

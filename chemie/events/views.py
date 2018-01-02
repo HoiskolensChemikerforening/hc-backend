@@ -68,6 +68,8 @@ class BedpresFormView(SocialFormView):
 class CreateBedpresView(PermissionRequiredMixin, SuccessMessageMixin, BedpresFormView, CreateView):
     success_url = reverse_lazy('events:index_bedpres')
     permission_required = 'events.add_bedpres'
+    # TODO: Couple the allowed grades with GRADES enum from customprofile models
+    initial = {'allowed_grades': [1, 2, 3, 4, 5, 6]}
     message_content = messages.SUCCESS, 'Bedpresen ble opprettet', 'Opprettet'
 
 
@@ -311,18 +313,19 @@ class SocialRegisterUserView(SingleObjectMixin, View):
 
     def post(self, request, pk):
         registration_form = self.registration_form(request.POST)
-        event = get_object_or_404(self.model, pk=pk)
+        self.object = get_object_or_404(self.model, pk=pk)
+        self.pk = pk
         if registration_form.is_valid():
             instance = registration_form.save(commit=False)
-            instance.event = event
+            instance.event = self.object
             instance.user = request.user
             instance.save()
-            status = set_user_event_status(event, instance)
-            self.set_status_message(request, status, instance, event)
+            status = set_user_event_status(self.object, instance)
+            self.set_status_message(request, status, instance, self.object)
             return redirect(self.get_success_url())
         context = {
             'registration_form': registration_form,
-            'event': event,
+            'event': self.object,
         }
         return render(request, self.template_name, context)
 
@@ -333,7 +336,8 @@ class SocialRegisterUserView(SingleObjectMixin, View):
                                  'Du er påmeldt arrangementet.',
                                  extra_tags='Påmeldt')
 
-            custom_messages = RegistrationMessage.objects.filter(user=instance.user, event=event)
+
+            custom_messages = event.custom_message.filter(user=instance.user, event=event)
             for custom_message in custom_messages:
                 messages.add_message(request,
                                      messages.INFO,
@@ -362,6 +366,9 @@ class BedpresRegisterUserView(SocialRegisterUserView):
     email_template = 'bedpres'
 
     registration_form = BedpresRegisterUserForm
+
+    def get_success_url(self):
+        return reverse('events:register_bedpres', kwargs={'pk': self.pk})
 
     def get_form_kwargs(self):
         return {}
