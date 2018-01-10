@@ -1,16 +1,18 @@
-{% extends "chemie/base.html" %}
-{% block nav_header %}
-  Bedpres
-{% endblock nav_header %}
+{% extends "events/bedpres/bedpres_base.html" %}
 
 {% block nav_sub_header %}
   Slett
 {% endblock nav_sub_header %}
-{% block content %}
 
-  {% include 'events/bedpres/permissions.html' %}
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Bedpres</a>
+    <a href="{% url "events:delete_list_bedpres" %}" class="breadcrumb">Slett</a>
+  </div>
+{% endblock %}
 
-  {% if perms.events.delete_bedpres %}
+{% block maincontent %}
     <div class="row">
       {% for event in object_list %}
         <div class="col s12 m10 l6">
@@ -39,6 +41,5 @@
         </div>
       {% endfor %}
     </div>
-  {% endif %}
 
-{% endblock content %}
+{% endblock maincontent %}

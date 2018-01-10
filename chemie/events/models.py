@@ -70,6 +70,9 @@ class BaseEvent(models.Model):
     def __str__(self):
         return self.title
 
+    def get_allowed_grades_display(self):
+        return [GRADES.for_value(x).display for x in self.allowed_grades]
+
     def registered_users(self):
         return self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED, event=self).count()
 

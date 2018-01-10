@@ -1,0 +1,12 @@
+{% if perms.events.change_eventregistration %}
+  <li>
+    <a class="btn-floating blue" href="{% url 'events:adminlist_social' social.id %}"><i class="material-icons">list</i></a>
+    <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist_social' social.id %}">Se påmeldte</a>
+  </li>
+{% endif %}
+{% if perms.events.change_social %}
+  <li>
+    <a class="btn-floating blue" href="{% url 'events:edit_social' social.id %}"><i class="material-icons">mode_edit</i></a>
+    <a class="btn-floating mobile-fab-tip" href="{% url 'events:edit_social' social.id %}">Endre</a>
+  </li>
+{% endif %}

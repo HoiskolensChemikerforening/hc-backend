@@ -1,0 +1,33 @@
+{% extends "chemie/base.html" %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load event_extras %}
+
+{% block nav_header %}
+  Sosiale arrangementer
+{% endblock nav_header %}
+
+{% block header %}
+{% endblock header %}
+
+{% block content %}
+  {% if perms.events %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% include "events/social/permissions.html" %}
+        {% block permissions %}
+        {% endblock %}
+      </ul>
+    </div>
+  {% endif %}
+
+  {% block breadcrumbs %}
+  {% endblock %}
+
+  {% block maincontent %}
+  {% endblock maincontent %}
+
+{% endblock content %}

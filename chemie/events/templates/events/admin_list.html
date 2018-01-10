@@ -86,7 +86,7 @@
   <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
 </div>
 <div class="row">
-  <div col s12 m12 l10>
+  <div class="col s12 m12 l10">
     <p class="flow-text">
       Søk og filtrering blant de påmeldte. Exportering av data tar kun med de som er synlig i listen. Velger man
       "Ikke betalt" deretter "Last ned" så får man kun de som ikke har betalt.
@@ -95,7 +95,7 @@
   </div>
 </div>
 <div class="row">
-  <div col s12 m12 l10>
+  <div class="col s12 m12 l10">
     <table id="myTable" class="tablesorter">
       <thead>
         <tr>
@@ -131,9 +131,9 @@
           {% else %}
             -
           {% endif %}</td>
-          {% if attendee.payment_status is not None %}
+          {% if social %}
             <td>
-            {% if social %}
+            {% if attendee.payment_status %}
               <a class="payment btn-floating btn-tiny waves-effect waves-light green"
                  id="payment-{{ attendee.id }}"><i class="material-icons">done</i></a>
             {% else %}
@@ -208,7 +208,7 @@
               var csrftoken = getCookie('csrftoken');
               $.ajax({
                   type: "GET",
-                  url: "/events/adminlist/paymentstatus/" + myID,
+                  url: "/events/social/adminlist/paymentstatus/" + myID,
                   datatype: "json",
 
                   success: function (json) {

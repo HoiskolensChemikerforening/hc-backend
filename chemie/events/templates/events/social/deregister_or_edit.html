@@ -1,56 +1,60 @@
-{% extends "chemie/base.html" %}
-{% load staticfiles %}
+{% extends "events/social/social_base.html" %}
 {% load material_form %}
 
-{% block header %}
-
-{% endblock header %}
-
-{% block nav_header %}
-    Arrangementer
-{% endblock nav_header %}
-
-{% block nav_sub_header %}
-    Påmelding
-{% endblock nav_sub_header %}
-
-{% block content %}
+{% block breadcrumbs %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-      <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
-      <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{ event.title }}</a>
-      <a class="breadcrumb">Påmelding</a>
+    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
+    <a href="{{ object.get_absolute_url }}" class="breadcrumb">{{ object.title }}</a>
+    <a class="breadcrumb">Din påmelding</a>
   </div>
+{% endblock %}
 
-    {% include 'events/registration_header.html' with event=object %}
+{# Include extra permissions that provide object specific URLs #}
+{% block permissions %}
+  {% include "events/social/permissions_object.html" %}
+{% endblock %}
 
-    <h5>
-        {% if registration.status == 1 %}
-            Du er påmeldt.
-        {% elif registration.status == 2 %}
-            Du er på ventelisten og er nr. {{ queue_position }} i køen
-        {% endif %}
-    </h5>
+{# Main block #}
+{% block maincontent %}
+  {% include 'events/registration_header.html' with event=object %}
 
-    <div class="row">
-    <form class="deregister" method="POST">{% csrf_token %}
+  <!-- Registration status message -->
+  <h5>
+    {% if registration.status == 1 %}
+      Du er påmeldt.
+    {% elif registration.status == 2 %}
+      Du er på ventelisten og er nr. {{ queue_position }} i køen
+    {% elif registration.status == 3 %}
+      Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse.<br>
+      Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.
+    {% endif %}
+  </h5>
+
+  <!-- Deregister form -->
+  <div class="row">
+    <div class="col">
+      <form class="deregister" method="POST">{% csrf_token %}
         {% form form=forms.deregister %}{% endform %}
         <button name='action' value='deregister' type="submit"
                 class="waves-effect waves-light btn btn-primary red">Meld meg av
         </button>
-    </form>
+      </form>
     </div>
-
-    <div class="row">
-    {% if forms.deregister and forms.edit %}
+  </div>
+  <div class="row">
+    <div class="col">
+      <!-- Edit registration form -->
+      {% if forms.deregister and forms.edit %}
         <form class="edit" method="POST">{% csrf_token %}
-            {% form form=forms.edit %}{% endform %}
-            <button name='action' value='edit' type="submit"
-                    class="waves-effect waves-light btn btn-primary blue">Endre registrasjon
-            </button>
+          {% form form=forms.edit %}{% endform %}
+          <button name='action' value='edit' type="submit"
+                  class="waves-effect waves-light btn btn-primary blue">Endre registrasjon
+          </button>
         </form>
-    {% else %}
+      {% else %}
         Avmeldingsfristen har passert.
-    {% endif %}
+      {% endif %}
     </div>
+  </div>
 
-{% endblock content %}
+{% endblock maincontent %}

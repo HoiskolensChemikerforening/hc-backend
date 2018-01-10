@@ -1,0 +1,12 @@
+{% if perms.events.change_bedpresregistration %}
+  <li>
+    <a class="btn-floating blue" href="{% url 'events:adminlist_bedpres' bedpres.id %}"><i class="material-icons">list</i></a>
+    <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist_bedpres' bedpres.id %}">Se påmeldte</a>
+  </li>
+{% endif %}
+{% if perms.events.change_bedpres %}
+  <li>
+    <a class="btn-floating blue" href="{% url 'events:edit_bedpres' bedpres.id %}"><i class="material-icons">mode_edit</i></a>
+    <a class="btn-floating mobile-fab-tip" href="{% url 'events:edit_bedpres' bedpres.id %}">Endre</a>
+  </li>
+{% endif %}
