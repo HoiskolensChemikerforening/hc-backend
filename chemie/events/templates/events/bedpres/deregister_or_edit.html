@@ -1,52 +1,44 @@
-{% extends "chemie/base.html" %}
+{% extends "events/bedpres/bedpres_base.html" %}
 {% load staticfiles %}
 {% load material_form %}
 
-{% block header %}
-
-{% endblock header %}
-
-{% block nav_header %}
-    Bedpres
-{% endblock nav_header %}
-
 {% block nav_sub_header %}
-    Påmelding
+  Påmelding
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-      <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Bedpres</a>
-      <a href="{{ bedpres.get_absolute_url }}" class="breadcrumb">{{ bedpres.title }}</a>
-      <a class="breadcrumb">Påmelding</a>
-    </div>
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Bedpres</a>
+    <a href="{{ bedpres.get_absolute_url }}" class="breadcrumb">{{ bedpres.title }}</a>
+    <a class="breadcrumb">Påmelding</a>
+  </div>
 
-    {% include 'events/registration_header.html' with event=object %}
+  {% include 'events/registration_header.html' with event=object %}
 
-    <h5>
-        {% if registration.status == 1 %}
-            Du er påmeldt.
-        {% elif registration.status == 2 %}
-            Du er på ventelisten og er nr. {{ queue_position }} i køen
-        {% elif registration.status == 3 %}
-            Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse.<br>
-            Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.
-        {% endif %}
-    </h5>
-
-
-
-    <div class="row">
-    {% if forms.deregister %}
-    <form class="deregister" method="POST">{% csrf_token %}
-        {% form form=forms.deregister %}{% endform %}
-        <button name='action' value='deregister' type="submit"
-                class="waves-effect waves-light btn btn-primary red">Meld meg av
-        </button>
-    </form>
-    {% else %}
-        Avmeldingsfristen har passert.
+  <h5>
+    {% if registration.status == 1 %}
+      Du er påmeldt.
+    {% elif registration.status == 2 %}
+      Du er på ventelisten og er nr. {{ queue_position }} i køen
+    {% elif registration.status == 3 %}
+      Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse.<br>
+      Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.
     {% endif %}
+  </h5>
+
+  <div class="row">
+    <div class="col">
+      {% if forms.deregister %}
+        <form class="deregister" method="POST">{% csrf_token %}
+          {% form form=forms.deregister %}{% endform %}
+          <button name='action' value='deregister' type="submit"
+                  class="waves-effect waves-light btn btn-primary red">Meld meg av
+          </button>
+        </form>
+      {% else %}
+        Avmeldingsfristen har passert.
+      {% endif %}
     </div>
+  </div>
 
 {% endblock content %}

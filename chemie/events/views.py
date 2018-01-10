@@ -213,9 +213,9 @@ class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
 
         # Remove the forms whenever the deadline has passed
         if not self.object.can_de_register:
-            context.pop('deregister')
-            if context.get('edit'):
-                context.pop('edit')
+            context['forms'].pop('deregister')
+            if context['forms'].get('edit'):
+                context['forms'].pop('edit')
 
         # Add queue position
         registration = self.registration
@@ -314,14 +314,15 @@ class SocialRegisterUserView(SingleObjectMixin, View):
     def post(self, request, pk):
         registration_form = self.registration_form(request.POST)
         self.object = get_object_or_404(self.model, pk=pk)
+        event = self.object
         self.pk = pk
         if registration_form.is_valid():
             instance = registration_form.save(commit=False)
             instance.event = self.object
             instance.user = request.user
             instance.save()
-            status = set_user_event_status(self.object, instance)
-            self.set_status_message(request, status, instance, self.object)
+            status = set_user_event_status(event, instance)
+            self.set_status_message(request, status, instance, event)
             return redirect(self.get_success_url())
         context = {
             'registration_form': registration_form,
@@ -337,7 +338,8 @@ class SocialRegisterUserView(SingleObjectMixin, View):
                                  extra_tags='Påmeldt')
 
 
-            custom_messages = event.custom_message.filter(user=instance.user, event=event)
+            custom_messages = event.custom_message.filter(user=instance.user)
+
             for custom_message in custom_messages:
                 messages.add_message(request,
                                      messages.INFO,
@@ -373,6 +375,9 @@ class BedpresRegisterUserView(SocialRegisterUserView):
     def get_form_kwargs(self):
         return {}
 
+    def get_success_url(self):
+        return reverse('events:register_bedpres', kwargs={'pk': self.pk})
+
 
 class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     model = Social
@@ -397,7 +402,7 @@ class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             if request.method == 'POST':
                 return self.registration_view_register.post(self.registration_view_register(), request, self.object.pk)
             else:
-                return self.registration_view_register.as_view()(self.request, pk=pk)
+                return self.registration_view_register.as_view()(self.request, event, pk=pk)
 
     def post(self, request, pk):
         return self.get(request, pk)

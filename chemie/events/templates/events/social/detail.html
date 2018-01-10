@@ -1,47 +1,29 @@
-{% extends "chemie/base.html" %}
+{% extends "events/social/social_base.html" %}
 {% load thumbnail %}
 {% load staticfiles %}
 {% load event_extras %}
-
-{% block nav_header %}
-  Arrangementer
-{% endblock nav_header %}
 
 {% block nav_sub_header %}
   Detaljer
 {% endblock nav_sub_header %}
 
-{% block content %}
+{# Include extra permissions that provide object specific URLs #}
+{% block permissions %}
+  {% include "events/social/permissions_object.html" %}
+{% endblock %}
 
-  {% if perms.events %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large">
-        <i class="large material-icons">edit</i>
-      </a>
-      <ul>
-        {% if perms.events.change_eventregistration %}
-          <li>
-            <a class="btn-floating blue" href="{% url 'events:adminlist_social' social.id %}"><i class="material-icons">list</i></a>
-            <a class="btn-floating mobile-fab-tip" href="{% url 'events:adminlist_social' social.id %}">Se påmeldte</a>
-          </li>
-        {% endif %}
-        {% if perms.events.change_social %}
-          <li>
-            <a class="btn-floating blue" href="{% url 'events:edit_social' social.id %}"><i class="material-icons">mode_edit</i></a>
-            <a class="btn-floating mobile-fab-tip" href="{% url 'events:edit_social' social.id %}">Endre</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  {% endif %}
-
+{% block breadcrumbs %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
     <a class="breadcrumb">{{ social.title }}</a>
   </div>
+{% endblock %}
+
+
+{% block maincontent %}
 
   <div class="row">
-    <div class="col s12 m12 l12"><h1 class="heading">{{ social.title }}</h1></div>
+    <div class="col s12 m12 l12"><h1 class="heading">{{ social.title }}wdw</h1></div>
   </div>
 
   <div class="row">
@@ -146,20 +128,24 @@
   </div>
 
   <!-- List of attending users -->
-  <div class="row">
-    <h2>Påmeldte</h2>
-    {% include "events/attendees.html" with user_list=attendees %}
-  </div>
+  {% if attendees %}
+    <div class="row">
+      <div class="col">
+        <h2>Påmeldte</h2>
+        {% include "events/attendees.html" with user_list=attendees %}
+      </div>
+    </div>
+  {% endif %}
 
   <!-- List of users on waiting list -->
-  {% if attendees_waiting %}
+  {% if waiting_list %}
     <div class="row">
       <h2>Venteliste</h2>
       {% include "events/attendees.html" with user_list=waiting_list %}
     </div>
   {% endif %}
 
-{% endblock content %}
+{% endblock %}
 
 {% block footer_js_files %}
   <script src="{% static "events/transpose_table.js" %}"></script>
