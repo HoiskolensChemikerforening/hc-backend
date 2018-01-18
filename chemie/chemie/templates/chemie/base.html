@@ -136,24 +136,18 @@
             </div>
           </li>
           <li>
-            <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
-                <div class="collapsible-body">
-                  <ul>
-                    <li><a href="{% url "yearbook:index" %}" class="waves-effect">Klassekatalog</a></li>
-                    <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
-                    <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
-                    <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
+            <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "yearbook:index" %}" class="waves-effect">Klassekatalog</a></li>
+                <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
+                <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
+                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
+              </ul>
+            </div>
           </li>
         </ul>
-      </li>
-      <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect"><i
-          class="material-icons micon">hearing</i>Sladreboks</a>
       </li>
       <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
           class="material-icons micon">inbox</i>Bokskap</a>
@@ -185,7 +179,8 @@
                 <div class="card-content">
                   <span class="card-title black-text valign-wrapper" style="clear: both;">
 
-                      <h5><i class="material-icons black-text" style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+                      <h5><i class="material-icons black-text"
+                             style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
                   </span>
                   <p class="flow-text black-text">{{ message }}</p>
                 </div>
@@ -253,12 +248,12 @@
       {% endcache %}
     </div>
 
-  <!-- Copyright -->
-  <div class="footer-copyright">
-    <div class="container">
-      <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+    <!-- Copyright -->
+    <div class="footer-copyright">
+      <div class="container">
+        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+      </div>
     </div>
-  </div>
 </footer>
 
 {% block footer_js_files %}
@@ -272,8 +267,8 @@
     (function (i, s, o, g, r, a, m) {
         i['GoogleAnalyticsObject'] = r;
         i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
+            (i[r].q = i[r].q || []).push(arguments)
+        }, i[r].l = 1 * new Date();
         a = s.createElement(o),
             m = s.getElementsByTagName(o)[0];
         a.async = 1;
