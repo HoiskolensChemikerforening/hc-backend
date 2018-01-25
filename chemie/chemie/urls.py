@@ -15,14 +15,15 @@ Including another URLconf
 """
 import django.contrib.auth.views as auth_views
 from django.conf import settings
-from django.conf.urls import include, url, handler404
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django_nyt.urls import get_pattern as get_nyt_pattern
 from wiki.urls import get_pattern as get_wiki_pattern
-
+from .urls_api import api_urlpatterns
 
 urlpatterns = [
+    url(r'^api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls', namespace='frontpage')),
     url(r'^sladreboks/', include('shitbox.urls', namespace='shitbox')),
@@ -37,16 +38,12 @@ urlpatterns = [
     url(r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/_accounts/sign-up/', auth_views.login),
     url(r'^wiki/', get_wiki_pattern()),
-    url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^carousel/', include('picturecarousel.urls', namespace='carousel'))
-]
+    url(r'^carousel/', include('picturecarousel.urls', namespace='carousel')),
+    url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
+] + api_urlpatterns
 
 handler404 = 'chemie.views.page_not_found'
-
-urlpatterns += [
-    url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
-]
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

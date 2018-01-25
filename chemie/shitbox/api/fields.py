@@ -1,13 +1,14 @@
-from rest_framework import serializers
-from .models import Submission
-from django.core.files.base import ContentFile
 import base64
-import six
-import uuid
 import imghdr
+import uuid
+
+import six
+from django.core.files.base import ContentFile
+from rest_framework import serializers
 
 
 class Base64ImageField(serializers.ImageField):
+    # https://stackoverflow.com/a/28036805
     def to_internal_value(self, data):
         if isinstance(data, six.string_types):
             if 'data:' in data and ';base64,' in data:
@@ -28,12 +29,3 @@ class Base64ImageField(serializers.ImageField):
         extension = "jpg" if extension == "jpeg" else extension
 
         return extension
-
-
-class SubmissionSerializer(serializers.ModelSerializer):
-    author = serializers.ReadOnlyField(source='owner.username')
-    image = Base64ImageField(max_length=None, use_url=True)
-
-    class Meta:
-        model = Submission
-        fields = ('content', 'image', 'date', 'author')
