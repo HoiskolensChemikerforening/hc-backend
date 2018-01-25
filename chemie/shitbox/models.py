@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
-from rest_framework.authtoken.models import Token
 
 
 class Submission(models.Model):
