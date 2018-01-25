@@ -5,26 +5,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-""" Rest Framework imports """
-from rest_framework import generics
-from .serializers import SubmissionSerializer
-
 from .forms import PostForm
 from .models import Submission
-
-
-class CreateView(generics.ListCreateAPIView):
-    queryset = Submission.objects.all()
-    serializer_class = SubmissionSerializer
-
-    def perform_create(self, serializer):
-        serializer.save(author=self.request.user)
-
-
-class DetailsView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Submission.objects.all()
-    serializer_class = SubmissionSerializer
 
 
 @login_required
