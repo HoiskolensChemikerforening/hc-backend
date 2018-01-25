@@ -20,10 +20,10 @@ class Command(BaseCommand):
     def import_email_template(self, **kwargs):
         directory = kwargs.pop('path')
 
-        with open(f'{directory}.html', 'r') as html:
+        with open(f'{directory}.html', 'r', encoding='utf-8') as html:
             kwargs['html_content'] = html.read()
 
-        with open(f'{directory}.txt', 'r') as txt:
+        with open(f'{directory}.txt', 'r', encoding='utf-8') as txt:
             kwargs['content'] = txt.read()
 
         EmailTemplate.objects.create(**kwargs)

@@ -1,7 +1,7 @@
 HC har fått en søknad om penger!
 
-Søker: {{ user.get_full_name }}
-Søkers e-post: {{ user.email }}
+Søker: {{ form_data.author.get_full_name }}
+Søkers e-post: {{ form_data.author.email }}
 Søknad datert {{ form_data.created}}
 
 Søker på vegne av: {{ form_data.applier }}
