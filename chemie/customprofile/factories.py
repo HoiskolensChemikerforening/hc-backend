@@ -6,7 +6,7 @@ from .models import Profile, GRADES, RELATIONSHIP_STATUS, FINISH_YEAR, CURRENT_Y
 class RandomUserFactory(factory.DjangoModelFactory):
     class Meta:
         model = models.User
-
+        django_get_or_create = ('username',)
     first_name = factory.Faker('first_name')
     last_name = factory.Faker('last_name')
     email = factory.Faker('safe_email')
@@ -24,13 +24,13 @@ class RandomProfileFactory(factory.DjangoModelFactory):
     user = factory.SubFactory(RandomUserFactory)
 
     # https: // faker.readthedocs.io / en / latest / locales / no_NO.html
-    grade = factory.Iterator(GRADES)
+    grade = factory.Iterator(GRADES.values.keys())
     start_year = CURRENT_YEAR
     end_year = FINISH_YEAR
-    allergies = factory.Faker('lorem', nb_words=6, variable_nb_words=True, ext_word_list=None)
-    relationship_status = factory.Iterator(RELATIONSHIP_STATUS)
-    phone_number = factory.Faker('phone_number')
-    access_card = factory.Faker('password', legth=10)
+    allergies = factory.Faker('word')
+    relationship_status = factory.Iterator(RELATIONSHIP_STATUS.values.keys())
+    phone_number = 12345678
+    access_card = factory.Faker('password', length=10)
 
     image_primary = factory.django.ImageField(color='blue')
     image_secondary = factory.django.ImageField(color='red')
