@@ -23,7 +23,6 @@ from wiki.urls import get_pattern as get_wiki_pattern
 from .urls_api import api_urlpatterns
 
 urlpatterns = [
-    url(r'^api/api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^admin/', admin.site.urls),
     url(r'^', include('home.urls', namespace='frontpage')),
     url(r'^sladreboks/', include('shitbox.urls', namespace='shitbox')),
