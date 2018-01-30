@@ -10,14 +10,19 @@
       <mj-section mj-class="primaryColor" padding-top="20">
         <mj-column width="98%">
           <mj-text mj-class="readable">
-            HC har blitt kontaktet!
-            <br><br>
-            Hvem: {{ contact_name|default_if_none:"Ikke oppgitt" }}<br>
-            E-post: {{ contact_email|default_if_none:"Ikke oppgitt" }}<br>
-            Når: {% now "j. F - H:i" %}<br>
-            <br>
-            Melding:<br>
-            {{ message }}
+            HC har fått en søknad om penger!<br><br>
+
+            Søker: {{ form_data.author.get_full_name }}<br>
+            Søkers e-post: {{ form_data.author.email }}<br>
+            Søknad datert {{ form_data.created}}<br></br>
+
+            Søker på vegne av: {{ form_data.applier }}<br>
+            Bankkonto eier: {{ form_data.bank_account_holder }}<br>
+            Bankkonto nummer: {{ form_data.bank_account_id }}<br></br>
+
+            Formål: {{ form_data.purpose }}<br>
+            Prisklasse: {{ form_data.get_price_range_display }}<br>
+            Beskrivelse: {{ form_data.description}}<br>
           </mj-text>
         </mj-column>
       </mj-section>

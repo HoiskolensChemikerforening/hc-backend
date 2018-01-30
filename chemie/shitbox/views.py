@@ -5,9 +5,9 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
 from .forms import PostForm
 from .models import Submission
+
 
 @login_required
 def post_votes(request):
@@ -42,17 +42,17 @@ def submissions_overview(request, page=1):
 
     useful_page_range = list(submissions.paginator.page_range)
     limit_useful_page_range = []
-    
-    if page-2 in paginator.page_range:
-        limit_useful_page_range.append(page-2)
-    if page-1 in paginator.page_range:
-        limit_useful_page_range.append(page-1)
+
+    if page - 2 in paginator.page_range:
+        limit_useful_page_range.append(page - 2)
+    if page - 1 in paginator.page_range:
+        limit_useful_page_range.append(page - 1)
     if page in paginator.page_range:
         limit_useful_page_range.append(page)
-    if page+1 in paginator.page_range:
-        limit_useful_page_range.append(page+1)
-    if page+2 in paginator.page_range:
-        limit_useful_page_range.append(page+2)
+    if page + 1 in paginator.page_range:
+        limit_useful_page_range.append(page + 1)
+    if page + 2 in paginator.page_range:
+        limit_useful_page_range.append(page + 2)
 
     submissions.paginator.first_page = paginator.page(useful_page_range[0]).number
     submissions.paginator.last_page = paginator.page(useful_page_range[-1]).number

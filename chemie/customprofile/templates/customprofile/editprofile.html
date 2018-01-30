@@ -51,6 +51,7 @@
                 <i class="material-icons prefix">credit_card</i>{% endpart %}
               {% part profile_form.phone_number prefix %}
                 <i class="material-icons prefix">contact_phone</i>{% endpart %}
+              {% attr profile_form.allergies 'widget' placeholder%}Ingen allergier{% endattr %}
               {% part profile_form.allergies prefix %}
                 <i class="material-icons prefix">error_outline</i>{% endpart %}
             {% endform %}

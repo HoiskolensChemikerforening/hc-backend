@@ -69,8 +69,10 @@ def request_funds(request):
         attachments = None
         if receipt.name is not None:
             filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
-            attachment = receipt.path
-            attachments = {filename: attachment}
+            attachment = receipt
+            attachments = {
+                filename: attachment.file,
+            }
         _, mail_to = zip(*settings.CONTACTS)
         mail.send(
             mail_to,

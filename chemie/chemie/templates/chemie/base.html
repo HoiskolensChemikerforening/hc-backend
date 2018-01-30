@@ -135,24 +135,18 @@
             </div>
           </li>
           <li>
-            <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
-                <div class="collapsible-body">
-                  <ul>
-                    <li><a href="{% url "yearbook:index" %}" class="waves-effect">Klassekatalog</a></li>
-                    <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
-                    <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
-                    <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
+            <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "yearbook:index" %}" class="waves-effect">Klassekatalog</a></li>
+                <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
+                <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
+                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
+              </ul>
+            </div>
           </li>
         </ul>
-      </li>
-      <li class="bold"><a href="{% url "shitbox:index" %}" class="waves-effect"><i
-          class="material-icons micon">hearing</i>Sladreboks</a>
       </li>
       <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
           class="material-icons micon">inbox</i>Bokskap</a>
@@ -259,7 +253,6 @@
         <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
       </div>
     </div>
-  </div>
 </footer>
 
 {% block footer_js_files %}

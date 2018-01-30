@@ -116,6 +116,7 @@ class BaseEvent(models.Model):
     def save(self, *args, **kwargs):
         super(BaseEvent, self).save(*args, **kwargs)
         self.bump_waiting()
+
         if self.allowed_grades_previous:
             new_grades = set(self.allowed_grades) - set(self.allowed_grades_previous)
             if new_grades:

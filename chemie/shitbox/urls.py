@@ -1,6 +1,6 @@
 from django.conf.urls import url
-
 from .views import submissions_overview, post_votes
+
 
 urlpatterns = [
     url(r'list/$', submissions_overview, name='list'),
