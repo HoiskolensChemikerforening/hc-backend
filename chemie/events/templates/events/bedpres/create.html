@@ -1,0 +1,72 @@
+{% extends "events/bedpres/bedpres_base.html" %}
+{% load material_form %}
+
+{% block nav_sub_header %}
+  Opprett bedpres
+{% endblock nav_sub_header %}
+
+{# Extra javascript that provides Norwegian locale for time and datepickers#}
+{% block extra_js %}
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pickadate.js/3.5.6/compressed/translations/no_NO.js" defer>
+  </script>
+{% endblock %}
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
+    <a href="{% url "events:create_social" %}" class="breadcrumb">Opprett</a>
+  </div>
+{% endblock %}
+
+{# Main block #}
+{% block maincontent %}
+
+<p class="flow-text">Her lager du de beste arrangementene på Gløs!</p>
+<div class="card">
+  <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <div class="card-content">
+      {% form form=form %}
+
+      {% endform %}
+
+      <div class="card-action">
+        <div class="right-align">
+          <input class="btn btn-primary pull-right" type='submit' value='Lagre arrangementet!'/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock maincontent %}
+
+{# Extra javascript to initiaize the time and datepickers #}
+{% block footer_script %}
+  <script type="text/javascript">
+      $(document).ready(function () {
+          $(".timepicker").clockpicker({
+              placement: 'bottom',
+              autoclose: true,
+              align: 'left',
+              twelvehour: false,
+              vibrate: true
+          });
+          $('.datepicker').pickadate({
+              selectMonths: true,   // Creates a dropdown to control month
+              selectYears: 2,   // Creates a dropdown of 15 years to control year
+              formatSubmit: 'yyyy-mm-dd',
+              hiddenName: true
+          });
+
+          // Incorrect date format is set on the datepickers when the form is returned to the user (with errors)
+          // This loops over the fields and "converts" the format
+          $(".datepicker").each(function () {
+              var date = document.getElementById(this.id).value;
+
+              if (date !== "") {
+                  $('#' + this.id).pickadate().pickadate('picker').set('select', date, {format: 'yyyy-mm-dd'});
+              }
+          });
+      });
+  </script>
+{% endblock footer_script %}
