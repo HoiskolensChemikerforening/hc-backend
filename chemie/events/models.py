@@ -146,7 +146,7 @@ class Social(BaseEvent):
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
 
-    attendees = models.ManyToManyField(User, through='EventRegistration')
+    attendees = models.ManyToManyField(User, through='SocialEventRegistration')
 
     def get_absolute_url(self):
         return reverse('events:detail_social', kwargs={"pk": self.pk})
@@ -156,6 +156,11 @@ class Social(BaseEvent):
 
     def get_absolute_delete_url(self):
         return reverse('events:delete_social', kwargs={"pk": self.pk})
+
+    def registered_users(self):
+        attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.CONFIRMED, event=self)
+        attendees_with_companion = attendees.filter(companion__gt='')
+        return attendees_with_companion.count() + attendees.count()
 
 
 class Bedpres(BaseEvent):
@@ -211,7 +216,7 @@ class BaseRegistration(models.Model):
         unique_together = ('event', 'user',)
 
 
-class EventRegistration(BaseRegistration):
+class SocialEventRegistration(BaseRegistration):
     event = models.ForeignKey(Social)
     # user = models.ForeignKey(User)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")

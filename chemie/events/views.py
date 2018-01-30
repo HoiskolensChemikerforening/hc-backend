@@ -17,7 +17,7 @@ from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm, RegisterBedpresForm, \
     BedpresRegisterUserForm
-from .models import Social, EventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
+from .models import Social, SocialEventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
 
 
@@ -53,7 +53,7 @@ class CreateSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormV
 
 
 class EditSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormView, UpdateView, ):
-    permission_required = 'events.change_event'
+    permission_required = 'events.change_socialevent'
     # Can't edit past events
     queryset = Social.objects.filter(date__gte=timezone.now())
     success_message = "%(name)s was created successfully"
@@ -177,9 +177,9 @@ class ViewBedpresDetailsView(ViewSocialDetailsView):
     model = Bedpres
 
 
-class SocialEditRemoveUserRegistration(SingleObjectMixin, MultiFormsView):
+class SocialEditRemoveUserRegistration(LoginRequiredMixin, SingleObjectMixin, MultiFormsView):
     model = Social
-    registration_model = EventRegistration
+    registration_model = SocialEventRegistration
     template_name = 'events/social/deregister_or_edit.html'
     form_classes = {'deregister': DeRegisterUserForm,
                     'edit': SocialRegisterUserForm}
@@ -270,7 +270,7 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
         return {'instance': self.registration}
 
 
-class SocialRegisterUserView(SingleObjectMixin, View):
+class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     template_name = "events/register_user.html"
     model = Social
 
@@ -381,18 +381,18 @@ class BedpresRegisterUserView(SocialRegisterUserView):
 
 class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     model = Social
-    registration_model = EventRegistration
+    registration_model = SocialEventRegistration
     registration_view_edit = SocialEditRemoveUserRegistration
     registration_view_register = SocialRegisterUserView
 
-    def dispatch(self, request, *args, **kwargs):
+    def set_initial(self):
         # Set event and registration on the whole object. This is run very early
         self.object = self.get_object()
         self.registration = self.registration_model.objects.filter(event=self.object, user=self.request.user).first()
-        return super().dispatch(request, *args, **kwargs)
 
     def get(self, request, pk):
         # Fetch event object
+        self.set_initial()
         event = self.object
         registration = self.registration_model.objects.filter(event=event, user=request.user).first()
 
@@ -405,6 +405,7 @@ class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
                 return self.registration_view_register.as_view()(self.request, event, pk=pk)
 
     def post(self, request, pk):
+        self.set_initial()
         return self.get(request, pk)
 
 
@@ -419,8 +420,8 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
 class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = 'events/admin_list.html'
     model = Social
-    registration_model = EventRegistration
-    permission_required = 'event.change_eventregistration'
+    registration_model = SocialEventRegistration
+    permission_required = 'event.change_socialeventregistration'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -441,9 +442,9 @@ class BedpresEnlistedUsersView(SocialEnlistedUsersView):
 
 
 @login_required
-@permission_required('events.change_eventregistration')
+@permission_required('events.change_socialeventregistration')
 def change_payment_status(request, registration_id):
-    registration = EventRegistration.objects.get(pk=registration_id)
+    registration = SocialEventRegistration.objects.get(pk=registration_id)
     registration.payment_status = not registration.payment_status
     registration.save()
     return JsonResponse({'payment_status': registration.payment_status})

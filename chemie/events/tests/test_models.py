@@ -8,8 +8,8 @@ from post_office.models import Email
 
 from customprofile.factories import RandomProfileFactory
 from customprofile.models import GRADES
-from .factories import BedpresEventFactory
-from ..models import BedpresRegistration, REGISTRATION_STATUS
+from .factories import BedpresEventFactory, SocialEventFactory
+from ..models import BedpresRegistration, SocialEventRegistration, REGISTRATION_STATUS
 from ..views import set_user_event_status
 
 
@@ -144,3 +144,22 @@ def test_signup_email():
     assert '3. desember - 01:30' in email.html_message
     assert '4. desember - 01:30' in email.message
     assert '4. desember - 01:30' in email.html_message
+
+
+@pytest.mark.django_db
+def test_social_event_attendee_count():
+    now = timezone.now()
+    social = SocialEventFactory(
+        date=now + timedelta(days=3),
+        register_startdate=now,
+        register_deadline=now + timedelta(days=1),
+        deregister_deadline=now + timedelta(days=2),
+        sluts=1,
+        allowed_grades=[1, 2],
+        companion=True,
+    )
+    profile = RandomProfileFactory(grade=GRADES.FIRST)
+    registration = SocialEventRegistration.objects.create(event=social, user=profile.user, companion="Someone")
+    registration.save()
+    set_user_event_status(event=social, registration=registration)
+    assert social.registered_users() == 2
