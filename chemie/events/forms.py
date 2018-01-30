@@ -3,7 +3,7 @@ from django import forms
 from django.core.validators import ValidationError
 
 from customprofile.models import GRADES
-from .models import Social, EventRegistration, Bedpres, BedpresRegistration, BaseEvent
+from .models import Social, SocialEventRegistration, Bedpres, BedpresRegistration, BaseEvent
 
 
 class BaseRegisterEventForm(forms.ModelForm):
@@ -121,7 +121,7 @@ class RegisterBedpresForm(BaseRegisterEventForm):
 
 class SocialRegisterUserForm(forms.ModelForm):
     class Meta:
-        model = EventRegistration
+        model = SocialEventRegistration
 
         fields = [
             "sleepover",

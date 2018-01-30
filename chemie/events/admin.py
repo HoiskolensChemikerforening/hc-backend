@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Social, EventRegistration, RegistrationMessage, Bedpres, BedpresRegistration
+from .models import Social, SocialEventRegistration, RegistrationMessage, Bedpres, BedpresRegistration
 from django.contrib.admin.filters import AllValuesFieldListFilter, RelatedFieldListFilter, ChoicesFieldListFilter
 
 
@@ -7,7 +7,7 @@ class DropdownFilter(RelatedFieldListFilter):
     template = 'admin/dropdown_filter.html'
 
 
-@admin.register(EventRegistration)
+@admin.register(SocialEventRegistration)
 class RegistrationAdmin(admin.ModelAdmin):
     list_filter = ('status', 'payment_status', ('event', DropdownFilter))
     ordering = ('-created',)

@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from chemie import settings
 from customprofile.factories import RandomProfileFactory
-from events.models import Social, EventRegistration
+from events.models import Social, SocialEventRegistration
 from ..views import set_user_event_status
 
 
@@ -45,7 +45,7 @@ class TestEventAndRegistration(TestCase):
         for i in range(event.sluts + 5):
             profile = RandomProfileFactory.create()
             profile.save()
-            registration = EventRegistration(event=event,
+            registration = SocialEventRegistration(event=event,
                                              user=profile.user,
                                              )
             set_user_event_status(event, registration)
