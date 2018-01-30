@@ -39,11 +39,16 @@
   {% endif %}
 
   <!-- Events -->
-  {% if events %}
-    {% cache 60 active_events %}
-      <h3 class="heading">Arrangementer</h3>
-      {% include 'events/social/list.html' with events=events %}
-      {% include 'events/social/list.html' with events=bedpres %}
+  {% if social %}
+    {% cache 60 social %}
+      <h3 class="heading">Sosiale arrangementer</h3>
+      {% include 'events/list_events.html' with object_list=social %}
+    {% endcache %}
+  {% endif %}
+
+  {% if bedpres %}
+    {% cache 60 bedpres %}
+      {% include 'events/list_events.html' with object_list=bedpres %}
     {% endcache %}
   {% endif %}
 
