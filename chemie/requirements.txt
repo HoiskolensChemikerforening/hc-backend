@@ -53,7 +53,7 @@ pytest-xdist==1.20.1
 python-dateutil==2.6.1
 pytz==2017.3
 six==1.11.0
-sorl-thumbnail==12.3
+sorl-thumbnail==12.4.1
 typing==3.6.2
 uWSGI==2.0.15
 Werkzeug==0.13
