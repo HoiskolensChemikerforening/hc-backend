@@ -1,17 +1,15 @@
-{% extends "events/bedpres/bedpres_base.html" %}
-{% load staticfiles %}
+{% extends "events/social/social_base.html" %}
 {% load material_form %}
 
 {% block nav_sub_header %}
   Påmelding
 {% endblock nav_sub_header %}
 
-{# Breadcrumbs #}
 {% block breadcrumbs %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Bedpres</a>
-    <a href="{{ bedpres.get_absolute_url }}" class="breadcrumb">{{ bedpres.title }}</a>
-    <a class="breadcrumb">Påmelding</a>
+    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
+    <a href="{{ object.get_absolute_url }}" class="breadcrumb">{{ object.title }}</a>
+    <a class="breadcrumb">Din påmelding</a>
   </div>
 {% endblock %}
 
@@ -20,8 +18,8 @@
   {% include "events/bedpres/permissions_object.html" %}
 {% endblock %}
 
+{# Main block #}
 {% block maincontent %}
-
   {% include 'events/registration_header.html' with event=object %}
 
   <!-- Registration status message -->
@@ -39,12 +37,22 @@
   <!-- Deregister form -->
   <div class="row">
     <div class="col">
+      <form class="deregister" method="POST">{% csrf_token %}
+        {% form form=forms.deregister %}{% endform %}
+        <button name='action' value='deregister' type="submit"
+                class="waves-effect waves-light btn btn-primary red">Meld meg av
+        </button>
+      </form>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
       <!-- Edit registration form -->
-      {% if forms.deregister %}
-        <form class="deregister" method="POST">{% csrf_token %}
-          {% form form=forms.deregister %}{% endform %}
-          <button name='action' value='deregister' type="submit"
-                  class="waves-effect waves-light btn btn-primary red">Meld meg av
+      {% if forms.deregister and forms.edit %}
+        <form class="edit" method="POST">{% csrf_token %}
+          {% form form=forms.edit %}{% endform %}
+          <button name='action' value='edit' type="submit"
+                  class="waves-effect waves-light btn btn-primary blue">Endre registrasjon
           </button>
         </form>
       {% else %}
