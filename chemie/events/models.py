@@ -224,8 +224,8 @@ class SocialEventRegistration(BaseRegistration):
     # Optional fields
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    companion = models.CharField(max_length=40, verbose_name="Navn på følge",
-                                 help_text="Navn på ekstern person. Ønske om bordkavaler sendes til festkom.",
+    companion = models.CharField(max_length=40, verbose_name="Navn på eksternt følge",
+                                 help_text="Navn på ekstern person. Ønske om bordkavaler sendes til arrangør.",
                                  null=True, blank=True)
 
 

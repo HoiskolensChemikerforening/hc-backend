@@ -45,7 +45,7 @@ class SocialFormView(FormView):
 
 class CreateSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormView, CreateView):
     success_url = reverse_lazy('events:index_social')
-    permission_required = 'events.add_event'
+    permission_required = 'events.add_social'
     # TODO: Couple the allowed grades with GRADES enum from customprofile models
     initial = {'allowed_grades': [1, 2, 3, 4, 5, 6]}
     success_message = "%(name)s was created successfully"
@@ -53,7 +53,7 @@ class CreateSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormV
 
 
 class EditSocialView(PermissionRequiredMixin, SuccessMessageMixin, SocialFormView, UpdateView, ):
-    permission_required = 'events.change_socialevent'
+    permission_required = 'events.change_social'
     # Can't edit past events
     queryset = Social.objects.filter(date__gte=timezone.now())
     success_message = "%(name)s was created successfully"
@@ -121,7 +121,7 @@ class ListPastBedpresView(ListPastSocialView):
 
 class ListSocialDeleteView(PermissionRequiredMixin, ListView):
     template_name = 'events/social/delete.html'
-    permission_required = 'events.delete_event'
+    permission_required = 'events.delete_social'
     model = Social
 
     def queryset(self):
@@ -137,7 +137,7 @@ class ListBedpresDeleteView(ListSocialDeleteView):
 
 class DeleteSocialView(PermissionRequiredMixin, DeleteView):
     model = Social
-    permission_required = 'events.delete_event'
+    permission_required = 'events.delete_social'
     success_url = reverse_lazy('events:delete_list_social')
 
     def delete(self, request, *args, **kwargs):
@@ -416,12 +416,11 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
     registration_view_register = BedpresRegisterUserView
 
 
-
 class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = 'events/admin_list.html'
     model = Social
     registration_model = SocialEventRegistration
-    permission_required = 'event.change_socialeventregistration'
+    permission_required = 'events.change_socialeventregistration'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -438,7 +437,7 @@ class BedpresEnlistedUsersView(SocialEnlistedUsersView):
     template_name = 'events/admin_list.html'
     model = Bedpres
     registration_model = BedpresRegistration
-    permission_required = 'event.change_bedpresregistration'
+    permission_required = 'events.change_bedpresregistration'
 
 
 @login_required
