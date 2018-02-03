@@ -57,4 +57,4 @@ sorl-thumbnail==12.4.1
 typing==3.6.2
 uWSGI==2.0.15
 Werkzeug==0.13
-wiki==0.2
+wiki==0.3
