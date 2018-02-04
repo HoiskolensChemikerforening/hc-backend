@@ -24,7 +24,7 @@ from .urls_api import api_urlpatterns
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('home.urls', namespace='frontpage')),
+    url(r'^', include('chemie.urls_home', namespace='frontpage')),
     url(r'^sladreboks/', include('shitbox.urls', namespace='shitbox')),
     url(r'^verv/', include('committees.urls', namespace='verv')),
     url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),

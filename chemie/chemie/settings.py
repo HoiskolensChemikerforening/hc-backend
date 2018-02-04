@@ -78,7 +78,6 @@ THIRD_PARTY_APPS = [
 
 LOCAL_APPS = [
     'chemie',
-    'home',
     'news',
     'shitbox',
     'committees',
