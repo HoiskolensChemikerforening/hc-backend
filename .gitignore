@@ -1,6 +1,7 @@
 *.DS_Store/
 chemie/__pycache__/
 chemie/db.sqlite3
+chemie/chemie/settings_dev.py
 chemie/chemie/__pycache__/*
 chemie/elections/__pycache__/*
 chemie/elections/migrations/*
