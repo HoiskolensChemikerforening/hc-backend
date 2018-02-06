@@ -381,9 +381,8 @@ p {
 }
 
 
-/* Top nav background image*/
 nav, footer {
-    background-image: url('/static/images/blur.png') !important;
+    background-color: var(--primary-color);
 }
 
 
