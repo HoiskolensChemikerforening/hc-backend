@@ -3,6 +3,35 @@ from .models import Social, SocialEventRegistration, RegistrationMessage, Bedpre
 from django.contrib.admin.filters import AllValuesFieldListFilter, RelatedFieldListFilter, ChoicesFieldListFilter
 
 
+def export_csv(modeladmin, request, queryset):
+    import csv
+    from django.utils.encoding import smart_str
+    from django.http.response import HttpResponse
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=registrations.csv'
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow([
+        smart_str(u"ID"),
+        smart_str(u"Event"),
+        smart_str(u"User"),
+        smart_str(u"Created"),
+        smart_str(u"Status"),
+        smart_str(u"Payment Status"),
+
+    ])
+    for obj in queryset:
+        writer.writerow([
+            smart_str(obj.pk),
+            smart_str(obj.event),
+            smart_str(obj.user),
+            smart_str(obj.created),
+            smart_str(obj.status),
+        ])
+    return response
+export_csv.short_description = u"Export CSV"
+
+
 class DropdownFilter(RelatedFieldListFilter):
     template = 'admin/dropdown_filter.html'
 
@@ -13,6 +42,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     ordering = ('-created',)
     search_fields = ('user__username', 'user__first_name', 'user__last_name')
     list_display = ('event', 'user', 'created', 'edited', 'payment_status', 'companion',)
+    actions = [export_csv]
 
 
 @admin.register(BedpresRegistration)
