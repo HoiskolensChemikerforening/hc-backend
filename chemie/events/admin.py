@@ -4,6 +4,7 @@ from django.contrib.admin.filters import AllValuesFieldListFilter, RelatedFieldL
 
 
 def export_csv(modeladmin, request, queryset):
+    # Credits to https://djangotricks.blogspot.no/2013/12/how-to-export-data-as-excel.html
     import csv
     from django.utils.encoding import smart_str
     from django.http.response import HttpResponse
