@@ -1,0 +1,191 @@
+<!-- Klassekatalog side -->
+
+{% extends "chemie/base.html" %}
+{% load thumbnail %}
+{% load staticfiles %}
+
+{% block nav_header %}
+  Klassekatalog
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{% block extra_css %}
+  <link href="{% static "css/detailview.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+{% endblock %}
+
+{% block extra_js %}
+  <script src="{% static "js/hammer.min.js" %}" defer></script>
+{% endblock %}
+
+{% block content %}
+  {% if perms.customprofile %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">menu</i>
+      </a>
+      <ul>
+        <li>
+          <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i
+              class="material-icons">edit</i></a>
+          <a class="btn-floating mobile-fab-tip">Se medlemsoversikt</a>
+        </li>
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="klassetrinn">
+      <div class="col s6 m6 l4 s12">
+        <a class='dropdown-button btn-large' href='#' data-activates='dropdown1'
+           >Klassetrinn</a>
+        <ul id='dropdown1' class='dropdown-content'>
+          {% for year_number, year_text in grades %}
+            <li><a href="{% url "profile:yearbook-grade" year=year_number %}">{{ year_text }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col s6 m6 l8">
+        <nav>
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <div class="input-field">
+                <input id="{{ search_form.search_field.id_for_label }}"
+                       type="search" required name="{{ search_form.search_field.html_name }}"
+                       value="{{ search_form.search_field.value|default:"" }}">
+                <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
+                  <i class="material-icons" style="line-height: 42px;">search</i></label>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
+  <div class="row">
+    {% for profile in profiles %}
+      <div class="col s12 m4">
+        <!-- When card is pressed, a detail view pops up. -->
+        <div class="card">
+          <!-- Showing the pictures. -->
+          <div class="card-image">
+            {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
+              <img src="{{ primary.url }}" data-field-id="#modal-{{ profile.pk }}"
+                  {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
+                   data-alt-src="{{ secondary.url }}"
+                  {% endthumbnail %}>
+            {% empty %}
+              <img src="{% static "images/blank_avatar.png" %}">
+            {% endthumbnail %}
+          </div>
+
+          <!-- The box under each picture -->
+          <div class="card-content">
+            <a class="card-title">{{ profile }}</a>
+            {% if profile.relationship_status == 1 %}
+              <i class="material-icons icon-green">favorite</i>
+            {% elif profile.relationship_status == 2 %}
+              <i class="material-icons icon-red">favorite</i>
+            {% else %}
+              <i class="material-icons icon-gray">favorite</i>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Detail view in yearbook -->
+      <div id="modal-{{ profile.pk }}" class="modal">
+
+        <!-- All content in popup goes here -->
+        <div class="modal-content">
+
+          <div class="row">
+            <!-- Picture in detail view -->
+            <div class="center-align">
+              <div class="col s12 m4 l4">
+                {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
+                  <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
+                       href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
+                {% endthumbnail %}
+              </div>
+            </div>
+
+            <!-- All text in view-->
+            <div class="col s12 m8 l8">
+              <div class="center-align">
+                <h4 class="grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
+                <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
+                <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
+                <p>Mobilnummer: {{ profile.phone_number }}</p>
+                <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Footer on popup. Contains closing button. -->
+        <div class="modal-footer">
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Lukk</a>
+          <a href="mailto:{{ profile.user.email }}"
+             class="modal-action modal-close waves-effect waves-green btn-flat">Send e-post</a>
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+
+{% endblock content %}
+
+{% block footer_script %}
+  <script>
+      var sourceSwap = function () {
+          var $this = $(this);
+          var newSource = $this.data('alt-src');
+          $this.data('alt-src', $this.attr('src'));
+          $this.attr('src', newSource);
+      };
+
+      $(function () {
+          $('img[data-alt-src]').each(function () {
+              new Image().src = $(this).data('alt-src');
+          }).hover(sourceSwap, sourceSwap);
+      });
+
+      // Functions for double tap (swap image) and tap/click (show modal)
+      // https://codepen.io/jtangelder/pen/pBuIw
+      $(document).ready(function () {
+          $('.card-image').each(function () {
+              var $this = $(this);
+              var mc = new Hammer.Manager(this);
+
+              // Tap recognizer with minimal 2 taps
+              mc.add(new Hammer.Tap({event: 'double_tap', taps: 2}));
+
+              // Single tap recognizer
+              mc.add(new Hammer.Tap({event: 'single_tap'}));
+
+              // we want to recognize this simulatenous, so a quadrupletap will be detected even while a tap has been recognized.
+              mc.get('double_tap').recognizeWith('single_tap');
+              // we only want to trigger a tap, when we don't have detected a doubletap
+              mc.get('single_tap').requireFailure('double_tap');
+
+              // Double tap swaps the images
+              mc.on("double_tap", function (e) {
+                  sourceSwap.call(e.srcEvent.target);
+                  return false;
+              });
+
+              // Single tap calls the modal trigger
+              mc.on("single_tap", function (e) {
+                  id = e.srcEvent.target.getAttribute('data-field-id');
+                  $(id).modal('open');
+                  return false;
+              });
+          });
+      });
+  </script>
+{% endblock %}
