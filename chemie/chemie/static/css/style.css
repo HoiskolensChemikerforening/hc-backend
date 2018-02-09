@@ -1,124 +1,223 @@
 /*  COLOR OPTIONS */
 :root {
-  --primary-color:      #0B3954;
-  --secondary-color:    #6288A5;
-  --sec-txt-color:      #6288A5;
-  --active-color:       #3C91E6;
-  --sidetext-color:     #1F2D3D;
-  --side-bg-color:      #fcfcff;
+
+    /* Side bar colors */
+    --side-bar-text:  #1F2D3D;
+    --side-bar-bg:    #fcfcff;
+
+    /* Card colors */
+    --card-text:      #000;
+    --card-bg:              #FFF;
+
+    /* Main area header and background colors */
+    --main-header-text:     #0B3954;
+    --background:           #FAFAFA;
+
+    /* Top nav colors */
+    --top-header-text:      #FFF;
+    --top-header-bg:        #0B3954;
+
+    --footer-bg:            #0B3954;
+
+    /* Hoover */
+    --btn-hoover:           #3C91E6;
+
+    /* Splash colors, buttons etc */
+    --extra-color:          #6288A5;
+
+    /* Text color on hoover */
+    --extra-text:           #FFF;
+
 }
 
-.btn:hover, .btn-large:hover {
-    background-color: var(--active-color);
+/* Headers above main block */
+#heading, #subheading {
+    color: var(--top-header-text);
 }
 
-nav, footer.page-footer {
-    color: #fff;
-    background-color: var(--primary-color);
-}
-
+/* Heading in main block */
 .heading {
-    color: var(--primary-color);
-    font-family: "Roboto";
-    font-weight: 200;
     margin-top: 0.0rem;
+    color: var(--main-header-text);
 }
 
+main {
+    min-height: 90%;
+    min-height: -webkit-calc(100% - 437px);
+    min-height: -moz-calc(100% - 437px);
+    min-height: calc(100% - 437px);
+    background-color: var(--background);
+}
+
+/* Text color inside cards */
+.card p, .card-content p {
+    color: var(--card-text) !important;
+}
+
+/* Side menu background color */
+#slide-out, .side-nav .collapsible-body, .side-nav.fixed .collapsible-body {
+    background-color: var(--side-bar-bg);
+}
+
+/* Text and icons inside menu */
+div.collapsible-header, ul.side-nav.fixed a, .micon, i .micon, .logo-text {
+    color: var(--side-bar-text) !important;
+}
+
+/* Background color for cards */
+.card {
+    background-color: var(--card-bg);
+}
+
+/* Top nav background image*/
+nav {
+    /*background-image: url('/static/images/blur.png') !important; */
+    background-color: var(--top-header-bg);
+}
+
+footer.page-footer {
+    background-color: var(--footer-bg);
+}
+
+
+/* Color when hover above buttons */
+.btn:hover, .btn-large:hover {
+    background-color: var(--btn-hoover);
+    color: var(--extra-text);
+}
+
+/* Button color */
+.btn, .btn-large {
+    background-color: var(--extra-color);
+    color:  var(--extra-text);
+}
+
+/* Top and footer block background color */
+nav {
+    background-color: var(--top-header-bg);
+}
+
+/* General icon color */
 div > i {
-    color: var(--secondary-color);
+    color: var(--extra-color);
+}
+/* Checkboxes color */
+[type="checkbox"].filled-in:checked + label::after {
+    border: 2px solid var(--btn-hoover);
+    background-color: var(--btn-hoover);
+}
+[type="checkbox"]:checked + label::before {
+    border-right: 2px solid var(--btn-hoover);
+    border-bottom: 2px solid var(--btn-hoover);
+}
+/* Some form color */
+input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default):focus:not([readonly]), input[type="password"]:not(.browser-default):focus:not([readonly]), input[type="email"]:not(.browser-default):focus:not([readonly]), input[type="url"]:not(.browser-default):focus:not([readonly]), input[type="time"]:not(.browser-default):focus:not([readonly]), input[type="date"]:not(.browser-default):focus:not([readonly]), input[type="datetime"]:not(.browser-default):focus:not([readonly]), input[type="datetime-local"]:not(.browser-default):focus:not([readonly]), input[type="tel"]:not(.browser-default):focus:not([readonly]), input[type="number"]:not(.browser-default):focus:not([readonly]), input[type="search"]:not(.browser-default):focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
+    border-bottom: 1px solid var(--btn-hoover);
+    -webkit-box-shadow: 0 1px 0 0 var(--btn-hoover);
+    box-shadow: 0 1px 0 0 var(--btn-hoover);
 }
 
-
-i .micon {
-    color: var(--sidetext-color);
+/* Rounded corners of cards */
+.card, .card-image, .card .card-image img {
+    border-radius: 8px 8px 0 0;
+}
+.card, .card {
+    border-radius: 8px 8px 8px 8px;
 }
 
-.micon {
-    color: var(--sidetext-color) !important;
+.card .card-action:last-child, .card-action:last-child {
+    border-radius: 0 0 8px 8px;
+}
+
+.card .card-image .card-title {
+    padding: 0 16px;
+}
+
+/* Card title color */
+.card-title {
+    color: var(--card-text);
+}
+
+/* IBM Plex as main font */
+html {
+    font-family: 'IBM Plex Sans', "Helvetica Neue", Arial, Roboto, sans-serif !important;
+    background-color: #FFF;
+}
+
+/* Reduce padding of text in message cards */
+.message-card .card-content {
+    padding: 10px 20px 10px 20px;
 }
 
 ul.side-nav.fixed a {
-    font-size: 14px;
+    font-size: 16px;
     line-height: 44px;
     height: 44px;
-    color: var(--sidetext-color);
     font-weight: 400;
     padding: 0 16px;
 }
 
+/* Card action colors */
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating) {
-    color: var(--sec-txt-color);
+    color: var(--card-text);
 }
-
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
-    color: var(--sec-txt-color);
+    color: var(--card-text);
 }
-
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating):hover {
-    color: var(--active-color);
+    color: var(--btn-hoover);
 }
-
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-floating):hover {
-    color: var(--sec-txt-color);
-}
-
-.btn {
-    background-color: var(--secondary-color);
-}
-
-.btn, .btn-large {
-    background-color: var(--secondary-color);
-}
-
-.btn-floating {
-    background-color: var(--secondary-color); !important;
-}
-
-.prefix.active {
-    color: var(--secondary-color); !important;
+    color: var(--card-text);
 }
 
 .dropdown-content li > a, .dropdown-content li > span {
-    color: var(--sidetext-color);
-}
-
-
-div.collapsible-header {
-    color: var(--sidetext-color);
-}
-
-#slide-out {
-    background-color: var(--side-bg-color);
+    color: var(--side-bar-text);
 }
 
 input:not([type]):focus:not([readonly]), input[type=text]:focus:not([readonly]), input[type=password]:focus:not([readonly]), input[type=email]:focus:not([readonly]), input[type=url]:focus:not([readonly]), input[type=time]:focus:not([readonly]), input[type=date]:focus:not([readonly]), input[type=datetime]:focus:not([readonly]), input[type=datetime-local]:focus:not([readonly]), input[type=tel]:focus:not([readonly]), input[type=number]:focus:not([readonly]), input[type=search]:focus:not([readonly]), textarea.materialize-textarea:focus:not([readonly]) {
-    border-bottom: 1px solid var(--active-color);
-    box-shadow: 0 1px 0 0 var(--active-color);
+    border-bottom: 1px solid var(--btn-hoover);
+    box-shadow: 0 1px 0 0 var(--btn-hoover);
 }
 
+/* Form label text colors */
 input:not([type]):focus:not([readonly]) + label, input[type=text]:focus:not([readonly]) + label, input[type=password]:focus:not([readonly]) + label, input[type=email]:focus:not([readonly]) + label, input[type=url]:focus:not([readonly]) + label, input[type=time]:focus:not([readonly]) + label, input[type=date]:focus:not([readonly]) + label, input[type=datetime]:focus:not([readonly]) + label, input[type=datetime-local]:focus:not([readonly]) + label, input[type=tel]:focus:not([readonly]) + label, input[type=number]:focus:not([readonly]) + label, input[type=search]:focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
-    color: var(--active-color);
+    color: var(--btn-hoover);
+}
+input:not([type]):focus:not([readonly]) + label, input[type="text"]:not(.browser-default):focus:not([readonly]) + label, input[type="password"]:not(.browser-default):focus:not([readonly]) + label, input[type="email"]:not(.browser-default):focus:not([readonly]) + label, input[type="url"]:not(.browser-default):focus:not([readonly]) + label, input[type="time"]:not(.browser-default):focus:not([readonly]) + label, input[type="date"]:not(.browser-default):focus:not([readonly]) + label, input[type="datetime"]:not(.browser-default):focus:not([readonly]) + label, input[type="datetime-local"]:not(.browser-default):focus:not([readonly]) + label, input[type="tel"]:not(.browser-default):focus:not([readonly]) + label, input[type="number"]:not(.browser-default):focus:not([readonly]) + label, input[type="search"]:not(.browser-default):focus:not([readonly]) + label, textarea.materialize-textarea:focus:not([readonly]) + label {
+    color: var(--btn-hoover);
+}
+
+/* Action button hover color */
+.btn-floating i {
+    color: var(--extra-text);
+}
+
+/* Action button icon hover color */
+.btn-floating i:hover {
+    color: var(--extra-text);
 }
 
 .tabs .tab a:hover {
-    color: var(--active-color);
+    color: var(--extra-color);
 }
 
 .input-field .prefix.active {
-    color: var(--active-color);
+    color: var(--btn-hoover);
 }
 
 .tabs .tab a {
-    color: var(--primary-color);
+    color: var(--card-text);
 }
 
 .tabs .tab a.active {
     background-color: transparent;
-    color: var(--primary-color);
+    color: var(--card-text);
 }
 
+/* Active tab indicator color */
 .tabs .indicator {
-    background-color: var(--active-color);
+    background-color: var(--extra-color);
 }
 
 
@@ -150,8 +249,6 @@ i.icon-gray {
     color: gray;
 }
 
-/* END COLOR OPTIONS */
-
 html, body {
     height: 100%;
 }
@@ -166,13 +263,7 @@ header, main, footer {
     }
 }
 
-main {
-    min-height: 90%;
-    min-height: -webkit-calc(100% - 437px);
-    min-height: -moz-calc(100% - 437px);
-    min-height: calc(100% - 437px);
-    background-color: #fafafa;
-}
+
 
 .error {
     color: red;
@@ -198,7 +289,7 @@ nav.top-nav {
 
 ul.side-nav.fixed li.logo {
     text-align: center;
-    margin-top: 10px;
+    padding-top: 10px;
 }
 
 #front-page-logo {
@@ -213,7 +304,7 @@ ul.side-nav.fixed li.logo {
 }
 
 .logo-text {
-    font-family: "Roboto Condensed";
+    font-family: 'IBM Plex Sans', "Helvetica Neue", Arial, Roboto, sans-serif;
     font-weight: 300;
     margin-top: 10px;
 }
@@ -227,9 +318,6 @@ ul.side-nav.fixed li {
 }
 
 #heading {
-    font-size: 3.56rem;
-    font-family: "Roboto";
-    font-weight: 300;
     margin-top: 0.0rem;
     padding-top: 0.5rem;
 }
@@ -243,8 +331,6 @@ ul.side-nav.fixed li {
 }
 
 #subheading {
-    font-family: "Roboto Condensed";
-    font-weight: 300;
     position: absolute;
     top: 1.7em;
 }
@@ -283,7 +369,7 @@ img.profile-circle {
 }
 
 .card-event {
-    margin: 0rem 0 1rem 0;
+    margin: 0 0 1rem 0;
 }
 
 .text-background {
@@ -298,7 +384,7 @@ img.profile-circle {
 }
 
 .card-event-title {
-    padding: 0px 10px;
+    padding: 0 10px;
     background-color: rgba(0, 0, 0, .2);
     width: 100%;
 }
@@ -319,7 +405,7 @@ img.profile-circle {
     footer.page-footer {
         padding-top: 20px;
         bottom: 0;
-        margin: 0px;
+        margin: 0;
 
     }
 
@@ -333,7 +419,7 @@ img.profile-circle {
     footer.page-footer {
         padding-top: 20px;
         bottom: 0;
-        margin: 0px;
+        margin: 0;
 
     }
 }
@@ -349,7 +435,7 @@ img.profile-circle {
     }
 
     footer.page-footer {
-        padding-left: 0px;
+        padding-left: 0;
         margin-left: 300px;
     }
 }
@@ -363,7 +449,7 @@ p {
 .mobile-fab-tip, .mobile-fab-tip:hover {
     position: fixed;
     right: 85px;
-    padding: 0px 0.5rem;
+    padding: 0 0.5rem;
     text-align: right;
     background-color: #323232;
     border-radius: 2px;
@@ -380,21 +466,10 @@ p {
     width: 100%;
 }
 
-
-/* Top nav background image*/
-nav, footer {
-    background-image: url('/static/images/blur.png') !important;
-}
-
-
+/* Break words in case they are too long */
 .flow-text {
     overflow-wrap: break-word;
 }
-
-.section.no-pad-bot {
-    padding-top: 2rem;
-}
-
 
 .breadcrumb:last-child {
     color: #263238 !important;
@@ -418,69 +493,3 @@ nav, footer {
       font-size: 2.224rem;
   }
 }
-
-
-/* CSS For konami code animation */
-@keyframes rotate {
-  100% {transform: rotate(360deg);}
-}
-@-webkit-keyframes rotate {
-  100% {-webkit-transform: rotate(360deg);}
-}
-
-@-webkit-keyframes crazyAnimation {
-  0% {color: #ff0000; background-color: #ff0080;}
-  10% {color: #ff8000; background-color: #8000ff;}
-  20% {color: #ffff00; background-color: #0000ff;}
-  30% {color: #80ff00; background-color: #0080ff;}
-  40% {color: #00ff00; background-color: #00ffff;}
-  50% {color: #00ff80; background-color: #00ff80;}
-  60% {color: #00ffff; background-color: #00ff00;}
-  70% {color: #0080ff; background-color: #80ff00;}
-  80% {color: #0000ff; background-color: #ffff00;}
-  90% {color: #8000ff; background-color: #ff8000;}
-  100% {color: #ff0080; background-color: #ff0000; -webkit-transform: rotate(360deg);}
-}
-
-@keyframes crazyAnimation {
-  0% {color: #ff0000; background-color: #ff0080;}
-  10% {color: #ff8000; background-color: #8000ff;}
-  20% {color: #ffff00; background-color: #0000ff;}
-  30% {color: #80ff00; background-color: #0080ff;}
-  40% {color: #00ff00; background-color: #00ffff;}
-  50% {color: #00ff80; background-color: #00ff80;}
-  60% {color: #00ffff; background-color: #00ff00;}
-  70% {color: #0080ff; background-color: #80ff00;}
-  80% {color: #0000ff; background-color: #ffff00;}
-  90% {color: #8000ff; background-color: #ff8000;}
-  100% {color: #ff0080; background-color: #ff0000; transform: rotate(360deg);}
-}
-
-@-webkit-keyframes BgcrazyAnimation {
-  0% {color: #ff0000; background-color: #ff0080;}
-  10% {color: #ff8000; background-color: #8000ff;}
-  20% {color: #ffff00; background-color: #0000ff;}
-  30% {color: #80ff00; background-color: #0080ff;}
-  40% {color: #00ff00; background-color: #00ffff;}
-  50% {color: #00ff80; background-color: #00ff80;}
-  60% {color: #00ffff; background-color: #00ff00;}
-  70% {color: #0080ff; background-color: #80ff00;}
-  80% {color: #0000ff; background-color: #ffff00;}
-  90% {color: #8000ff; background-color: #ff8000;}
-  100% {color: #ff0080; background-color: #ff0000; }
-}
-
-@keyframes BgcrazyAnimation {
-  0% {color: #ff0000; background-color: #ff0080;}
-  10% {color: #ff8000; background-color: #8000ff;}
-  20% {color: #ffff00; background-color: #0000ff;}
-  30% {color: #80ff00; background-color: #0080ff;}
-  40% {color: #00ff00; background-color: #00ffff;}
-  50% {color: #00ff80; background-color: #00ff80;}
-  60% {color: #00ffff; background-color: #00ff00;}
-  70% {color: #0080ff; background-color: #80ff00;}
-  80% {color: #0000ff; background-color: #ffff00;}
-  90% {color: #8000ff; background-color: #ff8000;}
-  100% {color: #ff0080; background-color: #ff0000;}
-}
-/* End konami code animation css */
