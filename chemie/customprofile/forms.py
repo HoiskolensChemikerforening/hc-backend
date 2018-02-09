@@ -175,3 +175,6 @@ class SetNewPassword(forms.ModelForm):
         super(SetNewPassword, self).clean()
         self.password_matches()
 
+
+class NameSearchForm(forms.Form):
+    search_field = forms.CharField(max_length=120)
