@@ -2,62 +2,70 @@
 {% load cache %}
 
 {% block nav_header %}
-  Forsiden
+    Forsiden
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Velkommen!
+    Velkommen!
 {% endblock nav_sub_header %}
 
+
 {% block content %}
-  {% if perms.events or perms.news %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large">
-        <i class="large material-icons">edit</i>
-      </a>
-      <ul>
-        {% if perms.events.add_event %}
-          <li>
-            <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Opprett arrangement</a>
-          </li>
+    {% if perms.events or perms.news %}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+            <a class="btn-floating btn-large">
+                <i class="large material-icons">edit</i>
+            </a>
+            <ul>
+                {% if perms.events.add_event %}
+                    <li>
+                        <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
+                        <a class="btn-floating mobile-fab-tip">Opprett arrangement</a>
+                    </li>
+                {% endif %}
+                {% if perms.events.add_bedpres %}
+                    <li>
+                        <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
+                        <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
+                    </li>
+                {% endif %}
+                {% if perms.news.add_article %}
+                    <li>
+                        <a class="btn-floating blue" href="{% url "news:create" %}"><i
+                                class="material-icons">add</i></a>
+                        <a class="btn-floating mobile-fab-tip">Opprett nyhet</a>
+                    </li>
+                {% endif %}
+            </ul>
+        </div>
         {% endif %}
-        {% if perms.events.add_bedpres %}
-          <li>
-            <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
-          </li>
-        {% endif %}
-        {% if perms.news.add_article %}
-          <li>
-            <a class="btn-floating blue" href="{% url "news:create" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Opprett nyhet</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  {% endif %}
-
-  <!-- Events -->
-  {% if social %}
-    {% cache 60 social %}
-      <h3 class="heading">Sosiale arrangementer</h3>
-      {% include 'events/list_events.html' with object_list=social %}
-    {% endcache %}
-  {% endif %}
-
-  {% if bedpres %}
-    {% cache 60 bedpres %}
-      {% include 'events/list_events.html' with object_list=bedpres %}
-    {% endcache %}
-  {% endif %}
-
-  <!-- News -->
-  {% if posts %}
-    {% cache 60 active_news %}
-      <h3 class="heading">Nyheter</h3>
-      {% include 'news/list_news.html' with posts=posts %}
-    {% endcache %}
-  {% endif %}
-
+        <div class="row">
+             <div class="col s12 push-m6 m6 push-l7 l5">
+            <!-- Events -->
+                <h3 class="heading">Arrangementer</h3>
+                {% if social or bedpres %}
+                    <ul class="tabs tabs-fixed-width" style="background-color: var(--card-bg)">
+                        <li class="tab col s3"><a href="#social">Sosialt</a></li>
+                        <li class="tab col s3"><a href="#bedpres">Bedpres</a></li>
+                    </ul>
+                    <div id="social" class="col s12" style="background-color: var(--card-bg)">
+                        <ul class="pagination nav navbar-nav">
+                            {% include 'events/frontpage_events.html' with object_list=social %}
+                        </ul>
+                    </div>
+                    <div id="bedpres" class="col s12" style="background-color: var(--card-bg)">
+                        {% include 'events/frontpage_events.html' with object_list=bedpres %}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="col s12 pull-m6 m6 pull-l5 l7">
+                <!-- News -->
+                {% if posts %}
+                    {% cache 60 active_news %}
+                        <h3 class="heading">Nyheter</h3>
+                        {% include 'news/frontpage_news.html' with posts=posts %}
+                    {% endcache %}
+                {% endif %}
+            </div>
+        </div>
 {% endblock content %}

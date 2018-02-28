@@ -1,0 +1,34 @@
+{% load thumbnail %}
+<style>
+    p {
+        margin: 0;
+        color: var(--card-text);
+    }
+
+    p.yel {
+        -o-transition: .2s;
+        -moz-transition: .2s;
+        -webkit-transition: .2s;
+        transition: .2s;
+    }
+
+    a:hover p.yel {
+        color: var(--extra-color)
+    }
+</style>
+
+
+{% for event in object_list %}
+    <a href="{{ event.get_absolute_url }}">
+        <p class="flow-text truncate" style="font-size: 1.34rem;">
+            {{ event.title }}
+        </p>
+        <p class="yel" style="font-size: 1rem;">{{ event.date|date:"j F - H:i" }}</p>
+    </a>
+    <p class="flow-text truncate" style="font-size: 12px">{{ event.registered_users|default_if_none:0 }}
+        av {{ event.sluts }} påmeldte</p>
+    <div class="progress">
+        <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
+    </div>
+
+{% endfor %}
