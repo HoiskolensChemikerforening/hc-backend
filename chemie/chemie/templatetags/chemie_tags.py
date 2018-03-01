@@ -2,7 +2,7 @@ from django import template
 from django.utils import timezone
 from django.views.decorators.cache import cache_page
 
-from chemie.models import Sponsor
+from chemie.chemie.models import Sponsor
 
 register = template.Library()
 

@@ -7,7 +7,7 @@ import os
 from django.conf import settings
 from django.utils.module_loading import import_module
 from django.core.management import execute_from_command_line
-os.environ['DJANGO_SETTINGS_MODULE'] = 'chemie.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'chemie.chemie.settings'
 
 
 def initial_migrations():

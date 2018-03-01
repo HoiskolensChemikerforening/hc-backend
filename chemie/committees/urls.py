@@ -2,6 +2,8 @@ from django.conf.urls import include, url
 
 from . import views
 
+app_name = 'committees'
+
 urlpatterns = [
     url(r'^$', views.index, name='list_all'),
     url(r'^user-autocomplete/',views.UserAutocomplete.as_view(), name='user-autocomplete',),

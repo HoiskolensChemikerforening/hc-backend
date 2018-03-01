@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from lockers.models import Locker
+from chemie.lockers.models import Locker
 
 
 class Command(BaseCommand):

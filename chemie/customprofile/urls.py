@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = 'customprofile'
+
 urlpatterns = [
     url(r'^profile/register$', views.register_user, name='register'),
     url(r'^profile/edit$', views.edit_profile, name='edit'),

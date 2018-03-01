@@ -6,8 +6,8 @@ from django.utils import timezone
 from freezegun import freeze_time
 from post_office.models import Email
 
-from customprofile.factories import RandomProfileFactory
-from customprofile.models import GRADES
+from chemie.customprofile.factories import RandomProfileFactory
+from chemie.customprofile.models import GRADES
 from .factories import BedpresEventFactory, SocialEventFactory
 from ..models import BedpresRegistration, SocialEventRegistration, REGISTRATION_STATUS
 from ..views import set_user_event_status

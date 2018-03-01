@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = 'picturecarousel'
+
 urlpatterns = [
     url(r'^send/', views.submit_picture, name="submit"),
     url(r'^$', views.view_carousel, name='display'),

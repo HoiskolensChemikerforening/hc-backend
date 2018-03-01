@@ -2,7 +2,7 @@ import material as M
 from django import forms
 from django.core.validators import ValidationError
 
-from customprofile.models import GRADES
+from chemie.customprofile.models import GRADES
 from .models import Social, SocialEventRegistration, Bedpres, BedpresRegistration, BaseEvent
 
 

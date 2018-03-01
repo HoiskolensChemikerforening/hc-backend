@@ -1,12 +1,12 @@
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
 
-from customprofile.models import GRADES
+from chemie.customprofile.models import GRADES
 from .email import send_event_mail
 
 REGISTRATION_STATUS = Choices(
@@ -27,7 +27,7 @@ class BaseEvent(models.Model):
     title = models.CharField(max_length=40, verbose_name='Tittel')
 
     # Name of person creating event
-    author = models.ForeignKey(User, related_name="baseevent")
+    author = models.ForeignKey(User, related_name="baseevent", on_delete=models.CASCADE)
 
     #  When the event occurs, is created and edited
     date = models.DateTimeField(verbose_name="Dato")
@@ -134,7 +134,7 @@ class BaseEvent(models.Model):
 
 
 class Social(BaseEvent):
-    author = models.ForeignKey(User, related_name='social_author')
+    author = models.ForeignKey(User, related_name='social_author', on_delete=models.CASCADE)
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
@@ -164,7 +164,7 @@ class Social(BaseEvent):
 
 
 class Bedpres(BaseEvent):
-    author = models.ForeignKey(User, related_name='+')
+    author = models.ForeignKey(User, related_name='+', on_delete=models.CASCADE)
     attendees = models.ManyToManyField(User, through='BedpresRegistration')
 
     def get_absolute_url(self):
@@ -191,8 +191,8 @@ class RegistrationManager(models.Manager):
 
 
 class BaseRegistration(models.Model):
-    user = models.ForeignKey(User)
-    event = models.ForeignKey(BaseEvent)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    event = models.ForeignKey(BaseEvent, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED)
@@ -217,8 +217,8 @@ class BaseRegistration(models.Model):
 
 
 class SocialEventRegistration(BaseRegistration):
-    event = models.ForeignKey(Social)
-    # user = models.ForeignKey(User)
+    event = models.ForeignKey(Social, on_delete=models.CASCADE)
+    # user = models.ForeignKey(User, on_delete=models.CASCADE)
     payment_status = models.BooleanField(default=False, verbose_name="Betalt")
 
     # Optional fields
@@ -230,14 +230,14 @@ class SocialEventRegistration(BaseRegistration):
 
 
 class BedpresRegistration(BaseRegistration):
-    event = models.ForeignKey(Bedpres)
+    event = models.ForeignKey(Bedpres, on_delete=models.CASCADE)
     status = models.IntegerField(choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED)
 
 
 class RegistrationMessage(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
-    author = models.ForeignKey(User, related_name='+')
+    author = models.ForeignKey(User, related_name='+', on_delete=models.CASCADE)
 
     # TODO: legge til author
     def __str__(self):
@@ -248,8 +248,8 @@ class RegistrationMessage(models.Model):
 
 
 class SocialEventMessage(RegistrationMessage):
-    event = models.ForeignKey(Social, related_name='custom_message')
+    event = models.ForeignKey(Social, related_name='custom_message', on_delete=models.CASCADE)
 
 
 class BedpresEventMessage(RegistrationMessage):
-    event = models.ForeignKey(Bedpres, related_name='custom_message')
+    event = models.ForeignKey(Bedpres, related_name='custom_message', on_delete=models.CASCADE)

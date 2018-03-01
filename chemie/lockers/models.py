@@ -4,7 +4,7 @@ from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ValidationError
 from django.utils.translation import ugettext_lazy as _
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from .validators import validate_NTNU
 
 VALID_TIME = 7  # 7 days
@@ -23,7 +23,7 @@ class LockerManager(models.Manager):
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField(unique=True)
     owner = models.ForeignKey('Ownership', related_name="definite_owner",
-                              null=True, blank=True)
+                              null=True, blank=True, on_delete=models.CASCADE)
 
     objects = LockerManager()
 
@@ -74,8 +74,8 @@ class OwnershipManager(models.Manager):
 
 
 class Ownership(models.Model):
-    locker = models.ForeignKey(Locker, related_name="indefinite_locker")
-    user = models.ForeignKey(LockerUser, related_name="User")
+    locker = models.ForeignKey(Locker, related_name="indefinite_locker", on_delete=models.CASCADE)
+    user = models.ForeignKey(LockerUser, related_name="User", on_delete=models.CASCADE)
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
     is_active = models.BooleanField(default=False)
@@ -102,7 +102,7 @@ class LockerConfirmationManager(models.Manager):
 
 
 class LockerToken(models.Model):
-    ownership = models.ForeignKey(Ownership)
+    ownership = models.ForeignKey(Ownership, on_delete=models.CASCADE)
     key = models.UUIDField(default=uuid4, editable=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 

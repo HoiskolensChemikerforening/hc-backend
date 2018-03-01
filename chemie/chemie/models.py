@@ -13,7 +13,7 @@ class Sponsor(models.Model):
     start_date = models.DateTimeField(auto_now=False, auto_now_add=True)
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False)
     image = ImageField(upload_to='sponsors', verbose_name="Bilde")
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.link

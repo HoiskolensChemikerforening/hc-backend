@@ -3,12 +3,16 @@ Django settings for the chemie project.
 """
 
 import os
+import environ
 
 
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# BASE_DIR is the path to the project folder chemie.
+BASE_DIR = environ.Path(__file__) - 4  # (chemie/chemie/settings/base.py - 3 = chemie/)
+APPS_DIR = BASE_DIR.path("chemie/")()
+SETTINGS_DIR = environ.Path(__file__) - 1
+
 
 if os.environ.get("DEBUG") == "False":
     ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
@@ -21,6 +25,7 @@ else:
     DEBUG = True
     ALLOWED_HOSTS = ['*']
 
+SHELL_PLUS = 'ipython'
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -36,8 +41,8 @@ CONTACTS = [('Styret', 'styret@hc.ntnu.no')]
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
-ROOT_URLCONF = 'chemie.urls'
-WSGI_APPLICATION = 'chemie.wsgi.application'
+ROOT_URLCONF = 'chemie.chemie.urls'
+WSGI_APPLICATION = 'chemie.chemie.wsgi.application'
 
 
 
@@ -74,19 +79,20 @@ THIRD_PARTY_APPS = [
     'rest_framework.authtoken',
     'smart_selects',
     'ckeditor',
+    'django_extensions',
 ]
 
 LOCAL_APPS = [
-    'chemie',
-    'home',
-    'news',
-    'shitbox',
-    'committees',
-    'events',
-    'lockers',
-    'yearbook',
-    'customprofile',
-    'picturecarousel',
+    'chemie.chemie',
+    'chemie.home',
+    'chemie.news',
+    'chemie.shitbox',
+    'chemie.committees',
+    'chemie.events',
+    'chemie.lockers',
+    'chemie.yearbook',
+    'chemie.customprofile',
+    'chemie.picturecarousel',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -94,7 +100,7 @@ INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
-MIDDLEWARE_CLASSES = [
+MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -111,8 +117,8 @@ MIDDLEWARE_CLASSES = [
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')],
-        'APP_DIRS': False,
+        'DIRS': [BASE_DIR.path('chemie/chemie/templates/')(), ],
+        'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.contrib.auth.context_processors.auth',
@@ -127,8 +133,9 @@ TEMPLATES = [
                 'django.contrib.messages.context_processors.messages',
                 'sekizai.context_processors.sekizai',
             ],
-            'loaders': ['django.template.loaders.filesystem.Loader',
-                        'django.template.loaders.app_directories.Loader']
+            'libraries':{
+                'chemie_tags': 'chemie.chemie.templatetags.chemie_tags',
+            }
         },
     }
 ]
@@ -145,7 +152,7 @@ if DEBUG:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': os.path.join(BASE_DIR, 'db1.sqlite3'),
+            'NAME': BASE_DIR.path('db1.sqlite3')(),
         }
     }
 else:
@@ -160,6 +167,7 @@ else:
             'CONN_MAX_AGE': 600,
         }
     }
+
 
 
 # PASSWORD VALIDATION
@@ -212,16 +220,16 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "chemie/static"),
+    BASE_DIR.path('chemie/chemie/static/')(),
 ]
 
-STATIC_ROOT = os.path.join(BASE_DIR, "static")
+STATIC_ROOT = BASE_DIR.path('chemie/static/')()
 
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = BASE_DIR.path('chemie/media/')()
 
 # Registration for new HC users
 REGISTRATION_KEY = os.environ.get('REGISTRATION_KEY') or ''
