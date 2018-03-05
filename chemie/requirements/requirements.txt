@@ -8,7 +8,7 @@ apipkg==1.4               # via execnet
 asn1crypto==0.24.0        # via cryptography
 attrs==17.4.0             # via pytest
 bleach==1.5.0             # via wiki
-cffi==1.11.4              # via cryptography
+cffi==1.11.5              # via cryptography
 click==6.7                # via pip-tools
 coverage==4.3.1
 cryptography==2.1.4       # via pyopenssl
@@ -33,7 +33,7 @@ django==1.11
 djangorestframework==3.5.3
 execnet==1.5.0            # via pytest-xdist
 factory-boy==2.9.2
-faker==0.8.10             # via factory-boy
+faker==0.8.11             # via factory-boy
 first==2.0.1              # via pip-tools
 freezegun==0.3.9
 future==0.16.0            # via django-extended-choices
@@ -57,10 +57,10 @@ pytest-forked==0.2        # via pytest-xdist
 pytest-xdist==1.20.1
 pytest==3.3.0
 python-dateutil==2.6.1    # via faker, freezegun
-pytz==2017.3              # via django
+pytz==2018.3              # via django
 six==1.11.0               # via bleach, cryptography, django-extensions, django-nyt, faker, freezegun, html5lib, pip-tools, pyopenssl, pytest, python-dateutil, wiki
 sorl-thumbnail==12.4.1    # via wiki
-text-unidecode==1.1       # via faker
+text-unidecode==1.2       # via faker
 typing==3.6.4             # via django-extensions
 werkzeug==0.13
 wiki==0.3
