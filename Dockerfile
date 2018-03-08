@@ -1,8 +1,10 @@
 FROM python:3.6.4
-RUN apt-get update
-RUN mkdir /code
-ADD requirements.txt /src/
-RUN pip install -r /src/requirements.txt
+RUN mkdir /chemie
 
-WORKDIR /code
+ADD requirements /requirements/
+ADD manage.py /
+RUN pip install -r /requirements/requirements.txt
+RUN pip install -r /requirements/prod.txt
+
+WORKDIR /chemie
 CMD ["bash", "/code/entrypoint.sh"]

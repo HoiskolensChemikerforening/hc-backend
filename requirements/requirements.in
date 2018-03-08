@@ -30,3 +30,5 @@ wiki==0.3
 
 coverage==4.3.1
 markdown==2.6.11
+
+django-environ==0.4.4

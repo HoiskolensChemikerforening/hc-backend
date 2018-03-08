@@ -108,7 +108,7 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.access_card is '':
-            self.access_card = f'{self.pk} - UGYLDIG KORTNUMMER'
+            self.access_card = f'{self.pk} - INVALID'
 
         return super().save(*args, **kwargs)
 

@@ -41,7 +41,7 @@ urlpatterns = [
     url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel'))
 ]
 
-handler404 = 'chemie.views.page_not_found'
+handler404 = 'chemie.chemie.views.page_not_found'
 
 urlpatterns += [
     url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
@@ -55,8 +55,8 @@ if settings.DEBUG:
     from chemie.chemie.views import page_not_found
     from django.views.defaults import server_error
 
-    urlpatterns += [url(r'test404', page_not_found, name='404 ')]
-    urlpatterns += [url(r'test500', server_error, name='404 ')]
+    urlpatterns += [url(r'test404', page_not_found, name='404')]
+    urlpatterns += [url(r'test500', server_error, name='404')]
 
 if 'debug_toolbar' in settings.INSTALLED_APPS:
     import debug_toolbar

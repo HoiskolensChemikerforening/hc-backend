@@ -13,17 +13,10 @@ BASE_DIR = environ.Path(__file__) - 4  # (chemie/chemie/settings/base.py - 3 = c
 APPS_DIR = BASE_DIR.path("chemie/")()
 SETTINGS_DIR = environ.Path(__file__) - 1
 
+# SECURITY WARNING: keep the secret key used in production secret!
+SECRET_KEY = 'd)%%e$l#xa7xtvro#(%n)q)h$_399wth0i1^@hxrruqz$0&@zx'
 
-if os.environ.get("DEBUG") == "False":
-    ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS')
-    SECRET_KEY = os.environ.get('SECRET_KEY')
-    DEBUG = False
-else:
-    # SECURITY WARNING: keep the secret key used in production secret!
-    SECRET_KEY = 'd)%%e$l#xa7xtvro#(%n)q)h$_399wth0i1^@hxrruqz$0&@zx'
-    # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
-    ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['*']
 
 SHELL_PLUS = 'ipython'
 
@@ -139,35 +132,6 @@ TEMPLATES = [
         },
     }
 ]
-
-if not DEBUG:
-    TEMPLATES[0]['OPTIONS']['loaders'] = [('django.template.loaders.cached.Loader',
-                                           ['django.template.loaders.filesystem.Loader',
-                                            'django.template.loaders.app_directories.Loader'])]
-
-
-# DATABASE CONFIGURATION
-# ------------------------------------------------------------------------------
-if DEBUG:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR.path('db1.sqlite3')(),
-        }
-    }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
-            'NAME': os.environ.get('POSTGRES_DB'),
-            'USER': os.environ.get('POSTGRES_USER'),
-            'PASSWORD': os.environ.get('POSTGRES_PASSWORD'),
-            'HOST': 'database',
-            'PORT': '5432',
-            'CONN_MAX_AGE': 600,
-        }
-    }
-
 
 
 # PASSWORD VALIDATION
@@ -392,4 +356,4 @@ THUMBNAIL_PRESERVE_FORMAT = True
 THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
-INTERNAL_IPS = '127.0.0.1'
+
