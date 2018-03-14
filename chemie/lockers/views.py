@@ -13,9 +13,9 @@ from .models import Locker, LockerUser, Ownership, LockerToken
 
 
 def view_lockers(request, page=1):
-    locker_list = Locker.objects.all().prefetch_related('owner')
+    free_locker_list = Locker.objects.filter(owner__isnull=True).prefetch_related('owner')
     free_lockers = Locker.objects.filter(owner__isnull=True).count()
-    paginator = Paginator(locker_list, 40)
+    paginator = Paginator(free_locker_list, 40)
 
     try:
         lockers = paginator.page(page)
