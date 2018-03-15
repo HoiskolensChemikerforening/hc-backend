@@ -38,10 +38,10 @@ then
     DBFILE=$REMOTE_BACKUP_DIR/database/$BACKUP_DIR/$TIME_PREFIX.gz
     MD5=($(md5sum $NOW/backup.gz))
     scp -P $REMOTE_PORT -r -o StrictHostKeyChecking=no -i /ssh/key $NOW/backup.gz $REMOTE_SSH_USER@$REMOTE_HOST:$DBFILE
-    MD5_SERVER=$(ssh $REMOTE_SSH_USER@$REMOTE_HOST -i /ssh/key -o StrictHostKeyChecking=no DBFILE=$DBFILE 'md5=($(md5sum $DBFILE)); echo $md5')
+    MD5_SERVER=$(ssh $REMOTE_SSH_USER@$REMOTE_HOST -p $REMOTE_PORT -i /ssh/key -o StrictHostKeyChecking=no DBFILE=$DBFILE 'md5=($(md5sum $DBFILE)); echo $md5')
     rm -r $NOW
     REMOTE_PATH=$REMOTE_BACKUP_DIR/media/$BACKUP_DIR/$TIME_PREFIX
-    rsync -vzrltoD -e "ssh -i /ssh/key" --rsync-path="mkdir -p $REMOTE_PATH && rsync" --delete /code/media/ $REMOTE_SSH_USER@$REMOTE_HOST:$REMOTE_PATH
+    rsync -vzrltoD -e "ssh -i /ssh/key -p $REMOTE_PORT" --rsync-path="mkdir -p $REMOTE_PATH && rsync" --delete /code/media/ $REMOTE_SSH_USER@$REMOTE_HOST:$REMOTE_PATH --port $REMOTE_PORT
 
     if [ "$MD5" == "$MD5_SERVER" ]
     then
