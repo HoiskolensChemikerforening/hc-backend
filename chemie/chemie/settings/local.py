@@ -1,11 +1,10 @@
-from .base import *
-
 DEBUG = True
 ALLOWED_HOSTS = ['*']
 INTERNAL_IPS = ['127.0.0.1']
 THUMBNAIL_DEBUG = True
+SECRET_KEY = 'lk'
 
-
+from .base import *
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 DATABASES = {
