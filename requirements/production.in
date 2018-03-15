@@ -1,0 +1,4 @@
+-r base.in
+
+uwsgi==2.0.15
+raven==6.6.0

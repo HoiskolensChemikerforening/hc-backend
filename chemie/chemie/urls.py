@@ -15,7 +15,7 @@ Including another URLconf
 """
 import django.contrib.auth.views as auth_views
 from django.conf import settings
-from django.conf.urls import include, url, handler404
+from django.conf.urls import include, url
 from django.conf.urls.static import static
 from django.contrib import admin
 from django_nyt.urls import get_pattern as get_nyt_pattern
@@ -24,35 +24,42 @@ from wiki.urls import get_pattern as get_wiki_pattern
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('home.urls', namespace='frontpage')),
-    url(r'^sladreboks/', include('shitbox.urls', namespace='shitbox')),
-    url(r'^verv/', include('committees.urls', namespace='verv')),
-    url(r'^bokskap/', include('lockers.urls', namespace='bokskap')),
-    url(r'^news/', include('news.urls', namespace='news')),
-    url(r'^', include('customprofile.urls', namespace="profile")),
+    url(r'^', include('chemie.home.urls', namespace='frontpage')),
+    url(r'^sladreboks/', include('chemie.shitbox.urls', namespace='shitbox')),
+    url(r'^verv/', include('chemie.committees.urls', namespace='verv')),
+    url(r'^bokskap/', include('chemie.lockers.urls', namespace='bokskap')),
+    url(r'^news/', include('chemie.news.urls', namespace='news')),
+    url(r'^', include('chemie.customprofile.urls', namespace="profile")),
     url(r'^login/$', auth_views.login, name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
-    url(r'^events/', include('events.urls', namespace='events')),
+    url(r'^events/', include('chemie.events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
     url(r'^wiki/_accounts/sign-up/', auth_views.login),
     url(r'^wiki/', get_wiki_pattern()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^carousel/', include('picturecarousel.urls', namespace='carousel'))
+    url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel'))
 ]
 
-handler404 = 'chemie.views.page_not_found'
+handler404 = 'chemie.chemie.views.page_not_found'
 
 urlpatterns += [
     url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
 ]
 
 if settings.DEBUG:
-    urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    from django.contrib.staticfiles.urls import staticfiles_urlpatterns
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += staticfiles_urlpatterns()
 
-    from chemie.views import page_not_found
+    from chemie.chemie.views import page_not_found
     from django.views.defaults import server_error
 
-    urlpatterns += [url(r'test404', page_not_found, name='404 ')]
-    urlpatterns += [url(r'test500', server_error, name='404 ')]
+    urlpatterns += [url(r'test404', page_not_found, name='404')]
+    urlpatterns += [url(r'test500', server_error, name='404')]
+
+if 'debug_toolbar' in settings.INSTALLED_APPS:
+    import debug_toolbar
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]

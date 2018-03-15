@@ -10,12 +10,12 @@ services:
 
   website:
     restart: always
-    build: ./chemie
+    build: .
     volumes:
-      - ./chemie:/code
+      - ./chemie:/chemie
       - ./logs/gunicorn:/gunicorn-logfiles
-      - media:/code/media
-      - static:/code/static
+      - media:/chemie/media
+      - static:/chemie/static
     depends_on:
       - database
     env_file: .env

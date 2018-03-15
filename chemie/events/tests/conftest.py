@@ -1,4 +1,4 @@
-from customprofile.factories import RandomProfileFactory
+from chemie.customprofile.factories import RandomProfileFactory
 import pytest
 
 # Fixture for logged in client with user profile

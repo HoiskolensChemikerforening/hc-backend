@@ -3,7 +3,7 @@ from django.db.models import Q
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 
-from customprofile.models import Profile, GRADES
+from chemie.customprofile.models import Profile, GRADES
 from .forms import NameSearchForm
 
 

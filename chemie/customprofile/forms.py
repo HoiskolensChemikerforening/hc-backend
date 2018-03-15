@@ -3,7 +3,7 @@ from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import ValidationError
-from chemie.settings import REGISTRATION_KEY
+from chemie.chemie.settings import REGISTRATION_KEY
 
 from .models import Profile
 

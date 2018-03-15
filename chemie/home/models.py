@@ -15,7 +15,7 @@ class FundsApplication(models.Model):
     applier = models.CharField(max_length=2000, verbose_name='Søker på vegne av',)
 
     # Name of person who sent application
-    author = models.ForeignKey(User, verbose_name='Innsender')
+    author = models.ForeignKey(User, verbose_name='Innsender', on_delete=models.CASCADE)
 
     # Short description of purpose
     purpose = models.CharField(max_length=2000, verbose_name='Formål')

@@ -5,9 +5,9 @@ from django.core.files import File
 from django.test import TestCase
 from django.utils import timezone
 
-from chemie import settings
-from customprofile.factories import RandomProfileFactory
-from events.models import Social, SocialEventRegistration
+from chemie.chemie import settings
+from chemie.customprofile.factories import RandomProfileFactory
+from chemie.events.models import Social, SocialEventRegistration
 from ..views import set_user_event_status
 
 

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from lockers.models import Ownership
-from lockers.email import send_re_activation_mail
+from chemie.lockers.models import Ownership
+from chemie.lockers.email import send_re_activation_mail
 
 
 class Command(BaseCommand):

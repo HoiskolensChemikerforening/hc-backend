@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from .models import Committee, Position
-from events.admin import DropdownFilter
+from chemie.events.admin import DropdownFilter
 from django.contrib.auth.models import User
 
 

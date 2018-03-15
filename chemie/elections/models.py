@@ -30,7 +30,7 @@ class Ticket(models.Model):
 
 class Candidate(models.Model):
     """docstring for Candidate"""
-    postition = models.ForeignKey(Position)
+    postition = models.ForeignKey(Position, on_delete=models.CASCADE)
     users = models.ManyToManyField(User)
     votes = models.ManyToManyField(Ticket, through = 'Vote')
 
@@ -42,8 +42,8 @@ class Candidate(models.Model):
 
 class Vote(models.Model):
     """docstring for Vote"""
-    candidate = models.ForeignKey(Candidate)
-    ticket = models.ForeignKey(Ticket)
+    candidate = models.ForeignKey(Candidate, on_delete=models.CASCADE)
+    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     time = models.TimeField(auto_now_add=True)
 
     @transaction.atomic

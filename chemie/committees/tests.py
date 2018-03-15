@@ -3,7 +3,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import reverse
 from django.test import TestCase, Client
 
-from customprofile.factories import RandomUserFactory
+from chemie.customprofile.factories import RandomUserFactory
 from .factories import LowPermissionPositionFactory, HighPermissionPositionFactory
 
 

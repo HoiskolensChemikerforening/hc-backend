@@ -10,9 +10,9 @@ from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from post_office import mail
 
-from events.models import Social, Bedpres
-from home.forms import FlatpageEditForm
-from news.models import Article
+from chemie.events.models import Social, Bedpres
+from chemie.home.forms import FlatpageEditForm
+from chemie.news.models import Article
 from .forms import ContactForm, PostFundsForm
 
 

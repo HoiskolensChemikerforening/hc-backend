@@ -7,8 +7,8 @@ from freezegun import freeze_time
 from post_office.models import Email
 from django.shortcuts import reverse
 
-from customprofile.factories import RandomProfileFactory
-from customprofile.models import GRADES
+from chemie.customprofile.factories import RandomProfileFactory
+from chemie.customprofile.models import GRADES
 from .factories import BedpresEventFactory
 from ..models import BedpresRegistration, REGISTRATION_STATUS
 from ..views import set_user_event_status

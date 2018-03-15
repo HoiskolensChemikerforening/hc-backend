@@ -26,9 +26,9 @@ def make_all_access_cards_unique(app, schema_editor):
         # Finally: Set access_card to empty string and saving the object
         # Model save function is called and will create a unique, and invalid (!), access card number
     duplicates = Profile.objects.filter(q_duplicate_or)
-    print(duplicates.count())
+
     for duplicate in duplicates:
-        duplicate.access_card = f'{duplicate.pk} - UGYLDIG KORTNUMMER'
+        duplicate.access_card = f'{duplicate.pk} - INVALID'
         duplicate.save()
 
 

@@ -1,6 +1,6 @@
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
@@ -13,7 +13,7 @@ class Article(models.Model):
     content = RichTextField(verbose_name='Beskrivelse', config_name='news')
     published_date = models.DateTimeField(auto_now_add=True)
     image = ImageField(upload_to='news', verbose_name="Bilde")
-    author = models.ForeignKey(User)
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
         return self.title

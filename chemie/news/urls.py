@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = 'news'
+
 urlpatterns = [
     url(r'^$', views.list_all, name = 'index'),
     url(r'^detail/(?P<article_id>[0-9]+)/(?P<slug>[\w0-9/]+)', views.news_details, name='detail'),

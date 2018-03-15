@@ -1,12 +1,14 @@
 import factory
 
-from customprofile.factories import RandomUserFactory
+from chemie.customprofile.factories import RandomUserFactory
 from ..models import Bedpres, Social
 from django.utils import timezone
 from datetime import timedelta
 
+
 def now_offset_days(days=0):
     return timezone.now() + timedelta(days=days)
+
 
 class BaseEventFactory(factory.DjangoModelFactory):
     title = 'Event Title'

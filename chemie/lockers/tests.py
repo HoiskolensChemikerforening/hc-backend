@@ -4,9 +4,9 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.test import TestCase
 from django.utils import timezone
 
-from lockers.models import LOCKER_COUNT
-from lockers.models import LockerUser, Locker, LockerToken, Ownership
-from lockers.management.commands.resetlockerstatus import reset_locker_ownerships
+from chemie.lockers.models import LOCKER_COUNT
+from chemie.lockers.models import LockerUser, Locker, LockerToken, Ownership
+from chemie.lockers.management.commands.resetlockerstatus import reset_locker_ownerships
 
 
 def create_user_with_locker(count):

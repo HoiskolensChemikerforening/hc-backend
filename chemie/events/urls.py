@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required, permission_required
 
 from . import views
 
+app_name = 'events'
+
 # Events
 urlpatterns = [
     url(r'^social/$',

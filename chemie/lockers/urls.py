@@ -2,6 +2,8 @@ from django.conf.urls import url
 
 from . import views
 
+app_name = 'lockers'
+
 urlpatterns = [
     url(r'^$', views.view_lockers, name='index'),
     url(r'^(?P<page>[0-9]+)$', views.view_lockers, name='detail'),

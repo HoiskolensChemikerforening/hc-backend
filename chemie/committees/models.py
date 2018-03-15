@@ -1,7 +1,7 @@
 from ckeditor.fields import RichTextField
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_delete
 from django.db.models.signals import pre_save, m2m_changed
@@ -28,8 +28,8 @@ class Committee(models.Model):
 class Position(models.Model):
     title = models.CharField(max_length=100, verbose_name="Stillingsnavn")
     email = models.EmailField(null=True, blank=True, verbose_name="Epost")
-    committee = models.ForeignKey(Committee, )
-    permission_group = models.ForeignKey(Group, null=True)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
+    permission_group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
     max_members = models.PositiveSmallIntegerField(default=1, verbose_name='Antall medlemmer')
     can_manage_committee = models.BooleanField(default=False)
     users = models.ManyToManyField(User, blank=True, verbose_name='medlem')

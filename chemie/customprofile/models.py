@@ -74,7 +74,7 @@ class ProfileManager(models.Manager):
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile')
+    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
 
     grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn")
     start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR, verbose_name="Startår")
@@ -93,7 +93,7 @@ class Profile(models.Model):
     image_secondary = ImageField(upload_to='avatars')
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
-    membership = models.OneToOneField("Membership", blank=True, null=True, related_name="membership")
+    membership = models.OneToOneField("Membership", blank=True, null=True, related_name="membership", on_delete=models.CASCADE)
 
     objects = ProfileManager()
 
@@ -108,7 +108,7 @@ class Profile(models.Model):
 
     def save(self, *args, **kwargs):
         if self.access_card is '':
-            self.access_card = f'{self.pk} - UGYLDIG KORTNUMMER'
+            self.access_card = f'{self.pk} - INVALID'
 
         return super().save(*args, **kwargs)
 
@@ -116,7 +116,7 @@ class Profile(models.Model):
 class Membership(models.Model):
     start_date = models.DateTimeField(auto_now=False, auto_now_add=True)
     end_date = models.DateTimeField(auto_now=False, auto_now_add=False)
-    endorser = models.ForeignKey(User)
+    endorser = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def is_active(self):
         return self.start_date < timezone.now() < self.end_date
@@ -128,7 +128,7 @@ class UserTokenManager(models.Manager):
 
 
 class UserToken(models.Model):
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     key = models.UUIDField(default=uuid.uuid4, editable=False)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 

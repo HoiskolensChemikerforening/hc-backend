@@ -4,7 +4,7 @@ from __future__ import unicode_literals
 
 from django.db import migrations, models
 import django.db.models.deletion
-import lockers.validators
+import chemie.lockers.validators
 import uuid
 
 
@@ -40,7 +40,7 @@ class Migration(migrations.Migration):
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('first_name', models.CharField(max_length=40, verbose_name='Fornavn')),
                 ('last_name', models.CharField(max_length=40, verbose_name='Etternavn')),
-                ('email', models.EmailField(max_length=254, validators=[lockers.validators.validate_NTNU], verbose_name='NTNU-epost')),
+                ('email', models.EmailField(max_length=254, validators=[chemie.lockers.validators.validate_NTNU], verbose_name='NTNU-epost')),
                 ('created', models.DateField(auto_now_add=True)),
             ],
         ),

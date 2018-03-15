@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
-from lockers.models import Locker, Ownership
-from lockers.email import send_final_warning
+from chemie.lockers.models import Locker, Ownership
+from chemie.lockers.email import send_final_warning
 
 
 class Command(BaseCommand):
