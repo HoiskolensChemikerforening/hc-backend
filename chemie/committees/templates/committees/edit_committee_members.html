@@ -1,6 +1,7 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
 {% load staticfiles %}
+{% load static %}
 
 
 {% block nav_header %}
@@ -12,26 +13,21 @@
 {% endblock nav_sub_header %}
 
 {% block header %}
-  <link href="/static/autocomplete_light/vendor/select2/dist/css/select2.css" type="text/css" media="all"
-        rel="stylesheet"/>
-  <link href="/static/autocomplete_light/select2.css" type="text/css" media="all" rel="stylesheet"/>
-  <script type="text/javascript" src="/static/admin/js/jquery.init.js"></script>
-  <script type="text/javascript" src="/static/smart-selects/admin/js/chainedfk.js"></script>
-  <script type="text/javascript" src="/static/autocomplete_light/jquery.init.js"></script>
-  <script type="text/javascript" src="/static/autocomplete_light/autocomplete.init.js"></script>
-  <script src="/static/autocomplete_light/vendor/select2/dist/js/select2.full.js" defer></script>
-  <script type="text/javascript" src="/static/autocomplete_light/forward.js"></script>
-  <script src="/static/autocomplete_light/select2.js" defer></script>
-
   <style>
-    .select2-container {
+    span.select2-container {
       width: inherit !important;
+      display: block;
     }
+
     label {
       display: block;
     }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
   </style>
-{% endblock %}
+{% endblock header %}
 
 {% block content %}
   <div class="col s12 m8 l8">
@@ -45,9 +41,10 @@
             {{ formset.management_form }}
             {% for form in formset %}
               <div class="row">
-                <div class="col s8">
+                <div class="col s12 l8">
                   <h5>{{ form.instance.title }} ({{ form.instance.max_members }} stk)</h5>
-                  {{ form }}
+                  {{ form.as_p }}
+
                 </div>
               </div>
             {% endfor %}
@@ -59,19 +56,14 @@
     </div>
   </div>
 
+
 {% endblock content %}
 
 
 {% block footer_script %}
 
-  <!-- <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script> -->
-  <script>
-      $(function () {
-          $("#id_position").on("change", function () {
-              $('select').material_select();
-          })
-      });
-  </script>
+  <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{{ formset.form.media }}
 
 {% endblock footer_script %}
 
