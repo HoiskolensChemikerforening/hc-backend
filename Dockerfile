@@ -6,4 +6,4 @@ ADD manage.py /
 RUN pip install -r /requirements/production.txt
 
 WORKDIR /chemie
-CMD ["bash", "/code/entrypoint.sh"]
+CMD ["bash", "/chemie/entrypoint.sh"]
