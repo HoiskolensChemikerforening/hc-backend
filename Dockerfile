@@ -3,8 +3,7 @@ RUN mkdir /chemie
 
 ADD requirements /requirements/
 ADD manage.py /
-RUN pip install -r /requirements/requirements.txt
-RUN pip install -r /requirements/prod.txt
+RUN pip install -r /requirements/production.txt
 
 WORKDIR /chemie
 CMD ["bash", "/code/entrypoint.sh"]
