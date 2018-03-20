@@ -20,25 +20,6 @@ from .forms import RegisterEventForm, SocialRegisterUserForm, DeRegisterUserForm
 from .models import Social, SocialEventRegistration, REGISTRATION_STATUS, RegistrationMessage, Bedpres, \
     BedpresRegistration
 
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-
-
-def list_social(request, page=1):
-    social_list = Social.objects.all()
-    paginator = Paginator(social_list, 3)
-
-    try:
-        social = paginator.page(page)
-    except PageNotAnInteger:
-        social = paginator.page(1)
-    except EmptyPage:
-        social = paginator.page(paginator.num_pages)
-
-    context = {
-        "social": social,
-    }
-    return render(request, "events/frontpage_events.html", context)
-
 
 class SuccessMessageMixin(object):
     message_content = '', '', ''
