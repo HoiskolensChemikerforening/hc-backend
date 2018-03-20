@@ -89,7 +89,7 @@ class BaseEvent(models.Model):
 
     def percentage_filled(self):
         try:
-            return round((self.attendees.all().count() / self.sluts) * 100)
+            return round((self.registered_users() / self.sluts) * 100)
         except ZeroDivisionError:
             return "N/A"
 
