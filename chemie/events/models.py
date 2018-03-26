@@ -162,6 +162,13 @@ class Social(BaseEvent):
         attendees_with_companion = attendees.filter(companion__gt='')
         return attendees_with_companion.count() + attendees.count()
 
+    def percentage_paid(self):
+        try:
+            paid = SocialEventRegistration.objects.filter(event=self, payment_status=True).count()
+            return round(paid / self.attendees.count() * 100)
+        except ZeroDivisionError:
+            return "N/A"
+
 
 class Bedpres(BaseEvent):
     author = models.ForeignKey(User, related_name='+', on_delete=models.CASCADE)
