@@ -1,13 +1,6 @@
 from .base import *
 import raven
 
-
-SETTINGS_DIR = environ.Path(__file__) - 1
-
-env = environ.Env()
-env_file = SETTINGS_DIR.path('.env')()
-env.read_env(env_file)
-
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 DATABASES = {
@@ -33,7 +26,7 @@ INSTALLED_APPS += [
 # SENTRY CONFIGURATION
 # ------------------------------------------------------------------------------
 RAVEN_CONFIG = {
-    'dsn': env('SENTRY'),
+    'dsn': os.environ.get('SENTRY'),
     # If you are using git, you can also automatically configure the
     # release based on the git info.
     'release': raven.fetch_git_sha(os.path.abspath(os.pardir)),
