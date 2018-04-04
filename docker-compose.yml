@@ -41,8 +41,14 @@ services:
     links:
       - database:database
 
+  redis:
+      restart: always
+      image: redis:latest
+      volumes:
+        - redisdata:/data
 
 volumes:
   dbdata:
   media:
   static:
+  redisdata:
