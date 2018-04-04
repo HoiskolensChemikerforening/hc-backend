@@ -15,6 +15,3 @@ else:
             from .local import *
         except ImportError as e:
             raise ImportError("Couldn't load local settings chemie.chemie.settings.local")
-
-
-a = 1
