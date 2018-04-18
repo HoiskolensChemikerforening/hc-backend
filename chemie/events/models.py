@@ -171,15 +171,6 @@ class Social(BaseEvent):
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
 
     attendees = models.ManyToManyField(User, through='SocialEventRegistration')
-    """
-    def get_atttendees(self):
-        attendees_first_grade = SocialEventRegistration.objects.filter(event=self, user__profile__grade=1).prefetch_related('user__profile__grade')
-        attendees_second_grade = SocialEventRegistration.objects.filter(event=self, user__profile__grade=2).prefetch_related('user__profile__grade')
-        attendees_third_grade = SocialEventRegistration.objects.filter(event=self, user__profile__grade=3).prefetch_related('user__profile__grade')
-        attendees_fourth_grade = SocialEventRegistration.objects.filter(event=self, user__profile__grade=4).prefetch_related('user__profile__grade')
-        attendees_fifth_grade = SocialEventRegistration.objects.filter(event=self, user__profile__grade=5).prefetch_related('user__profile__grade')
-        attendees_sixth_grade = SocialEventRegistration.objects.filter(event=self, user__profile__grade=6).prefetch_related('user__profile__grade')
-    """
 
     def get_absolute_url(self):
         return reverse('events:detail_social', kwargs={"pk": self.pk})
