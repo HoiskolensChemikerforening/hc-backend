@@ -166,9 +166,12 @@ class ViewSocialDetailsView(DetailView):
             prefetch_related('user__profile'). \
             order_by('user__profile__grade', 'user__first_name')
 
+        first, second, third, fourth, fifth, finished = self.object.get_attendees()
+
         confirmed = attendees.filter(event=self.object, status=REGISTRATION_STATUS.CONFIRMED)
         waiting = attendees.filter(event=self.object, status=REGISTRATION_STATUS.WAITING)
-        context.update({'attendees': confirmed, 'waiting_list': waiting})
+        context.update({'attendees': confirmed, 'waiting_list': waiting, 'first': first, 'second': second,\
+                        'third': third, 'fourth': fourth, 'fifth': fifth, 'finished': finished})
         return context
 
 

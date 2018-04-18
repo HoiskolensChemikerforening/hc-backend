@@ -1,3 +1,4 @@
+<!---
 {% regroup user_list by user.profile.get_grade_display as attendees_list %}
 <table class="responsive-table">
   {% for grade in attendees_list %}
@@ -9,3 +10,58 @@
     </tr>
   {% endfor %}
 </table>
+--->
+{% if user.is_authenticated %}
+<ul class="collapsible">
+    <li>
+      <div class="collapsible-header"><i class="material-icons">child_friendly</i>Første</div>
+        <div class="collapsible-body">
+            {% for user in first %}
+                <p>{{ user }}</p>
+            {% endfor %}
+        </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">child_care</i>Andre</div>
+      <div class="collapsible-body">
+            {% for user in second %}
+                <p>{{ item.user.get_full_name }}</p>
+            {% endfor %}
+        </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">face</i>Tredje</div>
+      <div class="collapsible-body">
+            {% for user in third %}
+                <p>{{ item.user.get_full_name }}</p>
+            {% endfor %}
+        </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">nature_people</i>Fjerde</div>
+        <div class="collapsible-body">
+            {% for user in fourth %}
+                <p>{{ item.user.get_full_name }}</p>
+            {% endfor %}
+        </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">pregnant_woman</i>Femte</div>
+        <div class="collapsible-body">
+            {% for user in fifth %}
+                <p>{{ item.user.get_full_name }}</p>
+            {% endfor %}
+        </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons">accessible</i>Utgåtte</div>
+        <div class="collapsible-body">
+            {% for user in finished %}
+                <p>{{ item.user.get_full_name }}</p>
+            {% endfor %}
+        </div>
+    </li>
+</ul>
+{% else %}
+    <p>Logg inn for å se påmeldte.</p>
+{% endif %}
