@@ -96,7 +96,7 @@ class BaseEvent(models.Model):
     def bump_waiting(self):
         if self.waiting_users():
             if self.has_spare_slots:
-                attendees = self.attendees.through.objects.filter(status=REGISTRATION_STATUS.WAITING).order_by(
+                attendees = self.attendees.through.objects.filter(event=self, status=REGISTRATION_STATUS.WAITING).order_by(
                     'created')[:self.spare_slots]
                 for attendee in attendees:
                     attendee.confirm()
@@ -114,7 +114,7 @@ class BaseEvent(models.Model):
         return self.spare_slots > 0
 
     def save(self, *args, **kwargs):
-        super(BaseEvent, self).save(*args, **kwargs)
+        super().save(*args, **kwargs)
         self.bump_waiting()
         if self.allowed_grades_previous:
             new_grades = set(self.allowed_grades) - set(self.allowed_grades_previous)
