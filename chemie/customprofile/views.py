@@ -23,7 +23,7 @@ from .models import UserToken, Profile, Membership, GRADES
 
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
-    user_profile_form = RegisterProfileForm(request.POST or None)
+    user_profile_form = RegisterProfileForm(request.POST or None, request.FILES or None)
     if user_core_form.is_valid() and user_profile_form.is_valid():
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
@@ -33,7 +33,7 @@ def register_user(request):
         profile.user = user
         profile.save()
         messages.add_message(request, messages.SUCCESS, 'Brukeren din er opprettet!', extra_tags='Takk!')
-        return HttpResponseRedirect('/')
+        return redirect('profile:register')
     context = {
         "user_core_form": user_core_form,
         "user_profile_form": user_profile_form,
