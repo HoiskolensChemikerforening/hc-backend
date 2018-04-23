@@ -3,6 +3,9 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 
+#fundamentet, en som en klasse i java. sier hvilke variabler du har
+
+
 PRICE_RANGE_CHOICES = (
         (1, 'Under 500 kr'),
         (2, 'Over 500 kr'),
@@ -39,3 +42,10 @@ class FundsApplication(models.Model):
 
     # Receipt
     receipt = models.FileField(upload_to='funds_application', blank=True, null=True, verbose_name="Kvittering")
+
+
+class OfficeApplication(models.Model):
+
+    #må hente inn studentkortnummer hvis det allerede er lagt inn, evt skrive det inn. Da kan det også lagres i customprofile
+
+    access_card = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Studentkortnummer")
