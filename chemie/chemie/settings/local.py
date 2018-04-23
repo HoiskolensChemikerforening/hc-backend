@@ -10,9 +10,9 @@ from .base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'webkom',
-        'USER': 'webkom',
-        'PASSWORD': '',
+        'NAME': 'hcdb',
+        'USER': 'hcuser',
+        'PASSWORD': 'abcdefgh',
         'HOST': '',
         'PORT': '5432',
         'CONN_MAX_AGE': 600,

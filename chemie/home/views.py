@@ -13,7 +13,10 @@ from post_office import mail
 from chemie.events.models import Social, Bedpres
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
-from .forms import ContactForm, PostFundsForm
+from .forms import ContactForm, PostFundsForm, PostOfficeForms  #importert
+
+
+#kobling mellom bruker og oss (mellom html som brukeren ser og models som er som klassen typ i java)
 
 
 def index(request):
@@ -95,6 +98,52 @@ def request_funds(request):
     }
 
     return render(request, "home/post_funds_form.html", context)
+
+
+@login_required()
+def request_office(request):   #laget en ly klasse liknende request_funds
+    office_form = PostOfficeForms(request.POST or None)
+    if office_form.is_valid():
+        instance = office_form.save(commit=False)   #dette vet jeg ikke om er riktig
+        instance.author = request.user
+        instance.save()
+        receipt = instance.receipt
+        attachments = None
+        if receipt.name is not None:
+            filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
+            attachment = receipt
+            attachments = {
+                filename: attachment.file,
+            }
+        _, mail_to = zip(*settings.CONTACTS)
+        mail.send(
+            mail_to,
+            'Webkom <webkom@hc.ntnu.no>',
+            template='office_request_form',
+            context={
+                'form_data': instance,
+                'root_url': get_current_site(None),
+            },
+            attachments=attachments
+        )
+        messages.add_message(request,
+                             messages.SUCCESS,
+                             'Din søknad er motatt og vil behandles snart.',
+                             extra_tags='Søknad sendt!',
+                             )
+        return redirect(reverse('frontpage:home'))
+    context = {
+        "office_form": office_form,
+    }
+
+    return render(request, "home/office_access_form.html", context)
+
+        #får feilmelding om at den ikke returnerer et http Response objekt, men None
+
+
+
+
+
 
 
 @permission_required('flatpages.change_flatpage')
