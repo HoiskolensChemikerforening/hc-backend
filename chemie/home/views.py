@@ -138,8 +138,6 @@ def request_office(request):   #laget en ly klasse liknende request_funds
 
     return render(request, "home/office_access_form.html", context)
 
-        #får feilmelding om at den ikke returnerer et http Response objekt, men None
-
 
 
 
