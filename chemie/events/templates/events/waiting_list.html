@@ -1,0 +1,18 @@
+{% if user.is_authenticated %}
+  <ul class="collapsible">
+      <li>
+        <div class="collapsible-header">Venteliste -
+          {{ user_list|length }} ventende</div>
+        <div class="collapsible-body">
+
+          {% for item in user_list %}
+            <p>{{ item.user.get_full_name }}</p>
+          {% endfor %}
+
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Logg inn for å se venteliste.</p>
+{% endif %}

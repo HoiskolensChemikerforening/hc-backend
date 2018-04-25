@@ -121,7 +121,7 @@
   {% if attendees_waiting %}
     <div class="row">
       <h2>Venteliste</h2>
-      {% include "events/attendees.html" with user_list=attendees_waiting %}
+      {% include "events/waiting_list.html" with user_list=attendees_waiting %}
     </div>
   {% endif %}
 
