@@ -1,11 +1,21 @@
-{% regroup user_list by user.profile.get_grade_display as attendees_list %}
-<table class="responsive-table">
-  {% for grade in attendees_list %}
-    <tr>
-      <th data-field="first-grade">{{ grade.grouper }}</th>
-      {% for item in grade.list %}
-        <td>{{ item.user.get_full_name }}</td>
-      {% endfor %}
-    </tr>
-  {% endfor %}
-</table>
+{% if user.is_authenticated %}
+  {% regroup user_list by user.profile.get_grade_display as attendees_list %}
+  <ul class="collapsible collapsible-round">
+    {% for grade in attendees_list %}
+      <li>
+        <div class="collapsible-header">{{ grade.grouper }} -
+          {{ grade.list|length }} påmeldt{{ grade.list|length|pluralize:"e" }}
+        </div>
+        <div class="collapsible-body">
+
+          {% for item in grade.list %}
+            <p>{{ item.user.get_full_name }}</p>
+          {% endfor %}
+
+        </div>
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>Logg inn for å se påmeldte.</p>
+{% endif %}

@@ -133,6 +133,19 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
     padding: 0 16px;
 }
 
+.collapsible-round
+ {
+    border-radius: 8px 8px 8px 8px;
+}
+
+.collapsible-round > li:last-child > .collapsible-header {
+    border-radius: 0 0 8px 8px;
+}
+
+.collapsible-round > li:first-child > .collapsible-header {
+    border-radius: 8px 8px 0 0;
+}
+
 /* Card title color */
 .card-title {
     color: var(--card-text);

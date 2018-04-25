@@ -1,0 +1,17 @@
+{% if user.is_authenticated %}
+  <ul class="collapsible collapsible-round">
+      <li>
+        <div class="collapsible-header">Venteliste -
+          {{ user_list|length }} påmeldt{{ user_list|length|pluralize:"e" }}</div>
+        <div class="collapsible-body">
+
+          {% for item in user_list %}
+            <p>{{ item.user.get_full_name }}</p>
+          {% endfor %}
+
+        </div>
+      </li>
+  </ul>
+{% else %}
+  <p>Logg inn for å se venteliste.</p>
+{% endif %}
