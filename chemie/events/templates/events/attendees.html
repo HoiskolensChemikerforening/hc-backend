@@ -1,16 +1,18 @@
-{% if user.is_authenticated %}
+{% if user.is_authenticated or 1 %}
   {% regroup user_list by user.profile.get_grade_display as attendees_list %}
   <ul class="collapsible">
     {% for grade in attendees_list %}
       <li>
-        <div class="collapsible-header">{{ grade.grouper }}</div>
+        <div class="collapsible-header">{{ grade.grouper }} -
+          {{ grade.list|length }} påmeldt{{ grade.list|length|pluralize:"e" }}
+        </div>
         <div class="collapsible-body">
 
-        {% for item in grade.list %}
-          <p>{{ item.user.get_full_name }}</p>
-        {% endfor %}
+          {% for item in grade.list %}
+            <p>{{ item.user.get_full_name }}</p>
+          {% endfor %}
 
-      </div>
+        </div>
       </li>
     {% endfor %}
   </ul>
