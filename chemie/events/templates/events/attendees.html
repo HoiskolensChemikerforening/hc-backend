@@ -1,54 +1,19 @@
 {% if user.is_authenticated %}
-<ul class="collapsible">
-    <li>
-      <div class="collapsible-header"><i class="material-icons">child_friendly</i>Første klasse &ndash; {{ first|length }} påmeldt(e)</div>
+  {% regroup user_list by user.profile.get_grade_display as attendees_list %}
+  <ul class="collapsible">
+    {% for grade in attendees_list %}
+      <li>
+        <div class="collapsible-header">{{ grade.grouper }}</div>
         <div class="collapsible-body">
-            {% for user in first %}
-                <p>{{ request.user.get_full_name }}</p>
-            {% endfor %}
-        </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">child_care</i>Andre klasse &ndash; {{ second|length }} påmeldt(e)</div>
-      <div class="collapsible-body">
-            {% for user in second %}
-                <p>{{ request.user.get_full_name }}</p>
-            {% endfor %}
-        </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">face</i>Tredje klasse &ndash; {{ third|length }} påmeldt(e)</div>
-      <div class="collapsible-body">
-            {% for user in third %}
-                <p>{{ request.user.get_full_name }}</p>
-            {% endfor %}
-        </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">nature_people</i>Fjerde klasse &ndash; {{ fourth|length }} påmeldt(e)</div>
-        <div class="collapsible-body">
-            {% for user in fourth %}
-                <p>{{ request.user.get_full_name }}</p>
-            {% endfor %}
-        </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">pregnant_woman</i>Femte klasse &ndash; {{ fifth|length }} påmeldt(e)</div>
-        <div class="collapsible-body">
-            {% for user in fifth %}
-                <p>{{ request.user.get_full_name }}</p>
-            {% endfor %}
-        </div>
-    </li>
-    <li>
-      <div class="collapsible-header"><i class="material-icons">accessible</i>Utgåtte &ndash; {{ finished|length }} påmeldt(e)</div>
-        <div class="collapsible-body">
-            {% for user in finished %}
-                <p>{{ request.user.get_full_name }}</p>
-            {% endfor %}
-        </div>
-    </li>
-</ul>
+
+        {% for item in grade.list %}
+          <p>{{ item.user.get_full_name }}</p>
+        {% endfor %}
+
+      </div>
+      </li>
+    {% endfor %}
+  </ul>
 {% else %}
-    <p>Logg inn for å se påmeldte.</p>
+  <p>Logg inn for å se påmeldte.</p>
 {% endif %}

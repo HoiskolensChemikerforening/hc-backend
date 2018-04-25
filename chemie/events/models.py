@@ -129,30 +129,6 @@ class BaseEvent(models.Model):
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
 
-    def get_attendees(self):
-        attendees_first_grade = self.attendees.through.objects.filter\
-            (event=self, user__profile__grade=1, status=REGISTRATION_STATUS.CONFIRMED)\
-            .prefetch_related('user__profile')
-        # TODO: Get users, not registration.
-        attendees_second_grade = self.attendees.through.objects.filter\
-            (event=self, user__profile__grade=2, status=REGISTRATION_STATUS.CONFIRMED)\
-            #.prefetch_related('user__profile__grade')
-        attendees_third_grade = self.attendees.through.objects.filter\
-            (event=self, user__profile__grade=3, status=REGISTRATION_STATUS.CONFIRMED)\
-            #.prefetch_related('user__profile__grade')
-        attendees_fourth_grade = self.attendees.through.objects.filter\
-            (event=self, user__profile__grade=4, status=REGISTRATION_STATUS.CONFIRMED)\
-            #.prefetch_related('user__profile__grade')
-        attendees_fifth_grade = self.attendees.through.objects.filter\
-            (event=self, user__profile__grade=5, status=REGISTRATION_STATUS.CONFIRMED)\
-            #.prefetch_related('user__profile__grade')
-        attendees_sixth_grade = self.attendees.through.objects.filter\
-            (event=self, user__profile__grade=6, status=REGISTRATION_STATUS.CONFIRMED)\
-            #.prefetch_related('user__profile__grade')
-
-        return attendees_first_grade, attendees_second_grade, attendees_third_grade, attendees_fourth_grade\
-            , attendees_fifth_grade, attendees_sixth_grade
-
     class Meta:
         abstract = True
 
