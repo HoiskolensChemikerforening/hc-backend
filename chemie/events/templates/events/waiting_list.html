@@ -2,7 +2,7 @@
   <ul class="collapsible">
       <li>
         <div class="collapsible-header">Venteliste -
-          {{ user_list|length }} ventende</div>
+          {{ user_list|length }} påmeldt{{ user_list|length|pluralize:"e" }}</div>
         <div class="collapsible-body">
 
           {% for item in user_list %}
@@ -11,7 +11,6 @@
 
         </div>
       </li>
-    {% endfor %}
   </ul>
 {% else %}
   <p>Logg inn for å se venteliste.</p>

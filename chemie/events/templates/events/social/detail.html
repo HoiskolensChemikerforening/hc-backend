@@ -140,8 +140,10 @@
   <!-- List of users on waiting list -->
   {% if waiting_list %}
     <div class="row">
-      <h2>Venteliste</h2>
-      {% include "events/waiting_list.html" with user_list=waiting_list %}
+      <div class="col">
+        <h2>Venteliste</h2>
+        {% include "events/waiting_list.html" with user_list=waiting_list %}
+        </div>
     </div>
   {% endif %}
 
