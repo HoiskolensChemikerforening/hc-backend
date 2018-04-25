@@ -1,6 +1,6 @@
 {% if user.is_authenticated %}
   {% regroup user_list by user.profile.get_grade_display as attendees_list %}
-  <ul class="collapsible">
+  <ul class="collapsible collapsible-round">
     {% for grade in attendees_list %}
       <li>
         <div class="collapsible-header">{{ grade.grouper }} -
