@@ -6,7 +6,13 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Opprett
+    {% with url_name=request.resolver_match.url_name %}
+        {% if url_name == 'create' %}
+             Opprett
+        {% elif url_name == 'edit_article' %}
+             Rediger
+        {% endif %}
+    {% endwith %}
 {% endblock nav_sub_header %}
 
 {% block content %}
@@ -15,6 +21,13 @@
   <form class="newPost" enctype="multipart/form-data" method='POST'>{% csrf_token %}
     {{ post.media }}
     {{ post.as_p }}
-    <input class="btn" type='submit' value='Lag artikkelen!' onclick="Materialize.toast('Takk for innslaget!', 4000)"/>
+    {% with url_name=request.resolver_match.url_name %}
+        {% if url_name == 'create' %}
+             <input class="btn" type='submit' value='Lag artikkelen!' />
+        {% elif url_name == 'edit_article' %}
+             <input class="btn" type='submit' value='Lagre artikkelen!' />
+        {% endif %}
+    {% endwith %}
+    <!-- <input class="btn" type='submit' value='Lag artikkelen!' /> <!-- onclick="Materialize.toast('Takk for innslaget!', 4000)" -->
   </form>
 {% endblock content %}

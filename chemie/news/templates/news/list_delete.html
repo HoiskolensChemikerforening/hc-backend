@@ -1,0 +1,49 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Nyheter
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+
+  {% load thumbnail %}
+{% if perms.news.delete_article %}
+  <div class="row">
+    {% for post in posts %}
+      <div class="col s12 m10 l6">
+        <div class="card">
+          <div class="card-image">
+            <a href="{{ post.get_absolute_url }}">
+              <!-- {% thumbnail post.image "630x400" crop="center" as im %} -->
+                <img src="{{ im.url }}">
+              <!-- {% endthumbnail %} -->
+            </a>
+            <span class="card-title card-event-title">
+                <h4>{{ post.title }}</h4>
+            </span>
+            <form method="POST" action="{{ post.get_absolute_delete_url }}">{% csrf_token %}
+                <button class="btn-floating halfway-fab waves-effect waves-light red" type="submit"><i
+                class="material-icons" value="Confirm">delete</i></button>
+            </form>
+          </div>
+          <div class="card-content">
+            {{ post.content|safe }}
+          </div>
+          <div class="card-action center">
+            <a href="{{ post.get_absolute_url }}" class="">Til artikkelen</a>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+
+{% endif %}
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}

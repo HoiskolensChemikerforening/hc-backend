@@ -19,7 +19,7 @@ from .forms import ContactForm, PostFundsForm
 def index(request):
     all_social = Social.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
     all_bedpres = Bedpres.objects.filter(date__gt=timezone.now(), published=True).order_by('date')
-    all_posts = Article.objects.all().order_by('-published_date')
+    all_posts = Article.objects.filter(published=True).order_by('-published_date')
 
     context = {
         'social': all_social,
