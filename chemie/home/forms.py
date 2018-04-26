@@ -6,7 +6,6 @@ from ckeditor.widgets import CKEditorWidget
 from .models import FundsApplication
 from .models import OfficeApplication
 
-
 class ContactForm(forms.Form):
     layout = M.Layout(M.Row('contact_name', 'contact_email'),
                       M.Row('content'),

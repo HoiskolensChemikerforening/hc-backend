@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import RegexValidator
 
-
 PRICE_RANGE_CHOICES = (
         (1, 'Under 500 kr'),
         (2, 'Over 500 kr'),

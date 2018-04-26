@@ -82,7 +82,6 @@ def request_funds(request):
                 'form_data': instance,
                 'root_url': get_current_site(None),
             },
-            attachments=attachments
         )
         messages.add_message(request,
                              messages.SUCCESS,
@@ -107,7 +106,7 @@ def request_office(request):
         instance.access_card = access_card
         instance.save()
 
-        _, mail_to = zip(*settings.CONTACTS)
+        """_, mail_to = zip(*settings.CONTACTS)
         mail.send(
             mail_to,
             'Webkom <webkom@hc.ntnu.no>',
@@ -116,21 +115,20 @@ def request_office(request):
                 'form_data': instance,
                 'root_url': get_current_site(None),
             },
-        )
+        )"""
         messages.add_message(request,
                              messages.SUCCESS,
                              'Din søknad er motatt og vil behandles snart.',
                              extra_tags='Søknad sendt!',
                              )
         return redirect(reverse('frontpage:home'))
+
     context = {
         "office_form": office_form,
         "access_card": access_card
     }
 
     return render(request, "home/office_access_form.html", context)
-
-
 
 
 
