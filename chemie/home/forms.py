@@ -4,10 +4,8 @@ from django import forms
 from django.contrib.flatpages.models import FlatPage
 from ckeditor.widgets import CKEditorWidget
 from .models import FundsApplication
-from .models import OfficeApplication   #imoirtert klassen fra models
+from .models import OfficeApplication
 
-
-#kan bruke de samme variablene som i models men man må ha forms også for å sette opp skjema på nettsiden
 
 class ContactForm(forms.Form):
     layout = M.Layout(M.Row('contact_name', 'contact_email'),
@@ -46,15 +44,10 @@ class PostFundsForm(forms.ModelForm):
         ]
 
 
-class PostOfficeForms(forms.ModelForm):    #hva skal stå som argument?
-    layout = M.Layout('access_card')
+class PostOfficeForms(forms.ModelForm):
     class Meta:
         model = OfficeApplication
-        fields = ["access_card"]    #eneste man trenger er kortnummer, det skal allerede være lagret men må sjekke at det er valid kanskje
-
-
-
-
+        fields = ["access_card"]
 
 
 class FlatpageEditForm(forms.ModelForm):

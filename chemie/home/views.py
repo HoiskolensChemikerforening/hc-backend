@@ -13,10 +13,7 @@ from post_office import mail
 from chemie.events.models import Social, Bedpres
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
-from .forms import ContactForm, PostFundsForm, PostOfficeForms  #importert
-
-
-#kobling mellom bruker og oss (mellom html som brukeren ser og models som er som klassen typ i java)
+from .forms import ContactForm, PostFundsForm, PostOfficeForms
 
 
 def index(request):
@@ -101,20 +98,15 @@ def request_funds(request):
 
 
 @login_required()
-def request_office(request):   #laget en ly klasse liknende request_funds
+def request_office(request):
     office_form = PostOfficeForms(request.POST or None)
+    access_card = request.user.profile.access_card
     if office_form.is_valid():
-        instance = office_form.save(commit=False)   #dette vet jeg ikke om er riktig
+        instance = office_form.save(commit=False)
         instance.author = request.user
+        instance.access_card = access_card
         instance.save()
-        receipt = instance.receipt
-        attachments = None
-        if receipt.name is not None:
-            filename = '{}_{}'.format(request.user, instance.receipt.name.split('/')[-1])
-            attachment = receipt
-            attachments = {
-                filename: attachment.file,
-            }
+
         _, mail_to = zip(*settings.CONTACTS)
         mail.send(
             mail_to,
@@ -124,7 +116,6 @@ def request_office(request):   #laget en ly klasse liknende request_funds
                 'form_data': instance,
                 'root_url': get_current_site(None),
             },
-            attachments=attachments
         )
         messages.add_message(request,
                              messages.SUCCESS,
@@ -134,6 +125,7 @@ def request_office(request):   #laget en ly klasse liknende request_funds
         return redirect(reverse('frontpage:home'))
     context = {
         "office_form": office_form,
+        "access_card": access_card
     }
 
     return render(request, "home/office_access_form.html", context)

@@ -3,9 +3,6 @@ from django.db import models
 from django.core.validators import RegexValidator
 
 
-#fundamentet, en som en klasse i java. sier hvilke variabler du har
-
-
 PRICE_RANGE_CHOICES = (
         (1, 'Under 500 kr'),
         (2, 'Over 500 kr'),
@@ -46,6 +43,11 @@ class FundsApplication(models.Model):
 
 class OfficeApplication(models.Model):
 
-    #må hente inn studentkortnummer hvis det allerede er lagt inn, evt skrive det inn. Da kan det også lagres i customprofile
+    # Name of person who sent application
+    author = models.ForeignKey(User, verbose_name='Innsender', on_delete=models.CASCADE)
 
+    # When application is sent
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    #The users accesscard
     access_card = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Studentkortnummer")
