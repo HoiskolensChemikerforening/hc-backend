@@ -13,7 +13,8 @@ from post_office import mail
 from chemie.events.models import Social, Bedpres
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
-from .forms import ContactForm, PostFundsForm
+from .forms import ContactForm, PostFundsForm, PostOfficeForms
+from .models import OfficeApplication
 
 
 def index(request):
@@ -82,7 +83,6 @@ def request_funds(request):
                 'form_data': instance,
                 'root_url': get_current_site(None),
             },
-            attachments=attachments
         )
         messages.add_message(request,
                              messages.SUCCESS,
@@ -95,6 +95,53 @@ def request_funds(request):
     }
 
     return render(request, "home/post_funds_form.html", context)
+
+
+@login_required()
+def request_office(request):
+    office_form = PostOfficeForms(request.POST or None)
+    access_card = request.user.profile.access_card
+    if office_form.is_valid():
+        try:
+            OfficeApplication.objects.get(access_card=access_card)
+            messages.add_message(request,
+                                 messages.WARNING,
+                                 'Du har allerede søkt om tilgang.',
+                                 extra_tags='Feil!',
+                                 )
+            return redirect(reverse('frontpage:home'))
+        except OfficeApplication.DoesNotExist:
+            instance = office_form.save(commit=False)
+            instance.author = request.user
+            instance.access_card = access_card
+            instance.save()
+
+            _, mail_to = zip(*settings.CONTACTS)
+            mail.send(
+                'Secreteuse <secreteuse@hc.ntnu.no>',
+                'Webkom <webkom@hc.ntnu.no>',
+                template='office_request_form',
+                context={
+                    'form_data': instance,
+                    'root_url': get_current_site(None),
+                },
+            )
+            messages.add_message(request,
+                                 messages.SUCCESS,
+                                 'Din søknad er motatt og vil behandles snart.',
+                                 extra_tags='Søknad sendt!',
+                                 )
+            return redirect(reverse('frontpage:home'))
+
+    context = {
+        "office_form": office_form,
+        "access_card": access_card
+    }
+
+    return render(request, "home/office_access_form.html", context)
+
+
+
 
 
 @permission_required('flatpages.change_flatpage')

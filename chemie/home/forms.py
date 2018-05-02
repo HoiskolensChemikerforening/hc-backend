@@ -4,7 +4,7 @@ from django import forms
 from django.contrib.flatpages.models import FlatPage
 from ckeditor.widgets import CKEditorWidget
 from .models import FundsApplication
-
+from .models import OfficeApplication
 
 class ContactForm(forms.Form):
     layout = M.Layout(M.Row('contact_name', 'contact_email'),
@@ -41,6 +41,12 @@ class PostFundsForm(forms.ModelForm):
             "description",
             "receipt",
         ]
+
+
+class PostOfficeForms(forms.ModelForm):
+    class Meta:
+        model = OfficeApplication
+        fields = ["access_card"]
 
 
 class FlatpageEditForm(forms.ModelForm):

@@ -2,7 +2,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.core.validators import RegexValidator
 
-
 PRICE_RANGE_CHOICES = (
         (1, 'Under 500 kr'),
         (2, 'Over 500 kr'),
@@ -39,3 +38,15 @@ class FundsApplication(models.Model):
 
     # Receipt
     receipt = models.FileField(upload_to='funds_application', blank=True, null=True, verbose_name="Kvittering")
+
+
+class OfficeApplication(models.Model):
+
+    # Name of person who sent application
+    author = models.ForeignKey(User, verbose_name='Innsender', on_delete=models.CASCADE)
+
+    # When application is sent
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+
+    #The users accesscard
+    access_card = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Studentkortnummer")
