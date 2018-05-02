@@ -60,5 +60,12 @@
 "description": "Siste påminnelse om boskap",
 "subject":"Skap #{{ ownership.locker }} klippes og tømmes snart!",
 "path":"lockers/lockers_final_warning"
+},
+
+{
+"name": "office_request_form",
+"description": "Søknad om kontortilgang",
+"subject":"{{ form_data.author.get_full_name }} søker om kontortilgang",
+"path":"misc/office_access_form"
 }
 ]

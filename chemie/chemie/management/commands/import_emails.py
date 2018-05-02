@@ -10,7 +10,7 @@ from django.core import serializers
 
 
 # Email template repo source directory
-EMAIL_TEMPLATE_DIR = os.path.join(settings.BASE_DIR, '../emails')
+EMAIL_TEMPLATE_DIR = settings.BASE_DIR.path('emails').root
 
 
 class Command(BaseCommand):
@@ -53,7 +53,7 @@ class Command(BaseCommand):
             self.import_email_template(**email_data)
 
         data = serializers.serialize("json", EmailTemplate.objects.all())
-        with open("../chemie/fixtures/email-templates.json", "w") as f:
+        with open(settings.BASE_DIR.path('chemie/fixtures/email-templates.json').root, "w") as f:
             f.write(data)
 
         self.stdout.write(self.style.SUCCESS(f'{len(emails)} email templates successfully loaded'))
