@@ -9,11 +9,11 @@ app_name = 'events'
 # Events
 urlpatterns = [
     url(r'^social/$',
-        views.ListSocialView.as_view(),
+        login_required(views.ListSocialView.as_view()),
         name='index_social'),
 
     url(r'^social/past',
-        views.ListPastSocialView.as_view(),
+        login_required(views.ListPastSocialView.as_view()),
         name='past_social'),
 
     url(r'^social/create',
@@ -25,11 +25,11 @@ urlpatterns = [
         name='edit_social'),
 
     url(r'^social/(?P<pk>[0-9]+)',
-        views.ViewSocialDetailsView.as_view(),
+        login_required(views.ViewSocialDetailsView.as_view()),
         name='detail_social'),
 
     url(r'^social/register/(?P<pk>[0-9]+)',
-        views.SocialBaseRegisterUserView.as_view(),
+        login_required(views.SocialBaseRegisterUserView.as_view()),
         name='register_social'),
 
     url(r'^social/adminlist/(?P<pk>[0-9]+)',

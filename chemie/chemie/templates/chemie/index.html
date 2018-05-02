@@ -39,12 +39,14 @@
   {% endif %}
 
   <!-- Events -->
+{% if request.user.is_authenticated %}
   {% if social %}
     {% cache 60 social %}
       <h3 class="heading">Sosiale arrangementer</h3>
       {% include 'events/list_events.html' with object_list=social %}
     {% endcache %}
   {% endif %}
+{% endif %}
 
   {% if bedpres %}
     {% cache 60 bedpres %}
