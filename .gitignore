@@ -84,3 +84,9 @@ fabric.properties
 # End of https://www.gitignore.io/api/django,pycharm
 
 chemie/chemie/settings/local.py
+.env
+.idea/
+backupjob/ssh_key
+chemie/static/
+chemie/media/
+

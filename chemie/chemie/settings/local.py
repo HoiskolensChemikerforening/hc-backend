@@ -5,6 +5,7 @@ THUMBNAIL_DEBUG = True
 SECRET_KEY = 'lk'
 
 from .base import *
+
 # DATABASE CONFIGURATION
 # ------------------------------------------------------------------------------
 DATABASES = {
@@ -12,7 +13,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'webkom',
         'USER': 'webkom',
-        'PASSWORD': '',
+        'PASSWORD': 'webkom',
         'HOST': '',
         'PORT': '5432',
         'CONN_MAX_AGE': 600,
