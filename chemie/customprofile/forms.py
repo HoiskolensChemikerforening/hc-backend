@@ -47,14 +47,15 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class RegisterProfileForm(forms.ModelForm):
-    registration_key = forms.CharField(max_length=40, required=True)
+#    registration_key = forms.CharField(max_length=40, required=True)
     layout = M.Layout(M.Row('grade'),
                       M.Row('start_year', 'end_year'),
                       M.Row('address'),
                       M.Row('access_card'),
                       M.Row('phone_number'),
                       M.Row('allergies', 'relationship_status'),
-                      M.Row('registration_key'),)
+                      M.Row('image_primary', 'image_secondary'))
+                      #M.Row('registration_key'),)
 
     class Meta:
         model = Profile
@@ -65,10 +66,12 @@ class RegisterProfileForm(forms.ModelForm):
                   "phone_number",
                   "allergies",
                   "address",
-                  "relationship_status"
+                  "relationship_status",
+                  "image_primary",
+                  "image_secondary",
                   ]
 
-    def clean_registration_key(self):
+    def not_clean_registration_key(self):
         registration_key = self.cleaned_data.get('registration_key')
         if not registration_key == REGISTRATION_KEY:
             self.add_error(None, ValidationError({'registration_key': ["Har du kode eller har du ikke kode? Du må ha kode."]}))

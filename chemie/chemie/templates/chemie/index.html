@@ -38,6 +38,14 @@
     </div>
   {% endif %}
 
+  <!-- News -->
+  {% if posts %}
+    {% cache 60 active_news %}
+      <h3 class="heading">Nyheter</h3>
+      {% include 'news/list_news.html' with posts=posts %}
+    {% endcache %}
+  {% endif %}
+
   <!-- Events -->
 {% if request.user.is_authenticated %}
   {% if social %}
@@ -51,14 +59,6 @@
   {% if bedpres %}
     {% cache 60 bedpres %}
       {% include 'events/list_events.html' with object_list=bedpres %}
-    {% endcache %}
-  {% endif %}
-
-  <!-- News -->
-  {% if posts %}
-    {% cache 60 active_news %}
-      <h3 class="heading">Nyheter</h3>
-      {% include 'news/list_news.html' with posts=posts %}
     {% endcache %}
   {% endif %}
 
