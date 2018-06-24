@@ -1,10 +1,8 @@
 import material as M
 from captcha.fields import ReCaptchaField
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm as OldAuthenticationForm
 from django.contrib.auth.models import User
 from django.core.validators import ValidationError
-from django.utils.translation import ugettext_lazy as _
 
 from chemie.chemie.settings import REGISTRATION_KEY
 from .models import Profile
@@ -185,21 +183,7 @@ class NameSearchForm(forms.Form):
     search_field = forms.CharField(max_length=120)
 
 
-class AuthenticationForm(OldAuthenticationForm):
-    error_messages = {
-        'invalid_login': _(
-            "Please enter a correct %(username)s and password. Note that both "
-            "fields may be case-sensitive."
-        ),
-        'inactive': _("This account is inactive."),
-        'not_approved': _("This account has not approved ."),
-    }
-
-    def confirm_login_allowed(self, user):
-        super().confirm_login_allowed(user)
-
-        if not user.profile.approved_terms:
-            raise forms.ValidationError(
-                self.error_messages['not_approved'],
-                code='not_approved',
-            )
+class ApprovedTermsForm(forms.Form):
+    approval = forms.BooleanField(required=True,
+                                  label='Jeg godkjenner', validators=
+                                  [lambda x: x == True])

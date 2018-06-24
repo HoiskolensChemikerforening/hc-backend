@@ -181,3 +181,18 @@ def find_user_by_name(query_name):
 
 class LoginView(OldLoginView):
     form_class = AuthenticationForm
+    # Få denne til å redirecte til det udner
+    def form_valid(self, form):
+        user = form.get_user()
+        if user.profile.approved_terms:
+            return super().form_valid(form)
+
+        HttpResponseRedirect(self.get_success_url())
+
+def approval_form_view(request):
+    """
+    Display the login form and a "consent" form.
+    If the user login is correct and consent is given: set value and
+    redirect to home page
+    """
+    pass
