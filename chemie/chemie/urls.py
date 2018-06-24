@@ -20,7 +20,7 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django_nyt.urls import get_pattern as get_nyt_pattern
 from wiki.urls import get_pattern as get_wiki_pattern
-
+from ..customprofile.views import LoginView
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -30,7 +30,8 @@ urlpatterns = [
     url(r'^bokskap/', include('chemie.lockers.urls', namespace='bokskap')),
     url(r'^news/', include('chemie.news.urls', namespace='news')),
     url(r'^', include('chemie.customprofile.urls', namespace="profile")),
-    url(r'^login/$', auth_views.login, name='login'),
+    url(r'^loginold/$', auth_views.login, name='oldlogin'),
+    url(r'^login/$', LoginView.as_view(),name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^events/', include('chemie.events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
