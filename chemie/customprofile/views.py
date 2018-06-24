@@ -5,6 +5,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
+from django.contrib.auth.views import (LoginView as OldLoginView, SuccessURLAllowedHostsMixin)
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.urlresolvers import reverse
 from django.core.validators import ValidationError
@@ -14,12 +15,13 @@ from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
 from django.utils import timezone
+from django.views.generic import FormView
 
 from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, \
     SetNewPassword, NameSearchForm
 from .models import UserToken, Profile, Membership, GRADES
-
+from .forms import AuthenticationForm
 
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
@@ -175,3 +177,7 @@ def find_user_by_name(query_name):
     for term in query_name.split():
         qs = qs.filter( Q(first_name__icontains=term) | Q(last_name__icontains=term))
     return qs
+
+
+class LoginView(OldLoginView):
+    form_class = AuthenticationForm
