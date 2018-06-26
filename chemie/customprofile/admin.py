@@ -8,6 +8,34 @@ from django.utils.translation import ugettext_lazy as _
 from .models import Profile
 
 
+def export_csv(modeladmin, request, queryset):
+    # Credits to https://djangotricks.blogspot.no/2013/12/how-to-export-data-as-excel.html
+    import csv
+    from django.utils.encoding import smart_str
+    from django.http.response import HttpResponse
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=registrations.csv'
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow([
+        smart_str(u"First name"),
+        smart_str(u"Last name"),
+        smart_str(u"Email"),
+        smart_str(u"Grade"),
+        smart_str(u"Username"),
+    ])
+    for obj in queryset:
+        writer.writerow([
+            smart_str(obj.first_name),
+            smart_str(obj.last_name),
+            smart_str(obj.email),
+            smart_str(obj.profile.grade),
+            smart_str(obj.username),
+        ])
+    return response
+export_csv.short_description = u"Export CSV"
+
+
 class UserCreateForm(OldUserChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -39,6 +67,7 @@ class UserAdmin(BuiltinUserAdmin):
                    ('profile__start_year', DropdownFilter), ('profile__end_year', DropdownFilter),
                    'profile__relationship_status')
     inlines = [UserInline]
+    actions = [export_csv]
 
 
 admin.site.unregister(User)
