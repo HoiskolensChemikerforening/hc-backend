@@ -4,8 +4,43 @@ from django.contrib.auth.admin import UserAdmin as BuiltinUserAdmin
 from django.contrib.auth.forms import UserChangeForm as OldUserChangeForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Profile
+
+
+def export_csv(modeladmin, request, queryset):
+    # Credits to https://djangotricks.blogspot.no/2013/12/how-to-export-data-as-excel.html
+    import csv
+    from django.utils.encoding import smart_str
+    from django.http.response import HttpResponse
+    response = HttpResponse(content_type='text/csv')
+    response['Content-Disposition'] = 'attachment; filename=users.csv'
+    writer = csv.writer(response, csv.excel)
+    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow([
+        smart_str(u"First name"),
+        smart_str(u"Last name"),
+        smart_str(u"Email"),
+        smart_str(u"Grade"),
+        smart_str(u"Username"),
+    ])
+    for obj in queryset:
+        try:
+            grade = obj.profile.grade
+        except ObjectDoesNotExist:
+            grade = ''
+
+        writer.writerow([
+            smart_str(obj.first_name),
+            smart_str(obj.last_name),
+            smart_str(obj.email),
+            smart_str(grade),
+            smart_str(obj.username),
+        ])
+    return response
+
+export_csv.short_description = "Export CSV"
 
 
 class UserCreateForm(OldUserChangeForm):
@@ -39,6 +74,7 @@ class UserAdmin(BuiltinUserAdmin):
                    ('profile__start_year', DropdownFilter), ('profile__end_year', DropdownFilter),
                    'profile__relationship_status')
     inlines = [UserInline]
+    actions = [export_csv]
 
 
 admin.site.unregister(User)
