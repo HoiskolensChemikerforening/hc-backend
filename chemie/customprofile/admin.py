@@ -4,6 +4,7 @@ from django.contrib.auth.admin import UserAdmin as BuiltinUserAdmin
 from django.contrib.auth.forms import UserChangeForm as OldUserChangeForm
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
+from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Profile
 
@@ -25,15 +26,21 @@ def export_csv(modeladmin, request, queryset):
         smart_str(u"Username"),
     ])
     for obj in queryset:
+        try:
+            grade = obj.profile.grade
+        except ObjectDoesNotExist:
+            grade = ''
+
         writer.writerow([
             smart_str(obj.first_name),
             smart_str(obj.last_name),
             smart_str(obj.email),
-            smart_str(obj.profile.grade),
+            smart_str(grade),
             smart_str(obj.username),
         ])
     return response
-export_csv.short_description = u"Export CSV"
+
+export_csv.short_description = "Export CSV"
 
 
 class UserCreateForm(OldUserChangeForm):
