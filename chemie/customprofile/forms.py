@@ -182,5 +182,5 @@ class NameSearchForm(forms.Form):
 
 class ApprovedTermsForm(forms.Form):
     approval = forms.BooleanField(required=True,
-                                  label='Jeg godkjenner', validators=
+                                  label='Jeg godkjenner Vilkår og Betingelser', validators=
                                   [lambda x: x == True])
