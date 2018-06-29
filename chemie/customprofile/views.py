@@ -21,7 +21,8 @@ from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, \
     SetNewPassword, NameSearchForm
 from .models import UserToken, Profile, Membership, GRADES
-from .forms import AuthenticationForm
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import ApprovedTermsForm
 
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
@@ -182,6 +183,7 @@ def find_user_by_name(query_name):
 class LoginView(OldLoginView):
     form_class = AuthenticationForm
     # Få denne til å redirecte til det udner
+
     def form_valid(self, form):
         user = form.get_user()
         if user.profile.approved_terms:
@@ -189,10 +191,20 @@ class LoginView(OldLoginView):
 
         HttpResponseRedirect(self.get_success_url())
 
-    def approval_form_view(request):
+    def approval_form_view(request, form):
+        if request.method != 'POST':
+            raise Http404
+
+        user = request.get_user
+        approval_form = ApprovedTermsForm(request)
+        approval = approval_form.cleaned_data.get('approval')
+        if approval:
+            user.profile.approved_terms = True
+
+        super().form_valid(form)
+
         """
         Display the login form and a "consent" form.
         If the user login is correct and consent is given: set value and
         redirect to home page
         """
-        pass
