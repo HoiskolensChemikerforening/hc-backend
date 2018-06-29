@@ -189,10 +189,10 @@ class LoginView(OldLoginView):
 
         HttpResponseRedirect(self.get_success_url())
 
-def approval_form_view(request):
-    """
-    Display the login form and a "consent" form.
-    If the user login is correct and consent is given: set value and
-    redirect to home page
-    """
-    pass
+    def approval_form_view(request):
+        """
+        Display the login form and a "consent" form.
+        If the user login is correct and consent is given: set value and
+        redirect to home page
+        """
+        pass
