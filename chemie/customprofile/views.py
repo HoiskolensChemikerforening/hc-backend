@@ -181,7 +181,6 @@ def find_user_by_name(query_name):
 
 
 class LoginView(OldLoginView):
-    form_class = AuthenticationForm
     # Få denne til å redirecte til det udner
 
     def form_valid(self, form):
@@ -189,19 +188,15 @@ class LoginView(OldLoginView):
         if user.profile.approved_terms:
             return super().form_valid(form)
 
-        HttpResponseRedirect(self.get_success_url())
+        self.approval_form_view(form, ApprovedTermsForm())
 
-    def approval_form_view(request, form):
-        if request.method != 'POST':
-            raise Http404
-
-        user = request.get_user
-        approval_form = ApprovedTermsForm(request)
-        approval = approval_form.cleaned_data.get('approval')
+    def approval_form_view(request, loginform, termsform):
+        user = loginform.get_user()
+        approval = termsform['approval'].value()
         if approval:
             user.profile.approved_terms = True
 
-        super().form_valid(form)
+        super().form_valid(loginform)
 
         """
         Display the login form and a "consent" form.
