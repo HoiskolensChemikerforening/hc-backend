@@ -188,15 +188,21 @@ class LoginView(OldLoginView):
         if user.profile.approved_terms:
             return super().form_valid(form)
 
-        self.approval_form_view(form, ApprovedTermsForm())
+        self.approval_form_view(self.request, form)
 
-    def approval_form_view(request, loginform, termsform):
-        user = loginform.get_user()
-        approval = termsform['approval'].value()
-        if approval:
-            user.profile.approved_terms = True
+    def approval_form_view(self, request, loginform):
+        if request.method == 'POST':
+            if loginform.is_valid():
+                termsform = ApprovedTermsForm(request.POST)
+                user = loginform.get_user()
+                approval = termsform['approval'].value()
+                if approval:
+                    user.profile.approved_terms = True
 
-        super().form_valid(loginform)
+                super().form_valid(loginform)
+        else:
+            termsform = ApprovedTermsForm()
+            return render(request, 'login.html', {'form': loginform, 'termsform': termsform})
 
         """
         Display the login form and a "consent" form.
