@@ -16,16 +16,28 @@
   <div class="row">
     <div class="col s12 m10 l8">
       <div class="card">
-        <form id='login-form' method='POST'>{% csrf_token %}
+        <form id='login-form' method='POST'>
+          {% csrf_token %}
           <div class="card-content">
             {% form form=form %}
             {% endform %}
           </div>
+          {% if show_popup %}
+              <div>
+                {% if form.errors %}
+                   <h1>You must agree to the TNC</h1>
+                {% endif %}
+                  <div class="card-content">
+                    {% form form=termsform %}
+                    {% endform %}
+                  </div>
+              </div>
+          {% endif %}
           <div class="card-action" style="overflow: hidden;">
             <div>
               <a href="{% url "profile:forgotpassword" %}" style="vertical-align: -webkit-baseline-middle;">Mistet
                 passord?</a>
-              <button class="btn btn-primary modal-trigger" style="float: right;" type="submit" href="terms_modal">Logg inn</button>
+              <button class="btn btn-primary" style="float: right;" type="submit">Logg inn</button>
             </div>
           </div>
         </form>
@@ -33,26 +45,6 @@
     </div>
   </div>
 
-
-  <!-- Modal Structure -->
-  {% if termsform %}
-  <div id="terms_modal" class="modal">
-    <div class="modal-content">
-        <div style="width:600px; height:300px; overflow-y:scroll;">
-          {% if form.errors %}
-             <h1>You must agree to the TNC</h1>
-          {% endif %}
-          <form method="post">
-              {{ termsform.as_p }}
-              <input type="submit" value="Jeg godkjenner" />
-          </form>
-        </div>
-    </div>
-    <div class="modal-footer">
-      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
-    </div>
-  </div>
-  {% endif %}
 
 
 {% endblock content %}
