@@ -24,12 +24,131 @@
           </div>
           {% if show_popup %}
               <div>
-                {% if form.errors %}
+                {% if termsform.errors %}
                    <h1>You must agree to the TNC</h1>
                 {% endif %}
+
                   <div class="card-content">
-                    {% form form=termsform %}
-                    {% endform %}
+
+                    <!-- Modal Structure -->
+                    <div id="terms_modal" class="modal modal-fixed-footer" style="width: 65% !important;">
+                      <div class="modal-content"">
+                        <h2>Samtykkeerklæring</h2>
+                        <br>
+                        <p style="font-weight: bold">
+                          VED REGISTRERING VED VÅRE NETTSIDER OG BRUK AV ALLE VÅRE TJENESTER SAMTYKKER DU TIL FØLGENDE:
+                        </p>
+                        <br>
+                        <h5>Forbehold</h5>
+
+                        <p>Høiskolens Chemikerforening kan ikke garantere at all dataen vi samler inn og viser er korrekt. Vi beholder retten til å kunne endre dataen lagret på https://chemie.no (inkludert vår Wiki og samtykkeerklæring) til enhver tid.
+                          Under ingen omstendigheter er vi ansvarlige for tap av eller skade på data som følge av, eller tilknyttet, bruk av https://chemie.no.
+                          Vi gjør vårt beste for å sørge for at nettsiden og alle våre tjenester er tilgjengelig til enhver tid, men vi tar ikke ansvar for midlertidig utilgjengelighet som følge av teknologiske problemer som står utenfor vår kontroll.
+                        </p>
+                        <br>
+                        <p style="font-style: italic">Juli 2018</p>
+                        <br>
+
+                        <h5>Data</h5>
+                        <p>Følgende data hentes inn ved bruk av våre tjenester:</p>
+
+                        <div>
+
+                        <table class="table-responsive striped terms_table">
+                          <thead>
+                            <tr>
+                              <th>Tjeneste</th>
+                              <th>Data</th>
+                              <th>Formål</th>
+                            </tr>
+                          </thead>
+                        <tbody>
+                          <col>
+                          <tr>
+                            <td style="vertical-align: top">Arrangement</td>
+                            <td style="vertical-align: top">a. E-post <br><br> b. Matallergi og/eller -preferanse <br><br> c. Studentkortnummer <br><br> d. Tilstedeværelse</td>
+                            <td style="vertical-align: top">a. Informasjon angående arrangement sendes ut på e-post. <br><br> b. For å sørge for optimale kulinariske opplevelser ved våre arrangementer. Denne informasjonen er kun tilgjengelig for arrangørene. <br><br> c. Gjøre billetthåndtering enkel ved arrangementer. <br><br> d. Oppfølging av påmeldinger for å sørge for at tjenesten ikke misbrukes.</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Klasse- og epostlister</td>
+                            <td style="vertical-align: top">E-post</td>
+                            <td style="vertical-align: top">Informasjon daglig drift, påminnelser, oppfølging av medlemsmassen sendes på e-post.</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Bokskap</td>
+                            <td style="vertical-align: top">E-post</td>
+                            <td style="vertical-align: top">Bekreftelse og vedlikehold av konto.</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Brukerkontakt</td>
+                            <td style="vertical-align: top">Kontaktinformasjon (tlf, epost, adresse).</td>
+                            <td style="vertical-align: top">HCs organ må kontakte brukeren i øvrige tilfeller.</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Søknader</td>
+                            <td style="vertical-align: top">a. E-post <br><br> b. Studentkortnummer <br><br> c. Kontonummer</td>
+                            <td style="vertical-align: top">a. Søknad om <em>kontortilgang</em> <br><br> b. Søknad om <em>kontortilgang</em> <br><br> c. Refusjon av midler</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Klassekatalog</td>
+                            <td style="vertical-align: top">E-post <br> Sivilstatus <br> Portrettbilde(r) <br> Telefonnummer <br> Adresse <br> Startår/Estimert ferdig <br> Klassetrinn</td>
+                            <td style="vertical-align: top">Frivillig informasjon som kun er synlig for medlemmene av HC. Informasjonen er kun til glede for medlemmer av organisasjonen.</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Utvikling, analyse</td>
+                            <td style="vertical-align: top">Dato opprettet og sist innlogging av bruker <br> Besøksmønstre</td>
+                            <td style="vertical-align: top">Forbedre nettsiden og tilpasse tjenester til våre brukere</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Vervsoversikt <br> Arkiv av informasjon og bilder <br> Interne tjenester</td>
+                            <td style="vertical-align: top">Navn <br> E-post <br> Telefonnummer <br> Bilder <br> Adresse <br> Valg<sup>1</sup></td>
+                            <td style="vertical-align: top">Intern bruk. Gjelder de som arbeider innad i organisasjonen. Dataen kan bli lagret i interne dokumenter. Dette inkluderer dokumenter lagret på Google Drive</td>
+                          </tr>
+                          <tr>
+                            <td style="vertical-align: top">Sladreboks <br> Innsending av bilder</td>
+                            <td style="vertical-align: top">Navn <br> E-post <br> Bilder</td>
+                            <td style="vertical-align: top">Forebygge usmakelig sladder, i medlemsmassens generelle interesse.</td>
+                          </tr>
+                        </tbody>
+                        </table>
+
+
+                        </div>
+
+                        <br>
+                        <p><sup>1</sup><em>Merk at den eneste valginformasjonen som lagres er hvem som stiller til valg og hvem som blir valgt. Informasjon utover dette, som f.eks. antall stemmer, blir ikke lagret.</em></p>
+                        <br>
+                        <h5 id="wiki-toc-hvor-ligger-dataen-min">Hvor ligger dataen min?</h5>
+                        <p>Besøksmønstre er den eneste informasjonen som blir lagret hos Google.
+                        All annen informasjon ligger kun lagret hos oss ved NTNU.</p>
+                        <br>
+                        <h5 id="wiki-toc-hvor-lenge-ligger-dataen-lagret">Hvor lenge ligger dataen lagret?</h5>
+                        <p>Brukerprofilen din forblir uendret på ubestemt tid. Du kan selv slette denne.</p>
+                        <br>
+                        <h5 id="wiki-toc-behandlingsansvarlig">Behandlingsansvarlig</h5>
+                        <p>WebsjaepH, lederen for Webkomiteen og medlem av Styret, er organisasjonens behandlingsansvarlige for dataen som besittes.</p>
+
+
+
+
+                      </div>
+
+
+
+
+
+                      <div class="modal-footer">
+                        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Lukk</a>
+                      </div>
+                    </div>
+
+                    <div style="float: left; clear=none; margin-right: 3px">
+                      {% form form=termsform %}
+                      {% endform %}
+                    </div>
+                    <div style="font-size: 15px; padding-top: 1.2px">
+                      <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
+                    </div>
                   </div>
               </div>
           {% endif %}
@@ -45,17 +164,4 @@
     </div>
   </div>
 
-
-
 {% endblock content %}
-
-{% block footer_script %}
-
-<script>
-function check_terms() {
-    var username = $("#login-form[id='id_username']")
-    var status =
-}
-</script>
-
-{% endblock footer_script %}
