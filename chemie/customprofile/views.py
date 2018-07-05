@@ -181,7 +181,12 @@ def find_user_by_name(query_name):
 
 
 class LoginView(OldLoginView):
-    # Få denne til å redirecte til det udner
+    # Få denne til å redirecte til det under
+    """
+    Display the login form and a "consent" form.
+    If the user login is correct and consent is given: set value and
+    redirect to home page
+    """
 
     def form_valid(self, form):
         user = form.get_user()
@@ -193,24 +198,14 @@ class LoginView(OldLoginView):
     def approval_form_view(self, request, loginform):
         if request.method == 'POST':
             if loginform.is_valid():
-                termsform = ApprovedTermsForm(request.POST)
                 user = loginform.get_user()
-                approval = termsform['approval'].value()
-                if approval:
+                termsform = ApprovedTermsForm(request.POST or None)
+                if termsform.is_valid():
                     user.profile.approved_terms = True
                     user.profile.save()
                     return super().form_valid(loginform)
                 else:
-                    termsform = ApprovedTermsForm()
                     context = super().get_context_data()
                     context['termsform'] = termsform
                     context['show_popup'] = True
                     return render(request, 'registration/login.html', context)
-        return render(request, 'registration/login.html', {'form': loginform})
-
-
-        """
-        Display the login form and a "consent" form.
-        If the user login is correct and consent is given: set value and
-        redirect to home page
-        """
