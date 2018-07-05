@@ -27,19 +27,22 @@ from .forms import ApprovedTermsForm
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
     user_profile_form = RegisterProfileForm(request.POST or None, request.FILES or None)
-    if user_core_form.is_valid() and user_profile_form.is_valid():
+    approved_terms_form = ApprovedTermsForm(request.POST or None)
+    if user_core_form.is_valid() and user_profile_form.is_valid() and approved_terms_form.is_valid():
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
         user.save()
 
         profile = user_profile_form.save(commit=False)
         profile.user = user
+        profile.approved_terms = True
         profile.save()
         messages.add_message(request, messages.SUCCESS, 'Brukeren din er opprettet!', extra_tags='Takk!')
         return redirect('profile:register')
     context = {
         "user_core_form": user_core_form,
         "user_profile_form": user_profile_form,
+        "approved_terms_form": approved_terms_form,
     }
     return render(request, 'customprofile/register.html', context)
 

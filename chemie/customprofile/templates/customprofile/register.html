@@ -41,7 +41,20 @@
                 {% part user_profile_form.allergies prefix %}
                   <i class="material-icons prefix">error_outline</i>{% endpart %}
               {% endform %}
-            </div>
+
+
+              <div class="card-content">
+                    {% include "registration/terms_and_conditions.html" %}
+                    <div style="float: left; clear:none; margin-right: 3px">
+                      {% form form=approved_terms_form %}
+                      {% endform %}
+                    </div>
+                    <div style="font-size: 15px; padding-top: 1.2px">
+                      <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
+                    </div>
+                  </div>
+              </div>
+
             <div class="card-action">
               <div class="right-align">
                 <button class="btn btn-primary pull-right" type="submit">Opprett konto</button>
