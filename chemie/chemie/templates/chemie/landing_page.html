@@ -30,9 +30,9 @@
 <body>
   <nav class="black" role="navigation">
     <div class="nav-wrapper container yellow-text">
-      <a id="logo-container" href="https://chemie.no" class="brand-logo yellow-text" style="font-family: 'Neue Haas Grotesk Display Pro'; font-weight: 100">HC</a>
+      <a id="logo-container" href="https://chemie.no" class="brand-logo yellow-text" style="font-weight: 300">HC</a>
       <ul class="right hide-on-med-and-down">
-        <li><a href="https://chemie.no">Til forsiden</a></li>
+        <li><a href="https://chemie.no" class="yellow-text" style="font-weight: 300">Til forsiden</a></li>
       </ul>
     </div>
   </nav>
@@ -58,7 +58,7 @@
                 høsten? Vi i fadderkomiteen har laget en egen Facebookgruppe for de nye studentene:</h5>
           </div>
           <div class="row center">
-            <a href="https://www.facebook.com/groups/585269618511588/" id="download-button" class="btn-large waves-effect waves-light yellow black-text"
+            <a href="https://www.facebook.com/groups/585269618511588/" id="fb-button" class="btn-large waves-effect waves-light yellow black-text"
             style="font-family: 'Neue Haas Grotesk Display Pro'; font-weight: 500">Bli Med</a>
           </div>
         <br><br>
@@ -90,8 +90,8 @@
 
           </div>
           <div class="row center">
-            <a href="https://chemie.no/s/om/" id="download-button" class="btn-large waves-effect waves-light yellow black-text"
-            style="font-family: 'Neue Haas Grotesk Display Pro'; font-weight: 500">Les mer</a>
+            <a href="https://chemie.no/s/om/" id="about-button" class="btn-large waves-effect waves-light yellow black-text"
+            style="font-weight: 500">Les mer</a>
           </div>
         <br><br>
         <br><br>
@@ -123,7 +123,7 @@
           </ul>
           </div>
         <div id="mandag1" class="col s12"><b>Mandag 13. august</b><br>
-          <b>10:00-15:00</b> Kom-i-gang-dag &ndash; Gløshaguen<br>
+          <b>10:00-15:00<a href="https://www.ntnu.no/student/kom-i-gang-dag"> Kom-i-gang-dag</a></b> &ndash; Gløshaguen <br>
           <b>18:00-21:00</b> Bli kjent kveld &ndash; Vrimle utenfor R1
         </div>
         <div id="tirsdag1" class="col s12"><b>Tirsdag 14. august</b><br>
@@ -209,14 +209,14 @@
             <div class="col s6 m6 l6">
               <img class="profile-image" id="thea_bakken" type="image/jpg" src="{% static "images/landing-page/thea.jpg" %}">
               <h6 class="header col s12" style="font-weight: 600">Thea Isabell Bakken</h6>
-              <div class="text-size">+47&nbsp;***&nbsp;**&nbsp;***<br>
+              <div class="text-size">+47&nbsp;930&nbsp;40&nbsp;399<br>
                 <a href="mailto:theaib@stud.ntnu.no" class="black-text text-size">theaib@stud.ntnu.no</a>
               </div>
             </div>
             <div class="col s6 m6 l6">
               <img class="profile-image" id="olav_sandvik" type="image/jpg" src="{% static "images/landing-page/olav.jpg" %}">
               <h6 class="header col s12" style="font-weight: 600">Olav Sandvik</h6>
-              <div class="text-size">+47&nbsp;***&nbsp;**&nbsp;***<br>
+              <div class="text-size">+47&nbsp;475&nbsp;03&nbsp;808<br>
                 <a href="mailto:olavws@stud.ntnu.no" class="black-text text-size">olavws@stud.ntnu.no</a>
               </div>
             </div>
@@ -225,7 +225,7 @@
             <div class="col s6 m6 l6">
               <img class="profile-image" id="elise_yndesdal" type="image/jpg" src="{% static "images/landing-page/elise.jpg" %}">
               <h6 class="header col s12" style="font-weight: 600">Elise Yndesdal</h6>
-              <div class="text-size">+47&nbsp;***&nbsp;**&nbsp;***<br>
+              <div class="text-size">+47&nbsp;986&nbsp;68&nbsp;977<br>
                 <a href="mailto:elise.yndesdal@gmail.com" class="black-text text-size" style="font-size: 0.9em">elise.yndesdal@gmail.com</a>
               </div>
             </div>
@@ -233,7 +233,7 @@
               <img class="profile-image" id="logo" type="image/png" src="{% static "images/logo.png" %}" style="max-width: 58%;">
               <h6 class="header col s12" style="font-weight: 600">HC</h6>
               <div>
-                <a href="mailto:fadderkom@hc.ntnu.no" class="black-text text-size">fadderkom@hc.ntnu.no</a>
+                <a href="mailto:fadderkom@hc.ntnu.no" class="black-text text-size">fadderkom@hc.ntnu.no</a><br>
                 <a href="mailto:styret@hc.ntnu.no" class="black-text text-size">styret@hc.ntnu.no</a>
               </div>
             </div>
@@ -255,14 +255,14 @@
       <!-- About -->
       <div class="col s12 m6 l4">
         <h5 class="black-text" style="font-weight: 600">Om oss</h5>
-        <p class="grey-text text-darken-2" style="font-weight: 500">
+        <p class="grey-text text-darken-2">
           Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
         </p>
 
         <a href="https://github.com/HoiskolensChemikerforening/website">
-          <img src="{% static "images/github.svg" %}" alt="Github"
+          <img src="{% static "images/github-black.svg" %}" alt="Github"
                style="display: inline-block;vertical-align: middle;">
-          <span style="display: inline-block; margin-left: 10px;" class="grey-text text-darken-2" style="font-weight: 500">Github</span>
+          <span style="display: inline-block; margin-left: 10px;" class="grey-text text-darken-2">Github</span>
         </a>
       </div>
 
@@ -277,7 +277,7 @@
             </svg>
           </a>
           <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-            <p class="left-align grey-text text-darken-2" style="font-weight: 500; margin-left: 10px">Facebook</p>
+            <p class="left-align grey-text text-darken-2" style="margin-left: 10px">Facebook</p>
           </a>
         </div>
         <div class="valign-wrapper">
@@ -285,10 +285,10 @@
             <i class="material-icons valign left grey-text text-darken-2">email</i>
           </a>
           <a href="mailto:styret@hc.ntnu.no">
-            <p class="left-align grey-text text-darken-2" style="font-weight: 500">Epost</p>
+            <p class="left-align grey-text text-darken-2">Epost</p>
           </a>
         </div>
-        <a class="white-text grey-text text-darken-2" href="{% url 'frontpage:kontakt' %}" style="font-weight: 500">Kontakt oss!</a>
+        <a class="white-text grey-text text-darken-2" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
       </div>
 
       <!-- Sponsors -->

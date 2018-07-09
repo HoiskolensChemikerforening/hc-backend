@@ -6,6 +6,18 @@
  * Made By MaterializeCSS.com
  */
 
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro 55";
+  src: url('../font/neue-haas-grotesk/NHaasGroteskDSPro-55Rg.otf')  format("truetype"),
+       local('Neue Haas Grotesk Display Pro');
+}
+
+@font-face {
+  font-family: "Neue Haas Grotesk Display Pro 75";
+  src: url('../font/neue-haas-grotesk/NHaasGroteskDSPro-75Bd.otf')  format("truetype"),
+       local('Neue Haas Grotesk Display Pro');
+}
+
 body {
   margin: 0;
 }
@@ -15,11 +27,12 @@ body {
 }
 
 html {
-  font-family: "Neue Haas Grotesk Display Pro" !important;
-  src: url('../static/font/neue-haas-grotesk')  format("truetype"),
-       local('Neue Haas Grotesk Display Pro');
-  font-weight: 400;
+  font-family: "Neue Haas Grotesk Display Pro 55", Helvetica, Arial, sans-serif !important;
   font-size: 0.9em;
+}
+
+h1, h2, h3{
+  font-family: "Neue Haas Grotesk Display Pro 75", Helvetica, Arial, sans-serif !important;
 }
 
 nav ul a,
