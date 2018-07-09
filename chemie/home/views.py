@@ -57,6 +57,8 @@ def contact(request):
 def calendar(request):
     return render(request, 'chemie/calendar.html')
 
+def landing_page(request):
+    return render(request, 'chemie/landing_page.html')
 
 @login_required
 def request_funds(request):
