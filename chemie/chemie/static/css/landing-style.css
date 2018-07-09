@@ -18,7 +18,7 @@ html {
   font-family: "Neue Haas Grotesk Display Pro" !important;
   src: url('../static/font/neue-haas-grotesk')  format("truetype"),
        local('Neue Haas Grotesk Display Pro');
-  font-weight: 500;
+  font-weight: 400;
   font-size: 0.9em;
 }
 
@@ -102,6 +102,28 @@ footer.page-footer {
 
 .text-size {
   font-size: 1.02rem
+}
+
+.tabs .tab a {
+  color: #a2a2a2;
+}
+
+.tabs .tab a:focus, .tabs .tab a:focus.active {
+  background-color: transparent;
+  outline: none;
+}
+
+.tabs .tab a:hover, .tabs .tab a.active {
+  color: #000;
+}
+
+.tabs .tab.disabled a,
+.tabs .tab.disabled a:hover {
+  color: #ffeb3b;
+}
+
+.tabs .indicator {
+  background-color: #ffeb3b;
 }
 
 @media only screen and (min-width: 993px) {
