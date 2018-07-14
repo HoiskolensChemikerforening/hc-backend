@@ -107,7 +107,7 @@ footer.page-footer {
 
 .profile-image {
   display: block;
-  max-width: 80%;
+  max-width: 15vw;
   height: auto;
   margin-left: auto;
   margin-right: auto;
@@ -149,6 +149,10 @@ footer.page-footer {
   .landing-image {
     width: 100vw;
     heigh: auto;
+  }
+
+  .profile-image {
+    max-width: 30vw;
   }
 }
 
