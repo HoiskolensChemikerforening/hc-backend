@@ -30,8 +30,8 @@ urlpatterns = [
     url(r'^bokskap/', include('chemie.lockers.urls', namespace='bokskap')),
     url(r'^news/', include('chemie.news.urls', namespace='news')),
     url(r'^', include('chemie.customprofile.urls', namespace="profile")),
-    url(r'^loginold/$', auth_views.login, name='oldlogin'),
-    url(r'^login/$', LoginView.as_view(),name='login'),
+    url(r'^loginold/$', auth_views.login, name='oldlogin'),                             # todo: Remove this?
+    url(r'^login/$', LoginView.as_view(), name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^events/', include('chemie.events.urls', namespace='events')),
     url(r'^notifications/', get_nyt_pattern()),
@@ -39,7 +39,8 @@ urlpatterns = [
     url(r'^wiki/', get_wiki_pattern()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel'))
+    url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel')),
+    url(r'^shop/', include('chemie.shop.urls', namespace='shop')),
 ]
 
 handler404 = 'chemie.chemie.views.page_not_found'

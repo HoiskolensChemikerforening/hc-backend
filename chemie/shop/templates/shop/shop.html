@@ -1,0 +1,57 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chemshop</title>
+</head>
+
+{% block content %}
+    {% for item in items %}
+    <div class="row">
+        <div class="col s12 m4 l3">
+          <div class="card sticky-action small">
+            <div class="card-image waves-effect waves-block waves-light">
+              {% thumbnail item.image "630x400" as pic %}
+              <img class="activator" src="{{ pic.url }}">
+                {% endthumbnail %}
+            </div>
+            <div class="card-content">
+              <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i class="material-icons right">more_vert</i></span>
+            </div>
+            <div class="card-reveal">
+              <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
+              <p>{{ item.description }}</p>
+            </div>
+            <div class="card-action"> {{ item.price }} kr
+              <span class="right">
+                  <form action = "#" method = "POST">
+                      {% csrf_token %}
+                      <button class="waves-effect waves-light btn" type="submit" name="buy" value="{{ item.id }}">Kjøp</button>
+                  </form>
+              </span>
+
+
+            </div>
+          </div>
+        </div>
+      </div>
+
+        {{ item.name }}
+        {{ item.description|default_if_none:"" }}
+        DENNE {{ item.name }}en KOSTER
+        {{ item.price }} KRONER
+    {% endfor %}
+    <div>
+        The cart contains:
+    {% for item_names, item_details in cart.cart.items %}
+        <div>
+        Item: {{ item_names }},
+        Quantity: {{item_details.quantity}},
+        Price: {{item_details.price}}
+    {% endfor %}
+        </div>
+    {{ cart.get_total_price }}
+    </div>
+{% endblock content %}

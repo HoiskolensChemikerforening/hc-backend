@@ -6,5 +6,5 @@ app_name = 'shitbox'
 urlpatterns = [
     url(r'list/$', submissions_overview, name='list'),
     url(r'list/(?P<page>[0-9]*)$', submissions_overview, name='list-page'),
-    url(r'^$', post_votes, name="index"),
+    url(r'^$', post_votes, name='index'),
 ]

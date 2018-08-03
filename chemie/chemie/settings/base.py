@@ -86,6 +86,7 @@ LOCAL_APPS = [
     'chemie.yearbook',
     'chemie.customprofile',
     'chemie.picturecarousel',
+    'chemie.shop',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -357,3 +358,4 @@ THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
 
+CART_SESSION_ID = 'cart'
