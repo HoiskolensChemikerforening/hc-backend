@@ -89,8 +89,8 @@ class Profile(models.Model):
     phone_number = models.BigIntegerField(verbose_name="Mobilnummer")
     access_card = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Studentkortnummer")
 
-    image_primary = ImageField(upload_to='avatars')
-    image_secondary = ImageField(upload_to='avatars')
+    image_primary = ImageField(upload_to='avatars', null=True, blank=True)
+    image_secondary = ImageField(upload_to='avatars', null=True, blank=True)
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
     membership = models.OneToOneField("Membership", blank=True, null=True, related_name="membership", on_delete=models.CASCADE)
