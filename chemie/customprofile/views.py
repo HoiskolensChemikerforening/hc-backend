@@ -212,4 +212,3 @@ class LoginView(OldLoginView):
                     context['termsform'] = termsform
                     context['show_popup'] = True
                     return render(request, 'registration/login.html', context)
-
