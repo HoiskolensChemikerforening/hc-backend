@@ -128,13 +128,14 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
     )
 
-    objects = ProfileManager()
-
     approved_terms = models.BooleanField(default=False)
 
     voted = models.BooleanField(default=False)
     eligible_for_voting = models.BooleanField(default=False)
+    balance = models.DecimalField(max_digits=6, decimal_places=2)
 
+    objects = ProfileManager()
+    
     class Meta:
         permissions = (
             ('can_edit_access_card', 'Can change access card of profiles'),
