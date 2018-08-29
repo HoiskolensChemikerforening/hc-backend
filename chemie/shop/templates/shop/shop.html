@@ -43,15 +43,20 @@
         DENNE {{ item.name }}en KOSTER
         {{ item.price }} KRONER
     {% endfor %}
+    {% if cart.cart %}
     <div>
         The cart contains:
-    {% for item_names, item_details in cart.cart.items %}
-        <div>
-        Item: {{ item_names }},
-        Quantity: {{item_details.quantity}},
-        Price: {{item_details.price}}
-    {% endfor %}
-        </div>
-    {{ cart.get_total_price }}
+        {% for item_names, item_details in cart.cart.items %}
+            <div>
+                Item: {{ item_names }},
+                Quantity: {{item_details.quantity}},
+                Price: {{item_details.price}}
+            </div>
+        {% endfor %}
+    Total: {{ cart.get_total_price }}
     </div>
+    <form method="POST"> {% csrf_token %}
+        <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
+    </form>
+    {% endif %}
 {% endblock content %}

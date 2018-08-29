@@ -95,9 +95,11 @@ class Profile(models.Model):
 
     membership = models.OneToOneField("Membership", blank=True, null=True, related_name="membership", on_delete=models.CASCADE)
 
-    objects = ProfileManager()
-
     approved_terms = models.BooleanField(default=False)
+
+    balance = models.DecimalField(max_digits=6, decimal_places=2)
+
+    objects = ProfileManager()
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name

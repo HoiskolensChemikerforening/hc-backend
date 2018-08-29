@@ -6,6 +6,7 @@ from django.core.urlresolvers import reverse
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
+from django.shortcuts import get_object_or_404
 
 
 class Category(models.Model):
@@ -35,7 +36,7 @@ class OrderItem(models.Model):
     quantity = models.PositiveIntegerField()
 
     def __str__(self):
-        return self.item
+        return self.item.name
 
 
 class Order(models.Model):
@@ -107,12 +108,21 @@ class ShoppingCart(object):
         # Decimal conversion may only be performed if string has dot as decimal separator
         return sum(Decimal(item['price'].replace(',', '.')) * item['quantity'] for item in self.cart.values())
 
-    def buy(self):
-        orderitems = []
-        for item in self.cart:
-            orderitems.append()
+    def buy(self, request):
+        user = request.user
+        order_items = []
+        for item in self.cart.keys():
+            item_object = get_object_or_404(Item, name=item)
+            order_items.append(OrderItem.objects.create(item=item_object, quantity=self.cart[item]['quantity']))
+        order = Order.objects.create(buyer=user)
+        order.items.add(*order_items)
+        order.save()
+        user.profile.balance -= self.get_total_price()
+        user.profile.save()
+        self.clear()
 
     def clear(self):
+        self.cart = {}
         del self.session[settings.CART_SESSION_ID]
         self.session.modified = True
 
