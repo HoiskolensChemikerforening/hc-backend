@@ -22,7 +22,7 @@
             </div>
             <div class="card-reveal">
               <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
-              <p>{{ item.description }}</p>
+              <p>{{ item.description|default_if_none:"Ingen beskrivelse tilgjengelig" }}</p>
             </div>
             <div class="card-action"> {{ item.price }} kr
               <span class="right">
