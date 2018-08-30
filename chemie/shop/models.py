@@ -127,7 +127,7 @@ class ShoppingCart(object):
         self.session.modified = True
 
 
-def pre_save_category_receiver(model, instance, *args, **kwargs):
+def pre_save_category_receiver(sender, instance, *args, **kwargs):
     slug = slugify(instance.name)
     instance.slug = slug
 
