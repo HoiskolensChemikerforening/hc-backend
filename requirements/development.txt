@@ -11,7 +11,7 @@ bleach==1.5.0             # via wiki
 cffi==1.11.5              # via cryptography
 click==6.7                # via pip-tools
 coverage==4.3.1
-cryptography==2.1.4       # via pyopenssl
+cryptography==2.3       # via pyopenssl
 django-autocomplete-light==3.2.10
 django-ckeditor==5.4.0
 django-classy-tags==0.8.0  # via django-sekizai
