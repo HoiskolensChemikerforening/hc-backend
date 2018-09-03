@@ -101,6 +101,11 @@ class Profile(models.Model):
 
     objects = ProfileManager()
 
+    class Meta:
+        permissions = (
+            ('refill_balance', 'Can refill balance'),
+        )
+
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 

@@ -2,8 +2,11 @@ from django.shortcuts import render
 from .models import Item, ShoppingCart
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
+from .forms import RefillBalanceForm
 
 
+@login_required
 def index(request):
     items = Item.objects.all()
     cart = ShoppingCart(request)
@@ -27,3 +30,22 @@ def index(request):
                 )
                 context['cart'] = cart
     return render(request, 'shop/shop.html', context)
+
+
+@permission_required('shop.can_refill_balance')
+def refill(request):
+    provider = request.user.profile
+    form = RefillBalanceForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            user_to_refill = form.cleaned_data.get('user')
+            amount = form.cleaned_data.get('amount')
+            user_to_refill.profile.balance += amount
+            user_to_refill.profile.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Du har fylt på {} kr til brukeren {}'.format(amount, user_to_refill.username),
+                extra_tags='Suksess'
+            )
+    return render(request, 'shop/refill-balance.html', {'form': form})
