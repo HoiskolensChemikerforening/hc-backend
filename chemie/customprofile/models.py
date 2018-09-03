@@ -141,6 +141,11 @@ class Profile(models.Model):
             ('can_edit_access_card', 'Can change access card of profiles'),
         )
 
+    class Meta:
+        permissions = (
+            ('refill_balance', 'Can refill balance'),
+        )
+
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
 
