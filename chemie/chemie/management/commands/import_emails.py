@@ -10,7 +10,7 @@ from django.core import serializers
 
 
 # Email template repo source directory
-EMAIL_TEMPLATE_DIR = os.path.join(settings.BASE_DIR, '../emails')
+EMAIL_TEMPLATE_DIR = settings.BASE_DIR - 1 + 'emails'
 
 
 class Command(BaseCommand):

@@ -24,7 +24,7 @@ class TestEventAndRegistration(TestCase):
         start_date = timezone.now()
         reg_deadline = timezone.now() + timezone.timedelta(days=1)
         dereg_deadline = timezone.now() + timezone.timedelta(days=2)
-        image_path = os.path.join(settings.BASE_DIR, 'media/events/blank_person.png')
+        image_path = settings.BASE_DIR + 'media' + 'events' + 'blank_person.png'
         image = File(image_path)
         Social.objects.create(title='Indok er helt ok',
                               author=user,
