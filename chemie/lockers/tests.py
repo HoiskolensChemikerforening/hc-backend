@@ -47,24 +47,29 @@ class TokenTest(TestCase):
         user = LockerUser.objects.create(first_name="Glenn",
                                          last_name="Gregor",
                                          email='glenny@test.no')
+
+        user2 = LockerUser.objects.create(first_name="Stale",
+                                         last_name="Staler",
+                                         email='stale@test.no')
+
         locker = Locker.objects.create(number=1)
-        ownership = Ownership.objects.create(locker=locker, user=user)
-        token = LockerToken.objects.create(ownership=ownership)
+        self.ownership = Ownership.objects.create(locker=locker, user=user)
+        self.disabled_ownership = Ownership.objects.create(locker=locker, user=user2)
+        token = LockerToken.objects.create(ownership=self.ownership)
 
     def test_locker_inactive(self):
         locker = Locker.objects.get(number=1)
-        ownership = Ownership.objects.get(locker=locker)
+        ownership = self.ownership
         self.assertEqual(locker.is_free(), True)
         self.assertEqual(ownership.is_active, False)
         self.assertEqual(ownership.is_confirmed, False)
 
     def test_locker_taken(self):
-        locker = Locker.objects.get(number=1)
-        ownership = Ownership.objects.get(locker=locker)
+        ownership = self.ownership
         token = LockerToken.objects.get(ownership=ownership)
         token.activate()
 
-        ownership = Ownership.objects.get(locker=locker)
+        ownership.refresh_from_db()
         locker = Locker.objects.get(number=1)
 
         self.assertEqual(locker.is_free(), False)
@@ -73,8 +78,7 @@ class TokenTest(TestCase):
         self.assertEqual(token.pk, None)
 
     def test_prune_expired(self):
-        locker = Locker.objects.get(number=1)
-        ownership = Ownership.objects.get(locker=locker)
+        ownership = self.ownership
         token = LockerToken.objects.get(ownership=ownership)
         # Locker was tried taken without confirming 8 days ago
         token.created = timezone.now() - timedelta(days=8)
@@ -102,6 +106,16 @@ class TokenTest(TestCase):
         self.assertEqual(ownership.locker.number, 1)
         self.assertEqual(ownership.user.email, 'glenny@test.no')
 
+    def test_active_locker_user_kept_after_reset(self):
+        locker = Locker.objects.get(number=1)
+        user = LockerUser.objects.get(email='glenny@test.no')
+        ownership = Ownership.objects.get(locker=locker, user=user)
+        token = LockerToken.objects.get(ownership=ownership)
+        token.activate()
+
+        Locker.objects.reset_idle()
+        locker.refresh_from_db()
+        self.assertEqual(locker.owner, ownership)
 
     def test_reset_locker_ownerships(self):
         # Fetch locker, user, ownership and attach locker <=> ownership

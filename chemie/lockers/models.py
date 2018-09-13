@@ -13,9 +13,9 @@ LOCKER_COUNT = 2
 
 class LockerManager(models.Manager):
     def reset_idle(self):
-        # Fetch all lockers, where an inactive Ownership (through indefinite_locker) is pointing to a locker.
+        # Fetch all lockers, where an inactive Ownership is pointing to a locker.
         taken_lockers = self.filter(owner__isnull=False)
-        idle_lockers = taken_lockers.filter(indefinite_locker__is_active__exact=False)
+        idle_lockers = taken_lockers.filter(owner__is_active__exact=False)
         idle_lockers_count = idle_lockers.update(owner=None)
         return idle_lockers_count
 
@@ -66,11 +66,6 @@ class LockerUser(models.Model):
 class OwnershipManager(models.Manager):
     def prune_expired(self):
         self.filter(is_confirmed=False).delete()
-
-    def fetch_all_states(self):
-        taken_lockers = self.objects.filter(definite_owner__owner__isnull=False)
-        taken_lockers = taken_lockers.prefetch_related("user")
-        return taken_lockers
 
 
 class Ownership(models.Model):

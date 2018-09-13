@@ -20,14 +20,16 @@ class Command(BaseCommand):
             self.stdout.write(self.style.NOTICE('Are you sure you wish to proceed? y/N'))
             confirm = input('').lower()
             if confirm == 'y':
-                self.stdout.write(self.style.NOTICE('Freeing lockers...'))
+                self.stdout.write(self.style.NOTICE('Issuing final warnings...'))
             else:
                 raise CommandError('Aborted.')
         else:
             self.stdout.write(self.style.NOTICE('Silent treatment received.'))
 
-        endangered = Locker.objects.filter(owner__isnull=False)
-        endangered = endangered.filter(indefinite_locker__is_active__exact=False).prefetch_related('indefinite_locker__user')
+        endangered = Locker.objects.\
+            filter(owner__isnull=False).\
+            filter(owner__is_active__exact=False). \
+            prefetch_related('owner__user')
 
         for locker in endangered:
             token = locker.owner.create_confirmation()
