@@ -111,7 +111,7 @@ class ListPastSocialView(ListView):
     model = Social
 
     def queryset(self):
-        return self.model.objects.filter(date__lte=timezone.now()).order_by('date')
+        return self.model.objects.filter(date__lte=timezone.now()).order_by('-date')
 
 
 class ListPastBedpresView(ListPastSocialView):
