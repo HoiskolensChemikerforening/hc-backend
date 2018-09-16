@@ -1,0 +1,28 @@
+{% extends 'chemie/base_election.html' %}
+
+{% block content %}
+<div style="margin-top: 10px">
+
+    <div >
+        <div >
+            <div style="">
+                <a href="" class="button is-success"> Refresh side</a>
+            </div>
+            <div>
+                <h2 class="title is-2" align="center">{{election.current_position.total_votes}} personer har stemt</h2>
+                <!--<p id="demo"></p>-->
+                <!--<script>-->
+                    <!--refresh();-->
+                    <!--function refresh() {-->
+                        <!--window.location.reload(true);-->
+                        <!--setTimeout(refresh(), 100000);-->
+                    <!--}-->
+                <!--</script>-->
+             </div>
+        </div>
+    </div>
+    <div style="margin-top: 10px">
+        <a href="{% url "elections:admin_results" %}" class="button is-danger">End Voting</a>
+    </div>
+</div>
+{% endblock %}

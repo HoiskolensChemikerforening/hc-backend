@@ -1,0 +1,48 @@
+{% extends "chemie/base_election.html" %}
+{% load thumbnail %}
+{% load static %}
+
+{% block content %}
+
+<div>
+    <div style="text-align: center">
+        <div>
+            <h3 class="title is-2">{{ position.position_name }}</h3>
+            <h4>Det skal velges <b>{{ position.spots }}</b> til dette vervet</h4>
+            <hr color="black">
+        </div>
+        <br>
+        <div>
+            <form method="POST">{% csrf_token %}
+                <div>
+                    <form method="POST" class="viewform">
+                        {% csrf_token %}
+
+                            {%for candidate in form.candidates%}
+                        <div class="vote-box">
+                            {{candidate}}
+                        </div>
+                        {%endfor%}
+                        <input class="button" type='submit' style="margin-right: 10%; margin-bottom: 10%" name="Blank" value='Stem blankt'/>
+                        <input class="button is-success" type='submit'  value='Avgi stemme'/>
+
+                    </form>
+
+                </div>
+            </form>
+
+
+        </div>
+    </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+<script src="{% static 'material/js/jquery.js' %}"></script>
+<script>
+    let inputs = $('.vote-box').find('input');
+
+</script>
+{% endblock footer_script %}

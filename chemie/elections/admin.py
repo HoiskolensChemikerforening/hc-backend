@@ -1,8 +1,8 @@
 from django.contrib import admin
 
-from .models import Candidate, Position, Election, Ticket
+from .models import Candidates, Position, Election
 
-admin.site.register(Candidate)
+admin.site.register(Candidates)
 admin.site.register(Position)
 admin.site.register(Election)
-admin.site.register(Ticket)
+
