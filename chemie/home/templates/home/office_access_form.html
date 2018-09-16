@@ -1,0 +1,40 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+  Kontortilgang
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Send søknad
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <div class="row">
+    <div class="col s12 m12 l12">
+      <p class="flow-text">
+        Her kan du søke om tilgang på kontoret med studentkortet ditt.
+        For at tilgang skal kunne bli innvilget er det
+        viktig at ditt lagrede studentkortnummer samsvarer med nummeret på studentkortet.
+      </p>
+      <p class="flow-text">
+        Ditt lagrede studentkortnummer er {{ access_card }}.
+        Vennligst bekreft at dette stemmer før du sender inn søknaden.
+      </p>
+
+      {% if not already_applied %}
+        <div>
+          <a style="float: left;" href="{% url "profile:edit" %}">
+            <button class="btn btn-primary pull-right" type="submit">Stemmer ikke, endre kortnummer!</button>
+          </a>
+          <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            {% form form=form %}
+            {% endform %}
+            <a style="float: right;"><input class="btn" type='submit' value='Kortnummeret stemmer, send søknad!'/></a>
+          </form>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+  </div>
+{% endblock content %}
