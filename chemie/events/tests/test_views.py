@@ -46,7 +46,7 @@ def test_overview_bedpres(client, create_user):
 
 
 @pytest.mark.django_db
-def test_my_active_social_events(client, create_user):
+def test_my_active_events(client, create_user):
     social = SocialEventFactory.create(title="Altair event")
     bedpres = BedpresEventFactory.create(title="Altair bedpres")
     user = create_user
