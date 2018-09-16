@@ -17,6 +17,7 @@ class RandomUserFactory(factory.DjangoModelFactory):
                                                 'defaultpassword')
     is_active = True
 
+
 class RandomProfileFactory(factory.DjangoModelFactory):
     class Meta:
         model = Profile
@@ -35,3 +36,4 @@ class RandomProfileFactory(factory.DjangoModelFactory):
     image_primary = factory.django.ImageField(color='blue')
     image_secondary = factory.django.ImageField(color='red')
     address = factory.Faker('address')
+    approved_terms = True
