@@ -44,25 +44,8 @@
             <!-- Events -->
                 <h3 class="heading">Arrangementer</h3>
                  {% if social or bedpres %}
-                    <ul id="frontpage_event_header" class="tabs tabs-fixed-width card" style="background-color: var(--card-bg);">
-                        <li class="tab col s3"><a href="#social">Sosialt</a></li>
-                        <li class="tab col s3"><a href="#bedpres">Bedpres</a></li>
-                    </ul>
-                    <div id="social" class="col s12 card" style="background-color: var(--card-bg)">
-                        {% include 'events/frontpage_events.html' with object_list=social %}
-                        <a href="{% url "events:index_social" %}">
-                            <p class="colhov center-align" style="font-size: 1rem; justify-content: center;">Alle sosiale arrangementer</p>
-                            <p class="center-align"><i class="material-icons" style="color: var(--extra-color);">arrow_forward</i></p>
-                        </a>
-                    </div>
-                    <div id="bedpres" class="col s12 card" style="background-color: var(--card-bg)">
-                        {% include 'events/frontpage_events.html' with object_list=bedpres %}
-                        <a href="{% url "events:index_bedpres" %}">
-                            <p class="colhov center-align" style="font-size: 1rem; justify-content: center;">Alle bedpresser</p>
-                            <p class="center-align"><i class="material-icons" style="color: var(--extra-color);">arrow_forward</i></p>
-                        </a>
-                    </div>
-                {% endif %}
+                  {% include 'events/frontpage_list_events.html' with object_list=object_list %}
+                 {% endif %}
             </div>
             <div class="col s12 pull-m6 m6 pull-l5 l7">
                 <!-- News -->
