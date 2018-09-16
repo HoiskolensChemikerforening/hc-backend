@@ -1,5 +1,5 @@
 # chemie
-hc.ntnu.no / chemie.no
+hc.ntnu.no
 
 ## Development setup
 
