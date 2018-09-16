@@ -1,1 +1,1 @@
-[{"model": "sites.site", "pk": 1, "fields": {"domain": "chemie.no", "name": "chemie.no"}}]
+[{"model": "sites.site", "pk": 1, "fields": {"domain": "hc.ntnu.no", "name": "hc.ntnu.no"}}]
