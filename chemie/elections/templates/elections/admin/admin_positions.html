@@ -1,0 +1,68 @@
+{% extends "chemie/base_election.html" %}
+{% load material_form %}
+
+<!--
+context = {
+    'form':form,
+    'positions':positions
+}
+-->
+
+
+{% block content %}
+<script> //TODO Dette burde legges i en egen static file
+function ConfirmValg() {
+ if (window.confirm('Avslutte valget?'))
+ {
+   return window.location.href= "{%url "elections:admin_end_election"%}"
+ }
+}
+</script>
+
+<div style="text-align: center;">
+    <div>
+        <div>
+
+            <h3 class="title is-3">Legg til Verv</h3>
+            <form method="POST" href="{%url "elections:admin_register_positions
+            "%}">{% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" style="margin-top: 10px" class="button">Legg til verv</button>
+            </form>
+        </div>
+    </div>
+    <br>
+    {%if positions.all%}
+    {% for position in positions%}
+    <div class="card">
+        <header class="card-header" >
+            <p class="card-header-title">
+                {{position}}
+            </p>
+        </header>
+        <div class="card-content">
+            <div class="content">
+                <h1 class="title is-5">{{position.spots}} skal velges inn</h1>
+            </div>
+        </div>
+        <footer class="card-footer">
+            <a href={{ position.id }} class="card-footer-item" >Gå til valg av posisjon</a>
+            {% if position.voting_done%}
+            <p class="card-footer-item" style="color: green">Gjennomført</p>
+            {%else%}
+            <p class="card-footer-item" style="color: red">Ikke gjennomført</p>
+            {%endif%}
+            <a href="#" class="card-footer-item">&#10060;</a>
+        </footer>
+    </div>
+    <div>
+        <br>
+    {%endfor%}
+    <br>
+    <div >
+        <a class="button is-danger" onclick="ConfirmValg(); return false;" >Avslutt valg</a>
+    </div>
+    {%endif%}
+</div>
+
+{% endblock %}

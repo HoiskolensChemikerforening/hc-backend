@@ -1,0 +1,81 @@
+{% extends 'chemie/base_election.html' %}
+<!--context = {
+            'candidates': candidates,
+            'form': form,
+            'position': position,
+            'search_user': search_user
+        }-->
+
+{% load thumbnail %}
+
+{% load staticfiles %}
+{% load static %}
+
+{%block content%}
+
+<script> //TODO Dette burde legges i en egen static file
+function ConfirmValg() {
+ if (window.confirm('Klar for å åpne valget?'))
+ {
+   return window.location.href = "start"
+ }
+}
+</script>
+
+<div>
+
+    <!--Tittle på possisjon-->
+    <div style="margin-bottom: 10px">
+        <h3 class="title is-4"> Kandidater for {{ position.position_name }}</h3>
+    </div>
+
+
+
+    <!--Søke felt for brukere-->
+    <div>
+        <div>
+            <form method="POST" action="" style="display: inline"> {% csrf_token %}
+                {{ add_candidate_form.candidate_user }}
+                <input type="submit" class="button" name="addCandidate" value="Legg til kandidat" height="10px"/>
+            </form>
+            {%if position.voting_done%}
+            <h2 class="title is-2"> Dette valget har alt blitt gjennomført</h2>
+            {%endif%}
+
+        </div>
+    </div>
+
+    <!--Alle Kandidater-->
+
+    {%for candidate in candidates%}
+    <div class="card border-secondary mb-3" style="
+    margin-top: 10px;
+
+    " >
+        <div class="card-body" style="padding: 0.5rem">
+            <h5 style="display: inline" class="title is-5"> {{candidate}}</h5>
+            <form method="post" href="#"; style="display: inline">{% csrf_token %}
+            <input id="preVotesForm" class="input" type="number" name="preVotes" value="{{candidate.votes}}" style="width:2cm; display: inline">
+            <button type="submit" class="button" value="{{candidate.candidate_user.username}}" name="OK" >OK</button>
+                <p style="margin-right: 10px"> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
+            <button class="button" type="submit" style="display: inline" name="Delete" value="{{candidate.candidate_user.username}}" >&#10060</button>
+            </form>
+        </div>
+
+    </div>
+    {%endfor%}
+
+
+    </div>
+    <div style="position: absolute; ">
+        {% if candidates %}
+        <a class="button is-success" style="margin-top: 10px" onclick="ConfirmValg(); return false;">Start</a>
+        {% endif %}
+    </div>
+</div>
+{%endblock%}
+
+{% block footer_script %}
+    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+    {{ add_candidate_form.media }}
+{% endblock footer_script %}
