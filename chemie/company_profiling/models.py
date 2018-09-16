@@ -28,7 +28,7 @@ class Interview(models.Model):
     name = models.CharField(max_length=None, verbose_name="Navn")
 
     # Company
-    company = models.ForeignKey(Company)
+    company = models.ForeignKey(Company, verbose_name="Firma")
 
     # Name of the position the person holds at the company
     position = models.CharField(max_length=None, verbose_name="Arbeidsstilling")
@@ -44,3 +44,17 @@ class Interview(models.Model):
 
     def __str__(self):
         return self.name + ", " + self.position + " for " + self.company.name
+
+
+class Position(models.Model):
+    # Name of the open position at the company
+    name = models.CharField(max_length=None, verbose_name="Navn")
+
+    # Company
+    company = models.ForeignKey(Company, verbose_name="Firma")
+
+    # URL to the application
+    url = models.URLField(max_length=None, verbose_name="Nettverksaddresse")
+
+    # Which fields of study the position is relevant for
+    field_of_study = MultiSelectField(choices=FIELD_OF_STUDY)
