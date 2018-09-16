@@ -1,0 +1,12 @@
+{% extends 'chemie/base_election.html' %}
+
+{% block content %}
+<div>
+    {%for ticket in tickets%}
+        {{ticket}}
+        <br>
+    {%endfor%}
+
+</div>
+
+{% endblock %}
