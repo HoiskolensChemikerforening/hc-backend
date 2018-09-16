@@ -41,6 +41,8 @@
       <button class="waves-effect waves-light btn btn-primary" name="register_or_edit" type="submit">{% if registered %}
         Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
     </form>
+<p>Ved å melde deg på dette arrangementet godtar du vår <a class="modal-trigger" href="#terms_modal">samtykkeerklæring</a>.</p>
+  {% include 'registration/terms_and_conditions.html' %}
   {% else %}
 
     {% if not event.registration_has_opened %}
