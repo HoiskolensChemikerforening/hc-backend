@@ -39,13 +39,6 @@ def list_all(request):
     }
     return render(request, 'news/list.html', context)
 
-@permission_required("news.delete_article")
-def list_article_delete(request):
-    all_posts = Article.objects.filter(published=True).order_by('-published_date')
-    context = {
-        'posts': all_posts,
-    }
-    return render(request, 'news/list_delete.html', context)
 
 @permission_required("news.delete_article")
 def delete_article(request, article_id, slug):
