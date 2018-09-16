@@ -13,8 +13,6 @@
   <form class="newPost" enctype="multipart/form-data" method='POST'>{% csrf_token %}
     {{ post.media }}
     {{ post.as_p }}
-    {% with url_name=request.resolver_match.url_name %}
-      <input class="btn" type='submit' value='Lagre artikkelen!'/>
-    {% endwith %}
+    <input class="btn" type='submit' value='Lagre artikkelen!'/>
   </form>
 {% endblock content %}
