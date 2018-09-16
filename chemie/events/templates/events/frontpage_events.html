@@ -2,12 +2,10 @@
 <style>
     #social, #bedpres {
         border-radius: 0 0 8px 8px;
-        <!---box-shadow: 1px 1px;--->
     }
 
     #frontpage_event_header {
         border-radius: 8px 8px 0 0;
-        <!---box-shadow: 1px 1px;--->
     }
 
     p {
@@ -36,10 +34,4 @@
         <p class="flow-text truncate colhov" style="font-weight: normal; font-size: 1rem;">{{ event.date|date:"j F - H:i" }}</p>
     </a>
     <hr>
-    <!--<p class="flow-text truncate" style="font-size: 12px">{{ event.registered_users|default_if_none:0 }}
-        av {{ event.sluts }} påmeldte</p>
-    <div class="progress">
-        <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
-    </div> -->
-
 {% endfor %}
