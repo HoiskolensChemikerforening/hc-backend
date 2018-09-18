@@ -26,4 +26,9 @@ def create_admin_user():
 def create_election_with_positions():
     new_election = Election.objects.create()
     positions = PositionFactory.create_batch(5)
-    ape=3
+    return new_election, positions
+
+@pytest.fixture(scope='function')
+def create_candidates():
+    number_of_candidates = 4
+    return CandidateFactory.create_batch(number_of_candidates)

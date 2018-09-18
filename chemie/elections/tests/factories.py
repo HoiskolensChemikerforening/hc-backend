@@ -8,7 +8,7 @@ class PositionFactory(factory.DjangoModelFactory):
     class Meta:
         model=Position
     position_name = factory.Faker('first_name')
-    spots = random.randint(1,5)
+    spots = random.randint(1, 5)
 
 
 class CandidateFactory(factory.DjangoModelFactory):

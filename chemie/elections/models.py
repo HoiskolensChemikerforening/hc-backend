@@ -1,11 +1,9 @@
-from django.db import models, transaction
-from django.utils.crypto import get_random_string
-from django.contrib.auth.models import User
-import uuid
 import datetime
-from django.shortcuts import render_to_response, get_object_or_404, render
 
-
+from django.contrib.auth.models import User
+from django.db import models
+from django.shortcuts import get_object_or_404
+from django.db.models.query import QuerySet
 
 """
 POTITION_TYPE_CHOICES= (
@@ -65,20 +63,24 @@ class Position(models.Model):
     voting_done = models.BooleanField(default=False)
     winners = models.ManyToManyField(Candidates, blank=True, related_name="winners", default=None)
 
-    def delete_position(self, *args, **kwargs):
-        try:  # prøver å delete candidater under en posisjon
-            election = kwargs['election']
-            candidates_objects = self.candidates.all()
-            self.candidates.remove(candidates_objects)
-            candidates_objects.delete()
-            self.save()
-            election.positions.remove(self)
-            self.delete()
-            election.save()
-        except:  # catcher hvis posisjonen ikke har candidater
-            election.positions.remove(self)
-            self.delete()
-            election.save()
+    def delete_candidates(self, candidates):
+        if type(candidates) is Candidates:
+            deletable = candidates
+            if deletable in self.candidates.all():
+                deletable.delete()
+                return
+        elif type(candidates) is QuerySet:
+            deletables = candidates
+        elif type(candidates) is list:
+            ids = [candidate.id for candidate in candidates]
+            deletables = Candidates.objects.filter(pk__in=ids)
+        else:
+            raise AttributeError
+        for candidate in deletables:
+            if candidate in self.candidates.all():
+                candidate.delete()
+            else:
+                print('Candidate {} was not related to position {}'.format(candidate, self))
 
     def __str__(self):
         return self.position_name
@@ -110,7 +112,6 @@ class Position(models.Model):
         self.winners = all_winners
 
 
-
 class Election(models.Model):
     is_open = models.BooleanField(verbose_name="Er åpent", default=False) #Generelt for hele valget
     positions = models.ManyToManyField(Position, blank=True, related_name='election')
@@ -120,6 +121,25 @@ class Election(models.Model):
 
     def __str__(self):
         return '{}: {}'.format(self.id, self.date)
+
+    def add_position(self, positions):
+        self.positions.add(*positions)
+        self.save()
+
+    def delete_position(self, positions):
+        if type(positions) is QuerySet:
+            deletables = positions
+        elif type(positions) is list:
+            ids = [position.id for position in positions]
+            deletables = Position.objects.filter(pk__in=ids)
+        else:
+            raise AttributeError
+        for position in deletables:
+            if position in self.positions.all():
+                position.delete_candidates(candidates=position.candidates.all())
+                position.delete()
+            else:
+                raise ValueError
 
     def start_current_election(self,*args,**kwargs):
         current_position = get_object_or_404(Position, pk=int(args[0]))  # finner posisjonen vi skal votere om
@@ -138,13 +158,11 @@ class Election(models.Model):
             self.save()
             self.current_position.save()
 
-
     def end_election(self):
         if self.is_open:
             self.is_open = False
             self.date = datetime.date.today()
             self.save()
-
 
     def vote(self,*args,**kwargs):
         voted = False
