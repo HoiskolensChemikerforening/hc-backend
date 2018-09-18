@@ -1,5 +1,8 @@
 import pytest
 from django.core.exceptions import ObjectDoesNotExist
+from chemie.customprofile.factories import RandomProfileFactory
+from django.core.urlresolvers import reverse
+
 
 @pytest.mark.django_db
 def test_inital_election(create_election_with_positions):
@@ -56,7 +59,7 @@ def test_delete_single_candidate(create_election_with_positions, create_candidat
     position.candidates.add(candidate)
     assert candidate in list(position.candidates.all())
     position.delete_candidates(candidate)
-    with pytest.raises(ObjectDoesNotExist):
+    with pytest.raises(ObjectDoesNotExist) as e_info:
         candidate.refresh_from_db()
 
 
@@ -71,11 +74,12 @@ def test_delete_position(create_election_with_positions, create_candidates):
     election.delete_position(positions)
 
     # Refetch all objects, since they have been deleted, and references are stale
-    with pytest.raises(ObjectDoesNotExist):
+    with pytest.raises(ObjectDoesNotExist)  as e_info:
         for position in positions:
             position.refresh_from_db()
         for candidate in candidates:
             candidate.refresh_from_db()
+
 
 @pytest.mark.django_db
 def test_get_current_position_winners(create_election_with_positions, create_candidates):
@@ -95,8 +99,84 @@ def test_get_current_position_winners(create_election_with_positions, create_can
     assert list(position.winners.all()) == list(winner_candidates)
 
 
+@pytest.mark.django_db
+def test_start_current_election(create_election_with_positions, create_candidates):
+    election, positions = create_election_with_positions
+    candidates = create_candidates
+
+    total_votes = 0
+    for i in range(len(candidates)):
+        candidates[i].votes = i + 1
+        candidates[i].save()
+        total_votes += candidates[i].votes
+
+    position = positions[0]
+    position.candidates.add(*candidates)
+
+    # Fetch all profiles and fake that they have voted
+    profiles = RandomProfileFactory.create_batch(10)
+    for profile in profiles:
+        profile.voted = True
+        profile.save()
+
+    election.start_current_election(position.id)
+    assert election.current_position == position
+
+    # Check that users can now vote again
+    for profile in profiles:
+        profile.refresh_from_db()
+        assert profile.voted is False
+
+    assert election.current_position_is_open is True
+    assert election.current_position.total_votes is total_votes
 
 
+@pytest.mark.django_db
+def test_end_election(create_election_with_positions):
+    election, _ = create_election_with_positions
+
+    election.end_election()
+    assert election.is_open is False
+
+    election.is_open = True
+    election.save()
+    assert election.is_open is True
+
+    election.end_election()
+    assert election.is_open is False
 
 
+@pytest.mark.django_db
+def test_start_current_election(client, create_election_with_positions, create_candidates, create_user):
+    election, positions = create_election_with_positions
+    candidates = create_candidates
+    candidate = candidates[0]
 
+    # Prepare the election
+    position = positions[0]
+    position.candidates.add(*candidates)
+    election.start_current_election(position.id)
+
+    # Let user vote
+    user = create_user
+    client.login(username=user.username, password='defaultpassword')
+    # TODO: Find out how data is passed in to the client.post.
+    request = client.post(
+        reverse('elections:voting'),
+        data={
+            'candidates': candidate
+        }
+    )
+
+    """
+    Assuming your form has the fields carID, Driver_Last_Name, etc,
+    the call to self.client.get should look like
+    self.client.get(
+            url,
+            data={
+                'carID': <id>,
+                'Driver_Last_Name': <driver_last_name>,
+                ...
+                }
+            )
+    """
