@@ -68,6 +68,7 @@ class Position(models.Model):
             deletable = candidates
             if deletable in self.candidates.all():
                 deletable.delete()
+                self.save()
                 return
         elif type(candidates) is QuerySet:
             deletables = candidates
@@ -81,35 +82,34 @@ class Position(models.Model):
                 candidate.delete()
             else:
                 print('Candidate {} was not related to position {}'.format(candidate, self))
+        self.save()
 
     def __str__(self):
         return self.position_name
 
     def get_current_position_winners(self):
-        all_winners = dict()
-        all_results = dict()
-        for candidates in self.candidates.all():
-            all_results[candidates] = candidates.votes
+        winners = []
+        all_votes = {}
+        for candidate in self.candidates.all():
+            all_votes[candidate.id] = candidate.votes
         for winner_spots in range(self.spots):
             most_votes = 0
-            winner = None
+            winner_id = None
             winner_votes = 0
-            for result in all_results:
-                if all_results[result] >= most_votes:
-                    most_votes = all_results[result]
-                    winner = result
-                    winner_votes = all_results[result]
-            all_winners[winner] = winner_votes
+            for candidate_id, votes in all_votes.items():
+                if votes > most_votes:
+                    most_votes = votes
+                    winner_id = candidate_id
+                    winner_votes = votes
+            winner_candidate = Candidates.objects.get(id=winner_id)
+            winners.append(winner_candidate)
 
-            found_winner = False
-            for candidate in all_results:
-                if all_results[candidate] == winner_votes:
-                    all_winners[candidate] = all_results[candidate]
-                    if not found_winner:
-                        # Når vi finner bestCandidate
-                        found_winner = True
-                    all_results[candidate] = -1
-        self.winners = all_winners
+            # Now set the votes of the last found winner to -1, so he is not found again
+            all_votes[winner_id] = -1
+
+        # All winners are now stored in a list. Add this to self.winners
+        self.winners.add(*winners)
+        self.save()
 
 
 class Election(models.Model):
