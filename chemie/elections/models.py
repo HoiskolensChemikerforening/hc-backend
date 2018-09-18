@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.shortcuts import get_object_or_404
 from django.db.models.query import QuerySet
+from chemie.customprofile.models import Profile
 
 """
 POTITION_TYPE_CHOICES= (
@@ -95,12 +96,10 @@ class Position(models.Model):
         for winner_spots in range(self.spots):
             most_votes = 0
             winner_id = None
-            winner_votes = 0
             for candidate_id, votes in all_votes.items():
                 if votes > most_votes:
                     most_votes = votes
                     winner_id = candidate_id
-                    winner_votes = votes
             winner_candidate = Candidates.objects.get(id=winner_id)
             winners.append(winner_candidate)
 
@@ -140,14 +139,15 @@ class Election(models.Model):
                 position.delete()
             else:
                 raise ValueError
+        self.save()
 
-    def start_current_election(self,*args,**kwargs):
+    def start_current_election(self, *args):
         current_position = get_object_or_404(Position, pk=int(args[0]))  # finner posisjonen vi skal votere om
         candidates = current_position.candidates.all()
-        users = User.objects.all()
-        for user in users:
-            user.profile.voted = False
-            user.profile.save()
+        profiles = Profile.objects.all()
+        for profile in profiles:
+            profile.voted = False
+            profile.save()
         if not self.current_position_is_open:  # forhindrer at vi ikke resetter votes ved refresh page
             self.current_position = current_position
             self.current_position.total_votes = 0
@@ -155,8 +155,8 @@ class Election(models.Model):
             # Legge til forhndsstemmene i totale stemmer
             for candidate in candidates:
                 self.current_position.total_votes += candidate.votes
-            self.save()
             self.current_position.save()
+            self.save()
 
     def end_election(self):
         if self.is_open:
@@ -164,7 +164,7 @@ class Election(models.Model):
             self.date = datetime.date.today()
             self.save()
 
-    def vote(self,*args,**kwargs):
+    def vote(self, *args, **kwargs):
         voted = False
         candidates = self.current_position.candidates.all()
         form = args[1]
