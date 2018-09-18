@@ -1,12 +1,11 @@
 import pytest
-import factory
-import random
+
 from chemie.customprofile.factories import RandomProfileFactory
-from chemie.elections.models import Election,Position,Candidates
+from chemie.elections.models import Election
 from .factories import CandidateFactory, PositionFactory
 
 
-# Fixture for logged in client with user profile
+# Fixture for logged in client with user profiŒle
 @pytest.fixture(scope='function')
 def create_user(superuser=False):
     new_profile = RandomProfileFactory.create()
