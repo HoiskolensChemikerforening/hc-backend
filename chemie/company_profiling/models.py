@@ -58,3 +58,7 @@ class Position(models.Model):
 
     # Which fields of study the position is relevant for
     field_of_study = MultiSelectField(choices=FIELD_OF_STUDY)
+
+    # Deadline for submitting a job application
+    deadline = models.DateField(auto_now=False, auto_now_add=False)
+
