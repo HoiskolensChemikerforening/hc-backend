@@ -6,6 +6,13 @@
 
 <div>
     <div style="text-align: center">
+         {% for message in messages %}
+        <!-- TODO: Style alert for user not voting correctly-->
+            <div class="alert alert-success">
+                <a class="close" href="#" data-dismiss="alert">×</a>
+                {{ message }}
+            </div>
+        {% endfor %}
         <div>
             <h3 class="title is-2">{{ position.position_name }}</h3>
             <h4>Det skal velges <b>{{ position.spots }}</b> til dette vervet</h4>

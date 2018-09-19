@@ -1,7 +1,7 @@
 import material as M
 from dal import autocomplete
 from django import forms
-from extended_choices import Choices
+from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 
 from .models import Position, Election, Candidates
@@ -15,11 +15,6 @@ class AddPositionForm(forms.ModelForm):
 
     class Meta:
         model = Position
-        #widgets = {
-        #    'position_name': forms.TextInput(attrs={'placeholder': 'Legg til verv...'}),
-        #    'spots': forms.NumberInput(
-        #        attrs={'placeholder': 'Legg til antall plasser...'}),
-        #}
         fields = ('position_name', 'spots')
 
 
@@ -80,3 +75,11 @@ class CastVoteForm(forms.Form):
         self.election = kwargs.pop('election')
         super().__init__(*args, **kwargs)
         self.fields['candidates'].queryset = candidatesChoices(self.election)
+
+    def clean_candidates(self):
+        candidates = self.cleaned_data['candidates'].all()
+        count = candidates.count()
+        if count > self.election.current_position.spots or count <= 0:
+            raise ValidationError('Stem på litt færre folk da kis')
+        else:
+            return candidates
