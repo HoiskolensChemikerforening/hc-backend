@@ -1,7 +1,9 @@
-from chemie.customprofile.factories import RandomUserFactory
-import factory
-from chemie.elections.models import Position, Candidates
 import random
+
+import factory
+
+from chemie.customprofile.factories import RandomUserFactory
+from chemie.elections.models import Position, Candidates
 
 
 class PositionFactory(factory.DjangoModelFactory):

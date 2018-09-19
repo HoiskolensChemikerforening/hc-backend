@@ -1,9 +1,11 @@
-from django.shortcuts import render_to_response, get_object_or_404, render
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-from .models import Election, Position, Candidates
-from .forms import AddPositionForm, AddCandidateForm, OpenElectionForm, AddVotesCandidateForm, CastVoteForm
+from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
+
+from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, CastVoteForm
+from .models import Election, Position, Candidates
 
 
 def check_latest_election():
@@ -27,6 +29,7 @@ def vote(request):
         context = {'election':None, 'voted':False}
     return render(request, 'elections/election/index.html', context)
 
+
 @login_required
 def resultater(request):
     try:
@@ -37,6 +40,7 @@ def resultater(request):
         'elections':elections,
     }
     return render(request,'elections/election/resultater.html',context)
+
 
 @login_required
 def voting(request):
@@ -49,16 +53,32 @@ def voting(request):
             if not voted:
                 form = CastVoteForm(request.POST or None, election=election)
                 if request.method == 'POST':
-                    if election.vote(request,form):
+                    profile = request.user.profile
+                    if form.is_valid():
+                        candidates = form.cleaned_data.get('candidates')
+                        successful_vote = election.vote(profile, candidates, blank=False)
+                    elif 'Stem blankt' in request.POST.getlist('Blank'):
+                        successful_vote = election.vote(profile, candidates=None, blank=True)
+                    else:
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            'Gjør det rett a kis',
+                        )
+                        context = {
+                            'form': form,
+                            'position': election.current_position,
+                            'candidates': election.current_position.candidates.all(),
+                        }
+                        return render(request, 'elections/election/vote.html', context)
+                    if successful_vote:
                         return redirect('elections:has_voted')
                 else:
                     context= {
                         'form': form,
                         'position':  election.current_position,
-                        'candidates':election.current_position.candidates.all(),
-                        'picture':election.current_position.candidates.latest('id').candidate_user.profile.image_primary
+                        'candidates': election.current_position.candidates.all(),
                     }
-                    print(election.current_position.candidates.latest('id').candidate_user.profile.image_primary)
                     return render(request, 'elections/election/vote.html', context)
             return redirect('elections:has_voted')
         return redirect('elections:vote')
@@ -94,6 +114,7 @@ def admin_start_election(request): # OK
         except:
             pass
     return render(request, 'elections/admin/admin_start_election.html')
+
 
 @permission_required('valg.add_Election')
 @login_required
@@ -196,7 +217,6 @@ def admin_start_voting(request, pk):
         return render(request, 'elections/admin/admin_start_voting.html', context)
 
 
-
 @permission_required('valg.add_Election')
 @login_required
 def admin_results(request):
@@ -218,6 +238,8 @@ def admin_results(request):
             }
 
         return render(request, 'elections/admin/admin_results.html', context)
+
+
 @permission_required('valg.add_Election')
 @login_required
 def admin_end_election(request):

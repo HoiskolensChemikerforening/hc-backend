@@ -2,8 +2,9 @@ import datetime
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.shortcuts import get_object_or_404
 from django.db.models.query import QuerySet
+from django.shortcuts import get_object_or_404
+
 from chemie.customprofile.models import Profile
 
 """
@@ -164,39 +165,22 @@ class Election(models.Model):
             self.date = datetime.date.today()
             self.save()
 
-    def vote(self, *args, **kwargs):
+    def vote(self, profile, candidates=None, blank=False):
         voted = False
-        candidates = self.current_position.candidates.all()
-        form = args[1]
-        request = args[0]
-        vote_blank = request.POST.getlist('Blank')
-        if 'Blank' in vote_blank:
-            self.current_position.total_votes += 1
-            self.current_position.save()
-            voted = True
-            request.user.profile.voted = voted
-            request.user.profile.save()
-        else:
-            print(form.is_valid())
-            if form.is_valid():
-
-                 # Henter ut id nummerene til kandidatene som brukeren stemmer på
-                voted_user_list = request.POST.getlist('candidates')
-                spots = self.current_position.spots
-
-                if not len(voted_user_list) > spots:  # Checking if user have voted for at least 1 candidate and no more than spots avalible
-                    if not request.user.profile.voted:  # check if user has voted
-                        # Looper gjennom listen med id-nummerene
-                        for number in voted_user_list:
-                            candidate_user = candidates.get(id=number)
-                            candidate_user.votes += 1
-
-                            self.current_position.total_votes += 1
-
-                            candidate_user.save()
-                            self.current_position.save()
-                        request.user.profile.voted = True
-                        voted = True
-                        request.user.profile.save()
+        if not profile.voted:
+            if blank:
+                self.current_position.total_votes += 1
+                self.current_position.save()
+                voted = True
+                profile.voted = True
+                profile.save()
+            elif candidates.count() is not 0:
+                for candidate in candidates:
+                    candidate.votes += 1
+                    self.current_position.total_votes += 1
+                    candidate.save()
+                    self.current_position.save()
+                profile.voted = True
+                profile.save()
+                voted = True
         return voted
-

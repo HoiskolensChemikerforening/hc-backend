@@ -1,7 +1,8 @@
 import pytest
 from django.core.exceptions import ObjectDoesNotExist
-from chemie.customprofile.factories import RandomProfileFactory
 from django.core.urlresolvers import reverse
+
+from chemie.customprofile.factories import RandomProfileFactory
 
 
 @pytest.mark.django_db
