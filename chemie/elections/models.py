@@ -127,7 +127,12 @@ class Election(models.Model):
         self.save()
 
     def delete_position(self, positions):
-        if type(positions) is QuerySet:
+        if type(positions) is Position:
+            position = positions
+            position.delete_candidates(candidates=position.candidates.all())
+            self.save()
+            return
+        elif type(positions) is QuerySet:
             deletables = positions
         elif type(positions) is list:
             ids = [position.id for position in positions]
@@ -174,13 +179,28 @@ class Election(models.Model):
                 voted = True
                 profile.voted = True
                 profile.save()
-            elif candidates.count() is not 0:
-                for candidate in candidates:
+            else:
+                if type(candidates) is Candidates:
+                    candidate = candidates
                     candidate.votes += 1
                     self.current_position.total_votes += 1
                     candidate.save()
                     self.current_position.save()
-                profile.voted = True
-                profile.save()
-                voted = True
+                    return True
+                elif type(candidates) is QuerySet:
+                    cands = candidates
+                elif type(candidates) is list:
+                    ids = [candidate.id for candidate in candidates]
+                    cands = Candidates.objects.filter(pk__in=ids)
+                else:
+                    raise AttributeError
+                if cands.count() is not 0:
+                    for candidate in cands:
+                        candidate.votes += 1
+                        self.current_position.total_votes += 1
+                        candidate.save()
+                        self.current_position.save()
+                    profile.voted = True
+                    profile.save()
+                    voted = True
         return voted
