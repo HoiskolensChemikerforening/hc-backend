@@ -60,10 +60,9 @@ def candidatesChoices(election=None):
 
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
-        image = mark_safe("<img src='%s' width='300' height='300' />" % obj.candidate_user.profile.image_primary.url)
+        image = mark_safe("<img src='%s' class='vote-image' />" % obj.candidate_user.profile.image_primary.url)
         name = mark_safe("<p>%s %s </p>" %(obj.candidate_user.first_name,obj.candidate_user.last_name))
         return image + name
-
 
 class CastVoteForm(forms.Form):
     candidates = CustomChoiceField(
