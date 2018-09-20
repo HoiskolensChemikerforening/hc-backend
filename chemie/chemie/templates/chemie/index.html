@@ -45,6 +45,8 @@
       <h3 class="heading">Arrangementer</h3>
       {% if social or bedpres %}
         {% include 'events/frontpage_list_events.html' with object_list=object_list %}
+      {% else %}
+        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
       {% endif %}
     </div>
     <div class="col s12 pull-m6 m6 pull-l5 l7">
