@@ -72,10 +72,11 @@ def test_delete_position(create_election_with_positions, create_candidates):
 
     position = positions[0]
     position.candidates.add(*candidates)
+    election.delete_position(position)
     election.delete_position(positions)
 
     # Refetch all objects, since they have been deleted, and references are stale
-    with pytest.raises(ObjectDoesNotExist)  as e_info:
+    with pytest.raises(ObjectDoesNotExist) as e_info:
         for position in positions:
             position.refresh_from_db()
         for candidate in candidates:
@@ -148,7 +149,7 @@ def test_end_election(create_election_with_positions):
 
 
 @pytest.mark.django_db
-def test_start_current_election(client, create_election_with_positions, create_candidates, create_user):
+def test_start_current_election(create_election_with_positions, create_candidates, create_user):
     election, positions = create_election_with_positions
     candidates = create_candidates
     candidate = candidates[0]
@@ -158,26 +159,37 @@ def test_start_current_election(client, create_election_with_positions, create_c
     position.candidates.add(*candidates)
     election.start_current_election(position.id)
 
-    # Let user vote
-    user = create_user
-    client.login(username=user.username, password='defaultpassword')
-    # TODO: Find out how data is passed in to the client.post.
-    request = client.post(
-        reverse('elections:voting'),
-        data={
-            'candidates': candidate
-        }
-    )
+    # Fetch user
+    profile = create_user.profile
 
-    """
-    Assuming your form has the fields carID, Driver_Last_Name, etc,
-    the call to self.client.get should look like
-    self.client.get(
-            url,
-            data={
-                'carID': <id>,
-                'Driver_Last_Name': <driver_last_name>,
-                ...
-                }
-            )
-    """
+    # Set an a vote variable
+    votes = 0
+
+    # Let user vote blank
+    election.vote(profile, candidates=None, blank=True)
+    votes += 1
+    assert election.current_position.total_votes is votes
+    for cand in candidates:
+        assert cand.votes is 0
+
+    # Let user vote for single candidate
+    profile.voted = False
+    profile.save()
+    election.vote(profile, candidate, blank=False)
+    votes += 1
+    assert election.current_position.total_votes is votes
+    assert candidate.votes is 1
+
+    # Let user vote for several candidates
+    profile.voted = False
+    profile.save()
+    election.vote(profile, candidates, blank=False)
+    votes += len(candidates)
+    for cand in candidates:
+        cand.refresh_from_db()
+        if cand is candidate:
+            assert cand.votes is 2
+        else:
+            assert cand.votes is 1
+    assert election.current_position.total_votes is votes
+    assert profile.voted is True
