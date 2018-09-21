@@ -1,69 +1,95 @@
-from datetime import timedelta
-from .factories import SocialEventFactory
 import pytest
-from django.core.management import call_command
-from django.utils import timezone
-from freezegun import freeze_time
-from post_office.models import Email
 from django.shortcuts import reverse
+from freezegun import freeze_time
 
-from chemie.customprofile.factories import RandomProfileFactory
-from chemie.customprofile.models import GRADES
 from .factories import BedpresEventFactory
-from ..models import BedpresRegistration, REGISTRATION_STATUS
-from ..views import set_user_event_status
+from .factories import SocialEventFactory
 
-
-
+from ..models import SocialEventRegistration, BedpresRegistration, REGISTRATION_STATUS
 
 
 @freeze_time('2040-12-01 00:30')
 @pytest.mark.django_db
-def test_overview_social(client_profile):
+def test_overview_social(client, create_user):
     future_social = SocialEventFactory.create(title="Altair event")
-    request = client_profile.get(reverse('events:index_social'))
+    user = create_user
+    client.login(username=user.username, password='defaultpassword')
+    request = client.get(reverse('events:index_social'))
     assert future_social.title in request.content.decode('utf-8')
     assert "Det er ingen aktive sosiale arrangementer" not in request.content.decode('utf-8')
 
     with freeze_time('2040-12-24 00:30'):
-        request = client_profile.get(reverse('events:past_social'))
+        client.login(username=user.username, password='defaultpassword')
+        request = client.get(reverse('events:past_social'))
         assert future_social.title in request.content.decode('utf-8')
-
-        request = client_profile.get(reverse('events:index_social'))
+        request = client.get(reverse('events:index_social'))
         assert "Det er ingen aktive sosiale arrangementer" in request.content.decode('utf-8')
 
 
 @freeze_time('2040-12-01 00:30')
 @pytest.mark.django_db
-def test_overview_bedpres(client_profile):
+def test_overview_bedpres(client, create_user):
     future_bedpres = BedpresEventFactory.create(title="Altair event")
-    request = client_profile.get(reverse('events:index_bedpres'))
+    user = create_user
+    client.login(username=user.username, password='defaultpassword')
+    request = client.get(reverse('events:index_bedpres'))
     assert future_bedpres.title in request.content.decode('utf-8')
     assert "Det er ingen aktive bedpresser" not in request.content.decode('utf-8')
 
     with freeze_time('2040-12-24 00:30'):
-        request = client_profile.get(reverse('events:past_bedpres'))
+        client.login(username=user.username, password='defaultpassword')
+        request = client.get(reverse('events:past_bedpres'))
         assert future_bedpres.title in request.content.decode('utf-8')
 
-        request = client_profile.get(reverse('events:index_bedpres'))
+        request = client.get(reverse('events:index_bedpres'))
         assert "Det er ingen aktive bedpreser nå" in request.content.decode('utf-8')
 
 
 @pytest.mark.django_db
-def test_my_active_social_events(client_profile):
+def test_my_active_events(client, create_user):
     social = SocialEventFactory.create(title="Altair event")
+    bedpres = BedpresEventFactory.create(title="Altair bedpres")
+    user = create_user
+    client.login(username=user.username, password='defaultpassword')
+    request_social = client.get(reverse('events:index_social'))
+    request_bedpres = client.get(reverse('events:index_bedpres'))
 
-    request = client_profile.get(reverse('events:index_social'))
+    ####### USER NOT ENROLLED #######
+    # Test that user does not see any social events when he is not enrolled
+    assert \
+        'Du er ikke påmeldt noen sosiale arrangementer. Finn på noe sprell!' or \
+        'Vennligst logg inn for å se dine aktive sosiale arrangementer.' in \
+        request_social.content.decode('utf-8')
+
+    # Test that user does not see any bedpres events when he is not enrolled
+    assert \
+        'Du er ikke påmeldt noen bedpreser. Finn på noe sprell!' or \
+        'Vennligst logg inn for å se dine aktive bedpreser.' in \
+        request_bedpres.content.decode('utf-8')
+
+    # Check SQL entry in database
+    assert not SocialEventRegistration.objects.filter(event=social, user=user).exists()
+    assert not BedpresRegistration.objects.filter(event=bedpres, user=user).exists()
+
+    ####### ENROLL USER #######
+    SocialEventRegistration.objects.create(user=user, event=social, status=REGISTRATION_STATUS.CONFIRMED)
+    BedpresRegistration.objects.create(user=user, event=bedpres, status=REGISTRATION_STATUS.CONFIRMED)
+    # Refetch urls, user is now enrolled
+    request_social = client.get(reverse('events:index_social'))
+    request_bedpres = client.get(reverse('events:index_bedpres'))
+
+    # Test that user sees his social events when he is enrolled
+    assert social.title in request_social.content.decode('utf-8')
+
+    # Test that user sees his bedpres events when he is enrolled
+    assert bedpres.title in request_bedpres.content.decode('utf-8')
+
+    # Check SQL entry in database
+    assert SocialEventRegistration.objects.filter(event=social, user=user).exists()
+    assert BedpresRegistration.objects.filter(event=bedpres, user=user).exists()
 
 
-#    my_event = SocialEventFactory.create()
-
-# Create social event
-# Create bedbres
-
-
-
-
+# TODO: Create this test. Should check that all details related to the event is correct and that the HTML displays correctly
 @pytest.mark.django_db
 def test_create_social_event_view(admin_client):
     url = reverse('events:create_social')

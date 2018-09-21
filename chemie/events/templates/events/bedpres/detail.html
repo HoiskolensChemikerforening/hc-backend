@@ -121,25 +121,23 @@
     </div>
   </div>
 
+  <div class="row">
   <!-- List of attending users -->
-  {% if attendees %}
-    <div class="row">
-      <div class="col">
+    <div class="col s12 m6 l6">
+      {% if attendees %}
         <h2>Påmeldte</h2>
         {% include "events/attendees.html" with user_list=attendees %}
-      </div>
+      {% endif %}
     </div>
-  {% endif %}
 
-  <!-- List of users on waiting list -->
-  {% if attendees_waiting %}
-    <div class="row">
-      <div class="col">
+    <div class="col s12 m6 l6">
+    <!-- List of users on waiting list -->
+      {% if waiting_list %}
         <h2>Venteliste</h2>
         {% include "events/waiting_list.html" with user_list=attendees_waiting %}
-      </div>
+      {% endif %}
     </div>
-  {% endif %}
+  </div>
 
 {% endblock maincontent %}
 
