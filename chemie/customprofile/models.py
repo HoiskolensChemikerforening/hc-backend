@@ -91,6 +91,7 @@ class Profile(models.Model):
 
     image_primary = ImageField(upload_to='avatars', null=True, blank=True)
     image_secondary = ImageField(upload_to='avatars', null=True, blank=True)
+
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
     membership = models.OneToOneField("Membership", blank=True, null=True, related_name="membership", on_delete=models.CASCADE)
