@@ -58,7 +58,7 @@
                 <div class="section">
                         <div class="valign-wrapper">
                             <i class="material-icons valign left">contacts</i>
-                            <h5 class="left-align">Ansvarlig komité</h5>
+                            <h5 class="left-align">Komité</h5>
                         </div>
                         <p>{{ social.committee }}</p>
                     </div>
@@ -127,8 +127,9 @@
     </div>
 
     <!-- Button for signup page -->
-    <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
-
+    {% if social.sluts != 0 %}
+        <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
+    {% endif %}
     <!-- Desription info -->
     <div class="row">
         <div class="col s12 m12 l12">
