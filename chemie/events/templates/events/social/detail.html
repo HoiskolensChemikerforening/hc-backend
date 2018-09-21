@@ -4,26 +4,27 @@
 {% load event_extras %}
 
 {% block nav_sub_header %}
-  Detaljer
+    Detaljer
 {% endblock nav_sub_header %}
 
 {# Include extra permissions that provide object specific URLs #}
 {% block permissions %}
-  {% include "events/social/permissions_object.html" %}
+    {% include "events/social/permissions_object.html" %}
 {% endblock %}
 
 {% block breadcrumbs %}
-  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
-    <a class="breadcrumb">{{ social.title }}</a>
-  </div>
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+        <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
+        <a class="breadcrumb">{{ social.title }}</a>
+    </div>
 {% endblock %}
 
 
 {% block maincontent %}
 
   <div class="row">
-    <div class="col s12 m12 l12"><h1 class="heading">{{ social.title }}</h1></div>
+    <p class="col s12 m12 l12">
+    <h1 class="heading">{{ social.title }}</h1>
   </div>
 
   <div class="row">
@@ -54,82 +55,108 @@
           </div>
           <div class="divider"></div>
 
-          <!-- Prices -->
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">attach_money</i>
-              <h5 class="left-align">Pris</h5>
-            </div>
-            <div>
-              <p class="left valign"><b>Medlem:</b></p>
-              <p class="right valign">{{ social.price_member|price }}</p>
-            </div>
-            <br>
-            <div>
-              <p class="left valign"><b>Ikke-medlem: </b></p>
-              <p class="right valign">{{ social.price_not_member|price }}</p>
-            </div>
-            <br>
-            {% if social.companion %}
-              <div>
-                <p class="left valign"><b>Eksternt følge: </b></p>
-                <p class="right valign">{{ social.price_companion|price }}</p>
+            <div class="section">
+              <div class="valign-wrapper">
+                <i class="material-icons valign left">contacts</i>
+                <h5 class="left-align">Komité</h5>
               </div>
-              <br>
+              <p>{{ social.committee }}</p>
+            </div>
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">edit</i>
+                  <h5 class="left-align">Forfatter</h5>
+                </div>
+                <p>{{ social.author.get_full_name }}</p>
+              </div>
+              <div class="divider"></div>
+
+                <!-- Prices -->
+                <div class="section">
+                  <div class="valign-wrapper">
+                    <i class="material-icons valign left">attach_money</i>
+                    <h5 class="left-align">Pris</h5>
+                  </div>
+                  <div>
+                    <p class="left valign"><b>Medlem:</b></p>
+                    <p class="right valign">{{ social.price_member|price }}</p>
+                  </div>
+                  <br>
+                  <div>
+                    <p class="left valign"><b>Ikke-medlem: </b></p>
+                    <p class="right valign">{{ social.price_not_member|price }}</p>
+                  </div>
+                  <br>
+                  {% if social.companion %}
+                    <div>
+                      <p class="left valign"><b>Eksternt følge: </b></p>
+                      <p class="right valign">{{ social.price_companion|price }}</p>
+                    </div>
+                    <br>
+                  {% endif %}
+                  </div>
+                  <div class="divider"></div>
+
+                  <!-- Total and remaining slots bar -->
+                  <div class="section">
+                    <div class="valign-wrapper">
+                      <i class="material-icons valign left">people_outline</i>
+                      <h5 class="left-align">Plasser</h5>
+                    </div>
+                    {% if social.sluts == 0 %}
+                      <div>
+                        <p class="left valign">Arrangementet er åpent for alle!</p>
+                      </div>
+                    {% else %}
+                      <div>
+                        <p class="left valign"><b>Påmeldte:</b></p>
+                        <p class="right valign">{{ social.registered_users|default_if_none:0 }}
+                            av {{ social.sluts }}</p>
+                      </div>
+                      <div class="progress">
+                        <div class="determinate" style="width: {{ social.percentage_filled }}%"></div>
+                      </div>
+                    {% endif %}
+                    <br>
+                  </div>
+                </div>
+                <div class="divider"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Button for signup page -->
+    {% if social.sluts != 0 %}
+        <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
+    {% endif %}
+    <!-- Desription info -->
+    <div class="row">
+        <div class="col s12 m12 l12">
+            <div class="card">
+                <div class="card-content">
+                    <h5>Beskrivelse:</h5>
+                    <p class="flow-text"> {{ social.description|linebreaksbr }} </p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Payment info -->
+        <div class="col s12 m12 l12">
+            {% if social.price_member or social.price_companion or social.price_companion %}
+                <div class="card">
+                    <div class="card-content">
+                        <h5>Betalingsinformasjon:</h5>
+                        <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
+                    </div>
+                </div>
             {% endif %}
-          </div>
-          <div class="divider"></div>
-
-          <!-- Total and remaining slots bar -->
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">people_outline</i>
-              <h5 class="left-align">Plasser</h5>
-            </div>
-            <div>
-              <p class="left valign"><b>Påmeldte:</b></p>
-              <p class="right valign">{{ social.registered_users|default_if_none:0 }} av {{ social.sluts }}</p>
-            </div>
-            <br>
-            <div class="progress">
-              <div class="determinate" style="width: {{ social.percentage_filled }}%"></div>
-            </div>
-          </div>
         </div>
-        <div class="divider"></div>
-      </div>
-
     </div>
-  </div>
-
-  <!-- Button for signup page -->
-  <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
-
-  <!-- Desription info -->
-  <div class="row">
-    <div class="col s12 m12 l12">
-      <div class="card">
-        <div class="card-content">
-          <h5>Beskrivelse:</h5>
-          <p class="flow-text"> {{ social.description|linebreaksbr }} </p>
-        </div>
-      </div>
-    </div>
-
-    <!-- Payment info -->
-    <div class="col s12 m12 l12">
-      <div class="card">
-        <div class="card-content">
-          <h5>Betalingsinformasjon:</h5>
-          <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
-        </div>
-      </div>
-    </div>
-  </div>
 
   <div class="row">
   <!-- List of attending users -->
-    <div class="col s12 m6 l6">
+    <div class="col
+">
       {% if attendees %}
         <h2>Påmeldte</h2>
         {% include "events/attendees.html" with user_list=attendees %}
@@ -145,9 +172,8 @@
     </div>
   </div>
 
-
 {% endblock %}
 
 {% block footer_js_files %}
-  <script src="{% static "events/transpose_table.js" %}"></script>
+    <script src="{% static "events/transpose_table.js" %}"></script>
 {% endblock footer_js_files %}

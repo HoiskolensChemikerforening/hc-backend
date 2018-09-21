@@ -75,7 +75,8 @@ class BaseRegisterEventForm(forms.ModelForm):
 
 
 class RegisterEventForm(BaseRegisterEventForm):
-    layout = M.Layout(M.Row(M.Column('published','title', )),
+    layout = M.Layout(M.Row(M.Column('published', 'title')),
+                      M.Row('committee'),
                       M.Row(M.Column('date', span_columns=1),
                             M.Column('register_startdate', span_columns=1),
                             M.Column('register_deadline', span_columns=1),
@@ -86,13 +87,15 @@ class RegisterEventForm(BaseRegisterEventForm):
                       M.Row(M.Column('image'), M.Column('sluts')),
                       M.Row('price_member', 'price_not_member', 'price_companion'),
                       M.Row('companion', 'sleepover', 'night_snack'),
-                      M.Row('allowed_grades')
+                      M.Row('allowed_grades'),
                       )
+
 
     class Meta(BaseRegisterEventForm.Meta):
         model = Social
         fields = BaseRegisterEventForm.Meta.fields.copy()
         fields += [
+            "committee",
             "payment_information",
             "price_member",
             "price_not_member",
