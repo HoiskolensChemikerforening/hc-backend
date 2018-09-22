@@ -123,8 +123,19 @@ class Election(models.Model):
         return '{}: {}'.format(self.id, self.date)
 
     def add_position(self, positions):
-        self.positions.add(*positions)
-        self.save()
+        if type(positions) is Position:
+            self.positions.add(positions)
+            self.save()
+            return
+        elif type(positions) is QuerySet:
+            self.positions.add(positions)
+            self.save()
+            return
+        elif type(positions) is list:
+            self.positions.add(*positions)
+            self.save()
+        else:
+            raise AttributeError
 
     def delete_position(self, positions):
         if type(positions) is Position:
