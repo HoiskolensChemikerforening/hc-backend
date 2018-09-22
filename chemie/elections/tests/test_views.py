@@ -47,7 +47,7 @@ def test_election_is_open(client, create_user, create_election_with_positions):
 
 
 @pytest.mark.django_db
-def test_election_is_open(client, create_user, create_election_with_positions, create_candidates):
+def test_vote_for_one_user(client, create_user, create_election_with_positions, create_candidates):
     election, positions = create_election_with_positions
     candidates = create_candidates
     election.is_open = True
@@ -70,8 +70,12 @@ def test_election_is_open(client, create_user, create_election_with_positions, c
         reverse('elections:voting'),
         {'candidates': [str(candidate.id)]}
     )
+    assert request.url == reverse('elections:has_voted')
     candidate.refresh_from_db()
     assert candidate.votes == 1
     for cand in candidates[1:]:
         cand.refresh_from_db()
         assert cand.votes == 0
+    user.profile.refresh_from_db()
+    assert user.profile.voted is True
+
