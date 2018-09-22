@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, CastVoteForm
 from .models import Election, Position, Candidates
@@ -14,7 +15,7 @@ def check_latest_election():
         election = Election.objects.latest('id')
         if not election.is_open:
             check = False
-    except AttributeError:
+    except ObjectDoesNotExist:
         check = False
     return check
 
