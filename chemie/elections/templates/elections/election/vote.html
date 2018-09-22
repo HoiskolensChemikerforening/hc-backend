@@ -21,18 +21,21 @@
         <br>
         <div>
             <form method="POST">{% csrf_token %}
-                <div>
-                    <form method="POST" class="viewform">
+
+                    <form method="POST">
+                        <div class="vote-div">
                         {% csrf_token %}
                             {%for candidate in form.candidates%}
-                        <div class='box' onclick="changeColor(this)">
+                        <div class='vote-box' onclick="changeColor(this)">
                             {{candidate}}
                         </div>
                         {%endfor%}
+                        </div>
+                        <hr color="black">
                         <input class="button" type='submit' style="margin-right: 10%; margin-bottom: 10%" name="Blank" value='Stem blankt'/>
                         <input class="button is-success" type='submit'  value='Avgi stemme'/>
                     </form>
-                </div>
+
             </form>
 
 
@@ -48,30 +51,45 @@
 <script>
 changeColor = function(block){
     var input = block.children[0].children[0];
+    var image = block.children[0].children[1];
     console.log(input);
     console.log(input.checked);
     if (input.checked) {
-        block.style.backgroundColor='gray';
+        //block.style.backgroundColor='gray';
+        image.style.backgroundColor='gray';
+        image.style.borderColor='gray';
     } else {
-        block.style.backgroundColor='transparent';
+        // block.style.backgroundColor='transparent';
+        image.style.backgroundColor='transparent';
+        image.style.borderColor='transparent';
     }
 }
 </script>
 
 <style>
-    .box {
-        width:40%;
-        height:20%;
-        padding: 20px;
-        border-radius: 25px;
-        margin: 10px;
+    .vote-box {
+        border-color: black;
+        margin-bottom: 1.5rem;
     }
-
-    .box input{
+    .vote-div{
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        align-items: center;
+    }
+    .vote-box input{
         opacity: 0;
     }
     .vote-image {
-        max-width: 40%;
+        display: inline;
+        border-radius: 30%;
+        border-color: transparent;
+        border: 3px solid #ddd;
+        margin-right: 1.5rem;
+        margin-right: 1.5rem;
+        padding: 5px;
+        width: 150px;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
 </style>
 {% endblock footer_script %}
