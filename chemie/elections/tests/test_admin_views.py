@@ -114,5 +114,32 @@ def test_delete_position(client,create_admin_user, create_election_with_position
         position.refresh_from_db()
 
 
+@pytest.mark.django_db
+def test_add_candidates(client,create_admin_user,create_election_with_positions,create_user):
+    admin = create_admin_user
+    client.login(username=admin.username, password='defaultpassword')
+    election, postitions = create_election_with_positions
+    election.is_open = True
+    position = postitions[0]
+    election.add_position(position)
+    election.save()
+    user = create_user
+
+    #TODO Fix this
+    # request = client.post(
+    #     reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
+    #     {
+    #         "candidate_user": user,
+    #         "addCandidate": "addCandidate"
+    #      }
+    # )
+    #
+    # position.refresh_from_db()
+    # assert position.candidates.all().count() == 1
+
+
+
+
+
 
 

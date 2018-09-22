@@ -65,6 +65,21 @@ class Position(models.Model):
     voting_done = models.BooleanField(default=False)
     winners = models.ManyToManyField(Candidates, blank=True, related_name="winners", default=None)
 
+    def add_candidate(self, candidates):
+        if type(candidates) is Candidates:
+            self.candidates.add(candidates)
+            self.save()
+            return
+        elif type(candidates) is QuerySet:
+            self.candidates.add(candidates)
+            self.save()
+            return
+        elif type(candidates) is list:
+            self.candidates.add(*candidates)
+            self.save()
+        else:
+            raise AttributeError
+
     def delete_candidates(self, candidates):
         if type(candidates) is Candidates:
             deletable = candidates
