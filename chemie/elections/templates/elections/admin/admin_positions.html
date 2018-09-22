@@ -24,8 +24,7 @@ function ConfirmValg() {
         <div>
 
             <h3 class="title is-3">Legg til Verv</h3>
-            <form method="POST" href="{%url "elections:admin_register_positions
-            "%}">{% csrf_token %}
+            <form method="POST" href="{%url "elections:admin_register_positions"%}">{% csrf_token %}
             {{ form.as_p }}
             <button type="submit" style="margin-top: 10px" class="button">Legg til verv</button>
             </form>
@@ -52,17 +51,20 @@ function ConfirmValg() {
             {%else%}
             <p class="card-footer-item" style="color: red">Ikke gjennomført</p>
             {%endif%}
-            <a href="#" class="card-footer-item">&#10060;</a>
+            <form method="POST" href="#">{% csrf_token %}
+                <button href="#" class="card-footer-item" type="submit" name="Delete" value="{{position.id}}">&#10060;</button>
+            </form>
         </footer>
     </div>
     <div>
         <br>
     {%endfor%}
     <br>
-    <div >
-        <a class="button is-danger" onclick="ConfirmValg(); return false;" >Avslutt valg</a>
-    </div>
+
     {%endif%}
+        <div >
+            <a class="button is-danger" onclick="ConfirmValg(); return false;" >Avslutt valg</a>
+        </div>
 </div>
 
 {% endblock %}

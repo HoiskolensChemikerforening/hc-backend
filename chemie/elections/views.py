@@ -126,10 +126,9 @@ def admin_register_positions(request):
         election = Election.objects.latest('id')
         if request.method == "POST":
             if "Delete" in request.POST: # delete posisjon
-                position_name = request.POST.get("Delete", "0")
-                election_position = election.positions.filter(position_name=position_name)
-                #todo change filter to get
-                election_position[0].delete_position(election=election)
+                position_id = request.POST.get("Delete", "0")
+                position = election.positions.get(id=int(position_id))
+                election.delete_position(position)
             # Selve formen fr registrering av posisjon
             form = AddPositionForm(request.POST)
             if form.is_valid():
