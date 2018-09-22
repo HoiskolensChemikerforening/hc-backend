@@ -128,8 +128,9 @@ class Election(models.Model):
 
     def delete_position(self, positions):
         if type(positions) is Position:
-            position = positions
+            position = positions #
             position.delete_candidates(candidates=position.candidates.all())
+            position.delete()
             self.save()
             return
         elif type(positions) is QuerySet:

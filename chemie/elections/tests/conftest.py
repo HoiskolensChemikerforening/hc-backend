@@ -31,6 +31,14 @@ def create_election_with_positions():
 
 
 @pytest.fixture(scope='function')
+def create_open_election():
+    new_election = Election.objects.create()
+    new_election.is_open = True
+    new_election.save()
+    return new_election
+
+
+@pytest.fixture(scope='function')
 def create_candidates():
     number_of_candidates = 4
     return CandidateFactory.create_batch(number_of_candidates)
