@@ -1,6 +1,6 @@
 import pytest
 from django.shortcuts import reverse
-from ..models import Election
+from ..models import Election, Candidates
 from django.core.exceptions import ObjectDoesNotExist
 
 @pytest.mark.django_db
@@ -125,17 +125,46 @@ def test_add_candidates(client,create_admin_user,create_election_with_positions,
     election.save()
     user = create_user
 
-    #TODO Fix this
-    # request = client.post(
-    #     reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
-    #     {
-    #         "candidate_user": user,
-    #         "addCandidate": "addCandidate"
-    #      }
-    # )
-    #
-    # position.refresh_from_db()
-    # assert position.candidates.all().count() == 1
+    request = client.post(
+        reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
+        {
+            "candidate_user": user.id,
+            "addCandidate": "Legg til kandidat"
+         }
+    )
+
+    position.refresh_from_db()
+    assert position.candidates.all().count() == 1
+    candidate = Candidates.objects.get(candidate_user=user)
+    assert candidate is not None
+    assert candidate.votes == 0
+    assert not candidate.winner
+    assert candidate in position.candidates.all()
+
+
+@pytest.mark.django_db
+def test_add_pre_votes_to_candidate(client,create_admin_user,create_open_election_with_position_and_candidates):
+    admin = create_admin_user
+    client.login(username=admin.username, password='defaultpassword')
+    election = create_open_election_with_position_and_candidates
+    position = election.positions.all().first()
+    number_of_candidates = len(position.candidates.all())
+    candidate = position.candidates.all().first()
+    pre_votes = 5
+    client.post(
+        reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
+        {
+            "preVotes": pre_votes,
+            "OK":candidate.candidate_user.username,
+        }
+    )
+    candidate.refresh_from_db()
+    position.refresh_from_db()
+    assert candidate.votes == 5
+    assert position.total_votes == 5
+
+    # Testing that the votes of other candidates has not changed.
+    assert len(position.candidates.filter(votes=0)) == number_of_candidates-1
 
 
 
