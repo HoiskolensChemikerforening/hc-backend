@@ -9,16 +9,22 @@ from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, Cas
 from .models import Election, Position, Candidates
 
 
-def check_latest_election():
-    check = True
+def election_is_open():
+    is_open = True
     try:
         election = Election.objects.latest('id')
         if not election.is_open:
-            check = False
+            is_open = False
     except ObjectDoesNotExist:
-        check = False
-    return check
+        is_open = False
+    return is_open
 
+def voting_is_active():
+    active = False
+    election = Election.objects.latest('id')
+    if election.current_position_is_open:
+        active = True
+    return active
 
 @login_required
 def vote(request):
@@ -45,7 +51,7 @@ def resultater(request):
 
 @login_required
 def voting(request):
-    if not check_latest_election():
+    if not election_is_open():
         return redirect('elections:vote')
     else:
         voted = request.user.profile.voted
@@ -87,7 +93,7 @@ def voting(request):
 
 @login_required
 def has_voted(request):
-    if not check_latest_election():
+    if not election_is_open():
         return redirect('elections:vote')
     else:
         election = Election.objects.latest('id')
@@ -102,28 +108,27 @@ def has_voted(request):
 @permission_required('valg.add_Election')
 @login_required
 def admin_start_election(request): # OK
+    if election_is_open():
+        election = Election.objects.latest('id')
+        if voting_is_active():
+            return redirect('elections:admin_start_voting', pk=election.current_position.id)
+        return redirect('elections:admin_register_positions')
     if request.method == 'POST': # brukeren trykker på knappen
         Election.objects.create(is_open=True)
-        election = Election.objects.latest('id')
-        election.save()
         return redirect('elections:admin_register_positions')
-    else:
-        try: # kjører try fordi det kan hende det ikke finnes et election object
-            election = Election.objects.latest('id')
-            if election.is_open: # hvis det alt finnes en election skal vi bare hoppe til hovedsiden
-                return redirect('elections:admin_register_positions')
-        except:
-            pass
     return render(request, 'elections/admin/admin_start_election.html')
+
 
 
 @permission_required('valg.add_Election')
 @login_required
 def admin_register_positions(request):
-    if not check_latest_election():
+    if not election_is_open():
         return redirect('elections:admin_start_election')
     else:
         election = Election.objects.latest('id')
+        if voting_is_active():
+            return redirect('elections:admin_start_voting', pk=election.current_position.id)
         if request.method == "POST":
             if "Delete" in request.POST: # delete posisjon
                 position_id = request.POST.get("Delete", "0")
@@ -155,9 +160,12 @@ def admin_register_positions(request):
 @permission_required('valg.add_Election')
 @login_required
 def admin_register_candidates(request, pk):
-    if not check_latest_election():
+    if not election_is_open():
         return redirect('elections:admin_start_election')
     else:
+        if voting_is_active():
+            election = Election.objects.latest('id')
+            return redirect('elections:admin_start_voting',pk=election.current_position.id)
         position = get_object_or_404(Position, pk=pk) # henter ut position som skal legge verv til
         add_candidate_form = AddCandidateForm(request.POST or None)
         if request.method == 'POST':
@@ -171,8 +179,6 @@ def admin_register_candidates(request, pk):
                     candidate_object = all_candidates.get(candidate_user=candidate_user_object)
                     candidate_object.votes = preVotes
                     candidate_object.save()
-                    position.total_votes += preVotes
-                    position.save()
             elif 'Delete' in request.POST: # hvis brukeren skal slette candidaten fra posisjonen.
                 form = AddVotesCandidateForm(request.POST)
                 if form.is_valid():
@@ -192,6 +198,11 @@ def admin_register_candidates(request, pk):
                         candidate = Candidates.objects.create(candidate_user=user)
                         position.candidates.add(candidate)
                         position.save()
+            elif 'startVoting' in request.POST:
+                election = Election.objects.latest('id')
+                if not election.current_position_is_open:
+                    election.start_current_election(position)
+                return redirect('elections:admin_start_voting', pk=position.id)
 
         candidates = position.candidates.all()
         form = AddCandidateForm() # overskriver form her for at sist lagt til bruker ikke står som default for neste innlegging
@@ -206,51 +217,51 @@ def admin_register_candidates(request, pk):
 
 @permission_required('valg.add_Election')
 @login_required
-def admin_start_voting(request, pk):
-    if not check_latest_election():
+def admin_voting_is_active(request, pk):
+    if not election_is_open():
         return redirect('elections:admin_start_election')
-    else:
-        election = Election.objects.latest('id')
-        if not election.current_position_is_open:
-            election.start_current_election(pk)
-        context = {
-            'election': election
-        }
-        return render(request, 'elections/admin/admin_start_voting.html', context)
+    if not voting_is_active():
+        return redirect('elections:admin_register_positions')
+
+    election = Election.objects.latest('id')
+    if request.method == 'POST':
+        if 'endVoting' in request.POST:
+            election.current_position.end_voting_for_position()
+            return redirect('elections:admin_results',pk=pk)
+    context = {
+        'election': election
+    }
+    return render(request, 'elections/admin/admin_start_voting.html', context)
 
 
 @permission_required('valg.add_Election')
 @login_required
-def admin_results(request):
-    if not check_latest_election():
+def admin_results(request,pk):
+    if not election_is_open():
         return redirect('elections:admin_start_election')
-    else:
-        election = Election.objects.latest('id')
-        election.current_position.get_current_position_winners()
-        election.current_position_is_open = False
-        election.current_position.voting_done = True
-        election.current_position.save()
-        election.save()
+    election = Election.objects.latest('id')
+    if voting_is_active():
+        return redirect('elections:admin_start_voting', pk=pk)
+    position = election.positions.get(id=pk)
+    context = {
+        'candidates': position.candidates.all(),
+        'current_position': position,
+        'total_votes': position.total_votes,
+        'winners':position.winners.all()
+    }
 
-        context = {
-            'candidates': election.current_position.candidates.all(),
-            'current_position': election.current_position,
-            'total_votes': election.current_position.total_votes,
-            'winners':election.current_position.winners.all()
-            }
-
-        return render(request, 'elections/admin/admin_results.html', context)
+    return render(request, 'elections/admin/admin_results.html', context)
 
 
 @permission_required('valg.add_Election')
 @login_required
 def admin_end_election(request):
-    if not check_latest_election():
+    if not election_is_open():
         return redirect('elections:admin_start_election')
-    else:
-        election = Election.objects.latest('id')
-        election.end_election()
-        return redirect('elections:resultater')
+    election = Election.objects.latest('id')
+    if voting_is_active():
+        return redirect('elections:admin_start_voting', pk=election.current_position.id)
+    return redirect('elections:resultater')
 
 
 
