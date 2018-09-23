@@ -171,6 +171,8 @@ def admin_register_candidates(request, pk):
                     candidate_object = all_candidates.get(candidate_user=candidate_user_object)
                     candidate_object.votes = preVotes
                     candidate_object.save()
+                    position.total_votes += preVotes
+                    position.save()
             elif 'Delete' in request.POST: # hvis brukeren skal slette candidaten fra posisjonen.
                 form = AddVotesCandidateForm(request.POST)
                 if form.is_valid():
