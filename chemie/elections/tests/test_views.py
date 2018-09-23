@@ -54,7 +54,7 @@ def test_vote_for_one_user(client, create_user, create_election_with_positions, 
     candidate, position = candidates[0], positions[0]
     position.candidates.add(*candidates)
     election.add_position(position)
-    election.start_current_election(position.id)
+    election.start_current_election(position)
     election.save()
     election.refresh_from_db()
 

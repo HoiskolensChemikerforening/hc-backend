@@ -104,27 +104,39 @@ class Position(models.Model):
     def __str__(self):
         return self.position_name
 
-    def get_current_position_winners(self):
-        winners = []
-        all_votes = {}
-        for candidate in self.candidates.all():
-            all_votes[candidate.id] = candidate.votes
-        for winner_spots in range(self.spots):
-            most_votes = 0
-            winner_id = None
-            for candidate_id, votes in all_votes.items():
-                if votes > most_votes:
-                    most_votes = votes
-                    winner_id = candidate_id
-            winner_candidate = Candidates.objects.get(id=winner_id)
-            winners.append(winner_candidate)
+    def end_voting_for_position(self):
 
-            # Now set the votes of the last found winner to -1, so he is not found again
-            all_votes[winner_id] = -1
+        if self.candidates.all().count() > 0:
+            if self.spots >= self.candidates.all().count():
+                winners = self.candidates.all()
+                for candidate in self.candidates.all():
+                    self.total_votes += candidate.votes
+            else:
+                winners = []
+                all_votes = {}
+                for candidate in self.candidates.all():
+                    all_votes[candidate.id] = candidate.votes
+                    self.total_votes += candidate.votes
+                for winner_spots in range(self.spots):
+                    most_votes = -1
+                    winner_id = None
+                    for candidate_id, votes in all_votes.items():
+                        if votes > most_votes:
+                            most_votes = votes
+                            winner_id = candidate_id
+                    winner_candidate = Candidates.objects.get(id=winner_id)
+                    winners.append(winner_candidate)
 
-        # All winners are now stored in a list. Add this to self.winners
-        self.winners.add(*winners)
-        self.save()
+                # Now set the votes of the last found winner to -1, so he is not found again
+                all_votes[winner_id] = -1
+
+            # All winners are now stored in a list. Add this to self.winners
+            self.winners.add(*winners)
+            self.save()
+        election = Election.objects.latest('id')
+        election.current_position_is_open = False
+        election.current_position = None
+        election.save()
 
 
 class Election(models.Model):
@@ -174,8 +186,9 @@ class Election(models.Model):
                 raise ValueError
         self.save()
 
-    def start_current_election(self, *args):
-        current_position = get_object_or_404(Position, pk=int(args[0]))  # finner posisjonen vi skal votere om
+    def start_current_election(self, current_position):
+        # finner posisjonen vi skal votere om
+        #current_position = Position.objects.get(id=current_position_id)
         candidates = current_position.candidates.all()
         profiles = Profile.objects.all()
         for profile in profiles:
@@ -196,6 +209,7 @@ class Election(models.Model):
             self.is_open = False
             self.date = datetime.date.today()
             self.save()
+
 
     def vote(self, profile, candidates=None, blank=False):
         voted = False

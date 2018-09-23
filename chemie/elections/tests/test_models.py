@@ -97,7 +97,7 @@ def test_get_current_position_winners(create_election_with_positions, create_can
         winner_candidates.append(candidates[i])
 
     position.candidates.add(*candidates)
-    position.get_current_position_winners()
+    position.end_voting_for_position()
     assert list(position.winners.all()) == list(winner_candidates)
 
 
@@ -157,7 +157,7 @@ def test_start_current_election(create_election_with_positions, create_candidate
     # Prepare the election
     position = positions[0]
     position.candidates.add(*candidates)
-    election.start_current_election(position.id)
+    election.start_current_election(position)
 
     # Fetch user
     profile = create_user.profile

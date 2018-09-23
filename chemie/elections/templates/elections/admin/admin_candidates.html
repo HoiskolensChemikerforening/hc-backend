@@ -17,7 +17,7 @@
 function ConfirmValg() {
  if (window.confirm('Klar for å åpne valget?'))
  {
-   return window.location.href = "start"
+   return window.location.href = ""
  }
 }
 </script>
@@ -69,7 +69,10 @@ function ConfirmValg() {
     </div>
     <div style="position: absolute; ">
         {% if candidates %}
-        <a class="button is-success" style="margin-top: 10px" onclick="ConfirmValg(); return false;">Start</a>
+        <form method="post" href="#">{% csrf_token %}
+            <button class="button is-success" type="submit" name="startVoting" value="{{position.id}}"}}style="margin-top: 10px" >Start</button>
+        </form>
+<!--onclick="ConfirmValg(); return false;"-->
         {% endif %}
     </div>
 </div>
