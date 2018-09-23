@@ -22,7 +22,10 @@
         </div>
     </div>
     <div style="margin-top: 10px">
-        <a href="{% url "elections:admin_results" %}" class="button is-danger">End Voting</a>
+        <form method="post" href="#">{% csrf_token %}
+            <button class="button is-danger" type="submit" name="endVoting" value="{{position.id}}"}}style="margin-top: 10px" >End Voting</button>
+        </form>
+
     </div>
 </div>
 {% endblock %}
