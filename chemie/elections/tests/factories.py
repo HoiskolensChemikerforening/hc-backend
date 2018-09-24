@@ -1,16 +1,14 @@
-import random
-
 import factory
 
-from chemie.customprofile.factories import RandomUserFactory
+from chemie.customprofile.factories import RandomUserFactory, RandomUserWithProfileFactory, RandomProfileFactory
 from chemie.elections.models import Position, Candidates
 
 
 class PositionFactory(factory.DjangoModelFactory):
     class Meta:
-        model=Position
+        model = Position
     position_name = factory.Faker('first_name')
-    spots = random.randint(1, 3)
+    spots = 2
 
 
 class CandidateFactory(factory.DjangoModelFactory):
