@@ -33,10 +33,6 @@ class AddVotesCandidateForm(forms.Form):
     preVotes = forms.IntegerField(initial=0, min_value=0, max_value=500) #500 is arbitrary chosen
 
 
-class RegisterCandidatesForm(forms.ModelForm):
-    pass
-
-
 class OpenElectionForm(forms.ModelForm):
     class Meta:
         model = Election
@@ -61,8 +57,9 @@ def candidatesChoices(election=None):
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         image = mark_safe("<img src='%s' class='vote-image' />" % obj.candidate_user.profile.image_primary.url)
-        name = mark_safe("<p>%s %s </p>" %(obj.candidate_user.first_name,obj.candidate_user.last_name))
+        name = mark_safe("<p>%s %s </p>" %(obj.candidate_user.first_name, obj.candidate_user.last_name))
         return image + name
+
 
 class CastVoteForm(forms.Form):
     candidates = CustomChoiceField(
@@ -79,6 +76,11 @@ class CastVoteForm(forms.Form):
         candidates = self.cleaned_data['candidates'].all()
         count = candidates.count()
         if count > self.election.current_position.spots or count <= 0:
-            raise ValidationError('Stem på litt færre folk da kis')
+            raise ValidationError(
+                'Stem på litt færre folk da kis. '
+                'Du stemte på {} kandidater, '
+                'og det skal velges {} kandidater til vervet.'
+                .format(count, self.election.current_position.spots)
+            )
         else:
             return candidates

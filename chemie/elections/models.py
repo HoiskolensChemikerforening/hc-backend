@@ -105,7 +105,6 @@ class Position(models.Model):
         return self.position_name
 
     def end_voting_for_position(self):
-
         if self.candidates.all().count() > 0:
             if self.spots >= self.candidates.all().count():
                 winners = self.candidates.all()
@@ -127,8 +126,8 @@ class Position(models.Model):
                     winner_candidate = Candidates.objects.get(id=winner_id)
                     winners.append(winner_candidate)
 
-                # Now set the votes of the last found winner to -1, so he is not found again
-                all_votes[winner_id] = -1
+                    # Now set the votes of the last found winner to -1, so he is not found again
+                    all_votes[winner_id] = -1
 
             # All winners are now stored in a list. Add this to self.winners
             self.winners.add(*winners)
@@ -209,7 +208,6 @@ class Election(models.Model):
             self.is_open = False
             self.date = datetime.date.today()
             self.save()
-
 
     def vote(self, profile, candidates=None, blank=False):
         voted = False

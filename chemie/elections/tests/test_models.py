@@ -32,8 +32,9 @@ def test_add_positions_to_election(create_election_with_positions):
 
 @pytest.mark.django_db
 def test_add_candidate(create_election_with_positions, create_candidates):
+    # TODO: Weird stuff is coming out of the factories (position or candidates)
     election, positions = create_election_with_positions
-    election.add_position(positions)
+    election.positions.add(*positions)
     for position in positions:
         candidates = create_candidates
         position.candidates.add(*candidates)
@@ -94,6 +95,7 @@ def test_get_current_position_winners(create_election_with_positions, create_can
     for i in range(number_of_winners):
         candidates[i].votes = i + 1
         candidates[i].save()
+        candidates[i].refresh_from_db()
         winner_candidates.append(candidates[i])
 
     position.candidates.add(*candidates)

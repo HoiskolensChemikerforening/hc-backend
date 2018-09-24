@@ -44,9 +44,9 @@ def resultater(request):
     except:
         elections = None
     context = {
-        'elections':elections,
+        'elections': elections,
     }
-    return render(request,'elections/election/resultater.html',context)
+    return render(request, 'elections/election/resultater.html',context)
 
 
 @login_required
@@ -67,11 +67,6 @@ def voting(request):
                     elif 'Stem blankt' in request.POST.getlist('Blank'):
                         successful_vote = election.vote(profile, candidates=None, blank=True)
                     else:
-                        messages.add_message(
-                            request,
-                            messages.ERROR,
-                            'Gjør det rett a kis',
-                        )
                         context = {
                             'form': form,
                             'position': election.current_position,
@@ -81,7 +76,7 @@ def voting(request):
                     if successful_vote:
                         return redirect('elections:has_voted')
                 else:
-                    context= {
+                    context = {
                         'form': form,
                         'position':  election.current_position,
                         'candidates': election.current_position.candidates.all(),
@@ -105,7 +100,7 @@ def has_voted(request):
         return render(request, 'elections/election/vote_ended.html')
 
 
-@permission_required('valg.add_Election')
+@permission_required('elections.add_election')
 @login_required
 def admin_start_election(request): # OK
     if election_is_open():
@@ -119,8 +114,7 @@ def admin_start_election(request): # OK
     return render(request, 'elections/admin/admin_start_election.html')
 
 
-
-@permission_required('valg.add_Election')
+@permission_required('elections.add_election')
 @login_required
 def admin_register_positions(request):
     if not election_is_open():
@@ -157,7 +151,7 @@ def admin_register_positions(request):
         return render(request, 'elections/admin/admin_positions.html', context)
 
 
-@permission_required('valg.add_Election')
+@permission_required('elections.add_election')
 @login_required
 def admin_register_candidates(request, pk):
     if not election_is_open():
@@ -215,7 +209,7 @@ def admin_register_candidates(request, pk):
         return render(request, 'elections/admin/admin_candidates.html', context)
 
 
-@permission_required('valg.add_Election')
+@permission_required('elections.add_election')
 @login_required
 def admin_voting_is_active(request, pk):
     if not election_is_open():
@@ -234,7 +228,7 @@ def admin_voting_is_active(request, pk):
     return render(request, 'elections/admin/admin_start_voting.html', context)
 
 
-@permission_required('valg.add_Election')
+@permission_required('elections.add_election')
 @login_required
 def admin_results(request,pk):
     if not election_is_open():
@@ -253,7 +247,7 @@ def admin_results(request,pk):
     return render(request, 'elections/admin/admin_results.html', context)
 
 
-@permission_required('valg.add_Election')
+@permission_required('elections.add_election')
 @login_required
 def admin_end_election(request):
     if not election_is_open():
