@@ -46,11 +46,11 @@ function ConfirmValg() {
         </div>
         <footer class="card-footer">
             <a href={{ position.id }} class="card-footer-item" >Gå til valg av posisjon</a>
-            {% if position.voting_done%}
+            {% if position.voting_done %}
             <p class="card-footer-item" style="color: green">Gjennomført</p>
             {%else%}
             <p class="card-footer-item" style="color: red">Ikke gjennomført</p>
-            {%endif%}
+            {% endif %}
             <form method="POST" href="#">{% csrf_token %}
                 <button href="#" class="card-footer-item" type="submit" name="Delete" value="{{position.id}}">&#10060;</button>
             </form>

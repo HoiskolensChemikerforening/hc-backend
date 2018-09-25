@@ -35,7 +35,7 @@ function ConfirmValg() {
     <div>
         <div>
             <form method="POST" action="" style="display: inline"> {% csrf_token %}
-                {{ add_candidate_form.candidate_user }}
+                {{ add_candidate_form.user }}
                 <input type="submit" class="button" name="addCandidate" value="Legg til kandidat" height="10px"/>
             </form>
             {%if position.voting_done%}
@@ -56,9 +56,9 @@ function ConfirmValg() {
             <h5 style="display: inline" class="title is-5"> {{candidate}}</h5>
             <form method="post" href="#"; style="display: inline">{% csrf_token %}
             <input id="preVotesForm" class="input" type="number" name="preVotes" value="{{candidate.votes}}" style="width:2cm; display: inline">
-            <button type="submit" class="button" value="{{candidate.candidate_user.username}}" name="OK" >OK</button>
+            <button type="submit" class="button" value="{{candidate.user.username}}" name="OK" >OK</button>
                 <p style="margin-right: 10px"> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
-            <button class="button" type="submit" style="display: inline" name="Delete" value="{{candidate.candidate_user.username}}" >&#10060</button>
+            <button class="button" type="submit" style="display: inline" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
             </form>
         </div>
 
