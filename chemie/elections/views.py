@@ -6,7 +6,7 @@ from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, CastVoteForm
-from .models import Election, Position, Candidates
+from .models import Election, Position, Candidate
 
 
 def election_is_open():
@@ -120,6 +120,7 @@ def admin_register_positions(request):
     if not election_is_open():
         return redirect('elections:admin_start_election')
     else:
+        form = AddPositionForm(request.POST or None)
         election = Election.objects.latest('id')
         if voting_is_active():
             return redirect('elections:admin_start_voting', pk=election.current_position.id)
@@ -129,7 +130,6 @@ def admin_register_positions(request):
                 position = election.positions.get(id=int(position_id))
                 election.delete_position(position)
             # Selve formen fr registrering av posisjon
-            form = AddPositionForm(request.POST)
             if form.is_valid():
                 # lager en ny posistion objekt som vi legger inn i vår election
                 new_position = form.cleaned_data['position_name'] #position field
@@ -142,7 +142,6 @@ def admin_register_positions(request):
                     new_position_object = Position.objects.create(position_name=str(new_position), spots=int(spots))  # lager et position objetkt
                     election.positions.add(new_position_object)
                     election.save()
-        form = AddPositionForm()
         positions = election.positions.all()
         context = {
             'form': form,
@@ -170,7 +169,7 @@ def admin_register_candidates(request, pk):
                     candidate_username = request.POST.get("OK", "1")
                     candidate_user_object = User.objects.get(username=candidate_username)
                     all_candidates = position.candidates.all()
-                    candidate_object = all_candidates.get(candidate_user=candidate_user_object)
+                    candidate_object = all_candidates.get(user=candidate_user_object)
                     candidate_object.votes = preVotes
                     candidate_object.save()
             elif 'Delete' in request.POST: # hvis brukeren skal slette candidaten fra posisjonen.
@@ -179,17 +178,17 @@ def admin_register_candidates(request, pk):
                     candidate_username = request.POST.get("Delete", "0")
                     candidate_user_object = User.objects.get(username=candidate_username)
                     all_candidates = position.candidates.all()
-                    candidate_object = all_candidates.get(candidate_user=candidate_user_object)
+                    candidate_object = all_candidates.get(user=candidate_user_object)
                     position.candidates.remove(candidate_object)  # sletter brukeren fra stillingen
                     candidate_object.delete()
                     position.save()
             elif 'addCandidate' in request.POST:
                 if add_candidate_form.is_valid():
-                    user = add_candidate_form.cleaned_data['candidate_user']
+                    user = add_candidate_form.cleaned_data['user']
                     position_candidates = position.candidates.all()
                     to_be_added = False if user in [usr.candidate_user for usr in position_candidates] else True
                     if to_be_added:
-                        candidate = Candidates.objects.create(candidate_user=user)
+                        candidate = Candidate.objects.create(user=user)
                         position.candidates.add(candidate)
                         position.save()
             elif 'startVoting' in request.POST:
@@ -199,10 +198,8 @@ def admin_register_candidates(request, pk):
                 return redirect('elections:admin_start_voting', pk=position.id)
 
         candidates = position.candidates.all()
-        form = AddCandidateForm() # overskriver form her for at sist lagt til bruker ikke står som default for neste innlegging
         context = {
             'candidates': candidates,
-            'form': form,
             'position': position,
             'add_candidate_form': add_candidate_form
         }
@@ -255,6 +252,7 @@ def admin_end_election(request):
     election = Election.objects.latest('id')
     if voting_is_active():
         return redirect('elections:admin_start_voting', pk=election.current_position.id)
+    election.end_election()
     return redirect('elections:resultater')
 
 

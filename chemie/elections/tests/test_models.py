@@ -44,7 +44,7 @@ def test_add_candidate(create_election_with_positions, create_candidates):
         for candidate in position.candidates.all():
             assert candidate.votes is 0
             assert candidate.winner is False
-            assert candidate.candidate_user is not None
+            assert candidate.user is not None
 
 
 @pytest.mark.django_db

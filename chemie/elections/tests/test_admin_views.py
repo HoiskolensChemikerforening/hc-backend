@@ -1,7 +1,8 @@
 import pytest
 from django.shortcuts import reverse
-from ..models import Election, Candidates
+from ..models import Election, Candidate
 from django.core.exceptions import ObjectDoesNotExist
+
 
 @pytest.mark.django_db
 def test_basic_user_admin_page_no_open_election(client, create_user):
@@ -77,12 +78,13 @@ def test_admin_add_positions(client,create_admin_user, create_open_election):
     election = create_open_election
     position_name = "position_name"
     position_spots = 2
-    request = client.post(
+    client.post(
         reverse('elections:admin_register_positions'),
         {
             'position_name': position_name,
             'spots': position_spots
-        })
+        }
+    )
 
     assert election.positions.all().count() == 1
     assert election.positions.all().first().position_name == position_name
@@ -108,7 +110,7 @@ def test_delete_position(client,create_admin_user, create_election_with_position
 
     position = postitions[0]
     assert position in election.positions.all()
-    request = client.post(reverse('elections:admin_register_positions'), {'Delete': position.id})
+    client.post(reverse('elections:admin_register_positions'), {'Delete': position.id})
     assert election.positions.all().count() == 4
     with pytest.raises(ObjectDoesNotExist) as e_info:
         position.refresh_from_db()
@@ -125,17 +127,17 @@ def test_add_candidates(client,create_admin_user,create_election_with_positions,
     election.save()
     user = create_user
 
-    request = client.post(
+    client.post(
         reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
         {
-            "candidate_user": user.id,
+            "user": user.id,
             "addCandidate": "Legg til kandidat"
          }
     )
 
     position.refresh_from_db()
     assert position.candidates.all().count() == 1
-    candidate = Candidates.objects.get(candidate_user=user)
+    candidate = Candidate.objects.get(user=user)
     assert candidate is not None
     assert candidate.votes == 0
     assert not candidate.winner
@@ -155,7 +157,7 @@ def test_add_pre_votes_to_candidate(client,create_admin_user,create_open_electio
         reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
         {
             "preVotes": pre_votes,
-            "OK":candidate.candidate_user.username,
+            "OK": candidate.user.username,
         }
     )
     candidate.refresh_from_db()
@@ -166,6 +168,7 @@ def test_add_pre_votes_to_candidate(client,create_admin_user,create_open_electio
     # Testing that the votes of other candidates has not changed.
     assert position.candidates.filter(votes=0).count() == number_of_candidates-1
 
+
 @pytest.mark.django_db
 def test_delete_candidate_from_position(client,create_admin_user,create_open_election_with_position_and_candidates):
     admin = create_admin_user
@@ -174,19 +177,19 @@ def test_delete_candidate_from_position(client,create_admin_user,create_open_ele
     position = election.positions.all().first()
     number_of_candidates = position.candidates.all().count()
     candidate = position.candidates.all().first()
-    candidate_user = candidate.candidate_user
+    candidate_user = candidate.user
 
     client.post(
         reverse('elections:admin_register_candidates', kwargs={'pk': position.id}),
         {
             "preVotes": candidate.votes,
-            "Delete": candidate.candidate_user.username,
+            "Delete": candidate.user.username,
         }
     )
     position.refresh_from_db()
     assert position.candidates.all().count() == number_of_candidates-1
     with pytest.raises(ObjectDoesNotExist) as e_info:
-        candidate = Candidates.objects.get(candidate_user=candidate_user)
+        Candidate.objects.get(user=candidate_user)
 
 
 
