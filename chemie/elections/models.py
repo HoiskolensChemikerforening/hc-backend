@@ -48,25 +48,25 @@ POTITION_TYPE_CHOICES= (
 """
 
 
-class Candidates(models.Model):
-    candidate_user = models.ForeignKey(User, related_name="candidate")
+class Candidate(models.Model):
+    user = models.ForeignKey(User, related_name="candidate")
     votes = models.IntegerField(verbose_name="Antall stemmer", blank=True, default=0)
     winner = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.candidate_user.first_name + " " + self.candidate_user.last_name
+        return self.user.first_name + " " + self.user.last_name
 
 
 class Position(models.Model):
     position_name = models.CharField(max_length=100, verbose_name="Navn på verv")
     spots = models.IntegerField(verbose_name="Antall plasser")
-    candidates = models.ManyToManyField(Candidates, blank=True, related_name="positions")
+    candidates = models.ManyToManyField(Candidate, blank=True, related_name="positions")
     total_votes = models.IntegerField(default=0)
     voting_done = models.BooleanField(default=False)
-    winners = models.ManyToManyField(Candidates, blank=True, related_name="winners", default=None)
+    winners = models.ManyToManyField(Candidate, blank=True, related_name="winners", default=None)
 
     def add_candidate(self, candidates):
-        if type(candidates) is Candidates:
+        if type(candidates) is Candidate:
             self.candidates.add(candidates)
             self.save()
             return
@@ -81,7 +81,7 @@ class Position(models.Model):
             raise AttributeError
 
     def delete_candidates(self, candidates):
-        if type(candidates) is Candidates:
+        if type(candidates) is Candidate:
             deletable = candidates
             if deletable in self.candidates.all():
                 deletable.delete()
@@ -91,7 +91,7 @@ class Position(models.Model):
             deletables = candidates
         elif type(candidates) is list:
             ids = [candidate.id for candidate in candidates]
-            deletables = Candidates.objects.filter(pk__in=ids)
+            deletables = Candidate.objects.filter(pk__in=ids)
         else:
             raise AttributeError
         for candidate in deletables:
@@ -123,7 +123,7 @@ class Position(models.Model):
                         if votes > most_votes:
                             most_votes = votes
                             winner_id = candidate_id
-                    winner_candidate = Candidates.objects.get(id=winner_id)
+                    winner_candidate = Candidate.objects.get(id=winner_id)
                     winners.append(winner_candidate)
 
                     # Now set the votes of the last found winner to -1, so he is not found again
@@ -131,6 +131,7 @@ class Position(models.Model):
 
             # All winners are now stored in a list. Add this to self.winners
             self.winners.add(*winners)
+            self.voting_done = True
             self.save()
         election = Election.objects.latest('id')
         election.current_position_is_open = False
@@ -219,7 +220,7 @@ class Election(models.Model):
                 profile.voted = True
                 profile.save()
             else:
-                if type(candidates) is Candidates:
+                if type(candidates) is Candidate:
                     candidate = candidates
                     candidate.votes += 1
                     self.current_position.total_votes += 1
@@ -230,7 +231,7 @@ class Election(models.Model):
                     cands = candidates
                 elif type(candidates) is list:
                     ids = [candidate.id for candidate in candidates]
-                    cands = Candidates.objects.filter(pk__in=ids)
+                    cands = Candidate.objects.filter(pk__in=ids)
                 else:
                     raise AttributeError
                 if cands.count() is not 0:

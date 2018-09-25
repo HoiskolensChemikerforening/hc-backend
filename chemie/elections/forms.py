@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 
-from .models import Position, Election, Candidates
+from .models import Position, Election, Candidate
 
 
 class AddPositionForm(forms.ModelForm):
@@ -20,10 +20,10 @@ class AddPositionForm(forms.ModelForm):
 
 class AddCandidateForm(forms.ModelForm):
     class Meta:
-        model = Candidates
-        fields = ('candidate_user',)
+        model = Candidate
+        fields = ('user',)
         widgets = {
-            'candidate_user': autocomplete.ModelSelect2(
+            'user': autocomplete.ModelSelect2(
                 url='verv:user-autocomplete'
             )
         }
@@ -56,8 +56,8 @@ def candidatesChoices(election=None):
 
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
-        image = mark_safe("<img src='%s' class='vote-image' />" % obj.candidate_user.profile.image_primary.url)
-        name = mark_safe("<p>%s %s </p>" %(obj.candidate_user.first_name, obj.candidate_user.last_name))
+        image = mark_safe("<img src='%s' class='vote-image' />" % obj.user.profile.image_primary.url)
+        name = mark_safe("<p>%s %s </p>" %(obj.user.first_name, obj.user.last_name))
         return image + name
 
 
