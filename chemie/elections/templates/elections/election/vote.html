@@ -59,13 +59,13 @@ changeColor = function(block){
     console.log(input);
     console.log(input.checked);
     if (input.checked) {
-        //block.style.backgroundColor='gray';
-        image.style.backgroundColor='gray';
-        image.style.borderColor='gray';
+        image.style.backgroundColor='lightgray';
+        image.style.boxShadow='1px 1px 2px 0px #ccc';
     } else {
         // block.style.backgroundColor='transparent';
         image.style.backgroundColor='transparent';
         image.style.borderColor='transparent';
+        image.style.boxShadow='2px 2px 4px 3px #ccc';
     }
 }
 </script>
@@ -86,14 +86,14 @@ changeColor = function(block){
     }
     .vote-image {
         display: inline;
-        border-radius: 30%;
+        background-color: transparent;
         border-color: transparent;
-        border: 3px solid #ddd;
-        margin-right: 1.5rem;
+        border: 3px solid transparent;
+        border-radius: 30%;
         margin-right: 1.5rem;
         padding: 5px;
         width: 150px;
-        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: 2px 2px 4px 3px #ccc;
     }
 </style>
 {% endblock footer_script %}

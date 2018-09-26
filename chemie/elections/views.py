@@ -153,6 +153,7 @@ def admin_register_positions(request):
 @permission_required('elections.add_election')
 @login_required
 def admin_register_candidates(request, pk):
+    #TODO handle error when candidate does not have a profile.
     if not election_is_open():
         return redirect('elections:admin_start_election')
     else:
