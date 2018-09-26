@@ -3,7 +3,6 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.query import QuerySet
-from django.shortcuts import get_object_or_404
 
 from chemie.customprofile.models import Profile
 
@@ -54,7 +53,7 @@ class Candidate(models.Model):
     winner = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.user.first_name + " " + self.user.last_name
+        return self.user.get_full_name()
 
 
 class Position(models.Model):
@@ -116,18 +115,17 @@ class Position(models.Model):
                 for candidate in self.candidates.all():
                     all_votes[candidate.id] = candidate.votes
                     self.total_votes += candidate.votes
-                for winner_spots in range(self.spots):
-                    most_votes = -1
-                    winner_id = None
+                winner_spots = self.spots
+                while len(winners) < winner_spots:
+                    most_votes = max(all_votes.values())
+                    winner_ids = []
                     for candidate_id, votes in all_votes.items():
-                        if votes > most_votes:
-                            most_votes = votes
-                            winner_id = candidate_id
-                    winner_candidate = Candidate.objects.get(id=winner_id)
-                    winners.append(winner_candidate)
-
-                    # Now set the votes of the last found winner to -1, so he is not found again
-                    all_votes[winner_id] = -1
+                        if votes == most_votes:
+                            winner_ids.append(candidate_id)
+                            # Now set the votes of the last found winner to -1, so he is not found again
+                            all_votes[candidate_id] = -1
+                    winner_candidates = Candidate.objects.filter(id__in=winner_ids)
+                    winners.extend(list(winner_candidates))
 
             # All winners are now stored in a list. Add this to self.winners
             self.winners.add(*winners)
