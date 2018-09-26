@@ -15,6 +15,6 @@ user_urlpatterns = [
     url(r'^$', views.vote, name='vote'),
     url(r'^vote/$', views.voting, name='voting'),
     url(r'^vote/end', views.has_voted, name='has_voted'),
-    url(r'^results', views.resultater, name='resultater')
+    url(r'^results', views.results, name='results')
 ]
 urlpatterns = admin_urlpatterns + user_urlpatterns

@@ -42,7 +42,7 @@ context = {
             </tr>
             {%for candidate in current_position.candidates.all%}
             <tr>
-                <td>{{candidate.candidate_user.first_name}} {{candidate.candidate_user.last_name}}</td>
+                <td>{{candidate.user.first_name}} {{candidate.user.last_name}}</td>
                 <td>
                     {{candidate.votes}}
                 </td>
@@ -50,8 +50,8 @@ context = {
                     <p id="voting_percentage"></p>
                     <script type="text/javascript">
                         var total_votes = " {{current_position.total_votes}}";
-                        var votes = "{{candidate.votes}}"
-                        var percentage = votes/total_votes
+                        var votes = "{{candidate.votes}}";
+                        var percentage = votes/total_votes;
                         document.getElementById("voting_percentage").innerHTML = total_votes
                     </script>
                 </td>

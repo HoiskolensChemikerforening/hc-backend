@@ -29,9 +29,14 @@ def test_election_not_open(client, create_user):
 @pytest.mark.django_db
 def test_election_is_open(client, create_user, create_election_with_positions):
     election, positions = create_election_with_positions
+    user = create_user
+    client.login(username=user.username, password='defaultpassword')
+    request = client.get(reverse('elections:voting'))
+    assert request.status_code == 302
+    assert request.url == reverse('elections:vote')
+
     election.is_open = True
     election.save()
-    user = create_user
 
     client.login(username=user.username, password='defaultpassword')
     request = client.get(reverse('elections:vote'))
@@ -44,6 +49,24 @@ def test_election_is_open(client, create_user, create_election_with_positions):
     request = client.get(reverse('elections:voting'))
     assert request.status_code == 302
     assert reverse('elections:vote') == request.url
+
+
+@pytest.mark.django_db
+def test_get_vote_page(client, create_user, create_open_election_with_position_and_candidates):
+    election = create_open_election_with_position_and_candidates
+    position = election.positions.first()
+    election.start_current_election(position)
+    election.save()
+    election.refresh_from_db()
+
+    user = create_user
+    client.login(username=user.username, password='defaultpassword')
+    request = client.get(reverse('elections:voting'))
+    assert request.status_code is 200
+    assert position.position_name in request.content.decode('utf-8')
+    assert str(position.spots) in request.content.decode('utf-8')
+    for candidate in position.candidates.all():
+        assert candidate.user.get_full_name() in request.content.decode('utf-8')
 
 
 @pytest.mark.django_db
@@ -78,6 +101,12 @@ def test_vote_for_one_user(client, create_user, create_election_with_positions, 
         assert cand.votes == 0
     user.profile.refresh_from_db()
     assert user.profile.voted is True
+
+    # Close election and check the results
+    position.end_voting_for_position()
+    election.end_election()
+    request = client.get(reverse('elections:results'))
+    assert candidate.user.get_full_name() in request.content.decode('utf-8')
 
 
 @pytest.mark.django_db

@@ -35,12 +35,12 @@ def create_election_with_positions():
 def create_open_election_with_position_and_candidates():
     new_election = Election.objects.create()
     new_election.is_open = True
-    new_election.save()
-    positions = PositionFactory.create_batch(1)
-    new_election.add_position(positions)
+    position = PositionFactory.create()
     candidates = create_candidates()
-    position = new_election.positions.all().first()
     position.add_candidate(candidates)
+    position.save()
+    new_election.add_position(position)
+    new_election.save()
     return new_election
 
 
