@@ -1,9 +1,8 @@
-from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
-from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, CastVoteForm
 from .models import Election, Position, Candidate
@@ -19,6 +18,7 @@ def election_is_open():
         is_open = False
     return is_open
 
+
 def voting_is_active():
     active = False
     election = Election.objects.latest('id')
@@ -26,19 +26,20 @@ def voting_is_active():
         active = True
     return active
 
+
 @login_required
 def vote(request):
     try:
         election = Election.objects.latest('id')
         voted = request.user.profile.voted
-        context = {'election': election, 'voted':voted}
+        context = {'election': election, 'voted': voted}
     except:
-        context = {'election':None, 'voted':False}
+        context = {'election': None, 'voted': False}
     return render(request, 'elections/election/index.html', context)
 
 
 @login_required
-def resultater(request):
+def results(request):
     try:
         elections = Election.objects.all()
     except:
@@ -46,7 +47,7 @@ def resultater(request):
     context = {
         'elections': elections,
     }
-    return render(request, 'elections/election/resultater.html',context)
+    return render(request, 'elections/election/resultater.html', context)
 
 
 @login_required
@@ -76,6 +77,7 @@ def voting(request):
                     if successful_vote:
                         return redirect('elections:has_voted')
                 else:
+                    # TODO: Test these lines
                     context = {
                         'form': form,
                         'position':  election.current_position,
@@ -94,6 +96,7 @@ def has_voted(request):
         election = Election.objects.latest('id')
         if not election.current_position_is_open:
             return redirect('elections:vote')
+        # TODO: Test below
         voted = request.user.profile.voted
         if not voted:
             return redirect('elections:vote')
@@ -137,7 +140,7 @@ def admin_register_positions(request):
                 current_positions_in_election = list()
                 for i in election.positions.all():
                     current_positions_in_election.append(i.position_name)
-                if not new_position in current_positions_in_election: # hvis vi ikke har lagt til vervet allerede
+                if new_position not in current_positions_in_election: # hvis vi ikke har lagt til vervet allerede
                     spots = form.cleaned_data['spots']  # spots field
                     new_position_object = Position.objects.create(position_name=str(new_position), spots=int(spots))  # lager et position objetkt
                     election.positions.add(new_position_object)
@@ -153,7 +156,6 @@ def admin_register_positions(request):
 @permission_required('elections.add_election')
 @login_required
 def admin_register_candidates(request, pk):
-    #TODO handle error when candidate does not have a profile.
     if not election_is_open():
         return redirect('elections:admin_start_election')
     else:
@@ -210,6 +212,7 @@ def admin_register_candidates(request, pk):
 @permission_required('elections.add_election')
 @login_required
 def admin_voting_is_active(request, pk):
+    # TODO: Test this entire function
     if not election_is_open():
         return redirect('elections:admin_start_election')
     if not voting_is_active():
@@ -239,9 +242,8 @@ def admin_results(request,pk):
         'candidates': position.candidates.all(),
         'current_position': position,
         'total_votes': position.total_votes,
-        'winners':position.winners.all()
+        'winners': position.winners.all()
     }
-
     return render(request, 'elections/admin/admin_results.html', context)
 
 
@@ -254,7 +256,7 @@ def admin_end_election(request):
     if voting_is_active():
         return redirect('elections:admin_start_voting', pk=election.current_position.id)
     election.end_election()
-    return redirect('elections:resultater')
+    return redirect('elections:results')
 
 
 

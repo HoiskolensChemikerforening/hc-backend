@@ -6,7 +6,7 @@ from chemie.customprofile.factories import RandomProfileFactory
 
 
 @pytest.mark.django_db
-def test_inital_election(create_election_with_positions):
+def test_initial_election(create_election_with_positions):
     election, positions = create_election_with_positions
     assert not election.is_open
     assert not election.current_position_is_open
@@ -32,7 +32,6 @@ def test_add_positions_to_election(create_election_with_positions):
 
 @pytest.mark.django_db
 def test_add_candidate(create_election_with_positions, create_candidates):
-    # TODO: Weird stuff is coming out of the factories (position or candidates)
     election, positions = create_election_with_positions
     election.positions.add(*positions)
     for position in positions:
@@ -100,7 +99,7 @@ def test_get_current_position_winners(create_election_with_positions, create_can
 
     position.candidates.add(*candidates)
     position.end_voting_for_position()
-    assert list(position.winners.all()) == list(winner_candidates)
+    assert list(position.winners.all()) == winner_candidates
 
 
 @pytest.mark.django_db
