@@ -1,31 +1,38 @@
 {% extends 'chemie/base_election.html' %}
 
 {% block content %}
-<div style="margin-top: 10px">
-
-    <div >
-        <div >
-            <div style="">
+<style>
+    .candidate-voted{
+        margin-top: 2rem;
+        margin-bottom: 2rem;
+    }
+</style>
+<div class="div-container">
+        <div>
+            <div >
                 <a href="" class="button is-success"> Refresh side</a>
             </div>
-            <div>
+            <div class="candidate-voted">
+                <!--TODO future improvent would be to set dynamic rendering of total votes-->
                 <h2 class="title is-2" align="center">{{election.current_position.total_votes}} personer har stemt</h2>
-                <!--<p id="demo"></p>-->
-                <!--<script>-->
-                    <!--refresh();-->
-                    <!--function refresh() {-->
-                        <!--window.location.reload(true);-->
-                        <!--setTimeout(refresh(), 100000);-->
-                    <!--}-->
-                <!--</script>-->
              </div>
         </div>
-    </div>
-    <div style="margin-top: 10px">
-        <form method="post" href="#">{% csrf_token %}
-            <button class="button is-danger" type="submit" name="endVoting" value="{{position.id}}"}}style="margin-top: 10px" >End Voting</button>
+
+        <form method="post" onsubmit="return confirmValg(this, 'Klart for å stenge valget?')" href="#">{% csrf_token %}
+            <button class="button is-danger" type="submit" name="endVoting" value="{{position.id}}">End Voting</button>
         </form>
 
-    </div>
+
 </div>
-{% endblock %}
+{% endblock content %}
+{% block footer_script %}
+<script type="text/javascript">
+function confirmValg(form, message) {
+       if (!form){
+           return false
+       } else {
+           return confirm(message)
+       }
+    }
+</script>
+{% endblock footer_script%}
