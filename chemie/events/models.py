@@ -7,6 +7,7 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 
 from chemie.customprofile.models import GRADES
+from chemie.committees.models import Committee
 from .email import send_event_mail
 
 REGISTRATION_STATUS = Choices(
@@ -53,7 +54,7 @@ class BaseEvent(models.Model):
     image = ImageField(upload_to='events', verbose_name="Bilde")
 
     # Number of slots reserved for the event
-    sluts = models.PositiveSmallIntegerField(default=100, verbose_name="Antall plasser")
+    sluts = models.PositiveSmallIntegerField(default=0, verbose_name="Antall plasser, sett til 0 for åpent arrangement")
 
     attendees = models.ManyToManyField(User, through='BaseRegistration')
 
@@ -135,6 +136,8 @@ class BaseEvent(models.Model):
 
 class Social(BaseEvent):
     author = models.ForeignKey(User, related_name='social_author', on_delete=models.CASCADE)
+    #   Name of the committee responsible for the event
+    committee = models.ForeignKey(Committee, null=True, blank=True)
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")
