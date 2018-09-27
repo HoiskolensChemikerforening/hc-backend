@@ -28,7 +28,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
   <link rel="stylesheet" href="{% static 'css/bulma.css' %}">
-  <link href="{% static 'css/style_elections.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static 'css/style_election.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
   {% block extra_css %}
   {% endblock %}
 
@@ -64,14 +64,14 @@
     <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
   <div class="navbar-brand">
     <a class="navbar-item" href="/" >
-      <img src="{% static 'images/logo.png'%}" style="padding-right: 20px">
-      <h2 class="title is-4" style="color: #edcd2f;">Høiskolens Chemikerforening</h2>
+      <img class="nav-bar-image"src="{% static 'images/logo.png'%}">
+      <h2 class="title is-4 nav-bar-title">Høiskolens Chemikerforening</h2>
     </a>
 
   </div>
 </nav>
     </header>
-    <div class="container" style="margin-top: 20px; margin-bottom: 20px; margin-right: 5%; margin-right:5% ">
+    <div class="main-container">
       {% block content %}
       {% endblock content %}
     </div>

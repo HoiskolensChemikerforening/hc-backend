@@ -13,23 +13,19 @@
                     <th>Vinner</th>
                 </tr>
                 {%for position in election.positions.all%}
-                <tr>
-                    <td>{{position}}</td>
-                    <td>
-                    {%for winner in position.winners.all%}
-                    {{winner}}
-                    {%endfor%}
-                    </td>
-                </tr>
+                {%if position.voting_done%}
+                    <tr>
+                        <td>{{position}}</td>
+                        <td>
+                        {%for winner in position.winners.all%}
+                        {{winner}}
+                        {%endfor%}
+                        </td>
+                    </tr>
+                {%endif%}
                 {%endfor%}
             </table>
             {{position}}
-
-            <!--<h5>{{position.position_name}}</h5>-->
-            <!--{%for winner in position.winners.all%}-->
-            <!--<ul>vinner: {{winner}}</ul>-->
-            <!--{%endfor%}-->
-
         </div>
         {%endfor%}
     </div>

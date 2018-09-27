@@ -24,10 +24,10 @@ context = {
 </div>
 -->
 <div align="center">
-    <h3 class="title is-3">Vinnere</h3>
+    <h3 class="title is-3">Vinner(e)</h3>
     {%if winners %}
     {%for winner in winners%}
-        <h4 class="title is-4">{{winner.candidate_user.first_name}} {{winner.candidate_user.last_name}}</h4>
+        <h4 class="title is-4">{{winner.user.first_name}} {{winner.user.last_name}}</h4>
     {%endfor%}
     {%else%}
         <h4 class="title is-4">Ikke et gyldig valg, {{current_position.total_votes}} av 50 har stemt</h4>
@@ -36,7 +36,7 @@ context = {
         <h4 class="title is-6">Totalt antall stemmer: {{current_position.total_votes}}</h4>
         <table class="table">
             <tr>
-                <th>Kandidat</th>
+                <th>Kandidater</th>
                 <th>Antall stemmer</th>
                 <th>Prosent av totale stemmer</th>
             </tr>
@@ -47,25 +47,19 @@ context = {
                     {{candidate.votes}}
                 </td>
                 <td>
-                    <p id="voting_percentage"></p>
+                    <p id="voting_percentage-{{candidate.id}}"></p>
                     <script type="text/javascript">
-                        var total_votes = " {{current_position.total_votes}}";
+                        var total_votes = "{{current_position.total_votes}}";
                         var votes = "{{candidate.votes}}";
-                        var percentage = votes/total_votes;
-                        document.getElementById("voting_percentage").innerHTML = total_votes
+                        var percentage = (100*votes/total_votes).toFixed(2);
+                        document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage + "%";
                     </script>
                 </td>
             </tr>
             {%endfor%}
         </table>
     </div>
-
-
-
-
-
     <br>
-
-    <a class="button" href="{%url "elections:admin_register_positions"%}">Tilbake</a>
+    <a class="button is-success" href="{%url "elections:admin_register_positions"%}">Tilbake</a>
 </div>
 {%endblock%}
