@@ -5,17 +5,17 @@
 {% block content %}
 
 <div>
-    <div style="text-align: center">
+    <div class="div-container">
         {% if form.errors %}
-            {% for field in form %}
-                {% for error in field.errors %}
-                    <!-- TODO: Style alert for user not voting correctly-->
-                    <div class="alert alert-success">
-                        <a class="close" href="#" data-dismiss="alert">×</a>
-                            {{ error }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
+        {% for field in form %}
+        {% for error in field.errors %}
+        <!-- TODO: Style alert for user not voting correctly-->
+        <div class="alert alert-success">
+            <a class="close" href="#" data-dismiss="alert">×</a>
+            {{ error }}
+        </div>
+        {% endfor %}
+        {% endfor %}
         {% endif %}
         <div>
             <h3 class="title is-2">{{ position.position_name }}</h3>
@@ -24,25 +24,19 @@
         </div>
         <br>
         <div>
-            <form method="POST">{% csrf_token %}
-
-                    <form method="POST">
-                        <div class="vote-div">
-                        {% csrf_token %}
-                            {%for candidate in form.candidates%}
-                        <div class='vote-box' onclick="changeColor(this)">
-                            {{candidate}}
-                        </div>
-                        {%endfor%}
-                        </div>
-                        <hr color="black">
-                        <input class="button" type='submit' style="margin-right: 10%; margin-bottom: 10%" name="Blank" value='Stem blankt'/>
-                        <input class="button is-success" type='submit'  value='Avgi stemme'/>
-                    </form>
-
+            <form method="POST" onsubmit="return confirmValg(this)">{% csrf_token %}
+                <div class="vote-div">
+                    {% csrf_token %}
+                    {%for candidate in form.candidates%}
+                    <div class='vote-box' onclick="changeColor(this)">
+                        {{candidate}}
+                    </div>
+                    {%endfor%}
+                </div>
+                <hr color="black">
+                <input class="button" type='submit' name="Blank" value='Stem blankt'/>
+                <input class="button is-success" type='submit' value='Avgi stemme'/>
             </form>
-
-
         </div>
     </div>
 </div>
@@ -53,21 +47,50 @@
 {% block footer_script %}
 <script src="{% static 'material/js/jquery.js' %}"></script>
 <script>
-changeColor = function(block){
-    var input = block.children[0].children[0];
-    var image = block.children[0].children[1];
-    console.log(input);
-    console.log(input.checked);
-    if (input.checked) {
-        image.style.backgroundColor='lightgray';
-        image.style.boxShadow='1px 1px 2px 0px #ccc';
-    } else {
-        // block.style.backgroundColor='transparent';
-        image.style.backgroundColor='transparent';
-        image.style.borderColor='transparent';
-        image.style.boxShadow='2px 2px 4px 3px #ccc';
+    changeColor = function (block) {
+        var input = block.children[0].children[0];
+        var image = block.children[0].children[1];
+        console.log(input);
+        console.log(input.checked);
+        //removing or adding shadow to box to visualize checked or not checked
+        if (input.checked) {
+            image.style.backgroundColor = 'lightgray';
+            image.style.boxShadow = '1px 1px 2px 0px #ccc';
+        } else {
+            // block.style.backgroundColor='transparent';
+            image.style.backgroundColor = 'transparent';
+            image.style.borderColor = 'transparent';
+            image.style.boxShadow = '2px 2px 4px 3px #ccc';
+        }
     }
-}
+</script>
+<script>
+    function confirmValg(form) {
+        if (!form) {
+            return false
+        } else {
+            var inputs = document.getElementsByClassName('vote-box');
+            console.log(inputs);
+            var lengthOfInputs = inputs.length;
+            console.log(lengthOfInputs);
+            var selectedCandidates = [];
+            // Extracting the names of candidates which are checked to confirmation message.
+            for (i = 0; i < lengthOfInputs; i++) {
+                var candidateChecked = inputs[i].childNodes[1].childNodes[0].checked;
+                if (candidateChecked) {
+                    var candidateName = inputs[i].childNodes[1].childNodes[3].innerText;
+                    var name = ` ${candidateName}`;
+                    selectedCandidates.push(name);
+                }
+            }
+            if (selectedCandidates.length == 0){
+                var message = "Du har ikke valg noen kandidater";
+            } else {
+                var message = 'Du stemmer nå på: \n' + selectedCandidates;
+            }
+            return confirm(message)
+        }
+    }
 </script>
 
 <style>
@@ -75,15 +98,18 @@ changeColor = function(block){
         border-color: black;
         margin-bottom: 1.5rem;
     }
-    .vote-div{
+
+    .vote-div {
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
         align-items: center;
     }
-    .vote-box input{
+
+    .vote-box input {
         opacity: 0;
     }
+
     .vote-image {
         display: inline;
         background-color: transparent;

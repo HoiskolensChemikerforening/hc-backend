@@ -92,8 +92,6 @@ class Position(models.Model):
         if self.candidates.all().count() > 0:
             if self.spots >= self.candidates.all().count():
                 winners = self.candidates.all()
-                for candidate in self.candidates.all():
-                    self.total_votes += candidate.votes
             else:
                 winners = []
                 all_votes = {}

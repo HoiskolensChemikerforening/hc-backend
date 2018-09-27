@@ -12,20 +12,32 @@
 {% load static %}
 
 {%block content%}
-
-<script> //TODO Dette burde legges i en egen static file
-function ConfirmValg() {
- if (window.confirm('Klar for å åpne valget?'))
- {
-   return window.location.href = ""
- }
-}
-</script>
-
+<style>
+    .candidate-container{
+        padding: 0.9rem;
+        margin-top: 0.3rem;
+        margin-bottom: 0.3rem;
+    }
+    .candidate-delete{
+        display: inline;
+        position: absolute;
+        right: 1rem;
+    }
+    .candidate-line{
+        display: inline;
+    }
+    .candidate-input{
+        display: inline;
+        width: 4rem;
+    }
+    .candidate-component{
+        margin-right: 0.2rem;
+    }
+</style>
 <div>
 
     <!--Tittle på possisjon-->
-    <div style="margin-bottom: 10px">
+    <div class="">
         <h3 class="title is-4"> Kandidater for {{ position.position_name }}</h3>
     </div>
 
@@ -34,12 +46,14 @@ function ConfirmValg() {
     <!--Søke felt for brukere-->
     <div>
         <div>
-            <form method="POST" action="" style="display: inline"> {% csrf_token %}
+            <form method="POST" action="" > {% csrf_token %}
                 {{ add_candidate_form.user }}
                 <input type="submit" class="button" name="addCandidate" value="Legg til kandidat" height="10px"/>
             </form>
             {%if position.voting_done%}
-            <h2 class="title is-2"> Dette valget har alt blitt gjennomført</h2>
+            <div class="div-container">
+                <h2 class="title is-3"> Dette valget har alt blitt gjennomført</h2>
+            </div>
             {%endif%}
 
         </div>
@@ -48,17 +62,15 @@ function ConfirmValg() {
     <!--Alle Kandidater-->
 
     {%for candidate in candidates%}
-    <div class="card border-secondary mb-3" style="
-    margin-top: 10px;
-
-    " >
-        <div class="card-body" style="padding: 0.5rem">
-            <h5 style="display: inline" class="title is-5"> {{candidate}}</h5>
-            <form method="post" href="#"; style="display: inline">{% csrf_token %}
-            <input id="preVotesForm" class="input" type="number" name="preVotes" value="{{candidate.votes}}" style="width:2cm; display: inline">
+    <div class="card border-secondary mb-3">
+        <div class="card-body candidate-container" >
+            <h5 class="title is-5"> {{candidate}}</h5>
+            <form method="post" href="#"; style="display: inline" onsubmit="confirmValg(this, 'Sikker?')">{% csrf_token %}
+            <input id="preVotesForm" class="input candidate-input" type="number" name="preVotes" value="{{candidate.votes}}">
             <button type="submit" class="button" value="{{candidate.user.username}}" name="OK" >OK</button>
-                <p style="margin-right: 10px"> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
-            <button class="button" type="submit" style="display: inline" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
+            <button class="button candidate-delete" type="submit" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
+                <p> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
+
             </form>
         </div>
 
@@ -67,18 +79,27 @@ function ConfirmValg() {
 
 
     </div>
-    <div style="position: absolute; ">
+    <div>
         {% if candidates %}
-        <form method="post" href="#">{% csrf_token %}
-            <button class="button is-success" type="submit" name="startVoting" value="{{position.id}}"}}style="margin-top: 10px" >Start</button>
+        <form method="post" href="#" onsubmit="return confirmValg(this, 'Klar for å åpne valget')">{% csrf_token %}
+            <button class="button is-success" type="submit" name="startVoting" value="{{position.id}}"}}>Start</button>
         </form>
-<!--onclick="ConfirmValg(); return false;"-->
+
         {% endif %}
     </div>
 </div>
 {%endblock%}
 
 {% block footer_script %}
-    <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
     {{ add_candidate_form.media }}
+<script type="text/javascript">
+function confirmValg(form, message) {
+       if (!form){
+           return false
+       } else {
+           return confirm(message)
+       }
+    }
+</script>
+
 {% endblock footer_script %}

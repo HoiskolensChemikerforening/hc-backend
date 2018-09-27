@@ -189,7 +189,7 @@ def admin_register_candidates(request, pk):
                 if add_candidate_form.is_valid():
                     user = add_candidate_form.cleaned_data['user']
                     position_candidates = position.candidates.all()
-                    to_be_added = False if user in [usr.candidate_user for usr in position_candidates] else True
+                    to_be_added = False if user in [usr.user for usr in position_candidates] else True
                     if to_be_added:
                         candidate = Candidate.objects.create(user=user)
                         position.candidates.add(candidate)
