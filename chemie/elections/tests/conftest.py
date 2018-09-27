@@ -37,7 +37,7 @@ def create_open_election_with_position_and_candidates():
     new_election.is_open = True
     position = PositionFactory.create()
     candidates = create_candidates()
-    position.add_candidate(candidates)
+    position.candidates.add(*candidates)
     position.save()
     new_election.add_position(position)
     new_election.save()
