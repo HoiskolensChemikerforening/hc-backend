@@ -59,7 +59,7 @@
               <i class="material-icons valign left">contacts</i>
               <h5 class="left-align">Komité</h5>
             </div>
-            <p>{{ social.committee }}</p>
+            <p>{{ social.committee|default_if_none:"Tilhører ingen komité" }}</p>
           </div>
             <div class="section">
               <div class="valign-wrapper">
