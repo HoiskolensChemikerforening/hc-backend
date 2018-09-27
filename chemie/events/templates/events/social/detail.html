@@ -53,21 +53,21 @@
             </div>
             <p>{{ social.date|date:"j. F - H:i" }}</p>
           </div>
-        <div class="divider"></div>
-             <div class="section">
-              <div class="valign-wrapper">
-                <i class="material-icons valign left">contacts</i>
-                <h5 class="left-align">Komité</h5>
-              </div>
-              <p>{{ social.committee }}</p>
+          <div class="divider"></div>
+          <div class="section">
+            <div class="valign-wrapper">
+              <i class="material-icons valign left">contacts</i>
+              <h5 class="left-align">Komité</h5>
             </div>
-              <div class="section">
-                <div class="valign-wrapper">
-                  <i class="material-icons valign left">edit</i>
-                  <h5 class="left-align">Forfatter</h5>
-                </div>
-                <p>{{ social.author.get_full_name }}</p>
+            <p>{{ social.committee }}</p>
+          </div>
+            <div class="section">
+              <div class="valign-wrapper">
+                <i class="material-icons valign left">edit</i>
+                <h5 class="left-align">Forfatter</h5>
               </div>
+              <p>{{ social.author.get_full_name }}</p>
+            </div>
           <div class="divider"></div>
 
           <!-- Prices -->
@@ -102,21 +102,20 @@
               <i class="material-icons valign left">people_outline</i>
               <h5 class="left-align">Plasser</h5>
             </div>
-              {% if social.sluts == 0 %}
-                      <div>
-                        <p class="left valign">Arrangementet er åpent for alle!</p>
-                      </div>
-                    {% else %}
-            <div>
-              <p class="left valign"><b>Påmeldte:</b></p>
-              <p class="right valign">{{ social.registered_users|default_if_none:0 }}
-                            av {{ social.sluts }}</p>
-            </div>
-            <div class="progress">
-              <div class="determinate" style="width: {{ social.percentage_filled }}%"></div>
-            </div>
-              {% endif %}
-                    <br>
+            {% if social.sluts == 0 %}
+              <div>
+                <p class="left valign">Arrangementet er åpent for alle!</p>
+              </div>
+            {% else %}
+              <div>
+                <p class="left valign"><b>Påmeldte:</b></p>
+                <p class="right valign">{{ social.registered_users|default_if_none:0 }} av {{ social.sluts }}</p>
+              </div>
+              <div class="progress">
+                <div class="determinate" style="width: {{ social.percentage_filled }}%"></div>
+              </div>
+            {% endif %}
+            <br>
           </div>
         </div>
         <div class="divider"></div>
