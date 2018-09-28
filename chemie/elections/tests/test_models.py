@@ -1,6 +1,6 @@
 import pytest
 from django.core.exceptions import ObjectDoesNotExist
-from django.core.urlresolvers import reverse
+import collections
 
 from chemie.customprofile.factories import RandomProfileFactory
 
@@ -99,7 +99,9 @@ def test_get_current_position_winners(create_election_with_positions, create_can
 
     position.candidates.add(*candidates)
     position.end_voting_for_position()
-    assert list(position.winners.all()) == winner_candidates
+    assert \
+        collections.Counter(list(position.winners.all())) \
+        == collections.Counter(winner_candidates)
 
 
 @pytest.mark.django_db
