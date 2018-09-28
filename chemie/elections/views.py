@@ -77,7 +77,6 @@ def voting(request):
                     if successful_vote:
                         return redirect('elections:has_voted')
                 else:
-                    # TODO: Test these lines
                     context = {
                         'form': form,
                         'position':  election.current_position,
@@ -96,16 +95,15 @@ def has_voted(request):
         election = Election.objects.latest('id')
         if not election.current_position_is_open:
             return redirect('elections:vote')
-        # TODO: Test below
         voted = request.user.profile.voted
         if not voted:
-            return redirect('elections:vote')
+            return redirect('elections:voting')
         return render(request, 'elections/election/vote_ended.html')
 
 
 @permission_required('elections.add_election')
 @login_required
-def admin_start_election(request): # OK
+def admin_start_election(request):
     if election_is_open():
         election = Election.objects.latest('id')
         if voting_is_active():
@@ -212,17 +210,15 @@ def admin_register_candidates(request, pk):
 @permission_required('elections.add_election')
 @login_required
 def admin_voting_is_active(request, pk):
-    # TODO: Test this entire function
     if not election_is_open():
         return redirect('elections:admin_start_election')
     if not voting_is_active():
         return redirect('elections:admin_register_positions')
-
     election = Election.objects.latest('id')
     if request.method == 'POST':
         if 'endVoting' in request.POST:
             election.current_position.end_voting_for_position()
-            return redirect('elections:admin_results',pk=pk)
+            return redirect('elections:admin_results', pk=pk)
     context = {
         'election': election
     }

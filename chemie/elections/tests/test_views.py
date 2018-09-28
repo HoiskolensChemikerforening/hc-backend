@@ -61,6 +61,14 @@ def test_get_vote_page(client, create_user, create_open_election_with_position_a
 
     user = create_user
     client.login(username=user.username, password='defaultpassword')
+
+    # Check that when user accesses url where he has voted, he is redirected to vote page
+    request = client.get(reverse('elections:has_voted'), follow=True)
+    assert request.status_code == 200
+    assert (reverse('elections:voting'), 302) == request.redirect_chain[0]
+    assert election.current_position.position_name in request.content.decode('utf-8')
+
+    # Let user access vote page
     request = client.get(reverse('elections:voting'))
     assert request.status_code is 200
     assert position.position_name in request.content.decode('utf-8')
@@ -101,6 +109,18 @@ def test_vote_for_one_user(client, create_user, create_election_with_positions, 
         assert cand.votes == 0
     user.profile.refresh_from_db()
     assert user.profile.voted is True
+
+    # Check that when user accesses url where he has voted, he receives proper message
+    request = client.get(reverse('elections:has_voted'))
+    assert 'Du har stemt!' in request.content.decode('utf-8')
+
+    # Check that when user tries to vote again, he is redirected
+    request = client.post(
+        reverse('elections:voting'),
+        {'candidates': candidate.id},
+        follow=True
+    )
+    assert 'Du har stemt!' in request.content.decode('utf-8')
 
     # Close election and check the results
     position.end_voting_for_position()
