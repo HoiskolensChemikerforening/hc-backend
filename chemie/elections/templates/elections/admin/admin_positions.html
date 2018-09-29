@@ -9,7 +9,8 @@
     }
     .delete-button{
         margin-bottom: 0rem;
-
+        background-color: transparent;
+        border: None;
     }
     .delete-form{
         padding-bottom: 0rem;
@@ -51,7 +52,7 @@
             <p class="card-footer-item error-message" >Ikke gjennomført</p>
             {% endif %}
             <form method="POST" href="#" class="delete-form">{% csrf_token %}
-                <a href="#" class="card-footer-item delete-button" type="submit" name="Delete" value="{{position.id}}">&#10060;</a>
+                <button class="card-footer-item delete-button" type="submit" name="Delete" value="{{position.id}}">&#10060;</button>
             </form>
         </footer>
     </div>
