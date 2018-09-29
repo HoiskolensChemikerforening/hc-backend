@@ -65,7 +65,7 @@
     <div class="card border-secondary mb-3">
         <div class="card-body candidate-container" >
             <h5 class="title is-5"> {{candidate}}</h5>
-            <form method="post" href="#"; style="display: inline" onsubmit="confirmValg(this, 'Sikker?')">{% csrf_token %}
+            <form method="post" href="#"; style="display: inline" >{% csrf_token %}
             <input id="preVotesForm" class="input candidate-input" type="number" name="preVotes" value="{{candidate.votes}}">
             <button type="submit" class="button" value="{{candidate.user.username}}" name="OK" >OK</button>
             <button class="button candidate-delete" type="submit" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
@@ -81,7 +81,7 @@
     </div>
     <div>
         {% if candidates %}
-        <form method="post" href="#" onsubmit="return confirmValg(this, 'Klar for å åpne valget')">{% csrf_token %}
+        <form method="post" href="#" onsubmit="return confirmValg(this,'Åpne valget for?')">{% csrf_token %}
             <button class="button is-success" type="submit" name="startVoting" value="{{position.id}}"}}>Start</button>
         </form>
 
@@ -97,6 +97,15 @@ function confirmValg(form, message) {
        if (!form){
            return false
        } else {
+           var div = document.getElementsByClassName('candidate-container');
+           var selectedCandidates = [];
+           for (i=0; i<div.length; i++){
+               let candidateName = div[i].children[0].innerHTML;
+               let candidatePreVotes = div[i].children[1].children[4].children[0].innerHTML
+               let name = `\n ${candidateName} : ${candidatePreVotes} `;
+               selectedCandidates.push(name);
+           }
+           var message = 'Starte valget med forhåndstemmer: ' + selectedCandidates;
            return confirm(message)
        }
     }
