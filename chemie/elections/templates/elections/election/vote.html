@@ -34,9 +34,13 @@
                     {%endfor%}
                 </div>
                 <hr color="black">
-                <input class="button" type='submit' name="Blank" value='Stem blankt'/>
-                <input class="button is-success" type='submit' value='Avgi stemme'/>
+                <input class="button is-success" type='submit' name="Stem" value='Avgi stemme'/>
             </form>
+            <div class="div-blank">
+                <form method="POST" submit="return confirmBlank()">{% csrf_token %}
+                    <input class="button" type='submit' name="Blank" value='Stem blankt'/>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -89,6 +93,15 @@
                 var message = 'Du stemmer nå på: \n' + selectedCandidates;
             }
             return confirm(message)
+        }
+    }
+</script>
+<script>
+    function confirmBlank(form){
+        if (!form){
+            return false
+        } else {
+            return confirm("Du stemmer nå blankt")
         }
     }
 </script>
