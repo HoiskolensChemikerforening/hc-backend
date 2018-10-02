@@ -35,9 +35,9 @@ context = {
           <td>
             <p id="voting_percentage-{{candidate.id}}"></p>
             <script type="text/javascript">
-              var total_votes = "{{current_position.total_votes}}";
-              var votes = "{{candidate.votes}}";
-              var percentage = (100*votes/total_votes).toFixed(2);
+              let total_votes = "{{current_position.total_votes}}";
+              let votes = "{{candidate.votes}}";
+              let percentage = (100*votes/total_votes).toFixed(2);
               document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage + "%";
             </script>
           </td>
