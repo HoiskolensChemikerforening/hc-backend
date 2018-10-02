@@ -18,7 +18,7 @@
              </div>
         </div>
 
-        <form method="post" onsubmit="return confirmValg(this, 'Klart for å stenge valget?')" href="#">{% csrf_token %}
+        <form method="post" onsubmit="return confirmValg(this, 'Stenge valget?')" href="#">{% csrf_token %}
             <button class="button is-danger" type="submit" name="endVoting" value="{{position.id}}">End Voting</button>
         </form>
 

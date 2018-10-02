@@ -73,7 +73,6 @@ class Position(models.Model):
                 all_votes = {}
                 for candidate in self.candidates.all():
                     all_votes[candidate.id] = candidate.votes
-                    self.total_votes += candidate.votes
                 winner_spots = self.spots
                 while len(winners) < winner_spots:
                     most_votes = max(all_votes.values())
