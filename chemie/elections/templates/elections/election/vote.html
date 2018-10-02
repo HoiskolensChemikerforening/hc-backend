@@ -3,6 +3,11 @@
 {% load static %}
 
 {% block content %}
+<style>
+    .div-blank{
+        margin-top: 2rem;
+    }
+</style>
 
 <div>
     <div class="div-container">
@@ -24,7 +29,7 @@
         </div>
         <br>
         <div>
-            <form method="POST" onsubmit="return confirmValg(this)">{% csrf_token %}
+            <form method="POST"  onsubmit="return confirmValg(this)">{% csrf_token %}
                 <div class="vote-div">
                     {% csrf_token %}
                     {%for candidate in form.candidates%}
@@ -37,8 +42,9 @@
                 <input class="button is-success" type='submit' name="Stem" value='Avgi stemme'/>
             </form>
             <div class="div-blank">
-                <form method="POST" submit="return confirmBlank()">{% csrf_token %}
-                    <input class="button" type='submit' name="Blank" value='Stem blankt'/>
+                <hr color="black">
+                <form method="POST" onsubmit="return confirmBlank(this)">{% csrf_token %}
+                    <input class="button is-danger" type='submit' name="Blank" value='Stem blankt'/>
                 </form>
             </div>
         </div>
@@ -58,7 +64,7 @@
         console.log(input.checked);
         //removing or adding shadow to box to visualize checked or not checked
         if (input.checked) {
-            image.style.backgroundColor = 'lightgray';
+            image.style.backgroundColor = '#edcd2f';
             image.style.boxShadow = '1px 1px 2px 0px #ccc';
         } else {
             // block.style.backgroundColor='transparent';
