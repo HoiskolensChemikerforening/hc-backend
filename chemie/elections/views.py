@@ -55,6 +55,7 @@ def voting(request):
     if not election_is_open():
         return redirect('elections:vote')
     else:
+        successful_vote = False
         voted = request.user.profile.voted
         election = Election.objects.latest('id')
         if election.current_position_is_open:
@@ -64,11 +65,10 @@ def voting(request):
                     profile = request.user.profile
                     if 'Stem blankt' in request.POST.getlist('Blank'):
                         successful_vote = election.vote(profile, candidates=None, blank=True)
-                    elif 'Avgi stemme' in request.POST.getlist('Blank'):
+                    elif 'Avgi stemme' in request.POST.getlist('Stem'):
                         if form.is_valid():
                             candidates = form.cleaned_data.get('candidates')
                             successful_vote = election.vote(profile, candidates, blank=False)
-
                     else:
                         context = {
                             'form': form,
