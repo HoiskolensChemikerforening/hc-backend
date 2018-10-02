@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect
+from chemie.customprofile.models import Profile
 
 from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, CastVoteForm
 from .models import Election, Position, Candidate
@@ -55,7 +56,6 @@ def voting(request):
     if not election_is_open():
         return redirect('elections:vote')
     else:
-        successful_vote = False
         voted = request.user.profile.voted
         election = Election.objects.latest('id')
         if election.current_position_is_open:
@@ -69,6 +69,15 @@ def voting(request):
                         if form.is_valid():
                             candidates = form.cleaned_data.get('candidates')
                             successful_vote = election.vote(profile, candidates, blank=False)
+                        else:
+                            # Un-checks all candidates, since form is invalid
+                            form.fields['candidates'].widget.checked_attribute['checked'] = False
+                            context = {
+                                'form': form,
+                                'position': election.current_position,
+                                'candidates': election.current_position.candidates.all(),
+                            }
+                            return render(request, 'elections/election/vote.html', context)
                     else:
                         context = {
                             'form': form,
@@ -221,8 +230,11 @@ def admin_voting_is_active(request, pk):
         if 'endVoting' in request.POST:
             election.current_position.end_voting_for_position()
             return redirect('elections:admin_results', pk=pk)
+    total_voters = Profile.objects.filter(voted=True).count()
     context = {
-        'election': election
+        'election': election,
+        'total_voters': total_voters
+
     }
     return render(request, 'elections/admin/admin_start_voting.html', context)
 
@@ -255,45 +267,3 @@ def admin_end_election(request):
         return redirect('elections:admin_start_voting', pk=election.current_position.id)
     election.end_election()
     return redirect('elections:results')
-
-
-
-
-"""
-     Her er et utkast på å skjekke om en kanditat har vunnet med alminnelig flertall.
-    
-    ALLMENN_FLERTALL = {
-    'pHormand/pHorquinde'
-    }
-    
-    winners = current_election.winners.all()
-    candidates = election.current_election.candidates.all()
-
-    if current_election.position_name in ALLMENN_FLERTALL:
-        totalVotes = 0
-        for candidate in candidates:
-            totalVotes += candidate.votes
-        foundWinner = False
-        lowestVote = 1
-        for winner in winners:
-            print(winner.votes)
-            print(totalVotes)
-            margin = float(winner.votes/totalVotes)
-            if margin<lowestVote:
-                lowestVote=margin
-            print(margin)
-            if margin >= 0.5:
-                election.current_election.winners.clear()
-                election.current_election.winners.add(winner)
-                election.current_election.save()
-                election.save()
-                foundWinner = True
-        print(foundWinner)
-        if not foundWinner:
-            #TODO fjerne kandidaten med lavest score fra posisjon
-            #election.current_election.candidates.remove(votes=lowestVote)
-            election.current_election.save()
-            election.save()
-            #TODO bytte ut admin_register_positions og heller legge in pk for å sende oss tilbake til admin_start_voting
-            return redirect('elections:admin_register_positions')
-    """
