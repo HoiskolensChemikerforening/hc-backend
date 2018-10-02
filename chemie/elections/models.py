@@ -7,30 +7,6 @@ from django.db.models.query import QuerySet
 from chemie.customprofile.models import Profile
 
 """
-POTITION_TYPE_CHOICES= (
-    ('pHormand/pHorquinde','pHormand/pHorquinde'),
-    ('PR-sjaepH','PR-sjaepH'),
-    ('Sectreteuse','Sectreteuse'),
-    ('Kasserer','Kasserer'),
-    ('pHaestsjaepH','pHaestsjaepH'),
-    ('IndustrisjaepH','IndustrisjaepH'),
-    ('ChemicalsjaepH','ChemicalsjaepH'),
-    ('Kjellerstyret','Kjellerstyret'),
-    ('Assisterende pHaestsjef','Assisterende pHaestsjef'),
-    ('pHaestslave','pHaestslave'),
-    ('Redacteur','Redacteur'),
-    ('Administrasjonprotogé/sjaepH', 'Administrasjonprotogé/sjaepH'),
-    ('Utenrikskomiteen','Utenrikskomiteen'),
-    ('Wettrekomiteen','Wettrekomiteen'),
-    ('Arrkomiteen','Arrkomiteen'),
-    ('Sportskomiteen','Sportskomiteen'),
-    ('Arkivar','Arkivar'),
-    ('Fadderkomiteen','Fadderkomiteen'),
-    ('PTV: (ProgramsTillitsValgt for MTKJ)','PTV: (ProgramsTillitsValgt for MTKJ)'),
-    ('Webkomiteen','Webkomiteen')
-)"""
-
-"""
 ---------------READ ME-----------------
 - I appen er elections delt inn i to deler, en admin del og en bruker del
 - I admindelen vil alt av logikk med stemmetelling og legge til kandidater skjer
