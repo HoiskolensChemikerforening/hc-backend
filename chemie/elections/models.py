@@ -96,10 +96,12 @@ class Position(models.Model):
 
 
 class Election(models.Model):
-    is_open = models.BooleanField(verbose_name="Er åpent", default=False) #Generelt for hele valget
+    # For the entire election
+    is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(Position, blank=True, related_name='election')
     current_position = models.ForeignKey(Position, blank=True, null=True, related_name='current_election')
-    current_position_is_open = models.BooleanField(verbose_name="Det er åpent for stemming", default=False)  #For delvalget for hver position
+    # For sub-elections
+    current_position_is_open = models.BooleanField(verbose_name="Det er åpent for stemming", default=False)
     date = models.DateField(auto_now_add=True, blank=True)
 
     def __str__(self):
@@ -143,8 +145,7 @@ class Election(models.Model):
         self.save()
 
     def start_current_election(self, current_position):
-        # finner posisjonen vi skal votere om
-        #current_position = Position.objects.get(id=current_position_id)
+        # Find candidates running for current position
         candidates = current_position.candidates.all()
         profiles = Profile.objects.all()
         for profile in profiles:
