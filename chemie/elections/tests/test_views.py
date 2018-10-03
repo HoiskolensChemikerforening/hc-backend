@@ -99,7 +99,10 @@ def test_vote_for_one_user(client, create_user, create_election_with_positions, 
     client.login(username=user.username, password='defaultpassword')
     request = client.post(
         reverse('elections:voting'),
-        {'candidates': candidate.id}
+        {
+            'Stem': 'Avgi stemme',
+            'candidates': candidate.id
+        }
     )
     assert request.url == reverse('elections:has_voted')
     candidate.refresh_from_db()
@@ -150,7 +153,10 @@ def test_vote_for_multiple_users(client, create_user, create_election_with_posit
     client.login(username=user.username, password='defaultpassword')
     client.post(
         reverse('elections:voting'),
-        {'candidates': [cand.id for cand in winner_candidates]}
+        {
+            'Stem': 'Avgi stemme',
+            'candidates': [cand.id for cand in winner_candidates]
+        }
     )
     for cand in winner_candidates:
         cand.refresh_from_db()

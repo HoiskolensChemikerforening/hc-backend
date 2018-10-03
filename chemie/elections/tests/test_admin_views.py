@@ -319,9 +319,9 @@ def test_admin_view_results(
     client.login(username=admin.username, password='defaultpassword')
     election = create_open_election_with_position_and_candidates
     position = election.positions.all().first()
-    election.current_position = position
-    election.current_position_is_open = True
-    election.save()
+    # election.current_position = position
+    # election.current_position_is_open = True
+    # election.save()
 
     # Fake a number of votes for first candidate
     candidates = position.candidates.all()
@@ -330,6 +330,8 @@ def test_admin_view_results(
         winner.votes = 2
         winner.save()
     position.save()
+    position.refresh_from_db()
+    election.start_current_election(position)
     position.end_voting_for_position()
     position.refresh_from_db()
     election.refresh_from_db()
