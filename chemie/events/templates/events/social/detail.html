@@ -23,7 +23,8 @@
 {% block maincontent %}
 
   <div class="row">
-    <div class="col s12 m12 l12"><h1 class="heading">{{ social.title }}</h1></div>
+      <p class="col s12 m12 l12">
+      <h1 class="heading">{{ social.title }}</h1>
   </div>
 
   <div class="row">
@@ -52,6 +53,21 @@
             </div>
             <p>{{ social.date|date:"j. F - H:i" }}</p>
           </div>
+          <div class="divider"></div>
+          <div class="section">
+            <div class="valign-wrapper">
+              <i class="material-icons valign left">contacts</i>
+              <h5 class="left-align">Komité</h5>
+            </div>
+            <p>{{ social.committee|default_if_none:"Tilhører ingen komité" }}</p>
+          </div>
+            <div class="section">
+              <div class="valign-wrapper">
+                <i class="material-icons valign left">edit</i>
+                <h5 class="left-align">Forfatter</h5>
+              </div>
+              <p>{{ social.author.get_full_name }}</p>
+            </div>
           <div class="divider"></div>
 
           <!-- Prices -->
@@ -86,14 +102,20 @@
               <i class="material-icons valign left">people_outline</i>
               <h5 class="left-align">Plasser</h5>
             </div>
-            <div>
-              <p class="left valign"><b>Påmeldte:</b></p>
-              <p class="right valign">{{ social.registered_users|default_if_none:0 }} av {{ social.sluts }}</p>
-            </div>
+            {% if social.sluts == 0 %}
+              <div>
+                <p class="left valign">Arrangementet er åpent for alle!</p>
+              </div>
+            {% else %}
+              <div>
+                <p class="left valign"><b>Påmeldte:</b></p>
+                <p class="right valign">{{ social.registered_users|default_if_none:0 }} av {{ social.sluts }}</p>
+              </div>
+              <div class="progress">
+                <div class="determinate" style="width: {{ social.percentage_filled }}%"></div>
+              </div>
+            {% endif %}
             <br>
-            <div class="progress">
-              <div class="determinate" style="width: {{ social.percentage_filled }}%"></div>
-            </div>
           </div>
         </div>
         <div class="divider"></div>
@@ -103,9 +125,11 @@
   </div>
 
   <!-- Button for signup page -->
+        {% if social.sluts != 0 %}
   <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
+    {% endif %}
 
-  <!-- Desription info -->
+    <!-- Desription info -->
   <div class="row">
     <div class="col s12 m12 l12">
       <div class="card">
@@ -117,6 +141,7 @@
     </div>
 
     <!-- Payment info -->
+      {% if social.price_member or social.price_companion or social.price_companion %}
     <div class="col s12 m12 l12">
       <div class="card">
         <div class="card-content">
@@ -124,6 +149,7 @@
           <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
         </div>
       </div>
+        {% endif %}
     </div>
   </div>
 

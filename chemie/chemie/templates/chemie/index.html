@@ -39,27 +39,25 @@
   {% endif %}
 
   <!-- News -->
-  {% if posts %}
-    {% cache 60 active_news %}
-      <h3 class="heading">Nyheter</h3>
-      {% include 'news/list_news.html' with posts=posts %}
-    {% endcache %}
-  {% endif %}
-
-  <!-- Events -->
-{% if request.user.is_authenticated %}
-  {% if social %}
-    {% cache 60 social %}
-      <h3 class="heading">Sosiale arrangementer</h3>
-      {% include 'events/list_events.html' with object_list=social %}
-    {% endcache %}
-  {% endif %}
-{% endif %}
-
-  {% if bedpres %}
-    {% cache 60 bedpres %}
-      {% include 'events/list_events.html' with object_list=bedpres %}
-    {% endcache %}
-  {% endif %}
+  <div class="row">
+    <div class="col s12 push-m6 m6 push-l7 l5">
+    <!-- Events -->
+      <h3 class="heading">Arrangementer</h3>
+      {% if social or bedpres %}
+        {% include 'events/frontpage_list_events.html' with object_list=object_list %}
+      {% else %}
+        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
+      {% endif %}
+    </div>
+    <div class="col s12 pull-m6 m6 pull-l5 l7">
+      <!-- News -->
+      {% if posts %}
+        {% cache 60 active_news %}
+          <h3 class="heading">Nyheter</h3>
+          {% include 'news/frontpage_news.html' with posts=posts %}
+        {% endcache %}
+      {% endif %}
+    </div>
+  </div>
 
 {% endblock content %}
