@@ -39,7 +39,8 @@ urlpatterns = [
     url(r'^wiki/', get_wiki_pattern()),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
-    url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel'))
+    url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel')),
+    url(r'^elections/',include('chemie.elections.urls', namespace='elections')),
 ]
 
 handler404 = 'chemie.chemie.views.page_not_found'

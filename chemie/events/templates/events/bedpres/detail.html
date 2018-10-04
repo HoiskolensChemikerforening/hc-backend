@@ -50,8 +50,7 @@
                 {% endfor %}</p>
             </div>
           </div>
-        <br>
-
+          <br>
           <div class="divider"></div>
 
           <div class="section">
@@ -68,6 +67,22 @@
             </div>
             <p>{{ bedpres.date|date:"j. F - H:i" }}</p>
           </div>
+          <div class="divider"></div>
+          <div class="section">
+            <div class="valign-wrapper">
+              <i class="material-icons valign left">contacts</i>
+              <h5 class="left-align">Komité</h5>
+            </div>
+            <p>Industrikomitéen</p>
+          </div>
+          <div class="section">
+            <div class="valign-wrapper">
+              <i class="material-icons valign left">edit</i>
+              <h5 class="left-align">Forfatter</h5>
+            </div>
+            <p>{{ bedpres.author.get_full_name }}</p>
+          </div>
+          <div class="divider"></div>
 
           <!-- Total and remaining slots bar -->
           <div class="divider"></div>

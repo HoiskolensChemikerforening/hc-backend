@@ -1,0 +1,85 @@
+{% load staticfiles %}
+{% load thumbnail %}
+{% load chemie_tags %}
+{% load cache %}
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <!--Specific for Base_elections-->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <!--From Base template-->
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Høiskolens Chemikerforening</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon.png" %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons/favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons/favicon-16x16.png" %}">
+  <link rel="manifest" href="{% static "favicons/manifest.json" %}">
+  <link rel="mask-icon" href="{% static "favicons/safari-pinned-tab.svg" %}" color="#5bbad5">
+
+<!--Bootstrap CSS-->
+  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">-->
+
+  <!-- CSS from base -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
+  <link href="{% static 'css/style_election.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  {% block extra_css %}
+  {% endblock %}
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+  <script src="{% static "js/timepicker.js" %}"></script>
+  <script src="{% static "js/init.js" %}" defer></script>
+
+  {% block extra_js %}
+  {% endblock %}
+
+  <style>
+    {% block style %}
+    {% endblock style %}
+  </style>
+
+  {% block header %}
+  {% endblock header %}
+  <meta name="theme-color" content="#3C91E6">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#3C91E6">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+
+
+<body>
+  <div>
+    <header>
+    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
+  <div class="navbar-brand">
+    <a class="navbar-item" href="/" >
+      <img class="nav-bar-image"src="{% static 'images/logo.png'%}">
+      <h2 class="title is-4 nav-bar-title">Høiskolens Chemikerforening</h2>
+    </a>
+
+  </div>
+</nav>
+    </header>
+    <div class="main-container">
+      {% block content %}
+      {% endblock content %}
+    </div>
+  </div>
+
+{% block footer_script %}
+
+{% endblock footer_script %}
+
+</body>
+</html>
