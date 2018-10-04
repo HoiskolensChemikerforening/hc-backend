@@ -6,6 +6,8 @@ from django.contrib.auth.decorators import permission_required
 from .models import Article
 from .forms import NewsPost
 
+#skal lage artikkel-kommentarer
+
 
 @permission_required('news.add_article')
 def create_post(request):
