@@ -86,7 +86,6 @@ LOCAL_APPS = [
     'chemie.yearbook',
     'chemie.customprofile',
     'chemie.picturecarousel',
-    'chemie.elections',
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS

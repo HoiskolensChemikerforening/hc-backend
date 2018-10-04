@@ -1,6 +1,5 @@
 import factory
 from django.contrib.auth import models
-
 from .models import Profile, GRADES, RELATIONSHIP_STATUS, FINISH_YEAR, CURRENT_YEAR
 
 

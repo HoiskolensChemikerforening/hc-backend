@@ -22,21 +22,14 @@
           <p class="flow-text truncate">
             {{ event.title }}
           </p>
-              {% if event.sluts == 0 %}
-              <p>Arrangementet er åpent for alle!</p>
-              <div class="card-action">
-                <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
-              </div>
-            {% else %}
           <p>{{ event.registered_users|default_if_none:0 }} av {{ event.sluts }} påmeldte</p>
           <div class="progress">
             <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
           </div>
+        </div>
         <div class="card-action">
           <a href="{{ event.get_absolute_registration_url }}" class="left">Til påmelding</a>
           <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
-        </div>
-      {% endif %}
         </div>
       </div>
     </div>
