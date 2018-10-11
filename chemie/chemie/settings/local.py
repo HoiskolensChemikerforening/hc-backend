@@ -11,9 +11,9 @@ from .base import *
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'webkom',
-        'USER': 'webkom',
-        'PASSWORD': 'webkom',
+        'NAME': 'hc_chemie',
+        'USER': 'hc_chemie',
+        'PASSWORD': 'passord',
         'HOST': '',
         'PORT': '5432',
         'CONN_MAX_AGE': 600,
