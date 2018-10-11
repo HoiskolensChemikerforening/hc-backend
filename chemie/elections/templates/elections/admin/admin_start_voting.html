@@ -14,17 +14,16 @@
             </div>
             <div class="candidate-voted">
                 <!--TODO future improvent would be to set dynamic rendering of total votes-->
-                <h2 class="title is-2" align="center">{{election.current_position.total_votes}} stemmer er talt</h2>
+                <h2 class="title is-2" align="center">{{ total_voters }} personer har stemt</h2>
              </div>
         </div>
 
         <form method="post" onsubmit="return confirmValg(this, 'Stenge valget?')" href="#">{% csrf_token %}
             <button class="button is-danger" type="submit" name="endVoting" value="{{position.id}}">End Voting</button>
         </form>
-
-
 </div>
 {% endblock content %}
+
 {% block footer_script %}
 <script type="text/javascript">
 function confirmValg(form, message) {

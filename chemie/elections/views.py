@@ -1,50 +1,269 @@
-from .models import Candidate, Position, Vote, Position, Election, Ticket
-from django.http import HttpResponse
-from django.shortcuts import render_to_response, get_object_or_404, render
-from random import randint
-from .forms import Postform
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import get_object_or_404, render
+from django.shortcuts import redirect
+from chemie.customprofile.models import Profile
+
+from .forms import AddPositionForm, AddCandidateForm, AddVotesCandidateForm, CastVoteForm
+from .models import Election, Position, Candidate
 
 
-SECRET_CHARS = '23456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKLMNPQRSTUVWXYZ'
-TICKET_LENGTH = 8
+def election_is_open():
+    is_open = True
+    try:
+        election = Election.objects.latest('id')
+        if not election.is_open:
+            is_open = False
+    except ObjectDoesNotExist:
+        is_open = False
+    return is_open
 
 
-def index(request):
-    positions = print_sorted_candidates(request)
-    return render_to_response('elections/detail.html', {'position_list': positions})
+def voting_is_active():
+    active = False
+    election = Election.objects.latest('id')
+    if election.current_position_is_open:
+        active = True
+    return active
 
 
-def print_sorted_candidates(request):
-    # We use prefetch_related to get the related Candidates for each position
-    # Even tho position doesn't have any connection to Candidate (its the
-    # other way around)
-    positions = Position.objects.prefetch_related('candidate_set').filter(active=True)
-    return positions
+@login_required
+def vote(request):
+    try:
+        election = Election.objects.latest('id')
+        voted = request.user.profile.voted
+        context = {'election': election, 'voted': voted}
+    except:
+        context = {'election': None, 'voted': False}
+    return render(request, 'elections/election/index.html', context)
 
 
-def generate_tickets(ticket_count):
-    choices = len(SECRET_CHARS) - 1
-    chars = range(TICKET_LENGTH)
-    count, secret_list, tickets = 0, [], []
-    while count < ticket_count:
-        secret = [SECRET_CHARS[randint(0, choices)] for x in chars]
-        secret_snippet = ''.join(secret)
-        if secret not in secret_list:
-            secret_list.append(secret_snippet)
-            count += 1
-
-    for secret in secret_list:
-        tickets.append(Ticket(secret=secret))
-
-    Ticket.objects.bulk_create(tickets)
-
-
-def post_votes(request):
-    form = Postform(request.POST or None)
-    if form.is_valid():
-        instance = form.save(commit=False)
-        instance.save()
+@login_required
+def results(request):
+    try:
+        elections = Election.objects.all()
+    except:
+        elections = None
     context = {
-        "form": form,
+        'elections': elections,
     }
-    return render(request, "elections/post_form.html", context)
+    return render(request, 'elections/election/resultater.html', context)
+
+
+@login_required
+def voting(request):
+    if not election_is_open():
+        return redirect('elections:vote')
+    else:
+        voted = request.user.profile.voted
+        election = Election.objects.latest('id')
+        if election.current_position_is_open:
+            if not voted:
+                form = CastVoteForm(request.POST or None, election=election)
+                if request.method == 'POST':
+                    profile = request.user.profile
+                    if 'Stem blankt' in request.POST.getlist('Blank'):
+                        successful_vote = election.vote(profile, candidates=None, blank=True)
+                    elif 'Avgi stemme' in request.POST.getlist('Stem'):
+                        if form.is_valid():
+                            candidates = form.cleaned_data.get('candidates')
+                            successful_vote = election.vote(profile, candidates, blank=False)
+                        else:
+                            # Un-checks all candidates, since form is invalid
+                            form.fields['candidates'].widget.checked_attribute['checked'] = False
+                            context = {
+                                'form': form,
+                                'position': election.current_position,
+                                'candidates': election.current_position.candidates.all(),
+                            }
+                            return render(request, 'elections/election/vote.html', context)
+                    else:
+                        context = {
+                            'form': form,
+                            'position': election.current_position,
+                            'candidates': election.current_position.candidates.all(),
+                        }
+                        return render(request, 'elections/election/vote.html', context)
+                    if successful_vote:
+                        return redirect('elections:has_voted')
+                else:
+                    context = {
+                        'form': form,
+                        'position':  election.current_position,
+                        'candidates': election.current_position.candidates.all(),
+                    }
+                    return render(request, 'elections/election/vote.html', context)
+            return redirect('elections:has_voted')
+        return redirect('elections:vote')
+
+
+@login_required
+def has_voted(request):
+    if not election_is_open():
+        return redirect('elections:vote')
+    else:
+        election = Election.objects.latest('id')
+        if not election.current_position_is_open:
+            return redirect('elections:vote')
+        voted = request.user.profile.voted
+        if not voted:
+            return redirect('elections:voting')
+        return render(request, 'elections/election/vote_ended.html')
+
+
+@permission_required('elections.add_election')
+@login_required
+def admin_start_election(request):
+    if election_is_open():
+        election = Election.objects.latest('id')
+        if voting_is_active():
+            return redirect('elections:admin_start_voting', pk=election.current_position.id)
+        return redirect('elections:admin_register_positions')
+    if request.method == 'POST': # brukeren trykker på knappen
+        Election.objects.create(is_open=True)
+        return redirect('elections:admin_register_positions')
+    return render(request, 'elections/admin/admin_start_election.html')
+
+
+@permission_required('elections.add_election')
+@login_required
+def admin_register_positions(request):
+    if not election_is_open():
+        return redirect('elections:admin_start_election')
+    else:
+        form = AddPositionForm(request.POST or None)
+        election = Election.objects.latest('id')
+        if voting_is_active():
+            return redirect('elections:admin_start_voting', pk=election.current_position.id)
+        if request.method == "POST":
+            if "Delete" in request.POST: # delete posisjon
+                position_id = request.POST.get("Delete", "0")
+                position = election.positions.get(id=int(position_id))
+                election.delete_position(position)
+            # Selve formen fr registrering av posisjon
+            if form.is_valid():
+                # lager en ny posistion objekt som vi legger inn i vår election
+                new_position = form.cleaned_data['position_name'] #position field
+                # lager en liste som skjekker at vi ikke alt har lagt til vervet i election
+                current_positions_in_election = list()
+                for i in election.positions.all():
+                    current_positions_in_election.append(i.position_name)
+                if new_position not in current_positions_in_election: # hvis vi ikke har lagt til vervet allerede
+                    spots = form.cleaned_data['spots']  # spots field
+                    new_position_object = Position.objects.create(position_name=str(new_position), spots=int(spots))  # lager et position objetkt
+                    election.positions.add(new_position_object)
+                    election.save()
+        positions = election.positions.all()
+        context = {
+            'form': form,
+            'positions': positions
+        }
+        return render(request, 'elections/admin/admin_positions.html', context)
+
+
+@permission_required('elections.add_election')
+@login_required
+def admin_register_candidates(request, pk):
+    if not election_is_open():
+        return redirect('elections:admin_start_election')
+    else:
+        if voting_is_active():
+            election = Election.objects.latest('id')
+            return redirect('elections:admin_start_voting',pk=election.current_position.id)
+        position = get_object_or_404(Position, pk=pk) # henter ut position som skal legge verv til
+        add_candidate_form = AddCandidateForm(request.POST or None)
+        if request.method == 'POST':
+            if 'OK' in request.POST: # Hvis brukeren skal avgi forhåndsstemmer
+                form = AddVotesCandidateForm(request.POST)
+                if form.is_valid():
+                    preVotes = form.cleaned_data['preVotes']
+                    candidate_username = request.POST.get("OK", "1")
+                    candidate_user_object = User.objects.get(username=candidate_username)
+                    all_candidates = position.candidates.all()
+                    candidate_object = all_candidates.get(user=candidate_user_object)
+                    candidate_object.votes = preVotes
+                    candidate_object.save()
+            elif 'Delete' in request.POST: # hvis brukeren skal slette candidaten fra posisjonen.
+                form = AddVotesCandidateForm(request.POST)
+                if form.is_valid():
+                    candidate_username = request.POST.get("Delete", "0")
+                    candidate_user_object = User.objects.get(username=candidate_username)
+                    all_candidates = position.candidates.all()
+                    candidate_object = all_candidates.get(user=candidate_user_object)
+                    position.candidates.remove(candidate_object)  # sletter brukeren fra stillingen
+                    candidate_object.delete()
+                    position.save()
+            elif 'addCandidate' in request.POST:
+                if add_candidate_form.is_valid():
+                    user = add_candidate_form.cleaned_data['user']
+                    position_candidates = position.candidates.all()
+                    to_be_added = False if user in [usr.user for usr in position_candidates] else True
+                    if to_be_added:
+                        candidate = Candidate.objects.create(user=user)
+                        position.candidates.add(candidate)
+                        position.save()
+            elif 'startVoting' in request.POST:
+                election = Election.objects.latest('id')
+                if not election.current_position_is_open:
+                    election.start_current_election(position)
+                return redirect('elections:admin_start_voting', pk=position.id)
+
+        candidates = position.candidates.all()
+        context = {
+            'candidates': candidates,
+            'position': position,
+            'add_candidate_form': add_candidate_form
+        }
+        return render(request, 'elections/admin/admin_candidates.html', context)
+
+
+@permission_required('elections.add_election')
+@login_required
+def admin_voting_is_active(request, pk):
+    if not election_is_open():
+        return redirect('elections:admin_start_election')
+    if not voting_is_active():
+        return redirect('elections:admin_register_positions')
+    election = Election.objects.latest('id')
+    if request.method == 'POST':
+        if 'endVoting' in request.POST:
+            election.current_position.end_voting_for_position()
+            return redirect('elections:admin_results', pk=pk)
+    total_voters = Profile.objects.filter(voted=True).count()
+    context = {
+        'election': election,
+        'total_voters': total_voters
+
+    }
+    return render(request, 'elections/admin/admin_start_voting.html', context)
+
+
+@permission_required('elections.add_election')
+@login_required
+def admin_results(request,pk):
+    if not election_is_open():
+        return redirect('elections:admin_start_election')
+    election = Election.objects.latest('id')
+    if voting_is_active():
+        return redirect('elections:admin_start_voting', pk=pk)
+    position = election.positions.get(id=pk)
+    context = {
+        'candidates': position.candidates.all(),
+        'current_position': position,
+        'total_votes': position.total_votes,
+        'winners': position.winners.all()
+    }
+    return render(request, 'elections/admin/admin_results.html', context)
+
+
+@permission_required('elections.add_election')
+@login_required
+def admin_end_election(request):
+    if not election_is_open():
+        return redirect('elections:admin_start_election')
+    election = Election.objects.latest('id')
+    if voting_is_active():
+        return redirect('elections:admin_start_voting', pk=election.current_position.id)
+    election.end_election()
+    return redirect('elections:results')
