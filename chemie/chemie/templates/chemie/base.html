@@ -1,4 +1,4 @@
-{% load static %}
+{% load staticfiles %}
 {% load thumbnail %}
 {% load chemie_tags %}
 {% load cache %}
@@ -19,16 +19,54 @@
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/css/materialize.min.css">
   <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
   {% block extra_css %}
   {% endblock %}
 
   <!-- JS -->
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-messaging.js"></script>
 
-  
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js" defer></script>
+  <script src="{% static "js/timepicker.js" %}"></script>
+
+    <!--TODO Move the script to firebase-initial.js-->
+  <script>
+  var config = {
+      apiKey: "AIzaSyCSQFxPpdWUnNAEX2N8xt5Fz1YB6TQt7KE",
+      authDomain: "chemie-265d6.firebaseapp.com",
+      databaseURL: "https://chemie-265d6.firebaseio.com",
+      projectId: "chemie-265d6",
+      storageBucket: "chemie-265d6.appspot.com",
+      messagingSenderId: "1057998917777"
+    };
+    firebase.initializeApp(config);
+    const messaging = firebase.messaging();
+    navigator.serviceWorker.register('{% static "js/firebase-messaging-sw.js" %}')
+    .then(function(registration) {
+      messaging.useServiceWorker(registration);
+      messaging.requestPermission()
+          .then( function(){
+            console.log("has permission");
+            return messaging.getToken();
+          }).then(function (token) {
+              console.log(token);
+      //        TODO: store token in database
+      })
+      .catch( function(err){
+          console.log(("Error Occured"));
+      });
+    });
+    messaging.onMessage(function(payload){
+          console.log('oneMessage: ',payload);
+      });
+  </script>
+  <script src="{% static "js/init.js" %}" defer></script>
+
   {% block extra_js %}
   {% endblock %}
 
@@ -49,26 +87,30 @@
 </head>
 <body>
 
-    <header>
-        <nav class="top-nav">
-          <div class="container">
-            <div class="nav-wrapper">
-                <div class="container"><a href="#" data-target="nav-mobile" class="top-nav sidenav-trigger full hide-on-large-only"><i class="material-icons">menu</i></a></div>
-                <div><h2 id="heading">{% block nav_header %}{% endblock nav_header %}</h2></div>
-                <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
-            </div>
-          </div>
-        </nav>
-        
-        <ul id="nav-mobile" class="sidenav sidenav-fixed">
-            <li class="logo">
-                <a id="logo-container" href="/" class="brand-logo">
-                  <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
-                </a>
-                  <a href="/" style="height: 100%"><h4 class="logo-text">Høiskolens Chemikerforening</h4></a>
-                <div class="divider"></div>
-              </li>
-              {% if user.is_authenticated %}
+<header>
+  <nav class="top-nav">
+    <div class="container">
+      <div class="nav-wrapper">
+        <a href="#" data-activates="slide-out" style="padding-right: 10px;" class="button-collapse">
+          <i class="material-icons white-text">menu</i></a>
+        <div><h2 id="heading">{% block nav_header %}{% endblock nav_header %}</h2></div>
+        <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
+      </div>
+    </div>
+  </nav>
+<div class="divider"></div>
+
+  <div class="nav-wrapper container">
+    <ul id="slide-out" class="side-nav fixed">
+      <li class="logo">
+        <a id="logo-container" href="/" class="brand-logo">
+          <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
+        </a>
+          <a href="/" style="height: 100%"><h4 class="logo-text">Høiskolens Chemikerforening</h4></a>
+        <div class="divider"></div>
+      </li>
+
+      {% if user.is_authenticated %}
         <li>
           <ul class="collapsible" data-collapsible="accordion">
             <li>
@@ -96,70 +138,75 @@
       {% else %}
         <li class="bold"><a href="{% url "login" %}">Logg inn</a></li>
       {% endif %}
+      <li>
+        <ul class="collapsible" data-collapsible="accordion">
           <li>
-            <ul class="collapsible collapsible-accordion">
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">info</i>Om HC</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
-                      <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
-                      <li><a href="/s/kontoret/" class="waves-effect">Kontoret</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">stars</i>Ny student</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="/s/velkommen/" class="waves-effect">Velkommen!</a></li>
-                      <li><a href="/s/praktisk/" class="waves-effect">Praktisk info</a></li>
-                      <li><a href="/s/fadderperioden/" class="waves-effect">Fadderperioden</a></li>
-                      <li><a href="/s/teknostart/" class="waves-effect">Teknostart</a></li>
-                      <li><a href="/s/HC/" class="waves-effect">Høiskolens Chemikerforening</a></li>
-                      <li><a href="/s/kontakt/" class="waves-effect">Kontaktinfo</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">local_drink</i>Sosialt</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="{% url "events:index_social" %}" class="waves-effect">Arrangementer</a></li>
-                      <li><a href="{% url "events:index_bedpres" %}" class="waves-effect">Bedpres</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">people</i>Internt</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
-                      <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
-                      <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
-                      <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
-                      <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
-                      <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
+            <div class="collapsible-header"><i class="material-icons micon">info</i>Om HC</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
+                <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
+                <li><a href="/s/kontoret/" class="waves-effect">Kontoret</a></li>
+              </ul>
+            </div>
           </li>
-          <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
-            class="material-icons micon">inbox</i>Bokskap</a>
-        </li>
-        <li class="bold"><a href="/s/bedrift/" class="waves-effect"><i
-            class="material-icons micon">business</i>
-          For bedrifter</a></li>
-        <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
-            class="material-icons micon">contact_mail</i>Kontakt</a>
-        </li>
-  
-        <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
-            class="material-icons micon">date_range</i>Kalender</a></li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">stars</i>Ny student</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/s/velkommen/" class="waves-effect">Velkommen!</a></li>
+                <li><a href="/s/praktisk/" class="waves-effect">Praktisk info</a></li>
+                <li><a href="/s/fadderperioden/" class="waves-effect">Fadderperioden</a></li>
+                <li><a href="/s/teknostart/" class="waves-effect">Teknostart</a></li>
+                <li><a href="/s/HC/" class="waves-effect">Høiskolens Chemikerforening</a></li>
+                <li><a href="/s/kontakt/" class="waves-effect">Kontaktinfo</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">local_drink</i>Sosialt</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "events:index_social" %}" class="waves-effect">Arrangementer</a></li>
+                <li><a href="{% url "events:index_bedpres" %}" class="waves-effect">Bedpres</a></li>
+              </ul>
+            </div>
+          </li>
+          <li>
+            <div class="collapsible-header"><i class="material-icons micon">people</i>Internt</div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
+                <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
+                <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
+                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
+              </ul>
+            </div>
+          </li>
         </ul>
-    </header>
+      </li>
+      <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
+          class="material-icons micon">inbox</i>Bokskap</a>
+      </li>
+      <li class="bold"><a href="/s/bedrift/" class="waves-effect"><i
+          class="material-icons micon">business</i>
+        For bedrifter</a></li>
+      <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
+          class="material-icons micon">contact_mail</i>Kontakt</a>
+      </li>
+
+      <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
+          class="material-icons micon">date_range</i>Kalender</a></li>
+    </ul>
+    <a href="#" data-activates="slide-out" class="button-collapse"><i class="mdi-navigation-menu"></i></a>
+  </div>
+</header>
+
 
 <main>
   <div class="section no-pad-bot" id="index-banner">
     <div class="container">
-
       <!-- Messaging framework card -->
       {% if messages %}
         <div class="row">
@@ -251,17 +298,8 @@
 {% endblock footer_js_files %}
 
 {% block footer_script %}
+
 {% endblock footer_script %}
-
-<script>
-  $(document).ready(function(){
-    $('.sidenav').sidenav();
-    $('.collapsible').collapsible();
-    $('.fixed-action-btn').floatingActionButton();
-    $('.tabs').tabs();
-  });
-</script>
-
 
 <script>
     (function (i, s, o, g, r, a, m) {
