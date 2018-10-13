@@ -25,9 +25,46 @@
   {% endblock %}
 
   <!-- JS -->
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-messaging.js"></script>
+
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js" defer></script>
   <script src="{% static "js/timepicker.js" %}"></script>
+
+    <!--TODO Move the script to firebase-initial.js-->
+  <script>
+  var config = {
+      apiKey: "AIzaSyCSQFxPpdWUnNAEX2N8xt5Fz1YB6TQt7KE",
+      authDomain: "chemie-265d6.firebaseapp.com",
+      databaseURL: "https://chemie-265d6.firebaseio.com",
+      projectId: "chemie-265d6",
+      storageBucket: "chemie-265d6.appspot.com",
+      messagingSenderId: "1057998917777"
+    };
+    firebase.initializeApp(config);
+    const messaging = firebase.messaging();
+    navigator.serviceWorker.register('{% static "js/firebase-messaging-sw.js" %}')
+    .then(function(registration) {
+      messaging.useServiceWorker(registration);
+      messaging.requestPermission()
+          .then( function(){
+            console.log("has permission");
+            return messaging.getToken();
+          }).then(function (token) {
+              console.log(token);
+      //        TODO: store token in database
+      })
+      .catch( function(err){
+          console.log(("Error Occured"));
+      });
+    });
+    messaging.onMessage(function(payload){
+          console.log('oneMessage: ',payload);
+      });
+  </script>
   <script src="{% static "js/init.js" %}" defer></script>
 
   {% block extra_js %}
