@@ -4,5 +4,8 @@ firebase.initializeApp({
     messagingSenderId: "1057998917777"
 });
 const messaging = firebase.messaging();
+messaging.onMessage(function(payload){
+          console.log('oneMessage: ',payload);
+      });
 
 

@@ -126,3 +126,9 @@ def edit_flatpage(request, url):
         'form': form,
     }
     return render(request, 'flatpage/edit_flatpage.html', context)
+
+
+@login_required
+def web_notification(request):
+    print(request.body)
+    return redirect(reverse('frontpage:home'))
