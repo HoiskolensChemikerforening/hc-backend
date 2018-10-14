@@ -171,3 +171,8 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     template_name = 'home/office_access_list.html'
     queryset = OfficeApplication.objects.order_by('-created')
     permission_required = 'events.change_officeapplication'
+
+@login_required
+def web_notification(request):
+    print(request.body)
+    return redirect(reverse('frontpage:home'))

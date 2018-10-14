@@ -10,6 +10,7 @@ urlpatterns = [
     url(r'^funds/', request_funds, name="fundsapplication"),
     url(r'^kontortilgang/apply', request_office, name='officeaccess'),
     url(r'^flatpage/(?P<url>.*)$', edit_flatpage, name='edit_flatpage'),
+    url(r'^web_notifications/', web_notification, name='notifications')
     url(r'^kontortilgang/applicants',
         OfficeAccessApplicationListView.as_view(),
         name='office_access_list'),
