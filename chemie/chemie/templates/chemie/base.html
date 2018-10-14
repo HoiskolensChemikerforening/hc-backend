@@ -35,7 +35,7 @@
   <script src="{% static "js/timepicker.js" %}"></script>
 
     <!--TODO Move the script to firebase-initial.js-->
-  <script>
+  <script type="text/javascript">
   var config = {
       apiKey: "AIzaSyCSQFxPpdWUnNAEX2N8xt5Fz1YB6TQt7KE",
       authDomain: "chemie-265d6.firebaseapp.com",
@@ -55,6 +55,28 @@
             return messaging.getToken();
           }).then(function (token) {
               console.log(token);
+              var xhttp = new XMLHttpRequest();
+
+              function getCookie(name) {
+                var cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    var cookies = document.cookie.split(';');
+                    for (var i = 0; i < cookies.length; i++) {
+                        var cookie = jQuery.trim(cookies[i]);
+                        // Does this cookie string begin with the name we want?
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+              }
+              var csrftoken = getCookie('csrftoken');
+              console.log(csrftoken);
+              xhttp.open("POST","",true);
+              xhttp.setRequestHeader("X-CSRFToken", csrftoken);
+              xhttp.send()
       //        TODO: store token in database
       })
       .catch( function(err){
