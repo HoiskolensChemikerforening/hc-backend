@@ -60,7 +60,9 @@ def voting(request):
         election = Election.objects.latest('id')
         if election.current_position_is_open:
             if not voted:
+                print('Before CastVoteForm')
                 form = CastVoteForm(request.POST or None, election=election)
+                print('After CastVoteForm')
                 if request.method == 'POST':
                     profile = request.user.profile
                     if 'Stem blankt' in request.POST.getlist('Blank'):

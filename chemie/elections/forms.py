@@ -49,7 +49,7 @@ def candidatesChoices(election=None):
     try:
         position = election.current_position
         choices = position.candidates.all()
-    except AttributeError:
+    except:# AttributeError:
         choices = Position.objects.none()
     return choices
 
