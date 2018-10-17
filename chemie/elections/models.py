@@ -147,7 +147,7 @@ class Election(models.Model):
     def start_current_election(self, current_position):
         # Find candidates running for current position
         candidates = current_position.candidates.all()
-        profiles = Profile.objects.all()
+        profiles = Profile.objects.filter(voted=True)
         for profile in profiles:
             profile.voted = False
             profile.save()
