@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.shortcuts import get_current_site
 from django.core.urlresolvers import reverse
@@ -8,12 +9,14 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
+from django.views.generic import ListView
 from post_office import mail
 
 from chemie.events.models import Social, Bedpres
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
-from .forms import ContactForm, PostFundsForm
+from .forms import ContactForm, PostFundsForm, PostOfficeForms
+from .models import OfficeApplication
 
 
 def index(request):
@@ -97,6 +100,42 @@ def request_funds(request):
     return render(request, "home/post_funds_form.html", context)
 
 
+@login_required()
+def request_office(request):
+    office_form = PostOfficeForms(request.POST or None)
+    access_card = request.user.profile.access_card
+    already_applied = OfficeApplication.objects.filter(
+            access_card=access_card,
+            created__gte=timezone.now() - timezone.timedelta(days=30)).exists()
+    if already_applied:
+        messages.add_message(request,
+                             messages.WARNING,
+                             'Du har allerede søkt om tilgang den siste måneden',
+                             extra_tags='Feil',
+                             )
+    if office_form.is_valid():
+        if already_applied:
+            return redirect(reverse('frontpage:home'))
+        instance = office_form.save(commit=False)
+        instance.author = request.user
+        instance.access_card = access_card
+        instance.save()
+        messages.add_message(request,
+             messages.SUCCESS,
+             'Din søknad er motatt og vil behandles snart.',
+             extra_tags='Søknad sendt!',
+            )
+        return redirect(reverse('frontpage:home'))
+
+    context = {
+        "office_form": office_form,
+        "access_card": access_card,
+        "already_applied": already_applied
+    }
+    return render(request, "home/office_access_form.html", context)
+
+
+
 @permission_required('flatpages.change_flatpage')
 def edit_flatpage(request, url):
     if not url.startswith('/'):
@@ -126,3 +165,9 @@ def edit_flatpage(request, url):
         'form': form,
     }
     return render(request, 'flatpage/edit_flatpage.html', context)
+
+
+class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
+    template_name = 'home/office_access_list.html'
+    queryset = OfficeApplication.objects.order_by('-created')
+    permission_required = 'events.change_officeapplication'
