@@ -1,0 +1,117 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+ {% block header %}
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/css/theme.materialize.min.css">
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/widgets/widget-output.min.js"></script>
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
+  <script>
+      $(function () {
+          var $table = $('table');
+          $('.download').click(function () {
+              // tell the output widget do it's thing
+              $table.trigger('outputTable');
+          });
+           $table.tablesorter({
+              theme: "materialize",
+              widgets: ['zebra', 'output', 'filter'],
+              widgetOptions: {
+                  output_delivery: 'd',
+                  zebra: ["even", "odd"],
+                  output_saveFileName: 'kontorsøknader_{{ now }}.csv',
+                  filter_cssFilter: ["", "", "browser-default"],
+                   // add 'selectmenu' class name to first filter
+                  filter_selectSource: {
+                      3: [ // membership column
+                          {value: 'local_play', 'data-class': 'ui-icon-image', text: 'Medlem'},
+                          {value: '-', 'data-class': 'ui-icon-image', text: 'Ikke medlem'}
+                      ],
+                      4: [ // Payment column
+                          {value: 'done', 'data-class': 'ui-icon-image', text: 'Betalt'},
+                          {value: 'error', 'data-class': 'ui-icon-image', text: 'Ikke betalt'}
+                      ],
+                      5: [ // Registrations status column
+                          {value: 'done', 'data-class': 'ui-icon-image', text: 'Bekreftet'},
+                          {value: 'error', 'data-class': 'ui-icon-image', text: 'Venteliste'}
+                      ]
+                  }
+              }
+          });
+      });
+  </script>
+   <style>
+    .tablesorter-materialize .tablesorter-filter-row input.tablesorter-filter, .tablesorter-materialize .tablesorter-filter-row select.tablesorter-filter {
+      margin: 0 0 10px 0 !important;
+    }
+     .select-wrapper input.select-dropdown {
+      margin: 0 0 10px 0 !important;
+    }
+     .tablesorter-materialize tfoot td, .tablesorter-materialize tfoot th, .tablesorter-materialize thead td, .tablesorter-materialize thead th {
+      background-color: transparent !important;
+    }
+     .tablesorter-materialize .tablesorter-filter-row {
+      background-color: transparent !important;
+    }
+     ul {
+      padding-left: 20px;
+    }
+     #foo.hide2 tr > *:nth-child(2) {
+      display: none;
+    }
+   </style>
+{% endblock header %}
+ {% block nav_header %}
+  Kontortilgang
+{% endblock nav_header %}
+ {% block nav_sub_header %}
+  Søknader
+{% endblock nav_sub_header %}
+ {% block content %}
+  <div class="row">
+    <div class="col s12 m12 l12"><h3 class="heading">{{ event.title }}</h3></div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <p class="flow-text">
+        Søk og filtrering blant de søknadene. Vær obs på at alle tidligere søknader inkluderes!
+      </p>
+      <button class="download btn">Last ned</button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <table id="myTable" class="tablesorter">
+        <thead>
+        <tr>
+          <th>Navn</th>
+          <th class="filter-select filter-exact">Klassetrinn</th>
+          <th class="filter-select filter-exact">Verv</th>
+          <th>Kortnr</th>
+          <th>Dato</th>
+        </tr>
+        </thead>
+         <tbody>
+        {% for application in object_list %}
+          <tr>
+            <td>{{ application.author.get_full_name }} </td>
+            <td>{{ application.author.profile.get_grade_display }} </td>
+             <td>
+              {% if application.author.position_set.count >= 0 %}
+                Ja
+              {% else %}
+                Nei
+              {% endif %}
+            </td>
+             <td>{{ application.access_card }}</td>
+            <td>{{ application.created }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock content %}
