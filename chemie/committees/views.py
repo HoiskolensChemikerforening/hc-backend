@@ -7,7 +7,7 @@ from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
-from django.views.generic.edit import FormView
+from django.utils.html import format_html
 
 from .forms import EditDescription, EditPositionForm
 from .models import Committee, Position
@@ -75,6 +75,9 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
                  qs.filter(last_name__icontains=self.q)
 
         return qs
+
+    def get_result_label(self, user):
+        return format_html('{}', user.get_full_name())
 
 
 @permission_required('committees.change_committee')
