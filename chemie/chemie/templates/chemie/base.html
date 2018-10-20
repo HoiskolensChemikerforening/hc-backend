@@ -50,15 +50,18 @@
     navigator.serviceWorker.register('{% static "js/firebase-messaging-sw.js" %}')
     .then(function(registration) {
       messaging.useServiceWorker(registration);
-      messaging.requestPermission()
-      .then( function(){
-      return messaging.getToken();
-  }).then(function (token) {
-      // Saving device token backend to be used when notification is to be sent
-      var browser = getBrowser()
-      postAjax("web_notifications/",{'token':token,'browser':browser});
+      //TODO change the adress to chemie.no in production
+      if (window.location.href == "http://127.0.0.1:8000/"){ //only prompts permission on home page
+        messaging.requestPermission()
+        .then( function(){
+        return messaging.getToken();
+      }).then(function (token) {
+        // Saving device token backend to be used when notification is to be sent
+        var browser = getBrowser()
+        postAjax("web_notifications/",{'token':token,'browser':browser});
     });
-  })
+        }
+      })
       .catch( function(err){
           console.log(("Error Occured"));
       });
