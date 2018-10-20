@@ -52,10 +52,9 @@
       messaging.useServiceWorker(registration);
       messaging.requestPermission()
       .then( function(){
-      console.log("has permission");
       return messaging.getToken();
   }).then(function (token) {
-      console.log(token);
+      // Saving device token backend to be used when notification is to be sent
       var browser = getBrowser()
       postAjax("web_notifications/",{'token':token,'browser':browser});
     });
@@ -63,8 +62,13 @@
       .catch( function(err){
           console.log(("Error Occured"));
       });
+
     messaging.onMessage(function(payload){
-          console.log('oneMessage: ',payload);
+        // When user is present on the site, they are instead presented with a toast message.
+        var snackbar = document.getElementById("snackbar");
+        snackbar.innerHTML = payload.notification.body
+        snackbar.className = "show";
+        setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
       });
   </script>
   <script src="{% static "js/init.js" %}" defer></script>
@@ -234,6 +238,9 @@
       {% endblock content %}
       <br><br>
       <br><br>
+          <div id="snackbar">
+              Some textome message
+          </div>
     </div>
   </div>
 </main>

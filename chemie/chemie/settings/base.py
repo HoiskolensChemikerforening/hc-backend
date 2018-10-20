@@ -73,6 +73,7 @@ THIRD_PARTY_APPS = [
     'smart_selects',
     'ckeditor',
     'django_extensions',
+    'push_notifications',
 ]
 
 LOCAL_APPS = [
@@ -244,6 +245,13 @@ REST_FRAMEWORK = {
     )
 }
 
+# FIREBASE PUSH NOTIFICATION CONFIGURATION
+# ------------------------------------------------------------------------------
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+        "FCM_API_KEY": '<insert firebase API key here>'
+        #TODO Change the firebase to a webkom firebase
+}
 
 # HAYSTACK CONFIGURATION
 # ------------------------------------------------------------------------------
