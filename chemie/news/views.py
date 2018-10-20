@@ -15,7 +15,7 @@ def create_post(request):
             instance = post.save(commit=False)
             instance.author = request.user
             instance.save()
-            send(post.cleaned_data['title'],"NYHET!",None) #Send push notification to user
+            send(post.cleaned_data['title'],"NYHET!") #Send push notification to user
             return HttpResponseRedirect(reverse('news:index'))
     context = {
         'post': post

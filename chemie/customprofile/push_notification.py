@@ -1,6 +1,6 @@
 from push_notifications.models import APNSDevice, GCMDevice
 
-
+HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 def save_device(token, browser, user):
     if browser == "Safari":
         pass #TODO APNSDevice
@@ -10,25 +10,25 @@ def save_device(token, browser, user):
 
 
 
-def APNS_send(message, title, icon):
+def APNS_send(message, title, icon=HC_ICON):
     devices = APNSDevice.objects.all()
     devices.send_message(message,
                          extra={
                              "title": title,
-                             # "icon": icon
+                             "icon": icon,
                          })
 
 
-def GCM_send(message, title, icon):
+def GCM_send(message, title,icon=HC_ICON):
     devices = GCMDevice.objects.all()
     devices.send_message(message,
                          extra={
                              "title": title,
-                             #"icon": icon
+                             "icon": icon,
                          })
 
 
-def send(message, title, icon):
-    GCM_send(message, title, icon)
+def send(message, title,icon=HC_ICON):
+    GCM_send(message, title,icon)
     APNS_send(message,title,icon)
 
