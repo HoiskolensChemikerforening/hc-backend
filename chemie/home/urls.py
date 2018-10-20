@@ -2,6 +2,7 @@ from django.conf.urls import url
 from .views import index, contact, calendar, request_funds, edit_flatpage, request_office, OfficeAccessApplicationListView
 
 app_name = 'home'
+from .views import index, contact, calendar, request_funds, edit_flatpage
 
 urlpatterns = [
     url(r'^$', index, name="home"),

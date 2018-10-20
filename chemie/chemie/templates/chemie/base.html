@@ -55,9 +55,9 @@
       console.log("has permission");
       return messaging.getToken();
   }).then(function (token) {
-      var data = {'token':token}
-      var xhttp = new XMLHttpRequest();
-      postAjax("web_notifications/",{'token':token});
+      console.log(token);
+      var browser = getBrowser()
+      postAjax("web_notifications/",{'token':token,'browser':browser});
     });
   })
       .catch( function(err){

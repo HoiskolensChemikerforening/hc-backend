@@ -13,4 +13,5 @@ urlpatterns = [
     url(r'^profile/medlemmer', views.view_memberships, name='memberships'),
     url(r'^yearbook/(?P<year>[0-9]+)/$', views.yearbook, name='yearbook-grade'),
     url(r'^yearbook$', views.yearbook, name='yearbook-index'),
+    url(r'^web_notifications/', views.web_notification, name='notifications')
 ]
