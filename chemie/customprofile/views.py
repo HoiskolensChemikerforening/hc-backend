@@ -23,6 +23,7 @@ from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProf
 from .models import UserToken, Profile, Membership, GRADES
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
+from .push_notification import save_device
 
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
@@ -212,3 +213,13 @@ class LoginView(OldLoginView):
                     context['termsform'] = termsform
                     context['show_popup'] = True
                     return render(request, 'registration/login.html', context)
+
+
+
+@login_required
+def web_notification(request):
+    browser = request.POST['browser']
+    token = request.POST['token']
+    if request.POST['browser'] is not None:
+        save_device(token,browser,request.user)
+    return redirect(reverse('frontpage:home'))
