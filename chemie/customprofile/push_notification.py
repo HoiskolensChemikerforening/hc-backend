@@ -12,8 +12,6 @@ def save_device(token, browser, user):
             GCMDevice.objects.create(registration_id=token,cloud_message_type="FCM", user=user)
 
 
-
-
 def APNS_send(message, title, icon=HC_ICON):
     devices = APNSDevice.objects.all()
     devices.send_message(message,
@@ -35,4 +33,11 @@ def GCM_send(message, title,icon=HC_ICON):
 def send(message, title,icon=HC_ICON):
     GCM_send(message, title,icon)
     APNS_send(message,title,icon)
+
+
+def delete_inactive_devices():
+    GCM_devices = GCMDevice.objects.filter(active=False)
+    APNS_devices = APNSDevice.objects.filter(active=False)
+    GCM_devices.delete()
+    APNS_devices.delete()
 
