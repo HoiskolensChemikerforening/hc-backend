@@ -1,12 +1,16 @@
 from push_notifications.models import APNSDevice, GCMDevice
 
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
+
+
 def save_device(token, browser, user):
     if browser == "Safari":
-        pass #TODO APNSDevice
+        if APNSDevice.objects.filter(registration_id=token).count() == 0:
+            APNSDevice.objects.create(registration_id=token,cloud_message_type="FCM", user=user)
     else:
         if GCMDevice.objects.filter(registration_id=token).count() == 0:
             GCMDevice.objects.create(registration_id=token,cloud_message_type="FCM", user=user)
+
 
 
 

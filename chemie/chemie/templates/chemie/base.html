@@ -29,51 +29,11 @@
   <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-messaging.js"></script>
 
-
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js" defer></script>
   <script src="{% static "js/timepicker.js" %}"></script><
   <script src="{% static "js/firebase-initial.js" %}"></script>
-
     <!--TODO Move the script to firebase-initial.js-->
-  <script type="text/javascript">
-  var config = {
-      apiKey: "AIzaSyCSQFxPpdWUnNAEX2N8xt5Fz1YB6TQt7KE",
-      authDomain: "chemie-265d6.firebaseapp.com",
-      databaseURL: "https://chemie-265d6.firebaseio.com",
-      projectId: "chemie-265d6",
-      storageBucket: "chemie-265d6.appspot.com",
-      messagingSenderId: "1057998917777"
-    };
-    firebase.initializeApp(config);
-    const messaging = firebase.messaging();
-    navigator.serviceWorker.register('{% static "js/firebase-messaging-sw.js" %}')
-    .then(function(registration) {
-      messaging.useServiceWorker(registration);
-      //TODO change the adress to chemie.no in production
-      if (window.location.href == "http://127.0.0.1:8000/"){ //only prompts permission on home page
-        messaging.requestPermission()
-        .then( function(){
-        return messaging.getToken();
-      }).then(function (token) {
-        // Saving device token backend to be used when notification is to be sent
-        var browser = getBrowser()
-        postAjax("web_notifications/",{'token':token,'browser':browser});
-    });
-        }
-      })
-      .catch( function(err){
-          console.log(("Error Occured"));
-      });
-
-    messaging.onMessage(function(payload){
-        // When user is present on the site, they are instead presented with a toast message.
-        var snackbar = document.getElementById("snackbar");
-        snackbar.innerHTML = payload.notification.body
-        snackbar.className = "show";
-        setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
-      });
-  </script>
   <script src="{% static "js/init.js" %}" defer></script>
 
   {% block extra_js %}
