@@ -217,9 +217,10 @@ class LoginView(OldLoginView):
 
 
 @login_required
-def web_notification(request):
-    browser = request.POST['browser']
-    token = request.POST['token']
-    if request.POST['browser'] is not None:
-        save_device(token,browser,request.user)
+def web_notification(request): # View for storing users device token.
+    if request.method == 'POST':
+        browser = request.POST['browser']
+        token = request.POST['token']
+        if request.POST['browser'] is not None and token is not '':
+            save_device(token,browser,request.user) #saving device token with user
     return redirect(reverse('frontpage:home'))
