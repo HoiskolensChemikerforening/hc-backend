@@ -1,5 +1,6 @@
 //TODO populate this script with the one in base.html
 
+//Gives the CSRF token to be used in a AJAX POST request
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {
@@ -32,6 +33,37 @@ function postAjax(url, data) {
     xhr.send(params);
     return xhr
 }
+
+var config = {
+    apiKey: "AIzaSyBiK7kDOZlPR_6QQyX8pxsrY3RHtlSKewQ",
+    authDomain: "chemie-4a9d7.firebaseapp.com",
+    databaseURL: "https://chemie-4a9d7.firebaseio.com",
+    projectId: "chemie-4a9d7",
+    storageBucket: "chemie-4a9d7.appspot.com",
+    messagingSenderId: "949677257241"
+};
+firebase.initializeApp(config);
+const messaging = firebase.messaging();
+navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
+.then(function(registration) {
+  messaging.useServiceWorker(registration);
+  //TODO change the adress to chemie.no in production
+  if (window.location.href == "http://127.0.0.1:8000/"){ //only prompts permission on home page
+    messaging.requestPermission()
+    .then( function(){
+    return messaging.getToken();
+  }).then(function (token) {
+    // Saving device token backend to be used when notification is to be sent
+    var browser = getBrowser()
+    postAjax("web_notifications/",{'token':token,'browser':browser});
+});
+    }
+  })
+  .catch( function(err){
+      console.log(("Error Occured"));
+  });
+
+
 
 function getBrowser(){
     var browser = null
