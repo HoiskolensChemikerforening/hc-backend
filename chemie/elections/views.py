@@ -91,7 +91,7 @@ def voting(request):
                     context = {
                         'form': form,
                         'position':  election.current_position,
-                        'candidates': election.current_position.candidates.all(),
+                        'candidates': election.current_position.candidates.all().order_by('id'),
                     }
                     return render(request, 'elections/election/vote.html', context)
         return redirect('elections:vote')
