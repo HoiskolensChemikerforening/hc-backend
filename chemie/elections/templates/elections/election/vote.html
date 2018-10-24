@@ -10,45 +10,49 @@
 </style>
 
 <div>
-    <div class="div-container">
-        {% if form.errors %}
-        {% for field in form %}
+  <div class="div-container">
+    {% if form.errors %}
+      {% for field in form %}
         {% for error in field.errors %}
-        <!-- TODO: Style alert for user not voting correctly-->
-        <div class="alert alert-success">
+          <!-- TODO: Style alert for user not voting correctly-->
+          <div class="alert alert-dismissable">
             <a class="close" href="#" data-dismiss="alert">×</a>
-            {{ error }}
-        </div>
+              {{ error }}
+          </div>
         {% endfor %}
-        {% endfor %}
-        {% endif %}
-        <div>
-            <h3 class="title is-2">{{ position.position_name }}</h3>
-            <h4>Det skal velges <b>{{ position.spots }}</b> til dette vervet</h4>
-            <hr color="black">
-        </div>
-        <br>
-        <div>
-            <form method="POST"  onsubmit="return confirmValg(this)">{% csrf_token %}
-                <div class="vote-div">
-                    {% csrf_token %}
-                    {%for candidate in form.candidates%}
-                    <div class='vote-box' onclick="changeColor(this)">
-                        {{candidate}}
-                    </div>
-                    {%endfor%}
-                </div>
-                <hr color="black">
-                <input class="button is-success" type='submit' name="Stem" value='Avgi stemme'/>
-            </form>
-            <div class="div-blank">
-                <hr color="black">
-                <form method="POST" onsubmit="return confirmBlank(this)">{% csrf_token %}
-                    <input class="button is-danger" type='submit' name="Blank" value='Stem blankt'/>
-                </form>
-            </div>
-        </div>
+      {% endfor %}
+    {% endif %}
+    <div>
+      <h3 class="title is-2">{{ position.position_name }}</h3>
+      <h4>Det skal velges <b class="title is-4">{{ position.spots }}</b> til dette vervet</h4>
+      <hr color="black">
     </div>
+    <br>
+    <div>
+      <form method="POST"  onsubmit="return confirmValg(this)">{% csrf_token %}
+        <div class="vote-div">
+          {%for candidate in form.candidates%}
+            <div class='vote-box' onclick="changeColor(this)">
+              {{candidate}}
+            </div>
+          {%endfor%}
+        </div>
+        <hr color="black">
+        <input class="button is-success" type='submit' name="Stem" value='Avgi stemme'/>
+      </form>
+      <div class="div-blank">
+        <hr color="black">
+        <form method="POST" onsubmit="return confirmBlank(this)">{% csrf_token %}
+            <input class="button is-danger" type='submit' name="Blank" value='Stem blankt'/>
+        </form>
+        <p>
+            NB: Å stemme blankt betyr at du er imot alle alternativene du har tilgjengelig.
+            Du benytter kun dette alternativet dersom du ikke vil stemme på NOEN av kandidatene.
+            Husk at du har lov til å stemme på færre enn det antallet som skal velges inn.
+        </p>
+      </div>
+    </div>
+  </div>
 </div>
 
 

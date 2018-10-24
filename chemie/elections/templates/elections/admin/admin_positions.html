@@ -5,18 +5,18 @@
 {% block content %}
 <style>
     .submit-button{
-        margin-top: 0.9rem;
+      margin-top: 0.9rem;
     }
     .delete-button{
-        margin-bottom: 0rem;
-        background-color: transparent;
-        border: None;
+      margin-bottom: 0rem;
+      background-color: transparent;
+      border: None;
     }
     .delete-form{
-        padding-bottom: 0rem;
+      padding-bottom: 0rem;
     }
     .position-title{
-        justify-content: center;
+      margin: auto;
     }
 </style>
 <div class="div-container">
@@ -35,7 +35,7 @@
     {% for position in positions%}
     <div class="card">
         <header class="card-header" >
-            <h1 class="card-header-title position-title">
+            <h1 class="position-title title is-4">
                 {{position}}
             </h1>
         </header>

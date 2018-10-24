@@ -17,8 +17,12 @@
                     <tr>
                         <td>{{position}}</td>
                         <td>
-                        {%for winner in position.winners.all%}
-                        {{winner}}
+                        {% for winner in position.winners.all %}
+                          {% if forloop.last %}
+                            {{ winner }}
+                          {% else %}
+                            {{ winner }},
+                          {% endif %}
                         {%endfor%}
                         </td>
                     </tr>
