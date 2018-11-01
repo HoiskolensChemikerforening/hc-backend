@@ -119,11 +119,11 @@ def test_vote_for_one_user(client, create_user, create_election_with_positions, 
 
     # Check that when user tries to vote again, he is redirected
     request = client.post(
-        reverse('elections:voting'),
+        reverse('elections:vote'),
         {'candidates': candidate.id},
         follow=True
     )
-    assert 'Du har stemt!' in request.content.decode('utf-8')
+    assert 'Du har alt stemt' in request.content.decode('utf-8')
 
     # Close election and check the results
     position.end_voting_for_position()

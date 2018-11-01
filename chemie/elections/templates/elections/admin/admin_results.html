@@ -13,15 +13,16 @@ context = {
 
 <div align="center">
   <h3 class="title is-3">Vinner(e)</h3>
-  {%if winners %}
-  {%for winner in winners%}
-    <h4 class="title is-4">{{winner.user.first_name}} {{winner.user.last_name}}</h4>
-  {%endfor%}
-  {%else%}
-    <h4 class="title is-4">Ikke et gyldig valg, {{current_position.total_votes}} av 50 har stemt</h4>
+  {% if winners %}
+  {% for winner in winners %}
+    <h4 class="title is-4">{{ winner.user.first_name }} {{ winner.user.last_name }}</h4>
+  {% endfor %}
+  {% else %}
+    <h4 class="title is-4">Ikke et gyldig valg, {{ current_position.total_votes }} av 50 har stemt</h4>
   {%endif%}
   <div class="box">
-    <h4 class="title is-6">Totalt antall stemmer: {{current_position.total_votes}}</h4>
+    <h4 class="title is-6">Totalt antall stemmer: {{ current_position.total_votes }}</h4>
+    <h4 class="title is-6">Blanke stemmer: {{ blank_votes }}</h4>
     <table class="table">
       <tr>
         <th>Kandidater</th>

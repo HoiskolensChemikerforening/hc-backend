@@ -60,9 +60,7 @@ def voting(request):
         election = Election.objects.latest('id')
         if election.current_position_is_open:
             if not voted:
-                print('Before CastVoteForm')
                 form = CastVoteForm(request.POST or None, election=election)
-                print('After CastVoteForm')
                 if request.method == 'POST':
                     profile = request.user.profile
                     if 'Stem blankt' in request.POST.getlist('Blank'):
@@ -93,10 +91,9 @@ def voting(request):
                     context = {
                         'form': form,
                         'position':  election.current_position,
-                        'candidates': election.current_position.candidates.all(),
+                        'candidates': election.current_position.candidates.all().order_by('id'),
                     }
                     return render(request, 'elections/election/vote.html', context)
-            return redirect('elections:has_voted')
         return redirect('elections:vote')
 
 
@@ -143,6 +140,7 @@ def admin_register_positions(request):
                 position_id = request.POST.get("Delete", "0")
                 position = election.positions.get(id=int(position_id))
                 election.delete_position(position)
+                form = AddPositionForm(None)
             # Selve formen fr registrering av posisjon
             if form.is_valid():
                 # lager en ny posistion objekt som vi legger inn i vår election
@@ -250,11 +248,15 @@ def admin_results(request,pk):
     if voting_is_active():
         return redirect('elections:admin_start_voting', pk=pk)
     position = election.positions.get(id=pk)
+    total_votes = position.total_votes
+    winners = position.winners.all()
+    blank_votes = total_votes - sum([w.votes for w in winners])
     context = {
         'candidates': position.candidates.all(),
         'current_position': position,
-        'total_votes': position.total_votes,
-        'winners': position.winners.all()
+        'total_votes': total_votes,
+        'winners': winners,
+        'blank_votes': blank_votes
     }
     return render(request, 'elections/admin/admin_results.html', context)
 
