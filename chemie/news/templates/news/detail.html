@@ -1,6 +1,7 @@
 {% extends 'chemie/base.html' %}
 {% load thumbnail %}
 {% load staticfiles %}
+{% load material_form %}
 
 {% block nav_header %}
   Artikler
@@ -25,7 +26,7 @@
       </div>
     </div>
   </div>
-  <div class="row">
+  <ul class="row">
     <div class="col s12 m12 l12"><h3 class="heading">{{ article.title }}</h3></div>
     <div class="col s12 m12 l12">
       <div class="card">
@@ -37,5 +38,35 @@
         </div>
       </div>
     </div>
-  </div>
+  </ul>
+  <br>
+  {% if user.is_authenticated %}
+  <div class="row">
+  <!-- List of comments -->
+    <div class="col s12 m12 112">
+    {% if comments %}
+      <h5 style="margin-top: 5px" class="heading"> Kommentarer </h5>
+        <ul class="collection">
+          {% for comment in comments reversed %}
+            <li class="collection-item avatar">
+              {% thumbnail comment.author.profile.image_primary "200x200" crop="left" as im %}
+                <img src="{{ im.url }}" width="200px" height="200px" alt="" class="circle">
+              {% endthumbnail %}
+              <b style="font-size: 1rem;">{{ comment.author.get_full_name }}</b>
+              <p style="font-size: 1rem;">{{ comment.text }}</p>
+              <p style="font-size: 0.8rem;" align="right">{{ comment.published_date }}</p>
+            </li>
+          {% endfor %}
+        </ul>
+        {% endif %}
+      </div>
+    </div>
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+     {% form form=comment_form %}
+     {% endform %}
+       <input class="btn" type='submit' style="float: right; height:40px; width:150px" value='Kommenter' onclick="Materialize.toast('Du har kommentert!', 4000)"/><br>
+   </form>
+  {% else %}
+    <p>Logg inn for å se kommentarer.</p>
+  {% endif %}
 {% endblock content %}

@@ -22,6 +22,23 @@ class Article(models.Model):
         return reverse('news:detail', kwargs={"article_id": self.id, 'slug':self.slug})
 
 
+class ArticleComment(models.Model):
+    article = models.ForeignKey(Article, related_name='comments')
+    author = models.ForeignKey(User, on_delete=models.CASCADE)
+    text = models.TextField(max_length=200, verbose_name='Skriv en kommentar')
+    published_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        verbose_name = 'Article Comment'
+        verbose_name_plural = 'Article Comments'
+
+
+    def __str__(self):
+        return self.text
+
+
+
+
 def pre_save_article_receiver(sender, instance, *args, **kwargs):
     slug = slugify(instance.title)
     instance.slug = slug
