@@ -88,6 +88,7 @@
         <thead>
         <tr>
           <th>Navn</th>
+          <th>Studentbrukernavn</th>
           <th class="filter-select filter-exact">Klassetrinn</th>
           <th class="filter-select filter-exact">Verv</th>
           <th>Kortnr</th>
@@ -98,6 +99,7 @@
         {% for application in object_list %}
           <tr>
             <td>{{ application.author.get_full_name }} </td>
+            <td>{{ application.student_username }} </td>
             <td>{{ application.author.profile.get_grade_display }} </td>
              <td>
               {% if application.author.position_set.count >= 0 %}

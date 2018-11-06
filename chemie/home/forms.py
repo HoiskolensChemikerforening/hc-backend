@@ -47,7 +47,7 @@ class PostFundsForm(forms.ModelForm):
 class PostOfficeForms(forms.ModelForm):
     class Meta:
         model = OfficeApplication
-        fields = ["access_card"]
+        fields = ["student_username"]
 
 
 class FlatpageEditForm(forms.ModelForm):
