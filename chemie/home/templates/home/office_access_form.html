@@ -27,20 +27,23 @@
         For at tilgang skal kunne bli innvilget er det
         viktig at ditt lagrede studentkortnummer samsvarer med nummeret på studentkortet.
       </p>
+     {% if not already_applied %}
         <br>
-      <p class="flow-text">
+         <p class="flow-text">
+             For å søke må du oppgi brukernavnet du har fått fra NTNU:
+         </p>
+         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            {% form form=office_form %}
+            {% endform %}
+         <p class="flow-text">
           Ditt lagrede studentkortnummer er <b>{{ access_card }}</b>.</p><br>
         <p class="flow-text"> Vennligst bekreft at dette stemmer før du sender inn søknaden.
       </p>
          <br>
-       {% if not already_applied %}
         <div>
           <a style="float: left;" href="{% url "profile:edit" %}">
             <button class="btn btn-primary pull-right red accent-2" type="submit">Endre kortnummer</button>
           </a>
-          <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-            {% form form=form %}
-            {% endform %}
             <a style="padding-left: 2rem"><input class="btn green lighten-2" type='submit' value='Kortnummer stemmer, send søknad'/></a>
           </form>
         </div>

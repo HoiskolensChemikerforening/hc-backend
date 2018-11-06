@@ -102,7 +102,7 @@ def request_funds(request):
 
 @login_required()
 def request_office(request):
-    office_form = PostOfficeForms(request.POST or None)
+    office_form = PostOfficeForms(request.POST or None, initial={'student_username': ""})
     access_card = request.user.profile.access_card
     already_applied = OfficeApplication.objects.filter(
             access_card=access_card,
@@ -119,6 +119,7 @@ def request_office(request):
         instance = office_form.save(commit=False)
         instance.author = request.user
         instance.access_card = access_card
+        instance.student_username = office_form.cleaned_data.get('student_username')
         instance.save()
         messages.add_message(request,
              messages.SUCCESS,
