@@ -13,11 +13,13 @@ const messaging = firebase.messaging();
 navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     .then(function (registration) {
         messaging.useServiceWorker(registration);
-        if (window.location.href == "https://chemie.no") { //Only prompts permission on home page
+        if (window.location.href == "http://127.0.0.1:8000/") { //Only prompts permission on home page
             messaging.requestPermission()
                 .then(function () {
+                    console.log("permission granted");
                     return messaging.getToken();
                 }).then(function (token) {
+                    console.log(token);
                 // Saving device token backend to be used when notification is to be sent
                 var browser = getBrowser();
                 postAjax("web_notifications/", {'token': token, 'browser': browser});
@@ -29,6 +31,7 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     });
 
 messaging.onMessage(function (payload) {
+    console.log(payload);
     // When user is present on the site, they are presented with a toast message instead of the notification.
     var snackbar = document.getElementById("snackbar");
     snackbar.innerHTML = payload.notification.body;
