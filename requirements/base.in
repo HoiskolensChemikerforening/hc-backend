@@ -1,6 +1,6 @@
-psycopg2==2.6.2
+psycopg2==2.7
 
-django==1.11
+django==1.11.15
 djangorestframework==3.5.3
 django-autocomplete-light==3.2.10
 django-ckeditor==5.4.0
@@ -29,5 +29,6 @@ wiki==0.3
 
 coverage==4.3.1
 markdown==2.6.11
+markdown2==2.3.6
 
 django-environ==0.4.4
