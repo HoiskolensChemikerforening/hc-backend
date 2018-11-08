@@ -429,6 +429,16 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 status=REGISTRATION_STATUS.CONFIRMED,
                 event=self.object,
             ).select_related('user__profile__membership')
+            context['total_paid']= self.registration_model.objects.filter(
+                status=REGISTRATION_STATUS.CONFIRMED,
+                event=self.object,
+                payment_status=True
+            ).count()
+            context['total_not_paid'] = self.registration_model.objects.filter(
+                status=REGISTRATION_STATUS.CONFIRMED,
+                event=self.object,
+                payment_status=False
+            ).count()
 
         return context
 
