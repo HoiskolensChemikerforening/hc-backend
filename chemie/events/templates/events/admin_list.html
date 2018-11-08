@@ -167,6 +167,12 @@
       {% endfor %}
       </tbody>
     </table>
+        <p class="flow-text" style="padding-top: 3rem">Betalingsoversikt
+      <div class="progress" style="width: 100%">
+        <div class="determinate" style="width: {{ social.percentage_paid }}%"></div>
+      </div>
+    </p>
+    <div align="right" id="paidcounter">{{ total_paid }} har betalt • {{ total_not_paid }} har ikke betalt</div>
   </div>
 </div>
 {% endblock content %}
