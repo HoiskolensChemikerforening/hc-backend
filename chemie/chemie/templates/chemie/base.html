@@ -28,12 +28,12 @@
   <!-- Firebase App is always required and must be first -->
   <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
   <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-messaging.js"></script>
-
+  <script src="{% static "js/firebase-initial.js" %}"></script>
+  
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.100.2/js/materialize.min.js" defer></script>
   <script src="{% static "js/timepicker.js" %}"></script><
-  <script src="{% static "js/firebase-initial.js" %}"></script>
-  <script src="{% static "js/firebase-messaging-sw.js" %}"></script>
+
   <script src="{% static "js/init.js" %}" defer></script>
 
   {% block extra_js %}
