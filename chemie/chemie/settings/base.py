@@ -273,7 +273,7 @@ CKEDITOR_CONFIGS = {
         'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'PasteText'],
             ['NumberedList', 'BulletedList', '-', 'Link'],
             ['Maximize', 'Find', 'Replace']
         ],
@@ -284,7 +284,7 @@ CKEDITOR_CONFIGS = {
         'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'PasteText'],
             ['NumberedList', 'BulletedList', '-', 'Link'],
             ['Maximize', 'Find', 'Replace']
         ],
@@ -297,7 +297,7 @@ CKEDITOR_CONFIGS = {
         'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'PasteText'],
             ['NumberedList', 'BulletedList', '-', 'Link'],
             ['Maximize', 'Find', 'Replace']
         ],
@@ -309,7 +309,7 @@ CKEDITOR_CONFIGS = {
         'skin': 'bootstrapck',
         'toolbar': 'Custom',
         'toolbar_Custom': [
-            ['Bold', 'Italic', '-', 'Undo', 'Redo', '-', 'PasteText'],
+            ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', '-', 'Undo', 'Redo', '-', 'PasteText'],
             ['NumberedList', 'BulletedList', '-', 'Link'],
             ['Maximize', 'Find', 'Replace']
         ],
@@ -325,7 +325,7 @@ CKEDITOR_CONFIGS = {
             {'name': 'editing', 'items': ['Find', 'Replace', '-', 'SelectAll']},
             '/',
             {'name': 'basicstyles',
-             'items': ['Bold', 'Italic', 'Underline', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
+             'items': ['Bold', 'Italic', 'Underline', 'Subscript', 'Superscript', 'Strike', 'Subscript', 'Superscript', '-', 'RemoveFormat']},
             {'name': 'paragraph',
              'items': ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'Blockquote', 'CreateDiv', '-',
                        'JustifyLeft', 'JustifyCenter', 'JustifyRight', 'JustifyBlock', '-', 'BidiLtr', 'BidiRtl',
