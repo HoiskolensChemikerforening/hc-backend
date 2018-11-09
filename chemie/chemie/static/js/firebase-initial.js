@@ -13,17 +13,15 @@ const messaging = firebase.messaging();
 navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     .then(function (registration) {
         messaging.useServiceWorker(registration);
-        if (window.location.href == "http://127.0.0.1:8000/") { //Only prompts permission on home page
+        if (window.location.href == "https://chemie.no/") { //Only prompts permission on home page
             messaging.requestPermission()
                 .then(function () {
-                    console.log("permission granted");
                     return messaging.getToken();
                 }).then(function (token) {
-                    console.log(token);
                 // Saving device token backend to be used when notification is to be sent
                 var browser = getBrowser();
-                postAjax("web_notifications/", {'token': token, 'browser': browser});
-            });
+                postAjax("notifications/save/", {'token': token, 'browser': browser});
+            })
         }
     })
     .catch(function (err) {
@@ -72,7 +70,7 @@ function postAjax(url, data) {
     xhr.open('POST', url);
     xhr.onreadystatechange = function () {
         if (xhr.readyState > 3 && xhr.status == 200) {
-            console.log(xhr.status);
+            console.log("Device registred");
         }
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
