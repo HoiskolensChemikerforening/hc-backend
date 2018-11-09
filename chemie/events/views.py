@@ -439,6 +439,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 event=self.object,
                 payment_status=False
             ).count()
+            context['percentage_paid'] = round((context['total_paid'] // (context['total_not_paid'] + context['total_paid']))*100)
         return context
 
 
