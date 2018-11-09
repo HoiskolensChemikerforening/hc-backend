@@ -2,7 +2,6 @@ from django.http import HttpResponseRedirect
 from django.core.urlresolvers import reverse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.decorators import permission_required
-from chemie.customprofile.push_notification import send
 from .models import Article
 from .forms import NewsPost
 
@@ -15,7 +14,7 @@ def create_post(request):
             instance = post.save(commit=False)
             instance.author = request.user
             instance.save()
-            send(post.cleaned_data['title'],"NYHET!") #Send push notification to user
+            # send(post.cleaned_data['title'],"NYHET!") #Send push notification to user
             return HttpResponseRedirect(reverse('news:index'))
     context = {
         'post': post
