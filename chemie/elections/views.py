@@ -250,10 +250,9 @@ def admin_results(request,pk):
     position = election.positions.get(id=pk)
     total_votes = position.total_votes
     winners = position.winners.all()
-    blank_votes = total_votes - sum([w.votes for w in winners])
+    blank_votes = total_votes - sum([c.votes for c in position.candidates.all()])
     context = {
         'candidates': position.candidates.all(),
-        'current_position': position,
         'total_votes': total_votes,
         'winners': winners,
         'blank_votes': blank_votes

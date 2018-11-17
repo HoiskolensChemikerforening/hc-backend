@@ -3,10 +3,10 @@
 
 <!--
 context = {
-            'candidates':election.current_position.candidates.all(),
-            'current_position':election.current_position,
-            'winners':election.current_position.winners.all(),
-            'total_votes':total_votes
+            'candidates': election.current_position.candidates.all(),
+            'winners': election.current_position.winners.all(),
+            'total_votes': total_votes,
+            'blank_votes': blank_votes
             }
 -->
 {% block content%}
@@ -14,14 +14,14 @@ context = {
 <div align="center">
   <h3 class="title is-3">Vinner(e)</h3>
   {% if winners %}
-  {% for winner in winners %}
-    <h4 class="title is-4">{{ winner.user.first_name }} {{ winner.user.last_name }}</h4>
-  {% endfor %}
+    {% for winner in winners %}
+      <h4 class="title is-4">{{ winner.user.get_full_name }}</h4>
+    {% endfor %}
   {% else %}
-    <h4 class="title is-4">Ikke et gyldig valg, {{ current_position.total_votes }} av 50 har stemt</h4>
-  {%endif%}
+    <h4 class="title is-4">Ikke et gyldig valg, {{ total_votes }} av 50 har stemt</h4>
+  {% endif %}
   <div class="box">
-    <h4 class="title is-6">Totalt antall stemmer: {{ current_position.total_votes }}</h4>
+    <h4 class="title is-6">Totalt antall stemmer: {{ total_votes }}</h4>
     <h4 class="title is-6">Blanke stemmer: {{ blank_votes }}</h4>
     <table class="table">
       <tr>
@@ -29,21 +29,21 @@ context = {
         <th>Antall stemmer</th>
         <th>Prosent av totale stemmer</th>
       </tr>
-      {%for candidate in current_position.candidates.all%}
+      {% for candidate in candidates %}
         <tr>
-          <td> {{candidate.user.first_name}} {{candidate.user.last_name}} </td>
-          <td> {{candidate.votes}} </td>
+          <td> {{ candidate.user.get_full_name }} </td>
+          <td> {{ candidate.votes }} </td>
           <td>
             <p id="voting_percentage-{{candidate.id}}"></p>
             <script type="text/javascript">
-              var total_votes = "{{current_position.total_votes}}";
-              var votes = "{{candidate.votes}}";
+              var total_votes = "{{ total_votes }}";
+              var votes = "{{ candidate.votes }}";
               var percentage = (100*votes/total_votes).toFixed(2);
               document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage + "%";
             </script>
           </td>
       </tr>
-      {%endfor%}
+      {% endfor %}
     </table>
   </div>
   <br>
