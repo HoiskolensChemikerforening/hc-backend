@@ -300,7 +300,7 @@ def admin_register_prevotes(request, pk):
             'position': position
         }
         return render(
-            request, 'elections/admin/admin_add_prevotes.html', 
+            request, 'elections/admin/admin_add_prevotes.html',
             context
             )
 
