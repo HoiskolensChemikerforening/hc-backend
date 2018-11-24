@@ -6,6 +6,8 @@ from django.db.models.query import QuerySet
 
 from chemie.customprofile.models import Profile
 
+VOTES_REQUIRED_FOR_VALID_ELECTION = 50
+
 """
 ---------------READ ME-----------------
 - I appen er elections delt inn i to deler, en admin del og en bruker del
@@ -25,7 +27,7 @@ from chemie.customprofile.models import Profile
 
 class Candidate(models.Model):
     user = models.ForeignKey(User, related_name="candidate")
-    votes = models.IntegerField(verbose_name="Antall stemmer", blank=True, default=0)
+    votes = models.PositiveIntegerField(verbose_name="Antall stemmer", blank=True, default=0)
     winner = models.BooleanField(default=False)
 
     def __str__(self):
@@ -33,12 +35,26 @@ class Candidate(models.Model):
 
 
 class Position(models.Model):
+    # Name of position
     position_name = models.CharField(max_length=100, verbose_name="Navn på verv")
-    spots = models.IntegerField(verbose_name="Antall plasser")
+
+    # Number of spots available
+    spots = models.PositiveIntegerField(default=1, verbose_name="Antall plasser")
+
+    # Candidates running for position
     candidates = models.ManyToManyField(Candidate, blank=True, related_name="positions")
-    total_votes = models.IntegerField(default=0)
+
+    # Number of votes. Sum of all votes on candidates and blanks
+    total_votes = models.PositiveIntegerField(default=0, verbose_name="Totalt stemmer mottatt")
+
+    # Mark position as done when it has been closed for voting
     voting_done = models.BooleanField(default=False)
+
+    # Winner candidates for current position
     winners = models.ManyToManyField(Candidate, blank=True, related_name="winners", default=None)
+
+    # Number of people voting
+    number_of_voters = models.PositiveIntegerField(default=0, verbose_name="Antall stemmesedler avgitt")
 
     def delete_candidates(self, candidates):
         if type(candidates) is Candidate:
@@ -87,6 +103,7 @@ class Position(models.Model):
 
             # All winners are now stored in a list. Add this to self.winners
             self.winners.add(*winners)
+            self.number_of_voters += Profile.objects.filter(voted=True).count()
             self.voting_done = True
             self.save()
         election = Election.objects.latest('id')
@@ -172,6 +189,7 @@ class Election(models.Model):
         if not profile.voted:
             if blank:
                 self.current_position.total_votes += 1
+                # self.current_position.number_of_voters += 1
                 self.current_position.save()
                 voted = True
                 profile.voted = True
@@ -181,6 +199,7 @@ class Election(models.Model):
                     candidate = candidates
                     candidate.votes += 1
                     self.current_position.total_votes += 1
+                    # self.current_position.number_of_voters += 1
                     candidate.save()
                     self.current_position.save()
                     return True
@@ -197,6 +216,7 @@ class Election(models.Model):
                         self.current_position.total_votes += 1
                         candidate.save()
                         self.current_position.save()
+                    # self.current_position.number_of_voters += 1
                     profile.voted = True
                     profile.save()
                     voted = True
