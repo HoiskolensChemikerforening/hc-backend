@@ -7,6 +7,7 @@ admin_urlpatterns = [
     url(r'^admin/end/$', views.admin_end_election, name='admin_end_election'),
     url(r'^admin/register/$', views.admin_register_positions, name='admin_register_positions'),
     url(r'^admin/register/(?P<pk>\d+)/$', views.admin_register_candidates, name='admin_register_candidates'),
+    url(r'^admin/register/(?P<pk>\d+)/prevotes/$', views.admin_register_prevotes, name='admin_register_prevotes'),
     url(r'^admin/register/(?P<pk>\d+)/start', views.admin_voting_is_active, name='admin_start_voting'),
     url(r'^admin/results/(?P<pk>\d+)', views.admin_results, name='admin_results'),
     url(r'^user-autocomplete/', UserAutocomplete.as_view(), name='user-autocomplete',),
