@@ -270,14 +270,20 @@ def admin_register_prevotes(request, pk):
         # Fetch position
         position = get_object_or_404(Position, pk=pk)
         # For for editing total number of people prevoting
-        prevote_form = AddPrevoteForm(request.POST or None, instance=position)
+        prevote_form = AddPrevoteForm(
+            request.POST or None,
+            instance=position,
+            prefix='total_voters'
+        )
+
         # Form for adjusting individual candidate's votes
         CandidateFormSet = modelformset_factory(
             Candidate, form=AddPreVoteToCandidateForm, extra=0
             )
         formset = CandidateFormSet(
             request.POST or None,
-            queryset=position.candidates.all()
+            queryset=position.candidates.all(),
+            prefix='candidate_forms',
             )
         if request.method == 'POST':
             if formset.is_valid() and prevote_form.is_valid():
