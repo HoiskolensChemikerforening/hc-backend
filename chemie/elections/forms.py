@@ -68,11 +68,19 @@ def candidatesChoices(election=None):
 
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
-        name = mark_safe("<p>%s %s </p>" % (obj.user.first_name, obj.user.last_name))
+        name = mark_safe(
+            "<p>%s %s </p>" % (obj.user.first_name, obj.user.last_name)
+            )
         try:
-            image = mark_safe("<img src='%s' class='vote-image' />" % obj.user.profile.image_primary.url)
+            image = mark_safe(
+                "<img src='%s' class='vote-image' />"
+                % obj.user.profile.image_primary.url
+                )
         except:
-            image = mark_safe("<img src='%s' class='vote-image' />" % '/static/images/blank_avatar.png')
+            image = mark_safe(
+                "<img src='%s' class='vote-image' />"
+                % '/static/images/blank_avatar.png'
+                )
         return image + name
 
 

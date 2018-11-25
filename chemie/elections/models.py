@@ -11,23 +11,33 @@ VOTES_REQUIRED_FOR_VALID_ELECTION = 50
 """
 ---------------READ ME-----------------
 - I appen er elections delt inn i to deler, en admin del og en bruker del
-- I admindelen vil alt av logikk med stemmetelling og legge til kandidater skjer
-- I brukerdelen vil hver bruker kunne stemme på en kandidat når admin gir dem tilgang 
-- Valget går ut på at man lager et objekt av Election, det vil si at kun et objekt lages for et medlemsmøte emd valg
-- Det legges til unike Position objekter fra lista over som knyttes til election
-- Det legges til Candidates objekter knyttet hvert position objekt, disse er hentet fra Django sin User
-- For hver position vil det lages nye Candidates-objekter,  
-- Dvs: Hvis Joachim stiller til to verv vil User "Joachim" hentes to ganger fra User og danne to Candidates-objekter som er knyttet til hvert sitt position-objekt
+- I admindelen vil alt av logikk med stemmetelling
+  og legge til kandidater skjer
+- I brukerdelen vil hver bruker kunne stemme på en kandidat
+  når admin gir dem tilgang
+- Valget går ut på at man lager et objekt av Election, det vil si
+  at kun et objekt lages for et medlemsmøte emd valg
+- Det legges til unike Position objekter knyttes til election
+- Det legges til Candidates objekter knyttet hvert position objekt,
+  disse er hentet fra Django sin User
+- For hver position vil det lages nye Candidates-objekter
+- Dvs: Hvis Joachim stiller til to verv vil User "Joachim" hentes to ganger
+  fra User og danne to Candidates-objekter som er knyttet til hvert sitt
+  position-objekt
 - For logikken bak telling av stemmer, se admin_end_voting i views
-- Når admin starter valget vil current_position_is_open settes til True og man kan da stemme på en bestemt position
-- Når admin slutter valget vil vinnere med flest stemmer lagres i winners og man kan da gå videre til neste valg
+- Når admin starter valget vil current_position_is_open settes til True
+  og man kan da stemme på en bestemt position
+- Når admin avslutter valget vil vinnere med flest stemmer lagres i winners
+  og man kan da gå videre til neste valg
 ---------------------------------------
 """
 
 
 class Candidate(models.Model):
     user = models.ForeignKey(User, related_name="candidate")
-    votes = models.PositiveIntegerField(verbose_name="Antall stemmer", blank=True, default=0)
+    votes = models.PositiveIntegerField(
+        verbose_name="Antall stemmer", blank=True, default=0
+        )
     winner = models.BooleanField(default=False)
 
     def __str__(self):
@@ -36,25 +46,37 @@ class Candidate(models.Model):
 
 class Position(models.Model):
     # Name of position
-    position_name = models.CharField(max_length=100, verbose_name="Navn på verv")
+    position_name = models.CharField(
+        max_length=100, verbose_name="Navn på verv"
+        )
 
     # Number of spots available
-    spots = models.PositiveIntegerField(default=1, verbose_name="Antall plasser")
+    spots = models.PositiveIntegerField(
+        default=1, verbose_name="Antall plasser"
+        )
 
     # Candidates running for position
-    candidates = models.ManyToManyField(Candidate, blank=True, related_name="positions")
+    candidates = models.ManyToManyField(
+        Candidate, blank=True, related_name="positions"
+        )
 
     # Number of votes. Sum of all votes on candidates and blanks
-    total_votes = models.PositiveIntegerField(default=0, verbose_name="Totalt stemmer mottatt")
+    total_votes = models.PositiveIntegerField(
+        default=0, verbose_name="Totalt stemmer mottatt"
+        )
 
     # Mark position as done when it has been closed for voting
     voting_done = models.BooleanField(default=False)
 
     # Winner candidates for current position
-    winners = models.ManyToManyField(Candidate, blank=True, related_name="winners", default=None)
+    winners = models.ManyToManyField(
+        Candidate, blank=True, related_name="winners", default=None
+        )
 
     # Number of people voting
-    number_of_voters = models.PositiveIntegerField(default=0, verbose_name="Antall stemmesedler avgitt")
+    number_of_voters = models.PositiveIntegerField(
+        default=0, verbose_name="Antall stemmesedler avgitt"
+        )
 
     def delete_candidates(self, candidates):
         if type(candidates) is Candidate:
@@ -74,7 +96,10 @@ class Position(models.Model):
             if candidate in self.candidates.all():
                 candidate.delete()
             else:
-                print('Candidate {} was not related to position {}'.format(candidate, self))
+                print(
+                    'Candidate {} was not related to position {}'
+                    .format(candidate, self)
+                    )
         self.save()
 
     def __str__(self):
@@ -96,9 +121,12 @@ class Position(models.Model):
                     for candidate_id, votes in all_votes.items():
                         if votes == most_votes:
                             winner_ids.append(candidate_id)
-                            # Now set the votes of the last found winner to -1, so he is not found again
+                            # Now set the votes of the last found winner to -1,
+                            # so he is not found again
                             all_votes[candidate_id] = -1
-                    winner_candidates = Candidate.objects.filter(id__in=winner_ids)
+                    winner_candidates = Candidate.objects.filter(
+                        id__in=winner_ids
+                        )
                     winners.extend(list(winner_candidates))
 
             # All winners are now stored in a list. Add this to self.winners
@@ -115,10 +143,16 @@ class Position(models.Model):
 class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
-    positions = models.ManyToManyField(Position, blank=True, related_name='election')
-    current_position = models.ForeignKey(Position, blank=True, null=True, related_name='current_election')
+    positions = models.ManyToManyField(
+        Position, blank=True, related_name='election'
+        )
+    current_position = models.ForeignKey(
+        Position, blank=True, null=True, related_name='current_election'
+        )
     # For sub-elections
-    current_position_is_open = models.BooleanField(verbose_name="Det er åpent for stemming", default=False)
+    current_position_is_open = models.BooleanField(
+        verbose_name="Det er åpent for stemming", default=False
+        )
     date = models.DateField(auto_now_add=True, blank=True)
 
     def __str__(self):
@@ -155,7 +189,9 @@ class Election(models.Model):
             raise AttributeError
         for position in deletables:
             if position in self.positions.all():
-                position.delete_candidates(candidates=position.candidates.all())
+                position.delete_candidates(
+                    candidates=position.candidates.all()
+                    )
                 position.delete()
             else:
                 raise ValueError
@@ -168,7 +204,8 @@ class Election(models.Model):
         for profile in profiles:
             profile.voted = False
             profile.save()
-        if not self.current_position_is_open:  # forhindrer at vi ikke resetter votes ved refresh page
+        if not self.current_position_is_open:
+            # forhindrer at vi ikke resetter votes ved refresh page
             self.current_position = current_position
             self.current_position.total_votes = 0
             self.current_position_is_open = True
