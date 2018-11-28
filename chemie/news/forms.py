@@ -2,7 +2,8 @@ from django import forms
 import material as M
 from .models import Article
 
-class NewsPost(forms.ModelForm):
+
+class ArticleForm(forms.ModelForm):
     layout = M.Layout(M.Row('title'),
                       M.Row('content'),
                       M.Row('image'),
@@ -14,5 +15,3 @@ class NewsPost(forms.ModelForm):
             'content',
             'image',
         ]
-
-

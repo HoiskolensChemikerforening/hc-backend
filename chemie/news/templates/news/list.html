@@ -16,11 +16,12 @@
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.news.delete_article %}
-          <li><a class="btn-floating red" href="delete/"><i class="material-icons">delete_forever</i></a></li>
-        {% endif %}
         {% if perms.news.add_article %}
-          <li><a class="btn-floating blue" href="create/"><i class="material-icons">add</i></a></li>
+          <li>
+            <a class="btn-floating blue" href="create/">
+              <i class="material-icons">add</i>
+              <a class="btn-floating mobile-fab-tip" href="create/">Lag ny artikkel</a>
+            </a></li>
         {% endif %}
       </ul>
     </div>
