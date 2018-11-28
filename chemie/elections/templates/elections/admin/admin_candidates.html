@@ -71,10 +71,12 @@
   <div class="card border-secondary mb-3">
       <div class="card-body candidate-container" >
           <h5 class="title is-5"> {{candidate}}</h5>
-          <form method="post" href="#"; style="display: inline" >{% csrf_token %}
-          <button class="button candidate-delete" type="submit" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
-              <p> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
-          </form>
+          {% if not position.voting_done %}
+            <form method="post" href="#"; style="display: inline" >{% csrf_token %}
+              <button class="button candidate-delete" type="submit" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
+            </form>
+          {% endif %}
+          <p> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
       </div>
   </div>
   {%endfor%}
