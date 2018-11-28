@@ -350,8 +350,7 @@ def admin_results(request, pk):
             request,
             messages.ERROR,
             'OBS!',
-            extra_tags='Valget er ikke gyldig! Det kreves {} avgitte stemmer'
-            ' for at valget skal være gyldig. Det ble kun avgitt {} stemmer.'
+            extra_tags='Det ble kun avgitt {} stemmesedler.'
             .format(VOTES_REQUIRED_FOR_VALID_ELECTION, number_of_voters)
         )
     context = {
