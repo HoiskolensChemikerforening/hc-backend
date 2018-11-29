@@ -137,7 +137,7 @@ class BaseEvent(models.Model):
 class Social(BaseEvent):
     author = models.ForeignKey(User, related_name='social_author', on_delete=models.CASCADE)
     #   Name of the committee responsible for the event
-    committee = models.ForeignKey(Committee, null=True, blank=True)
+    committee = models.ForeignKey(Committee, null=True, blank=True, on_delete=models.CASCADE)
     # Payment information
     payment_information = models.TextField(verbose_name="Betalingsinformasjon", max_length=500)
     price_member = models.PositiveSmallIntegerField(default=0, verbose_name="Pris, medlem")

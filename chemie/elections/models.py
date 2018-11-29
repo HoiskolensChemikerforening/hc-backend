@@ -24,7 +24,7 @@ from chemie.customprofile.models import Profile
 
 
 class Candidate(models.Model):
-    user = models.ForeignKey(User, related_name="candidate")
+    user = models.ForeignKey(User, related_name="candidate", on_delete=models.CASCADE)
     votes = models.IntegerField(verbose_name="Antall stemmer", blank=True, default=0)
     winner = models.BooleanField(default=False)
 
@@ -99,7 +99,13 @@ class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(Position, blank=True, related_name='election')
-    current_position = models.ForeignKey(Position, blank=True, null=True, related_name='current_election')
+    current_position = models.ForeignKey(
+        Position,
+        blank=True,
+        null=True,
+        related_name='current_election',
+        on_delete=models.CASCADE
+    )
     # For sub-elections
     current_position_is_open = models.BooleanField(verbose_name="Det er åpent for stemming", default=False)
     date = models.DateField(auto_now_add=True, blank=True)

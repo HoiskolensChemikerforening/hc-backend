@@ -34,9 +34,9 @@ urlpatterns = [
     url(r'^login/$', LoginView.as_view(),name='login'),
     url(r'^logout/$', auth_views.logout, {'next_page': '/'}, name='logout'),
     url(r'^events/', include('chemie.events.urls', namespace='events')),
-    url(r'^notifications/', get_nyt_pattern()),
+    url(r'^notifications/', include('django_nyt.urls')),
     url(r'^wiki/_accounts/sign-up/', auth_views.login),
-    url(r'^wiki/', get_wiki_pattern()),
+    url(r'^wiki/', include('wiki.urls')),
     url(r'^api-auth/', include('rest_framework.urls', namespace='rest_framework')),
     url(r'^chaining/', include('smart_selects.urls')),
     url(r'^carousel/', include('chemie.picturecarousel.urls', namespace='carousel')),
@@ -46,7 +46,11 @@ urlpatterns = [
 handler404 = 'chemie.chemie.views.page_not_found'
 
 urlpatterns += [
-    url(r'^s/', include('django.contrib.flatpages.urls', namespace='flatpages')),
+    url(
+        r'^s/',
+        include(('django.contrib.flatpages.urls', 'flatpages'),
+                namespace='flatpages')
+    ),
 ]
 
 if settings.DEBUG:

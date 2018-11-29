@@ -1,6 +1,8 @@
 from django.conf.urls import url
 from .views import index, contact, calendar, request_funds, edit_flatpage, request_office, OfficeAccessApplicationListView
 
+app_name = 'home'
+
 urlpatterns = [
     url(r'^$', index, name="home"),
     url(r'^kontakt/', contact, name="kontakt"),
