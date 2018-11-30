@@ -29,7 +29,6 @@ services:
     volumes:
       - static:/code/static
       - media:/code/media
-      - /etc/localtime:/etc/localtime:ro
     links:
       - website:website
 
