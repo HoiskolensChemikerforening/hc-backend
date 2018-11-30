@@ -1,4 +1,4 @@
 -r base.in
 
-uwsgi==2.0.15
+uwsgi==2.0.17.1
 raven==6.6.0
