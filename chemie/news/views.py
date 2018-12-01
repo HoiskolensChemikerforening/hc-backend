@@ -33,7 +33,9 @@ def news_details(request, article_id, slug):
 
 
 def list_all(request):
-    all_posts = Article.objects.filter(published=True).order_by('-published_date')
+    all_posts = Article.objects.filter(
+        published=True
+        ).order_by('-published_date')
     context = {
         'posts': all_posts,
     }
@@ -45,18 +47,32 @@ def delete_article(request, article_id, slug):
     article = get_object_or_404(Article, id=article_id)
     article.published = False
     article.save()
-    messages.add_message(request, messages.SUCCESS, 'Nyheten ble slettet', extra_tags='Slettet')
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        'Nyheten ble slettet',
+        extra_tags='Slettet'
+        )
     return HttpResponseRedirect(reverse("news:index"))
 
 
 @permission_required("news.change_article")
 def edit_article(request, article_id, slug):
     article = get_object_or_404(Article, id=article_id)
-    post = ArticleForm(request.POST or None, instance=article)
+    post = ArticleForm(
+        request.POST or None,
+        request.FILES or None,
+        instance=article
+        )
     if request.method == 'POST':
         if post.is_valid():
             post.save()
-            messages.add_message(request, messages.SUCCESS, 'Nyheten ble endret', extra_tags='Endret')
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                'Nyheten ble endret',
+                extra_tags='Endret'
+                )
             return HttpResponseRedirect(reverse('news:index'))
     context = {
         'post': post,
