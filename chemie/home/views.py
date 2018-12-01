@@ -136,7 +136,6 @@ def request_office(request):
     return render(request, "home/office_access_form.html", context)
 
 
-
 @permission_required('flatpages.change_flatpage')
 def edit_flatpage(request, url):
     if not url.startswith('/'):
