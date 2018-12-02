@@ -9,7 +9,8 @@ import environ
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
 # BASE_DIR is the path to the project folder chemie.
-BASE_DIR = environ.Path(__file__) - 4  # (chemie/chemie/settings/base.py - 3 = chemie/)
+# (chemie/chemie/settings/base.py - 3 = chemie/)
+BASE_DIR = environ.Path(__file__) - 4
 APPS_DIR = BASE_DIR.path("chemie/")()
 SETTINGS_DIR = environ.Path(__file__) - 1
 
@@ -36,7 +37,6 @@ LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/login/'
 ROOT_URLCONF = 'chemie.chemie.urls'
 WSGI_APPLICATION = 'chemie.chemie.wsgi.application'
-
 
 
 # APP CONFIGURATION

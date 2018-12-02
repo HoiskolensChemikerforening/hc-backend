@@ -55,12 +55,12 @@ main {
 }
 
 /* Side menu background color */
-#slide-out, .side-nav .collapsible-body, .side-nav.fixed .collapsible-body {
+.sidenav .collapsible-body, .sidenav-fixed .collapsible-body {
     background-color: var(--side-bar-bg);
 }
 
 /* Text and icons inside menu */
-div.collapsible-header, ul.side-nav.fixed a, .micon, i .micon, .logo-text {
+div.collapsible-header, ul.sidenav.fixed a, .micon, i .micon, .logo-text {
     color: var(--side-bar-text) !important;
 }
 
@@ -162,7 +162,7 @@ html {
     padding: 10px 20px 10px 20px;
 }
 
-ul.side-nav.fixed a {
+ul.sidenav-fixed a {
     font-size: 16px;
     line-height: 44px;
     height: 44px;
@@ -300,7 +300,7 @@ nav.top-nav {
     box-shadow: none;
 }
 
-ul.side-nav.fixed li.logo {
+ul.sidenav.sidenav-fixed li.logo {
     text-align: center;
     padding-top: 10px;
 }
@@ -322,11 +322,11 @@ ul.side-nav.fixed li.logo {
     margin-top: 10px;
 }
 
-ul.side-nav.fixed ul.collapsible-accordion a.collapsible-header {
-    padding: 0 30px;
+ul.sidenav-fixed ul.collapsible a.collapsible-header {
+    padding: 0 1.1rem;
 }
 
-ul.side-nav.fixed li {
+ul.sidenav-fixed li {
     line-height: 44px;
 }
 
@@ -366,7 +366,7 @@ img.profile-circle {
     transform: scale(0.6);
 }
 
-.side-nav li > a > i.material-icons {
+.sidenav li > a > i.material-icons {
     color: rgb(0, 0, 0);
     width: 2rem;
     font-size: 1.6rem;
@@ -377,7 +377,7 @@ img.profile-circle {
     margin-right: 1rem;
 }
 
-.side-nav .collapsible-body li a, .side-nav.fixed .collapsible-body li a {
+.sidenav .collapsible-body li a, .sidenav-fixed .collapsible-body li a {
     padding: 0 23.5px 0 45px;
 }
 

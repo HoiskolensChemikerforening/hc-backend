@@ -27,7 +27,6 @@
   <form method="POST" enctype="multipart/form-data">{% csrf_token %}
     <div class="card-content">
       {% form form=form %}
-
       {% endform %}
 
       <div class="card-action">
@@ -44,29 +43,93 @@
 {% block footer_script %}
   <script type="text/javascript">
       $(document).ready(function () {
-          $(".timepicker").clockpicker({
-              placement: 'bottom',
-              autoclose: true,
-              align: 'left',
-              twelvehour: false,
-              vibrate: true
-          });
-          $('.datepicker').pickadate({
-              selectMonths: true,   // Creates a dropdown to control month
-              selectYears: 2,   // Creates a dropdown of 15 years to control year
-              formatSubmit: 'yyyy-mm-dd',
-              hiddenName: true
-          });
+        /* Customize datepicker */
+        var date_elems = document.querySelectorAll('.datepicker');
+        var date_instances = M.Datepicker.init(
+          date_elems,
+          {
+            'showClearBtn': false,
+            'autoClose': true,
+            'format': 'yyyy-mm-dd',
+            'firstDay': 1,
+            'yearRange': 1,
+            'i18n': {
+              'cancel': 'Avbryt',
+              'months': [
+                'Januar',
+                'Februar',
+                'Mars',
+                'April',
+                'Mai',
+                'Juni',
+                'Juli',
+                'August',
+                'September',
+                'Oktober',
+                'November',
+                'Desember'
+              ],
+              'monthsShort': [
+                'Jan',
+                'Feb',
+                'Mar',
+                'Apr',
+                'Mai',
+                'Jun',
+                'Jul',
+                'Aug',
+                'Sep',
+                'Okt',
+                'Nov',
+                'Des'
+              ],
+              'weekdays': [
+                'Søndag',
+                'Mandag',
+                'Tirsdag',
+                'Onsdag',
+                'Torsdag',
+                'Fredag',
+                'Lørdag',
+              ],
+              'weekdaysShort': [
+                'Søn',
+                'Man',
+                'Tir',
+                'Ons',
+                'Tor',
+                'Fre',
+                'Lør',
+              ],
+              'weekdaysAbbrev': [
+                'S',
+                'M',
+                'T',
+                'O',
+                'T',
+                'F',
+                'L',
+              ]
+            }
+          }
+          );
 
-          // Incorrect date format is set on the datepickers when the form is returned to the user (with errors)
-          // This loops over the fields and "converts" the format
-          $(".datepicker").each(function () {
-              var date = document.getElementById(this.id).value;
-
-              if (date !== "") {
-                  $('#' + this.id).pickadate().pickadate('picker').set('select', date, {format: 'yyyy-mm-dd'});
+          /* Customize timepicker */
+          var time_elems = document.querySelectorAll('.timepicker');
+          var time_instances = M.Timepicker.init(
+            time_elems,
+            {
+              'twelveHour': false,
+              'autoClose': true,
+              'showClearBtn': true,
+              'i18n': {
+                'cancel': 'Avbryt',
+                'clear': 'Nullstill',
+                'done': 'OK'
               }
-          });
+            }
+            );
+          $('select').formSelect();
       });
   </script>
 {% endblock footer_script %}
