@@ -37,26 +37,28 @@
   <!-- Deregister form -->
   <div class="row">
     <div class="col">
+      {% if forms.deregister %}
       <form class="deregister" method="POST">{% csrf_token %}
         {% form form=forms.deregister %}{% endform %}
         <button name='action' value='deregister' type="submit"
                 class="waves-effect waves-light btn btn-primary red">Meld meg av
         </button>
       </form>
+      {% else %}
+        Avmeldingsfristen har passert.
+      {% endif %}
     </div>
   </div>
   <div class="row">
     <div class="col">
       <!-- Edit registration form -->
-      {% if forms.deregister and forms.edit %}
+      {% if forms.edit %}
         <form class="edit" method="POST">{% csrf_token %}
           {% form form=forms.edit %}{% endform %}
           <button name='action' value='edit' type="submit"
-                  class="waves-effect waves-light btn btn-primary blue">Endre registrasjon
+                  class="waves-effect waves-light btn btn-primary blue">Endre påmelding
           </button>
         </form>
-      {% else %}
-        Avmeldingsfristen har passert.
       {% endif %}
     </div>
   </div>

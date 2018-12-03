@@ -261,6 +261,14 @@ class SocialEditRemoveUserRegistration(
             if context['forms'].get('edit'):
                 context['forms'].pop('edit')
 
+        # Remove edit forms if none of the fields are present
+        edit_form_boolean = self.object.companion or \
+            self.object.sleepover or \
+            self.object.night_snack
+        # Remove edit if no fields and editform is in context
+        if not (edit_form_boolean) and context['forms'].get('edit'):
+            context['forms'].pop('edit')
+
         # Add queue position
         registration = self.registration
         if registration:
