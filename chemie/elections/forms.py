@@ -29,8 +29,20 @@ class AddCandidateForm(forms.ModelForm):
         }
 
 
-class AddVotesCandidateForm(forms.Form):
-    preVotes = forms.IntegerField(initial=0, min_value=0, max_value=500) #500 is arbitrary chosen
+class AddPrevoteForm(forms.ModelForm):
+    class Meta:
+        model = Position
+        fields = ['number_of_voters']
+
+
+class AddPreVoteToCandidateForm(forms.ModelForm):
+    class Meta:
+        model = Candidate
+        fields = ['votes']
+
+    def __init__(self, *args, **kwargs):
+        super(AddPreVoteToCandidateForm, self).__init__(*args, **kwargs)
+        self.fields['votes'].label = self.instance.user.get_full_name()
 
 
 class OpenElectionForm(forms.ModelForm):
@@ -49,15 +61,26 @@ def candidatesChoices(election=None):
     try:
         position = election.current_position
         choices = position.candidates.all()
-    except:# AttributeError:
+    except:  # AttributeError:
         choices = Position.objects.none()
     return choices
 
 
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
-        image = mark_safe("<img src='%s' class='vote-image' />" % obj.user.profile.image_primary.url)
-        name = mark_safe("<p>%s %s </p>" %(obj.user.first_name, obj.user.last_name))
+        name = mark_safe(
+            "<p>%s %s </p>" % (obj.user.first_name, obj.user.last_name)
+            )
+        try:
+            image = mark_safe(
+                "<img src='%s' class='vote-image' />"
+                % obj.user.profile.image_primary.url
+                )
+        except:
+            image = mark_safe(
+                "<img src='%s' class='vote-image' />"
+                % '/static/images/blank_avatar.png'
+                )
         return image + name
 
 

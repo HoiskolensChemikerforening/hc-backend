@@ -47,8 +47,7 @@
   </div>
 
 
-
-  <!--Søke felt for brukere-->
+  <!--Søkefelt for brukere-->
   <div>
       <div>
           <form method="POST" action="" > {% csrf_token %}
@@ -64,25 +63,21 @@
               </p>
           </div>
           {%endif%}
-
       </div>
   </div>
 
   <!--Alle Kandidater-->
-
   {%for candidate in candidates%}
   <div class="card border-secondary mb-3">
       <div class="card-body candidate-container" >
           <h5 class="title is-5"> {{candidate}}</h5>
-          <form method="post" href="#"; style="display: inline" >{% csrf_token %}
-          <input id="preVotesForm" class="input candidate-input" type="number" name="preVotes" value="{{candidate.votes}}">
-          <button type="submit" class="button" value="{{candidate.user.username}}" name="OK" >OK</button>
-          <button class="button candidate-delete" type="submit" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
-              <p> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
-
-          </form>
+          {% if not position.voting_done %}
+            <form method="post" href="#"; style="display: inline" >{% csrf_token %}
+              <button class="button candidate-delete" type="submit" name="Delete" value="{{candidate.user.username}}" >&#10060</button>
+            </form>
+          {% endif %}
+          <p> <b>{{candidate.votes}}</b> forhåndsstemmer</p>
       </div>
-
   </div>
   {%endfor%}
 
@@ -90,10 +85,14 @@
   </div>
   <div>
       {% if candidates %}
+      {% if not position.voting_done %}
       <form method="post" href="#" onsubmit="return confirmValg(this,'Åpne valget for?')">{% csrf_token %}
-          <button class="button is-success" type="submit" name="startVoting" value="{{position.id}}"}}>Start</button>
+          <button class="button is-success is-pulled-left" type="submit" name="startVoting" value="{{position.id}}"}}>Start</button>
       </form>
-
+      <a href="{% url "elections:admin_register_prevotes" position.id %}">
+        <button class="button is-warning is-pulled-right" >Legg inn forhåndsstemmer</button>
+      </a>
+      {% endif %}
       {% endif %}
   </div>
 </div>
