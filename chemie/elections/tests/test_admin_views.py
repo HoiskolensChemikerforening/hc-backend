@@ -192,6 +192,7 @@ def test_add_pre_votes_to_candidate(
     position = election.positions.all().first()
     cands = position.candidates.all()
     number_of_candidates = cands.count()
+    cands = list(cands)  # Do not remove this bad boy!
     candidate = cands[0]
     pre_votes = 5
     post_data = {
@@ -209,7 +210,7 @@ def test_add_pre_votes_to_candidate(
         'candidate_forms-3-id': cands[3].pk,
         'total_voters-number_of_voters': 5
     }
-    request = client.post(
+    client.post(
         reverse(
             'elections:admin_register_prevotes',
             kwargs={'pk': position.id}
@@ -220,10 +221,7 @@ def test_add_pre_votes_to_candidate(
     candidate.refresh_from_db()
     old_votes = position.total_votes
     position.refresh_from_db()
-    for cand in cands:
-        cand.refresh_from_db()
-        print(cand.pk, cand.votes)
-    print('\n', candidate.pk, candidate.votes)
+
     assert candidate.votes == pre_votes
     assert position.total_votes == (old_votes + pre_votes)
 

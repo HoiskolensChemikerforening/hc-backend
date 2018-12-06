@@ -291,7 +291,9 @@ def admin_register_prevotes(request, pk):
                     candidate = Candidate.objects.get(pk=candidate_pk)
                     old_votes = candidate.votes
                     new_votes = form.cleaned_data['votes']
-                    position.total_votes += (new_votes - old_votes)
+                    position.total_votes = \
+                        position.total_votes + (new_votes - old_votes)
+                    position.save()
                     form.save()
                 return redirect(reverse(
                     'elections:admin_register_candidates',
