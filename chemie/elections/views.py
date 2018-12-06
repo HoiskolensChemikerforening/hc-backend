@@ -222,10 +222,7 @@ def admin_register_candidates(request, pk):
                 candidate_object = all_candidates.get(
                     user=candidate_user_object
                     )
-                position.total_votes -= candidate_object.votes
-                # sletter brukeren fra stillingen
-                position.candidates.remove(candidate_object)
-                candidate_object.delete()
+                position.delete_candidates(candidate_object)
                 position.save()
             elif 'addCandidate' in request.POST:
                 if add_candidate_form.is_valid():
@@ -287,6 +284,7 @@ def admin_register_prevotes(request, pk):
             )
         if request.method == 'POST':
             if formset.is_valid() and prevote_form.is_valid():
+                prevote_form.save()
                 for form in formset:
                     # Increment both candidate and positions votes
                     candidate_pk = form.instance.pk
@@ -295,7 +293,6 @@ def admin_register_prevotes(request, pk):
                     new_votes = form.cleaned_data['votes']
                     position.total_votes += (new_votes - old_votes)
                     form.save()
-                prevote_form.save()
                 return redirect(reverse(
                     'elections:admin_register_candidates',
                     kwargs={'pk': position.id}
@@ -351,7 +348,7 @@ def admin_results(request, pk):
             messages.ERROR,
             'OBS!',
             extra_tags='Det ble kun avgitt {} stemmesedler.'
-            .format(VOTES_REQUIRED_FOR_VALID_ELECTION, number_of_voters)
+            .format(number_of_voters)
         )
     context = {
         'candidates': position.candidates.all(),
