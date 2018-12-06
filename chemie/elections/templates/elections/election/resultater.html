@@ -6,16 +6,16 @@
         <a href="/elections/" class="button" style="margin-bottom: 10px">&#8592; Gå tilbake</a>
         {%for election in elections%}
         <div class="box">
-            <h5 class="title is-3">Resulater fra valget {{election.date}}</h5>
+            <h5 class="title is-3">Resulater fra valget {{ election.date }}</h5>
             <table class="table">
                 <tr>
                     <th>Posisjon</th>
                     <th>Vinner</th>
                 </tr>
-                {%for position in election.positions.all%}
-                {%if position.voting_done%}
+                {% for position in election.positions.all %}
+                {% if position.voting_done %}
                     <tr>
-                        <td>{{position}}</td>
+                        <td>{{ position }}</td>
                         <td>
                         {% for winner in position.winners.all %}
                           {% if forloop.last %}
@@ -23,17 +23,17 @@
                           {% else %}
                             {{ winner }},
                           {% endif %}
-                        {%endfor%}
+                        {% endfor %}
                         </td>
                     </tr>
-                {%endif%}
-                {%endfor%}
+                {% endif %}
+                {% endfor %}
             </table>
-            {{position}}
+            {{ position }}
         </div>
-        {%endfor%}
+        {% endfor %}
     </div>
 </div>
 
 
-{% endblock %}
+{% endblock content%}
