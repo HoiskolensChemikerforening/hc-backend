@@ -39,7 +39,7 @@
   <div class="row">
     <div class="klassetrinn">
       <div class="col s6 m6 l4 s12">
-        <a class='dropdown-button btn-large' href='#' data-activates='dropdown1'
+        <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
           {% for year_number, year_text in grades %}
@@ -186,6 +186,8 @@
                   return false;
               });
           });
+          $('.dropdown-trigger').dropdown();
+          $('.modal').modal();
       });
   </script>
 {% endblock %}

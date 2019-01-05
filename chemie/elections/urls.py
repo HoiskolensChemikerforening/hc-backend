@@ -2,6 +2,8 @@ from django.conf.urls import url
 from chemie.committees.views import UserAutocomplete
 from . import views
 
+app_name = 'elections'
+
 admin_urlpatterns = [
     url(
         r'^admin/$',

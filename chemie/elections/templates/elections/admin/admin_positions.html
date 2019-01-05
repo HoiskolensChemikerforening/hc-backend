@@ -1,9 +1,7 @@
 {% extends "chemie/base_election.html" %}
 {% load material_form %}
 
-
-{% block content %}
-<style>
+{% block style %}
     .submit-button{
       margin-top: 0.9rem;
     }
@@ -18,7 +16,9 @@
     .position-title{
       margin: auto;
     }
-</style>
+{% endblock style %}
+
+{% block content %}
 <div class="div-container">
     <div>
         <div>
@@ -31,7 +31,7 @@
         </div>
     </div>
     <br>
-    {%if positions.all%}
+    {% if positions.all %}
     {% for position in positions%}
     <div class="card">
         <header class="card-header" >
@@ -48,7 +48,7 @@
             <a href={{ position.id }} class="card-footer-item" >Gå til valg av posisjon</a>
             {% if position.voting_done %}
             <p class="card-footer-item success-message" >Gjennomført</p>
-            {%else%}
+            {% else %}
             <p class="card-footer-item error-message" >Ikke gjennomført</p>
             {% endif %}
             <form method="POST" href="#" class="delete-form">{% csrf_token %}
@@ -58,16 +58,15 @@
     </div>
     <div>
         <br>
-    {%endfor%}
-    <br>
-
-    {%endif%}
+        {% endfor %}
+        <br>
+    {% endif %}
         <div >
             <a class="button is-danger" onclick="ConfirmAvsluttValg(); return false;" >Avslutt valg</a>
         </div>
-</div>
-
+    </div>
 {% endblock content %}
+
 {% block footer_script%}
     <script>
         function ConfirmAvsluttValg() {

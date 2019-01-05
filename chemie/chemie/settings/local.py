@@ -10,7 +10,7 @@ from .base import *
 # ------------------------------------------------------------------------------
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'webkom',
         'USER': 'webkom',
         'PASSWORD': 'webkom',

@@ -190,17 +190,14 @@ def test_add_pre_votes_to_candidate(
     client.login(username=admin.username, password='defaultpassword')
     election = create_open_election_with_position_and_candidates
     position = election.positions.all().first()
-    number_of_candidates = position.candidates.all().count()
-    candidate = position.candidates.all().first()
-    pre_votes = 5
-    Formset = modelformset_factory(
-            Candidate, form=AddPreVoteToCandidateForm, extra=0
-            )
-    formset = Formset(queryset=position.candidates.all())
     cands = position.candidates.all()
+    number_of_candidates = cands.count()
+    cands = list(cands)  # Do not remove this bad boy!
+    candidate = cands[0]
+    pre_votes = 5
     post_data = {
-        'candidate_forms-TOTAL_FORMS': '4',
-        'candidate_forms-INITIAL_FORMS': '4',
+        'candidate_forms-TOTAL_FORMS': number_of_candidates,
+        'candidate_forms-INITIAL_FORMS': number_of_candidates,
         'candidate_forms-MIN_NUM_FORMS': '0',
         'candidate_forms-MAX_NUM_FORMS': '1000',
         'candidate_forms-0-votes': pre_votes,
@@ -211,18 +208,20 @@ def test_add_pre_votes_to_candidate(
         'candidate_forms-2-id': cands[2].pk,
         'candidate_forms-3-votes': 0,
         'candidate_forms-3-id': cands[3].pk,
-        'total_voters-number_of_voters': 3
+        'total_voters-number_of_voters': 5
     }
     client.post(
         reverse(
             'elections:admin_register_prevotes',
             kwargs={'pk': position.id}
             ),
-        data=post_data
-    )
+        data=post_data,
+        follow=True
+        )
     candidate.refresh_from_db()
     old_votes = position.total_votes
     position.refresh_from_db()
+
     assert candidate.votes == pre_votes
     assert position.total_votes == (old_votes + pre_votes)
 

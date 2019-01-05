@@ -24,17 +24,23 @@ def index(request, year=1):
             users = find_user_by_name(search_field)
             profiles = Profile.objects.filter(user__in=users)
     else:
-        profiles = Profile.objects.filter(grade=year, user__is_active=True).order_by('user__last_name')
+        profiles = Profile.objects.filter(
+            grade=year,
+            user__is_active=True
+            ).order_by('user__last_name')
     context = {
         'profiles': profiles,
         'grades': GRADES,
         'search_form': form,
     }
-    return render(request, 'customprofile/get_images.html', context)
+    return render(request, 'customprofile/yearbook.html', context)
 
 
 def find_user_by_name(query_name):
     qs = User.objects.all()
     for term in query_name.split():
-        qs = qs.filter( Q(first_name__icontains=term) | Q(last_name__icontains=term))
+        qs = qs.filter(
+            Q(first_name__icontains=term) |
+            Q(last_name__icontains=term)
+            )
     return qs

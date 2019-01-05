@@ -7,13 +7,10 @@
         }-->
 
 {% load thumbnail %}
-
-{% load staticfiles %}
 {% load static %}
 
-{%block content%}
-<style>
-    .candidate-container{
+{% block style %}
+  .candidate-container{
         padding: 0.9rem;
         margin-top: 0.3rem;
         margin-bottom: 0.3rem;
@@ -33,7 +30,9 @@
     .candidate-component{
         margin-right: 0.2rem;
     }
-</style>
+{% endblock style %}
+
+{%block content%}
 <div>
   <nav class="breadcrumb" aria-label="breadcrumbs">
     <ul>

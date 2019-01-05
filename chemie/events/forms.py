@@ -3,7 +3,8 @@ from django import forms
 from django.core.validators import ValidationError
 
 from chemie.customprofile.models import GRADES
-from .models import Social, SocialEventRegistration, Bedpres, BedpresRegistration, BaseEvent
+from .models import Social, SocialEventRegistration, Bedpres,\
+    BedpresRegistration, BaseEvent
 
 
 class BaseRegisterEventForm(forms.ModelForm):
@@ -18,24 +19,46 @@ class BaseRegisterEventForm(forms.ModelForm):
         if not self.is_valid():
             return
 
-        event_date, open_date = self.cleaned_data['date'], self.cleaned_data['register_startdate']
-        deadline, lock_in_date = self.cleaned_data['register_deadline'], self.cleaned_data['deregister_deadline']
+        event_date, open_date = self.cleaned_data['date'],\
+            self.cleaned_data['register_startdate']
+        deadline, lock_in_date = self.cleaned_data['register_deadline'],\
+            self.cleaned_data['deregister_deadline']
 
         if event_date < open_date:
-            self.add_error(None, ValidationError(
-                {'register_startdate': ["Påmeldingen må være før arrangementet begynner"]}))
+            self.add_error(
+                None,
+                ValidationError({
+                    'register_startdate':
+                    ["Påmeldingen må være før arrangementet begynner"]
+                    })
+                )
 
         if event_date < deadline:
-            self.add_error(None, ValidationError(
-                {'register_deadline': ["Påmeldingsfristen må være før arrangementet begynner"]}))
+            self.add_error(
+                None,
+                ValidationError({
+                    'register_deadline':
+                    ["Påmeldingsfristen må være før arrangementet begynner"]
+                    })
+                )
 
         if event_date < lock_in_date:
-            self.add_error(None, ValidationError(
-                {'deregister_deadline': ["Avmeldingsfristen må være før arrangementet begynner"]}))
+            self.add_error(
+                None,
+                ValidationError({
+                    'deregister_deadline':
+                    ["Avmeldingsfristen må være før arrangementet begynner"]
+                    })
+                )
 
         if deadline < open_date:
-            self.add_error(None, ValidationError(
-                {'register_deadline': ["Påmeldingsfristen må være etter påmeldingen begynner"]}))
+            self.add_error(
+                None,
+                ValidationError({
+                    'register_deadline':
+                    ["Påmeldingsfristen må være etter påmeldingen begynner"]
+                    })
+                )
 
     def clean_allowed_grades(self):
         try:
@@ -44,8 +67,13 @@ class BaseRegisterEventForm(forms.ModelForm):
             _ = [GRADES.values[int(grade)] for grade in grades]
             return grades
         except (ValueError, KeyError):
-            self.add_error(None, ValidationError(
-                {'allowed_grades': ["Tillatte klassetrinn er ikke akseptert"]}))
+            self.add_error(
+                None,
+                ValidationError({
+                    'allowed_grades':
+                    ["Tillatte klassetrinn er ikke akseptert"]
+                    })
+                )
 
     class Meta:
         abstract = True
@@ -65,7 +93,8 @@ class BaseRegisterEventForm(forms.ModelForm):
         ]
 
         # Override field type from DateTimeField to SplitDateTimeField
-        # Note that this field loads the widget from chemie/templates/material/fields/django_splitdatetimewidget.html
+        # Note that this field loads the widget from
+        # chemie/templates/material/fields/django_splitdatetimewidget.html
         field_classes = {
             'date': forms.SplitDateTimeField,
             'register_startdate': forms.SplitDateTimeField,
@@ -75,7 +104,7 @@ class BaseRegisterEventForm(forms.ModelForm):
 
 
 class RegisterEventForm(BaseRegisterEventForm):
-    layout = M.Layout(M.Row(M.Column('published','title', )),
+    layout = M.Layout(M.Row(M.Column('published', 'title', )),
                       M.Row('committee'),
                       M.Row(M.Column('date', span_columns=1),
                             M.Column('register_startdate', span_columns=1),
@@ -85,7 +114,11 @@ class RegisterEventForm(BaseRegisterEventForm):
                       M.Row('description'),
                       M.Row('payment_information'),
                       M.Row(M.Column('image'), M.Column('sluts')),
-                      M.Row('price_member', 'price_not_member', 'price_companion'),
+                      M.Row(
+                          'price_member',
+                          'price_not_member',
+                          'price_companion'
+                          ),
                       M.Row('companion', 'sleepover', 'night_snack'),
                       M.Row('allowed_grades'),
                       )
@@ -151,4 +184,7 @@ class BedpresRegisterUserForm(forms.ModelForm):
 
 
 class DeRegisterUserForm(forms.Form):
-    really_sure = forms.BooleanField(required=True, label='Er dette ditt endelige svar?')
+    really_sure = forms.BooleanField(
+        required=True,
+        label='Er dette ditt endelige svar?'
+        )

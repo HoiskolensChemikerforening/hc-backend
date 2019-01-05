@@ -1,41 +1,39 @@
-{% extends "chemie/base.html" %}
 {% load material_form %}
 {% load thumbnail %}
 {% load static %}
 
-{% block nav_header %}
-    Bildekarusell
-{% endblock nav_header %}
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+<link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
 
-{% block nav_sub_header %}
-    Send inn bilder
-{% endblock nav_sub_header %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-{% block content %}
-<style>
-  .indicators {
-    display:  none;
-  }
-</style>
-<div class="slider fullscreen">
-   <ul class="slides">
-       {%for picture in pictures%}
-     <li>
-         {% thumbnail picture.image "1920" padding=True as pic %}
-       <img src="{{pic.url}}"> <!-- random image -->
-       <div class="caption center-align">
-         <h3>{{picture.description}}</h3>
-         {%endthumbnail%}
-       </div>
-     </li>
-     {%endfor%}
-   </ul>
+<div class="carousel carousel-slider">
+  {% for picture in pictures %}
+    {% thumbnail picture.image "1920" padding=True as pic %}
+      <a class="carousel-item" href="#"><img src="{{pic.url}}"></a> <!-- random image -->
+      <div class="caption center-align">
+        <h3>{{picture.description}}</h3>
+      </div>
+      {% endthumbnail %}
+  {% endfor %}
  </div>
+
 <script>
-    $(document).ready(function(){
-      $('.slider').slider();
-      $('.side-nav').hide();
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(
+      elems,
+      {
+        fullWidth: true,
+      }
+    );
+    window.setInterval(slidePictures, 7000);
+    function slidePictures() {
+      var instance = M.Carousel.getInstance(elems[0]);
+      instance.next();
+    }
     });
 </script>
-
-{% endblock content %}

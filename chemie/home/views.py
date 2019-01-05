@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.shortcuts import get_current_site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.http import Http404
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
@@ -134,7 +134,6 @@ def request_office(request):
         "already_applied": already_applied
     }
     return render(request, "home/office_access_form.html", context)
-
 
 
 @permission_required('flatpages.change_flatpage')

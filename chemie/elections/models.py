@@ -34,9 +34,15 @@ VOTES_REQUIRED_FOR_VALID_ELECTION = 50
 
 
 class Candidate(models.Model):
-    user = models.ForeignKey(User, related_name="candidate")
-    votes = models.PositiveIntegerField(
-        verbose_name="Antall stemmer", blank=True, default=0
+    user = models.ForeignKey(
+        User,
+        related_name="candidate",
+        on_delete=models.CASCADE
+        )
+    votes = models.IntegerField(
+        verbose_name="Antall stemmer",
+        blank=True,
+        default=0
         )
     winner = models.BooleanField(default=False)
 
@@ -131,7 +137,7 @@ class Position(models.Model):
 
             # All winners are now stored in a list. Add this to self.winners
             self.winners.add(*winners)
-            self.number_of_voters += Profile.objects.filter(voted=True).count()
+            """ self.number_of_voters += Profile.objects.filter(voted=True).count() """
             self.voting_done = True
             self.save()
         election = Election.objects.latest('id')
@@ -144,11 +150,17 @@ class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(
-        Position, blank=True, related_name='election'
+        Position,
+        blank=True,
+        related_name='election'
         )
     current_position = models.ForeignKey(
-        Position, blank=True, null=True, related_name='current_election'
-        )
+        Position,
+        blank=True,
+        null=True,
+        related_name='current_election',
+        on_delete=models.CASCADE
+    )
     # For sub-elections
     current_position_is_open = models.BooleanField(
         verbose_name="Det er åpent for stemming", default=False
@@ -226,7 +238,7 @@ class Election(models.Model):
         if not profile.voted:
             if blank:
                 self.current_position.total_votes += 1
-                # self.current_position.number_of_voters += 1
+                self.current_position.number_of_voters += 1
                 self.current_position.save()
                 voted = True
                 profile.voted = True
@@ -236,7 +248,7 @@ class Election(models.Model):
                     candidate = candidates
                     candidate.votes += 1
                     self.current_position.total_votes += 1
-                    # self.current_position.number_of_voters += 1
+                    self.current_position.number_of_voters += 1
                     candidate.save()
                     self.current_position.save()
                     return True
@@ -251,9 +263,9 @@ class Election(models.Model):
                     for candidate in cands:
                         candidate.votes += 1
                         self.current_position.total_votes += 1
+                        self.current_position.number_of_voters += 1
                         candidate.save()
                         self.current_position.save()
-                    # self.current_position.number_of_voters += 1
                     profile.voted = True
                     profile.save()
                     voted = True
