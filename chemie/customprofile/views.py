@@ -5,7 +5,10 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.contrib.auth.views import (LoginView as OldLoginView, SuccessURLAllowedHostsMixin)
+from django.contrib.auth.views import (
+    LoginView as OldLoginView,
+    SuccessURLAllowedHostsMixin,
+)
 from django.core.exceptions import ObjectDoesNotExist
 from django.urls import reverse
 from django.core.validators import ValidationError
@@ -18,17 +21,31 @@ from django.utils import timezone
 from django.views.generic import FormView
 
 from .email import send_forgot_password_mail
-from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, \
-    SetNewPassword, NameSearchForm
+from .forms import (
+    RegisterUserForm,
+    RegisterProfileForm,
+    EditUserForm,
+    EditProfileForm,
+    ForgotPassword,
+    SetNewPassword,
+    NameSearchForm,
+)
 from .models import UserToken, Profile, Membership, GRADES
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
 
+
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
-    user_profile_form = RegisterProfileForm(request.POST or None, request.FILES or None)
+    user_profile_form = RegisterProfileForm(
+        request.POST or None, request.FILES or None
+    )
     approved_terms_form = ApprovedTermsForm(request.POST or None)
-    if user_core_form.is_valid() and user_profile_form.is_valid() and approved_terms_form.is_valid():
+    if (
+        user_core_form.is_valid()
+        and user_profile_form.is_valid()
+        and approved_terms_form.is_valid()
+    ):
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
         user.save()
@@ -37,14 +54,19 @@ def register_user(request):
         profile.user = user
         profile.approved_terms = True
         profile.save()
-        messages.add_message(request, messages.SUCCESS, 'Brukeren din er opprettet!', extra_tags='Takk!')
-        return redirect('profile:register')
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Brukeren din er opprettet!",
+            extra_tags="Takk!",
+        )
+        return redirect("profile:register")
     context = {
         "user_core_form": user_core_form,
         "user_profile_form": user_profile_form,
         "approved_terms_form": approved_terms_form,
     }
-    return render(request, 'customprofile/register.html', context)
+    return render(request, "customprofile/register.html", context)
 
 
 @login_required
@@ -56,7 +78,9 @@ def edit_profile(request):
         current_profile = request.user.profile
     except:
         current_profile = Profile(user=user)
-    profile_form = EditProfileForm(request.POST or None, instance=current_profile)
+    profile_form = EditProfileForm(
+        request.POST or None, instance=current_profile
+    )
     if request.POST:
         if new_password_form.has_changed():
             # The user has filled in something in at least one field
@@ -72,38 +96,48 @@ def edit_profile(request):
                 user_form.save()
                 profile_form.save()
 
-        if not (user_form.errors or profile_form.errors or new_password_form.errors):
-            messages.add_message(request, messages.SUCCESS, 'Dine endringer har blitt lagret!')
+        if not (
+            user_form.errors or profile_form.errors or new_password_form.errors
+        ):
+            messages.add_message(
+                request, messages.SUCCESS, "Dine endringer har blitt lagret!"
+            )
 
     context = {
         "user_form": user_form,
         "profile_form": profile_form,
-        'change_password_form': new_password_form,
+        "change_password_form": new_password_form,
     }
-    return render(request, 'customprofile/editprofile.html', context)
+    return render(request, "customprofile/editprofile.html", context)
 
 
 def forgot_password(request):
     form = ForgotPassword(request.POST or None)
     if request.POST:
-        email = form.data.get('email')
+        email = form.data.get("email")
         if form.is_valid():
             try:
                 user = User.objects.get(email=email)
                 token = UserToken.objects.create(user=user)
                 send_forgot_password_mail(email, user, token)
-                messages.add_message(request, messages.SUCCESS, 'Sjekk {} for videre detaljer'.format(email),
-                                     extra_tags='Tilbakestille passord')
-                return redirect(reverse('frontpage:home'))
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Sjekk {} for videre detaljer".format(email),
+                    extra_tags="Tilbakestille passord",
+                )
+                return redirect(reverse("frontpage:home"))
 
             except ObjectDoesNotExist:
-                form.add_error(None, ValidationError(
-                    {'email': ["Vi finner ingen bruker med denne e-posten"]}))
+                form.add_error(
+                    None,
+                    ValidationError(
+                        {"email": ["Vi finner ingen bruker med denne e-posten"]}
+                    ),
+                )
 
-    context = {
-        'form': form,
-    }
-    return render(request, 'customprofile/forgot_password.html', context)
+    context = {"form": form}
+    return render(request, "customprofile/forgot_password.html", context)
 
 
 def activate_password(request, code):
@@ -114,40 +148,41 @@ def activate_password(request, code):
     password_form = SetNewPassword(request.POST or None)
     if request.POST:
         if password_form.is_valid():
-            password = password_form.data.get('password_new')
+            password = password_form.data.get("password_new")
             activator.set_password(password)
-            messages.add_message(request, messages.SUCCESS, 'Ditt passord ble endret', extra_tags='Suksess')
-            return redirect(reverse('frontpage:home'))
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Ditt passord ble endret",
+                extra_tags="Suksess",
+            )
+            return redirect(reverse("frontpage:home"))
 
-    context = {
-        'form': password_form,
-    }
-    return render(request, 'customprofile/set_forgotten_password.html', context)
+    context = {"form": password_form}
+    return render(request, "customprofile/set_forgotten_password.html", context)
 
 
-@permission_required('customprofile.change_membership')
+@permission_required("customprofile.change_membership")
 def view_memberships(request):
-    profiles = Profile.objects.all().select_related('user', 'membership')
-    context = {
-        "profiles": profiles,
-    }
+    profiles = Profile.objects.all().select_related("user", "membership")
+    context = {"profiles": profiles}
     return render(request, "customprofile/memberships.html", context)
 
 
-@permission_required('customprofile.change_membership')
+@permission_required("customprofile.change_membership")
 def change_membership_status(request, profile_id):
     person = Profile.objects.get(pk=profile_id)
     if person.membership is None:
         membership = Membership(
             start_date=timezone.now(),
-            end_date=timezone.now() + timedelta(365*5),
-            endorser=request.user
-            )
+            end_date=timezone.now() + timedelta(365 * 5),
+            endorser=request.user,
+        )
         membership.save()
         person.membership = membership
         person.save()
     membership_status = person.membership.is_active()
-    return JsonResponse({'membership_status': membership_status})
+    return JsonResponse({"membership_status": membership_status})
 
 
 @login_required
@@ -161,25 +196,25 @@ def yearbook(request, year=1):
             year = 1
     form = NameSearchForm(request.POST or None)
     profiles = Profile.objects.none()
-    if request.method == 'POST':
+    if request.method == "POST":
         if form.is_valid():
-            search_field = form.cleaned_data.get('search_field')
+            search_field = form.cleaned_data.get("search_field")
             users = find_user_by_name(search_field)
             profiles = Profile.objects.filter(user__in=users)
     else:
-        profiles = Profile.objects.filter(grade=year, user__is_active=True).order_by('user__last_name')
-    context = {
-        'profiles': profiles,
-        'grades': GRADES,
-        'search_form': form,
-    }
-    return render(request, 'customprofile/yearbook.html', context)
+        profiles = Profile.objects.filter(
+            grade=year, user__is_active=True
+        ).order_by("user__last_name")
+    context = {"profiles": profiles, "grades": GRADES, "search_form": form}
+    return render(request, "customprofile/yearbook.html", context)
 
 
 def find_user_by_name(query_name):
     qs = User.objects.all()
     for term in query_name.split():
-        qs = qs.filter( Q(first_name__icontains=term) | Q(last_name__icontains=term))
+        qs = qs.filter(
+            Q(first_name__icontains=term) | Q(last_name__icontains=term)
+        )
     return qs
 
 
@@ -199,7 +234,7 @@ class LoginView(OldLoginView):
         return self.approval_form_view(self.request, form)
 
     def approval_form_view(self, request, loginform):
-        if request.method == 'POST':
+        if request.method == "POST":
             if loginform.is_valid():
                 user = loginform.get_user()
                 termsform = ApprovedTermsForm(request.POST or None)
@@ -209,6 +244,6 @@ class LoginView(OldLoginView):
                     return super().form_valid(loginform)
                 else:
                     context = super().get_context_data()
-                    context['termsform'] = termsform
-                    context['show_popup'] = True
-                    return render(request, 'registration/login.html', context)
+                    context["termsform"] = termsform
+                    context["show_popup"] = True
+                    return render(request, "registration/login.html", context)
