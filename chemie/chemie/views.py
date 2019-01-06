@@ -12,5 +12,6 @@ def page_not_found(request):
     except IndexError:
         random_image = None
 
-    return render(request, '404.html', context={'image': random_image}, status=404)
-
+    return render(
+        request, "404.html", context={"image": random_image}, status=404
+    )

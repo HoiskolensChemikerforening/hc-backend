@@ -6,8 +6,10 @@ from chemie.chemie.models import Sponsor
 
 register = template.Library()
 
+
 @cache_page(60 * 60)
-@register.inclusion_tag('chemie/sponsor_list.html')
+@register.inclusion_tag("chemie/sponsor_list.html")
 def show_sponsors():
     sponsors = Sponsor.objects.filter(end_date__gte=timezone.now())
-    return {'sponsors': sponsors}
+    return {"sponsors": sponsors}
+
