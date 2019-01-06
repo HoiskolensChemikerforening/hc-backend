@@ -35,15 +35,11 @@ VOTES_REQUIRED_FOR_VALID_ELECTION = 50
 
 class Candidate(models.Model):
     user = models.ForeignKey(
-        User,
-        related_name="candidate",
-        on_delete=models.CASCADE
-        )
+        User, related_name="candidate", on_delete=models.CASCADE
+    )
     votes = models.IntegerField(
-        verbose_name="Antall stemmer",
-        blank=True,
-        default=0
-        )
+        verbose_name="Antall stemmer", blank=True, default=0
+    )
     winner = models.BooleanField(default=False)
 
     def __str__(self):
@@ -54,22 +50,22 @@ class Position(models.Model):
     # Name of position
     position_name = models.CharField(
         max_length=100, verbose_name="Navn på verv"
-        )
+    )
 
     # Number of spots available
     spots = models.PositiveIntegerField(
         default=1, verbose_name="Antall plasser"
-        )
+    )
 
     # Candidates running for position
     candidates = models.ManyToManyField(
         Candidate, blank=True, related_name="positions"
-        )
+    )
 
     # Number of votes. Sum of all votes on candidates and blanks
     total_votes = models.PositiveIntegerField(
         default=0, verbose_name="Totalt stemmer mottatt"
-        )
+    )
 
     # Mark position as done when it has been closed for voting
     voting_done = models.BooleanField(default=False)
@@ -77,12 +73,12 @@ class Position(models.Model):
     # Winner candidates for current position
     winners = models.ManyToManyField(
         Candidate, blank=True, related_name="winners", default=None
-        )
+    )
 
     # Number of people voting
     number_of_voters = models.PositiveIntegerField(
         default=0, verbose_name="Antall stemmesedler avgitt"
-        )
+    )
 
     def delete_candidates(self, candidates):
         if type(candidates) is Candidate:
@@ -103,9 +99,10 @@ class Position(models.Model):
                 candidate.delete()
             else:
                 print(
-                    'Candidate {} was not related to position {}'
-                    .format(candidate, self)
+                    "Candidate {} was not related to position {}".format(
+                        candidate, self
                     )
+                )
         self.save()
 
     def __str__(self):
@@ -132,7 +129,7 @@ class Position(models.Model):
                             all_votes[candidate_id] = -1
                     winner_candidates = Candidate.objects.filter(
                         id__in=winner_ids
-                        )
+                    )
                     winners.extend(list(winner_candidates))
 
             # All winners are now stored in a list. Add this to self.winners
@@ -140,7 +137,7 @@ class Position(models.Model):
             """ self.number_of_voters += Profile.objects.filter(voted=True).count() """
             self.voting_done = True
             self.save()
-        election = Election.objects.latest('id')
+        election = Election.objects.latest("id")
         election.current_position_is_open = False
         election.current_position = None
         election.save()
@@ -150,25 +147,23 @@ class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(
-        Position,
-        blank=True,
-        related_name='election'
-        )
+        Position, blank=True, related_name="election"
+    )
     current_position = models.ForeignKey(
         Position,
         blank=True,
         null=True,
-        related_name='current_election',
-        on_delete=models.CASCADE
+        related_name="current_election",
+        on_delete=models.CASCADE,
     )
     # For sub-elections
     current_position_is_open = models.BooleanField(
         verbose_name="Det er åpent for stemming", default=False
-        )
+    )
     date = models.DateField(auto_now_add=True, blank=True)
 
     def __str__(self):
-        return '{}: {}'.format(self.id, self.date)
+        return "{}: {}".format(self.id, self.date)
 
     def add_position(self, positions):
         if type(positions) is Position:
@@ -201,9 +196,7 @@ class Election(models.Model):
             raise AttributeError
         for position in deletables:
             if position in self.positions.all():
-                position.delete_candidates(
-                    candidates=position.candidates.all()
-                    )
+                position.delete_candidates(candidates=position.candidates.all())
                 position.delete()
             else:
                 raise ValueError
