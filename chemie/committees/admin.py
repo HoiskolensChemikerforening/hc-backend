@@ -7,21 +7,26 @@ from chemie.events.admin import DropdownFilter
 
 @admin.register(Committee)
 class CommitteeAdmin(admin.ModelAdmin):
-    ordering = ('title',)
-    search_fields = ('title',)
-    list_display = ('title', 'email',)
+    ordering = ("title",)
+    search_fields = ("title",)
+    list_display = ("title", "email")
 
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
-    list_filter = ('can_manage_committee', ('committee', DropdownFilter),)
-    ordering = ('-committee',)
-    search_fields = ('users__username', 'users__first_name', 'users__last_name',
-                     'title',)
-    list_display = ('title', 'committee', 'email', 'can_manage_committee',)
+    list_filter = ("can_manage_committee", ("committee", DropdownFilter))
+    ordering = ("-committee",)
+    search_fields = (
+        "users__username",
+        "users__first_name",
+        "users__last_name",
+        "title",
+    )
+    list_display = ("title", "committee", "email", "can_manage_committee")
 
 
 @admin.register(OfficeApplication)
 class OfficeApplication(admin.ModelAdmin):
-    ordering = ('-created',)
-    list_display = ('author', 'access_card', 'created')
+    ordering = ("-created",)
+    list_display = ("author", "access_card", "created")
+
