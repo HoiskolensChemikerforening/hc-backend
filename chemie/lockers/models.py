@@ -22,8 +22,13 @@ class LockerManager(models.Manager):
 
 class Locker(models.Model):
     number = models.PositiveSmallIntegerField(unique=True)
-    owner = models.ForeignKey('Ownership', related_name="definite_owner",
-                              null=True, blank=True, on_delete=models.CASCADE)
+    owner = models.ForeignKey(
+        "Ownership",
+        related_name="definite_owner",
+        null=True,
+        blank=True,
+        on_delete=models.CASCADE,
+    )
 
     objects = LockerManager()
 
@@ -42,21 +47,25 @@ class Locker(models.Model):
         self.owner = None
 
     class Meta:
-        ordering = ('number',)
+        ordering = ("number",)
 
 
 class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, verbose_name="Fornavn")
     last_name = models.CharField(max_length=40, verbose_name="Etternavn")
-    email = models.EmailField(validators=[validate_NTNU], verbose_name="NTNU-epost")
+    email = models.EmailField(
+        validators=[validate_NTNU], verbose_name="NTNU-epost"
+    )
     created = models.DateField(auto_now=False, auto_now_add=True)
-    ownerships = models.ManyToManyField(Locker, through='Ownership')
+    ownerships = models.ManyToManyField(Locker, through="Ownership")
 
     def __str__(self):
         return self.first_name + " " + self.last_name
 
     def reached_limit(self):
-        user_locker_count = Ownership.objects.filter(user=self, is_active=True).count()
+        user_locker_count = Ownership.objects.filter(
+            user=self, is_active=True
+        ).count()
         return user_locker_count >= LOCKER_COUNT
 
     def fetch_lockers(self):
@@ -69,8 +78,12 @@ class OwnershipManager(models.Manager):
 
 
 class Ownership(models.Model):
-    locker = models.ForeignKey(Locker, related_name="indefinite_locker", on_delete=models.CASCADE)
-    user = models.ForeignKey(LockerUser, related_name="User", on_delete=models.CASCADE)
+    locker = models.ForeignKey(
+        Locker, related_name="indefinite_locker", on_delete=models.CASCADE
+    )
+    user = models.ForeignKey(
+        LockerUser, related_name="User", on_delete=models.CASCADE
+    )
     created = models.DateField(auto_now=False, auto_now_add=True)
     edited = models.DateField(auto_now=True, auto_now_add=False)
     is_active = models.BooleanField(default=False)
@@ -79,7 +92,9 @@ class Ownership(models.Model):
     objects = OwnershipManager()
 
     def __str__(self):
-        return "Locker {} registered to {}".format(self.locker.number, self.user)
+        return "Locker {} registered to {}".format(
+            self.locker.number, self.user
+        )
 
     def create_confirmation(self):
         confirmation_object = LockerToken.objects.create(ownership=self)
@@ -110,7 +125,9 @@ class LockerToken(models.Model):
                 raise ValidationError(_("Skapet er tatt"))
 
         if self.ownership.user.reached_limit():
-            raise ValidationError(_("Du har nådd maksgrensen på ", LOCKER_COUNT, " skap."))
+            raise ValidationError(
+                _("Du har nådd maksgrensen på ", LOCKER_COUNT, " skap.")
+            )
 
         # Activating ownership
         self.ownership.is_confirmed = True
@@ -133,4 +150,4 @@ class LockerToken(models.Model):
         self.delete()
 
     def get_absolute_url(self):
-        return reverse('bokskap:activate', kwargs={'code': self.key.hex})
+        return reverse("bokskap:activate", kwargs={"code": self.key.hex})
