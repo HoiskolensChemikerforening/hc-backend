@@ -38,8 +38,17 @@
 
       {% endform %}
 
-      <button class="waves-effect waves-light btn btn-primary" name="register_or_edit" type="submit">{% if registered %}
-        Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
+      <p><label>
+      <input type="checkbox" class="filled-in" id="tos" onclick="enableRegister()"/>
+      <span>Jeg har lest og samtykker til Høiskolens Chemikerforenings
+      <a href="https://chemie.no/wiki/webkom/samtykkeerklaering-arrangement/">
+      samtykkeerklæring for arrangementer</a></span>
+      </label></p>
+
+      <button class="waves-effect waves-light btn btn-primary" name="register_or_edit"
+      id="register_or_edit" type="submit" disabled>{% if registered %}
+      Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
+
     </form>
   {% else %}
 
@@ -50,3 +59,7 @@
     {% endif %}
 {% endif %}
 {% endblock content %}
+
+{% block footer_js_files %}
+  <script src="{% static "events/enable_register.js" %}"></script>
+{% endblock footer_js_files %}
