@@ -49,13 +49,8 @@ olefile==0.46
 passlib==1.7.1            # via django-hashers-passlib
 pillow==5.3.0             # via wiki
 pip-tools==3.1.0
-<<<<<<< Updated upstream
 pluggy==0.8.0             # via pytest
 psycopg2==2.7.6.1
-=======
-pluggy==0.6.0             # via pytest
-#psycopg2==2.7
->>>>>>> Stashed changes
 py==1.7.0                 # via pytest
 pycparser==2.19           # via cffi
 pyopenssl==18.0.0
