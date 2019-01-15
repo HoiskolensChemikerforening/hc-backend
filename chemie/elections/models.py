@@ -39,7 +39,7 @@ class Candidate(models.Model):
         related_name="candidate",
         on_delete=models.CASCADE
         )
-    votes = models.IntegerField(
+    votes = models.PositiveIntegerField(
         verbose_name="Antall stemmer",
         blank=True,
         default=0
