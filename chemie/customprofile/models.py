@@ -100,6 +100,7 @@ class Profile(models.Model):
     approved_terms = models.BooleanField(default=False)
 
     voted = models.BooleanField(default=False)
+    eligible_for_voting = models.BooleanField(default=False)
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name

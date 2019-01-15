@@ -105,6 +105,8 @@ class EditProfileForm(forms.ModelForm):
                   "address",
                   "relationship_status"
                 ]
+
+
 class ChangePasswordForm(forms.ModelForm):
         password = forms.CharField(widget=forms.PasswordInput, label="Old password")
         password_new = forms.CharField(widget=forms.PasswordInput, label="New password")
@@ -187,3 +189,7 @@ class ApprovedTermsForm(forms.Form):
     approval = forms.BooleanField(required=True,
                                   label='Jeg godkjenner ', validators=
                                   [lambda x: x == True])
+
+
+class GetRFIDForm(forms.Form):
+    rfid = forms.IntegerField(label='Scann studentkortet', max_value=20)
