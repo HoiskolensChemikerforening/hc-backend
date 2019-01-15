@@ -283,8 +283,7 @@ class SocialEventRegistration(BaseRegistration):
     companion = models.CharField(
         max_length=40,
         verbose_name="Navn på eksternt følge",
-        help_text="Navn på ekstern person. \
-            Ønske om bordkavaler sendes til arrangør.",
+        help_text="Navn på ekstern person. Ønske om bordkavaler sendes til arrangør.",
         null=True,
         blank=True
         )
