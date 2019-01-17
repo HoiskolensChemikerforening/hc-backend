@@ -184,7 +184,7 @@ USE_TZ = True
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = [
-    BASE_DIR.path('chemie/chemie/static/')(),
+    BASE_DIR.path('chemie/chemie/static')(),
 ]
 
 STATIC_ROOT = BASE_DIR.path('chemie/static/')()
