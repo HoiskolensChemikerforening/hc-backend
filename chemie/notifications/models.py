@@ -4,7 +4,7 @@ from push_notifications.models import APNSDevice, GCMDevice
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
 class Device(models.Model):
-    gcm_device = models.ForeignKey(GCMDevice, blank=False, related_name="Device")
+    gcm_device = models.ForeignKey(GCMDevice, blank=False, related_name="Device",on_delete=models.DO_NOTHING,)
     # apns_device = models.ForeignKey(APNSDevice, blank=False, related_name="Device")
     coffee_subscription = models.BooleanField(default=True)
     news_subscription = models.BooleanField(default=True)
