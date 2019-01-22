@@ -14,7 +14,7 @@ from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, User
+from chemie.customprofile.models import ProfileManager, User, Profile
 
 
 def election_is_open():
@@ -387,18 +387,24 @@ def change_rfid_status(request):
     if request.method == "POST":
         form = GetRFIDForm(request.POST)
         if form.is_valid():
-            rfid = form.rfid
+            rfid = form.cleaned_data.get('rfid')
             em_code = ProfileManager.rfid_to_em(rfid)
-            user = User.objects.filter(access_card=em_code).get()
-            eligible = user.profile.eligible_for_voting
+            try:
+                profile = Profile.objects.get(access_card=em_code)
+            except ObjectDoesNotExist:
+                return None
+            except None:
+                return None
+            except:
+                raise Http404
+            eligible = profile.eligible_for_voting
             if eligible:
-                user.profile.eligible_for_voting = False
-
+                profile.eligible_for_voting = False
             else:
-                user.profile.eligible_for_voting = True
-            user.profile.save()
-            status = user.profile.eligible_for_voting
-            messages.add_message(request, messages.SUCCESS, 'Statusen din ble endret til ')
+                profile.eligible_for_voting = True
+            profile.save()
+            status = profile.eligible_for_voting
+            messages.add_message(request, messages.SUCCESS, 'Statusen din ble endret til {}'.format(status))
         return redirect('elections:checkin')
     else:
         form = GetRFIDForm()

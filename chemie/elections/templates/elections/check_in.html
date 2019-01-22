@@ -1,14 +1,30 @@
-{% extends "chemie/base.html" %}
+{% extends "chemie/base_election.html" %}
 {% load material_form %}
-{% load staticfiles %}
-{% load thumbnail %}
-{% block nav_header %}
-  Profil
-{% endblock nav_header %}
 
-{% block nav_sub_header %}
-  Endre
-{% endblock nav_sub_header %}
 {% block content %}
 
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+<div align="center">
+    <h1 class="title is-2">Sjekk inn til valget</h1>
+    <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      {{ form }}
+      <input class="btn" type='submit' value='Sjekk inn'/>
+    </form>
+</div>
+
 {% endblock content %}
+
+{% block footer_script %}
+<script>
+  $(document).ready(function(){
+    $('#target').focus();
+  });
+</script>
+{% endblock footer_script %}
