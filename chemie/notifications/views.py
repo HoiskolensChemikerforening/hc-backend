@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect,reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from push_notifications.models import APNSDevice, GCMDevice
 from .models import Device
+from django.views.decorators.csrf import csrf_exempt
+import os
 # Create your views here.
 
 @login_required
@@ -19,16 +21,23 @@ def save_device(request):
                 Device.objects.create(gcm_device=device)  # saving device token with user
     return redirect(reverse('frontpage:home'))
 
-@login_required
-@permission_required('notifications.add_notification')
+
+@csrf_exempt
 def send_notification(request):
-    if request.method == 'POST':
-        topic = request.POST['topic']
-        if topic == "coffee":
-            devices = Device.objects.filter(coffee_subscription=True)
-            devices.send_notification("Kaffe", "Nytraktet kaffe på kontoret")
-        elif topic == "news":
-            message = request.post['message']
-            devices = Device.objects.filter(news_subscription=True)
-            devices.send_notification("Nyheter", message)
+    try:
+        if request.method == 'POST':
+            if request.POST['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
+                topic = request.POST['topic']
+                if topic == "coffee":
+                    devices = Device.objects.filter(coffee_subscription=True)
+                    #TODO create batch send
+                    [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in devices]
+                elif topic == "news":
+                    message = request.post['message']
+                    devices = Device.objects.filter(news_subscription=True)
+                    devices.send_notification("Nyheter", message)
+            else:
+                raise ConnectionAbortedError('Notification key is not valid')
+    except ConnectionAbortedError:
+        pass
     return redirect(reverse('frontpage:home'))
