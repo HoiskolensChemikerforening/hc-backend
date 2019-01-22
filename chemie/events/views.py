@@ -528,7 +528,10 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 event=self.object,
                 payment_status=False
             ).count()
-            context['percentage_paid'] = round((paid // (not_paid + paid))*100)
+            try:
+                context['percentage_paid'] = round((paid // (not_paid + paid))*100)
+            except ZeroDivisionError:
+                context['percentage_paid'] = 0
             context['total_paid'] = paid
             context['total_not_paid'] = not_paid
         return context
