@@ -250,8 +250,7 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-        "FCM_API_KEY": '<insert firebase API key here>'
-        #TODO Change the firebase to a webkom firebase
+        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or ''
 }
 
 # HAYSTACK CONFIGURATION
