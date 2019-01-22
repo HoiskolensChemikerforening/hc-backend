@@ -189,7 +189,7 @@ STATICFILES_DIRS = [
     BASE_DIR.path('chemie/chemie/static')(),
 ]
 
-STATIC_ROOT = BASE_DIR.path('chemie/static/')()
+STATIC_ROOT = BASE_DIR.path('chemie/static')()
 
 
 # MEDIA CONFIGURATION

@@ -1,12 +1,12 @@
 // Main script
 //----------------------------------------
 var config = { // Firebase front-end configurations
-    apiKey: "AIzaSyBiK7kDOZlPR_6QQyX8pxsrY3RHtlSKewQ",
-    authDomain: "chemie-4a9d7.firebaseapp.com",
-    databaseURL: "https://chemie-4a9d7.firebaseio.com",
-    projectId: "chemie-4a9d7",
-    storageBucket: "chemie-4a9d7.appspot.com",
-    messagingSenderId: "949677257241"
+    apiKey: "AIzaSyDZ8vCkF4evPls5g708fgYnV2grx4FmJkk",
+    authDomain: "chemie-da469.firebaseapp.com",
+    databaseURL: "https://chemie-da469.firebaseio.com",
+    projectId: "chemie-da469",
+    storageBucket: "chemie-da469.appspot.com",
+    messagingSenderId: "775983543184"
 };
 firebase.initializeApp(config);
 const messaging = firebase.messaging();
@@ -27,7 +27,7 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
             }
         });
         }
-    })
+    });
 
 messaging.onMessage(function (payload) {
     console.log(payload);
@@ -71,7 +71,7 @@ function postAjax(url, data) {
     xhr.open('POST', url);
     xhr.onreadystatechange = function () {
         if (xhr.readyState > 3 && xhr.status == 200) {
-            console.log("Device registred");
+            console.log("Device registered");
         }
     };
     xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
