@@ -1,10 +1,10 @@
 from django.shortcuts import render, redirect,reverse
 from django.contrib.auth.decorators import login_required, permission_required
 from push_notifications.models import APNSDevice, GCMDevice
-from .models import Device
+from .models import Device, CoffeeSubmission
 from django.views.decorators.csrf import csrf_exempt
 import os
-# Create your views here.
+
 
 @login_required
 def edit_notifications(request):
@@ -29,9 +29,12 @@ def send_notification(request):
             if request.POST['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
                 topic = request.POST['topic']
                 if topic == "coffee":
-                    gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
-                    #TODO create batch send
-                    [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
+                    if CoffeeSubmission.check_last_submission():
+                        gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
+                        # TODO create batch send
+                        # TODO delete Submission objects if they exeds a threshhold
+                        [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
+                        CoffeeSubmission.objects.create()
                 elif topic == "news":
                     message = request.post['message']
                     gcm_devices = Device.objects.filter(news_subscription=True,gcm_device__active=True)

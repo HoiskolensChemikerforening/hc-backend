@@ -1,8 +1,24 @@
 from django.db import models
 from push_notifications.models import APNSDevice, GCMDevice
+import datetime
 
 # Create your models here.
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
+
+
+class CoffeeSubmission(models.Model):
+    date = models.DateTimeField(auto_now_add=True)
+
+    @classmethod
+    def check_last_submission(cls):
+        if cls.objects.count() == 0:
+            return True
+        last_submission_date =cls.objects.latest('date').date.replace(tzinfo=None)
+        delta = datetime.datetime.now()-last_submission_date
+        #TODO check that 15 minutes have passed
+        if delta.seconds > 0:  # 15 minutes delay
+            return True
+        return False
 
 
 class Device(models.Model):
@@ -18,3 +34,5 @@ class Device(models.Model):
                                          "icon": HC_ICON,
                                      })
     # TODO: custom delete function that deletes all gcm/apns-devices when Device is deleted
+
+
