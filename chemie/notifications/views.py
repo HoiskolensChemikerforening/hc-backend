@@ -29,13 +29,13 @@ def send_notification(request):
             if request.POST['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
                 topic = request.POST['topic']
                 if topic == "coffee":
-                    devices = Device.objects.filter(coffee_subscription=True)
+                    gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
                     #TODO create batch send
-                    [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in devices]
+                    [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
                 elif topic == "news":
                     message = request.post['message']
-                    devices = Device.objects.filter(news_subscription=True)
-                    devices.send_notification("Nyheter", message)
+                    gcm_devices = Device.objects.filter(news_subscription=True,gcm_device__active=True)
+                    [device.send_notification("Nyheter", message) for device in gcm_devices]
             else:
                 raise ConnectionAbortedError('Notification key is not valid')
     except ConnectionAbortedError:

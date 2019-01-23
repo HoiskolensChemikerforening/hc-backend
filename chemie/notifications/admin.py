@@ -4,12 +4,7 @@ from django.contrib import admin
 from push_notifications.models import APNSDevice, GCMDevice
 
 
-
-class DeviceAdmin(admin.ModelAdmin):
-    fieldsets = [
-        ('Subscriptions', {'fields': ['coffee_subscription','news_subscription']}),
-        ('GCM Device',{'fields': ['gcm_device']})
-    ]
-
-admin.site.register(Device, DeviceAdmin)
+@admin.register(Device)
+class EventAdmin(admin.ModelAdmin):
+    list_display = ('gcm_device', 'coffee_subscription', 'news_subscription')
 
