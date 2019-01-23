@@ -7,16 +7,17 @@ HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
 
 class CoffeeSubmission(models.Model):
-    date = models.DateTimeField(auto_now_add=True)
+    date = models.DateTimeField(default=datetime.datetime.now)
 
     @classmethod
     def check_last_submission(cls):
         if cls.objects.count() == 0:
             return True
-        last_submission_date =cls.objects.latest('date').date.replace(tzinfo=None)
-        delta = datetime.datetime.now()-last_submission_date
-        #TODO check that 15 minutes have passed
-        if delta.seconds > 0:  # 15 minutes delay
+        last_submission_date =cls.objects.latest('id').date
+        delta = datetime.datetime.now()-last_submission_date.replace(tzinfo=None)
+        minutes_passed = divmod(delta.total_seconds(),60)
+        #TODO fix the timezone issue with last_submission is set to -1 hour
+        if minutes_passed[0] > 75:  # 15 minutes delay
             return True
         return False
 
