@@ -14,10 +14,9 @@ class CoffeeSubmission(models.Model):
         if cls.objects.count() == 0:
             return True
         last_submission_date =cls.objects.latest('id').date
-        delta = datetime.datetime.now()-last_submission_date.replace(tzinfo=None)
+        delta = datetime.datetime.utcnow()-last_submission_date.replace(tzinfo=None)
         minutes_passed = divmod(delta.total_seconds(),60)
-        #TODO fix the timezone issue with last_submission is set to -1 hour
-        if minutes_passed[0] > 75:  # 15 minutes delay
+        if minutes_passed[0] > 15:  # 15 minutes delay
             return True
         return False
 
