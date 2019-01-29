@@ -32,7 +32,6 @@ def send_notification(request):
                     if CoffeeSubmission.check_last_submission():
                         gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
                         # TODO create batch send
-                        # TODO delete Submission objects if they exeds a threshhold
                         [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
                         CoffeeSubmission.objects.create()
                 elif topic == "news":

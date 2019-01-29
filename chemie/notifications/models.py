@@ -1,6 +1,8 @@
 from django.db import models
 from push_notifications.models import APNSDevice, GCMDevice
 import datetime
+from django.db.models.signals import pre_delete
+from django.dispatch import receiver
 
 # Create your models here.
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
@@ -33,6 +35,11 @@ class Device(models.Model):
                                          "title": title,
                                          "icon": HC_ICON,
                                      })
-    # TODO: custom delete function that deletes all gcm/apns-devices when Device is deleted
+
+
+def delete_device_signal(sender, instance, **kwargs):
+    instance.gcm_device.delete()
+
+pre_delete.connect(delete_device_signal, sender=Device)
 
 
