@@ -1,4 +1,4 @@
-'from dal import autocomplete
+from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.models import User
