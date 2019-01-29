@@ -2,9 +2,8 @@ from django.db import models
 from push_notifications.models import APNSDevice, GCMDevice
 import datetime
 from django.db.models.signals import pre_delete
-from django.dispatch import receiver
 
-# Create your models here.
+
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
 
@@ -24,7 +23,7 @@ class CoffeeSubmission(models.Model):
 
 
 class Device(models.Model):
-    gcm_device = models.ForeignKey(GCMDevice, blank=False, related_name="Device", on_delete=models.DO_NOTHING)
+    gcm_device = models.ForeignKey(GCMDevice, related_name="Device", on_delete=models.DO_NOTHING)
     # apns_device = models.ForeignKey(APNSDevice, blank=False, related_name="Device")
     coffee_subscription = models.BooleanField(default=True)
     news_subscription = models.BooleanField(default=True)

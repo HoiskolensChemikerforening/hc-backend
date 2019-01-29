@@ -5,7 +5,6 @@ from .models import Device, CoffeeSubmission
 from django.views.decorators.csrf import csrf_exempt
 import os
 
-
 @login_required
 def edit_notifications(request):
     return render(request, 'editnotifications.html')
@@ -24,22 +23,19 @@ def save_device(request):
 
 @csrf_exempt
 def send_notification(request):
-    try:
-        if request.method == 'POST':
-            if request.POST['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
-                topic = request.POST['topic']
-                if topic == "coffee":
-                    if CoffeeSubmission.check_last_submission():
-                        gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
-                        # TODO create batch send
-                        [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
-                        CoffeeSubmission.objects.create()
-                elif topic == "news":
-                    message = request.post['message']
-                    gcm_devices = Device.objects.filter(news_subscription=True,gcm_device__active=True)
-                    [device.send_notification("Nyheter", message) for device in gcm_devices]
-            else:
-                raise ConnectionAbortedError('Notification key is not valid')
-    except ConnectionAbortedError:
-        pass
+    if request.method == 'POST':
+        if request.POST['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
+            topic = request.POST['topic']
+            if topic == "coffee":
+                if CoffeeSubmission.check_last_submission():
+                    gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
+                    # TODO create batch send
+                    [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
+                    CoffeeSubmission.objects.create()
+            elif topic == "news":
+                message = request.post['message']
+                gcm_devices = Device.objects.filter(news_subscription=True,gcm_device__active=True)
+                [device.send_notification("Nyheter", message) for device in gcm_devices]
+        else:
+            raise ConnectionAbortedError('Notification key is not valid')
     return redirect(reverse('frontpage:home'))
