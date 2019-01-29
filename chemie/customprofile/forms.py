@@ -192,4 +192,10 @@ class ApprovedTermsForm(forms.Form):
 
 
 class GetRFIDForm(forms.Form):
-    rfid = forms.CharField(label='Studentkortnr', max_length=20, strip=True, widget=forms.TextInput(attrs={'autofocus': True}))
+    rfid = forms.IntegerField(label='Studentkortnr', max_value=99999999999,
+                              widget=forms.NumberInput(attrs={'autofocus': True}))
+
+
+class AddCardForm(forms.Form):
+    username = forms.CharField(max_length=100, label='Brukernavn')
+    card_nr = forms.IntegerField(label='Studentkortnr', max_value=99999999999)

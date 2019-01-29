@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist
+from django.core.exceptions import ObjectDoesNotExist, ValidationError
+from django.http import Http404
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect, reverse
 from django.contrib import messages
@@ -13,7 +14,7 @@ from .models import Election, Position, Candidate
 from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 
 
-from chemie.customprofile.forms import GetRFIDForm
+from chemie.customprofile.forms import GetRFIDForm, AddCardForm
 from chemie.customprofile.models import ProfileManager, User, Profile
 
 
@@ -390,11 +391,9 @@ def change_rfid_status(request):
             rfid = form.cleaned_data.get('rfid')
             em_code = ProfileManager.rfid_to_em(rfid)
             try:
-                profile = Profile.objects.get(access_card=em_code)
-            except ObjectDoesNotExist:
-                return None
-            except None:
-                return None
+                profile = Profile.objects.get(access_card=em_code).first()
+            except ObjectDoesNotExist or None:
+                return redirect('elections:add_rfid')
             except:
                 raise Http404
             eligible = profile.eligible_for_voting
@@ -411,3 +410,18 @@ def change_rfid_status(request):
         context = {'form': form}
     return render(request, 'elections/check_in.html', context)
 
+
+def add_rfid(request):
+    if request.method == 'POST':
+        form = AddCardForm(request)
+        if form.is_valid:
+            username = form.cleaned_data.get('username')
+            try:
+                user = User.objects.get(username=username).first()
+            except:
+                messages.add_message(request, messages.ERROR, 'Det finnes ingen bruker med brukernavn {}'.format(username))
+            card_nr = form.cleaned_data.get('card_nr')
+            user.access_card = card_nr
+            messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
+            return redirect('elections:checkin')
+    return
