@@ -37,8 +37,6 @@ class FundsApplication(models.Model):
     # When application is sent
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
-    # Receipt
-    receipt = models.FileField(upload_to='funds_application', blank=True, null=True, verbose_name="Kvittering")
 
 
 class OfficeApplication(models.Model):
