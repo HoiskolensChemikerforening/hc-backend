@@ -103,9 +103,9 @@ def request_funds(request):
 @login_required()
 def request_office(request):
     office_form = PostOfficeForms(request.POST or None, initial={'student_username': ""})
-    access_card = request.user.profile.access_card
+    author = request.user #hente student username fra form
     already_applied = OfficeApplication.objects.filter(
-            access_card=access_card,
+            author=author,
             created__gte=timezone.now() - timezone.timedelta(days=30)).exists()
     if already_applied:
         messages.add_message(request,
@@ -117,8 +117,7 @@ def request_office(request):
         if already_applied:
             return redirect(reverse('frontpage:home'))
         instance = office_form.save(commit=False)
-        instance.author = request.user
-        instance.access_card = access_card
+        instance.author = author
         instance.student_username = office_form.cleaned_data.get('student_username')
         instance.save()
         messages.add_message(request,
@@ -130,7 +129,6 @@ def request_office(request):
 
     context = {
         "office_form": office_form,
-        "access_card": access_card,
         "already_applied": already_applied
     }
     return render(request, "home/office_access_form.html", context)

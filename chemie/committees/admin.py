@@ -1,6 +1,5 @@
 from django.contrib import admin
 
-from chemie.home.models import OfficeApplication
 from .models import Committee, Position
 from chemie.events.admin import DropdownFilter
 
@@ -19,9 +18,3 @@ class PositionAdmin(admin.ModelAdmin):
     search_fields = ('users__username', 'users__first_name', 'users__last_name',
                      'title',)
     list_display = ('title', 'committee', 'email', 'can_manage_committee',)
-
-
-@admin.register(OfficeApplication)
-class OfficeApplication(admin.ModelAdmin):
-    ordering = ('-created',)
-    list_display = ('author', 'access_card', 'created')
