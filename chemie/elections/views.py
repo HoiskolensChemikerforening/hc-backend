@@ -391,11 +391,10 @@ def change_rfid_status(request):
             rfid = form.cleaned_data.get('rfid')
             em_code = ProfileManager.rfid_to_em(rfid)
             try:
-                profile = Profile.objects.get(access_card=em_code).first()
-            except ObjectDoesNotExist or None:
-                return redirect('elections:add_rfid')
+                profile = Profile.objects.get(access_card=em_code)
             except:
-                raise Http404
+                messages.add_message(request, messages.ERROR, 'Studentkortnummeret er ikke registrert enda.')
+                return redirect('elections:add_rfid')
             eligible = profile.eligible_for_voting
             if eligible:
                 profile.eligible_for_voting = False
@@ -413,15 +412,21 @@ def change_rfid_status(request):
 
 def add_rfid(request):
     if request.method == 'POST':
-        form = AddCardForm(request)
-        if form.is_valid:
+        form = AddCardForm(request.POST)
+        if form.is_valid():
             username = form.cleaned_data.get('username')
             try:
-                user = User.objects.get(username=username).first()
+                user = User.objects.filter(username=username).first()
+                rfid = form.cleaned_data.get('card_nr')
+                card_nr = ProfileManager.rfid_to_em(rfid)
+                user.profile.access_card = card_nr
+                user.save()
+                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
+                return redirect('elections:checkin')
             except:
                 messages.add_message(request, messages.ERROR, 'Det finnes ingen bruker med brukernavn {}'.format(username))
-            card_nr = form.cleaned_data.get('card_nr')
-            user.access_card = card_nr
-            messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
-            return redirect('elections:checkin')
-    return
+        return redirect('elections:add_rfid')
+    else:
+        form = AddCardForm()
+        context = {'form': form}
+    return render(request, 'elections/add_card.html', context)

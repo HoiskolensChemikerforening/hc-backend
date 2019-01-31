@@ -197,5 +197,5 @@ class GetRFIDForm(forms.Form):
 
 
 class AddCardForm(forms.Form):
-    username = forms.CharField(max_length=100, label='Brukernavn')
+    username = forms.CharField(max_length=100, label='Brukernavn', widget=forms.TextInput(attrs={'autofocus': True}))
     card_nr = forms.IntegerField(label='Studentkortnr', max_value=99999999999)

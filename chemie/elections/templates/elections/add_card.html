@@ -12,10 +12,11 @@
 {% endif %}
 
 <div align="center">
-    <h1 class="title is-2">Sjekk inn til valget</h1>
+    <h1 class="title is-2">Legg til nytt Studentkortnummer</h1>
     <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
-      {{ form.rfid }}
-      <input class="btn" type='submit' value='Sjekk inn'/>
+      {{ form.username }} <br>
+      {{ form.card_nr }} <br>
+      <input class="btn" type='submit' value='Legg til Studentkortnummer'/>
     </form>
 </div>
 
