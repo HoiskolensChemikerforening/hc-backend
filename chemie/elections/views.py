@@ -36,15 +36,23 @@ def voting_is_active():
         active = True
     return active
 
+def clear_all_checkins():
+    #Get all profiles where eligible_for_voting is set to True and set False
+    checked = Profile.objects.filter(eligible_for_voting=True)
+    for profile in checked:
+        profile.eligible_for_voting = False
+        profile.save()
+
 
 @login_required
 def vote(request):
+    eligible = request.user.profile.eligible_for_voting
     try:
         election = Election.objects.latest('id')
         voted = request.user.profile.voted
-        context = {'election': election, 'voted': voted}
+        context = {'election': election, 'voted': voted, 'eligible': eligible}
     except:
-        context = {'election': None, 'voted': False}
+        context = {'election': None, 'voted': False, 'eligible': eligible}
     return render(request, 'elections/election/index.html', context)
 
 
@@ -66,9 +74,10 @@ def voting(request):
         return redirect('elections:vote')
     else:
         voted = request.user.profile.voted
+        eligible = request.user.profile.eligible_for_voting
         election = Election.objects.latest('id')
         if election.current_position_is_open:
-            if not voted:
+            if not voted and eligible:
                 form = CastVoteForm(request.POST or None, election=election)
                 if request.method == 'POST':
                     profile = request.user.profile
@@ -151,6 +160,7 @@ def admin_start_election(request):
         return redirect('elections:admin_register_positions')
     if request.method == 'POST':  # brukeren trykker på knappen
         Election.objects.create(is_open=True)
+        clear_all_checkins() # setter alle RFID-checkins til False (ingen har møtt opp enda)
         return redirect('elections:admin_register_positions')
     return render(request, 'elections/admin/admin_start_election.html')
 
@@ -393,7 +403,7 @@ def change_rfid_status(request):
             try:
                 profile = Profile.objects.get(access_card=em_code)
             except:
-                messages.add_message(request, messages.ERROR, 'Studentkortnummeret er ikke registrert enda.')
+                messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
                 return redirect('elections:add_rfid')
             eligible = profile.eligible_for_voting
             if eligible:
@@ -410,21 +420,23 @@ def change_rfid_status(request):
     return render(request, 'elections/check_in.html', context)
 
 
+@permission_required('elections.add_election')
+@login_required
 def add_rfid(request):
     if request.method == 'POST':
         form = AddCardForm(request.POST)
         if form.is_valid():
-            username = form.cleaned_data.get('username')
+            user = form.cleaned_data.get('user')
             try:
-                user = User.objects.filter(username=username).first()
+                profile = Profile.objects.get(user=user)
                 rfid = form.cleaned_data.get('card_nr')
                 card_nr = ProfileManager.rfid_to_em(rfid)
-                user.profile.access_card = card_nr
-                user.save()
+                profile.access_card = card_nr
+                profile.save()
                 messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
                 return redirect('elections:checkin')
             except:
-                messages.add_message(request, messages.ERROR, 'Det finnes ingen bruker med brukernavn {}'.format(username))
+                messages.add_message(request, messages.WARNING, 'Det finnes ingen bruker med brukernavn {}'.format(username))
         return redirect('elections:add_rfid')
     else:
         form = AddCardForm()

@@ -3,6 +3,8 @@ from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import ValidationError
+from dal import autocomplete
+from django.utils.translation import ugettext_lazy as _
 
 from chemie.chemie.settings import REGISTRATION_KEY
 from .models import Profile
@@ -196,6 +198,22 @@ class GetRFIDForm(forms.Form):
                               widget=forms.NumberInput(attrs={'autofocus': True}))
 
 
-class AddCardForm(forms.Form):
-    username = forms.CharField(max_length=100, label='Brukernavn', widget=forms.TextInput(attrs={'autofocus': True}))
-    card_nr = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
+class AddCardForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ('user', 'access_card',)
+        widgets = {
+            'user': autocomplete.ModelSelect2(
+                url='verv:user-autocomplete'
+            )
+        }
+        labels = {
+            'user': _('Bruker'),
+            'access_card': 'Studentkortnummer',
+        }
+    #username = forms.ModelChoiceField(
+     #   queryset=User.objects.all(),
+     #   widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+    #username = forms.CharField(max_length=100, label='Brukernavn', widget=forms.TextInput(attrs={'autofocus': True}))
+    #card_nr = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
+
