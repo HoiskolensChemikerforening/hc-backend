@@ -412,7 +412,10 @@ def change_rfid_status(request):
                 profile.eligible_for_voting = True
             profile.save()
             status = profile.eligible_for_voting
-            messages.add_message(request, messages.SUCCESS, 'Statusen din ble endret til {}'.format(status))
+            if status:
+                messages.add_message(request, messages.SUCCESS, '{} har sjekket inn'.format(profile.user.get_full_name()))
+            else:
+                messages.add_message(request, messages.WARNING, '{} har sjekket ut'.format(profile.user.get_full_name()))
         return redirect('elections:checkin')
     else:
         form = GetRFIDForm()
@@ -429,14 +432,14 @@ def add_rfid(request):
             user = form.cleaned_data.get('user')
             try:
                 profile = Profile.objects.get(user=user)
-                rfid = form.cleaned_data.get('card_nr')
+                rfid = form.cleaned_data.get('access_card')
                 card_nr = ProfileManager.rfid_to_em(rfid)
                 profile.access_card = card_nr
                 profile.save()
                 messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
                 return redirect('elections:checkin')
             except:
-                messages.add_message(request, messages.WARNING, 'Det finnes ingen bruker med brukernavn {}'.format(username))
+                messages.add_message(request, messages.WARNING, 'Det finnes ingen bruker med brukernavn {}'.format(user.username))
         return redirect('elections:add_rfid')
     else:
         form = AddCardForm()

@@ -198,22 +198,8 @@ class GetRFIDForm(forms.Form):
                               widget=forms.NumberInput(attrs={'autofocus': True}))
 
 
-class AddCardForm(forms.ModelForm):
-    class Meta:
-        model = Profile
-        fields = ('user', 'access_card',)
-        widgets = {
-            'user': autocomplete.ModelSelect2(
-                url='verv:user-autocomplete'
-            )
-        }
-        labels = {
-            'user': _('Bruker'),
-            'access_card': 'Studentkortnummer',
-        }
-    #username = forms.ModelChoiceField(
-     #   queryset=User.objects.all(),
-     #   widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
-    #username = forms.CharField(max_length=100, label='Brukernavn', widget=forms.TextInput(attrs={'autofocus': True}))
-    #card_nr = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
-
+class AddCardForm(forms.Form):
+    user = forms.ModelChoiceField(
+       queryset=User.objects.all(),
+       widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+    access_card = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
