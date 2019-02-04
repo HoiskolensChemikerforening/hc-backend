@@ -127,6 +127,8 @@ def edit_committee_memberships(request, slug):
                 "Endringene ble lagret.",
                 extra_tags="Flott!",
             )
+            committee = get_object_or_404(Committee, slug=slug)
+            return HttpResponseRedirect(committee.get_absolute_url())
     else:
         for form in formset:
             # Dynamically change each max-selected-items

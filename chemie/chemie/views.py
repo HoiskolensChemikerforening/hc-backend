@@ -5,7 +5,7 @@ from django.shortcuts import render
 from .models import pictures_for_404
 
 
-def page_not_found(request):
+def page_not_found(request, exception):
     img_404 = pictures_for_404.objects.all()
     try:
         random_image = choice(img_404)

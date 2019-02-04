@@ -37,9 +37,11 @@ class Candidate(models.Model):
     user = models.ForeignKey(
         User, related_name="candidate", on_delete=models.CASCADE
     )
-    votes = models.IntegerField(
-        verbose_name="Antall stemmer", blank=True, default=0
-    )
+    votes = models.PositiveIntegerField(
+        verbose_name="Antall stemmer",
+        blank=True,
+        default=0
+        )
     winner = models.BooleanField(default=False)
 
     def __str__(self):
