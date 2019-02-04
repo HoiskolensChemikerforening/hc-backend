@@ -381,8 +381,8 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
         return render(request, self.template_name, context)
 
     def post(self, request, pk):
-        registration_form = self.registration_form(request.POST)
         self.object = get_object_or_404(self.model, pk=pk)
+        registration_form = self.registration_form(request.POST, **self.get_form_kwargs())
         event = self.object
         self.pk = pk
         if registration_form.is_valid():
@@ -396,6 +396,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
         context = {
             'registration_form': registration_form,
             'event': self.object,
+            "allowed_grade": self.object.allowed_grade(request.user)
         }
         return render(request, self.template_name, context)
 

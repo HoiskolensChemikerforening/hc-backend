@@ -155,6 +155,11 @@ class RegisterBedpresForm(BaseRegisterEventForm):
 
 
 class SocialRegisterUserForm(forms.ModelForm):
+    approval = forms.BooleanField(
+        required=True,
+        label='Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer',
+        validators=[lambda x: x == True])
+
     class Meta:
         model = SocialEventRegistration
 

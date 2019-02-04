@@ -1,6 +1,9 @@
-//Enables register button if event TOS is accepted
+//Enables register button if events TOS is accepted
 
-function enableRegister(){
-    let tos = document.getElementById('tos');
-    document.getElementById('register_or_edit').disabled = !tos.checked;
-}
+let tos = document.getElementById('id_approval');
+let btn = document.getElementById('register_or_edit');
+
+$(document.getElementById('id_approval')).change(
+    function() {
+        btn.disabled = !tos.checked;
+    });
