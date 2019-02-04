@@ -65,15 +65,10 @@ class OfficeApplication(models.Model):
     )
     # When application is sent
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    # The users accesscard
-    access_card = models.CharField(
-        max_length=20, blank=True, null=True, verbose_name="Studentkortnummer"
-    )
     # The users student username
     student_username = models.CharField(
         max_length=20, default="NOT_VALID", verbose_name="Studentbrukernavn"
     )
 
     def __str__(self):
-        return f"{self.author.get_full_name()} - {self.student_username} - {self.access_card}"
-
+        return f'{self.author.get_full_name()} - {self.student_username}'
