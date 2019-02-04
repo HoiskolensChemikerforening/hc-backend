@@ -4,7 +4,6 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import ValidationError
 from dal import autocomplete
-from django.utils.translation import ugettext_lazy as _
 
 from chemie.chemie.settings import REGISTRATION_KEY
 from .models import Profile

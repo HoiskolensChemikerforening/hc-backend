@@ -77,7 +77,7 @@ def voting(request):
         eligible = request.user.profile.eligible_for_voting
         election = Election.objects.latest('id')
         if election.current_position_is_open:
-            if not voted and eligible:
+            if eligible and not voted:
                 form = CastVoteForm(request.POST or None, election=election)
                 if request.method == 'POST':
                     profile = request.user.profile
