@@ -5,12 +5,14 @@
 #    pip-compile --output-file development.txt development.in
 #
 apipkg==1.5               # via execnet
+appdirs==1.4.3            # via black
 asn1crypto==0.24.0        # via cryptography
 atomicwrites==1.2.1       # via pytest
-attrs==18.2.0             # via pytest
+attrs==18.2.0             # via black, pytest
+black==18.9b0
 bleach==2.1.4             # via wiki
 cffi==1.11.5              # via cryptography
-click==7.0                # via pip-tools
+click==7.0                # via black, pip-tools
 coverage==4.5.2
 cryptography==2.4.2       # via pyopenssl
 django-autocomplete-light==3.3.2
@@ -65,6 +67,7 @@ six==1.12.0               # via bleach, cryptography, django-extensions, faker, 
 sorl-thumbnail==12.5.0    # via wiki
 sqlparse==0.2.4           # via django-debug-toolbar
 text-unidecode==1.2       # via faker
+toml==0.10.0              # via black
 webencodings==0.5.1       # via html5lib
 werkzeug==0.14.1
 wiki==0.4.2

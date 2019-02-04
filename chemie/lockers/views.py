@@ -8,12 +8,18 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 
 from .email import send_my_lockers_mail, send_activation_mail
-from .forms import RegisterExternalLockerUserForm, MyLockersForm, ConfirmOwnershipForm
+from .forms import (
+    RegisterExternalLockerUserForm,
+    MyLockersForm,
+    ConfirmOwnershipForm,
+)
 from .models import Locker, LockerUser, Ownership, LockerToken
 
 
 def view_lockers(request, page=1):
-    free_locker_list = Locker.objects.filter(owner__isnull=True).prefetch_related('owner')
+    free_locker_list = Locker.objects.filter(
+        owner__isnull=True
+    ).prefetch_related("owner")
     free_lockers = Locker.objects.filter(owner__isnull=True).count()
     paginator = Paginator(free_locker_list, 40)
 
@@ -24,17 +30,14 @@ def view_lockers(request, page=1):
     except EmptyPage:
         lockers = paginator.page(paginator.num_pages)
 
-    context = {
-        "lockers": lockers,
-        "free_lockers": free_lockers,
-    }
-    return render(request, 'lockers/list.html', context)
+    context = {"lockers": lockers, "free_lockers": free_lockers}
+    return render(request, "lockers/list.html", context)
 
 
 def my_lockers(request):
     form = MyLockersForm(request.POST or None)
     if request.POST:
-        email = form.data.get('email')
+        email = form.data.get("email")
         if form.is_valid():
             try:
                 locker_user = LockerUser.objects.get(email=email)
@@ -43,16 +46,23 @@ def my_lockers(request):
                     raise ObjectDoesNotExist
 
                 send_my_lockers_mail(email, lockers, locker_user)
-                messages.add_message(request, messages.SUCCESS, 'Eposten ble sendt!', extra_tags="Dine skap")
-                return redirect(reverse('frontpage:home'))
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Eposten ble sendt!",
+                    extra_tags="Dine skap",
+                )
+                return redirect(reverse("frontpage:home"))
             except ObjectDoesNotExist:
-                messages.add_message(request, messages.ERROR, 'Ingen bokskap ble funnet på denne eposten.',
-                                     extra_tags="Ikke funnet")
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Ingen bokskap ble funnet på denne eposten.",
+                    extra_tags="Ikke funnet",
+                )
 
-    context = {
-        'form': form,
-    }
-    return render(request, 'lockers/mineskap.html', context)
+    context = {"form": form}
+    return render(request, "lockers/mineskap.html", context)
 
 
 def register_locker(request, number):
@@ -81,63 +91,79 @@ def register_locker(request, number):
             # Create confirmation link object
             token = new_ownership.create_confirmation()
             send_activation_mail(user, token)
-            messages.add_message(request, messages.SUCCESS,
-                                 'Bokskapet er nesten reservert! '
-                                 'En epost har blitt sendt til deg med videre instrukser for å bekrefte epostaddressen din.',
-                                 extra_tags='Boskap - reservasjon')
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Bokskapet er nesten reservert! "
+                "En epost har blitt sendt til deg med videre instrukser for å bekrefte epostaddressen din.",
+                extra_tags="Boskap - reservasjon",
+            )
 
-            return redirect(reverse('frontpage:home'))
+            return redirect(reverse("frontpage:home"))
 
-        context = {
-            "form": form_data,
-        }
-        return render(request, 'lockers/registrer.html', context)
+        context = {"form": form_data}
+        return render(request, "lockers/registrer.html", context)
 
 
 def activate_ownership(request, code):
     try:
         activator = LockerToken.objects.get(key=code)
     except ObjectDoesNotExist:
-        messages.add_message(request, messages.ERROR,
-                                     'Aktiveringsnøkkelen er allerede brukt eller har utgått.',
-                                     extra_tags='Ugyldig nøkkel')
+        messages.add_message(
+            request,
+            messages.ERROR,
+            "Aktiveringsnøkkelen er allerede brukt eller har utgått.",
+            extra_tags="Ugyldig nøkkel",
+        )
         raise Http404
     agreed_to_terms = ConfirmOwnershipForm(request.POST or None)
-    if request.method == 'POST':
+    if request.method == "POST":
         if agreed_to_terms.is_valid():
             try:
                 activator.activate()
             except ValidationError:
-                messages.add_message(request, messages.ERROR,
-                                     'Bokskapet ble reservert før du rakk å reservere det.',
-                                     extra_tags='Bokskap - opptatt')
-                return redirect(reverse('bokskap:index'))
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Bokskapet ble reservert før du rakk å reservere det.",
+                    extra_tags="Bokskap - opptatt",
+                )
+                return redirect(reverse("bokskap:index"))
 
-            messages.add_message(request, messages.SUCCESS, 'Bokskapet ble aktivert og er nå ditt =D',
-                                 extra_tags='Fullført')
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Bokskapet ble aktivert og er nå ditt =D",
+                extra_tags="Fullført",
+            )
 
-            return redirect(reverse('frontpage:home'))
+            return redirect(reverse("frontpage:home"))
 
-    return render(request, 'lockers/confirm_locker.html', context={'form':agreed_to_terms})
+    return render(
+        request,
+        "lockers/confirm_locker.html",
+        context={"form": agreed_to_terms},
+    )
 
 
-@permission_required('lockers.delete_locker')
+@permission_required("lockers.delete_locker")
 def manage_lockers(request):
-    lockers = Locker.objects.prefetch_related('indefinite_locker__user')\
-        .prefetch_related('indefinite_locker__is_confirmed__exact=True')\
-        .select_related('owner__user')
-    context = {
-        "request": request,
-        "lockers": lockers
-    }
-    return render(request, 'lockers/administrer.html', context)
+    lockers = (
+        Locker.objects.prefetch_related("indefinite_locker__user")
+        .prefetch_related("indefinite_locker__is_confirmed__exact=True")
+        .select_related("owner__user")
+    )
+    context = {"request": request, "lockers": lockers}
+    return render(request, "lockers/administrer.html", context)
 
 
-@permission_required('lockers.delete_locker')
+@permission_required("lockers.delete_locker")
 def clear_locker(request, locker_number):
     locker = get_object_or_404(Locker, number=locker_number)
     if locker.owner:
         locker.clear()
         locker.save()
 
-    return redirect(reverse('bokskap:administrate') + '#locker{}'.format(locker_number))
+    return redirect(
+        reverse("bokskap:administrate") + "#locker{}".format(locker_number)
+    )
