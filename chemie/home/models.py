@@ -38,7 +38,6 @@ class FundsApplication(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
 
 
-
 class OfficeApplication(models.Model):
     # Name of person who sent application
     author = models.ForeignKey(User, verbose_name='Innsender', on_delete=models.CASCADE)
