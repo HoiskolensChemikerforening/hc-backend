@@ -6,9 +6,9 @@ from chemie.events.admin import DropdownFilter
 
 @admin.register(Committee)
 class CommitteeAdmin(admin.ModelAdmin):
-    ordering = ('title',)
-    search_fields = ('title',)
-    list_display = ('title', 'email',)
+    ordering = ("title",)
+    search_fields = ("title",)
+    list_display = ("title", "email")
 
 
 @admin.register(Position)

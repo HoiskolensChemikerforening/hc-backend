@@ -6,13 +6,15 @@ from django.utils import timezone
 
 from chemie.lockers.models import LOCKER_COUNT
 from chemie.lockers.models import LockerUser, Locker, LockerToken, Ownership
-from chemie.lockers.management.commands.resetlockerstatus import reset_locker_ownerships
+from chemie.lockers.management.commands.resetlockerstatus import (
+    reset_locker_ownerships,
+)
 
 
 def create_user_with_locker(count):
-    user = LockerUser.objects.create(first_name="Glenn",
-                                     last_name="Gregor",
-                                     email='glenny@test.no')
+    user = LockerUser.objects.create(
+        first_name="Glenn", last_name="Gregor", email="glenny@test.no"
+    )
     for i in range(count):
         locker = Locker.objects.create(number=i)
         ownership = Ownership.objects.create(locker=locker, user=user)
@@ -22,14 +24,14 @@ def create_user_with_locker(count):
 
 class LockerUserLimitTest(TestCase):
     def setUp(self):
-        create_user_with_locker(LOCKER_COUNT-1)
+        create_user_with_locker(LOCKER_COUNT - 1)
 
     def test_not_reached_limit(self):
-        ownership = Ownership.objects.filter(user__email='glenny@test.no')[0]
+        ownership = Ownership.objects.filter(user__email="glenny@test.no")[0]
         self.assertEqual(ownership.reached_limit(), False)
 
     def test_reached_limit(self):
-        ownership = Ownership.objects.filter(user__email='glenny@test.no')[0]
+        ownership = Ownership.objects.filter(user__email="glenny@test.no")[0]
         user = ownership.user
 
         locker = Locker.objects.create(number=LOCKER_COUNT)
@@ -42,19 +44,22 @@ class LockerUserLimitTest(TestCase):
 
 class TokenTest(TestCase):
     # Fetch all templates for sending mail
-    fixtures = ['fixtures/email-templates.json']
-    def setUp(self):
-        user = LockerUser.objects.create(first_name="Glenn",
-                                         last_name="Gregor",
-                                         email='glenny@test.no')
+    fixtures = ["fixtures/email-templates.json"]
 
-        user2 = LockerUser.objects.create(first_name="Stale",
-                                         last_name="Staler",
-                                         email='stale@test.no')
+    def setUp(self):
+        user = LockerUser.objects.create(
+            first_name="Glenn", last_name="Gregor", email="glenny@test.no"
+        )
+
+        user2 = LockerUser.objects.create(
+            first_name="Stale", last_name="Staler", email="stale@test.no"
+        )
 
         locker = Locker.objects.create(number=1)
         self.ownership = Ownership.objects.create(locker=locker, user=user)
-        self.disabled_ownership = Ownership.objects.create(locker=locker, user=user2)
+        self.disabled_ownership = Ownership.objects.create(
+            locker=locker, user=user2
+        )
         token = LockerToken.objects.create(ownership=self.ownership)
 
     def test_locker_inactive(self):
@@ -86,11 +91,13 @@ class TokenTest(TestCase):
         LockerToken.objects.prune_expired()
         # Try to get the recently pruned locker token,
         # but it raises an object does not exist since it was just pruned.
-        self.assertRaises(ObjectDoesNotExist, LockerToken.objects.get, ownership=ownership)
+        self.assertRaises(
+            ObjectDoesNotExist, LockerToken.objects.get, ownership=ownership
+        )
 
     def test_reset_idle(self):
         locker = Locker.objects.get(number=1)
-        user = LockerUser.objects.get(email='glenny@test.no')
+        user = LockerUser.objects.get(email="glenny@test.no")
         ownership = Ownership.objects.get(locker=locker, user=user)
         token = LockerToken.objects.get(ownership=ownership)
         token.activate()
@@ -102,13 +109,13 @@ class TokenTest(TestCase):
         locker.refresh_from_db()
         self.assertEqual(locker.owner, None)
         self.assertEqual(locker.number, 1)
-        self.assertEqual(user.email, 'glenny@test.no')
+        self.assertEqual(user.email, "glenny@test.no")
         self.assertEqual(ownership.locker.number, 1)
-        self.assertEqual(ownership.user.email, 'glenny@test.no')
+        self.assertEqual(ownership.user.email, "glenny@test.no")
 
     def test_active_locker_user_kept_after_reset(self):
         locker = Locker.objects.get(number=1)
-        user = LockerUser.objects.get(email='glenny@test.no')
+        user = LockerUser.objects.get(email="glenny@test.no")
         ownership = Ownership.objects.get(locker=locker, user=user)
         token = LockerToken.objects.get(ownership=ownership)
         token.activate()
@@ -120,9 +127,8 @@ class TokenTest(TestCase):
     def test_reset_locker_ownerships(self):
         # Fetch locker, user, ownership and attach locker <=> ownership
         locker = Locker.objects.get(number=1)
-        user = LockerUser.objects.get(email='glenny@test.no')
-        ownership = Ownership.objects.get(locker=locker,
-                                          user=user)
+        user = LockerUser.objects.get(email="glenny@test.no")
+        ownership = Ownership.objects.get(locker=locker, user=user)
         token = LockerToken.objects.get(ownership=ownership)
         token.activate()
         locker.refresh_from_db()

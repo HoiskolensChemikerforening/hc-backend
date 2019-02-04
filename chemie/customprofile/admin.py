@@ -14,31 +14,39 @@ def export_csv(modeladmin, request, queryset):
     import csv
     from django.utils.encoding import smart_str
     from django.http.response import HttpResponse
-    response = HttpResponse(content_type='text/csv')
-    response['Content-Disposition'] = 'attachment; filename=users.csv'
+
+    response = HttpResponse(content_type="text/csv")
+    response["Content-Disposition"] = "attachment; filename=users.csv"
     writer = csv.writer(response, csv.excel)
-    response.write(u'\ufeff'.encode('utf8')) # BOM (optional...Excel needs it to open UTF-8 file properly)
-    writer.writerow([
-        smart_str(u"First name"),
-        smart_str(u"Last name"),
-        smart_str(u"Email"),
-        smart_str(u"Grade"),
-        smart_str(u"Username"),
-    ])
+    response.write(
+        u"\ufeff".encode("utf8")
+    )  # BOM (optional...Excel needs it to open UTF-8 file properly)
+    writer.writerow(
+        [
+            smart_str(u"First name"),
+            smart_str(u"Last name"),
+            smart_str(u"Email"),
+            smart_str(u"Grade"),
+            smart_str(u"Username"),
+        ]
+    )
     for obj in queryset:
         try:
             grade = obj.profile.grade
         except ObjectDoesNotExist:
-            grade = ''
+            grade = ""
 
-        writer.writerow([
-            smart_str(obj.first_name),
-            smart_str(obj.last_name),
-            smart_str(obj.email),
-            smart_str(grade),
-            smart_str(obj.username),
-        ])
+        writer.writerow(
+            [
+                smart_str(obj.first_name),
+                smart_str(obj.last_name),
+                smart_str(obj.email),
+                smart_str(grade),
+                smart_str(obj.username),
+            ]
+        )
     return response
+
 
 export_csv.short_description = "Export CSV"
 
@@ -46,13 +54,13 @@ export_csv.short_description = "Export CSV"
 class UserCreateForm(OldUserChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields['email'].required = True
-        self.fields['first_name'].required = True
-        self.fields['last_name'].required = True
+        self.fields["email"].required = True
+        self.fields["first_name"].required = True
+        self.fields["last_name"].required = True
 
 
 class DropdownFilter(ChoicesFieldListFilter):
-    template = 'admin/dropdown_filter.html'
+    template = "admin/dropdown_filter.html"
 
 
 class UserInline(admin.StackedInline):
@@ -65,14 +73,23 @@ class UserAdmin(BuiltinUserAdmin):
 
     form = UserCreateForm
     fieldsets = (
-        (None, {'fields': ('username', 'password')}),
-        (_('Personal info'), {'fields': ('first_name', 'last_name', 'email')}),
-        (_('Permissions'), {'fields': ('is_active', 'is_staff', 'is_superuser')}),
-        (_('Important dates'), {'fields': ('last_login', 'date_joined')}),
+        (None, {"fields": ("username", "password")}),
+        (_("Personal info"), {"fields": ("first_name", "last_name", "email")}),
+        (
+            _("Permissions"),
+            {"fields": ("is_active", "is_staff", "is_superuser")},
+        ),
+        (_("Important dates"), {"fields": ("last_login", "date_joined")}),
     )
-    list_filter = ('is_staff', 'is_superuser', 'is_active', ('profile__grade', DropdownFilter),
-                   ('profile__start_year', DropdownFilter), ('profile__end_year', DropdownFilter),
-                   'profile__relationship_status')
+    list_filter = (
+        "is_staff",
+        "is_superuser",
+        "is_active",
+        ("profile__grade", DropdownFilter),
+        ("profile__start_year", DropdownFilter),
+        ("profile__end_year", DropdownFilter),
+        "profile__relationship_status",
+    )
     inlines = [UserInline]
     actions = [export_csv]
 

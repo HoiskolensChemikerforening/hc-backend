@@ -9,7 +9,11 @@ from post_office.models import Email
 from chemie.customprofile.factories import RandomProfileFactory
 from chemie.customprofile.models import GRADES
 from .factories import BedpresEventFactory, SocialEventFactory
-from ..models import BedpresRegistration, SocialEventRegistration, REGISTRATION_STATUS
+from ..models import (
+    BedpresRegistration,
+    SocialEventRegistration,
+    REGISTRATION_STATUS,
+)
 from ..views import set_user_event_status
 
 
@@ -26,9 +30,13 @@ def test_registration_lists():
     )
     profile_one = RandomProfileFactory(grade=GRADES.FIRST)
     profile_two = RandomProfileFactory(grade=GRADES.FIRST)
-    reg_one = BedpresRegistration.objects.create(event=bedpres, user=profile_one.user)
+    reg_one = BedpresRegistration.objects.create(
+        event=bedpres, user=profile_one.user
+    )
     reg_one.save()
-    reg_two = BedpresRegistration.objects.create(event=bedpres, user=profile_two.user)
+    reg_two = BedpresRegistration.objects.create(
+        event=bedpres, user=profile_two.user
+    )
     reg_two.save()
     assert reg_one.status == REGISTRATION_STATUS.INTERESTED
     assert reg_two.status == REGISTRATION_STATUS.INTERESTED
@@ -52,7 +60,7 @@ def test_registration_lists():
 
 
 class TestDateRegistrationCriteria:
-    fake_now = '2052-12-01 00:30'
+    fake_now = "2052-12-01 00:30"
 
     @freeze_time(fake_now)
     @pytest.mark.django_db
@@ -64,7 +72,7 @@ class TestDateRegistrationCriteria:
             deregister_deadline=now + timedelta(days=3),
             date=now + timedelta(days=4),
             sluts=1,
-            allowed_grades=[2, ],
+            allowed_grades=[2],
         )
 
         # It is not possible to register yet
@@ -96,7 +104,7 @@ def test_grade_guarding():
         register_deadline=now + timedelta(days=1),
         deregister_deadline=now + timedelta(days=2),
         sluts=1,
-        allowed_grades=[2, ],
+        allowed_grades=[2],
     )
     profile_with_correct_grade = RandomProfileFactory(grade=2)
     profile_with_incorrect_grade = RandomProfileFactory(grade=3)
@@ -106,10 +114,10 @@ def test_grade_guarding():
     assert bedpres.allowed_grade(profile_with_incorrect_grade.user) is False
 
 
-@freeze_time('2052-12-01 00:30')
+@freeze_time("2052-12-01 00:30")
 @pytest.mark.django_db
 def test_signup_email():
-    call_command('loaddata', './fixtures/email-templates.json')
+    call_command("loaddata", "./fixtures/email-templates.json")
 
     now = timezone.now()
     bedpres = BedpresEventFactory(
@@ -118,10 +126,12 @@ def test_signup_email():
         register_deadline=now + timedelta(days=1),
         deregister_deadline=now + timedelta(days=2),
         sluts=0,
-        allowed_grades=[1, ],
+        allowed_grades=[1],
     )
     user_profile = RandomProfileFactory(grade=1)
-    registration = BedpresRegistration.objects.create(event=bedpres, user=user_profile.user)
+    registration = BedpresRegistration.objects.create(
+        event=bedpres, user=user_profile.user
+    )
     registration.save()
     set_user_event_status(event=bedpres, registration=registration)
     bedpres.sluts = 1
@@ -136,14 +146,14 @@ def test_signup_email():
 
     assert bedpres.location in email.message
     assert bedpres.location in email.html_message
-    assert 'Du er påmeldt' in email.message
-    assert 'Du er påmeldt' in email.html_message
+    assert "Du er påmeldt" in email.message
+    assert "Du er påmeldt" in email.html_message
     # Notice that the dates are 1 hour off the frozen time
     # This is due to the timezone settings
-    assert '3. desember - 01:30' in email.message
-    assert '3. desember - 01:30' in email.html_message
-    assert '4. desember - 01:30' in email.message
-    assert '4. desember - 01:30' in email.html_message
+    assert "3. desember - 01:30" in email.message
+    assert "3. desember - 01:30" in email.html_message
+    assert "4. desember - 01:30" in email.message
+    assert "4. desember - 01:30" in email.html_message
 
 
 @pytest.mark.django_db
@@ -159,7 +169,9 @@ def test_social_event_attendee_count():
         companion=True,
     )
     profile = RandomProfileFactory(grade=GRADES.FIRST)
-    registration = SocialEventRegistration.objects.create(event=social, user=profile.user, companion="Someone")
+    registration = SocialEventRegistration.objects.create(
+        event=social, user=profile.user, companion="Someone"
+    )
     registration.save()
     set_user_event_status(event=social, registration=registration)
     assert social.registered_users() == 2

@@ -16,18 +16,16 @@ VALID_TIME = 2
 
 # TODO: Decide how to handle weird students aka "PI" / 6th ++ year students
 GRADES = Choices(
-    ('FIRST', 1, 'Første'),
-    ('SECOND', 2, 'Andre'),
-    ('THIRD', 3, 'Tredje'),
-    ('FOURTH', 4, 'Fjerde'),
-    ('FIFTH', 5, 'Femte'),
-    ('DONE', 6, 'Ferdig'),
+    ("FIRST", 1, "Første"),
+    ("SECOND", 2, "Andre"),
+    ("THIRD", 3, "Tredje"),
+    ("FOURTH", 4, "Fjerde"),
+    ("FIFTH", 5, "Femte"),
+    ("DONE", 6, "Ferdig"),
 )
 
 RELATIONSHIP_STATUS = Choices(
-    ('SINGLE', 1, 'Singel'),
-    ('TAKEN', 2, 'Opptatt'),
-    ('NSA', 3, 'Hemmelig!'),
+    ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!")
 )
 
 COMMENCE_YEAR = 1980
@@ -40,8 +38,16 @@ YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 
 class ProfileManager(models.Manager):
     def search_name(self, list):
-        result = self.filter(reduce(lambda x, y: x | y,
-                    [Q(user__first_name__contains=word) | Q(user__last_name__contains=word) for word in list]))
+        result = self.filter(
+            reduce(
+                lambda x, y: x | y,
+                [
+                    Q(user__first_name__contains=word)
+                    | Q(user__last_name__contains=word)
+                    for word in list
+                ],
+            )
+        )
         return result
 
     def get_profile_from_em(self, code):
@@ -61,39 +67,66 @@ class ProfileManager(models.Manager):
         binary = bin(int(code))[2:]
 
         # Pad with zeroes on left side
-        padded = '0' * (8 - len(binary) % 8) + binary
+        padded = "0" * (8 - len(binary) % 8) + binary
 
         # Split into 8-bit groups
-        chunked = [padded[(i * 8):(i + 1) * 8] for i in range(0, len(padded) // 8)]
+        chunked = [
+            padded[(i * 8) : (i + 1) * 8] for i in range(0, len(padded) // 8)
+        ]
 
         # Reverse all elements in each group, join groups together
-        reversed = ''.join([ci[::-1] for ci in chunked])
+        reversed = "".join([ci[::-1] for ci in chunked])
 
         # Convert binary back to int
         return int(reversed, 2)
 
 
 class Profile(models.Model):
-    user = models.OneToOneField(User, related_name='profile', on_delete=models.CASCADE)
+    user = models.OneToOneField(
+        User, related_name="profile", on_delete=models.CASCADE
+    )
 
-    grade = models.PositiveSmallIntegerField(choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn")
-    start_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR, verbose_name="Startår")
-    end_year = models.PositiveSmallIntegerField(choices=YEARS, default=CURRENT_YEAR + STIPULATED_TIME,
-                                                verbose_name="Estimert ferdig")
+    grade = models.PositiveSmallIntegerField(
+        choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn"
+    )
+    start_year = models.PositiveSmallIntegerField(
+        choices=YEARS, default=CURRENT_YEAR, verbose_name="Startår"
+    )
+    end_year = models.PositiveSmallIntegerField(
+        choices=YEARS,
+        default=CURRENT_YEAR + STIPULATED_TIME,
+        verbose_name="Estimert ferdig",
+    )
 
-    allergies = models.TextField(null=True, blank=True, verbose_name="Matallergi")
-    relationship_status = models.PositiveSmallIntegerField(choices=RELATIONSHIP_STATUS,
-                                                           default=RELATIONSHIP_STATUS.SINGLE,
-                                                           verbose_name="Samlivsstatus")
+    allergies = models.TextField(
+        null=True, blank=True, verbose_name="Matallergi"
+    )
+    relationship_status = models.PositiveSmallIntegerField(
+        choices=RELATIONSHIP_STATUS,
+        default=RELATIONSHIP_STATUS.SINGLE,
+        verbose_name="Samlivsstatus",
+    )
 
     phone_number = models.BigIntegerField(verbose_name="Mobilnummer")
-    access_card = models.CharField(max_length=20, blank=True, null=True, unique=True, verbose_name="Studentkortnummer")
+    access_card = models.CharField(
+        max_length=20,
+        blank=True,
+        null=True,
+        unique=True,
+        verbose_name="Studentkortnummer",
+    )
 
-    image_primary = ImageField(upload_to='avatars', null=True, blank=True)
-    image_secondary = ImageField(upload_to='avatars', null=True, blank=True)
+    image_primary = ImageField(upload_to="avatars", null=True, blank=True)
+    image_secondary = ImageField(upload_to="avatars", null=True, blank=True)
     address = models.CharField(max_length=200, verbose_name="Adresse")
 
-    membership = models.OneToOneField("Membership", blank=True, null=True, related_name="membership", on_delete=models.CASCADE)
+    membership = models.OneToOneField(
+        "Membership",
+        blank=True,
+        null=True,
+        related_name="membership",
+        on_delete=models.CASCADE,
+    )
 
     objects = ProfileManager()
 
@@ -105,14 +138,14 @@ class Profile(models.Model):
         return self.user.first_name + " " + self.user.last_name
 
     def get_nice_grade(self):
-        return '{}. klasse'.format(self.grade)
+        return "{}. klasse".format(self.grade)
 
     def get_nice_relationship_status(self):
         return self.get_relationship_status_display()
 
     def save(self, *args, **kwargs):
-        if self.access_card is '':
-            self.access_card = f'{self.pk} - INVALID'
+        if self.access_card is "":
+            self.access_card = f"{self.pk} - INVALID"
 
         return super().save(*args, **kwargs)
 
@@ -128,7 +161,9 @@ class Membership(models.Model):
 
 class UserTokenManager(models.Manager):
     def prune_expired(self):
-        self.filter(created__lt=timezone.now() - timedelta(hours=VALID_TIME)).delete()
+        self.filter(
+            created__lt=timezone.now() - timedelta(hours=VALID_TIME)
+        ).delete()
 
 
 class UserToken(models.Model):
@@ -153,5 +188,4 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
-
 
