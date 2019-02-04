@@ -79,7 +79,14 @@ def request_funds(request):
         instance = funds_form.save(commit=False)
         instance.author = request.user
         instance.save()
+        receipt = instance.receipt
         attachments = None
+        if receipt.name is not None:
+            filename = "{}_{}".format(
+                request.user, instance.receipt.name.split("/")[-1]
+            )
+            attachment = receipt
+            attachments = {filename: attachment.file}
         _, mail_to = zip(*settings.CONTACTS)
         mail.send(
             mail_to,
