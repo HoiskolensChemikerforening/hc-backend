@@ -418,8 +418,9 @@ def change_rfid_status(request):
                 messages.add_message(request, messages.WARNING, '{} har sjekket ut'.format(profile.user.get_full_name()))
         return redirect('elections:checkin')
     else:
+        is_open = election_is_open()
         form = GetRFIDForm()
-        context = {'form': form}
+        context = {'form': form, 'is_open': is_open}
     return render(request, 'elections/check_in.html', context)
 
 
@@ -439,9 +440,14 @@ def add_rfid(request):
                 messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
                 return redirect('elections:checkin')
             except:
-                messages.add_message(request, messages.WARNING, 'Det finnes ingen bruker med brukernavn {}'.format(user.username))
+                #Hvis en bruker ikke finnes vil koden gå hit
+                messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
+                return redirect('elections:add_rfid')
+        #Feil ved validering av Form
+        messages.add_message(request, messages.WARNING, 'Noe galt skjedde med valideringen.')
         return redirect('elections:add_rfid')
     else:
+        is_open = election_is_open()
         form = AddCardForm()
-        context = {'form': form}
+        context = {'form': form, 'is_open': is_open}
     return render(request, 'elections/add_card.html', context)

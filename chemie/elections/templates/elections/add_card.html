@@ -34,34 +34,39 @@
   {% endfor %}
 {% endif %}
 
-<div align="center">
-    <h1 class="title is-2">Legg til studentkort</h1>
-    <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
-        <div class="columns">
-            <div class="column is-2 is-hidden-mobile"></div>
-            <div class="column is-3 is-hidden-mobile">
-                <p style="text-align: right">Bruker:</p>
+{% if is_open %}
+    <div align="center">
+        <h1 class="title is-2">Legg til studentkort</h1>
+        <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
+            <div class="columns">
+                <div class="column is-2 is-hidden-mobile"></div>
+                <div class="column is-3 is-hidden-mobile">
+                    <p style="text-align: right">Bruker:</p>
+                </div>
+                <div class="column is-12 is-hidden-tablet" style="padding-bottom: 0"><p>Bruker:</p></div>
+                <div class="column is-3">
+                     {{ form.user }}
+                </div>
+                <div class="column is-4 is-hidden-mobile"></div>
             </div>
-            <div class="column is-12 is-hidden-tablet" style="padding-bottom: 0"><p>Bruker:</p></div>
-            <div class="column is-3">
-                 {{ form.user }}
+            <div class="columns">
+                <div class="column is-2 is-hidden-mobile"></div>
+                <div class="column is-3 is-hidden-mobile">
+                    <p style="text-align: right;"> Studentkortnummer: </p>
+                </div>
+                <div class="column is-12 is-hidden-tablet" style="padding-bottom: 0"><p>Studentkortnummer:</p></div>
+                <div class="column is-3">
+                    {{ form.access_card }}
+                </div>
+                <div class="column is-4 is-hidden-mobile"></div>
             </div>
-            <div class="column is-4 is-hidden-mobile"></div>
-        </div>
-        <div class="columns">
-            <div class="column is-2 is-hidden-mobile"></div>
-            <div class="column is-3 is-hidden-mobile">
-                <p style="text-align: right;"> Studentkortnummer: </p>
-            </div>
-            <div class="column is-12 is-hidden-tablet" style="padding-bottom: 0"><p>Studentkortnummer:</p></div>
-            <div class="column is-3">
-                {{ form.access_card }}
-            </div>
-            <div class="column is-4 is-hidden-mobile"></div>
-        </div>
-      <input type="submit" class="button" name="addStudentcard" value="Legg til studentkortnummer" height="10px"/>
-    </form>
-</div>
+          <input type="submit" class="button" name="addStudentcard" value="Legg til studentkortnummer" height="10px"/>
+        </form>
+    </div>
+{% else %}
+    <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
+    <h5>Åpne et valg for å sjekke inn til valget.</h5>
+{% endif %}
 
 {% endblock content %}
 
