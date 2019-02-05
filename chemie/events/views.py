@@ -548,14 +548,24 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 context['percentage_paid'] = 0
             context['total_paid'] = paid
             context['total_not_paid'] = not_paid
+            context["is_bedpres"] = False
         return context
 
 
-class BedpresEnlistedUsersView(SocialEnlistedUsersView):
+class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = "events/admin_list.html"
     model = Bedpres
     registration_model = BedpresRegistration
     permission_required = "events.change_bedpresregistration"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.object:
+            context["attendees"] = self.registration_model.objects.filter(
+                status=REGISTRATION_STATUS.CONFIRMED, event=self.object
+            ).select_related("user__profile__membership")
+        context["is_bedpres"] = True
+        return context
 
 
 @login_required
