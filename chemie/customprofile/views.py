@@ -17,10 +17,11 @@ from django.shortcuts import render
 from django.utils import timezone
 from django.views.generic import FormView
 
+from chemie.elections.views import election_is_open
 from .email import send_forgot_password_mail
 from .forms import RegisterUserForm, RegisterProfileForm, EditUserForm, EditProfileForm, ForgotPassword, \
-    SetNewPassword, NameSearchForm
-from .models import UserToken, Profile, Membership, GRADES
+    SetNewPassword, NameSearchForm, AddCardForm
+from .models import UserToken, Profile, Membership, GRADES, ProfileManager
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
 
@@ -212,3 +213,32 @@ class LoginView(OldLoginView):
                     context['termsform'] = termsform
                     context['show_popup'] = True
                     return render(request, 'registration/login.html', context)
+
+
+@permission_required('customprofile.can_edit_access_card')
+@login_required
+def add_rfid(request):
+    if request.method == 'POST':
+        form = AddCardForm(request.POST)
+        if form.is_valid():
+            user = form.cleaned_data.get('user')
+            try:
+                profile = Profile.objects.get(user=user)
+                rfid = form.cleaned_data.get('access_card')
+                card_nr = ProfileManager.rfid_to_em(rfid)
+                profile.access_card = card_nr
+                profile.save()
+                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
+                return redirect('elections:checkin')
+            except:
+                #Hvis en bruker ikke finnes vil koden gå hit
+                messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
+                return redirect('profile:add_rfid')
+        #Feil ved validering av Form
+        messages.add_message(request, messages.WARNING, 'Noe galt skjedde med valideringen.')
+        return redirect('profile:add_rfid')
+    else:
+        is_open = election_is_open()
+        form = AddCardForm()
+        context = {'form': form, 'is_open': is_open}
+    return render(request, 'customprofile/add_card.html', context)

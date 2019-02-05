@@ -14,7 +14,7 @@ from .models import Election, Position, Candidate
 from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 
 
-from chemie.customprofile.forms import GetRFIDForm, AddCardForm
+from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import ProfileManager, User, Profile
 
 
@@ -38,11 +38,7 @@ def voting_is_active():
 
 def clear_all_checkins():
     #Get all profiles where eligible_for_voting is set to True and set False
-    checked = Profile.objects.filter(eligible_for_voting=True)
-    for profile in checked:
-        profile.eligible_for_voting = False
-        profile.save()
-
+    Profile.objects.filter(eligible_for_voting=True).update(eligible_for_voting=False)
 
 @login_required
 def vote(request):
@@ -404,12 +400,8 @@ def change_rfid_status(request):
                 profile = Profile.objects.get(access_card=em_code)
             except:
                 messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect('elections:add_rfid')
-            eligible = profile.eligible_for_voting
-            if eligible:
-                profile.eligible_for_voting = False
-            else:
-                profile.eligible_for_voting = True
+                return redirect('profile:add_rfid')
+            profile.eligible_for_voting = not profile.eligible_for_voting
             profile.save()
             status = profile.eligible_for_voting
             if status:
@@ -423,31 +415,3 @@ def change_rfid_status(request):
         context = {'form': form, 'is_open': is_open}
     return render(request, 'elections/check_in.html', context)
 
-
-@permission_required('elections.add_election')
-@login_required
-def add_rfid(request):
-    if request.method == 'POST':
-        form = AddCardForm(request.POST)
-        if form.is_valid():
-            user = form.cleaned_data.get('user')
-            try:
-                profile = Profile.objects.get(user=user)
-                rfid = form.cleaned_data.get('access_card')
-                card_nr = ProfileManager.rfid_to_em(rfid)
-                profile.access_card = card_nr
-                profile.save()
-                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
-                return redirect('elections:checkin')
-            except:
-                #Hvis en bruker ikke finnes vil koden gå hit
-                messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
-                return redirect('elections:add_rfid')
-        #Feil ved validering av Form
-        messages.add_message(request, messages.WARNING, 'Noe galt skjedde med valideringen.')
-        return redirect('elections:add_rfid')
-    else:
-        is_open = election_is_open()
-        form = AddCardForm()
-        context = {'form': form, 'is_open': is_open}
-    return render(request, 'elections/add_card.html', context)

@@ -11,6 +11,7 @@ urlpatterns = [
     url(r'^profile/aktiver/(?P<code>[a-z0-9]{32})/?', views.activate_password, name='activate'),
     url(r'^profile/medlemmer/endre/(?P<profile_id>[0-9]+)', views.change_membership_status, name='membership'),
     url(r'^profile/medlemmer', views.view_memberships, name='memberships'),
+    url(r'^profile/add_card', views.add_rfid, name='add_rfid'),
     url(r'^yearbook/(?P<year>[0-9]+)/$', views.yearbook, name='yearbook-grade'),
     url(r'^yearbook$', views.yearbook, name='yearbook-index'),
 ]

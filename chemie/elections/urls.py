@@ -52,6 +52,5 @@ user_urlpatterns = [
     url(r'^vote/end', views.has_voted, name='has_voted'),
     url(r'^results', views.results, name='results'),
     url(r'^checkin/$', views.change_rfid_status, name='checkin'),
-    url(r'^checkin/add', views.add_rfid, name='add_rfid'),
 ]
 urlpatterns = admin_urlpatterns + user_urlpatterns
