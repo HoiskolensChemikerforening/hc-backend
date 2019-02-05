@@ -11,34 +11,44 @@ from .models import Profile
 
 class RegisterUserForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Passord")
-    password_confirm = forms.CharField(widget=forms.PasswordInput, label="Gjenta passord")
+    password_confirm = forms.CharField(
+        widget=forms.PasswordInput, label="Gjenta passord"
+    )
 
-    layout = M.Layout(M.Row('first_name', 'last_name'),
-                      M.Row('email'),
-                      M.Row('username'),
-                      M.Row('password', 'password_confirm'),)
+    layout = M.Layout(
+        M.Row("first_name", "last_name"),
+        M.Row("email"),
+        M.Row("username"),
+        M.Row("password", "password_confirm"),
+    )
 
     class Meta:
         model = User
-        fields = ["first_name",
-                  "last_name",
-                  "email",
-                  "username",
-                  ]
+        fields = ["first_name", "last_name", "email", "username"]
 
     def password_matches(self):
-        password = self.cleaned_data.get('password')
-        confrimed_password = self.cleaned_data.get('password_confirm')
+        password = self.cleaned_data.get("password")
+        confrimed_password = self.cleaned_data.get("password_confirm")
 
         if not password:
-            self.add_error(None, ValidationError({'password':["Feltet er påkrevd"]}))
+            self.add_error(
+                None, ValidationError({"password": ["Feltet er påkrevd"]})
+            )
 
         if not confrimed_password:
-            self.add_error(None, ValidationError({'password_confirm':["Feltet er påkrevd"]}))
+            self.add_error(
+                None,
+                ValidationError({"password_confirm": ["Feltet er påkrevd"]}),
+            )
 
         if password != confrimed_password:
-            message = 'Password does not match'
-            self.add_error(None, ValidationError({'password_confirm':["Passordene stemmer ikke overens"]}))
+            message = "Password does not match"  # Redundant?
+            self.add_error(
+                None,
+                ValidationError(
+                    {"password_confirm": ["Passordene stemmer ikke overens"]}
+                ),
+            )
             return False
         return password
 
@@ -48,132 +58,182 @@ class RegisterUserForm(forms.ModelForm):
 
 
 class RegisterProfileForm(forms.ModelForm):
-#    registration_key = forms.CharField(max_length=40, required=True)
-    layout = M.Layout(M.Row('grade'),
-                      M.Row('start_year', 'end_year'),
-                      M.Row('address'),
-                      M.Row('access_card'),
-                      M.Row('phone_number'),
-                      M.Row('allergies', 'relationship_status'),
-                      M.Row('image_primary', 'image_secondary'))
-                      #M.Row('registration_key'),)
+    #    registration_key = forms.CharField(max_length=40, required=True)
+    layout = M.Layout(
+        M.Row("grade"),
+        M.Row("start_year", "end_year"),
+        M.Row("address"),
+        M.Row("access_card"),
+        M.Row("phone_number"),
+        M.Row("allergies", "relationship_status"),
+        M.Row("image_primary", "image_secondary"),
+    )
+    # M.Row('registration_key'),)
 
     class Meta:
         model = Profile
-        fields = ["grade",
-                  "start_year",
-                  "end_year",
-                  "access_card",
-                  "phone_number",
-                  "allergies",
-                  "address",
-                  "relationship_status",
-                  "image_primary",
-                  "image_secondary",
-                  ]
+        fields = [
+            "grade",
+            "start_year",
+            "end_year",
+            "access_card",
+            "phone_number",
+            "allergies",
+            "address",
+            "relationship_status",
+            "image_primary",
+            "image_secondary",
+        ]
 
     def not_clean_registration_key(self):
-        registration_key = self.cleaned_data.get('registration_key')
+        registration_key = self.cleaned_data.get("registration_key")
         if not registration_key == REGISTRATION_KEY:
-            self.add_error(None, ValidationError({'registration_key': ["Har du kode eller har du ikke kode? Du må ha kode."]}))
+            self.add_error(
+                None,
+                ValidationError(
+                    {
+                        "registration_key": [
+                            "Har du kode eller har du ikke kode? Du må ha kode."
+                        ]
+                    }
+                ),
+            )
         return registration_key
 
 
 class EditUserForm(forms.ModelForm):
-    layout = M.Layout(M.Row('first_name', 'last_name'),
-                      M.Row('email'))
+    layout = M.Layout(M.Row("first_name", "last_name"), M.Row("email"))
 
     class Meta:
         model = User
-        fields = ["first_name",
-                  "last_name",
-                  "email",
-                ]
+        fields = ["first_name", "last_name", "email"]
+
 
 class EditProfileForm(forms.ModelForm):
-    layout = M.Layout(M.Row('start_year', 'end_year'),
-                      M.Row('address'),
-                      M.Row('access_card'),
-                      M.Row('phone_number'),
-                      M.Row('allergies', 'relationship_status'))
+    layout = M.Layout(
+        M.Row("start_year", "end_year"),
+        M.Row("address"),
+        M.Row("access_card"),
+        M.Row("phone_number"),
+        M.Row("allergies", "relationship_status"),
+    )
+
     class Meta:
         model = Profile
-        fields = ["start_year",
-                  "end_year",
-                  "access_card",
-                  "phone_number",
-                  "allergies",
-                  "address",
-                  "relationship_status"
-                ]
+        fields = [
+            "start_year",
+            "end_year",
+            "access_card",
+            "phone_number",
+            "allergies",
+            "address",
+            "relationship_status",
+        ]
 
 
 class ChangePasswordForm(forms.ModelForm):
-        password = forms.CharField(widget=forms.PasswordInput, label="Old password")
-        password_new = forms.CharField(widget=forms.PasswordInput, label="New password")
-        password_new_confirm = forms.CharField(widget=forms.PasswordInput, label="Confirm new password")
-        layout = M.Layout(M.Row('password'),
-                          M.Row('password_new', 'password_new_confirm'),)
-        class Meta:
-            model = User
-            fields = ["password",
-            "password_new",
-            "password_new_confirm"
-            ]
+    password = forms.CharField(widget=forms.PasswordInput, label="Old password")
+    password_new = forms.CharField(
+        widget=forms.PasswordInput, label="New password"
+    )
+    password_new_confirm = forms.CharField(
+        widget=forms.PasswordInput, label="Confirm new password"
+    )
+    layout = M.Layout(
+        M.Row("password"), M.Row("password_new", "password_new_confirm")
+    )
 
-        def password_matches(self):
-            password = self.cleaned_data.get('password')
-            password_new = self.cleaned_data.get('password_new')
-            password_new_confirm = self.cleaned_data.get('password_new_confirm')
-            if not password:
-                self.add_error(None, ValidationError({'password':["Feltet er påkrevd"]}))
-            if not password_new:
-                self.add_error(None, ValidationError({'password_new':["Feltet er påkrevd"]}))
-            if not password_new_confirm:
-                self.add_error(None, ValidationError({'password_new_confirm':["Feltet er påkrevd"]}))
-            if password_new != password_new_confirm:
-                message = 'Password does not match'
-                self.add_error(None, ValidationError({'password_new_confirm':["Passordene stemmer ikke overens"]}))
-                return False
-            return password_new
+    class Meta:
+        model = User
+        fields = ["password", "password_new", "password_new_confirm"]
 
-        def clean(self):
-            super(ChangePasswordForm, self).clean()
-            self.password_matches()
+    def password_matches(self):
+        password = self.cleaned_data.get("password")
+        password_new = self.cleaned_data.get("password_new")
+        password_new_confirm = self.cleaned_data.get("password_new_confirm")
+        if not password:
+            self.add_error(
+                None, ValidationError({"password": ["Feltet er påkrevd"]})
+            )
+        if not password_new:
+            self.add_error(
+                None, ValidationError({"password_new": ["Feltet er påkrevd"]})
+            )
+        if not password_new_confirm:
+            self.add_error(
+                None,
+                ValidationError(
+                    {"password_new_confirm": ["Feltet er påkrevd"]}
+                ),
+            )
+        if password_new != password_new_confirm:
+            message = "Password does not match"  # Redundant?
+            self.add_error(
+                None,
+                ValidationError(
+                    {
+                        "password_new_confirm": [
+                            "Passordene stemmer ikke overens"
+                        ]
+                    }
+                ),
+            )
+            return False
+        return password_new
+
+    def clean(self):
+        super(ChangePasswordForm, self).clean()
+        self.password_matches()
 
 
 class ForgotPassword(forms.ModelForm):
     email = forms.CharField(widget=forms.EmailInput, label="E-post")
     captcha = ReCaptchaField()
-    layout = M.Layout(M.Row('email'),
-                      M.Row('captcha'))
+    layout = M.Layout(M.Row("email"), M.Row("captcha"))
 
     class Meta:
         model = User
-        fields = ['email']
+        fields = ["email"]
 
 
 class SetNewPassword(forms.ModelForm):
-    password_new = forms.CharField(widget=forms.PasswordInput, label="Nytt passord")
-    password_new_confirm = forms.CharField(widget=forms.PasswordInput, label="Bekreft nytt passord")
-    layout = M.Layout(M.Row('password_new'),
-                      M.Row('password_new_confirm'))
+    password_new = forms.CharField(
+        widget=forms.PasswordInput, label="Nytt passord"
+    )
+    password_new_confirm = forms.CharField(
+        widget=forms.PasswordInput, label="Bekreft nytt passord"
+    )
+    layout = M.Layout(M.Row("password_new"), M.Row("password_new_confirm"))
 
     class Meta:
         model = User
-        fields = ['password_new',
-                  'password_new_confirm',
-                  ]
+        fields = ["password_new", "password_new_confirm"]
 
     def password_matches(self):
-        password_new = self.cleaned_data.get('password_new')
-        password_new_confirm = self.cleaned_data.get('password_new_confirm')
+        password_new = self.cleaned_data.get("password_new")
+        password_new_confirm = self.cleaned_data.get("password_new_confirm")
         if not password_new:
-            self.add_error(None, ValidationError({'password_new': ["Feltet er påkrevd"]}))
+            self.add_error(
+                None, ValidationError({"password_new": ["Feltet er påkrevd"]})
+            )
         if not password_new_confirm:
-            self.add_error(None, ValidationError({'password_new_confirm': ["Feltet er påkrevd"]}))
+            self.add_error(
+                None,
+                ValidationError(
+                    {"password_new_confirm": ["Feltet er påkrevd"]}
+                ),
+            )
         if password_new != password_new_confirm:
-            self.add_error(None, ValidationError({'password_new_confirm': ["Passordene stemmer ikke overens"]}))
+            self.add_error(
+                None,
+                ValidationError(
+                    {
+                        "password_new_confirm": [
+                            "Passordene stemmer ikke overens"
+                        ]
+                    }
+                ),
+            )
             return False
         return password_new
 
@@ -187,9 +247,9 @@ class NameSearchForm(forms.Form):
 
 
 class ApprovedTermsForm(forms.Form):
-    approval = forms.BooleanField(required=True,
-                                  label='Jeg godkjenner ', validators=
-                                  [lambda x: x == True])
+    approval = forms.BooleanField(
+        required=True, label="Jeg godkjenner ", validators=[lambda x: x == True]
+    )
 
 
 class GetRFIDForm(forms.Form):
