@@ -264,17 +264,36 @@ class SocialEditRemoveUserRegistration(
         obj = self.kwargs.get("object")
         return obj
 
+    def _update_context_on_deadline(self, context):
+        # Remove the forms whenever the deadline has passed
+        if not self.object.can_de_register:
+            context["forms"].pop("deregister")
+            if context["forms"].get("edit"):
+                context["forms"].pop("edit")
+        return context
+
+    def _add_queue_position(self, context, registration):
+        # Add queue position
+        if registration:
+            if registration.status == REGISTRATION_STATUS.WAITING:
+                queue_position = (
+                        self.registration_model.objects.filter(
+                            event=registration.event,
+                            created__lt=registration.created,
+                            status=REGISTRATION_STATUS.WAITING,
+                        ).count()
+                        + 1
+                )
+                context.update({"queue_position": queue_position})
+        return context
+
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context.update(super().get_context_data(**kwargs))
         # Todo: Make it possible to remove registration whenever,
         # IF it is of "interest" type
 
-        # Remove the forms whenever the deadline has passed
-        if not self.object.can_de_register:
-            context["forms"].pop("deregister")
-            if context["forms"].get("edit"):
-                context["forms"].pop("edit")
+        context = self._update_context_on_deadline(context)
 
         # Remove edit forms if none of the fields are present
         edit_form_boolean = (
@@ -286,20 +305,8 @@ class SocialEditRemoveUserRegistration(
         if not (edit_form_boolean) and context["forms"].get("edit"):
             context["forms"].pop("edit")
 
-        # Add queue position
         registration = self.registration
-        if registration:
-            if registration.status == REGISTRATION_STATUS.WAITING:
-                queue_position = (
-                    self.registration_model.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
-                )
-                context.update({"queue_position": queue_position})
-
+        context = self._add_queue_position(context, registration)
         context["registration"] = registration
         return context
 
@@ -355,6 +362,17 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
 
     def get_edit_initial(self):
         return {"instance": self.registration}
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(super().get_context_data(**kwargs))
+
+        context = self._update_context_on_deadline(context)
+
+        registration = self.registration
+        context = self._add_queue_position(context, registration)
+        context["registration"] = registration
+        return context
 
 
 class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
