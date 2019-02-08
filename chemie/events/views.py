@@ -346,7 +346,9 @@ class SocialEditRemoveUserRegistration(
         return form.signup(self.request, user, self.get_success_url())
 
 
-class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
+class BedpresEditRemoveUserRegistration(
+    LoginRequiredMixin, SingleObjectMixin, MultiFormsView
+):
     model = Bedpres
     registration_model = BedpresRegistration
     template_name = "events/bedpres/deregister_or_edit.html"
@@ -355,6 +357,19 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
 
     def get_edit_initial(self):
         return {"instance": self.registration}
+
+    def dispatch(self, request, *args, **kwargs):
+        # Set event and registration on the whole object.
+        # This is run very early
+        self.object = self.get_object()
+        self.registration = self.registration_model.objects.filter(
+            event=self.object, user=self.request.user
+        ).first()
+        return super().dispatch(request)
+
+    def get_object(self, queryset=None):
+        obj = self.kwargs.get("object")
+        return obj
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -388,6 +403,45 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
 
         context["registration"] = registration
         return context
+
+    def deregister_form_valid(self, form):
+        event = self.object
+
+        # Deregister the current user and give a slot
+        # to the first user in the event queue
+        if event.can_de_register:
+            registration = self.registration_model.objects.filter(
+                event=event, user=self.request.user
+            ).first()
+            lucky_person = self.registration_model.objects.de_register(
+                registration
+            )
+            if lucky_person:
+                send_event_mail(lucky_person, event, self.email_template)
+            messages.add_message(
+                self.request,
+                messages.WARNING,
+                "Du er nå avmeldt {}".format(event.title),
+                extra_tags="Avmeldt",
+            )
+        return redirect(event.get_absolute_registration_url())
+
+    def edit_form_valid(self, form):
+        # Form fields must be set as None is not a valid option
+        registration = self.registration
+        registration.save()
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            "Påmeldingsdetaljene ble endret",
+            extra_tags="Endringer utført",
+        )
+
+        return redirect(registration.event.get_absolute_registration_url())
+
+    def signup_form_valid(self, form):
+        user = form.save(self.request)
+        return form.signup(self.request, user, self.get_success_url())
 
 
 class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
