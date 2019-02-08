@@ -356,6 +356,39 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
     def get_edit_initial(self):
         return {"instance": self.registration}
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(super().get_context_data(**kwargs))
+        # Todo: Make it possible to remove registration whenever,
+        # IF it is of "interest" type
+
+        # Remove the forms whenever the deadline has passed
+        if not self.object.can_de_register:
+            context["forms"].pop("deregister")
+            if context["forms"].get("edit"):
+                context["forms"].pop("edit")
+
+        # Remove edit if no fields and editform is in context
+        if context["forms"].get("edit"):
+            context["forms"].pop("edit")
+
+        # Add queue position
+        registration = self.registration
+        if registration:
+            if registration.status == REGISTRATION_STATUS.WAITING:
+                queue_position = (
+                    self.registration_model.objects.filter(
+                        event=registration.event,
+                        created__lt=registration.created,
+                        status=REGISTRATION_STATUS.WAITING,
+                    ).count()
+                    + 1
+                )
+                context.update({"queue_position": queue_position})
+
+        context["registration"] = registration
+        return context
+
 
 class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     template_name = "events/register_user.html"
@@ -519,6 +552,27 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
     registration_view_edit = BedpresEditRemoveUserRegistration
     registration_view_register = BedpresRegisterUserView
 
+    def get(self, request, pk):
+        # Fetch event object
+        self.set_initial()
+        event = self.object
+        registration = self.registration_model.objects.filter(
+            event=event, user=request.user
+        ).first()
+
+        if registration:
+            return self.registration_view_edit.as_view()(
+                self.request, object=event, registration=registration
+            )
+        else:
+            if request.method == "POST":
+                return self.registration_view_register.post(
+                    self.registration_view_register(), request, self.object.pk
+                )
+            else:
+                return self.registration_view_register.as_view()(
+                    self.request, event, pk=pk
+                )
 
 class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = "events/admin_list.html"
