@@ -346,7 +346,9 @@ class SocialEditRemoveUserRegistration(
         return form.signup(self.request, user, self.get_success_url())
 
 
-class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
+class BedpresEditRemoveUserRegistration(
+    LoginRequiredMixin, SingleObjectMixin, MultiFormsView
+):
     model = Bedpres
     registration_model = BedpresRegistration
     template_name = "events/bedpres/deregister_or_edit.html"
@@ -355,6 +357,91 @@ class BedpresEditRemoveUserRegistration(SocialEditRemoveUserRegistration):
 
     def get_edit_initial(self):
         return {"instance": self.registration}
+
+    def dispatch(self, request, *args, **kwargs):
+        # Set event and registration on the whole object.
+        # This is run very early
+        self.object = self.get_object()
+        self.registration = self.registration_model.objects.filter(
+            event=self.object, user=self.request.user
+        ).first()
+        return super().dispatch(request)
+
+    def get_object(self, queryset=None):
+        obj = self.kwargs.get("object")
+        return obj
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context.update(super().get_context_data(**kwargs))
+        # Todo: Make it possible to remove registration whenever,
+        # IF it is of "interest" type
+
+        # Remove the forms whenever the deadline has passed
+        if not self.object.can_de_register:
+            context["forms"].pop("deregister")
+            if context["forms"].get("edit"):
+                context["forms"].pop("edit")
+
+        # Remove edit if no fields and editform is in context
+        if context["forms"].get("edit"):
+            context["forms"].pop("edit")
+
+        # Add queue position
+        registration = self.registration
+        if registration:
+            if registration.status == REGISTRATION_STATUS.WAITING:
+                queue_position = (
+                    self.registration_model.objects.filter(
+                        event=registration.event,
+                        created__lt=registration.created,
+                        status=REGISTRATION_STATUS.WAITING,
+                    ).count()
+                    + 1
+                )
+                context.update({"queue_position": queue_position})
+
+        context["registration"] = registration
+        return context
+
+    def deregister_form_valid(self, form):
+        event = self.object
+
+        # Deregister the current user and give a slot
+        # to the first user in the event queue
+        if event.can_de_register:
+            registration = self.registration_model.objects.filter(
+                event=event, user=self.request.user
+            ).first()
+            lucky_person = self.registration_model.objects.de_register(
+                registration
+            )
+            if lucky_person:
+                send_event_mail(lucky_person, event, self.email_template)
+            messages.add_message(
+                self.request,
+                messages.WARNING,
+                "Du er nå avmeldt {}".format(event.title),
+                extra_tags="Avmeldt",
+            )
+        return redirect(event.get_absolute_registration_url())
+
+    def edit_form_valid(self, form):
+        # Form fields must be set as None is not a valid option
+        registration = self.registration
+        registration.save()
+        messages.add_message(
+            self.request,
+            messages.SUCCESS,
+            "Påmeldingsdetaljene ble endret",
+            extra_tags="Endringer utført",
+        )
+
+        return redirect(registration.event.get_absolute_registration_url())
+
+    def signup_form_valid(self, form):
+        user = form.save(self.request)
+        return form.signup(self.request, user, self.get_success_url())
 
 
 class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
@@ -519,6 +606,27 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
     registration_view_edit = BedpresEditRemoveUserRegistration
     registration_view_register = BedpresRegisterUserView
 
+    def get(self, request, pk):
+        # Fetch event object
+        self.set_initial()
+        event = self.object
+        registration = self.registration_model.objects.filter(
+            event=event, user=request.user
+        ).first()
+
+        if registration:
+            return self.registration_view_edit.as_view()(
+                self.request, object=event, registration=registration
+            )
+        else:
+            if request.method == "POST":
+                return self.registration_view_register.post(
+                    self.registration_view_register(), request, self.object.pk
+                )
+            else:
+                return self.registration_view_register.as_view()(
+                    self.request, event, pk=pk
+                )
 
 class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = "events/admin_list.html"
@@ -548,14 +656,24 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 context['percentage_paid'] = 0
             context['total_paid'] = paid
             context['total_not_paid'] = not_paid
+            context["is_bedpres"] = False
         return context
 
 
-class BedpresEnlistedUsersView(SocialEnlistedUsersView):
+class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = "events/admin_list.html"
     model = Bedpres
     registration_model = BedpresRegistration
     permission_required = "events.change_bedpresregistration"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.object:
+            context["attendees"] = self.registration_model.objects.filter(
+                status=REGISTRATION_STATUS.CONFIRMED, event=self.object
+            ).select_related("user__profile__membership")
+        context["is_bedpres"] = True
+        return context
 
 
 @login_required
