@@ -90,6 +90,7 @@ chemie/chemie/settings/local.py
 backupjob/ssh_key
 chemie/static/
 chemie/media/
+venv/
 
 # Ignore vscode settings for now
 .vscode/*

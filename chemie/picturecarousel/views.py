@@ -15,46 +15,56 @@ def submit_picture(request):
         instance = form.save(commit=False)
         instance.author = request.user
         instance.save()
-        messages.add_message(request, messages.SUCCESS,
-                             'Bildet har blitt sendt inn!',
-                             extra_tags='Bildet ble sendt')
-        return redirect(reverse('carousel:submit'))
-    context = {
-        "form": form,
-    }
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Bildet har blitt sendt inn!",
+            extra_tags="Bildet ble sendt",
+        )
+        return redirect(reverse("carousel:submit"))
+    context = {"form": form}
 
     return render(request, "picturecarousel/submit_picture.html", context)
 
 
 def view_carousel(request):
     pictures = Contribution.objects.get_all_shuffled()
-    context = {
-        "pictures": pictures
-    }
+    context = {"pictures": pictures}
     return render(request, "picturecarousel/carousel.html", context)
 
 
-@permission_required('picturecarousel.change_contribution')
+@permission_required("picturecarousel.change_contribution")
 def approve_pictures(request):
-    awaiting_approval = Contribution.objects.filter(approved=False).prefetch_related('author')
-    approved = Contribution.objects.filter(approved=True).prefetch_related('author')
-    context = {
-        "awaiting_approval": awaiting_approval,
-        "approved": approved,
-    }
+    awaiting_approval = Contribution.objects.filter(
+        approved=False
+    ).prefetch_related("author")
+    approved = Contribution.objects.filter(approved=True).prefetch_related(
+        "author"
+    )
+    context = {"awaiting_approval": awaiting_approval, "approved": approved}
     return render(request, "picturecarousel/approve.html", context)
 
 
-@permission_required('picturecarousel.change_contribution')
+@permission_required("picturecarousel.change_contribution")
 def approve_deny(request, picture_id, deny=False):
-    if request.method == 'POST':
+    if request.method == "POST":
         picture = get_object_or_404(Contribution, id=picture_id)
         if not deny:
             picture.approve()
             picture.save()
-            messages.add_message(request, messages.SUCCESS, 'Bildet er godkjent', extra_tags="Yay!")
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Bildet er godkjent",
+                extra_tags="Yay!",
+            )
         else:
             picture.delete()
-            messages.add_message(request, messages.SUCCESS, 'Bildet ble slettet', extra_tags='Slettet!')
-        return HttpResponseRedirect(reverse('carousel:overview'))
-    return HttpResponseRedirect(reverse('carousel:overview'))
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Bildet ble slettet",
+                extra_tags="Slettet!",
+            )
+        return HttpResponseRedirect(reverse("carousel:overview"))
+    return HttpResponseRedirect(reverse("carousel:overview"))

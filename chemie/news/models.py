@@ -10,9 +10,9 @@ from sorl.thumbnail import ImageField
 class Article(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField()
-    content = RichTextField(verbose_name='Beskrivelse', config_name='news')
+    content = RichTextField(verbose_name="Beskrivelse", config_name="news")
     published_date = models.DateTimeField(auto_now_add=True)
-    image = ImageField(upload_to='news', verbose_name="Bilde")
+    image = ImageField(upload_to="news", verbose_name="Bilde")
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     published = models.BooleanField(default=True, verbose_name="Publisert")
 
@@ -20,13 +20,21 @@ class Article(models.Model):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('news:detail', kwargs={"article_id": self.id, 'slug':self.slug})
+        return reverse(
+            "news:detail", kwargs={"article_id": self.id, "slug": self.slug}
+        )
 
     def get_absolute_delete_url(self):
-        return reverse('news:delete_article', kwargs={"article_id": self.id, 'slug': self.slug})
+        return reverse(
+            "news:delete_article",
+            kwargs={"article_id": self.id, "slug": self.slug},
+        )
 
     def get_absolute_edit_url(self):
-        return reverse('news:edit_article', kwargs={"article_id": self.id, 'slug': self.slug})
+        return reverse(
+            "news:edit_article",
+            kwargs={"article_id": self.id, "slug": self.slug},
+        )
 
 
 def pre_save_article_receiver(sender, instance, *args, **kwargs):

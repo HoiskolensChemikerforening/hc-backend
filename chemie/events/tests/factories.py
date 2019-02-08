@@ -11,11 +11,11 @@ def now_offset_days(days=0):
 
 
 class BaseEventFactory(factory.DjangoModelFactory):
-    title = 'Event Title'
+    title = "Event Title"
     author = factory.SubFactory(RandomUserFactory)
-    location = 'Event Location'
-    description = 'Event Description'
-    image = factory.django.ImageField(color='red')
+    location = "Event Location"
+    description = "Event Description"
+    image = factory.django.ImageField(color="red")
 
     register_startdate = factory.LazyFunction(lambda: now_offset_days(2))
     register_deadline = factory.LazyFunction(lambda: now_offset_days(4))
@@ -31,7 +31,7 @@ class BedpresEventFactory(BaseEventFactory):
 
 
 class SocialEventFactory(BaseEventFactory):
-    payment_information = 'Social event payment information'
+    payment_information = "Social event payment information"
     price_member = 101
     price_not_member = 202
     price_companion = 153

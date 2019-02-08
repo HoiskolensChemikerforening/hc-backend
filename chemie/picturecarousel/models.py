@@ -12,7 +12,7 @@ class ContributionManager(models.Manager):
 
 
 class Contribution(models.Model):
-    image = ImageField(upload_to='kontorbilder')
+    image = ImageField(upload_to="kontorbilder")
     approved = models.BooleanField(default=False)
     author = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)

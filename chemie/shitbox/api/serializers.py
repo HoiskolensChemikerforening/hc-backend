@@ -8,4 +8,4 @@ class SubmissionSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Submission
-        fields = ('content', 'image', 'date',)
+        fields = ("content", "image", "date")
