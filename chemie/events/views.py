@@ -487,8 +487,8 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
         return render(request, self.template_name, context)
 
     def post(self, request, pk):
-        registration_form = self.registration_form(request.POST)
         self.object = get_object_or_404(self.model, pk=pk)
+        registration_form = self.registration_form(request.POST, **self.get_form_kwargs())
         event = self.object
         self.pk = pk
         if registration_form.is_valid():
@@ -499,7 +499,11 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             status = set_user_event_status(event, instance)
             self.set_status_message(request, status, instance, event)
             return redirect(self.get_success_url())
-        context = {"registration_form": registration_form, "event": self.object}
+        context = {
+            'registration_form': registration_form,
+            'event': self.object,
+            "allowed_grade": self.object.allowed_grade(request.user)
+        }
         return render(request, self.template_name, context)
 
     def set_status_message(self, request, status, instance, event):
