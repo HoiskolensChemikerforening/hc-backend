@@ -34,7 +34,22 @@ context = {
       <tr>
         <th>Kandidater</th>
         <th>Antall stemmer</th>
-        <th>Prosent av totale stemmer</th>
+        <th>Prosent med blanke stemmer</th>
+        <th>Prosent uten blanke stemmer</th>
+      </tr>
+      <tr>
+        <td>Blanke stemmer</td>
+        <td>{{blank_votes}}</td>
+        <td>
+          <p id="blank_percentage"></p>
+          <script type="text/javascript">
+            var total_votes = "{{total_votes}}";
+            var blank_votes = "{{blank_votes}}";
+            var blank_percentage = 100*(blank_votes/total_votes).toFixed(2);
+            document.getElementById("blank_percentage").innerHTML = blank_percentage + " %"
+          </script>
+        </td>
+        <td>Nan</td>
       </tr>
       {% for candidate in candidates %}
         <tr>
@@ -45,8 +60,18 @@ context = {
             <script type="text/javascript">
               var total_votes = "{{ total_votes }}";
               var votes = "{{ candidate.votes }}";
-              var percentage = (100*votes/total_votes).toFixed(2);
-              document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage + "%";
+              var percentage_with_blank = (100*votes/total_votes).toFixed(2);
+              document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage_with_blank + " %";
+            </script>
+          </td>
+          <td>
+            <p id="voting_percentage-without-blank{{candidate.id}}"></p>
+            <script type="text/javascript">
+              var total_votes = "{{ total_votes }}";
+              var total_votes_without_blank = total_votes-"{{blank_votes}}";
+              var votes = "{{ candidate.votes }}";
+              var percentage_without_blank = (100*votes/total_votes_without_blank).toFixed(2);
+              document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
             </script>
           </td>
       </tr>
