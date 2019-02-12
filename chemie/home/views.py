@@ -175,5 +175,5 @@ def edit_flatpage(request, url):
 class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     template_name = "home/office_access_list.html"
     queryset = OfficeApplication.objects.order_by("-created")
-    permission_required = "events.change_officeapplication"
+    permission_required = "home.change_officeapplication"
 
