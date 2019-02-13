@@ -4,6 +4,7 @@ from push_notifications.models import APNSDevice, GCMDevice
 from .models import Device, CoffeeSubmission
 from django.views.decorators.csrf import csrf_exempt
 import os
+import json
 
 @login_required
 def edit_notifications(request):
@@ -24,8 +25,11 @@ def save_device(request):
 @csrf_exempt
 def send_notification(request):
     if request.method == 'POST':
-        if request.POST['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
-            topic = request.POST['topic']
+        payload_bytes = request.body
+        payload_bytes_decoded = payload_bytes.decode('utf8').replace("'", '"')
+        payload_json = json.loads(payload_bytes_decoded)
+        if payload_json['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
+            topic = payload_json['topic']
             if topic == "coffee":
                 if CoffeeSubmission.check_last_submission():
                     gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
