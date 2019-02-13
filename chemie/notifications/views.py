@@ -7,11 +7,8 @@ import os
 import json
 
 @login_required
-def edit_notifications(request):
-    return render(request, 'editnotifications.html')
-
-@login_required
 def save_device(request):
+    """ Creates a device and gcm/apns device for user that allowes for notification """
     if request.method == "POST":
         browser = request.POST['browser']
         token = request.POST['token']
@@ -24,18 +21,24 @@ def save_device(request):
 
 @csrf_exempt
 def send_notification(request):
+    """ Send notification to all users from notification/send url """
     if request.method == 'POST':
         payload_bytes = request.body
         payload_bytes_decoded = payload_bytes.decode('utf8').replace("'", '"')
         payload_json = json.loads(payload_bytes_decoded)
+
+        # Custom symmetric verification key. One is storred on device with identical on server
         if payload_json['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
             topic = payload_json['topic']
             if topic == "coffee":
+
+                # Prevent to frequent notification sendings
                 if CoffeeSubmission.check_last_submission():
                     gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
-                    # TODO create batch send
                     [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
                     CoffeeSubmission.objects.create()
+
+            # Redundant method which may be implemented later
             elif topic == "news":
                 message = request.post['message']
                 gcm_devices = Device.objects.filter(news_subscription=True,gcm_device__active=True)

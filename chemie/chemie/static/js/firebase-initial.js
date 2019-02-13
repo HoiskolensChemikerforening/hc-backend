@@ -1,4 +1,6 @@
-// Main script
+// Main script which is called in base.html for logged in users
+// For better understanding of firebase initial se url:
+// https://firebase.google.com/docs/cloud-messaging/js/client
 //----------------------------------------
 var config = { // Firebase front-end configurations
     apiKey: "AIzaSyDZ8vCkF4evPls5g708fgYnV2grx4FmJkk",
@@ -18,7 +20,7 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
                 .then(function () {
                     return messaging.getToken();
                 }).then(function (token) {
-                // Saving device token backend to be used when notification is to be sent
+                // Saving device token backend as Device object to be used when notification is to be sent
                 var browser = getBrowser();
                 postAjax("notifications/save/", {'token': token, 'browser': browser});
             }).catch(function (err) {
@@ -29,9 +31,8 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
         }
     });
 
+// When user is present on the site, they are presented with a toast message instead of the notification.
 messaging.onMessage(function (payload) {
-    console.log(payload);
-    // When user is present on the site, they are presented with a toast message instead of the notification.
     var snackbar = document.getElementById("snackbar");
     snackbar.innerHTML = payload.notification.body;
     snackbar.className = "show";
