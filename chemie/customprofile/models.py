@@ -83,7 +83,7 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User, related_name="profile", on_delete=models.CASCADE
+        User, related_name="profile", on_delete=models.CASCADE, verbose_name="Bruker"
     )
 
     grade = models.PositiveSmallIntegerField(
@@ -133,6 +133,12 @@ class Profile(models.Model):
     approved_terms = models.BooleanField(default=False)
 
     voted = models.BooleanField(default=False)
+    eligible_for_voting = models.BooleanField(default=False)
+
+    class Meta:
+        permissions = (
+            ('can_edit_access_card', 'Can change access card of profiles'),
+        )
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name

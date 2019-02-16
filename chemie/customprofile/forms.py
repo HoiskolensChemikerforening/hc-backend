@@ -3,6 +3,7 @@ from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import ValidationError
+from dal import autocomplete
 
 from chemie.chemie.settings import REGISTRATION_KEY
 from .models import Profile
@@ -249,3 +250,15 @@ class ApprovedTermsForm(forms.Form):
     approval = forms.BooleanField(
         required=True, label="Jeg godkjenner ", validators=[lambda x: x == True]
     )
+
+
+class GetRFIDForm(forms.Form):
+    rfid = forms.IntegerField(label='Studentkortnr', max_value=99999999999,
+                              widget=forms.NumberInput(attrs={'autofocus': True}))
+
+
+class AddCardForm(forms.Form):
+    user = forms.ModelChoiceField(
+       queryset=User.objects.all(),
+       widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+    access_card = forms.IntegerField(label='Studentkortnr', max_value=99999999999)

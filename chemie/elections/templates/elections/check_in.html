@@ -1,0 +1,35 @@
+{% extends "chemie/base_election.html" %}
+{% load material_form %}
+{% load static %}
+{% load thumbnail %}
+{% load chemie_tags %}
+{% load cache %}
+
+
+{% block content %}
+
+<!-- Messaging framework card -->
+{% if messages %}
+  {% for message in messages %}
+    <article class="message is-{{ message.level_tag }}">
+      <div class="message-header">
+          <p>{{ message }}</p>
+      </div>
+    </article>
+  {% endfor %}
+{% endif %}
+
+{% if is_open %}
+    <div align="center">
+        <h1 class="title is-2">Sjekk inn til valget</h1>
+        <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
+          {{ form.rfid }}
+          <input type="submit" class="button" name="addStudentcard" value="Sjekk inn" height="1.7rem"/>
+        </form>
+    </div>
+{% else %}
+    <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
+    <h5>Åpne et valg for å sjekke inn til valget.</h5>
+{% endif %}
+
+{% endblock content %}
