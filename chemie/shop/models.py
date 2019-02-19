@@ -2,7 +2,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
@@ -10,22 +10,30 @@ from django.shortcuts import get_object_or_404
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=100, verbose_name='Kategori', unique=True)
+    name = models.CharField(
+        max_length=100, verbose_name="Kategori", unique=True
+    )
     slug = models.SlugField()
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
-        return reverse("shop:category", kwargs={'slug': self.slug})
+        return reverse("shop:category", kwargs={"slug": self.slug})
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=40, verbose_name='Varenavn', unique=True)
+    name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
     price = models.DecimalField(max_digits=6, decimal_places=2)
-    description = models.CharField(max_length=100, verbose_name='Varebeskrivelse', blank=True, null=True, default=None)
-    category = models.ForeignKey(Category)
-    image = models.ImageField(upload_to='shopitems')
+    description = models.CharField(
+        max_length=100,
+        verbose_name="Varebeskrivelse",
+        blank=True,
+        null=True,
+        default=None,
+    )
+    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="shopitems")
 
     def __str__(self):
         return self.name
@@ -41,7 +49,9 @@ class OrderItem(models.Model):
 
 class Order(models.Model):
     items = models.ManyToManyField(OrderItem)
-    buyer = models.ForeignKey(User, related_name='orders')
+    buyer = models.ForeignKey(
+        User, related_name="orders", on_delete=models.CASCADE
+    )
 
     def get_total_price(self):
         totalprice = 0
@@ -51,11 +61,10 @@ class Order(models.Model):
         return totalprice
 
     def __str__(self):
-        return self.buyer.username + ' order ' + str(self.id)
+        return self.buyer.username + " order " + str(self.id)
 
 
 class ShoppingCart(object):
-
     def __init__(self, request):
         self.session = request.session
         cart = self.session.get(settings.CART_SESSION_ID)
@@ -68,10 +77,10 @@ class ShoppingCart(object):
         # and update quantity of item
         item = product.name
         if item not in self.cart:
-            price = str(product.price).replace('.', ',')
-            self.cart[item] = {'quantity': 0, 'price': price}
-        if self.cart[item]['quantity'] + quantity >= 0:
-            self.cart[item]['quantity'] += quantity
+            price = str(product.price).replace(".", ",")
+            self.cart[item] = {"quantity": 0, "price": price}
+        if self.cart[item]["quantity"] + quantity >= 0:
+            self.cart[item]["quantity"] += quantity
             self.save()
 
     def subtract(self, product, quantity=1):
@@ -83,9 +92,9 @@ class ShoppingCart(object):
         item = product.name
         if item not in self.cart:
             # Necessary conversion to comma for items to use same decimal separator
-            price = str(product.price).replace('.', ',')
-            self.cart[item] = {'quantity': 0, 'price': price}
-        self.cart[item]['quantity'] = quantity
+            price = str(product.price).replace(".", ",")
+            self.cart[item] = {"quantity": 0, "price": price}
+        self.cart[item]["quantity"] = quantity
         self.save()
 
     def save(self):
@@ -100,20 +109,27 @@ class ShoppingCart(object):
 
     def __iter__(self):
         for item in self.cart.values():
-            item['price'] = Decimal(item['price'])
-            item['total_price'] = item['price'] * item['quantity']
+            item["price"] = Decimal(item["price"])
+            item["total_price"] = item["price"] * item["quantity"]
             yield item
 
     def get_total_price(self):
         # Decimal conversion may only be performed if string has dot as decimal separator
-        return sum(Decimal(item['price'].replace(',', '.')) * item['quantity'] for item in self.cart.values())
+        return sum(
+            Decimal(item["price"].replace(",", ".")) * item["quantity"]
+            for item in self.cart.values()
+        )
 
     def buy(self, request):
         user = request.user
         order_items = []
         for item in self.cart.keys():
             item_object = get_object_or_404(Item, name=item)
-            order_items.append(OrderItem.objects.create(item=item_object, quantity=self.cart[item]['quantity']))
+            order_items.append(
+                OrderItem.objects.create(
+                    item=item_object, quantity=self.cart[item]["quantity"]
+                )
+            )
         order = Order.objects.create(buyer=user)
         order.items.add(*order_items)
         order.save()

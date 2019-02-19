@@ -7,9 +7,8 @@ import material as M
 class RefillBalanceForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=User.objects.all(),
-        widget=autocomplete.ModelSelect2(url='verv:user-autocomplete')
+        widget=autocomplete.ModelSelect2(url="verv:user-autocomplete"),
     )
     amount = forms.DecimalField(max_digits=6, decimal_places=2)
 
-    layout = M.Layout(M.Row('Bruker'),
-                      M.Row('Beløp'))
+    layout = M.Layout(M.Row("Bruker"), M.Row("Beløp"))
