@@ -24,7 +24,9 @@ class Category(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
-    price = models.DecimalField(max_digits=6, decimal_places=2)
+    price = models.DecimalField(
+        max_digits=6, decimal_places=2, verbose_name="Pris"
+    )
     description = models.CharField(
         max_length=100,
         verbose_name="Varebeskrivelse",
@@ -32,7 +34,9 @@ class Item(models.Model):
         null=True,
         default=None,
     )
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
+    category = models.ForeignKey(
+        Category, verbose_name="Kategori", on_delete=models.CASCADE
+    )
     image = models.ImageField(upload_to="shopitems")
 
     def __str__(self):
@@ -40,28 +44,33 @@ class Item(models.Model):
 
 
 class OrderItem(models.Model):
-    item = models.ForeignKey(Item, on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField()
+    item = models.ForeignKey(
+        Item, verbose_name="Varenavn", on_delete=models.CASCADE
+    )
+    quantity = models.PositiveIntegerField(verbose_name="Antall")
 
     def __str__(self):
         return self.item.name
 
 
 class Order(models.Model):
-    items = models.ManyToManyField(OrderItem)
+    items = models.ManyToManyField(OrderItem, related_name="order")
     buyer = models.ForeignKey(
-        User, related_name="orders", on_delete=models.CASCADE
+        User,
+        verbose_name="Kjøper",
+        related_name="orders",
+        on_delete=models.CASCADE,
     )
 
     def get_total_price(self):
         totalprice = 0
         # TODO: This iteration may be invalid. Should be checked. Maybe the attribute 'through' must be used.
-        for item in self.items:
+        for item in self.items.all():
             totalprice += item.item.price * item.quantity
         return totalprice
 
     def __str__(self):
-        return self.buyer.username + " order " + str(self.id)
+        return self.buyer.get_full_name() + " ordre " + str(self.id)
 
 
 class ShoppingCart(object):
