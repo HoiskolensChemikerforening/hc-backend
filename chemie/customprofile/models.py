@@ -83,7 +83,10 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User, related_name="profile", on_delete=models.CASCADE, verbose_name="Bruker"
+        User,
+        related_name="profile",
+        on_delete=models.CASCADE,
+        verbose_name="Bruker",
     )
 
     grade = models.PositiveSmallIntegerField(
@@ -134,17 +137,19 @@ class Profile(models.Model):
     eligible_for_voting = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2)
 
+    approved_terms = models.BooleanField(default=False)
+
+    balance = models.DecimalField(max_digits=6, decimal_places=2)
+
     objects = ProfileManager()
-    
-    class Meta:
-        permissions = (
-            ('can_edit_access_card', 'Can change access card of profiles'),
-        )
 
     class Meta:
         permissions = (
-            ('refill_balance', 'Can refill balance'),
+            ("can_edit_access_card", "Can change access card of profiles"),
         )
+
+    class Meta:
+        permissions = (("refill_balance", "Can refill balance"),)
 
     def __str__(self):
         return self.user.first_name + " " + self.user.last_name
@@ -200,4 +205,3 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
-
