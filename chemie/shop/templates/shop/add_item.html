@@ -1,0 +1,25 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chemshop</title>
+</head>
+
+{% block content %}
+<div>
+    <form enctype="multipart/form-data" method="POST">{% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
+    </form>
+</div>
+{% endblock content %}
+
+
+{% block footer_script %}
+<script>
+    $('select').formSelect();
+</script>
+{% endblock footer_script %}

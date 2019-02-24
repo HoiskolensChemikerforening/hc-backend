@@ -3,60 +3,120 @@
 {% load thumbnail %}
 
 <head>
-    <meta charset="UTF-8">
-    <title>Chemshop</title>
+  <meta charset="UTF-8">
+  <title>Chemshop</title>
 </head>
 
+{% block nav_header %}
+Chemshop
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+<div>
+  {% if cart.cart %}
+  <nav class="pushpin pinned" data-target="cart" style="top: 0rem; z-index: 1000;">
+    <a href="#"><i class="large material-icons">shopping_cart</i></a>
+  </nav>
+</div>
+{% endif %}
+{% endblock nav_sub_header %}
+
 {% block content %}
-    {% for item in items %}
-    <div class="row">
-        <div class="col s12 m4 l3">
-          <div class="card sticky-action small">
-            <div class="card-image waves-effect waves-block waves-light">
-              {% thumbnail item.image "630x400" as pic %}
-              <img class="activator" src="{{ pic.url }}">
-                {% endthumbnail %}
-            </div>
-            <div class="card-content">
-              <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i class="material-icons right">more_vert</i></span>
-            </div>
-            <div class="card-reveal">
-              <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
-              <p>{{ item.description|default_if_none:"Ingen beskrivelse tilgjengelig" }}</p>
-            </div>
-            <div class="card-action"> {{ item.price }} kr
-              <span class="right">
-                  <form action = "#" method = "POST">
-                      {% csrf_token %}
-                      <button class="waves-effect waves-light btn" type="submit" name="buy" value="{{ item.id }}">Kjøp</button>
-                  </form>
-              </span>
+<!-- 
+The cart contains:
+{% for item_names, item_details in cart.cart.items %}
+<div>
+  Item: {{ item_names }},
+  Quantity: {{item_details.quantity}},
+  Price: {{item_details.price}}
+</div>
+{% endfor %}
+Total: {{ cart.get_total_price }}
+</div>
+ -->
 
-
-            </div>
-          </div>
-        </div>
+{% for item in items %}
+<div class="row">
+  <div class="col s12 m4 l3">
+    <div class="card sticky-action small">
+      <div class="card-image waves-effect waves-block waves-light">
+        {% thumbnail item.image "630x400" as pic %}
+        <img class="activator" src="{{ pic.url }}">
+        {% endthumbnail %}
       </div>
+      <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i
+            class="material-icons right">more_vert</i></span>
+      </div>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
+        <p>{{ item.description|default_if_none:"Ingen beskrivelse tilgjengelig" }}</p>
+      </div>
+      <div class="card-action"> {{ item.price }} kr
+        <span class="right">
+          <form action="#" method="POST">
+            {% csrf_token %}
+            <button class="waves-effect waves-light btn" type="submit" name="buy" value="{{ item.id }}">Kjøp</button>
+          </form>
+        </span>
 
-        {{ item.name }}
-        {{ item.description|default_if_none:"" }}
-        DENNE {{ item.name }}en KOSTER
-        {{ item.price }} KRONER
-    {% endfor %}
-    {% if cart.cart %}
-    <div>
-        The cart contains:
-        {% for item_names, item_details in cart.cart.items %}
-            <div>
-                Item: {{ item_names }},
-                Quantity: {{item_details.quantity}},
-                Price: {{item_details.price}}
-            </div>
-        {% endfor %}
-    Total: {{ cart.get_total_price }}
+
+      </div>
     </div>
-    <form method="POST"> {% csrf_token %}
-        <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
-    </form>
-    {% endif %}
+  </div>
+</div>
+
+{{ item.name }}
+{{ item.description|default_if_none:"" }}
+DENNE {{ item.name }}en KOSTER
+{{ item.price }} KRONER
+{% endfor %}
+<!-- {% if cart.cart %}
+<div class="fixed-action-btn" style="top: 3.05rem; right: 1rem;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons yellow darken-1">shopping_cart</i>
+  </a>
+</div> -->
+<!--   <div>
+    The cart contains:
+    {% for item_names, item_details in cart.cart.items %}
+    <div>
+      Item: {{ item_names }},
+      Quantity: {{item_details.quantity}},
+      Price: {{item_details.price}}
+    </div>
+    {% endfor %}
+    Total: {{ cart.get_total_price }}
+  </div>
+  <form method="POST"> {% csrf_token %}
+    <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
+  </form> -->
+<!-- {% endif %} -->
+
+{% if perms.shop.add_item %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">edit</i>
+  </a>
+  <ul>
+    <li>
+      <a class="btn-floating blue" href="{% url "shop:add-item" %}"><i class="material-icons">add</i></a>
+      <a class="btn-floating mobile-fab-tip">Opprett vare</a>
+    </li>
+    <li>
+      <a class="btn-floating blue" href="{% url "shop:add-category" %}"><i class="material-icons">add</i></a>
+      <a class="btn-floating mobile-fab-tip">Opprett kategori</a>
+    </li>
+  </ul>
+</div>
+{% endif %}
 {% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.pushpin');
+    var instances = M.Pushpin.init(elems, { "top": 60 });
+  });
+</script>
+{% endblock footer_script %}

@@ -1,0 +1,25 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chemshop</title>
+</head>
+
+{% block nav_header %}
+Chemshop
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Opprett kategori
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div>
+    <form method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <input class="btn btn-primary pull-right" type='submit' value='Lagre kategorien!' />
+    </form>
+</div>
+{% endblock content %}

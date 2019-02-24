@@ -1,9 +1,9 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect, reverse
 from .models import Item, ShoppingCart
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import RefillBalanceForm
+from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
 
 
 @login_required
@@ -40,7 +40,7 @@ def index(request):
 
 @permission_required("shop.can_refill_balance")
 def refill(request):
-    provider = request.user.profile
+    # provider = request.user.profile
     form = RefillBalanceForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
@@ -57,3 +57,23 @@ def refill(request):
                 extra_tags="Suksess",
             )
     return render(request, "shop/refill-balance.html", {"form": form})
+
+
+def add_item(request):
+    form = AddItemForm(request.POST or None, request.FILES or None)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("shop:index"))
+    context = {"form": form}
+    return render(request, "shop/add_item.html", context)
+
+
+def add_category(request):
+    form = AddCategoryForm(request.POST or None, request.FILES or None)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            return redirect(reverse("shop:index"))
+    context = {"form": form}
+    return render(request, "shop/add_category.html", context)
