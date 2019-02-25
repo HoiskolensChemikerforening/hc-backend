@@ -680,6 +680,10 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
         return context
 
 
+class BedpresCheckinView(PermissionRequiredMixin, DetailView, View):
+    
+
+
 @login_required
 @permission_required("events.change_socialeventregistration")
 def change_payment_status(request, registration_id):
@@ -701,3 +705,4 @@ def set_user_event_status(event, registration):
             return REGISTRATION_STATUS.WAITING
     else:
         return REGISTRATION_STATUS.INTERESTED
+

@@ -81,9 +81,14 @@ urlpatterns += [
         name="edit_bedpres",
     ),
     url(
-        r"^bedpres/(?P<pk>[0-9]+)",
+        r"^bedpres/(?P<pk>[0-9]+)/$",
         views.ViewBedpresDetailsView.as_view(),
         name="detail_bedpres",
+    ),
+    url(
+        r"^bedpres/(?P<pk>[0-9]+)/checkin/$",
+        views.BedpresCheckinView.as_view(),
+        name="checkin_bedpres",
     ),
     url(
         r"^bedpres/register/(?P<pk>[0-9]+)",
