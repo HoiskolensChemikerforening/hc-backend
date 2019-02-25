@@ -3,8 +3,8 @@
 {% load thumbnail %}
 
 <head>
-    <meta charset="UTF-8">
-    <title>Chemshop</title>
+  <meta charset="UTF-8">
+  <title>Chemshop</title>
 </head>
 
 {% block nav_header %}
@@ -17,9 +17,9 @@ Opprett kategori
 
 {% block content %}
 <div>
-    <form method="POST">{% csrf_token %}
-        {{ form.as_p }}
-        <input class="btn btn-primary pull-right" type='submit' value='Lagre kategorien!' />
-    </form>
+  <form method="POST">{% csrf_token %}
+    {{ form.as_p }}
+    <input class="btn btn-primary pull-right" type='submit' value='Lagre kategorien!' />
+  </form>
 </div>
 {% endblock content %}
