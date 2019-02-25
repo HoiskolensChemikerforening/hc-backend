@@ -21,6 +21,9 @@ from django.views.generic.edit import (
 )
 from django.views.generic.list import ListView
 from django.db.models import Q
+
+from chemie.customprofile.forms import GetRFIDForm
+from chemie.customprofile.models import ProfileManager, Profile, User
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -680,10 +683,6 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
         return context
 
 
-class BedpresCheckinView(PermissionRequiredMixin, DetailView, View):
-    
-
-
 @login_required
 @permission_required("events.change_socialeventregistration")
 def change_payment_status(request, registration_id):
@@ -706,3 +705,24 @@ def set_user_event_status(event, registration):
     else:
         return REGISTRATION_STATUS.INTERESTED
 
+
+@permission_required('events.bedpres_checkin')
+@login_required
+def checkin_to_bedpres(request):
+    form = GetRFIDForm(request.POST or None)
+    if request.method == 'POST':
+        if form.is_valid():
+            rfid = form.cleaned_data.get('rfid')
+            em_code = ProfileManager.rfid_to_em(rfid)
+            try:
+                user = Profile.objects.get(access_card=em_code).user
+                registration = BedpresRegistration.objects.get(user=user)
+            except:
+                messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
+                return redirect('profile:add_rfid')
+            registration.status = 3
+            registration.save()
+            messages.add_message(request, messages.SUCCESS, '{} har sjekket inn på {}'.format(user.get_full_name(), registration.event.title))
+        return redirect('elections:checkin')
+    context = {'form': form}
+    return render(request, 'events/bedpres/check_in.html', context)
