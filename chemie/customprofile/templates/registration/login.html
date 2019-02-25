@@ -49,3 +49,12 @@
   </div>
 
 {% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, {});
+  });
+</script>
+{% endblock footer_script %}
