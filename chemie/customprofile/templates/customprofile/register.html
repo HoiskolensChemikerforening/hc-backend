@@ -1,69 +1,78 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
 {% block nav_header %}
-  Bruker
+Bruker
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Registrasjon
+Registrasjon
 {% endblock nav_sub_header %}
 
 {% block content %}
-  {% load staticfiles %}
+{% load staticfiles %}
 
 
-  <div class="container">
-    <p class="flow-text">Velkommen til HC, linjeforeningen for Industriell Kjemi og Bioteknologi!<br>
-      Vi ønsker deg velkommen til oss og NTNU =D
-    </p>
-    <div class="row">
-      <div class="col s12 m12">
-        <div class="card">
-          <form method='POST' enctype="multipart/form-data">{% csrf_token %}
+<div class="container">
+  <p class="flow-text">Velkommen til HC, linjeforeningen for Industriell Kjemi og Bioteknologi!<br>
+    Vi ønsker deg velkommen til oss og NTNU =D
+  </p>
+  <div class="row">
+    <div class="col s12 m12">
+      <div class="card">
+        <form method='POST' enctype="multipart/form-data">{% csrf_token %}
+          <div class="card-content">
+            {% form form=user_core_form %}
+            {% part user_core_form.first_name prefix %}
+            <i class="material-icons prefix">account_circle</i>{% endpart %}
+            {% part user_core_form.last_name prefix %}
+            <i class="material-icons prefix">account_circle</i>{% endpart %}
+            {% part user_core_form.email prefix %}<i class="material-icons prefix">contact_mail</i>
+            {% endpart %}
+            {% endform %}
+
+
+            {% form form=user_profile_form %}
+            {% part user_profile_form.address prefix %}<i class="material-icons prefix">home</i>
+            {% endpart %}
+            {% part user_profile_form.access_card prefix %}
+            <i class="material-icons prefix">credit_card</i>{% endpart %}
+            {% part user_profile_form.phone_number prefix %}
+            <i class="material-icons prefix">contact_phone</i>{% endpart %}
+            {% part user_profile_form.allergies prefix %}
+            <i class="material-icons prefix">error_outline</i>{% endpart %}
+            {% endform %}
+
+
             <div class="card-content">
-              {% form form=user_core_form %}
-                {% part user_core_form.first_name prefix %}
-                  <i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part user_core_form.last_name prefix %}
-                  <i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part user_core_form.email prefix %}<i class="material-icons prefix">contact_mail</i>
-                {% endpart %}
-              {% endform %}
-
-
-              {% form form=user_profile_form %}
-                {% part user_profile_form.address prefix %}<i class="material-icons prefix">home</i>
-                {% endpart %}
-                {% part user_profile_form.access_card prefix %}
-                  <i class="material-icons prefix">credit_card</i>{% endpart %}
-                {% part user_profile_form.phone_number prefix %}
-                  <i class="material-icons prefix">contact_phone</i>{% endpart %}
-                {% part user_profile_form.allergies prefix %}
-                  <i class="material-icons prefix">error_outline</i>{% endpart %}
-              {% endform %}
-
-
-              <div class="card-content">
-                    {% include "registration/terms_and_conditions.html" %}
-                    <div style="float: left; clear:none; margin-right: 3px">
-                      {% form form=approved_terms_form %}
-                      {% endform %}
-                    </div>
-                    <div style="font-size: 15px; padding-top: 1.2px">
-                      <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
-                    </div>
-                  </div>
+              {% include "registration/terms_and_conditions.html" %}
+              <div style="float: left; clear:none; margin-right: 3px">
+                {% form form=approved_terms_form %}
+                {% endform %}
               </div>
-
-            <div class="card-action">
-              <div class="right-align">
-                <button class="btn btn-primary pull-right" type="submit">Opprett konto</button>
+              <div style="font-size: 15px; padding-top: 1.2px">
+                <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
               </div>
             </div>
-          </form>
-        </div>
+          </div>
+
+          <div class="card-action">
+            <div class="right-align">
+              <button class="btn btn-primary pull-right" type="submit">Opprett konto</button>
+            </div>
+          </div>
+        </form>
       </div>
     </div>
   </div>
+</div>
 
 {% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems, {});
+  });
+</script>
+{% endblock footer_script %}
