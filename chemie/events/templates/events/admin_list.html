@@ -150,17 +150,20 @@
             {% if event.night_snack %}
               <td>{% if attendee.night_snack %}
                 <i class="material-icons">done</i>
-            {% endif %}</td>{% endif %}
+              {% endif %}</td>
+            {% endif %}
 
-            {% if event.companion %}
+            {% if event.registration.companion %}
               <td>{% if attendee.companion %}
                 {{ attendee.companion }}
-            {% endif %}</td>{% endif %}
+              {% endif %}</td>
+            {% endif %}
 
             {% if event.sleepover %}
               <td>{% if attendee.sleepover %}
                 <i class="material-icons">done</i>
-            {% endif %}</td>{% endif %}
+              {% endif %}</td>
+            {% endif %}
             <td>{{ attendee.user.email }} </td>
 
         </tr>
