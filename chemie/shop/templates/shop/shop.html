@@ -1,5 +1,4 @@
 {% extends "chemie/base.html" %}
-{% load staticfiles %}
 {% load thumbnail %}
 
 <head>
@@ -11,29 +10,7 @@
 Chemshop
 {% endblock nav_header %}
 
-{% block nav_sub_header %}
-<div>
-  {% if cart.cart %}
-  <nav class="pushpin pinned" data-target="cart" style="top: 0rem; z-index: 1000;">
-    <a href="#"><i class="large material-icons">shopping_cart</i></a>
-  </nav>
-</div>
-{% endif %}
-{% endblock nav_sub_header %}
-
 {% block content %}
-<!-- 
-The cart contains:
-{% for item_names, item_details in cart.cart.items %}
-<div>
-  Item: {{ item_names }},
-  Quantity: {{item_details.quantity}},
-  Price: {{item_details.price}}
-</div>
-{% endfor %}
-Total: {{ cart.get_total_price }}
-</div>
- -->
 
 {% for item in items %}
 <div class="row">
@@ -59,39 +36,33 @@ Total: {{ cart.get_total_price }}
             <button class="waves-effect waves-light btn" type="submit" name="buy" value="{{ item.id }}">Kjøp</button>
           </form>
         </span>
-
-
       </div>
     </div>
   </div>
 </div>
-
-{{ item.name }}
-{{ item.description|default_if_none:"" }}
-DENNE {{ item.name }}en KOSTER
-{{ item.price }} KRONER
 {% endfor %}
-<!-- {% if cart.cart %}
-<div class="fixed-action-btn" style="top: 3.05rem; right: 1rem;">
+
+{% if cart.cart %}
+<div class="fixed-action-btn" style="bottom: 3.05rem; left: 1.7rem;">
   <a class="btn-floating btn-large">
-    <i class="large material-icons yellow darken-1">shopping_cart</i>
+    <i class="large material-icons yellow darken-2">shopping_cart</i>
   </a>
-</div> -->
-<!--   <div>
-    The cart contains:
-    {% for item_names, item_details in cart.cart.items %}
-    <div>
-      Item: {{ item_names }},
-      Quantity: {{item_details.quantity}},
-      Price: {{item_details.price}}
-    </div>
-    {% endfor %}
-    Total: {{ cart.get_total_price }}
+</div>
+<div>
+  The cart contains:
+  {% for item_names, item_details in cart.cart.items %}
+  <div>
+    Item: {{ item_names }},
+    Quantity: {{item_details.quantity}},
+    Price: {{item_details.price}}
   </div>
-  <form method="POST"> {% csrf_token %}
-    <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
-  </form> -->
-<!-- {% endif %} -->
+  {% endfor %}
+  Total: {{ cart.get_total_price }}
+</div>
+<form method="POST"> {% csrf_token %}
+  <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
+</form>
+{% endif %}
 
 {% if perms.shop.add_item %}
 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -103,10 +74,18 @@ DENNE {{ item.name }}en KOSTER
       <a class="btn-floating blue" href="{% url "shop:add-item" %}"><i class="material-icons">add</i></a>
       <a class="btn-floating mobile-fab-tip">Opprett vare</a>
     </li>
+    {% if perms.shop.add_category %}
     <li>
       <a class="btn-floating blue" href="{% url "shop:add-category" %}"><i class="material-icons">add</i></a>
       <a class="btn-floating mobile-fab-tip">Opprett kategori</a>
     </li>
+    {% endif %}
+    {% if perms.customprofile.can_refill_balance %}
+    <li>
+      <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">add</i></a>
+      <a class="btn-floating mobile-fab-tip">Fyll konto</a>
+    </li>
+    {% endif %}
   </ul>
 </div>
 {% endif %}

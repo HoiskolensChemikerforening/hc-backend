@@ -7,6 +7,7 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
+from django.core.exceptions import ValidationError
 
 
 class Category(models.Model):
@@ -37,10 +38,15 @@ class Item(models.Model):
     category = models.ForeignKey(
         Category, verbose_name="Kategori", on_delete=models.CASCADE
     )
-    image = models.ImageField(upload_to="shopitems")
+    image = models.ImageField(upload_to="shopitems", verbose_name="Bilde")
 
     def __str__(self):
         return self.name
+
+    def clean(self, *args, **kwargs):
+        if self.price < 0:
+            raise ValidationError("Du kan ikke legge inn en vare som gjør at vi taper penger. Wtf?")
+        super().clean(*args, **kwargs)
 
 
 class OrderItem(models.Model):
