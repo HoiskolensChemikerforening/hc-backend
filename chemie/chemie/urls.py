@@ -51,6 +51,12 @@ urlpatterns = [
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     url(r"^valg/", include("chemie.elections.urls", namespace="elections")),
+    url(
+        r"^elections/", include("chemie.elections.urls", namespace="elections")
+    ),
+    url(
+        r"^quiz/", include("chemie.quiz.urls", namespace="quiz")
+    )
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
