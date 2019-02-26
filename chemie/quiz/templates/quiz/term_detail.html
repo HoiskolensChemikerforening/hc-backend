@@ -1,0 +1,16 @@
+{% extends 'chemie/base.html' %}
+
+{% block content %}
+
+    <h4>{{ term }}</h4>
+    {% if scores %}
+        <ol>
+            {% for score in scores %}
+                <li>{{ score.user.profile }}: {{ score }} poeng</li>
+            {% endfor %}
+        </ol>
+    {% else %}
+        Ingen resultater å vise
+    {% endif %}
+
+{% endblock %}
