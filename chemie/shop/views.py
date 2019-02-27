@@ -13,9 +13,10 @@ def index(request):
     context = {"items": items, "cart": cart}
     if request.method == "POST":
         if "buy" in request.POST:
-            item_id = request.POST["buy"]
+            post_str = request.POST["buy"]
+            item_id, quantity = post_str.split('-')
             item = get_object_or_404(Item, pk=item_id)
-            cart.add(item)
+            cart.add(item,quantity=int(quantity))
         if "checkout" in request.POST:
             balance = request.user.profile.balance
             total_price = cart.get_total_price()
@@ -60,6 +61,7 @@ def refill(request):
 
 
 def add_item(request):
+    print(request.POST)
     form = AddItemForm(request.POST or None, request.FILES or None)
     if request.POST:
         if form.is_valid():

@@ -54,8 +54,12 @@ Chemshop
                 document.getElementById('item_'+ item_name).value = item_dict[item_name];
               }  
             </script>
-            <a type="button" class="btn-floating waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons">remove</i></a>
-            <a type="button"  class="btn-floating waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons">add</i></a>
+            <a type="button" class="btn-small waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
+            <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text">add</i></a>
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <button class="waves-effect waves-light btn" id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" onclick="changeQuantity(this,'{{item.name}}');">Legg til</button>
+            </form>
         </div>
         </span>
       </div>
@@ -119,5 +123,10 @@ Chemshop
     var elems = document.querySelectorAll('.pushpin');
     var instances = M.Pushpin.init(elems, { "top": 60 });
   });
+  function changeQuantity(self, item_name) {
+    var id = self.getAttribute("id");
+    self.setAttribute("value", id + "-" + item_dict[item_name]);
+    return false;
+}
 </script>
 {% endblock footer_script %}
