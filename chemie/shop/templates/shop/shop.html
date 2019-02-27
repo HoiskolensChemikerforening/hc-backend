@@ -20,7 +20,11 @@ Chemshop
     margin: 1rem;
   }
   .activator{
-    max-width:100%;
+    max-width:50%;
+    height:10rem;
+    margin-left:auto;
+    margin-right:auto;
+    padding:10px;
   }
   
 {% endblock style %}
@@ -33,12 +37,49 @@ Chemshop
 <div class="card-box">
     
 {% for item in items %}
-<div class="card-image waves-effect waves-block waves-light">
-    {% thumbnail item.image "630x400" as pic %}
-    <img class="activator" src="{{ pic.url }}">
-    {% endthumbnail %}
+<div class="card sticky-action small">
+  <div class="card-image waves-effect waves-block waves-light">
+      {% thumbnail item.image "630x400" as pic %}
+      <img class="activator" src="{{ pic.url }}">
+      {% endthumbnail %}
+  </div>
+
+  <div class="card-content">
+    <span class="card-title activator grey-text text-darken-4" style="float:left">{{ item.name }}</span>
+    <span class="card-title activator grey-text text-darken-4" style="float:right">{{ item.price }} kr</span>
+  </div>
+
+  <div class="card-action"> 
+      <script type="text/javascript">
+        item_dict["{{item.name}}"] = 0 // appends item to dictionary 
+        
+        //user presses the + button
+        function plus(item_name){
+            item_dict[item_name]++
+            document.getElementById('item_'+ item_name).value = item_dict[item_name];
+        }
+
+        // user presses the - button
+        function minus(item_name){
+          if (item_dict[item_name]>0){
+            item_dict[item_name]--
+          } 
+          document.getElementById('item_'+ item_name).value = item_dict[item_name];
+        }  
+      </script>
+      <div>
+          <a type="button" class="btn-small waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
+          <input style="width: 1.2rem" type="text" value="0" id="item_{{item.name}}">
+          <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text" style="margin:auto">add</i></a>
+          <form action="#" method="POST" style="display:inline; margin: auto">
+              {% csrf_token %}
+              <button class="waves-effect waves-light btn-small"id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" style="float:right; margin-top: 0.5rem" onclick="changeQuantity(this,'{{item.name}}');"><i class="large material-icons">add_shopping_cart</i></button>
+          </form>
+      </div>  
+  </div>
 </div>
 {% endfor %}
+
 
 </div>
 {% for item in items %}
