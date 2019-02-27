@@ -36,6 +36,30 @@ Chemshop
 </script>
 <div class="card-box">
     
+
+  <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+  <!-- Modal Structure -->
+  <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>Modal Header</h4>
+      <p>A bunch of text</p>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+    </div>
+  </div>
+          
+    <script type="text/javascript">
+      document.addEventListener('DOMContentLoaded', function() {
+      var elems = document.querySelectorAll('.modal');
+      var instances = M.Modal.init(elems, {});
+  });
+
+
+    </script>
+  
+  <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 {% for item in items %}
 <div class="card sticky-action small">
   <div class="card-image waves-effect waves-block waves-light">
@@ -46,7 +70,7 @@ Chemshop
 
   <div class="card-content">
     <span class="card-title activator grey-text text-darken-4" style="float:left">{{ item.name }}</span>
-    <span class="card-title activator grey-text text-darken-4" style="float:right">{{ item.price }} kr</span>
+    <span class="card-title activator grey-text text-darken-4" style="float:right; font-size: medium">{{ item.price }} kr</span>
   </div>
 
   <div class="card-action"> 
@@ -81,62 +105,9 @@ Chemshop
 {% endfor %}
 
 
-</div>
-{% for item in items %}
-  <div class="card-box">
-    <div class="card sticky-action small">
-      <div class="card-image waves-effect waves-block waves-light">
-        {% thumbnail item.image "340x100" as pic %}
-        <img class="activator" src="{{ pic.url }}">
-        {% endthumbnail %}
-      </div>
-      <div class="card-content">
-        <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i
-            class="material-icons right">more_vert</i></span>
-      </div>
-      <div class="card-reveal">
-        <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
-        <p>{{ item.description|default_if_none:"Ingen beskrivelse tilgjengelig" }}</p>
-      </div>
-      <div class="card-action"> {{ item.price }} kr
-        <span class="right">
-          <div id="input_div">
-            <input type="text" size="1" value="0" id="item_{{item.name}}">
-
-            <script type="text/javascript">
-              item_dict["{{item.name}}"] = 0 // appends item to dictionary 
-              
-              //user presses the + button
-              function plus(item_name){
-                  item_dict[item_name]++
-                  document.getElementById('item_'+ item_name).value = item_dict[item_name];
-              }
-
-              // user presses the - button
-              function minus(item_name){
-                if (item_dict[item_name]>0){
-                  item_dict[item_name]--
-                } 
-                document.getElementById('item_'+ item_name).value = item_dict[item_name];
-              }  
-            </script>
-            <a type="button" class="btn-small waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
-            <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text">add</i></a>
-            <form action="#" method="POST">
-                {% csrf_token %}
-                <button class="waves-effect waves-light btn" id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" onclick="changeQuantity(this,'{{item.name}}');">Legg til</button>
-            </form>
-        </div>
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-{% endfor %}
-
 {% if cart.cart %}
 <div class="fixed-action-btn" style="bottom: 3.05rem; left: 1.7rem;">
-  <a class="btn-floating btn-large">
+  <a class="btn-floating btn-large modal-trigger" href="#modal1">
     <i class="large material-icons yellow darken-2">shopping_cart</i>
   </a>
 </div>
@@ -196,3 +167,56 @@ Chemshop
 }
 </script>
 {% endblock footer_script %}
+
+<!-- </div>
+{% for item in items %}
+  <div class="card-box">
+    <div class="card sticky-action small">
+      <div class="card-image waves-effect waves-block waves-light">
+        {% thumbnail item.image "340x100" as pic %}
+        <img class="activator" src="{{ pic.url }}">
+        {% endthumbnail %}
+      </div>
+      <div class="card-content">
+        <span class="card-title activator grey-text text-darken-4">{{ item.name }}<i
+            class="material-icons right">more_vert</i></span>
+      </div>
+      <div class="card-reveal">
+        <span class="card-title grey-text text-darken-4">{{ item.name }}<i class="material-icons right">close</i></span>
+        <p>{{ item.description|default_if_none:"Ingen beskrivelse tilgjengelig" }}</p>
+      </div>
+      <div class="card-action"> {{ item.price }} kr
+        <span class="right">
+          <div id="input_div">
+            <input type="text" size="1" value="0" id="item_{{item.name}}">
+
+            <script type="text/javascript">
+              item_dict["{{item.name}}"] = 0 // appends item to dictionary 
+              
+              //user presses the + button
+              function plus(item_name){
+                  item_dict[item_name]++
+                  document.getElementById('item_'+ item_name).value = item_dict[item_name];
+              }
+
+              // user presses the - button
+              function minus(item_name){
+                if (item_dict[item_name]>0){
+                  item_dict[item_name]--
+                } 
+                document.getElementById('item_'+ item_name).value = item_dict[item_name];
+              }  
+            </script>
+            <a type="button" class="btn-small waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
+            <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text">add</i></a>
+            <form action="#" method="POST">
+                {% csrf_token %}
+                <button class="waves-effect waves-light btn" id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" onclick="changeQuantity(this,'{{item.name}}');">Legg til</button>
+            </form>
+        </div>
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+{% endfor %} -->
