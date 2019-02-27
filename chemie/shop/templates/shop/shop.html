@@ -69,7 +69,7 @@ Chemshop
       </script>
       <div>
           <a type="button" class="btn-small waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
-          <input style="width: 1.2rem" type="text" value="0" id="item_{{item.name}}">
+          <input style="width: 1.2rem; text-align: center" type="text" value="0" id="item_{{item.name}}">
           <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text" style="margin:auto">add</i></a>
           <form action="#" method="POST" style="display:inline; margin: auto">
               {% csrf_token %}
