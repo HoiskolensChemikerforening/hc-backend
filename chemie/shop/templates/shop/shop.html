@@ -11,7 +11,10 @@ Chemshop
 {% endblock nav_header %}
 
 {% block content %}
-
+<script>
+  // The dictionary is the equivalent shopping cart 
+  var item_dict = {}
+</script>
 {% for item in items %}
 <div class="row">
   <div class="col s12 m4 l3">
@@ -31,10 +34,27 @@ Chemshop
       </div>
       <div class="card-action"> {{ item.price }} kr
         <span class="right">
-          <form action="#" method="POST">
-            {% csrf_token %}
-            <button class="waves-effect waves-light btn" type="submit" name="buy" value="{{ item.id }}">Kjøp</button>
-          </form>
+          <div id="input_div">
+            <input type="text" size="1" value="0" id="item_{{item.name}}">
+
+            <script type="text/javascript">
+              item_dict["{{item.name}}"] = 0 // appends item to dictionary 
+              
+              //user presses the + button
+              function plus(item_name){
+                  item_dict[item_name]++
+                  document.getElementById('item_'+ item_name).value = item_dict[item_name];
+              }
+
+              // user presses the - button
+              function minus(item_name){
+                item_dict[item_name]--
+                document.getElementById('item_'+ item_name).value = item_dict[item_name];
+              }  
+            </script>
+            <input type="button" value="-" id="moins" onclick="minus('{{item.name}}')">
+            <input type="button" value="+" id="plus" onclick="plus('{{item.name}}')">
+        </div>
         </span>
       </div>
     </div>
