@@ -54,8 +54,8 @@ Chemshop
                 document.getElementById('item_'+ item_name).value = item_dict[item_name];
               }  
             </script>
-            <input type="button" value="-" id="moins" onclick="minus('{{item.name}}')">
-            <input type="button" value="+" id="plus" onclick="plus('{{item.name}}')">
+            <a type="button" class="btn-floating waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons">remove</i></a>
+            <a type="button"  class="btn-floating waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons">add</i></a>
         </div>
         </span>
       </div>
