@@ -10,6 +10,27 @@ from django.shortcuts import get_object_or_404
 from django.core.exceptions import ValidationError
 
 
+class RefillReceipt(models.Model):
+    # Is responsible for refilling balance
+    provider = models.ForeignKey(
+        User, verbose_name="Regnskapsfører", on_delete=models.CASCADE
+    )
+    # Person who gets money on their account
+    receiver = models.ForeignKey(
+        User,
+        related_name="refill",
+        verbose_name="Mottaker",
+        on_delete=models.CASCADE,
+    )
+    # Amount of money received
+    amount = models.DecimalField(
+        max_digits=4, decimal_places=2, verbose_name="Penger"
+    )
+
+    def __str__(self):
+        return f"Påfyllingskvittering {self.id}"
+
+
 class Category(models.Model):
     name = models.CharField(
         max_length=100, verbose_name="Kategori", unique=True
@@ -19,14 +40,14 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
-    def get_absolute_url(self):
-        return reverse("shop:category", kwargs={"slug": self.slug})
+    # def get_absolute_url(self):
+    # return reverse("shop:category", kwargs={"slug": self.slug})
 
 
 class Item(models.Model):
     name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
     price = models.DecimalField(
-        max_digits=6, decimal_places=2, verbose_name="Pris"
+        max_digits=4, decimal_places=2, verbose_name="Pris"
     )
     description = models.CharField(
         max_length=100,
@@ -45,7 +66,9 @@ class Item(models.Model):
 
     def clean(self, *args, **kwargs):
         if self.price < 0:
-            raise ValidationError("Du kan ikke legge inn en vare som gjør at vi taper penger. Wtf?")
+            raise ValidationError(
+                "Du kan ikke legge inn en vare som gjør at vi taper penger. Wtf?"
+            )
         super().clean(*args, **kwargs)
 
 

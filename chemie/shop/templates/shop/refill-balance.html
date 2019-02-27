@@ -12,8 +12,8 @@
 <div class="row">
   <div class="col s12 m8 l8">
     <div class="card">
-      <div class="card-content">
-        <form class="refill-balance-form" method="POST"> {% csrf_token %}
+      <div class="card-content" id="card-content">
+        <form id="refill-balance-form" method="POST"> {% csrf_token %}
           {{ form.as_p }}
           <input class="btn" type='submit' value='Lagre!' />
         </form>
@@ -21,11 +21,32 @@
     </div>
   </div>
 </div>
-
-
 {% endblock content %}
 
 {% block footer_script %}
 <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 {{ form.media }}
+<script>
+  var addEvent = function (object, type, callback) {
+    if (object == null || typeof (object) == 'undefined') return;
+    if (object.addEventListener) {
+      object.addEventListener(type, callback, false);
+    } else if (object.attachEvent) {
+      object.attachEvent("on" + type, callback);
+    } else {
+      object["on" + type] = callback;
+    }
+  };
+
+  var resizeReceiver = function () {
+    let amount = document.getElementById("id_amount");
+    let height = amount.offsetHeight;
+    let width = amount.offsetWidth;
+    let receiver = document.getElementsByClassName("select2 select2-container select2-container--default");
+    receiver[0].style.width = width + "px";
+  };
+
+  addEvent(window, "resize", resizeReceiver);
+  document.addEventListener('DOMContentLoaded', resizeReceiver, false);
+</script>
 {% endblock footer_script %}
