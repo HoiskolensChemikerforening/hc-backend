@@ -1,18 +1,18 @@
 from django import forms
 from dal import autocomplete
-from django.contrib.auth.models import User
 import material as M
-from .models import Item, Category
+from .models import Item, Category, RefillReceipt
 
 
-class RefillBalanceForm(forms.Form):
-    user = forms.ModelChoiceField(
-        queryset=User.objects.all(),
-        widget=autocomplete.ModelSelect2(url="verv:user-autocomplete"),
-    )
-    amount = forms.DecimalField(max_digits=6, decimal_places=2)
+class RefillBalanceForm(forms.ModelForm):
+    layout = M.Layout(M.Row("receiver"), M.Row("amount"))
 
-    layout = M.Layout(M.Row("Bruker"), M.Row("Beløp"))
+    class Meta:
+        model = RefillReceipt
+        fields = ["receiver", "amount"]
+        widgets = {
+            "receiver": autocomplete.ModelSelect2(url="verv:user-autocomplete")
+        }
 
 
 class AddCategoryForm(forms.ModelForm):

@@ -1,7 +1,15 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Item, Category, Order, OrderItem
+from .models import Item, Category, Order, OrderItem, RefillReceipt
+
+
+class RefillReceiptAdmin(admin.ModelAdmin):
+    list_display = ["provider", "receiver", "amount"]
+    search_fields = ["provider"]
+
+    class Meta:
+        model = RefillReceipt
 
 
 class ItemAdmin(admin.ModelAdmin):
@@ -48,6 +56,7 @@ class OrderAdmin(admin.ModelAdmin):
     get_price.short_description = "Totalpris"
 
 
+admin.site.register(RefillReceipt, RefillReceiptAdmin)
 admin.site.register(Item, ItemAdmin)
 admin.site.register(Category, CategoryAdmin)
 admin.site.register(Order, OrderAdmin)
