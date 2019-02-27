@@ -2,7 +2,6 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib.auth.models import User
-from django.urls import reverse
 from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
@@ -39,9 +38,6 @@ class Category(models.Model):
 
     def __str__(self):
         return self.name
-
-    # def get_absolute_url(self):
-    # return reverse("shop:category", kwargs={"slug": self.slug})
 
 
 class Item(models.Model):
