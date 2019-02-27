@@ -48,7 +48,9 @@ Chemshop
 
               // user presses the - button
               function minus(item_name){
-                item_dict[item_name]--
+                if (item_dict[item_name]>0){
+                  item_dict[item_name]--
+                } 
                 document.getElementById('item_'+ item_name).value = item_dict[item_name];
               }  
             </script>
