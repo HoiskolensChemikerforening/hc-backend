@@ -7,21 +7,20 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (
     LoginView as OldLoginView,
-    SuccessURLAllowedHostsMixin,
 )
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse
 from django.core.validators import ValidationError
 from django.db.models import Q
-from django.http import Http404, HttpResponseRedirect
+from django.http import Http404
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
-from django.views.generic import FormView
 
 from chemie.elections.views import election_is_open
 from .email import send_forgot_password_mail
+from .forms import ApprovedTermsForm
 from .forms import (
     RegisterUserForm,
     RegisterProfileForm,
@@ -33,8 +32,6 @@ from .forms import (
     AddCardForm,
 )
 from .models import UserToken, Profile, Membership, GRADES, ProfileManager
-from django.contrib.auth.forms import AuthenticationForm
-from .forms import ApprovedTermsForm
 
 
 def register_user(request):
@@ -254,6 +251,7 @@ class LoginView(OldLoginView):
 @permission_required('customprofile.can_edit_access_card')
 @login_required
 def add_rfid(request):
+    redirect_URL = request.GET.get('redirect')
     if request.method == 'POST':
         form = AddCardForm(request.POST)
         if form.is_valid():
@@ -265,7 +263,7 @@ def add_rfid(request):
                 profile.access_card = card_nr
                 profile.save()
                 messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
-                return redirect('elections:checkin')
+                return redirect(redirect_URL)
             except:
                 #Hvis en bruker ikke finnes vil koden gå hit
                 messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))

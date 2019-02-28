@@ -40,7 +40,7 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
-)
+    ARRIVAL_STATUS)
 
 
 class SuccessMessageMixin(object):
@@ -708,21 +708,42 @@ def set_user_event_status(event, registration):
 
 @permission_required('events.bedpres_checkin')
 @login_required
-def checkin_to_bedpres(request):
+def checkin_to_bedpres(request, pk):
     form = GetRFIDForm(request.POST or None)
+    bedpres = Bedpres.objects.get(pk=pk)
     if request.method == 'POST':
         if form.is_valid():
             rfid = form.cleaned_data.get('rfid')
             em_code = ProfileManager.rfid_to_em(rfid)
             try:
                 user = Profile.objects.get(access_card=em_code).user
-                registration = BedpresRegistration.objects.get(user=user)
             except:
                 messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect('profile:add_rfid')
-            registration.status = 3
-            registration.save()
-            messages.add_message(request, messages.SUCCESS, '{} har sjekket inn på {}'.format(user.get_full_name(), registration.event.title))
-        return redirect('elections:checkin')
-    context = {'form': form}
+                return redirect(f"{reverse('profile:add_rfid')}?redirect={request.get_full_path()}")
+            try:
+                registration = BedpresRegistration.objects.get(user=user, event=bedpres)
+            except:
+                messages.add_message(request, messages.WARNING, '{} er ikke påmeldt {}'.format(user.get_full_name(), bedpres.title))
+                return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
+            if registration.status == REGISTRATION_STATUS.CONFIRMED:
+                registration.arrival_status = ARRIVAL_STATUS.PRESENT
+                registration.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    '{} har sjekket inn på {}'.format(
+                        user.get_full_name(),
+                        registration.event.title,
+                    )
+                )
+            else:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    '{} står enda på venteliste. Sjekk inn manuelt.'.format(
+                        user.get_full_name(),
+                    )
+                )
+            return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
+    context = {'form': form, 'bedpres': bedpres}
     return render(request, 'events/bedpres/check_in.html', context)
