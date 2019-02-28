@@ -1,16 +1,44 @@
 {% extends 'chemie/base.html' %}
 
-{% block content %}
+{% block nav_header %}
+  Quiz
+{% endblock nav_header %}
 
-    <h4>{{ term }}</h4>
-    {% if scores %}
-        <ol>
-            {% for score in scores %}
-                <li>{{ score.user.profile }}: {{ score }} poeng</li>
-            {% endfor %}
-        </ol>
-    {% else %}
-        Ingen resultater å vise
-    {% endif %}
+{% block nav_sub_header %}
+  Detaljer
+{% endblock nav_sub_header %}
+
+{% block content %}
+        <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+        <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+        <a class="breadcrumb">{{ term }}</a>
+    </div>
+
+    <div class="card-panel" style="width:50%;">
+        <h4>{{ term }}</h4>
+        {% if scores %}
+            <table class="striped">
+                <thead>
+                    <tr>
+                        <th>Plass</th>
+                        <th>Navn</th>
+                        <th>Poengsum</th>
+                    </tr>
+                </thead>
+
+            <tbody>
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ score.user.profile }}</td>
+                        <td>{{ score }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+            </table>
+        {% else %}
+            Ingen resultater å vise
+        {% endif %}
+    </div>
 
 {% endblock %}
