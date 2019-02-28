@@ -15,4 +15,9 @@ urlpatterns = [
         views.term_detail,
         name="term_detail",
     ),
+    url(
+        r"^(?P<pk>[0-9]+)/create$",
+        views.create_score,
+        name="create_score",
+    )
 ]
