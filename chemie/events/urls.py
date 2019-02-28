@@ -87,7 +87,7 @@ urlpatterns += [
     ),
     url(
         r"^bedpres/(?P<pk>[0-9]+)/checkin/$",
-        views.BedpresCheckinView.as_view(),
+        views.checkin_to_bedpres,
         name="checkin_bedpres",
     ),
     url(

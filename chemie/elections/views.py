@@ -1,21 +1,16 @@
+from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.contrib.auth.models import User
-from django.core.exceptions import ObjectDoesNotExist, ValidationError
-from django.http import Http404
+from django.core.exceptions import ObjectDoesNotExist
+from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect, reverse
-from django.contrib import messages
-from django.forms import modelformset_factory
 
-
+from chemie.customprofile.forms import GetRFIDForm
+from chemie.customprofile.models import ProfileManager, User, Profile
 from .forms import AddPositionForm, AddCandidateForm, CastVoteForm
 from .forms import AddPrevoteForm, AddPreVoteToCandidateForm
 from .models import Election, Position, Candidate
 from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
-
-
-from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, User, Profile
 
 
 def election_is_open():
@@ -386,8 +381,8 @@ def admin_end_election(request):
 @permission_required('elections.add_election')
 @login_required
 def change_rfid_status(request):
+    form = GetRFIDForm(request.POST or None)
     if request.method == "POST":
-        form = GetRFIDForm(request.POST)
         if form.is_valid():
             rfid = form.cleaned_data.get('rfid')
             em_code = ProfileManager.rfid_to_em(rfid)
@@ -395,7 +390,7 @@ def change_rfid_status(request):
                 profile = Profile.objects.get(access_card=em_code)
             except:
                 messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect('profile:add_rfid')
+                return redirect(f"{reverse('profile:add_rfid')}?redirect={request.get_full_path()}")
             profile.eligible_for_voting = not profile.eligible_for_voting
             profile.save()
             status = profile.eligible_for_voting
@@ -406,6 +401,5 @@ def change_rfid_status(request):
         return redirect('elections:checkin')
     else:
         is_open = election_is_open()
-        form = GetRFIDForm()
         context = {'form': form, 'is_open': is_open}
     return render(request, 'elections/check_in.html', context)
