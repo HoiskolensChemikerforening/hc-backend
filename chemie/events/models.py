@@ -272,6 +272,9 @@ class BedpresRegistration(BaseRegistration):
     status = models.IntegerField(
         choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED
     )
+    arrival_status = models.IntegerField(
+        choices=ARRIVAL_STATUS, default=ARRIVAL_STATUS.TRUANT
+    )
 
 
 class RegistrationMessage(models.Model):

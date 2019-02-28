@@ -1,10 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "chemie/base_election.html" %}
+{% load material_form %}
+{% load static %}
+{% load thumbnail %}
+{% load chemie_tags %}
+{% load cache %}
 
-</body>
-</html>
+
+{% block content %}
+
+<!-- Messaging framework card -->
+{% if messages %}
+  {% for message in messages %}
+    <article class="message is-{{ message.level_tag }}">
+      <div class="message-header">
+          <p>{{ message }}</p>
+      </div>
+    </article>
+  {% endfor %}
+{% endif %}
+
+<div align="center">
+    <h1 class="title is-2">Sjekk inn på {{ bedpres.title }}</h1>
+    <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      {{ form.rfid }}
+      <input type="submit" class="button" name="checkInBedpres"
+             value="Sjekk inn" height="1.7rem"/>
+    </form>
+</div>
+
+{% endblock content %}
