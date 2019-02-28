@@ -9,7 +9,7 @@ def index(request):
     return HttpResponse("Hei <3")
 
 
-def quiz_term(request, pk):
+def term_detail(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
     context = {
