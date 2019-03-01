@@ -41,16 +41,16 @@
         {% endif %}
     </div>
 
-    {% if perms.quiz %}
+    {% if perms.quiz.add_quiz_score %}
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-            <a class="btn-floating btn-large">
+            <a  href="{% url 'quiz:create_score' term.pk %}" class="btn-floating btn-large">
                 <i class="large material-icons">edit</i>
             </a>
             <ul>
                 {% if perms.quiz.add_quizscore %}
                     <li>
                         <a class="btn-floating blue" href="{% url 'quiz:create_score' term.pk %}">
-                        <i class="material-icons">add</i>
+                        <i class="material-icons">edit</i>
                         <a class="btn-floating mobile-fab-tip" href="{% url 'quiz:create_score' term.pk %}">Rediger</a>
                         </a>
                     </li>
