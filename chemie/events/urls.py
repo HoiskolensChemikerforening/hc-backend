@@ -101,6 +101,11 @@ urlpatterns += [
         name="adminlist_bedpres",
     ),
     url(
+        r"^bedpres/adminlist/arrivalstatus/(?P<registration_id>[0-9]+)",
+        views.change_arrival_status,
+        name="arrival_status_bedpres",
+    ),
+    url(
         r"^bedpres/delete/(?P<pk>[0-9]+)",
         views.DeleteBedpresView.as_view(),
         name="delete_bedpres",
