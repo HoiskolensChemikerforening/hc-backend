@@ -714,7 +714,7 @@ def set_user_event_status(event, registration):
         return REGISTRATION_STATUS.INTERESTED
 
 
-@permission_required('events.bedpres_checkin')
+@permission_required('events.change_bedpresregistration')
 @login_required
 def checkin_to_bedpres(request, pk):
     form = GetRFIDForm(request.POST or None)
