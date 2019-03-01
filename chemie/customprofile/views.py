@@ -263,14 +263,14 @@ def add_rfid(request):
                 profile.access_card = card_nr
                 profile.save()
                 messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
-                return redirect(redirect_URL)
-            except:
+                if redirect_URL:
+                    return redirect(redirect_URL)
+                return render(request, 'customprofile/add_card.html')
+            except ObjectDoesNotExist:
                 #Hvis en bruker ikke finnes vil koden gå hit
                 messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
-                return redirect('profile:add_rfid')
-        #Feil ved validering av Form
-        messages.add_message(request, messages.WARNING, 'Noe galt skjedde med valideringen.')
-        return redirect('profile:add_rfid')
+            except: pass
+        return render(request, 'customprofile/add_card.html')
     else:
         is_open = election_is_open()
         form = AddCardForm()
