@@ -107,8 +107,15 @@
     </div>
   </div>
 
-  <!-- Button for signup page -->
-  <a class="waves-effect waves-light btn" href="{{ bedpres.get_absolute_registration_url }}">Til påmelding</a>
+  <div class="row">
+      <!-- Button for signup page -->
+      <a class="waves-effect waves-light btn" href="{{ bedpres.get_absolute_registration_url }}">Til påmelding</a>
+      <!-- Button for check in page -->
+      {% if perms.events.change_bedpresregistration %}
+      <a class="waves-effect waves-light btn" href="/events/bedpres/{{ bedpres.pk }}/checkin/">Til innsjekk</a>
+      {% endif %}
+  </div>
+
 
   <!-- Desription info -->
   <div class="row">
