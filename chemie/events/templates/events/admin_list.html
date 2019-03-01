@@ -41,6 +41,11 @@
                       5: [ // Registrations status column
                           {value: 'done', 'data-class': 'ui-icon-image', text: 'Bekreftet'},
                           {value: 'error', 'data-class': 'ui-icon-image', text: 'Venteliste'}
+                      ],
+
+                      6: [ // Arrival status column
+                          {value: 'done', 'data-class': 'ui-icon-image', text: 'Møtt'},
+                          {value: 'error', 'data-class': 'ui-icon-image', text: 'Ikke møtt'}
                       ]
                   }
               }
@@ -121,6 +126,9 @@
               <th>Overnatting</th>
             {% endif %}
             <th>Epost</th>
+          {% if is_bedpres %}
+            <th>Oppmøtestatus</th>
+          {% endif %}
         </tr>
       </thead>
 
@@ -164,7 +172,20 @@
                 <i class="material-icons">done</i>
               {% endif %}</td>
             {% endif %}
+
             <td>{{ attendee.user.email }} </td>
+
+            {% if is_bedpres %}
+            <td><center>
+            {% if attendee.arrival_status %}
+              <a class="arrival btn-floating btn-tiny waves-effect waves-light green"
+                 id="arrival-{{ attendee.id }}"><i class="material-icons">done</i></a>
+            {% else %}
+              <a class="arrival btn-floating btn-tiny waves-effect waves-light red"
+                 id="arrival-{{ attendee.id }}"><i class="material-icons">error</i></a>
+            {% endif %}
+            </center></td>
+          {% endif %}
 
         </tr>
       {% endfor %}
@@ -173,7 +194,7 @@
     {% if not is_bedpres %}
         <p class="flow-text" style="padding-top: 3rem">Betalingsoversikt
       <div class="progress" style="width: 100%">
-        <div class="determinate" style="width: {{ percentage_paid }}%"></div>
+        <div class="determinate" style="width:{{ percentage_paid }}%"></div>
       </div>
     </p>
     <div align="right" id="paidcounter">{{ total_paid }} har betalt • {{ total_not_paid }} har ikke betalt</div>
@@ -235,6 +256,57 @@
                   },
               });
           })
+
+          $('.arrival').on('click', function (event) {
+              event.preventDefault();
+              var myID = $(this).attr("id").split('-')[1];
+              // using jQuery
+              function getCookie(name) {
+                  var cookieValue = null;
+                  if (document.cookie && document.cookie !== '') {
+                      var cookies = document.cookie.split(';');
+                      for (var i = 0; i < cookies.length; i++) {
+                          var cookie = jQuery.trim(cookies[i]);
+                          // Does this cookie string begin with the name we want?
+                          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                              break;
+                          }
+                      }
+                  }
+                  return cookieValue;
+              }
+
+              function icon_changer(divID, arrival_status) {
+                  if (arrival_status) {
+                      $(divID).find('i').text('done');
+                      $(divID).removeClass('red');
+                      $(divID).addClass('green');
+                  }
+                  else {
+                      $(divID).find('i').text('error');
+                      $(divID).removeClass('green');
+                      $(divID).addClass('red');
+
+                  }
+              }
+
+              var csrftoken = getCookie('csrftoken');
+              $.ajax({
+                  type: "GET",
+                  url: "/events/bedpres/adminlist/arrivalstatus/" + myID,
+                  datatype: "json",
+
+                  success: function (json) {
+                      icon_changer("#arrival-" + myID, json.arrival_status)
+                  },
+
+                  error: function (xhr, errmsg, err) {
+                    //console.log(xhr.status + ": " + xhr.responseText);
+                  },
+              });
+          })
       });
+
   </script>
 {% endblock %}
