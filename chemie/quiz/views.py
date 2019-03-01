@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import QuizTerm, QuizScore
@@ -21,10 +21,8 @@ def term_detail(request, pk):
 
 
 def create_score(request, pk):
-    # TODO: Add score to existing if user already has a score
     # TODO: Fix responsive dal widget (and responsive table?)
     # TODO: Create option to update existing scores
-    # TODO: Refreshing page submits previous form now hidden
 
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
@@ -32,9 +30,15 @@ def create_score(request, pk):
     if request.method == 'POST':
         if form.is_valid():
             instance = form.save(commit=False)
-            instance.term = term
-            instance.save()
-            form = QuizScoreForm()
+            if scores.filter(user=instance.user):
+                # Oppdater eksisterende fremfor å legge til ny
+                quiz_score = scores.filter(user=instance.user).first()
+                quiz_score.score += instance.score
+                quiz_score.save()
+            else:
+                instance.term = term
+                instance.save()
+            return redirect('quiz:create_score', term.pk)
     context = {
         'term': term,
         'scores': scores,
