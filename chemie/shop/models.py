@@ -2,11 +2,11 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib.auth.models import User
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
-from django.utils.text import slugify
 from django.shortcuts import get_object_or_404
-from django.core.exceptions import ValidationError
+from django.utils.text import slugify
 
 
 class RefillReceipt(models.Model):
@@ -23,7 +23,7 @@ class RefillReceipt(models.Model):
     )
     # Amount of money received
     amount = models.DecimalField(
-        max_digits=4, decimal_places=2, verbose_name="Penger"
+        max_digits=6, decimal_places=2, verbose_name="Penger"
     )
 
     def __str__(self):
@@ -43,7 +43,7 @@ class Category(models.Model):
 class Item(models.Model):
     name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
     price = models.DecimalField(
-        max_digits=4, decimal_places=2, verbose_name="Pris"
+        max_digits=6, decimal_places=2, verbose_name="Pris"
     )
     description = models.CharField(
         max_length=100,
@@ -89,7 +89,6 @@ class Order(models.Model):
 
     def get_total_price(self):
         totalprice = 0
-        # TODO: This iteration may be invalid. Should be checked. Maybe the attribute 'through' must be used.
         for item in self.items.all():
             totalprice += item.item.price * item.quantity
         return totalprice

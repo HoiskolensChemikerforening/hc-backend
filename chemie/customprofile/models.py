@@ -137,8 +137,6 @@ class Profile(models.Model):
     eligible_for_voting = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
 
-    approved_terms = models.BooleanField(default=False)
-
     objects = ProfileManager()
 
     class Meta:

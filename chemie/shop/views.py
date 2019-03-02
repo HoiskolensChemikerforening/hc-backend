@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect, reverse
-from .models import Item, ShoppingCart
-from django.shortcuts import get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.shortcuts import get_object_or_404
+from django.shortcuts import render, redirect, reverse
+
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
+from .models import Item, ShoppingCart
 
 
 @login_required
@@ -39,7 +40,7 @@ def index(request):
     return render(request, "shop/shop.html", context)
 
 
-@permission_required("shop.can_refill_balance")
+@permission_required("customprofile.refill_balance")
 def refill(request):
     provider = request.user
     form = RefillBalanceForm(request.POST or None)
@@ -65,7 +66,6 @@ def refill(request):
 
 @permission_required("shop.add_item")
 def add_item(request):
-    print(request.POST)
     form = AddItemForm(request.POST or None, request.FILES or None)
     if request.POST:
         if form.is_valid():

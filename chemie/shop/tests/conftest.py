@@ -1,49 +1,106 @@
+from io import BytesIO
+
 import pytest
-
+from PIL import Image
 from django.contrib.auth.models import Permission
+from django.core.files.uploadedfile import InMemoryUploadedFile
+
 from chemie.customprofile.factories import RandomProfileFactory
+from chemie.shop.tests.factories import ItemFactory, CategoryFactory
 
 
-# Fixture for client with user profile and all perms
 @pytest.fixture(scope="function")
-def create_user_all_perms(perms=[1, 1, 1]):
+# Base user with profile and all perms
+def create_user_base():
     new_profile = RandomProfileFactory.create()
     new_user = new_profile.user
     new_user.set_password("defaultpassword")
-    p_item = Permission.objects.create(name="shop.add_item")
-    p_category = Permission.objects.create(name="shop.add_category")
-    p_refill = Permission.objects.get_or_create(
-        name="customprofile.refill_balance"
-    )
-    if perms[0]:
-        new_user.user_permissions.add(p_item)
-    if perms[1]:
-        new_user.user_permissions.add(p_category)
-    if perms[2]:
-        new_user.user_permissions.add(p_refill)
     new_user.save()
     return new_user
 
 
+@pytest.fixture(scope="function")
+def create_permissions():
+    p_item = Permission.objects.get_or_create(name="Can add item")[0]
+    p_category = Permission.objects.get_or_create(name="Can add category")[0]
+    p_refill = Permission.objects.get_or_create(
+        name="Can refill balance"
+    )[0]
+    return p_item, p_category, p_refill
+
+
+# Fixture for client with user profile and all perms
+@pytest.fixture(scope="function")
+def create_user_all_perms(create_user_base, create_permissions):
+    p_item, p_category, p_refill = create_permissions
+    user = create_user_base
+    user.user_permissions.add(p_item)
+    user.user_permissions.add(p_category)
+    user.user_permissions.add(p_refill)
+    user.save()
+    return user
+
+
 # Fixture for client with user profile and item perms
 @pytest.fixture(scope="function")
-def create_user_item_perms():
-    return create_user_all_perms([1, 0, 0])
+def create_user_item_perms(create_user_base, create_permissions):
+    p_item, p_category, p_refill = create_permissions
+    user = create_user_base
+    user.user_permissions.add(p_item)
+    user.save()
+    return user
 
 
 # Fixture for client with user profile and category perms
 @pytest.fixture(scope="function")
-def create_user_category_perms():
-    return create_user_all_perms([0, 1, 0])
+def create_user_category_perms(create_user_base, create_permissions):
+    p_item, p_category, p_refill = create_permissions
+    user = create_user_base
+    user.user_permissions.add(p_category)
+    user.save()
+    return user
 
 
 # Fixture for client with user profile and refill perms
 @pytest.fixture(scope="function")
-def create_user_refill_perms():
-    return create_user_all_perms([0, 0, 1])
+def create_user_refill_perms(create_user_base, create_permissions):
+    p_item, p_category, p_refill = create_permissions
+    user = create_user_base
+    user.user_permissions.add(p_refill)
+    user.save()
+    return user
 
 
 # Fixture for client with user profile and no perms
 @pytest.fixture(scope="function")
-def create_user_no_perms():
-    return create_user_all_perms([0, 0, 0])
+def create_user_no_perms(create_user_base):
+    user = create_user_base
+    return user
+
+
+@pytest.fixture(scope="function")
+def create_category():
+    return CategoryFactory.create()
+
+
+@pytest.fixture(scope="function")
+def create_item():
+    return ItemFactory.create()
+
+
+@pytest.fixture(scope="function")
+def create_multiple_items():
+    return ItemFactory.create_batch(3)
+
+
+@pytest.fixture(scope="function")
+def create_image():
+    im = Image.new(mode='RGB', size=(200, 200))  # create a new image using PIL
+    im_io = BytesIO()  # a BytesIO object for saving image
+    im.save(im_io, 'JPEG')  # save the image to im_io
+    im_io.seek(0)  # seek to the beginning
+
+    image = InMemoryUploadedFile(
+        im_io, None, 'random-name.jpg', 'image/jpeg', len(im_io.getvalue()), None
+    )
+    return image
