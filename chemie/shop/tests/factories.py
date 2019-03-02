@@ -1,7 +1,8 @@
-import factory
-import decimal
+from decimal import Decimal
 
+import factory
 from django.template.defaultfilters import slugify
+
 from chemie.shop.models import Item, Category
 
 
@@ -16,9 +17,10 @@ class CategoryFactory(factory.DjangoModelFactory):
 class ItemFactory(factory.DjangoModelFactory):
     class Meta:
         model = Item
+        django_get_or_create = ('name',)
 
     name = factory.Faker("first_name")
-    price = decimal(2)
+    price = Decimal(2)
     description = factory.Faker("last_name")
     category = factory.SubFactory(CategoryFactory)
     image = factory.django.ImageField(color="red")
