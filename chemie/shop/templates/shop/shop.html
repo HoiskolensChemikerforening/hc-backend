@@ -40,13 +40,13 @@ Chemshop
 }
 
 /* Remove margins and padding from the list */
-ul {
+.ul-item-list {
   margin: 0;
   padding: 0;
 }
 
 /* Style the list items */
-ul li {
+.item-list{
   cursor: pointer;
   position: relative;
   padding: 12px 8px 12px 40px;
@@ -63,17 +63,17 @@ ul li {
 }
 
 /* Set all odd list items to a different color (zebra-stripes) */
-ul li:nth-child(odd) {
+.item-list:nth-child(odd) {
   background: #f9f9f9;
 }
 
 /* Darker background-color on hover */
-ul li:hover {
+.item-list:hover {
   background: #ddd;
 }
 
 /* Style the close button */
-.close {
+.item-close {
   position: absolute;
   right: 0;
   top: 0;
@@ -138,9 +138,9 @@ ul li:hover {
       <div class="modal-content">
           <div>
               The cart contains:
-              <ul>
+              <ul class="ul-item-list">
               {% for item_names, item_details in cart.cart.items %}               
-                <li id="item-list">{{ item_names }},
+                <li class="item-list"id="item-list">{{ item_names }},
                     Quantity: {{item_details.quantity}},
                     Price: {{item_details.price}}</li> 
               {% endfor %}
@@ -218,23 +218,24 @@ ul li:hover {
 </script>
 <script>
     // Create a "close" button and append it to each list item
-    var myNodelist = document.getElementsByTagName("LI");
+    var itemList = document.getElementsByClassName("item-list");
     var i;
-    for (i = 0; i < myNodelist.length; i++) {
+    for (i = 0; i < itemList.length; i++) {
       var span = document.createElement("SPAN");
       var txt = document.createTextNode("\u00D7");
-      span.className = "close";
+      span.className = "item-close";
       span.appendChild(txt);
-      myNodelist[i].appendChild(span);
+      itemList[i].appendChild(span);
     }
     
     // Click on a close button to hide the current list item
-    var close = document.getElementsByClassName("close");
+    var closeItem = document.getElementsByClassName("item-list");
     var i;
     for (i = 0; i < close.length; i++) {
-      close[i].onclick = function() {
-        var div = this.parentElement;
-        div.style.display = "none";
+      closeItem[i].onclick = function() {
+        // var div = this.parentElement;
+        // div.style.display = "none";
+        
         //TODO delete item from shopping cart
 
       }
