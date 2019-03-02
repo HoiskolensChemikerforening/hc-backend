@@ -35,8 +35,25 @@
                         <tr>
                             <td>{{ forloop.counter }}</td>
                             <td>{{ score.user.profile }}</td>
-                            <td>{{ score }}</td>
-                            <td style="text-align:center;">Rediger</td>
+                            {% ifequal score quiz_score_edit %}
+                                <form method="POST">{% csrf_token %}
+                                    <td>{{ score }} + {{ form.score }}</td>
+                                    <td style="text-align:center;">
+                                        <button class="btn btn-floating" type="submit">
+                                            <i class="material-icons">check</i>
+                                        </button>
+                                    </td>
+                                </form>
+                            {% else %}
+                                <td>{{ score }}</td>
+                                <td style="text-align:center;">
+                                    <a href="{% url 'quiz:edit_score' score.pk %}">
+                                        <button class="btn btn-floating">
+                                            <i class="material-icons">edit</i>
+                                        </button>
+                                    </a>
+                            </td>
+                        {% endifequal %}
                         </tr>
                     {% endfor %}
 
@@ -44,18 +61,20 @@
                     Ingen resultater å vise
                 {% endif %}
 
-                <form method="POST">{% csrf_token %}
-                    <tr>
-                        <td>Ny</td>
-                        <td id="name_col">{{ form.user }}</td>
-                        <td>{{ form.score }}</td>
-                        <td style="text-align:center;">
-                            <button class="btn btn-floating" type="submit">
-                                <i class="material-icons">check</i>
-                            </button>
-                        </td>
-                    </tr>
-                </form>
+                {% if not quiz_score_edit %}
+                    <form method="POST">{% csrf_token %}
+                        <tr>
+                            <td>Ny</td>
+                            <td id="name_col">{{ form.user }}</td>
+                            <td>{{ form.score }}</td>
+                            <td style="text-align:center;">
+                                <button class="btn btn-floating" type="submit">
+                                    <i class="material-icons">check</i>
+                                </button>
+                            </td>
+                        </tr>
+                    </form>
+                {% endif %}
 
             </tbody>
         </table>

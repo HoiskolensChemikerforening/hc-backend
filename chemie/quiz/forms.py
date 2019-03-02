@@ -9,9 +9,6 @@ class QuizScoreForm(forms.ModelForm):
         fields = ['user', 'score']
         widgets = {
             'user': autocomplete.ModelSelect2(
-                url="verv:user-autocomplete",
-                attrs={
-                    'cols': 0,
-                    'rows': 0
-                })
+                url="verv:user-autocomplete"
+            ),
         }

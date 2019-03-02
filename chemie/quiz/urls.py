@@ -19,5 +19,10 @@ urlpatterns = [
         r"^(?P<pk>[0-9]+)/create$",
         views.create_score,
         name="create_score",
+    ),
+    url(
+        r"^(?P<pk>[0-9]+)/edit$",
+        views.edit_score,
+        name="edit_score"
     )
 ]
