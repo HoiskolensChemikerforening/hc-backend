@@ -31,7 +31,10 @@ Chemshop
     width: 50%;
     padding: 10px;
   }
-  
+  .item-close:hover {
+    background-color: #f44336;
+    color: white;
+  }
 
   <!-- ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ -->
   /* Include the padding and border in an element's total width and height */
@@ -140,9 +143,10 @@ Chemshop
               The cart contains:
               <ul class="ul-item-list">
               {% for item_names, item_details in cart.cart.items %}               
-                <li class="item-list"id="item-list">{{ item_names }},
+                <li class="item-list"id="item-list-{{item_names}}">{{ item_names }},
                     Quantity: {{item_details.quantity}},
-                    Price: {{item_details.price}}</li> 
+                    Price: {{item_details.price}}
+                  </li> 
               {% endfor %}
               </ul>
               Total: {{ cart.get_total_price }}
@@ -224,21 +228,45 @@ Chemshop
       var span = document.createElement("SPAN");
       var txt = document.createTextNode("\u00D7");
       span.className = "item-close";
+      span.id = itemList[i].id + "-delete"
       span.appendChild(txt);
       itemList[i].appendChild(span);
     }
     
     // Click on a close button to hide the current list item
-    var closeItem = document.getElementsByClassName("item-list");
+    var closeItem = document.getElementsByClassName("item-close");
     var i;
-    for (i = 0; i < close.length; i++) {
+    for (i = 0; i < closeItem.length; i++) {
       closeItem[i].onclick = function() {
+        var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
+        var url = window.location.href;
+        xhr.open('POST', url);
+        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
+        var csrftoken = getCookie('csrftoken');
+        xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.send(this.id);
+        }
+      }
         // var div = this.parentElement;
         // div.style.display = "none";
         
         //TODO delete item from shopping cart
 
-      }
+    function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
     }
+    return cookieValue
+}
     </script>
 {% endblock footer_script %}
