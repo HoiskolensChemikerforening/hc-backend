@@ -17,6 +17,8 @@ class ItemAdmin(admin.ModelAdmin):
     list_filter = ["name", "price"]
     search_fields = ["name"]
 
+    prepopulated_fields = {"slug": ("name",)}
+
     class Meta:
         model = Item
 

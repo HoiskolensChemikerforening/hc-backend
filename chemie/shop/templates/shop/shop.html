@@ -106,18 +106,18 @@ Chemshop
 
     <div class="card-action"> 
         <script type="text/javascript">
-          item_dict["{{item.name}}"] = 0 // appends item to dictionary 
+          item_dict["{{item.name}}"] = 0; // appends item to dictionary
           
           //user presses the + button
           function plus(item_name){
-              item_dict[item_name]++
+              item_dict[item_name]++;
               document.getElementById('item_'+ item_name).value = item_dict[item_name];
           }
 
           // user presses the - button
           function minus(item_name){
             if (item_dict[item_name]>0){
-              item_dict[item_name]--
+              item_dict[item_name]--;
             } 
             document.getElementById('item_'+ item_name).value = item_dict[item_name];
           }  
@@ -138,14 +138,14 @@ Chemshop
 <div>
     <!-- Modal Structure -->
     <div id="modal1" class="modal">
-      <div class="modal-content">
+      <div class="modal-content" id="cart-modal">
           <div>
-              The cart contains:
+              Din handlevogn inneholder:
               <ul class="ul-item-list">
               {% for item_names, item_details in cart.cart.items %}               
                 <li class="item-list"id="item-list">{{ item_names }},
-                    Quantity: {{item_details.quantity}},
-                    Price: {{item_details.price}}</li> 
+                    Antall: {{item_details.quantity}},
+                    Pris: {{item_details.price}}</li>
               {% endfor %}
               </ul>
               Total: {{ cart.get_total_price }}
@@ -197,6 +197,10 @@ Chemshop
 {% block footer_script %}
 <script>
   function changeQuantity(self, item_name) {
+    if (item_dict[item_name] == 0){
+      self.preventDefault();
+      return false;
+    }
     var id = self.getAttribute("id");
     self.setAttribute("value", id + "-" + item_dict[item_name]);
     return false;
@@ -233,12 +237,10 @@ Chemshop
     for (i = 0; i < closeItem.length; i++) {
       var close_button = closeItem[i].children[0];
       close_button.onclick = function() {
-        // var div = this.parentElement;
-        // div.style.display = "none";
         var current_item = this.parentNode;
         let text = current_item.innerHTML;
         let name_of_item = text.split(',')[0];
-        //TODO delete item from shopping cart
+        var slug_name = name_of_item.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 
         function getCookie(name) {
           var cookieValue = null;
@@ -258,11 +260,38 @@ Chemshop
         var csrftoken = getCookie('csrftoken');
         $.ajax({
           type: "GET",
-          url: "/shop/remove-item/" + name_of_item,
+          url: "/shop/remove-item/" + slug_name,
           datatype: "json",
 
           success: function (json) {
+            let total_sum_string = current_item
+                .parentNode
+                .parentNode
+                .lastChild
+                .textContent;
+            let amount_to_change = total_sum_string.split(":")[1];
+            let amount_of_items = text.split(":")[1].split(",")[0];
+            let price_per_item = text.split(":")[2].split("<")[0];
+            let new_amount = parseFloat(amount_to_change).toFixed(2) - (
+                parseFloat(amount_of_items).toFixed(2)*
+                parseFloat(price_per_item).toFixed(2)
+            );
+            current_item
+                .parentNode
+                .parentNode
+                .lastChild
+                .textContent = `Total: ${new_amount}`;
+            // total_amount -= (amount_of_items * price_per_item);
+            let cart_modal = document.getElementById("cart-modal")
+            let number_of_items_left = cart_modal
+                .children[0]
+                .children[0]
+                .childElementCount;
             current_item.parentNode.removeChild(current_item);
+            if ((number_of_items_left - 1) === 0){
+              item_dict =
+              cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!"
+            }
           },
 
           error: function (xhr, errmsg, err) {
