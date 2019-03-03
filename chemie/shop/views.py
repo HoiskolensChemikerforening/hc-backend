@@ -6,6 +6,7 @@ from django.shortcuts import render, redirect, reverse
 
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
 from .models import Item, ShoppingCart
+from decimal import InvalidOperation
 
 
 @login_required
@@ -49,8 +50,20 @@ def refill(request):
         if form.is_valid():
             receiver = form.cleaned_data.get("receiver")
             amount = form.cleaned_data.get("amount")
-            receiver.profile.balance += amount
-            receiver.profile.save()
+            try:
+                receiver.profile.balance += amount
+                receiver.profile.save()
+            except InvalidOperation:
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    (
+                        "Brukeren vil få mer enn 9999 kr på "
+                        "konto om du fyller på med beløpet."
+                    ),
+                    extra_tags="Feil"
+                )
+                return render(request, "shop/refill-balance.html", {"form": form})
             instance = form.save(commit=False)
             instance.provider = provider
             instance.save()
@@ -78,7 +91,7 @@ def add_item(request):
 
 @permission_required("shop.add_category")
 def add_category(request):
-    form = AddCategoryForm(request.POST or None, request.FILES or None)
+    form = AddCategoryForm(request.POST or None)
     if request.POST:
         if form.is_valid():
             form.save()
@@ -88,8 +101,8 @@ def add_category(request):
 
 
 @login_required
-def remove_item(request, name):
-    item = Item.objects.get(name=name)
+def remove_item(request, slug):
+    item = Item.objects.get(slug=slug)
     cart = ShoppingCart(request)
     cart.remove(item)
     return JsonResponse({"success": 1})
