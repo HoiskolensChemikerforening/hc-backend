@@ -1,5 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, reverse
 
@@ -84,3 +85,11 @@ def add_category(request):
             return redirect(reverse("shop:index"))
     context = {"form": form}
     return render(request, "shop/add_category.html", context)
+
+
+@login_required
+def remove_item(request, name):
+    item = Item.objects.get(name=name)
+    cart = ShoppingCart(request)
+    cart.remove(item)
+    return JsonResponse({"success": 1})

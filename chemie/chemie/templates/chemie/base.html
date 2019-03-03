@@ -256,13 +256,17 @@
 
 <script>
   $(document).ready(function(){
-    $('.sidenav').sidenav();
     $('.collapsible').collapsible();
     $('.fixed-action-btn').floatingActionButton();
     $('.tabs').tabs();
   });
 </script>
-
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.sidenav');
+    var instances = M.Sidenav.init(elems, {});
+  });
+</script>
 
 <script>
     (function (i, s, o, g, r, a, m) {

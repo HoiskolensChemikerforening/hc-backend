@@ -143,10 +143,9 @@ Chemshop
               The cart contains:
               <ul class="ul-item-list">
               {% for item_names, item_details in cart.cart.items %}               
-                <li class="item-list"id="item-list-{{item_names}}">{{ item_names }},
+                <li class="item-list"id="item-list">{{ item_names }},
                     Quantity: {{item_details.quantity}},
-                    Price: {{item_details.price}}
-                  </li> 
+                    Price: {{item_details.price}}</li> 
               {% endfor %}
               </ul>
               Total: {{ cart.get_total_price }}
@@ -197,10 +196,6 @@ Chemshop
 
 {% block footer_script %}
 <script>
-  document.addEventListener('DOMContentLoaded', function () {
-    var elems = document.querySelectorAll('.pushpin');
-    var instances = M.Pushpin.init(elems, { "top": 60 });
-  });
   function changeQuantity(self, item_name) {
     var id = self.getAttribute("id");
     self.setAttribute("value", id + "-" + item_dict[item_name]);
@@ -228,45 +223,53 @@ Chemshop
       var span = document.createElement("SPAN");
       var txt = document.createTextNode("\u00D7");
       span.className = "item-close";
-      span.id = itemList[i].id + "-delete"
       span.appendChild(txt);
       itemList[i].appendChild(span);
     }
     
     // Click on a close button to hide the current list item
-    var closeItem = document.getElementsByClassName("item-close");
+    var closeItem = document.getElementsByClassName("item-list");
     var i;
     for (i = 0; i < closeItem.length; i++) {
-      closeItem[i].onclick = function() {
-        var xhr = window.XMLHttpRequest ? new XMLHttpRequest() : new ActiveXObject("Microsoft.XMLHTTP");
-        var url = window.location.href;
-        xhr.open('POST', url);
-        xhr.setRequestHeader('X-Requested-With', 'XMLHttpRequest');
-        var csrftoken = getCookie('csrftoken');
-        xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.send(this.id);
-        }
-      }
+      var close_button = closeItem[i].children[0];
+      close_button.onclick = function() {
         // var div = this.parentElement;
         // div.style.display = "none";
-        
+        var current_item = this.parentNode;
+        let text = current_item.innerHTML;
+        let name_of_item = text.split(',')[0];
         //TODO delete item from shopping cart
 
-    function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
+        function getCookie(name) {
+          var cookieValue = null;
+          if (document.cookie && document.cookie !== '') {
+              var cookies = document.cookie.split(';');
+              for (var i = 0; i < cookies.length; i++) {
+                  var cookie = jQuery.trim(cookies[i]);
+                  // Does this cookie string begin with the name we want?
+                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                      break;
+                  }
+              }
+          }
+          return cookieValue;
         }
+        var csrftoken = getCookie('csrftoken');
+        $.ajax({
+          type: "GET",
+          url: "/shop/remove-item/" + name_of_item,
+          datatype: "json",
+
+          success: function (json) {
+            current_item.parentNode.removeChild(current_item);
+          },
+
+          error: function (xhr, errmsg, err) {
+              // console.log(xhr.status + ": " + xhr.responseText);
+          },
+      });
+      }
     }
-    return cookieValue
-}
     </script>
 {% endblock footer_script %}
