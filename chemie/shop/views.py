@@ -18,6 +18,8 @@ def index(request):
         if "buy" in request.POST:
             post_str = request.POST["buy"]
             item_id, quantity = post_str.split("-")
+            if int(quantity) <= 0:
+                return render(request, "shop/shop.html", context)
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
         if "checkout" in request.POST:
