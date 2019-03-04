@@ -123,12 +123,12 @@ Chemshop
           }  
         </script>
         <div>
-            <a type="button" class="btn-small waves-effect waves-light red" id="moins" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
+            <a type="button" class="btn-small waves-effect waves-light red" id="minus" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
             <input style="width: 1.2rem; text-align: center" type="text" value="0" id="item_{{item.name}}">
             <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text" style="margin:auto">add</i></a>
             <form action="#" method="POST" style="display:inline; margin: auto">
                 {% csrf_token %}
-                <button class="waves-effect waves-light btn-small"id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" style="float:right; margin-top: 0.5rem" onclick="changeQuantity(this,'{{item.name}}');"><i class="large material-icons">add_shopping_cart</i></button>
+                <button class="waves-effect waves-light btn-small" id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" style="float:right; margin-top: 0.5rem" onclick="changeQuantity(this,'{{item.name}}');"><i class="large material-icons">add_shopping_cart</i></button>
             </form>
         </div>  
     </div>
@@ -197,7 +197,7 @@ Chemshop
 {% block footer_script %}
 <script>
   function changeQuantity(self, item_name) {
-    if (item_dict[item_name] == 0){
+    if (item_dict[item_name] === 0){
       self.preventDefault();
       return false;
     }
@@ -213,8 +213,16 @@ Chemshop
   
   // Check if side bar is activated or not
   var floatBtn = document.getElementById("shopping-cart-btn");
-  if (window.innerWidth > 994){
-    floatBtn.setAttribute("style","left:22.5rem; bottom: 3.1rem;");
+  var boolean = false;
+  for (i = 0; i < item_dict.length; i++){
+      if (item_dict[i] > 0){
+          boolean = true;
+      }
+  }
+  if (boolean){
+      if (window.innerWidth > 994) {
+          floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
+      }
   }
 
 
@@ -240,6 +248,7 @@ Chemshop
         var current_item = this.parentNode;
         let text = current_item.innerHTML;
         let name_of_item = text.split(',')[0];
+        // TODO: make this slug into pk
         var slug_name = name_of_item.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
 
         function getCookie(name) {
@@ -282,15 +291,17 @@ Chemshop
                 .lastChild
                 .textContent = `Total: ${new_amount}`;
             // total_amount -= (amount_of_items * price_per_item);
-            let cart_modal = document.getElementById("cart-modal")
+            let cart_modal = document.getElementById("cart-modal");
             let number_of_items_left = cart_modal
                 .children[0]
                 .children[0]
                 .childElementCount;
             current_item.parentNode.removeChild(current_item);
             if ((number_of_items_left - 1) === 0){
-              item_dict =
-              cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!"
+              for (let key in item_dict){
+                item_dict[key] = 0;
+              }
+              cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
             }
           },
 
