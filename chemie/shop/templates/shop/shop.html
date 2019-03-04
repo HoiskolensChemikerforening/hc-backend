@@ -143,7 +143,7 @@ Chemshop
               Din handlevogn inneholder:
               <ul class="ul-item-list">
               {% for item_names, item_details in cart.cart.items %}               
-                <li class="item-list"id="item-list">{{ item_names }},
+                <li class="item-list"id="item-list-{{item_names.pk}}">{{ item_names }},
                     Antall: {{item_details.quantity}},
                     Pris: {{item_details.price}}</li>
               {% endfor %}
@@ -213,16 +213,8 @@ Chemshop
   
   // Check if side bar is activated or not
   var floatBtn = document.getElementById("shopping-cart-btn");
-  var boolean = false;
-  for (i = 0; i < item_dict.length; i++){
-      if (item_dict[i] > 0){
-          boolean = true;
-      }
-  }
-  if (boolean){
-      if (window.innerWidth > 994) {
-          floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
-      }
+  if (window.innerWidth > 994) {
+      floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
   }
 
 
