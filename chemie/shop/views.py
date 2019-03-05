@@ -37,7 +37,7 @@ def index(request):
                 messages.add_message(
                     request,
                     messages.SUCCESS,
-                    "Kontoen din er trukket {}".format(total_price),
+                    "Kontoen din er trukket {} HC-coins".format(total_price),
                     extra_tags="Kjøp godkjent",
                 )
                 context["cart"] = cart
@@ -60,7 +60,7 @@ def refill(request):
                     request,
                     messages.ERROR,
                     (
-                        "Brukeren vil få mer enn 9999 kr på "
+                        "Brukeren vil få mer enn 9999 HC-coins på "
                         "konto om du fyller på med beløpet."
                     ),
                     extra_tags="Feil"
@@ -72,7 +72,7 @@ def refill(request):
             messages.add_message(
                 request,
                 messages.SUCCESS,
-                "Du har fylt på {} kr til brukeren {}".format(
+                "Du har fylt på {} HC-coins til brukeren {}".format(
                     amount, receiver.username
                 ),
                 extra_tags="Suksess",
