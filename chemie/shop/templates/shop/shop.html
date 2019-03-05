@@ -213,16 +213,8 @@ Chemshop
   
   // Check if side bar is activated or not
   var floatBtn = document.getElementById("shopping-cart-btn");
-  var boolean = false;
-  for (let key in item_dict){
-    if (item_dict[key] > 0){
-        boolean = true;
-    }
-  }
-  if (boolean) {
-      if (window.innerWidth > 994) {
-          floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
-      }
+  if (window.innerWidth > 994) {
+      floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
   }
 
 
@@ -246,7 +238,6 @@ Chemshop
       var close_button = closeItem[i].children[0];
       close_button.onclick = function() {
         var current_item = this.parentNode;
-        console.log(current_item);
         let text = current_item.innerHTML;
         let name_of_item = text.split(',')[0];
         // TODO: make this slug into pk
