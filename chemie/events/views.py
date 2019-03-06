@@ -691,13 +691,21 @@ def change_payment_status(request, registration_id):
     registration.save()
     return JsonResponse({"payment_status": registration.payment_status})
 
+
 @login_required
 @permission_required("events.change_bedpresregistration")
 def change_arrival_status(request, registration_id):
     registration = BedpresRegistration.objects.get(pk=registration_id)
-    registration.arrival_status = not registration.arrival_status
-    registration.save()
-    return JsonResponse({"arrival_status": registration.arrival_status})
+    status = registration.arrival_status
+    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
+        registration.arrival_status = ARRIVAL_STATUS.PRESENT
+        registration.save()
+        return JsonResponse({"arrival_status": 1})
+    else:
+        # status is neither 'not set' nor 'not met' => status is 'met'
+        registration.arrival_status = ARRIVAL_STATUS.TRUANT
+        registration.save()
+        return JsonResponse({"arrival_status": 0})
 
 
 @transaction.atomic
@@ -734,7 +742,7 @@ def checkin_to_bedpres(request, pk):
                 messages.add_message(request, messages.WARNING, '{} er ikke påmeldt {}'.format(user.get_full_name(), bedpres.title))
                 return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
             if registration.status == REGISTRATION_STATUS.CONFIRMED:
-                registration.arrival_status = True
+                registration.arrival_status = ARRIVAL_STATUS.PRESENT
                 registration.save()
                 messages.add_message(
                     request,

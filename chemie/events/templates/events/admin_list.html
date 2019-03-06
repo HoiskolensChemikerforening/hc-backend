@@ -177,7 +177,7 @@
 
             {% if is_bedpres %}
             <td><center>
-            {% if attendee.arrival_status %}
+            {% if attendee.arrival_status == 2 %} <!-- This means present -->
               <a class="arrival btn-floating btn-tiny waves-effect waves-light green"
                  id="arrival-{{ attendee.id }}"><i class="material-icons">done</i></a>
             {% else %}
