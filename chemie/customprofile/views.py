@@ -32,7 +32,7 @@ from .forms import (
     NameSearchForm,
     AddCardForm,
 )
-from .models import UserToken, Profile, Membership, GRADES, ProfileManager
+from .models import UserToken, Profile, Membership, GRADES
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
 
