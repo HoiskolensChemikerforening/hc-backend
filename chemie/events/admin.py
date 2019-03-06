@@ -76,7 +76,7 @@ class RegistrationAdmin(admin.ModelAdmin):
     list_filter = ("status", ("event", DropdownFilter))
     ordering = ("-created",)
     search_fields = ("user__username", "user__first_name", "user__last_name")
-    list_display = ("event", "user", "created", "edited")
+    list_display = ("event", "user", "created", "edited", "arrival_status")
 
 
 @admin.register(Social)

@@ -21,6 +21,9 @@ from django.views.generic.edit import (
 )
 from django.views.generic.list import ListView
 from django.db.models import Q
+
+from chemie.customprofile.forms import GetRFIDForm
+from chemie.customprofile.models import ProfileManager, Profile, User
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -37,7 +40,7 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
-)
+    ARRIVAL_STATUS)
 
 
 class SuccessMessageMixin(object):
@@ -689,6 +692,22 @@ def change_payment_status(request, registration_id):
     return JsonResponse({"payment_status": registration.payment_status})
 
 
+@login_required
+@permission_required("events.change_bedpresregistration")
+def change_arrival_status(request, registration_id):
+    registration = BedpresRegistration.objects.get(pk=registration_id)
+    status = registration.arrival_status
+    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
+        registration.arrival_status = ARRIVAL_STATUS.PRESENT
+        registration.save()
+        return JsonResponse({"arrival_status": 1})
+    else:
+        # status is neither 'not set' nor 'not met' => status is 'met'
+        registration.arrival_status = ARRIVAL_STATUS.TRUANT
+        registration.save()
+        return JsonResponse({"arrival_status": 0})
+
+
 @transaction.atomic
 def set_user_event_status(event, registration):
     if event.allowed_grade(registration.user):
@@ -701,3 +720,46 @@ def set_user_event_status(event, registration):
             return REGISTRATION_STATUS.WAITING
     else:
         return REGISTRATION_STATUS.INTERESTED
+
+
+@permission_required('events.change_bedpresregistration')
+@login_required
+def checkin_to_bedpres(request, pk):
+    form = GetRFIDForm(request.POST or None)
+    bedpres = Bedpres.objects.get(pk=pk)
+    if request.method == 'POST':
+        if form.is_valid():
+            rfid = form.cleaned_data.get('rfid')
+            em_code = ProfileManager.rfid_to_em(rfid)
+            try:
+                user = Profile.objects.get(access_card=em_code).user
+            except:
+                messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
+                return redirect(f"{reverse('profile:add_rfid')}?redirect={request.get_full_path()}")
+            try:
+                registration = BedpresRegistration.objects.get(user=user, event=bedpres)
+            except:
+                messages.add_message(request, messages.WARNING, '{} er ikke påmeldt {}'.format(user.get_full_name(), bedpres.title))
+                return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
+            if registration.status == REGISTRATION_STATUS.CONFIRMED:
+                registration.arrival_status = ARRIVAL_STATUS.PRESENT
+                registration.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    '{} har sjekket inn på {}'.format(
+                        user.get_full_name(),
+                        registration.event.title,
+                    )
+                )
+            else:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    '{} står enda på venteliste. Sjekk inn manuelt.'.format(
+                        user.get_full_name(),
+                    )
+                )
+            return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
+    context = {'form': form, 'bedpres': bedpres}
+    return render(request, 'events/bedpres/check_in.html', context)

@@ -227,7 +227,9 @@ class BaseRegistration(models.Model):
         choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED
     )
     arrival_status = models.IntegerField(
-        choices=ARRIVAL_STATUS, default=ARRIVAL_STATUS.NONE
+        choices=ARRIVAL_STATUS,
+        default=ARRIVAL_STATUS.NONE,
+        verbose_name="Oppmøtestatus"
     )
 
     objects = RegistrationManager()

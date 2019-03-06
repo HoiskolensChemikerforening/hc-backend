@@ -81,9 +81,14 @@ urlpatterns += [
         name="edit_bedpres",
     ),
     url(
-        r"^bedpres/(?P<pk>[0-9]+)",
+        r"^bedpres/(?P<pk>[0-9]+)/$",
         views.ViewBedpresDetailsView.as_view(),
         name="detail_bedpres",
+    ),
+    url(
+        r"^bedpres/(?P<pk>[0-9]+)/checkin/$",
+        views.checkin_to_bedpres,
+        name="checkin_bedpres",
     ),
     url(
         r"^bedpres/register/(?P<pk>[0-9]+)",
@@ -94,6 +99,11 @@ urlpatterns += [
         r"^bedpres/adminlist/(?P<pk>[0-9]+)",
         views.BedpresEnlistedUsersView.as_view(),
         name="adminlist_bedpres",
+    ),
+    url(
+        r"^bedpres/adminlist/arrivalstatus/(?P<registration_id>[0-9]+)",
+        views.change_arrival_status,
+        name="arrival_status_bedpres",
     ),
     url(
         r"^bedpres/delete/(?P<pk>[0-9]+)",

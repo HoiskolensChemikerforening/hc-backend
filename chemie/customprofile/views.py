@@ -7,21 +7,21 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import (
     LoginView as OldLoginView,
-    SuccessURLAllowedHostsMixin,
 )
 from django.core.exceptions import ObjectDoesNotExist
-from django.urls import reverse
 from django.core.validators import ValidationError
 from django.db.models import Q
-from django.http import Http404, HttpResponseRedirect
+from django.db.utils import IntegrityError
+from django.http import Http404
 from django.http import JsonResponse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.urls import reverse
 from django.utils import timezone
-from django.views.generic import FormView
 
 from chemie.elections.views import election_is_open
 from .email import send_forgot_password_mail
+from .forms import ApprovedTermsForm
 from .forms import (
     RegisterUserForm,
     RegisterProfileForm,
@@ -32,9 +32,9 @@ from .forms import (
     NameSearchForm,
     AddCardForm,
 )
-from .models import UserToken, Profile, Membership, GRADES
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
+from .models import UserToken, Profile, Membership, GRADES, ProfileManager
 
 
 def register_user(request):
@@ -254,8 +254,10 @@ class LoginView(OldLoginView):
 @permission_required('customprofile.can_edit_access_card')
 @login_required
 def add_rfid(request):
+    form = AddCardForm(request.POST or None)
+    context = {'form': form}
+    redirect_URL = request.GET.get('redirect')
     if request.method == 'POST':
-        form = AddCardForm(request.POST)
         if form.is_valid():
             user = form.cleaned_data.get('user')
             try:
@@ -265,16 +267,17 @@ def add_rfid(request):
                 profile.access_card = card_nr
                 profile.save()
                 messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
-                return redirect('elections:checkin')
-            except:
+                if redirect_URL:
+                    return redirect(redirect_URL)
+                form = AddCardForm()
+            except ObjectDoesNotExist:
                 #Hvis en bruker ikke finnes vil koden gå hit
                 messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
-                return redirect('profile:add_rfid')
-        #Feil ved validering av Form
-        messages.add_message(request, messages.WARNING, 'Noe galt skjedde med valideringen.')
-        return redirect('profile:add_rfid')
-    else:
-        is_open = election_is_open()
-        form = AddCardForm()
-        context = {'form': form, 'is_open': is_open}
+            except IntegrityError:
+                messages.add_message(request, messages.WARNING,
+                                     'Studentkortnummeret {} er allerede registrert på en annen bruker'.format(card_nr))
+            except Exception as e:
+                messages.add_message(request, messages.WARNING,
+                                     'Det skjedde noe galt. {}'.format(e))
+        return render(request, 'customprofile/add_card.html', context={'form': form})
     return render(request, 'customprofile/add_card.html', context)
