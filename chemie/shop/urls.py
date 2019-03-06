@@ -9,5 +9,5 @@ urlpatterns = [
     url(r"^refill-balance", refill, name="refill"),
     url(r"^add-item/", add_item, name="add-item"),
     url(r"^add-category/", add_category, name="add-category"),
-    url(r"^remove-item/(?P<slug>[\w0-9-/]+)", remove_item, name="remove-item")
+    url(r"^remove-item/(?P<pk>[0-9]+)", remove_item, name="remove-item")
 ]

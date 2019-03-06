@@ -103,8 +103,8 @@ def add_category(request):
 
 
 @login_required
-def remove_item(request, slug):
-    item = Item.objects.get(slug=slug)
+def remove_item(request, pk):
+    item = Item.objects.get(pk=pk)
     cart = ShoppingCart(request)
     cart.remove(item)
     return JsonResponse({"success": 1})

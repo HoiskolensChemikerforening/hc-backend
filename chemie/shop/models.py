@@ -42,7 +42,6 @@ class Category(models.Model):
 
 class Item(models.Model):
     name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
-    slug = models.SlugField()
     price = models.DecimalField(
         max_digits=6, decimal_places=2, verbose_name="Pris"
     )
@@ -183,4 +182,3 @@ def pre_save_category_receiver(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(pre_save_category_receiver, sender=Category)
-pre_save.connect(pre_save_category_receiver, sender=Item)

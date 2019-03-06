@@ -1,5 +1,6 @@
 {% extends "chemie/base.html" %}
 {% load thumbnail %}
+{% load shop_extras %}
 
 <head>
   <meta charset="UTF-8">
@@ -142,8 +143,8 @@ Chemshop
           <div>
               Din handlevogn inneholder:
               <ul class="ul-item-list">
-              {% for item_names, item_details in cart.cart.items %}               
-                <li class="item-list"id="item-list-{{item_names.pk}}">{{ item_names }},
+              {% for item_names, item_details in cart.cart.items %}
+                <li class="item-list"id="item-list-{{ item_names|get_item_pk_from_name }}">{{ item_names }},
                     Antall: {{item_details.quantity}},
                     Pris: {{item_details.price}}</li>
               {% endfor %}
@@ -237,11 +238,13 @@ Chemshop
     for (i = 0; i < closeItem.length; i++) {
       var close_button = closeItem[i].children[0];
       close_button.onclick = function() {
+        // Get the current li element
         var current_item = this.parentNode;
-        let text = current_item.innerHTML;
-        let name_of_item = text.split(',')[0];
-        // TODO: make this slug into pk
-        var slug_name = name_of_item.toLowerCase().replace(/ /g,'-').replace(/[^\w-]+/g,'');
+        debugger;
+        // Get the id of the li element and put into array
+        var item_id_array = current_item.id.split("-");
+        // Get item id
+        var item_id = item_id_array[item_id_array.length - 1];
 
         function getCookie(name) {
           var cookieValue = null;
@@ -261,7 +264,7 @@ Chemshop
         var csrftoken = getCookie('csrftoken');
         $.ajax({
           type: "GET",
-          url: "/shop/remove-item/" + slug_name,
+          url: "/shop/remove-item/" + item_id,
           datatype: "json",
 
           success: function (json) {
@@ -271,6 +274,7 @@ Chemshop
                 .lastChild
                 .textContent;
             let amount_to_change = total_sum_string.split(":")[1];
+            let text = current_item.innerHTML;
             let amount_of_items = text.split(":")[1].split(",")[0];
             let price_per_item = text.split(":")[2].split("<")[0];
             let new_amount = parseFloat(amount_to_change).toFixed(2) - (
@@ -282,7 +286,6 @@ Chemshop
                 .parentNode
                 .lastChild
                 .textContent = `Total: ${new_amount}`;
-            // total_amount -= (amount_of_items * price_per_item);
             let cart_modal = document.getElementById("cart-modal");
             let number_of_items_left = cart_modal
                 .children[0]
