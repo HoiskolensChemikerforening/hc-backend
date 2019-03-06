@@ -24,7 +24,7 @@
         <h1 class="title is-2">Sjekk inn til valget</h1>
         <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
           {{ form.rfid }}
-          <input type="submit" class="button" name="addStudentcard" value="Sjekk inn" height="1.7rem"/>
+          <input type="submit" class="button" name="addStudentcard" value="Sjekk inn/ut" height="1.7rem"/>
         </form>
     </div>
 {% else %}
