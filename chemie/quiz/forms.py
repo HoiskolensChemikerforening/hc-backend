@@ -11,4 +11,8 @@ class QuizScoreForm(forms.ModelForm):
             'user': autocomplete.ModelSelect2(
                 url="verv:user-autocomplete"
             ),
+            'score': forms.NumberInput(
+                attrs={
+                    'style': 'width:10ch; margin-left: 10px;'
+                })
         }
