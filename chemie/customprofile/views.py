@@ -249,7 +249,7 @@ class LoginView(OldLoginView):
                     return render(request, 'registration/login.html', context)
 
 
-@permission_required('customprofile.can_edit_access_card')
+@permission_required('events.change_bedpresregistration' or 'elections.add_election')
 @login_required
 def add_rfid(request):
     form = AddCardForm(request.POST or None)
