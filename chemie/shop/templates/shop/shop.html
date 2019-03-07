@@ -32,7 +32,7 @@ Chemshop
     width: 50%;
     padding: 10px;
   }
-  .item-close:hover {
+  .item-remove:hover {
     background-color: #f44336;
     color: white;
   }
@@ -58,7 +58,7 @@ Chemshop
   background: #eee;
   font-size: 18px;
   transition: 0.2s;
-  
+
   /* make the list items unselectable */
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -77,11 +77,9 @@ Chemshop
 }
 
 /* Style the close button */
-.item-close {
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 12px 16px 12px 16px;
+.item-remove {
+  margin: auto;
+
 }
 {% endblock style %}
 
@@ -105,28 +103,16 @@ Chemshop
       <span class="card-title activator grey-text text-darken-4" style="float:right; font-size: medium">{{ item.price }} kr</span>
     </div>
 
-    <div class="card-action"> 
-        <script type="text/javascript">
-          item_dict["{{item.name}}"] = 0; // appends item to dictionary
-          
-          //user presses the + button
-          function plus(item_name){
-              item_dict[item_name]++;
-              document.getElementById('item_'+ item_name).value = item_dict[item_name];
-          }
-
-          // user presses the - button
-          function minus(item_name){
-            if (item_dict[item_name]>0){
-              item_dict[item_name]--;
-            } 
-            document.getElementById('item_'+ item_name).value = item_dict[item_name];
-          }  
-        </script>
+    <div class="card-action">
+      <script type="text/javascript">
+        item_dict["{{item.name}}"] = 0; // appends item to dictionary
+      </script>
         <div>
-            <a type="button" class="btn-small waves-effect waves-light red" id="minus" onclick="minus('{{item.name}}')"><i class="material-icons white-text">remove</i></a>
+            <a type="button" class="btn-small waves-effect waves-light red" id="minus" onclick="minus('{{ item.name }}')">
+              <i class="material-icons white-text">remove</i></a>
             <input style="width: 1.2rem; text-align: center" type="text" value="0" id="item_{{item.name}}">
-            <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{item.name}}')"><i class="material-icons white-text" style="margin:auto">add</i></a>
+            <a type="button"  class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{ item.name }}')">
+              <i class="material-icons white-text" style="margin:auto">add</i></a>
             <form action="#" method="POST" style="display:inline; margin: auto">
                 {% csrf_token %}
                 <button class="waves-effect waves-light btn-small" id="{{ item.id }}" type="submit" name="buy" value="{{ item.id }}-0" style="float:right; margin-top: 0.5rem" onclick="changeQuantity(this,'{{item.name}}');"><i class="large material-icons">add_shopping_cart</i></button>
@@ -141,22 +127,30 @@ Chemshop
     <div id="modal1" class="modal">
       <div class="modal-content" id="cart-modal">
           <div>
-              Din handlevogn inneholder:
-              <ul class="ul-item-list">
+            <h5>Handlevogn</h5>
+            <table style="width:100%" id="shopping-table">
+              <tr class="ul-item-list">
+                <th>Vare</th>
+                <th>Antall</th>
+                <th>Pris</th>
+                <th>Total</th>
+                <th></th>
+              </tr>
               {% for item_names, item_details in cart.cart.items %}
-                <li class="item-list"id="item-list-{{ item_names|get_item_pk_from_name }}">{{ item_names }},
-                    Antall: {{item_details.quantity}},
-                    Pris: {{item_details.price}}</li>
+                <tr class="item-list" id="item-list-{{ item_names|get_item_pk_from_name }}">
+                  <td>{{ item_names }}</td>
+                  <td>{{ item_details.quantity }}</td>
+                  <td>{{ item_details.price }}</td>
+                  <td>Totalpris for denne</td>
+                  <td style="text-align: center;" class="item-remove">&times;</td>
+                </tr>
               {% endfor %}
-              </ul>
-              Total: {{ cart.get_total_price }}
-            </div>
+            </table>
+            <div id="total-sum-in-cart">Total: {{ cart.get_total_price }}</div>
             <form method="POST"> {% csrf_token %}
                 <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
             </form>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Agree</a>
+          </div>
       </div>
     </div>
 </div>
@@ -196,6 +190,40 @@ Chemshop
 {% endblock content %}
 
 {% block footer_script %}
+<script type="text/javascript">
+  function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+              var cookie = jQuery.trim(cookies[i]);
+              // Does this cookie string begin with the name we want?
+              if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                  cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                  break;
+              }
+          }
+      }
+      return cookieValue;
+    }
+  var csrftoken = getCookie('csrftoken');
+</script>
+
+<script type="text/javascript">
+  //user presses the + button
+  function plus(item_name, item_pk){
+      item_dict[item_name]++;
+      document.getElementById('item_'+ item_name).value = item_dict[item_name];
+  }
+
+  // user presses the - button
+  function minus(item_name, item_pk){
+    if (item_dict[item_name]>0){
+      item_dict[item_name]--;
+    }
+    document.getElementById('item_'+ item_name).value = item_dict[item_name];
+  }
+</script>
 <script>
   function changeQuantity(self, item_name) {
     if (item_dict[item_name] === 0){
@@ -209,7 +237,7 @@ Chemshop
   
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');
-    var instances = M.Modal.init(elems, {});
+    var cart_modal_element = M.Modal.init(elems, {});
   });
   
   // Check if side bar is activated or not
@@ -218,25 +246,32 @@ Chemshop
       floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
   }
 
+  function getTotalForItem(item_list_id){
+    let item = document.getElementById(item_list_id);
+    let quantity = item.children[1].innerHTML;
+    let price = item.children[2].innerHTML;
+    return (parseFloat(price).toFixed(2)*parseFloat(quantity).toFixed(2)).toFixed(2);
+  }
 
 </script>
 <script>
     // Create a "close" button and append it to each list item
     var itemList = document.getElementsByClassName("item-list");
-    var i;
+    // var i;
     for (i = 0; i < itemList.length; i++) {
-      var span = document.createElement("SPAN");
-      var txt = document.createTextNode("\u00D7");
-      span.className = "item-close";
-      span.appendChild(txt);
-      itemList[i].appendChild(span);
+      var columns = itemList[i].children.length;
+      // Get total price for items: quantity*price
+      itemList[i]
+          .children[columns - 2]
+          .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
     }
     
-    // Click on a close button to hide the current list item
+    // Click on a close button to remove the current list item
     var closeItem = document.getElementsByClassName("item-list");
     var i;
     for (i = 0; i < closeItem.length; i++) {
-      var close_button = closeItem[i].children[0];
+      // The 'x' at the far right
+      var close_button = closeItem[i].lastElementChild;
       close_button.onclick = function() {
         // Get the current li element
         var current_item = this.parentNode;
@@ -245,56 +280,31 @@ Chemshop
         // Get item id
         var item_id = item_id_array[item_id_array.length - 1];
 
-        function getCookie(name) {
-          var cookieValue = null;
-          if (document.cookie && document.cookie !== '') {
-              var cookies = document.cookie.split(';');
-              for (var i = 0; i < cookies.length; i++) {
-                  var cookie = jQuery.trim(cookies[i]);
-                  // Does this cookie string begin with the name we want?
-                  if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                      cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                      break;
-                  }
-              }
-          }
-          return cookieValue;
-        }
-        var csrftoken = getCookie('csrftoken');
         $.ajax({
           type: "GET",
           url: "/shop/remove-item/" + item_id,
           datatype: "json",
 
           success: function (json) {
-            let total_sum_string = current_item
-                .parentNode
-                .parentNode
-                .lastChild
-                .textContent;
-            let amount_to_change = total_sum_string.split(":")[1];
-            let text = current_item.innerHTML;
-            let amount_of_items = text.split(":")[1].split(",")[0];
-            let price_per_item = text.split(":")[2].split("<")[0];
-            let new_amount = parseFloat(amount_to_change).toFixed(2) - (
-                parseFloat(amount_of_items).toFixed(2)*
-                parseFloat(price_per_item).toFixed(2)
-            );
-            current_item
-                .parentNode
-                .parentNode
-                .lastChild
-                .textContent = `Total: ${new_amount}`;
-            let cart_modal = document.getElementById("cart-modal");
-            let number_of_items_left = cart_modal
-                .children[0]
-                .children[0]
-                .childElementCount;
+            let total_sum_element = document.getElementById("total-sum-in-cart");
+            let sum_to_remove = current_item.
+                children[current_item.children.length - 2]
+                .innerHTML;
+            let total_sum = total_sum_element.innerHTML.split(" ")[1];
+            // Nasty, but really just takes the difference between previous total sum
+            // and sum of items removed + replaces decimal separator 'dot' to 'comma'
+            let new_sum = parseFloat(
+                parseFloat(total_sum).toFixed(2) -
+                parseFloat(sum_to_remove).toFixed(2)
+            ).toFixed(2).replace(".", ",");
+            total_sum_element.innerHTML = `Total: ${new_sum}`;
+            let number_of_items_left = document.getElementsByClassName("item-list").length;
             current_item.parentNode.removeChild(current_item);
             if ((number_of_items_left - 1) === 0){
               for (let key in item_dict){
                 item_dict[key] = 0;
               }
+              let cart_modal = document.getElementById("cart-modal");
               cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
             }
           },
