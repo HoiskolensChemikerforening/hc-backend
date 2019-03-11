@@ -5,6 +5,18 @@ from .models import Device, CoffeeSubmission
 from django.views.decorators.csrf import csrf_exempt
 import os
 import json
+from rest_framework import viewsets
+from .serializers import CoffeeSubmissionSerializer
+from django.http import HttpResponse, JsonResponse
+from rest_framework.renderers import JSONRenderer
+from rest_framework.parsers import JSONParser
+
+
+
+class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
+    queryset = CoffeeSubmission.objects.all().order_by('date')
+    serializer_class = CoffeeSubmissionSerializer
+
 
 @login_required
 def save_device(request):
@@ -22,27 +34,24 @@ def save_device(request):
 @csrf_exempt
 def send_notification(request):
     """ Send notification to all users from notification/send url """
-    if request.method == 'POST':
+    if request.method == 'GET':
+        submissions = CoffeeSubmission.objects.all()
+        serializer = CoffeeSubmissionSerializer(submissions, many=True)
+        return JsonResponse(serializer.data, safe=False)
+
+    elif request.method == 'POST':
         payload_bytes = request.body
-        payload_bytes_decoded = payload_bytes.decode('utf8').replace("'", '"')
+        payload_bytes_decoded = payload_bytes.decode('utf8')
         payload_json = json.loads(payload_bytes_decoded)
+        serializer = CoffeeSubmissionSerializer(data=payload_json)
+        if serializer.is_authorized(
+            payload_json['notification_key'], 
+            payload_json['topic']
+            ):
+            serializer.save()
 
-        # Custom symmetric verification key. One is storred on device with identical on server
-        if payload_json['notification_key'] == os.environ.get('NOTIFICATION_KEY'):
-            topic = payload_json['topic']
-            if topic == "coffee":
-
-                # Prevent to frequent notification sendings
-                if CoffeeSubmission.check_last_submission():
-                    gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
-                    [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
-                    CoffeeSubmission.objects.create()
-
-            # Redundant method which may be implemented later
-            elif topic == "news":
-                message = request.post['message']
-                gcm_devices = Device.objects.filter(news_subscription=True,gcm_device__active=True)
-                [device.send_notification("Nyheter", message) for device in gcm_devices]
-        else:
-            raise ConnectionAbortedError('Notification key is not valid')
+            gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
+            [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
+            return JsonResponse(serializer.data, status=201)
+        return JsonResponse(serializer.errors, status=400)
     return redirect(reverse('frontpage:home'))
