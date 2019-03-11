@@ -48,10 +48,11 @@ def send_notification(request):
             payload_json['notification_key'], 
             payload_json['topic']
             ):
-            serializer.save()
+            if CoffeeSubmission.check_last_submission():
+                serializer.save()
 
-            gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
-            [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
-            return JsonResponse(serializer.data, status=201)
-        return JsonResponse(serializer.errors, status=400)
+                gcm_devices = Device.objects.filter(coffee_subscription=True, gcm_device__active=True)
+                [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
+            return JsonResponse(serializer.errors, status=201)
+        return JsonResponse(serializer.errors, status=401)
     return redirect(reverse('frontpage:home'))

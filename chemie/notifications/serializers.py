@@ -12,7 +12,6 @@ class CoffeeSubmissionSerializer(serializers.HyperlinkedModelSerializer):
         if self.is_valid():
             if token == PUSH_NOTIFICATIONS_SETTINGS['FCM_API_KEY']:
                 if topic == 'coffee':
-                    if CoffeeSubmission.check_last_submission():
-                        return True
+                    return True
         return False 
         
