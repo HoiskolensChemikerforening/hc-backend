@@ -1,5 +1,6 @@
 from django.db import models
 from sorl.thumbnail import ImageField
+from multiselectfield import MultiSelectField
 
 
 SPECIALIZATIONS = ((1, 'Bioteknologi'),
@@ -13,8 +14,8 @@ SPECIALIZATIONS = ((1, 'Bioteknologi'),
 class Company(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
-    logo = models.ImageField(upload_to="corporate", verbose_name="Logo")
-    #specializations = models.(choices=SPECIALIZATIONS)
+    logo = ImageField(upload_to="corporate", verbose_name="Logo")
+    specializations = MultiSelectField(choices=SPECIALIZATIONS)
 
     def __str__(self):
         return self.name
@@ -26,4 +27,4 @@ class Interview(models.Model):
     text = models.TextField(
         verbose_name="Selve Intervjuet"
     )
-    picture = models.ImageField()
+    picture = ImageField(upload_to="corporate")
