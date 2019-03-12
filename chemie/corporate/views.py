@@ -6,3 +6,10 @@ from django.shortcuts import HttpResponse
 
 def index(request):
     return HttpResponse("Du er sykt heft10")
+
+def interview(request):
+    interviews = Interview.objects.order_by("id")
+    context = {"interviews": interviews}
+
+    return render(request, "committees/list_committees.html", context)
+
