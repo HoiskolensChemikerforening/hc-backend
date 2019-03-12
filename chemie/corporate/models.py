@@ -12,19 +12,19 @@ SPECIALIZATIONS = ((1, 'Bioteknologi'),
 
 
 class Company(models.Model):
-    name = models.CharField(max_length=200)
-    description = models.TextField()
+    name = models.CharField(max_length=200, verbose_name="Navn")
+    description = models.TextField(verbose_name="Beskrivelse")
     logo = ImageField(upload_to="corporate", verbose_name="Logo")
-    specializations = MultiSelectField(choices=SPECIALIZATIONS)
+    specializations = MultiSelectField(choices=SPECIALIZATIONS, verbose_name="Aktuelle retninger")
 
     def __str__(self):
         return self.name
 
 
 class Interview(models.Model):
-    corporate = models.ForeignKey(Company, on_delete=models.CASCADE)
-    person = models.CharField(max_length=40)
-    text = models.TextField(
-        verbose_name="Selve Intervjuet"
+    company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name="Bedrift")
+    name = models.CharField(max_length=40, verbose_name="Navn")
+    interview = models.TextField(
+        verbose_name="Intervjuet"
     )
-    picture = ImageField(upload_to="corporate")
+    picture = ImageField(upload_to="corporate", verbose_name="Bilde")
