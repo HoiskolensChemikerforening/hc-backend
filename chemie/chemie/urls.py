@@ -53,6 +53,9 @@ urlpatterns = [
     url(
         r"^elections/", include("chemie.elections.urls", namespace="elections")
     ),
+    url(
+        r"^corporate/", include("chemie.corporate.urls", namespace="corporate")
+    )
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
