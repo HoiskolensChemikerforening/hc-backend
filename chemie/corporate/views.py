@@ -1,6 +1,7 @@
 from django.shortcuts import render
-from django.shortcuts import HttpResponse
-from .models import Interview
+from django.shortcuts import HttpResponse, redirect, reverse
+from .models import Company, Interview
+from .forms import CreateCompanyForm
 
 # Create your views here.
 
@@ -15,3 +16,12 @@ def interview(request):
 
     return render(request, "corporate/interview.html", context)
 
+
+def create_company(request):
+    form = CreateCompanyForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse("corporate:temp_company_list"))
+
+    context = {"form": form}
+    return render(request, "corporate/company_create.html", context)
