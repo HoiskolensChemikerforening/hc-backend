@@ -10,15 +10,6 @@ SPECIALIZATIONS = ((1, 'Bioteknologi'),
                    (6, 'Materialkjemi og energiteknologi'))
 
 
-class Interview(models.Model):
-    corporate = models.ForeignKey(Company, on_delete=models.CASCADE)
-    person = models.CharField(max_length=40)
-    text = models.TextField(
-        verbose_name="Selve Intervjuet"
-    )
-    picture = models.ImageField()
-
-
 class Company(models.Model):
     name = models.CharField(max_length=200)
     description = models.TextField()
@@ -27,3 +18,12 @@ class Company(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class Interview(models.Model):
+    corporate = models.ForeignKey(Company, on_delete=models.CASCADE)
+    person = models.CharField(max_length=40)
+    text = models.TextField(
+        verbose_name="Selve Intervjuet"
+    )
+    picture = models.ImageField()
