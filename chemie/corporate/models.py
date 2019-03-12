@@ -13,8 +13,8 @@ SPECIALIZATIONS = ((1, 'Bioteknologi'),
 class Interview(models.Model):
     corporate = models.ForeignKey()
     person = models.CharField(max_length=40)
-    text = models.RichTextField(
-        verbose_name="Intervju"
+    text = models.TextField(
+        verbose_name="Selve Intervjuet"
     )
     picture = models.ImageField()
 
