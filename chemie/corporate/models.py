@@ -11,7 +11,7 @@ SPECIALIZATIONS = ((1, 'Bioteknologi'),
 
 
 class Interview(models.Model):
-    corporate = models.ForeignKey()
+    corporate = models.ForeignKey(Company, on_delete=models.CASCADE)
     person = models.CharField(max_length=40)
     text = models.TextField(
         verbose_name="Selve Intervjuet"
