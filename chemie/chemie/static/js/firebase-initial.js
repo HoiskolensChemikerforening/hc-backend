@@ -15,7 +15,7 @@ const messaging = firebase.messaging();
 navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     .then(function (registration) {
         messaging.useServiceWorker(registration);
-        if (window.location.href == "https://chemie.no/") { //Only prompts permission on home page
+        if (window.location.href == "https://chemie.no/" || window.location.href == "https://hc.ntnu.no/") { //Only prompts permission on home page
             messaging.requestPermission()
                 .then(function () {
                     return messaging.getToken();
