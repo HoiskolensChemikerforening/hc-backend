@@ -24,10 +24,17 @@ def save_device(request):
     if request.method == "POST":
         browser = request.POST['browser']
         token = request.POST['token']
+        #  todo check if user has a device
         if browser is not None and token is not '':
-            if GCMDevice.objects.filter(registration_id=token).count() == 0:
-                device = GCMDevice.objects.create(registration_id=token, cloud_message_type="FCM", user=request.user)
-                Device.objects.create(gcm_device=device)  # saving device token with user
+            if Device.objects.filter(owner=request.user).count() == 0:
+                Device.objects.create(owner=request.user)  
+            device= Device.objects.get(owner=request.user)
+            duplicate_gcm_device = device.gcm_device.filter(registration_id=token)
+            if duplicate_gcm_device.count() == 0:
+                device.gcm_device.create(
+                    registration_id=token, 
+                    cloud_message_type="FCM", 
+                    user=request.user)
     return redirect(reverse('frontpage:home'))
 
 
@@ -55,4 +62,5 @@ def send_notification(request):
                 [device.send_notification("Kaffe", "Nytraktet kaffe på kontoret") for device in gcm_devices]
             return JsonResponse(serializer.errors, status=201)
         return JsonResponse(serializer.errors, status=401)
-    return redirect(reverse('frontpage:home'))
+    else:  # PUT eller DELETE request
+        return redirect(reverse('frontpage:home'))
