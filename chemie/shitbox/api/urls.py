@@ -6,8 +6,6 @@ from .views import CreateView
 
 router = routers.DefaultRouter()
 
-router.register('submission', CreateView, base_name='submissions')
+router.register("submission", CreateView, base_name="submissions")
 
-urlpatterns = [
-    url(r'^', include(router.urls)),
-]
+urlpatterns = [url(r"^", include(router.urls))]

@@ -13,26 +13,32 @@ from sorl.thumbnail import ImageField
 class Committee(models.Model):
     title = models.CharField(max_length=100, unique=True)
     email = models.EmailField(null=True, blank=True)
-    image = ImageField(upload_to='komiteer')
+    image = ImageField(upload_to="komiteer")
     slug = models.SlugField(null=True, blank=True)
     one_liner = models.CharField(max_length=30, verbose_name="Lynbeskrivelse")
-    description = RichTextField(verbose_name='Beskrivelse', config_name='committees')
+    description = RichTextField(
+        verbose_name="Beskrivelse", config_name="committees"
+    )
 
     def __str__(self):
         return self.title
 
     def get_absolute_url(self):
-        return reverse('verv:committee_detail', kwargs={'slug': self.slug})
+        return reverse("verv:committee_detail", kwargs={"slug": self.slug})
 
 
 class Position(models.Model):
     title = models.CharField(max_length=100, verbose_name="Stillingsnavn")
     email = models.EmailField(null=True, blank=True, verbose_name="Epost")
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
-    permission_group = models.ForeignKey(Group, null=True, on_delete=models.CASCADE)
-    max_members = models.PositiveSmallIntegerField(default=1, verbose_name='Antall medlemmer')
+    permission_group = models.ForeignKey(
+        Group, null=True, on_delete=models.CASCADE
+    )
+    max_members = models.PositiveSmallIntegerField(
+        default=1, verbose_name="Antall medlemmer"
+    )
     can_manage_committee = models.BooleanField(default=False)
-    users = models.ManyToManyField(User, blank=True, verbose_name='medlem')
+    users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
 
     def remove_from_group(self, users):
         for user in users:
@@ -42,18 +48,22 @@ class Position(models.Model):
         for user in users:
             self.permission_group.user_set.add(user)
 
-    # Signal for adding and removing users from a permission group as they are added/removed to a Position
-    # https://stackoverflow.com/a/4571362
+    # Signal for adding and removing users from a permission group as they are
+    # added/removed to a Position https://stackoverflow.com/a/4571362
     @staticmethod
-    def consistent_permissions(sender, instance, action, reverse, model, pk_set, **kwargs):
+    def consistent_permissions(
+        sender, instance, action, reverse, model, pk_set, **kwargs
+    ):
 
-        if action == 'pre_add':
+        if action == "pre_add":
             if len(pk_set) + instance.users.count() > instance.max_members:
-                raise ValidationError('This only holds {} members.'.format(instance.max_members))
+                raise ValidationError(
+                    "This only holds {} members.".format(instance.max_members)
+                )
 
-        if action == 'post_add':
+        if action == "post_add":
             instance.add_to_group(instance.users.all())
-        elif action == 'pre_remove':
+        elif action == "pre_remove":
             instance.remove_from_group(instance.users.all())
 
     def __str__(self):
@@ -71,4 +81,6 @@ def pre_save_committee_receiver(sender, instance, *args, **kwargs):
     instance.slug = slug
 
 
-m2m_changed.connect(receiver=Position.consistent_permissions, sender=Position.users.through)
+m2m_changed.connect(
+    receiver=Position.consistent_permissions, sender=Position.users.through
+)

@@ -1,5 +1,5 @@
 {% extends "chemie/base.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load material_form %}
 
 {% block header %}
@@ -32,14 +32,20 @@
         Du kan fortsatt melde din interesse dersom det åpnes plasser.
       </p>
       {% endif %}
-    <form method='POST'>{% csrf_token %}
+
+    <form method='POST' id="registration">{% csrf_token %}
 
       {% form form=registration_form %}
 
       {% endform %}
 
-      <button class="waves-effect waves-light btn btn-primary" name="register_or_edit" type="submit">{% if registered %}
-        Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
+      <h6>Høiskolens Chemikerforenings <a href="https://chemie.no/wiki/webkom/samtykkeerklaering-arrangement/"
+                                         target="_blank">samtykkeerklæring for arrangementer</a></h6>
+
+      <button class="waves-effect waves-light btn btn-primary" name="register_or_edit"
+      id="register_or_edit" type="submit" disabled>{% if registered %}
+      Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
+
     </form>
   {% else %}
 
@@ -50,3 +56,7 @@
     {% endif %}
 {% endif %}
 {% endblock content %}
+
+{% block footer_js_files %}
+  <script src="{% static 'events/enable_register.js' %}"></script>
+{% endblock footer_js_files %}

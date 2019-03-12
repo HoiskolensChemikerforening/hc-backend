@@ -4,21 +4,24 @@
 <div align="center">
     <h1 class="title is-2">Velkommen til valg</h1>
     {% if election.is_open %}
-    {%if election.current_position_is_open%}
-    {%if not voted%}
-    <a href="vote" class="button">Gå til avstemming</a>
-    {% else %}
-    <h5 class="card-title">Du har alt stemt, vennligst vent</h5>
-    {%endif%}
+        {% if eligible %}
+            {%if election.current_position_is_open%}
+                {%if not voted%}
+                    <a href="vote" class="button">Gå til avstemming</a>
+                {% else %}
+                    <h5 class="card-title">Du har alt stemt, vennligst vent</h5>
+                {%endif%}
+            {%else%}
+                <h5 class="card-title">Klargjøres til valg av ny posisjon. Vennligst vent</h5>
+            {%endif%}
+        {% else %}
+            <h5 class="card-tile">Du har ikke sjekket inn på valget enda. Vennligst scann studentkortet ditt ved døra.</h5>
+        {% endif %}
     {%else%}
-    <h5 class="card-title">Klargjøres til valg av ny posisjon. Vennligst vent</h5>
-    {%endif%}
-    {%else%}
-
-    <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
-    <a class="button" href="{% url "elections:results" %}">
-    <h2>Se resultater fra forrige valg</h2>
-    </a>
+        <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
+        <a class="button" href="{% url "elections:results" %}">
+            <h2>Se resultater fra forrige valg</h2>
+        </a>
     {%endif%}
 </div>
 

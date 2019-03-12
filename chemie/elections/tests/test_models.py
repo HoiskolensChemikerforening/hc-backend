@@ -47,7 +47,9 @@ def test_add_candidate(create_election_with_positions, create_candidates):
 
 
 @pytest.mark.django_db
-def test_delete_single_candidate(create_election_with_positions, create_candidates):
+def test_delete_single_candidate(
+    create_election_with_positions, create_candidates
+):
     election, positions = create_election_with_positions
     election.add_position(positions)
 
@@ -84,7 +86,9 @@ def test_delete_position(create_election_with_positions, create_candidates):
 
 
 @pytest.mark.django_db
-def test_get_current_position_winners(create_election_with_positions, create_candidates):
+def test_get_current_position_winners(
+    create_election_with_positions, create_candidates
+):
     election, positions = create_election_with_positions
     candidates = create_candidates
 
@@ -99,13 +103,15 @@ def test_get_current_position_winners(create_election_with_positions, create_can
 
     position.candidates.add(*candidates)
     position.end_voting_for_position()
-    assert \
-        collections.Counter(list(position.winners.all())) \
-        == collections.Counter(winner_candidates)
+    assert collections.Counter(
+        list(position.winners.all())
+    ) == collections.Counter(winner_candidates)
 
 
 @pytest.mark.django_db
-def test_start_current_election(create_election_with_positions, create_candidates):
+def test_start_current_election(
+    create_election_with_positions, create_candidates
+):
     election, positions = create_election_with_positions
     candidates = create_candidates
 
@@ -124,7 +130,7 @@ def test_start_current_election(create_election_with_positions, create_candidate
         profile.voted = True
         profile.save()
 
-    election.start_current_election(position.id)
+    election.start_current_election(position)
     assert election.current_position == position
 
     # Check that users can now vote again
@@ -152,7 +158,9 @@ def test_end_election(create_election_with_positions):
 
 
 @pytest.mark.django_db
-def test_start_current_election(create_election_with_positions, create_candidates, create_user):
+def test_all_possible_vote_outcomes(
+    create_election_with_positions, create_candidates, create_user
+):
     election, positions = create_election_with_positions
     candidates = create_candidates
     candidate = candidates[0]
@@ -165,7 +173,7 @@ def test_start_current_election(create_election_with_positions, create_candidate
     # Fetch user
     profile = create_user.profile
 
-    # Set an a vote variable
+    # Set a vote variable
     votes = 0
 
     # Let user vote blank
