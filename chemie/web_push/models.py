@@ -2,7 +2,7 @@ from django.db import models
 from push_notifications.models import APNSDevice, GCMDevice
 import datetime
 from django.db.models.signals import pre_delete
-
+from django.contrib.auth.models import User
 
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
@@ -26,7 +26,10 @@ class CoffeeSubmission(models.Model):
 
 class Device(models.Model):
     """ Overall model which saves gcm/apns device and the users subsciption settings """
-    gcm_device = models.ForeignKey(GCMDevice, related_name="Device", on_delete=models.DO_NOTHING)
+    owner = models.ForeignKey(
+        User, verbose_name="eier", on_delete=models.CASCADE
+    )
+    gcm_device = models.ManyToManyField(GCMDevice, blank=True, related_name="Device")
     # apns_device = models.ForeignKey(APNSDevice, blank=False, related_name="Device")
     coffee_subscription = models.BooleanField(default=True)
     news_subscription = models.BooleanField(default=True)
@@ -42,7 +45,10 @@ class Device(models.Model):
 
 def delete_device_signal(sender, instance, **kwargs):
     """ Deletes gcm_device when deleting Device """
-    instance.gcm_device.delete()
+    query_set = instance.gcm_device.all()
+    if query_set.count() != 0:
+        for gcm_device in query_set:
+            gcm_device.delete()
 
 # Connects delete_device_signal with the pre_delete signal reciever
 pre_delete.connect(delete_device_signal, sender=Device)
