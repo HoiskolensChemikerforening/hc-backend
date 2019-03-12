@@ -22,7 +22,7 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
                 }).then(function (token) {
                 // Saving device token backend as Device object to be used when notification is to be sent
                 var browser = getBrowser();
-                postAjax("notifications/save/", {'token': token, 'browser': browser});
+                postAjax("web_push/save/", {'token': token, 'browser': browser});
             }).catch(function (err) {
             if (!err.code == "messaging/permission-blocked"){
                 throw err;
