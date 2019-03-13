@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-from .models import Contribution
+from .models import Contribution, PictureTag
 
 
 class PostAdmin(admin.ModelAdmin):
@@ -15,3 +15,4 @@ class PostAdmin(admin.ModelAdmin):
 
 
 admin.site.register(Contribution, PostAdmin)
+admin.site.register(PictureTag)
