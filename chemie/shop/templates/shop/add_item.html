@@ -8,15 +8,17 @@
 </head>
 
 {% block content %}
-<div>
-  <form enctype="multipart/form-data" method="POST">{% csrf_token %}
+<div style="display:inline">
+  <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
     {{ form.media }}
     {{ form.as_p }}
     <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
   </form>
+  <button onclick="location.href='{% url "shop:add-category" %}'" class="btn waves-effect waves-light" style="display:inline">Lag Ny kategori
+    <i class="material-icons right">send</i>
+  </button>
 </div>
 {% endblock content %}
-
 
 {% block footer_script %}
 <script>
