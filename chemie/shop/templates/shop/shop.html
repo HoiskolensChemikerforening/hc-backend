@@ -93,7 +93,7 @@ Chemshop
   var item_dict = {}
 </script>
 <div style="background-color: rgb(237,205,47);
-width: 7rem;
+width: 12rem;
 height: 3rem;
 padding-top: 0.2rem;
 padding-left: 0.2rem;
@@ -102,11 +102,11 @@ border-style: none solid solid solid;
 border-radius: 0rem 0rem 1rem 1rem;
 position: absolute;
 right: 1rem;
-display: inline-block;
 "
 >
-<p style=" display:inline; font-size:1.8rem; margin: auto"> <b>{{balance}}</b></p>
-<img type="image/jpg" src="/static/images/HC_coin.png" style="width:1.8rem; display: inline">
+<img type="image/jpg" src="/static/images/HC_coin.png" style="width:1.8rem; float:right; margin-right: 1rem; margin-top:0.4rem; display: inline">
+<p style=" display:inline; font-size:1.8rem; margin: auto; float: right; margin-right: 1rem"> <b>{{balance}}</b></p>
+
 </div>
 
 <div class="card-box">
@@ -120,7 +120,7 @@ display: inline-block;
 
     <div class="card-content">
       <span class="card-title activator grey-text text-darken-4" style="float:left">{{ item.name }}</span>
-      <span class="card-title activator grey-text text-darken-4" style="float:right; font-size: medium">{{ item.price }} <img type="image/jpg" src="/static/images/HC_coin.png" style="width:1.5rem"></span>
+      <span class="card-title activator grey-text text-darken-4" style="float:right; margin-right: 0.3rem; font-size: medium">{{ item.price }} <img type="image/jpg" src="/static/images/HC_coin.png" style="width:1.5rem; float:right; margin-top: 0.3rem"></span>
     </div>
 
     <div class="card-action">
