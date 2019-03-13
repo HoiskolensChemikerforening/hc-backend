@@ -19,6 +19,7 @@ Chemshop
   .card-box>* {
     flex: 1 1 160px;
     margin: 1rem;
+    margin-top: 4rem;
   }
   .activator{
     max-width:50%;
@@ -47,6 +48,9 @@ Chemshop
 .ul-item-list {
   margin: 0;
   padding: 0;
+}
+.section{
+  padding:0;
 }
 
 /* Style the list items */
@@ -88,7 +92,17 @@ Chemshop
   // The dictionary is the equivalent shopping cart 
   var item_dict = {}
 </script>
-
+<div style="background-color: rgb(124, 138, 3);
+width: 12rem;
+height: 3rem;
+border: 0.3rem solid rgb(124, 138, 3);
+border-radius: 0rem 0rem 1rem 1rem;
+position: absolute;
+right: 1rem;
+"
+>
+<p style="font-size:0.8rem; text-align: center">Du har <b>{{balance}}</b> HC-coin</å>
+</div>
 <div class="card-box">
   {% for item in items %}
   <div class="card sticky-action small">
