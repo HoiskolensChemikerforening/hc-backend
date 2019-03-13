@@ -29,11 +29,11 @@ class Device(models.Model):
     owner = models.ForeignKey(
         User, verbose_name="eier", on_delete=models.CASCADE
     )
-    gcm_device = models.ManyToManyField(GCMDevice, blank=True, related_name="Device")
-    # apns_device = models.ForeignKey(APNSDevice, blank=False, related_name="Device")
+    gcm_device = models.ForeignKey(GCMDevice, blank=True, null=True, related_name="Device", on_delete=models.DO_NOTHING)
+    # apns_device = models.ForeignKey(APNSDevice, blank=True, related_name="Device")
     coffee_subscription = models.BooleanField(default=True)
     news_subscription = models.BooleanField(default=True)
-
+    date_created = models.DateTimeField(auto_now_add=True)
     def send_notification(self, title, message):
         """" Send notification to gcm_device """
         self.gcm_device.send_message(message,
@@ -45,10 +45,9 @@ class Device(models.Model):
 
 def delete_device_signal(sender, instance, **kwargs):
     """ Deletes gcm_device when deleting Device """
-    query_set = instance.gcm_device.all()
-    if query_set.count() != 0:
-        for gcm_device in query_set:
-            gcm_device.delete()
+    if instance.gcm_device is not None:
+        instance.gcm_device.delete()
+        
 
 # Connects delete_device_signal with the pre_delete signal reciever
 pre_delete.connect(delete_device_signal, sender=Device)
