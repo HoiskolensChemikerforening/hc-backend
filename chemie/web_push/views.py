@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from push_notifications.models import APNSDevice, GCMDevice
 from .models import Device, CoffeeSubmission
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
 import os
 import json
 from rest_framework import viewsets
@@ -26,16 +27,21 @@ def save_device(request):
         token = request.POST['token']
         #  todo check if user has a device
         if browser is not None and token is not '':
-            if Device.objects.filter(owner=request.user).count() == 0:
-                Device.objects.create(owner=request.user)  
-            device= Device.objects.get(owner=request.user)
-            duplicate_gcm_device = device.gcm_device.filter(registration_id=token)
-            if duplicate_gcm_device.count() == 0:
-                device.gcm_device.create(
+            registered_device = GCMDevice.objects.filter(registration_id=token)
+            if len(registered_device)  == 0:
+                gcm_device = GCMDevice.objects.create(
                     registration_id=token, 
                     cloud_message_type="FCM", 
                     user=request.user)
-    return redirect(reverse('frontpage:home'))
+                Device.objects.create(
+                    owner=request.user,
+                    gcm_device=gcm_device
+                    )      
+                users_devices = Device.objects.filter(owner=request.user)
+                if len(users_devices) > 5:
+                    users_devices.latest('-date_created').delete()
+                return HttpResponse(status=201)
+    return HttpResponse(status=301)
 
 
 @csrf_exempt
