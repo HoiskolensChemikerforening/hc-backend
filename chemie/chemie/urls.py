@@ -54,7 +54,7 @@ urlpatterns = [
         r"^elections/", include("chemie.elections.urls", namespace="elections")
     ),
     url(
-        r"^corporate/", include("chemie.corporate.urls", namespace="corporate")
+        r"^bedrift/", include("chemie.corporate.urls", namespace="corporate")
     )
 ]
 

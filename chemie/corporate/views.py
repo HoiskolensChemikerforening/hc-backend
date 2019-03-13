@@ -1,13 +1,18 @@
 from django.shortcuts import render
 from django.shortcuts import HttpResponse, redirect, reverse
 from .models import Company, Interview
+from chemie.committees.models import Committee
 from .forms import CreateCompanyForm
 
 # Create your views here.
 
 
 def index(request):
-    return HttpResponse("Du er sykt heft10")
+    indkom = Committee.objects.get(id=12)
+    context = {
+        "indkom": indkom,
+    }
+    return render(request, "corporate/index.html", context)
 
 
 def interview(request):
