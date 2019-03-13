@@ -1,5 +1,5 @@
 from django.conf.urls import url
-
+from .views import PictureTagAutocomplete
 from . import views
 
 app_name = "picturecarousel"
@@ -19,4 +19,9 @@ urlpatterns = [
         {"deny": True},
         name="deny",
     ),
+    url(
+        r"^picturetag-autocomplete/",
+        PictureTagAutocomplete.as_view(),
+        name='picturetag-autocomplete'
+    )
 ]
