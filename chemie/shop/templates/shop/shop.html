@@ -166,9 +166,13 @@ right: 1rem;
                 </tr>
               {% endfor %}
             </table>
-            <div id="total-sum-in-cart">Total: {{ cart.get_total_price }}</div>
+            <div id="total-sum-in-cart">
+              <p style="display:inline; float:right; margin-top: 0.5rem">Total: <b>{{ cart.get_total_price }}</b></p>
+              <img type="image/jpg" src="/static/images/HC_coin.png" style="width:1.5rem; float:right; margin-right: 0.5rem; margin-top:0.5rem; display: inline">
+
+            </div>
             <form method="POST"> {% csrf_token %}
-                <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
+                <button class="waves-effect waves-light btn-small" type="submit" name="checkout" value="checkout">Kjøp varer</button>
             </form>
           </div>
       </div>
@@ -317,6 +321,8 @@ right: 1rem;
                 parseFloat(total_sum).toFixed(2) -
                 parseFloat(sum_to_remove).toFixed(2)
             ).toFixed(2).replace(".", ",");
+            //var img = document.createElement("img")
+            //total_sum_element.appendChild(img);
             total_sum_element.innerHTML = `Total: ${new_sum}`;
             let number_of_items_left = document.getElementsByClassName("item-list").length;
             current_item.parentNode.removeChild(current_item);
