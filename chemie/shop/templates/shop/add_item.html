@@ -8,14 +8,19 @@
 </head>
 
 {% block content %}
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+  <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
+  <a href="{% url "shop:add-category" %}" class="breadcrumb">Legg til kategori</a>
+  <a class="breadcrumb">Legg inn vare</a>
+</div>
 <div style="display:inline">
   <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
     {{ form.media }}
     {{ form.as_p }}
     <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
   </form>
-  <button onclick="location.href='{% url "shop:add-category" %}'" class="btn waves-effect waves-light" style="display:inline">Lag Ny kategori
-    <i class="material-icons right">send</i>
+  <button onclick="location.href='{% url "shop:add-category" %}'" class="btn-small waves-effect waves-light" style="display:inline; float: right">Lag Ny kategori
+    <i class="material-icons right">add</i>
   </button>
 </div>
 {% endblock content %}
