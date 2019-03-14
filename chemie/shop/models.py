@@ -23,7 +23,7 @@ class RefillReceipt(models.Model):
     )
     # Amount of money received
     amount = models.DecimalField(
-        max_digits=6, decimal_places=2, verbose_name="Penger"
+        max_digits=6, decimal_places=2, verbose_name="HC-coin"
     )
 
     def __str__(self):
