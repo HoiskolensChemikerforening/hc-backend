@@ -1,4 +1,5 @@
 {% extends "chemie/base.html" %}
+{% load static %}
 {% load material_form %}
 
 {% block nav_header %}
@@ -33,8 +34,8 @@
       </p>
 
       <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
-        {% form form=form %}
-        {% endform %}
+        {{ form.media }}
+        {{ form.as_p }}
         <input class="btn" type='submit' value='Send inn bilder!'/>
       </form>
     </div>
@@ -42,3 +43,8 @@
 
 
 {% endblock content %}
+
+{% block footer %}
+<script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
+{{ form.media }}
+{% endblock footer %}

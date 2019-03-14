@@ -10,16 +10,21 @@ class Pictureform(forms.ModelForm):
 
     class Meta:
         model = Contribution
-        fields = ["image",
-                  "tags"]
+        fields = ['image',
+                  'tags']
 
         widgets = {
             'tags': autocomplete.ModelSelect2Multiple(
                 url='picturecarousel:picturetag-autocomplete',
                 attrs={
-                    'style': 'width: 10px;'
+                    'style': 'width: 100px;',
                 }
             )
+        }
+
+        labels = {
+            'image': 'Bilde',
+            'tags': 'Tags',
         }
 
 
