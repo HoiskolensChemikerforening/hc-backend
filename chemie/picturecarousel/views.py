@@ -12,9 +12,8 @@ from django.utils.html import format_html
 from django.forms import modelformset_factory
 
 
-# TODO: Fikse submit picture form, save tags before godkjenn? Mulig å submitte begge?
-#  JA, for burde ha mulighet itl å legge til tags etter submitted
-#
+# TODO: Render tag field in submit PictureForm
+# TODO: Finn ut hvorfor Slett og Godkjenn-knappene klikker. <form> inni annen <form>??
 
 @login_required
 def submit_picture(request):
@@ -50,7 +49,33 @@ def approve_pictures(request):
     approved = Contribution.objects.filter(approved=True).prefetch_related(
         "author"
     )
-    context = {"awaiting_approval": awaiting_approval, "approved": approved}
+
+    MemberFormSet = modelformset_factory(
+        Contribution, form=PictureTagForm, extra=0
+    )
+
+    awaiting_formset = MemberFormSet(
+        request.POST or None, request.FILES or None, queryset=awaiting_approval
+    )
+    approved_formset = MemberFormSet(
+        request.POST or None, request.FILES or None, queryset=approved
+    )
+
+    if request.method == "POST":
+        if awaiting_formset.is_valid():
+            awaiting_formset.save()
+
+        if approved_formset.is_valid():
+            approved_formset.save()
+
+        return redirect("carousel:overview")
+
+    context = {"awaiting_approval": awaiting_approval,
+               "approved": approved,
+               "awaiting_formset": awaiting_formset,
+               "approved_formset": approved_formset
+               }
+
     return render(request, "picturecarousel/approve.html", context)
 
 
