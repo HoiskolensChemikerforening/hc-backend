@@ -23,6 +23,13 @@
     <i class="material-icons right">add</i>
   </button>
 </div>
+<div>
+    <ul>
+      {% for item in items %}
+      <li><b>Vare:</b> {{item.name}} <b>Pris:</b> {{item.price}} <b>Kategori:</b> {{item.category}}</li> 
+      {% endfor%}    
+    </ul>
+  </div>
 {% endblock content %}
 
 {% block footer_script %}
