@@ -4,16 +4,13 @@ from django.contrib import messages
 from django.urls import reverse
 from dal import autocomplete
 from django.shortcuts import redirect, get_object_or_404
-from django.forms import modelformset_factory
 from django.http import HttpResponseRedirect
 from .forms import Pictureform, PictureTagForm
 from .models import Contribution, PictureTag
-from django.utils.html import format_html
 from django.forms import modelformset_factory
 
 
 # TODO: Render tag field in submit PictureForm
-# TODO: Finn ut hvorfor Slett og Godkjenn-knappene klikker. <form> inni annen <form>??
 
 @login_required
 def submit_picture(request):
@@ -62,11 +59,22 @@ def approve_pictures(request):
     )
 
     if request.method == "POST":
-        if awaiting_formset.is_valid():
-            awaiting_formset.save()
+        if 'save_tag' in request.POST:
+            if awaiting_formset.is_valid():
+                awaiting_formset.save()
 
-        if approved_formset.is_valid():
-            approved_formset.save()
+            if approved_formset.is_valid():
+                approved_formset.save()
+
+            return redirect("carousel:overview")
+
+        elif 'approve' in request.POST:
+            picture_id = request.POST.get('form-0-id')
+            return redirect("carousel:approve", picture_id)
+
+        elif 'delete' in request.POST:
+            picture_id = request.POST.get('form-0-id')
+            return redirect("carousel:deny", picture_id)
 
         return redirect("carousel:overview")
 
@@ -81,26 +89,24 @@ def approve_pictures(request):
 
 @permission_required("picturecarousel.change_contribution")
 def approve_deny(request, picture_id, deny=False):
-    if request.method == "POST":
-        picture = get_object_or_404(Contribution, id=picture_id)
-        if not deny:
-            picture.approve()
-            picture.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Bildet er godkjent",
-                extra_tags="Yay!",
-            )
-        else:
-            picture.delete()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Bildet ble slettet",
-                extra_tags="Slettet!",
-            )
-        return HttpResponseRedirect(reverse("carousel:overview"))
+    picture = get_object_or_404(Contribution, id=picture_id)
+    if not deny:
+        picture.approve()
+        picture.save()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Bildet er godkjent",
+            extra_tags="Yay!",
+        )
+    else:
+        picture.delete()
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Bildet ble slettet",
+            extra_tags="Slettet!",
+        )
     return HttpResponseRedirect(reverse("carousel:overview"))
 
 
