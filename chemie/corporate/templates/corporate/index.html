@@ -9,9 +9,11 @@
 </head>
 <body>
 
+{% load static %}
+
 <nav class="navbar navbar-dark bg-dark">
   <a class="navbar-brand" href="#">
-    <img src="/docs/4.3/assets/brand/bootstrap-solid.svg" width="30" height="30" class="d-inline-block align-top" alt="">
+    <img src="{% static "images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
     HC
   </a>
 </nav>
@@ -37,7 +39,7 @@
     </div>
     <div class="col-sm-12 col-md-3">
       <div class="card">
-        <img src="../../../chemie/static/images/indkom.jpg" class="card-img-top" alt="...">
+        <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
         <div class="card-body">
           <h5 class="card-title">Industrikomiteen</h5>
           <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
