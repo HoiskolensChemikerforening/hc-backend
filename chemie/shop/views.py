@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, reverse
 
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
-from .models import Item, ShoppingCart
+from .models import Item, ShoppingCart, Category
 from decimal import InvalidOperation
 
 
@@ -30,7 +30,7 @@ def index(request):
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    "Du har itj pæng, kiis",
+                    "Du har itj nok HC-coin, kiis",
                     extra_tags="Nei!",
                 )
             else:
@@ -88,7 +88,8 @@ def add_item(request):
         if form.is_valid():
             form.save()
             return redirect(reverse("shop:index"))
-    context = {"form": form}
+    items = Item.objects.all()
+    context = {"form": form, "items":items}
     return render(request, "shop/add_item.html", context)
 
 
@@ -99,7 +100,8 @@ def add_category(request):
         if form.is_valid():
             form.save()
             return redirect(reverse("shop:index"))
-    context = {"form": form}
+    categories = Category.objects.all()
+    context = {"form": form,"categories":categories}
     return render(request, "shop/add_category.html", context)
 
 
