@@ -8,6 +8,7 @@ from django.http import HttpResponseRedirect
 from .forms import Pictureform, PictureTagForm
 from .models import Contribution, PictureTag
 from django.forms import modelformset_factory
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # TODO: Render tag field in submit PictureForm
@@ -39,20 +40,28 @@ def view_carousel(request):
 
 
 @permission_required("picturecarousel.change_contribution")
-def approve_pictures(request):
+def approve_pictures(request, page=1):
     awaiting_approval = Contribution.objects.filter(
         approved=False
-    ).prefetch_related("author")
+    ).prefetch_related("author").order_by('-date')
     approved = Contribution.objects.filter(approved=True).prefetch_related(
         "author"
-    )
+    ).order_by('-date')
+    paginator = Paginator(awaiting_approval, 15)
+
+    try:
+        picture_page = paginator.page(page)
+    except PageNotAnInteger:
+        picture_page = paginator.page(1)
+    except EmptyPage:
+        picture_page = paginator.page(paginator.num_pages)
 
     MemberFormSet = modelformset_factory(
         Contribution, form=PictureTagForm, extra=0
     )
 
     awaiting_formset = MemberFormSet(
-        request.POST or None, request.FILES or None, queryset=awaiting_approval
+        request.POST or None, request.FILES or None, queryset=picture_page.object_list
     )
     approved_formset = MemberFormSet(
         request.POST or None, request.FILES or None, queryset=approved
@@ -78,10 +87,10 @@ def approve_pictures(request):
 
         return redirect("carousel:overview")
 
-    context = {"awaiting_approval": awaiting_approval,
-               "approved": approved,
+    context = {"approved": approved,
                "awaiting_formset": awaiting_formset,
-               "approved_formset": approved_formset
+               "approved_formset": approved_formset,
+               "picture_page": picture_page
                }
 
     return render(request, "picturecarousel/approve.html", context)
