@@ -711,7 +711,9 @@ def change_arrival_status(request, registration_id):
 @transaction.atomic
 def set_user_event_status(event, registration):
     if event.allowed_grade(registration.user):
-        if event.has_spare_slots:
+        slots = event.sluts - event.registered_users()
+        has_spare_slots = (slots > 0)
+        if has_spare_slots:
             registration.confirm()
             registration.save()
             return REGISTRATION_STATUS.CONFIRMED
