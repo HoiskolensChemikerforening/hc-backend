@@ -12,8 +12,9 @@ from decimal import InvalidOperation
 @login_required
 def index(request):
     items = Item.objects.all()
+    categories = Category.objects.all()
     cart = ShoppingCart(request)
-    context = {"items": items, "cart": cart}
+    context = {"items": items, "categories":categories, "cart": cart}
     if request.method == "POST":
         if "buy" in request.POST:
             post_str = request.POST["buy"]
