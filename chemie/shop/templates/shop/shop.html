@@ -108,25 +108,26 @@ right: 1rem;
 <script>
   // The dictionary is the equivalent shopping cart 
   var item_dict = {}
-  var categories_filterd= {}
+  var categoriesFilterd= {}
+  var AllItemList = {}
 </script>
 
 <div id="checkboxes" style="display:flex; justify-content: space-between">
   {% for category in categories %}
   <script type="text/javascript">
-    categories_filterd["{{category.name}}"] = false
+    categoriesFilterd["{{category.name}}"] = false
   </script>
   <p>
       <label>
-        <input type="checkbox" onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}"/>
+        <input type="checkbox" name="filter-checkbox" onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}"/>
         <span>{{category}}</span>
       </label>
     </p>
   {% endfor %}
 </div>
-<div class="card-box">
+<div class="card-box" id="card-items">
   {% for item in items %}
-  <div class="card sticky-action small" id="{{item.category}}">
+  <div class="card sticky-action small" id="{{item.category}}-{{item.id}}">
     <div class="card-image waves-effect waves-block waves-light">
         {% thumbnail item.image "630x400" as pic %}
         <img class="activator" src="{{ pic.url }}">
@@ -227,9 +228,45 @@ right: 1rem;
 </script>
 
 <script type="text/javascript">
+  // creates all items to be remembered with filtering
+  var cardItemsChildren = document.getElementById("card-items").children;
+  for (var i = 0; i < cardItemsChildren.length; i++) {
+    AllItemList[cardItemsChildren[i].id]=cardItemsChildren[i]
+  }
 
   function filter_category(checked,category){
-    categories_filterd[category] = checked;
+    categoriesFilterd[category] = checked;
+
+    // check if any boxes are clicked
+    isActivated=false
+    for (key in categoriesFilterd){
+      if (categoriesFilterd[key]){
+        isActivated = true
+      }
+    }
+    var cardItems = document.getElementById("card-items");
+    cardItems.innerHTML = '';
+    var cardItemsList = [];
+    // append only clicked items to list
+    if (isActivated){
+      for (var key in AllItemList){
+        var itemCat = key.split('-')[0];
+        if (categoriesFilterd[itemCat]){
+          cardItemsList.push(AllItemList[key])
+        }
+      }
+    } else { 
+      // if no boxes are clicked, all item is presented
+      for (var key in AllItemList){
+        cardItemsList.push(AllItemList[key])
+      }
+    }
+    // append the filtered items to parent node
+    for (var i= 0; cardItemsList.length; i++){
+        cardItems.appendChild(cardItemsList[i])
+    }
+    
+     
   }
 </script>
 
