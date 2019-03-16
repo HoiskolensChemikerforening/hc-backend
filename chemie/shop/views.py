@@ -48,10 +48,6 @@ def index(request):
 def admin(request):
     return render(request, "shop/admin.html")
 
-#TODO add permissions
-def admin(request):
-    return render(request, "shop/admin.html")
-
 @permission_required("customprofile.refill_balance")
 def refill(request):
     provider = request.user
