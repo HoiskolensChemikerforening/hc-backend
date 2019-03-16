@@ -184,14 +184,6 @@ right: 1rem;
     </a>
   </div>
 {% endif %}
-<!-- TODO add new permission which is called shop.admin -->
-{% if perms.shop.add_item %}
-<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-  <a class="btn-floating btn-large" href="{% url "shop:admin" %}">
-    <i class="large material-icons">edit</i>
-  </a>
-</div>
-{% endif %}
 {% endblock content %}
 
 {% block footer_script %}
