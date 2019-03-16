@@ -43,6 +43,9 @@ def index(request):
                 context["cart"] = cart
     return render(request, "shop/shop.html", context)
 
+#TODO add permissions
+def admin(request):
+    return render(request, "shop/admin.html")
 
 @permission_required("customprofile.refill_balance")
 def refill(request):

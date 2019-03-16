@@ -1,0 +1,39 @@
+{% extends "chemie/base.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chemshop admin</title>
+</head>
+
+
+{% block content %}
+
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large">
+      <i class="large material-icons">edit</i>
+    </a>
+    <ul>
+      <li>
+        <a class="btn-floating blue" href="{% url "shop:add-item" %}"><i class="material-icons">add</i></a>
+        <a class="btn-floating mobile-fab-tip">Opprett vare</a>
+      </li>
+      {% if perms.shop.add_category %}
+      <li>
+        <a class="btn-floating blue" href="{% url "shop:add-category" %}"><i class="material-icons">add</i></a>
+        <a class="btn-floating mobile-fab-tip">Opprett kategori</a>
+      </li>
+      {% endif %}
+      {% if perms.customprofile.can_refill_balance %}
+      <li>
+        <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">add</i></a>
+        <a class="btn-floating mobile-fab-tip">Fyll konto</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+{% endblock content %}
+
+{% block footer_script %}
+{% endblock footer_script %} 
