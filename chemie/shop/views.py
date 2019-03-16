@@ -13,8 +13,7 @@ from decimal import InvalidOperation
 def index(request):
     items = Item.objects.all()
     cart = ShoppingCart(request)
-    balance = request.user.profile.balance
-    context = {"items": items, "cart": cart, "balance":balance}
+    context = {"items": items, "cart": cart}
     if request.method == "POST":
         if "buy" in request.POST:
             post_str = request.POST["buy"]
