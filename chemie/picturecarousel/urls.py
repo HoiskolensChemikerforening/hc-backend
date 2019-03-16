@@ -17,6 +17,12 @@ urlpatterns = [
     url(r"^overview/(?P<page>[0-9]+)$",
         views.approve_pictures,
         name="detail"),
+    url(r"^active/$",
+        views.active_list,
+        name="active"),
+    url(r"^active/(?P<page>[0-9]+)$",
+        views.active_list,
+        name="active_detail"),
     url(
         r"^overview/approve/(?P<picture_id>[0-9]+)",
         views.approve_deny,

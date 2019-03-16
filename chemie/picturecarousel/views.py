@@ -11,7 +11,7 @@ from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
-# TODO: Render tag field in submit PictureForm
+# TODO: approve_delete redirect to current page
 
 @login_required
 def submit_picture(request):
@@ -40,21 +40,63 @@ def view_carousel(request):
 
 
 @permission_required("picturecarousel.change_contribution")
-def approve_pictures(request, page=1):
-    awaiting_approval = Contribution.objects.filter(
-        approved=False
-    ).prefetch_related("author").order_by('-date')
+def active_list(request, page=1):
     approved = Contribution.objects.filter(approved=True).prefetch_related(
         "author"
     ).order_by('-date')
-    paginator = Paginator(awaiting_approval, 15)
+    paginator = Paginator(approved, 2)
 
     try:
         picture_page = paginator.page(page)
     except PageNotAnInteger:
         picture_page = paginator.page(1)
+        page = 1
     except EmptyPage:
         picture_page = paginator.page(paginator.num_pages)
+        page = paginator.num_pages
+
+    MemberFormSet = modelformset_factory(
+        Contribution, form=PictureTagForm, extra=0
+    )
+    approved_formset = MemberFormSet(
+        request.POST or None, request.FILES or None, queryset=picture_page.object_list
+    )
+
+    if request.method == "POST":
+        if 'save_tag' in request.POST:
+            if approved_formset.is_valid():
+                approved_formset.save()
+            return redirect("carousel:active_detail", page)
+
+        elif 'delete' in request.POST:
+            picture_id = request.POST.get('delete')
+            return redirect("carousel:deny", picture_id)
+
+        return redirect("carousel:active_detail", page)
+
+    context = {"approved_formset": approved_formset,
+               "picture_page": picture_page,
+               "page": page
+               }
+
+    return render(request, "picturecarousel/active.html", context)
+
+
+@permission_required("picturecarousel.change_contribution")
+def approve_pictures(request, page=1):
+    awaiting_approval = Contribution.objects.filter(
+        approved=False
+    ).prefetch_related("author").order_by('-date')
+    paginator = Paginator(awaiting_approval, 2)
+
+    try:
+        picture_page = paginator.page(page)
+    except PageNotAnInteger:
+        picture_page = paginator.page(1)
+        page = 1
+    except EmptyPage:
+        picture_page = paginator.page(paginator.num_pages)
+        page = paginator.num_pages
 
     MemberFormSet = modelformset_factory(
         Contribution, form=PictureTagForm, extra=0
@@ -63,34 +105,27 @@ def approve_pictures(request, page=1):
     awaiting_formset = MemberFormSet(
         request.POST or None, request.FILES or None, queryset=picture_page.object_list
     )
-    approved_formset = MemberFormSet(
-        request.POST or None, request.FILES or None, queryset=approved
-    )
 
     if request.method == "POST":
         if 'save_tag' in request.POST:
+            print(request.POST.get('value'))
             if awaiting_formset.is_valid():
                 awaiting_formset.save()
-
-            if approved_formset.is_valid():
-                approved_formset.save()
-
-            return redirect("carousel:overview")
+            return redirect("carousel:detail", page)
 
         elif 'approve' in request.POST:
-            picture_id = request.POST.get('form-0-id')
+            picture_id = request.POST.get('approve')
             return redirect("carousel:approve", picture_id)
 
         elif 'delete' in request.POST:
-            picture_id = request.POST.get('form-0-id')
+            picture_id = request.POST.get('delete')
             return redirect("carousel:deny", picture_id)
 
-        return redirect("carousel:overview")
+        return redirect("carousel:approve", page)
 
-    context = {"approved": approved,
-               "awaiting_formset": awaiting_formset,
-               "approved_formset": approved_formset,
-               "picture_page": picture_page
+    context = {"awaiting_formset": awaiting_formset,
+               "picture_page": picture_page,
+               "page": page
                }
 
     return render(request, "picturecarousel/approve.html", context)

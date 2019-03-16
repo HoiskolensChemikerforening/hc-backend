@@ -8,7 +8,7 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Avventer godkjenning
+  Aktive bilder
 {% endblock nav_sub_header %}
 
 
@@ -32,8 +32,8 @@
       <ul>
         {% if perms.picturecarousel %}
           <li>
-            <a class="btn-floating blue" href="{% url "carousel:active" %}"><i class="material-icons">photo_album</i></a>
-            <a class="btn-floating mobile-fab-tip">Tagg bilder</a>
+            <a class="btn-floating blue" href="{% url "carousel:overview" %}"><i class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip">Godkjenn</a>
           </li>
         {% endif %}
       </ul>
@@ -55,11 +55,11 @@
 
 
   <div class="row">
-    <h3>Avventer godkjenning</h3>
+    <h3>Aktive bilder</h3>
     <div class="card">
       <div class="card-content">
-        <form method="post">{% csrf_token %}
-          {{ awaiting_formset.management_form }}
+      <form class="form" method="post">{% csrf_token %}
+        {{ approved_formset.management_form }}
         <table class="responsive-table bordered">
           <thead>
           <tr>
@@ -71,7 +71,7 @@
           </tr>
           </thead>
           <tbody>
-          {% for form in awaiting_formset %}
+          {% for form in approved_formset %}
             <tr>
               <td>
                 <img class="responsive-img materialboxed" src="{{ form.instance.image.url }}">
@@ -83,18 +83,10 @@
               <td><p>{{ form.instance.author }}</p></td>
               <td><p>{{ form.instance.date|date:"j. F" }}</p></td>
               <td>
-                <form method="POST">
-                  {% csrf_token %}
-                  <button class="btn waves-effect waves-light" type="submit"
-                          name="delete" value="{{ form.instance.id }}">Slett
-                    <i class="material-icons right">delete</i>
-                  </button>
-                </form>
-                <form action="{% url "carousel:approve" form.instance.id %}" method="POST">
-                  {% csrf_token %}
-                  <button class="btn waves-effect waves-light" type="submit"
-                          name="approve" value="{{ form.instance.id }}">Godkjenn
-                    <i class="material-icons right">check</i>
+                <form method="POST">{% csrf_token %}
+                  <button class="waves-effect btn btn-primary" name="delete"
+                          value="{{ form.instance.id }}" type="submit">Slett
+                      <i class="material-icons right">delete</i>
                   </button>
                 </form>
               </td>
@@ -102,7 +94,7 @@
           {% endfor %}
           </tbody>
         </table>
-         </form>
+      </form>
       </div>
     </div>
   </div>
@@ -111,5 +103,4 @@
 {% block footer_script %}
   <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 {{ approved_formset.form.media }}
-{{ awaiting_formset.form.media }}
 {% endblock footer_script %}
