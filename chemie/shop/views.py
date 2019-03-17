@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, reverse
 
+from chemie.customprofile.forms import GetRFIDForm
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
 from .models import Item, ShoppingCart, Category
 from decimal import InvalidOperation
@@ -11,10 +12,22 @@ from decimal import InvalidOperation
 
 @login_required
 def index(request):
+    if request.user.username == 'tabletshop':
+        is_tablet_user = True
+        rfid_form = GetRFIDForm(request.POST or None)
+    else:
+        is_tablet_user = False
+        rfid_form = None
     items = Item.objects.all()
     categories = Category.objects.all()
     cart = ShoppingCart(request)
-    context = {"items": items, "categories":categories, "cart": cart}
+    context = {
+        "items": items, 
+        "categories":categories, 
+        "cart": cart, 
+        "is_tablet_user":is_tablet_user,
+        "rfid_form":rfid_form,
+        }
     if request.method == "POST":
         if "buy" in request.POST:
             post_str = request.POST["buy"]

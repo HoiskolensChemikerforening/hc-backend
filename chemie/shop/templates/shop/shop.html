@@ -10,6 +10,7 @@
 
 {% block nav_header %}
 Chemshop
+{% if not is_tablet_user %}
 <div style="background-color: rgb(237,205,47);
 width: 12rem;
 height: 3rem;
@@ -26,6 +27,7 @@ right: 1rem;
 <p style=" display:inline; font-size:1.8rem;color:black; float:left;margin: -0.7rem;margin-left: 1rem; padding-top: 0rem"> <b>{{request.user.profile.balance}}</b></p>
 
 </div>
+{% endif %}
 {% endblock nav_header %}
 
 {% block style %}
@@ -183,9 +185,16 @@ right: 1rem;
               {% endfor %}
             </table>
             <div id="total-sum-in-cart">Total: {{ cart.get_total_price }}</div>
+            {% if is_tablet_user %}
+            <form method="POST"> {% csrf_token %}
+              {{rfid_form}}
+              <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan kortet</button>
+            </form>
+            {% else %}
             <form method="POST"> {% csrf_token %}
                 <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp varer</button>
             </form>
+            {% endif %}
           </div>
       </div>
     </div>
