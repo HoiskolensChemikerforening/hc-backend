@@ -73,11 +73,11 @@ class OrderItem(models.Model):
         Item, verbose_name="Varenavn", on_delete=models.CASCADE
     )
     quantity = models.PositiveIntegerField(verbose_name="Antall")
-
+    date = models.DateTimeField(auto_now_add=True)
     def __str__(self):
         return self.item.name
 
-
+    
 class Order(models.Model):
     items = models.ManyToManyField(OrderItem, related_name="order")
     buyer = models.ForeignKey(
