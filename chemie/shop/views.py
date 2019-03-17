@@ -3,8 +3,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404
 from django.shortcuts import render, redirect, reverse
+from django.core.exceptions import ObjectDoesNotExist
 
 from chemie.customprofile.forms import GetRFIDForm
+from chemie.customprofile.models import Profile
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
 from .models import Item, ShoppingCart, Category
 from decimal import InvalidOperation
@@ -13,11 +15,14 @@ from decimal import InvalidOperation
 @login_required
 def index(request):
     if request.user.username == 'tabletshop':
-        is_tablet_user = True
-        rfid_form = GetRFIDForm(request.POST or None)
+        context = index_tabletshop(request)
     else:
-        is_tablet_user = False
-        rfid_form = None
+        context = index_user(request)
+    return render(request, "shop/shop.html", context)
+
+def index_user(request):
+    is_tablet_user = False
+    rfid_form = None
     items = Item.objects.all()
     categories = Category.objects.all()
     cart = ShoppingCart(request)
@@ -55,7 +60,59 @@ def index(request):
                     extra_tags="Kjøp godkjent",
                 )
                 context["cart"] = cart
-    return render(request, "shop/shop.html", context)
+    return context
+
+def index_tabletshop(request):
+    is_tablet_user = True
+    rfid_form = GetRFIDForm(request.POST or None)
+    items = Item.objects.all()
+    categories = Category.objects.all()
+    cart = ShoppingCart(request)
+    context = {
+        "items": items, 
+        "categories":categories, 
+        "cart": cart, 
+        "is_tablet_user":is_tablet_user,
+        "rfid_form":rfid_form,
+        }
+    if request.method == "POST":
+        if "buy" in request.POST:
+            post_str = request.POST["buy"]
+            item_id, quantity = post_str.split("-")
+            if int(quantity) <= 0:
+                return render(request, "shop/shop.html", context)
+            item = get_object_or_404(Item, pk=item_id)
+            cart.add(item, quantity=int(quantity))
+        if "checkout" in request.POST:
+            try:
+                rfid = request.POST['rfid']
+                buyer = Profile.objects.get(access_card=rfid)
+                balance = buyer.balance
+                total_price = cart.get_total_price()
+                if balance < total_price:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        "Du har itj nok HC-coin, kiis",
+                        extra_tags="Nei!",
+                    )
+                else:
+                    cart.buy(request)
+                    new_balance = balance-total_price
+                    messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Kontoen din er trukket {} HC-coin. Du har igjen {}  HC-coin".format(total_price, new_balance),
+                    extra_tags="Kjøp godkjent",
+                )
+                context["cart"] = cart
+            except ObjectDoesNotExist:
+                messages.add_message(request, messages.WARNING,
+                                     'Studentkort ikke registrert, Gå inn på chemie.no/profile/edit/',
+                                     extra_tags='Ups'
+                                     )
+    return context
+
 
 #TODO add permissions
 def admin(request):
