@@ -8,7 +8,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import Profile
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
-from .models import Item, ShoppingCart, Category
+from .models import Item, ShoppingCart, Category, OrderItem
 from decimal import InvalidOperation
 
 
@@ -116,7 +116,8 @@ def index_tabletshop(request):
 
 #TODO add permissions
 def admin(request):
-    return render(request, "shop/admin.html")
+    order_items = OrderItem.get_admin_list()
+    return render(request, "shop/admin.html",{'order_items':order_items})
 
 @permission_required("customprofile.refill_balance")
 def refill(request):

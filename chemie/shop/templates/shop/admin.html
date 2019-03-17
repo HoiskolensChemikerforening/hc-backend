@@ -9,11 +9,19 @@
 
 
 {% block content %}
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
+    <a class="breadcrumb">Admin</a>
+</div>
 <div style="display:flex;justify-content: space-between;">
     <span><a class="waves-effect waves-light btn" href="{% url "shop:add-item" %}">Legg til vare</a></span>
     <span><a class="waves-effect waves-light btn" href="{% url "shop:add-category" %}">Legg til kategori</a></span>
     <span><a class="waves-effect waves-light btn" href="{% url "shop:refill" %}">Fyll på konto</a></span>
 </div>
+{% for month_list in order_items%}
+    {{month_list}}
+    <br>
+{% endfor %}
 {% endblock content %}
 
 {% block footer_script %}
