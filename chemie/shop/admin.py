@@ -33,7 +33,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ["item", "quantity", "get_order"]
+    list_display = ["item", "quantity", 'date', 'get_order']
 
     class Meta:
         model = OrderItem
