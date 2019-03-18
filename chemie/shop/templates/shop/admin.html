@@ -18,15 +18,21 @@
     <span><a class="waves-effect waves-light btn" href="{% url "shop:add-category" %}">Legg til kategori</a></span>
     <span><a class="waves-effect waves-light btn" href="{% url "shop:refill" %}">Fyll på konto</a></span>
 </div>
-{% for month_list in order_items%}
-    {{month_list}}
-    <br>
-{% endfor %}
-{{items}}
-{% endblock content %}
+<!-- See JS footer-script for element creating -->
+<div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem"> 
+</div>
 
+
+{% endblock content %}
 {% block footer_script %}
 <script type="text/javascript">
+const monthNames = ['Desember','November','Oktober','September','August','Juli','Juni','Mai','April','Mars','Februar','Januar']
+// transfers the list to backwards this month first following previous month
+var monthNumber = new Date().getMonth();
+for (i=0;i<(11-monthNumber);i++){
+    let firthElement = monthNames.shift()
+    monthNames.push(firthElement)
+}
 
 // preprocess string to create list of item names
 var items = "{{items}}"
@@ -68,7 +74,29 @@ for (i=0; i<12; i++){
         adminList[i][itemName] = quantity
     }
 }
-console.log(adminList)
+
+var adminDiv = document.getElementById("admin-list-parent");
+for (i=0;i<12;i++){
+    var monthTitle = document.createElement("h4")
+    monthTitle.innerHTML = monthNames[i]
+    adminDiv.appendChild(monthTitle)
+    var monthDiv = document.createElement("div");
+    monthDiv.setAttribute("style","display: flex; flex-wrap:wrap; margin-top:2rem")
+    for (j=0; j<itemList.length; j++){
+        var itemDiv = document.createElement("div");
+        itemDiv.setAttribute("style","padding:0.4rem; height:4rem;border-style:solid")
+        var itemDivChild1 = document.createElement("div")
+        itemDivChild1.setAttribute("style","height:1.5rem; min-width:4rem; text-align:left")
+        itemDivChild1.innerHTML = itemList[j]
+        var itemDivChild2 = document.createElement("div")
+        itemDivChild2.innerHTML = adminList[i][itemList[j]]
+        itemDivChild2.setAttribute("style", "height:1.5rem; text-align:left; min-width:4rem")
+        itemDiv.appendChild(itemDivChild1)
+        itemDiv.appendChild(itemDivChild2)
+        monthDiv.appendChild(itemDiv);
+    }
+    adminDiv.appendChild(monthDiv)
+}
 
 
 </script>
