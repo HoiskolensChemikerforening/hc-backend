@@ -117,7 +117,9 @@ def index_tabletshop(request):
 #TODO add permissions
 def admin(request):
     order_items = OrderItem.get_admin_list()
-    return render(request, "shop/admin.html",{'order_items':order_items})
+    items = Item.objects.all()
+    item_list = [item.name for item in items]
+    return render(request, "shop/admin.html",{'order_items':order_items,'items':item_list,'order_items':order_items})
 
 @permission_required("customprofile.refill_balance")
 def refill(request):

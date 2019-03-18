@@ -22,7 +22,54 @@
     {{month_list}}
     <br>
 {% endfor %}
+{{items}}
 {% endblock content %}
 
 {% block footer_script %}
+<script type="text/javascript">
+
+// preprocess string to create list of item names
+var items = "{{items}}"
+items = items.replace(/&#39;/g,'');
+items = items.replace('[','');
+items = items.replace(']','');
+var itemList = items.split(',');
+for (var i=0; i<itemList.length; i++){
+    var itemName = itemList[i]
+    if (itemName[0] == ' '){
+        itemName = itemName.replace(' ','')
+    }
+    itemList[i] = itemName
+}
+
+// create a empty list of dictionaries for each month
+var adminList = []
+for (var i = 0; i < 12; i++) { 
+    var itemDict = {}
+    for (var j=0;j<itemList.length;j++){
+        itemList[itemList[j]]=0
+    }
+    adminList.push(itemDict)
+}
+
+var orderItems = "{{order_items}}"
+orderItems = orderItems.replace(/&#39;/g,'');
+orderItems = orderItems.replace('[','');
+orderItems = orderItems.replace(']','');
+orderItems = orderItems.replace(/{/g,'');
+var orderItemList = orderItems.split('},');
+for (i=0; i<12; i++){
+    var monthOrder = orderItemList[i]
+    var monthOrderItems = monthOrder.split(',')
+    for (j=0; j< monthOrderItems.length; j++){
+        var orderNameQuantity = monthOrderItems[j].split(':')
+        var quantity = parseInt(orderNameQuantity[1].replace(' ',''))
+        var itemName = orderNameQuantity[0].replace(' ','')
+        adminList[i][itemName] = quantity
+    }
+}
+console.log(adminList)
+
+
+</script>
 {% endblock footer_script %} 
