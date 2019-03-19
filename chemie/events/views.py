@@ -737,7 +737,7 @@ def checkin_to_bedpres(request, pk):
                 user = Profile.objects.get(access_card=em_code).user
             except:
                 messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect(f"{reverse('profile:add_rfid')}?redirect={request.get_full_path()}")
+                return redirect(f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}")
             try:
                 registration = BedpresRegistration.objects.get(user=user, event=bedpres)
             except:

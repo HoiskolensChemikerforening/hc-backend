@@ -390,7 +390,7 @@ def change_rfid_status(request):
                 profile = Profile.objects.get(access_card=em_code)
             except:
                 messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect(f"{reverse('profile:add_rfid')}?redirect={request.get_full_path()}")
+                return redirect(f"{reverse('profile:add_rfid')}?rfid={rfid}&redirect={request.get_full_path()}")
             profile.eligible_for_voting = not profile.eligible_for_voting
             profile.save()
             status = profile.eligible_for_voting
