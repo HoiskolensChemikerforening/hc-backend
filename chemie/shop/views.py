@@ -14,11 +14,12 @@ from decimal import InvalidOperation
 
 @login_required
 def index(request):
-    if request.user.username == 'tabletshop':
+    if request.user.username == "tabletshop":
         context = index_tabletshop(request)
     else:
         context = index_user(request)
     return render(request, "shop/shop.html", context)
+
 
 def index_user(request):
     is_tablet_user = False
@@ -27,12 +28,12 @@ def index_user(request):
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
-        "items": items, 
-        "categories":categories, 
-        "cart": cart, 
-        "is_tablet_user":is_tablet_user,
-        "rfid_form":rfid_form,
-        }
+        "items": items,
+        "categories": categories,
+        "cart": cart,
+        "is_tablet_user": is_tablet_user,
+        "rfid_form": rfid_form,
+    }
     if request.method == "POST":
         if "buy" in request.POST:
             post_str = request.POST["buy"]
@@ -62,6 +63,7 @@ def index_user(request):
                 context["cart"] = cart
     return context
 
+
 def index_tabletshop(request):
     is_tablet_user = True
     rfid_form = GetRFIDForm(request.POST or None)
@@ -69,12 +71,12 @@ def index_tabletshop(request):
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
-        "items": items, 
-        "categories":categories, 
-        "cart": cart, 
-        "is_tablet_user":is_tablet_user,
-        "rfid_form":rfid_form,
-        }
+        "items": items,
+        "categories": categories,
+        "cart": cart,
+        "is_tablet_user": is_tablet_user,
+        "rfid_form": rfid_form,
+    }
     if request.method == "POST":
         if "buy" in request.POST:
             post_str = request.POST["buy"]
@@ -85,7 +87,7 @@ def index_tabletshop(request):
             cart.add(item, quantity=int(quantity))
         if "checkout" in request.POST:
             try:
-                rfid = request.POST['rfid']
+                rfid = request.POST["rfid"]
                 buyer = Profile.objects.get(access_card=rfid)
                 balance = buyer.balance
                 total_price = cart.get_total_price()
@@ -98,28 +100,42 @@ def index_tabletshop(request):
                     )
                 else:
                     cart.buy(request)
-                    new_balance = balance-total_price
+                    new_balance = balance - total_price
                     messages.add_message(
-                    request,
-                    messages.SUCCESS,
-                    "Kontoen din er trukket {} HC-coin. Du har igjen {}  HC-coin".format(total_price, new_balance),
-                    extra_tags="Kjøp godkjent",
-                )
+                        request,
+                        messages.SUCCESS,
+                        "Kontoen din er trukket {} HC-coin. Du har igjen {}  HC-coin".format(
+                            total_price, new_balance
+                        ),
+                        extra_tags="Kjøp godkjent",
+                    )
                 context["cart"] = cart
             except ObjectDoesNotExist:
-                messages.add_message(request, messages.WARNING,
-                                     'Studentkort ikke registrert, Gå inn på chemie.no/profile/edit/',
-                                     extra_tags='Ups'
-                                     )
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Studentkort ikke registrert, Gå inn på chemie.no/profile/edit/",
+                    extra_tags="Ups",
+                )
     return context
 
 
-#TODO add permissions
+# TODO add permissions
 def admin(request):
     order_items = OrderItem.get_admin_list()
+    receipts = get_last_year_receipts()
     items = Item.objects.all()
     item_list = [item.name for item in items]
-    return render(request, "shop/admin.html",{'order_items':order_items,'items':item_list,'order_items':order_items})
+    return render(
+        request,
+        "shop/admin.html",
+        {
+            "order_items": order_items,
+            "items": item_list,
+            "order_items": order_items,
+        },
+    )
+
 
 @permission_required("customprofile.refill_balance")
 def refill(request):
@@ -140,9 +156,11 @@ def refill(request):
                         "Brukeren vil få mer enn 9999 HC-coins på "
                         "konto om du fyller på med beløpet."
                     ),
-                    extra_tags="Feil"
+                    extra_tags="Feil",
                 )
-                return render(request, "shop/refill-balance.html", {"form": form})
+                return render(
+                    request, "shop/refill-balance.html", {"form": form}
+                )
             instance = form.save(commit=False)
             instance.provider = provider
             instance.save()
@@ -165,7 +183,7 @@ def add_item(request):
             form.save()
             return redirect(reverse("shop:index"))
     items = Item.objects.all()
-    context = {"form": form, "items":items}
+    context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
 
 
@@ -177,7 +195,7 @@ def add_category(request):
             form.save()
             return redirect(reverse("shop:index"))
     categories = Category.objects.all()
-    context = {"form": form,"categories":categories}
+    context = {"form": form, "categories": categories}
     return render(request, "shop/add_category.html", context)
 
 

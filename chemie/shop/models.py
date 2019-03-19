@@ -10,6 +10,7 @@ from django.utils.text import slugify
 import datetime
 from collections import deque
 
+
 class RefillReceipt(models.Model):
     # Is responsible for refilling balance
     provider = models.ForeignKey(
@@ -116,9 +117,6 @@ class Order(models.Model):
         for item in self.items.all():
             totalprice += item.item.price * item.quantity
         return totalprice
-
-    def __str__(self):
-        return self.buyer.get_full_name() + " ordre " + str(self.id)
 
 
 class ShoppingCart(object):
