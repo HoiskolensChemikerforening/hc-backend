@@ -252,9 +252,10 @@ class LoginView(OldLoginView):
 @permission_required('customprofile.can_edit_access_card')
 @login_required
 def add_rfid(request):
-    form = AddCardForm(request.POST or None)
-    context = {'form': form}
     redirect_URL = request.GET.get('redirect')
+    rfid = request.GET.get('cardnr')
+    form = AddCardForm(request.POST or None, initial={"access_card": rfid})
+    context = {'form': form}
     if request.method == 'POST':
         if form.is_valid():
             user = form.cleaned_data.get('user')
