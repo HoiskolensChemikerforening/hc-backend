@@ -33,17 +33,18 @@
           fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og andre
           emner som kan interessere studentene.
         </p>
-        <button class="btn btn-primary">Bedrifter</button>
-        <button class="btn btn-secondary">Intervjuer</button>
+        <a class="btn btn-primary">Bedrifter</a>
+        <a class="btn btn-secondary" href="{% url "corporate:interview" %}">Intervjuer</a>
       </div>
     </div>
     <div class="col-sm-12 col-md-3">
       <div class="card">
         <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
         <div class="card-body">
-          <h5 class="card-title">Industrikomiteen</h5>
-          <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's
-              content.</p>
+          <a href="{{ indkom.get_absolute_url }}"><h5 class="card-title">Industrikomiteen</h5></a>
+          <p class="card-text">
+            {{ indkom.one_liner }}
+          </p>
         </div>
       </div>
     </div>
