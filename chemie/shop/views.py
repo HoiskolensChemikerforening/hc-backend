@@ -6,7 +6,7 @@ from django.shortcuts import render, redirect, reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import Profile
+from chemie.customprofile.models import Profile, ProfileManager
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
 from .models import Item, ShoppingCart, Category, OrderItem
 from decimal import InvalidOperation
@@ -86,7 +86,8 @@ def index_tabletshop(request):
         if "checkout" in request.POST:
             try:
                 rfid = request.POST['rfid']
-                buyer = Profile.objects.get(access_card=rfid)
+                access_card = ProfileManager.rfid_to_em(rfid)
+                buyer = Profile.objects.get(access_card=access_card)
                 balance = buyer.balance
                 total_price = cart.get_total_price()
                 if balance < total_price:
