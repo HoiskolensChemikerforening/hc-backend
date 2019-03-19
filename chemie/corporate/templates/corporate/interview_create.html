@@ -6,8 +6,7 @@
 </head>
 <body>
 <div class ="container">
-    <form method="POST" enctype="multipart/form-data">
-        {% csrf_token %}
+    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
          {{ form.as_p }}
          <br>
          <button class="btn btn-success" type="submit">LEGG TIL!</button>

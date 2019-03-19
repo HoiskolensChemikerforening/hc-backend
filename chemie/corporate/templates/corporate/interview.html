@@ -1,10 +1,23 @@
 <!DOCTYPE html>
+
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Intervjuer</title>
 </head>
 <body>
+<h>Hallo</h>
+
+<div>
+    {% for interview in interviews %}
+        {{ interview.name }}
+        <br>
+    {% empty %}}
+        <p>Det finnes ingen intervjuer enda</p>
+    {% endfor %}
+</div>
+
+
 
 </body>
 </html>
