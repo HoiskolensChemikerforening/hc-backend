@@ -8,4 +8,5 @@ urlpatterns = [
     url(r"^$", views.index, name="index"),
     path("interview/", views.interview, name = "interview index"),
     path("company/create/", views.create_company, name="create_company"),
+    path("interview/create/", views.create_interview, name ="create_interview")
 ]

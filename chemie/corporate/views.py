@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.shortcuts import HttpResponse, redirect, reverse
 from .models import Company, Interview
 from chemie.committees.models import Committee
-from .forms import CreateCompanyForm
+from .forms import CreateCompanyForm, CreateInterviewForm
 
 # Create your views here.
 
@@ -30,3 +30,13 @@ def create_company(request):
 
     context = {"form": form}
     return render(request, "corporate/company_create.html", context)
+
+
+def create_interview(request):
+    form = CreateInterviewForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse("interview:temp_interview_list"))
+
+    context = {"form": form}
+    return render(request, "corporate/interview_create.html", context)
