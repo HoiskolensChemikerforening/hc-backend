@@ -1,7 +1,10 @@
 from django.shortcuts import render
-from django.shortcuts import HttpResponse, redirect, reverse
+from django.shortcuts import redirect, reverse
+from django.utils import timezone
+
 from .models import Company, Interview
 from chemie.committees.models import Committee
+from chemie.events.models import Bedpres
 from .forms import CreateCompanyForm, CreateInterviewForm
 
 # Create your views here.
@@ -9,8 +12,10 @@ from .forms import CreateCompanyForm, CreateInterviewForm
 
 def index(request):
     indkom = Committee.objects.get(id=12)
+    bedpres = Bedpres.objects.filter(date__gte=timezone.now())
     context = {
         "indkom": indkom,
+        "bedpres": bedpres,
     }
     return render(request, "corporate/index.html", context)
 

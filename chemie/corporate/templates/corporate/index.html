@@ -1,19 +1,19 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Bedrift</title>
+  <meta charset="UTF-8">
+  <title>Bedrift</title>
 
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
 
 {% load static %}
 
 <nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="#">
-    <img src="{% static "images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
+  <a class="navbar-brand" href="">
+    <img src="{% static " images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
     HC
   </a>
 </nav>
@@ -24,6 +24,7 @@
     </div>
     <div class="col-sm-12 col-md-7">
       <div class="container">
+        <br><br>
         <h1>Bedrift</h1>
         <p>
           Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
@@ -35,13 +36,14 @@
         </p>
         <a class="btn btn-primary">Bedrifter</a>
         <a class="btn btn-secondary" href="{% url "corporate:interview" %}">Intervjuer</a>
+        <br><br><br><br><br>x
       </div>
     </div>
     <div class="col-sm-12 col-md-3">
       <div class="card">
         <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
         <div class="card-body">
-          <a href="{{ indkom.get_absolute_url }}"><h5 class="card-title">Industrikomiteen</h5></a>
+          <a href="{{ indkom.get_absolute_url }}"><h4 class="card-title">Industrikomiteen</h4></a>
           <p class="card-text">
             {{ indkom.one_liner }}
           </p>
@@ -55,10 +57,14 @@
       <div class="card">
         <div class="card-body">
           <h4 class="card-title">Bedriftspresentasjoner</h4>
-          <h6 class="card-text">Bedrift 1</h6>
-          <p>15. mars</p>
-          <h6 class="card-text">Bedrift 2</h6>
-          <p>19. mars</p>
+          {% for bp in bedpres %}
+            <a href="{{ bp.get_absolute_url }}">
+              <h5>{{ bp.title }}</h5>
+            </a>
+            <p>{{ bp.date }}</p>
+          {% empty %}
+            <p>Det er ingen aktive bedpreser.</p>
+          {% endfor %}
         </div>
       </div>
     </div>
