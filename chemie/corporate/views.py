@@ -22,6 +22,12 @@ def interview(request):
     return render(request, "corporate/interview.html", context)
 
 
+def list_companies(request):
+    companies = Company.objects.order_by("id")
+    context = {"companies": companies}
+
+    return render(request, "corporate/list_companies.html", context)
+
 def create_company(request):
     form = CreateCompanyForm(request.POST or None, request.FILES or None)
     if form.is_valid():
