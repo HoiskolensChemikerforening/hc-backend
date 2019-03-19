@@ -11,7 +11,7 @@ from .forms import CreateCompanyForm, CreateInterviewForm
 
 
 def index(request):
-    indkom = Committee.objects.get(id=12)
+    indkom = Committee.objects.get(title="Industrikomiteen")
     bedpres = Bedpres.objects.filter(date__gte=timezone.now())
     context = {
         "indkom": indkom,

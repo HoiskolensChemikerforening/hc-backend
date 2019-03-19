@@ -36,7 +36,7 @@
         </p>
         <a class="btn btn-primary">Bedrifter</a>
         <a class="btn btn-secondary" href="{% url "corporate:interview" %}">Intervjuer</a>
-        <br><br><br><br><br>x
+        <br><br><br><br><br>
       </div>
     </div>
     <div class="col-sm-12 col-md-3">
@@ -56,10 +56,10 @@
     <div class="col-sm-12 col-md-7">
       <div class="card">
         <div class="card-body">
-          <h4 class="card-title">Bedriftspresentasjoner</h4>
+          <h2 class="card-title">Bedriftspresentasjoner</h2>
           {% for bp in bedpres %}
             <a href="{{ bp.get_absolute_url }}">
-              <h5>{{ bp.title }}</h5>
+              <h4>{{ bp.title }}</h4>
             </a>
             <p>{{ bp.date }}</p>
           {% empty %}
@@ -83,7 +83,8 @@
   <div class="row">
     <div class="col-sm-12 col-md-2"></div>
     <div class="col-sm-12 col-md-7">
-      <h1>Statistikk</h1>
+      <br>
+      <h2>Statistikk</h2>
       <p>
         Hvert år gjennomfører Industrikomiteen diplomundersøkelsen, der de samler inn data om tidligere studenter ved
         industriell kjemi og bioteknologi. Dataen er presentert nedenfor.
