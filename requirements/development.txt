@@ -29,6 +29,7 @@ django-markdown2==0.3.1
 django-material==1.4.1
 django-model-utils==3.1.2
 django-mptt==0.9.1        # via wiki
+django-multiselectfield==0.1.8
 django-nyt==1.1.2         # via wiki
 django-post-office==3.1.0
 django-recaptcha==1.4.0

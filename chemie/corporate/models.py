@@ -24,7 +24,5 @@ class Company(models.Model):
 class Interview(models.Model):
     company = models.ForeignKey(Company, on_delete=models.CASCADE, verbose_name="Bedrift")
     name = models.CharField(max_length=40, verbose_name="Navn")
-    interview = models.TextField(
-        verbose_name="Intervjuet"
-    )
+    interview = models.TextField(verbose_name="Intervjuet")
     picture = ImageField(upload_to="corporate", verbose_name="Bilde")
