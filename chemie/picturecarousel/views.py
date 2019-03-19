@@ -108,7 +108,6 @@ def approve_pictures(request, page=1):
 
     if request.method == "POST":
         if 'save_tag' in request.POST:
-            print(request.POST.get('value'))
             if awaiting_formset.is_valid():
                 awaiting_formset.save()
             return redirect("carousel:detail", page)
