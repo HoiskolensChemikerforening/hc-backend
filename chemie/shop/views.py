@@ -8,8 +8,43 @@ from django.core.exceptions import ObjectDoesNotExist
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import Profile, ProfileManager
 from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
-from .models import Item, ShoppingCart, Category, OrderItem
+from .models import Item, ShoppingCart, Category, Order
 from decimal import InvalidOperation
+from django.utils import timezone
+
+
+def get_last_year_receipts():
+    all_receipts = Order.objects.all()
+    now = timezone.now()
+    # Get 11 months back
+    first_date = timezone.datetime(
+        year=now.year - 1, month=now.month + 1, day=1
+    )
+    receipts = all_receipts.filter(created__gte=first_date, created__lte=now)
+    months, m, i = 12, 0, 0
+    year, month = now.year, now.month
+    item_list = []
+    all_items = Item.objects.all()
+    while i < months:
+        # Get the receipts at current_month - m
+        if (month - m) > 0:
+            month_c = month - m
+        else:
+            year = now.year - 1
+            month, month_c = 12, 12
+            m = 0
+        current_receipts = receipts.filter(
+            created__year=year, created__month=month_c
+        )
+        item_list.append({})
+        for item in all_items:
+            item_list[i][item.name] = 0
+        for r in current_receipts:
+            for order_item in r.items.all():
+                item_list[i][order_item.item.name] += order_item.quantity
+        m += 1
+        i += 1
+    return item_list
 
 
 @login_required
@@ -87,7 +122,7 @@ def index_tabletshop(request):
             cart.add(item, quantity=int(quantity))
         if "checkout" in request.POST:
             try:
-                rfid = request.POST['rfid']
+                rfid = request.POST["rfid"]
                 access_card = ProfileManager.rfid_to_em(rfid)
                 buyer = Profile.objects.get(access_card=access_card)
                 balance = buyer.balance
@@ -123,8 +158,7 @@ def index_tabletshop(request):
 
 # TODO add permissions
 def admin(request):
-    order_items = OrderItem.get_admin_list()
-    receipts = get_last_year_receipts()
+    order_items = get_last_year_receipts()
     items = Item.objects.all()
     item_list = [item.name for item in items]
     return render(

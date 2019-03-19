@@ -7,8 +7,6 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
-import datetime
-from collections import deque
 
 
 class RefillReceipt(models.Model):
@@ -75,32 +73,9 @@ class OrderItem(models.Model):
         Item, verbose_name="Varenavn", on_delete=models.CASCADE
     )
     quantity = models.PositiveIntegerField(verbose_name="Antall")
-    date = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return self.item.name
-
-    @classmethod
-    def get_admin_list(cls):
-        admin_list = deque(maxlen=12)
-        all_items = Item.objects.all()
-        for i in range(12):
-            admin_list.append({})
-            for item in all_items:
-                admin_list[i][item.name] = 0
-
-        order_items = cls.objects.all().order_by('-date')
-        for item in order_items:
-            purchase_month = int(item.date.month)
-            item_name = str(item.item.name)
-            if item_name in admin_list[purchase_month]:
-                admin_list[purchase_month][item_name] += item.quantity
-        this_month = int(datetime.datetime.now().month)
-        admin_list.rotate(-(this_month+1))
-
-        reversed_admin_list=[]
-        for i in range(12,0,-1):
-            reversed_admin_list.append(admin_list[i-1])
-        return reversed_admin_list
 
 
 class Order(models.Model):
@@ -111,6 +86,10 @@ class Order(models.Model):
         related_name="orders",
         on_delete=models.CASCADE,
     )
+    created = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.buyer.get_full_name() + " ordre " + str(self.id)
 
     def get_total_price(self):
         totalprice = 0
