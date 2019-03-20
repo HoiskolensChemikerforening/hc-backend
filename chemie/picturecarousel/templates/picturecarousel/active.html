@@ -78,7 +78,9 @@
               </td>
               <td>
                 {{ form.as_p }}
-                <input type="submit" class="btn" name="save_tag" value="{{ page }}">
+                <button class="btn waves-effect waves-light" type="submit"
+                        name="save_tag" value="{{ page}}">Lagre tags!
+                </button>
               </td>
               <td><p>{{ form.instance.author }}</p></td>
               <td><p>{{ form.instance.date|date:"j. F" }}</p></td>
