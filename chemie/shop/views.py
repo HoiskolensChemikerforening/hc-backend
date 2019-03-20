@@ -24,7 +24,6 @@ def get_last_year_receipts():
     months, m, i = 12, 0, 0
     year, month = now.year, now.month
     item_list = []
-    all_items = Item.objects.all()
     while i < months:
         # Get the receipts at current_month - m
         if (month - m) > 0:
@@ -37,11 +36,12 @@ def get_last_year_receipts():
             created__year=year, created__month=month_c
         )
         item_list.append({})
-        for item in all_items:
-            item_list[i][item.name] = 0
         for r in current_receipts:
             for order_item in r.items.all():
-                item_list[i][order_item.item.name] += order_item.quantity
+                if order_item.item.name not in item_list[i]:
+                    item_list[i][order_item.item.name] = order_item.quantity
+                else:
+                    item_list[i][order_item.item.name] += order_item.quantity
         m += 1
         i += 1
     return item_list
