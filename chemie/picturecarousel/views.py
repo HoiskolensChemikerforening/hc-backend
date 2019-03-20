@@ -12,6 +12,7 @@ from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 
 # TODO: approve_delete redirect to current page
+# TODO: Change num of objects per page. UPDATE 3 VIEWS!1
 
 @login_required
 def submit_picture(request):
@@ -44,7 +45,7 @@ def active_list(request, page=1):
     approved = Contribution.objects.filter(approved=True).prefetch_related(
         "author"
     ).order_by('-date')
-    paginator = Paginator(approved, 2)
+    paginator = Paginator(approved, 10)
 
     try:
         picture_page = paginator.page(page)
@@ -87,7 +88,7 @@ def approve_pictures(request, page=1):
     awaiting_approval = Contribution.objects.filter(
         approved=False
     ).prefetch_related("author").order_by('-date')
-    paginator = Paginator(awaiting_approval, 2)
+    paginator = Paginator(awaiting_approval, 10)
 
     try:
         picture_page = paginator.page(page)
@@ -133,7 +134,13 @@ def approve_pictures(request, page=1):
 @permission_required("picturecarousel.change_contribution")
 def approve_deny(request, picture_id, deny=False):
     picture = get_object_or_404(Contribution, id=picture_id)
+    pictures_per_page = 10
     if not deny:
+        awaiting_approval = Contribution.objects.filter(
+            approved=False
+        ).prefetch_related("author").order_by('-date')
+        picture_index = list(awaiting_approval).index(picture)
+        page = int(picture_index / pictures_per_page) + 1
         picture.approve()
         picture.save()
         messages.add_message(
@@ -142,15 +149,30 @@ def approve_deny(request, picture_id, deny=False):
             "Bildet er godkjent",
             extra_tags="Yay!",
         )
+        return redirect("carousel:detail", page)
     else:
-        picture.delete()
         messages.add_message(
             request,
             messages.SUCCESS,
             "Bildet ble slettet",
             extra_tags="Slettet!",
         )
-    return HttpResponseRedirect(reverse("carousel:overview"))
+        if picture.approved:
+            approved = Contribution.objects.filter(
+                approved=True
+            ).prefetch_related("author").order_by('-date')
+            picture_index = list(approved).index(picture)
+            page = int(picture_index / pictures_per_page) + 1
+            picture.delete()
+            return redirect("carousel:active_detail", page)
+        else:
+            awaiting_approval = Contribution.objects.filter(
+                approved=False
+            ).prefetch_related("author").order_by('-date')
+            picture_index = list(awaiting_approval).index(picture)
+            page = int(picture_index / pictures_per_page) + 1
+            picture.delete()
+            return redirect("carousel:detail", page)
 
 
 class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
