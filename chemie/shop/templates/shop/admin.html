@@ -64,16 +64,17 @@
   orderItems = orderItems.replace(']', '');
   orderItems = orderItems.replace(/{/g, '');
   var orderItemList = orderItems.split('},');
-  for (i = 0; i < 12; i++) {
+  for (var i = 0; i < 12; i++) {
     var monthOrder = orderItemList[i]
     var monthOrderItems = monthOrder.split(',')
     for (var j = 0; j < monthOrderItems.length; j++) {
-      if (monthOrderItems[j].trim() === "") {
+      let it = monthOrderItems[j].trim();
+      if (it === "") {
         continue;
       }
       else {
-        debugger;
-        var orderNameQuantity = monthOrderItems[j].split(':');
+        it = it.split("}")[0];
+        var orderNameQuantity = it.split(':');
         var quantity = parseInt(orderNameQuantity[1].replace(' ', ''));
         var itemName = orderNameQuantity[0].replace(' ', '');
         adminList[i][itemName] = quantity;
@@ -88,18 +89,24 @@
     adminDiv.appendChild(monthTitle)
     var monthDiv = document.createElement("div");
     monthDiv.setAttribute("style", "display: flex; flex-wrap:wrap; margin-top:2rem")
-    for (j = 0; j < itemList.length; j++) {
-      var itemDiv = document.createElement("div");
-      itemDiv.setAttribute("style", "padding:0.4rem; height:4rem;border-style:solid")
-      var itemDivChild1 = document.createElement("div")
-      itemDivChild1.setAttribute("style", "height:1.5rem; min-width:4rem; text-align:left")
-      itemDivChild1.innerHTML = itemList[j]
-      var itemDivChild2 = document.createElement("div")
-      itemDivChild2.innerHTML = adminList[i][itemList[j]]
-      itemDivChild2.setAttribute("style", "height:1.5rem; text-align:left; min-width:4rem")
-      itemDiv.appendChild(itemDivChild1)
-      itemDiv.appendChild(itemDivChild2)
-      monthDiv.appendChild(itemDiv);
+    if (adminList[i] === {}) {
+      continue
+    }
+    else {
+      for (key in adminList[i]) {
+        debugger;
+        var itemDiv = document.createElement("div");
+        itemDiv.setAttribute("style", "padding:0.4rem; height:4rem;border-style:solid")
+        var itemDivChild1 = document.createElement("div")
+        itemDivChild1.setAttribute("style", "height:1.5rem; min-width:4rem; text-align:left")
+        itemDivChild1.innerHTML = itemList[j]
+        var itemDivChild2 = document.createElement("div")
+        itemDivChild2.innerHTML = adminList[i][itemList[j]]
+        itemDivChild2.setAttribute("style", "height:1.5rem; text-align:left; min-width:4rem")
+        itemDiv.appendChild(itemDivChild1)
+        itemDiv.appendChild(itemDivChild2)
+        monthDiv.appendChild(itemDiv);
+      }
     }
     adminDiv.appendChild(monthDiv)
   }
