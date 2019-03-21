@@ -216,7 +216,6 @@ def add_item(request):
     if request.POST:
         if form.is_valid():
             form.save()
-            return redirect(reverse("shop:index"))
     items = Item.objects.all()
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
@@ -228,7 +227,6 @@ def add_category(request):
     if request.POST:
         if form.is_valid():
             form.save()
-            return redirect(reverse("shop:index"))
     categories = Category.objects.all()
     context = {"form": form, "categories": categories}
     return render(request, "shop/add_category.html", context)
