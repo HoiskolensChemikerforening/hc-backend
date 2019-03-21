@@ -44,4 +44,7 @@ class EditItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ["name", "price", "category", "image"]
+        fields = ["name", "price", "category", "image", "is_active"]
+
+    def __init__(self, *args, **kwargs):
+        super(EditItemForm, self).__init__(*args, **kwargs)
