@@ -11,6 +11,7 @@
 {% block nav_header %}
 Chemshop
 {% if not is_tablet_user %}
+
 <div style="background-color: rgb(237,205,47);
 width: 12rem;
 height: 3rem;
@@ -220,13 +221,28 @@ margin: auto;
   </a>
 </div>
 {% endif %}
-{% if perms.shop.add_item %}
+{% if perms.shop.add_item or perms.customprofile.refill_balance %}
 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-  <a class="btn-floating btn-large" href="{% url "shop:admin" %}">
+  <a class="btn-floating btn-large">
     <i class="large material-icons">edit</i>
   </a>
+  <ul>
+    {% if perms.customprofile.refill_balance %}
+    <li>
+      <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">attach_money</i></a>
+      <a class="btn-floating mobile-fab-tip">Fyll på HC coin</a>
+    </li>
+    {% endif %}
+    {% if perms.shop.add_item %}
+    <li>
+      <a class="btn-floating blue" href="{% url "shop:admin" %}"><i class="material-icons">build</i></a>
+      <a class="btn-floating mobile-fab-tip">Admin side</a>
+    </li>
+    {% endif %}
+  </ul>
 </div>
 {% endif %}
+
 {% endblock content %}
 
 {% block footer_script %}
