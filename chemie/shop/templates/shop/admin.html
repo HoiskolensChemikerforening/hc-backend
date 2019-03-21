@@ -58,6 +58,10 @@
     adminList.push(itemDict)
   }
 
+
+  // Create a list of dictionaries where each dictionary represents the total purchase of
+  // items for each month. First index is the dictionary for the current month
+  // following by the previous month untill 12 month
   var orderItems = "{{order_items}}"
   orderItems = orderItems.replace(/&#39;/g, '');
   orderItems = orderItems.replace('[', '');
@@ -66,6 +70,7 @@
   var orderItemList = orderItems.split('},');
   for (var i = 0; i < 12; i++) {
     var monthOrder = orderItemList[i]
+    monthOrder = monthOrder.replace(/}/g, '');
     var monthOrderItems = monthOrder.split(',')
     for (var j = 0; j < monthOrderItems.length; j++) {
       let it = monthOrderItems[j].trim();
@@ -73,17 +78,17 @@
         continue;
       }
       else {
-        it = it.split("}")[0];
-        var orderNameQuantity = it.split(':');
-        var quantity = parseInt(orderNameQuantity[1].replace(' ', ''));
+        var orderNameQuantity = monthOrderItems[j].split(':');
+        var quantity = parseInt(orderNameQuantity[1]);
         var itemName = orderNameQuantity[0].replace(' ', '');
         adminList[i][itemName] = quantity;
       }
     }
   }
 
+  // Create the HTML elements for the adminList created above
   var adminDiv = document.getElementById("admin-list-parent");
-  for (i = 0; i < 12; i++) {
+  for (var i = 0; i < 12; i++) {
     var monthTitle = document.createElement("h4")
     monthTitle.innerHTML = monthNames[i]
     adminDiv.appendChild(monthTitle)
@@ -94,17 +99,16 @@
     }
     else {
       for (key in adminList[i]) {
-        debugger;
         var itemDiv = document.createElement("div");
         itemDiv.setAttribute("style", "padding:0.4rem; height:4rem;border-style:solid")
-        var itemDivChild1 = document.createElement("div")
-        itemDivChild1.setAttribute("style", "height:1.5rem; min-width:4rem; text-align:left")
-        itemDivChild1.innerHTML = itemList[j]
-        var itemDivChild2 = document.createElement("div")
-        itemDivChild2.innerHTML = adminList[i][itemList[j]]
-        itemDivChild2.setAttribute("style", "height:1.5rem; text-align:left; min-width:4rem")
-        itemDiv.appendChild(itemDivChild1)
-        itemDiv.appendChild(itemDivChild2)
+        var itemDivChildName = document.createElement("div")
+        itemDivChildName.setAttribute("style", "height:1.5rem; min-width:4rem; text-align:left")
+        itemDivChildName.innerHTML = key
+        var itemDivChildQuantity = document.createElement("div")
+        itemDivChildQuantity.innerHTML = adminList[i][key]
+        itemDivChildQuantity.setAttribute("style", "height:1.5rem; text-align:left; min-width:4rem")
+        itemDiv.appendChild(itemDivChildName)
+        itemDiv.appendChild(itemDivChildQuantity)
         monthDiv.appendChild(itemDiv);
       }
     }
