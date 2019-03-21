@@ -7,7 +7,7 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import Profile, ProfileManager
-from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
+from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm, EditItemForm
 from .models import Item, ShoppingCart, Category, Order
 from decimal import InvalidOperation
 from django.utils import timezone
@@ -223,7 +223,13 @@ def add_item(request):
 
 @permission_required("shop.edit_item")
 def edit_item(request, pk):
-    return render(request, "shop/edit_item.html")
+    item = Item.objects.get(pk=pk)
+    form = EditItemForm(request.POST or None, request.FILES or None, instance=item)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+    context = {"form": form}
+    return render(request, "shop/edit_item.html", context)
 
 
 @permission_required("shop.add_category")

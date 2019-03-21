@@ -35,3 +35,13 @@ class AddItemForm(forms.ModelForm):
     class Meta:
         model = Item
         fields = ["name", "price", "description", "category", "image"]
+
+
+class EditItemForm(forms.ModelForm):
+    layout = M.Layout(
+        M.Row("name"), M.Row("price"), M.Row("category"), M.Row("image")
+    )
+
+    class Meta:
+        model = Item
+        fields = ["name", "price", "category", "image"]
