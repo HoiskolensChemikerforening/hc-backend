@@ -4,15 +4,11 @@ from django.contrib import messages
 from django.urls import reverse
 from dal import autocomplete
 from django.shortcuts import redirect, get_object_or_404
-from django.http import HttpResponseRedirect
 from .forms import Pictureform, PictureTagForm
 from .models import Contribution, PictureTag
 from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-
-# TODO: approve_delete redirect to current page
-# TODO: Change num of objects per page. UPDATE 3 VIEWS!1
 
 @login_required
 def submit_picture(request):
