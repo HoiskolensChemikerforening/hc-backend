@@ -59,7 +59,7 @@ def index(request):
 def index_user(request):
     is_tablet_user = False
     rfid_form = None
-    items = Item.objects.all()
+    items = Item.get_active_items()
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
@@ -102,7 +102,7 @@ def index_user(request):
 def index_tabletshop(request):
     is_tablet_user = True
     rfid_form = GetRFIDForm(request.POST or None)
-    items = Item.objects.all()
+    items = Item.get_active_items()
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
