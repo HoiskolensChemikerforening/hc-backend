@@ -20,8 +20,8 @@
         <p>
             {% if field.name == "is_active" %}
             <label>
-                <input type="checkbox">
-                <span>{{ field.name }}</span>
+                {{field}}
+                <span>Aktiv</span>
             </label>
             {% else %}
             {{field}}

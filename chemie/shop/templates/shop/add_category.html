@@ -28,11 +28,15 @@ Opprett kategori
   </form>
 </div>
 <div>
-  <ul>
-    {% for category in categories %}
-    <li>{{category.name}}</li> 
-    {% endfor%}    
-  </ul>
+  <h4>Alle kategorier</h4>
+  {% for category in categories %}
+  <div class="collection"
+    style="padding:0.4rem;  height:3rem; display:flex; flex-wrap:wrap; justify-content:center; align-items:center">
+    {{category.name}}
+  </div>
+  {% endfor%}
+
+</div>
 </div>
 
 {% endblock content %}

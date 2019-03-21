@@ -117,7 +117,7 @@ margin: auto;
   var AllItemList = {}
 </script>
 
-<div id="checkboxes" style="display:flex; justify-content: space-between; flex-wrap: wrap">
+<div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
   <script type="text/javascript">
     categoriesFilterd["{{category.name}}"] = false
@@ -357,6 +357,15 @@ margin: auto;
 
 </script>
 <script>
+  var isTabletUserString = "{{is_tablet_user}}";
+  var isTabletUser = (isTabletUserString == "True");
+  if (isTabletUser) {
+    var sideBarNav = document.getElementsByClassName("top-nav")[0]
+    var footer = document.getElementsByClassName("page-footer")[0]
+    sideBarNav.setAttribute("style", "display:none")
+    footer.setAttribute("style", "display:none")
+  }
+
   // Create a "close" button and append it to each list item
   var itemList = document.getElementsByClassName("item-list");
   // var i;

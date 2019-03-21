@@ -224,7 +224,9 @@ def add_item(request):
 @permission_required("shop.edit_item")
 def edit_item(request, pk):
     item = Item.objects.get(pk=pk)
-    form = EditItemForm(request.POST or None, request.FILES or None, instance=item)
+    form = EditItemForm(
+        request.POST or None, request.FILES or None, instance=item
+    )
     if request.POST:
         if form.is_valid():
             form.save()

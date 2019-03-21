@@ -39,7 +39,11 @@ class AddItemForm(forms.ModelForm):
 
 class EditItemForm(forms.ModelForm):
     layout = M.Layout(
-        M.Row("name"), M.Row("price"), M.Row("category"), M.Row("image")
+        M.Row("name"),
+        M.Row("price"),
+        M.Row("category"),
+        M.Row("image"),
+        M.Row("is_active"),
     )
 
     class Meta:
