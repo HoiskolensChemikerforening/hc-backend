@@ -181,4 +181,4 @@ class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
         if self.q:
             qs = qs.filter(tag__startswith=self.q) | qs.filter(tag__icontains=self.q)
 
-        return qs
+        return qs.order_by('tag')
