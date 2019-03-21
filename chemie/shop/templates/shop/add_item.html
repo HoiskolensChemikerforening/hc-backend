@@ -38,7 +38,15 @@
       <td>{{ item.name }}</td>
       <td>{{ item.price }}</td>
       <td>{{ item.category }}</td>
-      <td>{{ item.is_active }}</td>
+      {% if item.is_active %}
+      <td>
+        <i class="material-icons" style="color:green">check</i>
+      </td>
+      {% else %}
+      <td>
+        <i class="material-icons" style="color:red">clear</i>
+      </td>
+      {% endif %}
       <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
     </tr>
     {% endfor %}
