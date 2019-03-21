@@ -16,9 +16,19 @@
 </div>
 <div style="display:inline">
     <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
-        {{ form.media }}
-        {{ form.as_p }}
-        <input class="btn btn-primary pull-right" type='submit' value='Lagre!' />
+        {% for field in form %}
+        <p>
+            {% if field.name == "is_active" %}
+            <label>
+                <input type="checkbox">
+                <span>{{ field.name }}</span>
+            </label>
+            {% else %}
+            {{field}}
+            {% endif %}
+            {% endfor %}
+        </p>
+        <input class="btn btn-primary pull-right" style="float:right" type='submit' value='Lagre!' />
     </form>
 </div>
 {% endblock content %}
