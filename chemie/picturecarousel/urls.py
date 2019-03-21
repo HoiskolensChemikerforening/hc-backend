@@ -36,7 +36,7 @@ urlpatterns = [
     ),
     url(
         r"^picturetag-autocomplete/",
-        PictureTagAutocomplete.as_view(),
+        PictureTagAutocomplete.as_view(create_field='tag'),
         name='picturetag-autocomplete'
     )
 ]
