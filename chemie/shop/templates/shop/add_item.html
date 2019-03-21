@@ -19,17 +19,31 @@
     {{ form.as_p }}
     <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
   </form>
-  <button onclick="location.href='{% url "shop:add-category" %}'" class="btn-small waves-effect waves-light" style="display:inline; float: right">Lag Ny kategori
+  <button onclick="location.href='{% url "shop:add-category" %}'" class="btn waves-effect waves-light"
+    style="display:inline; float: right">Lag Ny kategori
     <i class="material-icons right">add</i>
   </button>
 </div>
-<div>
-    <ul>
-      {% for item in items %}
-      <li><b>Vare:</b> {{item.name}} <b>Pris:</b> {{item.price}} <b>Kategori:</b> {{item.category}}</li> 
-      {% endfor%}    
-    </ul>
-  </div>
+<div id="itemList">
+  <table style="width:100%" id="shopping-table">
+    <tr class="ul-item-list" style="height:3rem">
+      <th>Vare</th>
+      <th>Pris</th>
+      <th>Kategori</th>
+      <th>Aktiv</th>
+      <th></th>
+    </tr>
+    {% for item in items %}
+    <tr class="item-list" id="item-list-{{item.name}}">
+      <td>{{ item.name }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.category }}</td>
+      <td>{{ item.is_active }}</td>
+      <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
 {% endblock content %}
 
 {% block footer_script %}

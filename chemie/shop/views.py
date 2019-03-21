@@ -221,6 +221,11 @@ def add_item(request):
     return render(request, "shop/add_item.html", context)
 
 
+@permission_required("shop.edit_item")
+def edit_item(request, pk):
+    return render(request, "shop/edit_item.html")
+
+
 @permission_required("shop.add_category")
 def add_category(request):
     form = AddCategoryForm(request.POST or None)
