@@ -7,8 +7,13 @@ from django.core.exceptions import ObjectDoesNotExist
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import Profile, ProfileManager
-from .forms import RefillBalanceForm, AddCategoryForm, AddItemForm
-from .models import Item, ShoppingCart, Category, Order
+from .forms import (
+    RefillBalanceForm,
+    AddCategoryForm,
+    AddItemForm,
+    HappyHourForm,
+)
+from .models import Item, ShoppingCart, Category, Order, HappyHour
 from decimal import InvalidOperation
 from django.utils import timezone
 
@@ -240,3 +245,45 @@ def remove_item(request, pk):
     cart = ShoppingCart(request)
     cart.remove(item)
     return JsonResponse({"success": 1})
+
+
+def activate_happyhour(request):
+    now = timezone.now()
+    try:
+        latest_happy_hour = HappyHour.objects.latest("id")
+        diff = now - latest_happy_hour.created
+        time_active_seconds = diff.total_seconds()
+        time_active_minutes = time_active_seconds / 60
+        time_active_hours = time_active_minutes / 60
+        if time_active_hours < latest_happy_hour.duration:
+            time_left_hours = (
+                float(latest_happy_hour.duration) - time_active_hours
+            )
+            time_left_minutes = time_left_hours * 60
+            messages.add_message(
+                request,
+                messages.WARNING,
+                f"Det er {round(time_left_minutes)} minutter igjen",
+                extra_tags="Happy Hour er allerede aktivert!",
+            )
+            return redirect(reverse("shop:admin"))
+    except ObjectDoesNotExist:
+        print("Det finnes ingen happy-hour objekter")
+    except:
+        print("GET happy hour feilet")
+    form = HappyHourForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            user = request.user
+            instance = form.save(commit=False)
+            instance.provider = user
+            instance.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Happy Hour aktivert!",
+                extra_tags=f"Aktivert i {instance.duration} time(r)",
+            )
+            return redirect(reverse("shop:admin"))
+    context = {"form": form}
+    return render(request, "shop/happy-hour.html", context)

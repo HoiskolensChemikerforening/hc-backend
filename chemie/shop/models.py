@@ -5,8 +5,18 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
+from extended_choices import Choices
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
+
+
+HAPPY_HOUR_DURATION = Choices(
+    ("ONE", 1, "1 time"),
+    ("TWO", 2, "2 timer"),
+    ("THREE", 3, "3 timer"),
+    ("FOUR", 4, "4 timer"),
+    ("FIVE", 5, "5 timer"),
+)
 
 
 class RefillReceipt(models.Model):
@@ -45,13 +55,6 @@ class Item(models.Model):
     price = models.DecimalField(
         max_digits=6, decimal_places=2, verbose_name="Pris"
     )
-    description = models.CharField(
-        max_length=100,
-        verbose_name="Varebeskrivelse",
-        blank=True,
-        null=True,
-        default=None,
-    )
     category = models.ForeignKey(
         Category, verbose_name="Kategori", on_delete=models.CASCADE
     )
@@ -70,7 +73,7 @@ class Item(models.Model):
 
 class OrderItem(models.Model):
     item = models.ForeignKey(
-        Item, verbose_name="Varenavn", on_delete=models.CASCADE
+        Item, verbose_name="Varenavn", on_delete=models.DO_NOTHING
     )
     quantity = models.PositiveIntegerField(verbose_name="Antall")
 
@@ -96,6 +99,19 @@ class Order(models.Model):
         for item in self.items.all():
             totalprice += item.item.price * item.quantity
         return totalprice
+
+
+class HappyHour(models.Model):
+    provider = models.ForeignKey(User, on_delete=models.DO_NOTHING)
+    created = models.DateTimeField(auto_now_add=True, verbose_name="Oprettet")
+    duration = models.PositiveSmallIntegerField(
+        choices=HAPPY_HOUR_DURATION,
+        verbose_name="Varighet",
+        default=HAPPY_HOUR_DURATION.ONE,
+    )
+
+    def __str__(self):
+        return f"Happy Hour {self.id} av {self.provider.get_full_name()}"
 
 
 class ShoppingCart(object):

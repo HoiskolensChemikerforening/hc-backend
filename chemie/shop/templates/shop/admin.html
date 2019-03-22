@@ -1,5 +1,5 @@
 {% extends "chemie/base.html" %}
-{% load staticfiles %}
+{% load static %}
 {% load thumbnail %}
 
 <head>
@@ -17,6 +17,8 @@
   <span><a class="waves-effect waves-light btn" href="{% url "shop:add-item" %}">Legg til vare</a></span>
   <span><a class="waves-effect waves-light btn" href="{% url "shop:add-category" %}">Legg til kategori</a></span>
   <span><a class="waves-effect waves-light btn" href="{% url "shop:refill" %}">Fyll på konto</a></span>
+  <span><a class="waves-effect waves-light btn" href="{% url "shop:activate-happyhour" %}">Aktiver Happy
+      Hour!</a></span>
 </div>
 <!-- See JS footer-script for element creating -->
 <div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">

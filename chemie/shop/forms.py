@@ -1,7 +1,7 @@
 from django import forms
 from dal import autocomplete
 import material as M
-from .models import Item, Category, RefillReceipt
+from .models import Item, Category, RefillReceipt, HappyHour
 
 
 class RefillBalanceForm(forms.ModelForm):
@@ -25,13 +25,17 @@ class AddCategoryForm(forms.ModelForm):
 
 class AddItemForm(forms.ModelForm):
     layout = M.Layout(
-        M.Row("name"),
-        M.Row("price"),
-        M.Row("description"),
-        M.Row("category"),
-        M.Row("image"),
+        M.Row("name"), M.Row("price"), M.Row("category"), M.Row("image")
     )
 
     class Meta:
         model = Item
-        fields = ["name", "price", "description", "category", "image"]
+        fields = ["name", "price", "category", "image"]
+
+
+class HappyHourForm(forms.ModelForm):
+    layout = M.Layout(M.Row("duration"))
+
+    class Meta:
+        model = HappyHour
+        fields = ["duration"]

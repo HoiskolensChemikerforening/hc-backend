@@ -1,0 +1,21 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+{% load thumbnail %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chemshop admin</title>
+</head>
+
+{% block content %}
+<form method="POST"> {% csrf_token %}
+  {{ form.as_p }}
+  <input class="btn btn-primary pull-right" type='submit' value='Aktiver Happy Hour!!' />
+</form>
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  $('select').formSelect();
+</script>
+{% endblock footer_script %}
