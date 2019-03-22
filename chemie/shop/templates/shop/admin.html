@@ -102,13 +102,14 @@
     else {
       for (key in adminList[i]) {
         var itemDiv = document.createElement("div");
-        itemDiv.setAttribute("style", "padding:0.4rem; height:4rem;border-style:solid")
+        itemDiv.setAttribute("style", "padding:0.4rem;  height:3rem; display:flex; flex-wrap:wrap; justify-content:center; align-items:center")
+        itemDiv.setAttribute("class", "collection")
         var itemDivChildName = document.createElement("div")
         itemDivChildName.setAttribute("style", "height:1.5rem; min-width:4rem; text-align:left")
         itemDivChildName.innerHTML = key
         var itemDivChildQuantity = document.createElement("div")
         itemDivChildQuantity.innerHTML = adminList[i][key]
-        itemDivChildQuantity.setAttribute("style", "height:1.5rem; text-align:left; min-width:4rem")
+        itemDivChildQuantity.setAttribute("style", "height:1.5rem; text-align:left")
         itemDiv.appendChild(itemDivChildName)
         itemDiv.appendChild(itemDivChildQuantity)
         monthDiv.appendChild(itemDiv);

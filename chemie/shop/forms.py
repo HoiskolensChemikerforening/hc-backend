@@ -39,3 +39,20 @@ class HappyHourForm(forms.ModelForm):
     class Meta:
         model = HappyHour
         fields = ["duration"]
+
+
+class EditItemForm(forms.ModelForm):
+    layout = M.Layout(
+        M.Row("name"),
+        M.Row("price"),
+        M.Row("category"),
+        M.Row("image"),
+        M.Row("is_active"),
+    )
+
+    class Meta:
+        model = Item
+        fields = ["name", "price", "category", "image", "is_active"]
+
+    def __init__(self, *args, **kwargs):
+        super(EditItemForm, self).__init__(*args, **kwargs)

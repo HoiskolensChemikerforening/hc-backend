@@ -59,6 +59,12 @@ class Item(models.Model):
         Category, verbose_name="Kategori", on_delete=models.CASCADE
     )
     image = models.ImageField(upload_to="shopitems", verbose_name="Bilde")
+    is_active = models.BooleanField(default=True)
+
+    @classmethod
+    def get_active_items(cls):
+        active_items = cls.objects.filter(is_active=True)
+        return active_items
 
     def __str__(self):
         return self.name

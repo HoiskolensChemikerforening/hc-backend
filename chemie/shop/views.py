@@ -12,6 +12,7 @@ from .forms import (
     AddCategoryForm,
     AddItemForm,
     HappyHourForm,
+    EditItemForm,
 )
 from .models import Item, ShoppingCart, Category, Order, HappyHour
 from decimal import InvalidOperation
@@ -64,7 +65,7 @@ def index(request):
 def index_user(request):
     is_tablet_user = False
     rfid_form = None
-    items = Item.objects.all()
+    items = Item.get_active_items()
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
@@ -107,7 +108,7 @@ def index_user(request):
 def index_tabletshop(request):
     is_tablet_user = True
     rfid_form = GetRFIDForm(request.POST or None)
-    items = Item.objects.all()
+    items = Item.get_active_items()
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
@@ -221,10 +222,22 @@ def add_item(request):
     if request.POST:
         if form.is_valid():
             form.save()
-            return redirect(reverse("shop:index"))
     items = Item.objects.all()
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
+
+
+@permission_required("shop.edit_item")
+def edit_item(request, pk):
+    item = Item.objects.get(pk=pk)
+    form = EditItemForm(
+        request.POST or None, request.FILES or None, instance=item
+    )
+    if request.POST:
+        if form.is_valid():
+            form.save()
+    context = {"form": form}
+    return render(request, "shop/edit_item.html", context)
 
 
 @permission_required("shop.add_category")
@@ -233,7 +246,6 @@ def add_category(request):
     if request.POST:
         if form.is_valid():
             form.save()
-            return redirect(reverse("shop:index"))
     categories = Category.objects.all()
     context = {"form": form, "categories": categories}
     return render(request, "shop/add_category.html", context)
