@@ -1,8 +1,12 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404
-from django.shortcuts import render, redirect, reverse
+from django.shortcuts import (
+    get_object_or_404,
+    render,
+    redirect,
+    reverse,
+)
 from django.core.exceptions import ObjectDoesNotExist
 
 from chemie.customprofile.forms import GetRFIDForm
@@ -146,8 +150,9 @@ def index_tabletshop(request):
                     messages.add_message(
                         request,
                         messages.SUCCESS,
-                        "Kontoen din er trukket {} HC-coin. Du har igjen {}  HC-coin".format(
-                            total_price, new_balance
+                        (
+                            "Kontoen din er trukket {} HC-coin. Du har igjen",
+                            " {} HC-coin".format(total_price, new_balance),
                         ),
                         extra_tags="Kjøp godkjent",
                     )
@@ -156,7 +161,9 @@ def index_tabletshop(request):
                 messages.add_message(
                     request,
                     messages.WARNING,
-                    "Studentkort ikke registrert, Gå inn på chemie.no/profile/edit/",
+                    "Studentkort ikke registrert, Gå inn på {}".format(
+                        reverse("profile:edit")
+                    ),
                     extra_tags="Ups",
                 )
     return context
@@ -261,6 +268,7 @@ def remove_item(request, pk):
 
 def activate_happyhour(request):
     now = timezone.now()
+    form = HappyHourForm(request.POST or None)
     try:
         latest_happy_hour = HappyHour.objects.latest("id")
         diff = now - latest_happy_hour.created
@@ -279,11 +287,22 @@ def activate_happyhour(request):
                 extra_tags="Happy Hour er allerede aktivert!",
             )
             return redirect(reverse("shop:admin"))
-    except ObjectDoesNotExist:
-        print("Det finnes ingen happy-hour objekter")
+        return create_happyhour(request, form)
+    except HappyHour.DoesNotExist:
+        print("Ingen Happy Hour objekter eksisterer")
+        return create_happyhour(request, form)
     except:
-        print("GET happy hour feilet")
-    form = HappyHourForm(request.POST or None)
+        messages.add_message(
+            request,
+            messages.WARNING,
+            "Vi har en teknisk feil og vil prøve å rette opp i det",
+            extra_tags="Vennligst ta kontakt med Webkom",
+        )
+        context = {"form": form}
+        return render(request, "shop/happy-hour.html", context)
+
+
+def create_happyhour(request, form):
     if request.method == "POST":
         if form.is_valid():
             user = request.user
