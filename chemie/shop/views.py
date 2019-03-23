@@ -1,12 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
-from django.shortcuts import (
-    get_object_or_404,
-    render,
-    redirect,
-    reverse,
-)
+from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.core.exceptions import ObjectDoesNotExist
 
 from chemie.customprofile.forms import GetRFIDForm
@@ -21,6 +16,25 @@ from .forms import (
 from .models import Item, ShoppingCart, Category, Order, HappyHour
 from decimal import InvalidOperation
 from django.utils import timezone
+
+
+def is_happy_hour():
+    now = timezone.now()
+    latest_happy_hour = HappyHour.objects.latest("id")
+    diff = now - latest_happy_hour.created
+    time_active_seconds = diff.total_seconds()
+    time_active_minutes = time_active_seconds / 60
+    time_active_hours = time_active_minutes / 60
+    if time_active_hours < latest_happy_hour.duration:
+        is_happy = True
+        time_left_hours = (
+                float(latest_happy_hour.duration) - time_active_hours
+            )
+        time_left_minutes = time_left_hours * 60
+    else:
+        is_happy = False
+        time_left_minutes = None
+    return is_happy, time_left_minutes
 
 
 def get_last_year_receipts():
@@ -267,19 +281,10 @@ def remove_item(request, pk):
 
 
 def activate_happyhour(request):
-    now = timezone.now()
     form = HappyHourForm(request.POST or None)
     try:
-        latest_happy_hour = HappyHour.objects.latest("id")
-        diff = now - latest_happy_hour.created
-        time_active_seconds = diff.total_seconds()
-        time_active_minutes = time_active_seconds / 60
-        time_active_hours = time_active_minutes / 60
-        if time_active_hours < latest_happy_hour.duration:
-            time_left_hours = (
-                float(latest_happy_hour.duration) - time_active_hours
-            )
-            time_left_minutes = time_left_hours * 60
+        is_happy, time_left_minutes = is_happy_hour()
+        if is_happy:
             messages.add_message(
                 request,
                 messages.WARNING,
@@ -291,15 +296,14 @@ def activate_happyhour(request):
     except HappyHour.DoesNotExist:
         print("Ingen Happy Hour objekter eksisterer")
         return create_happyhour(request, form)
-    except:
-        messages.add_message(
-            request,
-            messages.WARNING,
-            "Vi har en teknisk feil og vil prøve å rette opp i det",
-            extra_tags="Vennligst ta kontakt med Webkom",
-        )
-        context = {"form": form}
-        return render(request, "shop/happy-hour.html", context)
+    messages.add_message(
+        request,
+        messages.WARNING,
+        "Vi har en teknisk feil og vil prøve å rette opp i det",
+        extra_tags="Vennligst ta kontakt med Webkom",
+    )
+    context = {"form": form}
+    return render(request, "shop/happy-hour.html", context)
 
 
 def create_happyhour(request, form):
