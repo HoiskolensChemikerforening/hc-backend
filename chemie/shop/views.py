@@ -85,6 +85,7 @@ def index_user(request):
     rfid_form = None
     items = Item.get_active_items()
     categories = Category.objects.all()
+    is_happy = is_happy_hour()
     cart = ShoppingCart(request)
     context = {
         "items": items,
@@ -242,6 +243,29 @@ def add_item(request):
     form = AddItemForm(request.POST or None, request.FILES or None)
     if request.POST:
         if form.is_valid():
+            duplicate = form.cleaned_data["has_happy_hour_duplicate"]
+            if duplicate:
+                name = form.cleaned_data["name"]
+                price = form.cleaned_data["price"]
+                image = form.cleaned_data["image"]
+                try:
+                    Item.objects.create(
+                        name=name,
+                        price=price,
+                        category="Happy Hour",
+                        image=image
+                    )
+                except Category.DoesNotExist:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        (
+                            "Kategorien 'Happy Hour' er ikke opprettet enda. ",
+                            "Vennligst opprett den før du huker av at ",
+                            "varen er happy hour duplikat"
+                        ),
+                        extra_tags="En feil har oppstått"
+                    )
             form.save()
     items = Item.objects.all()
     context = {"form": form, "items": items}

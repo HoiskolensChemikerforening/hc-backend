@@ -12,50 +12,104 @@
   <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
   <a href="{% url "shop:admin" %}" class="breadcrumb">Admin</a>
   <a class="breadcrumb">Legg inn vare</a>
-</div>
-<div style="display:inline">
-  <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
-    {{ form.media }}
-    {{ form.as_p }}
-    <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
-  </form>
-  <button onclick="location.href='{% url "shop:add-category" %}'" class="btn waves-effect waves-light"
-    style="display:inline; float: right">Lag Ny kategori
-    <i class="material-icons right">add</i>
-  </button>
-</div>
-<div id="itemList">
-  <table style="width:100%" id="shopping-table">
-    <tr class="ul-item-list" style="height:3rem">
-      <th>Vare</th>
-      <th>Pris</th>
-      <th>Kategori</th>
-      <th>Aktiv</th>
-      <th></th>
-    </tr>
-    {% for item in items %}
-    <tr class="item-list" id="item-list-{{item.name}}">
-      <td>{{ item.name }}</td>
-      <td>{{ item.price }}</td>
-      <td>{{ item.category }}</td>
-      {% if item.is_active %}
-      <td>
-        <i class="material-icons" style="color:green">check</i>
-      </td>
-      {% else %}
-      <td>
-        <i class="material-icons" style="color:red">clear</i>
-      </td>
-      {% endif %}
-      <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
-    </tr>
-    {% endfor %}
-  </table>
-</div>
-{% endblock content %}
+  <!-- Checkboxes -->
+  <div id="checkbox" class="section scrollspy">
+    <p>Use checkboxes when looking for yes or no answers. The <code class="language-markup">for</code> attribute is
+      necessary to bind our custom checkbox with the input. Add the input's <code class="language-markup">id</code> as
+      the value of the <code class="language-markup">for</code> attribute of the label. </p>
+    <form action="#">
+      <p>
+        <label>
+          <input type="checkbox" />
+          <span>Red</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" checked="checked" />
+          <span>Yellow</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" class="filled-in" checked="checked" />
+          <span>Filled in</span>
+        </label>
+      </p>
+      <p>
+        <label for="kek">
+          <input id="indeterminate-checkbox" type="checkbox" />
+          <span>Indeterminate Style</span>
+        </label>
+      </p>
+      <p>
+        <!-- Worky -->
+        <label for="id_has_happy_hour_duplicate">
+          <input type="checkbox" name="has_happy_hour_duplicate" id="id_has_happy_hour_duplicate">
+          <span>Duplikat?</span></label>
+      </p>
+      <p>
+        <!-- No worky -->
+        <label for="id_has_happy_hour_duplicate">Har en Happy Hour duplikat:</label>
+        <input type="checkbox" name="has_happy_hour_duplicate" id="id_has_happy_hour_duplicate">
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" checked="checked" disabled="disabled" />
+          <span>Green</span>
+        </label>
+      </p>
+      <p>
+        <label>
+          <input type="checkbox" disabled="disabled" />
+          <span>Brown</span>
+        </label>
+      </p>
+    </form>
+  </div>
+  <div style="display:inline">
+    <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
+      {{ form.media }}
+      {{ form.as_p }}
+      <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
+    </form>
+    <button onclick="location.href='{% url "shop:add-category" %}'" class="btn waves-effect waves-light"
+      style="display:inline; float: right">Lag Ny kategori
+      <i class="material-icons right">add</i>
+    </button>
+  </div>
+  <div id="itemList">
+    <table style="width:100%" id="shopping-table">
+      <tr class="ul-item-list" style="height:3rem">
+        <th>Vare</th>
+        <th>Pris</th>
+        <th>Kategori</th>
+        <th>Aktiv</th>
+        <th></th>
+      </tr>
+      {% for item in items %}
+      <tr class="item-list" id="item-list-{{item.name}}">
+        <td>{{ item.name }}</td>
+        <td>{{ item.price }}</td>
+        <td>{{ item.category }}</td>
+        {% if item.is_active %}
+        <td>
+          <i class="material-icons" style="color:green">check</i>
+        </td>
+        {% else %}
+        <td>
+          <i class="material-icons" style="color:red">clear</i>
+        </td>
+        {% endif %}
+        <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
+      </tr>
+      {% endfor %}
+    </table>
+  </div>
+  {% endblock content %}
 
-{% block footer_script %}
-<script>
-  $('select').formSelect();
-</script>
-{% endblock footer_script %}
+  {% block footer_script %}
+  <script>
+    $('select').formSelect();
+  </script>
+  {% endblock footer_script %}

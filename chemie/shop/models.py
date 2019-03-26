@@ -60,6 +60,9 @@ class Item(models.Model):
     )
     image = models.ImageField(upload_to="shopitems", verbose_name="Bilde")
     is_active = models.BooleanField(default=True)
+    has_happy_hour_duplicate = models.BooleanField(
+        default=False, verbose_name="Har en Happy Hour duplikat"
+    )
 
     @classmethod
     def get_active_items(cls):
