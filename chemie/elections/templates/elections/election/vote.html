@@ -31,7 +31,7 @@
         <div class="vote-div">
           {% for candidate in form.candidates %}
             <div class='vote-box' onclick="changeColor(this)">
-              {{ candidate }}
+              {{ candidate.choice_label }}{{ candidate.tag }}
             </div>
           {% endfor %}
         </div>
