@@ -8,7 +8,11 @@ urlpatterns = [
         r"^$",
         views.index,
         name="index",
-
+    ),
+    url(
+        r"^create-term",
+        views.create_term,
+        name="create_term"
     ),
     url(
         r"^(?P<pk>[0-9]+)/$",

@@ -2,12 +2,23 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import QuizTerm, QuizScore
-from .forms import QuizScoreForm
+from .forms import QuizScoreForm, CreateQuizTermForm
 # Create your views here.
 
 
 def index(request):
     return HttpResponse("Hei <3")
+
+
+def create_term(request):
+    form = CreateQuizTermForm(request.POST or None)
+    if request.POST:
+        if form.is_valid():
+            form.save()
+            return redirect('quiz:term_detail', pk=form.instance.pk)
+
+    context = {'form': form}
+    return render(request, 'quiz/create_term.html', context)
 
 
 def term_detail(request, pk):
@@ -21,9 +32,6 @@ def term_detail(request, pk):
 
 
 def create_score(request, pk):
-    # TODO: Fix responsive dal widget (and responsive table?)
-    # TODO: Make update score form bjutiful <33
-
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
     form = QuizScoreForm(request.POST or None)
@@ -31,7 +39,7 @@ def create_score(request, pk):
         if form.is_valid():
             instance = form.save(commit=False)
             if scores.filter(user=instance.user):
-                # Oppdater eksisterende fremfor å legge til ny
+                # Oppdater eksisterende score fremfor å legge til ny
                 quiz_score = scores.filter(user=instance.user).first()
                 quiz_score.score += instance.score
                 quiz_score.save()
