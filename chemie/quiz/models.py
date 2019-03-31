@@ -7,8 +7,8 @@ from django.urls import reverse
 
 
 class QuizTerm(models.Model):
-    is_active = models.BooleanField()
-    term = models.CharField(max_length=100)
+    is_active = models.BooleanField(verbose_name='Aktiv Quiz')
+    term = models.CharField(max_length=100, verbose_name='Quiz')
 
     def __str__(self):
         return self.term
