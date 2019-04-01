@@ -261,7 +261,6 @@ def add_rfid(request):
             user = form.cleaned_data.get('user')
             try:
                 profile = Profile.objects.get(user=user)
-                rfid = form.cleaned_data.get('access_card')
                 card_nr = ProfileManager.rfid_to_em(rfid)
                 profile.access_card = card_nr
                 profile.save()
