@@ -3,8 +3,6 @@ from dal import autocomplete
 import material as M
 from .models import Item, Category, RefillReceipt, HappyHour
 
-from .widgets import CheckboxMaterializeWidget
-
 
 class RefillBalanceForm(forms.ModelForm):
     layout = M.Layout(M.Row("receiver"), M.Row("amount"))
@@ -31,21 +29,12 @@ class AddItemForm(forms.ModelForm):
         M.Row("price"),
         M.Row("category"),
         M.Row("image"),
-        M.Row("has_happy_hour_duplicate"),
-    )
-    has_happy_hour_duplicate = forms.ChoiceField(
-        widget=CheckboxMaterializeWidget()
+        M.Row("happy_hour_duplicate"),
     )
 
     class Meta:
         model = Item
-        fields = [
-            "name",
-            "price",
-            "category",
-            "image",
-            "has_happy_hour_duplicate",
-        ]
+        fields = ["name", "price", "category", "image", "happy_hour_duplicate"]
 
 
 class HappyHourForm(forms.ModelForm):

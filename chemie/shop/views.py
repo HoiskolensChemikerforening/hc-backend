@@ -20,21 +20,24 @@ from django.utils import timezone
 
 def is_happy_hour():
     now = timezone.now()
-    latest_happy_hour = HappyHour.objects.latest("id")
-    diff = now - latest_happy_hour.created
-    time_active_seconds = diff.total_seconds()
-    time_active_minutes = time_active_seconds / 60
-    time_active_hours = time_active_minutes / 60
-    if time_active_hours < latest_happy_hour.duration:
-        is_happy = True
-        time_left_hours = (
+    try:
+        latest_happy_hour = HappyHour.objects.latest("id")
+        diff = now - latest_happy_hour.created
+        time_active_seconds = diff.total_seconds()
+        time_active_minutes = time_active_seconds / 60
+        time_active_hours = time_active_minutes / 60
+        if time_active_hours < latest_happy_hour.duration:
+            is_happy = True
+            time_left_hours = (
                 float(latest_happy_hour.duration) - time_active_hours
             )
-        time_left_minutes = time_left_hours * 60
-    else:
-        is_happy = False
-        time_left_minutes = None
-    return is_happy, time_left_minutes
+            time_left_minutes = time_left_hours * 60
+        else:
+            is_happy = False
+            time_left_minutes = None
+        return is_happy, time_left_minutes
+    except HappyHour.DoesNotExist:
+        return False, False
 
 
 def get_last_year_receipts():
@@ -84,8 +87,13 @@ def index_user(request):
     is_tablet_user = False
     rfid_form = None
     items = Item.get_active_items()
+    try:
+        happy_category = Category.objects.get(name="Happy Hour")
+        happy_items = Item.objects.filter(category=happy_category)
+        items = items.exclude(id__in=happy_items.values("pk"))
+    except Category.DoesNotExist:
+        pass
     categories = Category.objects.all()
-    is_happy = is_happy_hour()
     cart = ShoppingCart(request)
     context = {
         "items": items,
@@ -102,6 +110,11 @@ def index_user(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
+            is_happy = is_happy_hour()
+            if is_happy:
+                duplicate = item.happy_hour_duplicate
+                if duplicate:
+                    cart.add(duplicate, quantity=int(quantity))
         if "checkout" in request.POST:
             balance = request.user.profile.balance
             total_price = cart.get_total_price()
@@ -128,6 +141,12 @@ def index_tabletshop(request):
     is_tablet_user = True
     rfid_form = GetRFIDForm(request.POST or None)
     items = Item.get_active_items()
+    try:
+        happy_category = Category.objects.get(name="Happy Hour")
+        happy_items = Item.objects.filter(category=happy_category)
+        items = items.exclude(id__in=happy_items.values("pk"))
+    except Category.DoesNotExist:
+        pass
     categories = Category.objects.all()
     cart = ShoppingCart(request)
     context = {
@@ -145,6 +164,11 @@ def index_tabletshop(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
+            is_happy = is_happy_hour()
+            if is_happy:
+                duplicate = item.happy_hour_duplicate
+                if duplicate:
+                    cart.add(duplicate, quantity=int(quantity))
         if "checkout" in request.POST:
             try:
                 rfid = request.POST["rfid"]
@@ -243,29 +267,6 @@ def add_item(request):
     form = AddItemForm(request.POST or None, request.FILES or None)
     if request.POST:
         if form.is_valid():
-            duplicate = form.cleaned_data["has_happy_hour_duplicate"]
-            if duplicate:
-                name = form.cleaned_data["name"]
-                price = form.cleaned_data["price"]
-                image = form.cleaned_data["image"]
-                try:
-                    Item.objects.create(
-                        name=name,
-                        price=price,
-                        category="Happy Hour",
-                        image=image
-                    )
-                except Category.DoesNotExist:
-                    messages.add_message(
-                        request,
-                        messages.ERROR,
-                        (
-                            "Kategorien 'Happy Hour' er ikke opprettet enda. ",
-                            "Vennligst opprett den før du huker av at ",
-                            "varen er happy hour duplikat"
-                        ),
-                        extra_tags="En feil har oppstått"
-                    )
             form.save()
     items = Item.objects.all()
     context = {"form": form, "items": items}
