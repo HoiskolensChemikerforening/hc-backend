@@ -1,13 +1,27 @@
 from django.shortcuts import render, redirect
-from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from .models import QuizTerm, QuizScore
 from .forms import QuizScoreForm, CreateQuizTermForm
 # Create your views here.
 
+# TODO: Fiks sånn at det kun kan eksistere én aktiv quiz om gangen. For det er no dritt
+
 
 def index(request):
-    return HttpResponse("Hei <3")
+    try:
+        active_term = QuizTerm.objects.get(is_active=True)
+        terms = QuizTerm.objects.exclude(id=active_term.id)
+    except QuizTerm.DoesNotExist:
+        active_term = None
+        terms = QuizTerm.objects.all()
+    top_scores = QuizScore.objects.filter(term=active_term).order_by('-score')[:3]
+    context = {
+        "active_term": active_term,
+        "top_scores": top_scores,
+        "terms": terms
+    }
+
+    return render(request, 'quiz/index.html', context)
 
 
 def create_term(request):
