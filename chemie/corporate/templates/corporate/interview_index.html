@@ -27,9 +27,10 @@
         <br><br>
         <h1> {{ interview.name }}</h1>
           <div><img src="{{ interview.picture.url }}" class="img-fluid"></div>
-        <p>
+          <br>
+        <p><b>
           Her kan det stå en ingress.
-        </p>
+        </b></p>
         <p>
           {{ interview.interview }}
         </p>
@@ -38,7 +39,7 @@
     </div>
     <div class="col-sm-12 col-md-3">
       <div class="card">
-        <img src="{{ interview.picture.url }}" class="card-img-top" alt="...">
+        <img src="{{ interview.company.logo.url }}" class="card-img-top" alt="...">
         <div class="card-body">
           <a href="{{ Interview.get_absolute_url }}"><h4 class="card-title"> {{ interview.company }}</h4></a>
           <p class="card-text">
@@ -52,6 +53,8 @@
             Aktuelle linjer:
             <hr>
             Funfacts:
+            <hr>
+            Fortfatter:
           </p>
 
         </div>
