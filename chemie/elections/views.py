@@ -292,9 +292,9 @@ def admin_register_prevotes(request, pk):
                     candidate = Candidate.objects.get(pk=candidate_pk)
                     old_votes = candidate.votes
                     new_votes = form.cleaned_data["votes"]
-                    position.total_votes = position.total_votes + (
-                        new_votes - old_votes
-                    )
+                    # position.total_votes = position.total_votes + (
+                    #     new_votes - old_votes
+                    # )
                     position.save()
                     form.save()
                 return redirect(
@@ -339,11 +339,9 @@ def admin_results(request, pk):
     if voting_is_active():
         return redirect("elections:admin_start_voting", pk=pk)
     position = election.positions.get(id=pk)
-    total_votes = position.total_votes
+    total_votes = position.get_total_votes()
     winners = position.winners.all()
-    blank_votes = total_votes - sum(
-        [c.votes for c in position.candidates.all()]
-    )
+    blank_votes = position.blank_votes
     number_of_voters = position.number_of_voters
     if number_of_voters < VOTES_REQUIRED_FOR_VALID_ELECTION:
         messages.add_message(
@@ -354,6 +352,7 @@ def admin_results(request, pk):
                 number_of_voters
             ),
         )
+    print(blank_votes)
     context = {
         "candidates": position.candidates.all(),
         "total_votes": total_votes,

@@ -3,7 +3,6 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.query import QuerySet
-
 from chemie.customprofile.models import Profile
 
 VOTES_REQUIRED_FOR_VALID_ELECTION = 50
@@ -65,8 +64,8 @@ class Position(models.Model):
     )
 
     # Number of votes. Sum of all votes on candidates and blanks
-    total_votes = models.PositiveIntegerField(
-        default=0, verbose_name="Totalt stemmer mottatt"
+    blank_votes = models.PositiveIntegerField(
+        default=0, verbose_name="Totalt blanke stemmer"
     )
 
     # Mark position as done when it has been closed for voting
@@ -144,6 +143,11 @@ class Position(models.Model):
         election.current_position = None
         election.save()
 
+    def get_total_votes(self):
+        candidate_votes = [cand.votes for cand in self.candidates.all()]
+        total_votes = sum(candidate_votes) + self.blank_votes
+        return total_votes
+
 
 class Election(models.Model):
     # For the entire election
@@ -214,11 +218,8 @@ class Election(models.Model):
         if not self.current_position_is_open:
             # forhindrer at vi ikke resetter votes ved refresh page
             self.current_position = current_position
-            self.current_position.total_votes = 0
+            self.current_position.blank_votes = 0
             self.current_position_is_open = True
-            # Legge til forhndsstemmene i totale stemmer
-            for candidate in candidates:
-                self.current_position.total_votes += candidate.votes
             self.current_position.save()
             self.save()
 
@@ -229,20 +230,18 @@ class Election(models.Model):
             self.save()
 
     def vote(self, profile, candidates=None, blank=False):
-        voted = False
         if not profile.voted:
             if blank:
-                self.current_position.total_votes += 1
+                self.current_position.blank_votes += 1
                 self.current_position.number_of_voters += 1
                 self.current_position.save()
-                voted = True
                 profile.voted = True
                 profile.save()
+                return True
             else:
                 if type(candidates) is Candidate:
                     candidate = candidates
                     candidate.votes += 1
-                    self.current_position.total_votes += 1
                     self.current_position.number_of_voters += 1
                     candidate.save()
                     self.current_position.save()
@@ -257,11 +256,10 @@ class Election(models.Model):
                 if cands.count() is not 0:
                     for candidate in cands:
                         candidate.votes += 1
-                        self.current_position.total_votes += 1
-                        self.current_position.number_of_voters += 1
                         candidate.save()
-                        self.current_position.save()
+                    self.current_position.number_of_voters += 1
+                    self.current_position.save()
                     profile.voted = True
                     profile.save()
-                    voted = True
-        return voted
+                    return True
+        return False
