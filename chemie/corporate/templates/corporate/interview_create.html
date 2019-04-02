@@ -2,16 +2,40 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Intervju</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 <body>
-<div class ="container">
-    <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+{% load static %}
+
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="">
+    <img src="{% static " images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
+    HC
+  </a>
+</nav>
+
+<div class="container">
+  <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
+    <div class="col-sm-12 col-md-2">
+    </div>
+    <div class="col-sm-12 col-md-7 jumbotron">
+      <div class="container">
+          <h1>Legg til nytt intervju</h1>
+          <br>
+          <form method="POST" enctype="multipart/form-data">{% csrf_token %}
          {{ form.as_p }}
          <br>
          <button class="btn btn-success" type="submit">LEGG TIL!</button>
          <br>
      </form>
+      </div>
+    </div>
+  </div>
 </div>
+
+
 </body>
 </html>
