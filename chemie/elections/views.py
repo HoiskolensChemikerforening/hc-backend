@@ -78,11 +78,12 @@ def voting(request):
                 form = CastVoteForm(request.POST or None, election=election)
                 if request.method == "POST":
                     profile = request.user.profile
-                    if "Stem blankt" in request.POST.getlist("Blank"):
+                    candidate_list = request.POST.getlist("candidates")
+                    if len(candidate_list) == 0:
                         successful_vote = election.vote(
                             profile, candidates=None, blank=True
                         )
-                    elif "Avgi stemme" in request.POST.getlist("Stem"):
+                    elif len(candidate_list) <= election.current_position.spots:
                         if form.is_valid():
                             candidates = form.cleaned_data.get("candidates")
                             successful_vote = election.vote(
