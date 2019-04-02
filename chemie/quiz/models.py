@@ -10,6 +10,13 @@ class QuizTerm(models.Model):
     is_active = models.BooleanField(verbose_name='Aktiv Quiz')
     term = models.CharField(max_length=100, verbose_name='Quiz')
 
+    def save(self, *args, **kwargs):
+        if self.is_active:
+            for quiz in QuizTerm.objects.exclude(pk=self.pk):
+                quiz.is_active = False
+                quiz.save()
+        super().save(*args, **kwargs)
+
     def __str__(self):
         return self.term
 
