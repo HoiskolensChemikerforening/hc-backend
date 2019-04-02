@@ -4,7 +4,7 @@ from .models import QuizTerm, QuizScore
 from .forms import QuizScoreForm, CreateQuizTermForm
 # Create your views here.
 
-# TODO: Fiks sånn at det kun kan eksistere én aktiv quiz om gangen. For det er no dritt
+# TODO: Mulighet for å aktivere en quiz i create_score
 
 
 def index(request):
@@ -49,22 +49,21 @@ def create_score(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
     form = QuizScoreForm(request.POST or None)
-    if request.method == 'POST':
-        if form.is_valid():
-            instance = form.save(commit=False)
-            if scores.filter(user=instance.user):
-                # Oppdater eksisterende score fremfor å legge til ny
-                quiz_score = scores.filter(user=instance.user).first()
-                quiz_score.score += instance.score
-                quiz_score.save()
-            else:
-                instance.term = term
-                instance.save()
-            return redirect('quiz:create_score', term.pk)
+    if form.is_valid():
+        instance = form.save(commit=False)
+        if scores.filter(user=instance.user):
+            # Oppdater eksisterende score fremfor å legge til ny
+            quiz_score = scores.filter(user=instance.user).first()
+            quiz_score.score += instance.score
+            quiz_score.save()
+        else:
+            instance.term = term
+            instance.save()
+        return redirect('quiz:create_score', term.pk)
     context = {
         'term': term,
         'scores': scores,
-        'form': form
+        'form': form,
     }
     return render(request, 'quiz/create_score.html', context)
 
