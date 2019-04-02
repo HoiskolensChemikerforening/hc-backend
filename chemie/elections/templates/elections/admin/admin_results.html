@@ -14,18 +14,18 @@ context = {
 
 <div align="center">
   {% if messages %}
-    <ul class="messages">
-        {% for message in messages %}
-        <li {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
-        <li> {{ message.extra_tags }}</li>
-        {% endfor %}
-    </ul>
-    {% endif %}
+  <ul class="messages">
+    {% for message in messages %}
+    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
+    <li> {{ message.extra_tags }}</li>
+    {% endfor %}
+  </ul>
+  {% endif %}
   <h3 class="title is-3">Vinner(e)</h3>
   {% if winners %}
-    {% for winner in winners %}
-      <h4 class="title is-4">{{ winner.user.get_full_name }}</h4>
-    {% endfor %}
+  {% for winner in winners %}
+  <h4 class="title is-4">{{ winner.user.get_full_name }}</h4>
+  {% endfor %}
   {% endif %}
   <div class="box">
     <h4 class="title is-6">Totalt antall stemmer: {{ total_votes }}</h4>
@@ -45,35 +45,35 @@ context = {
           <script type="text/javascript">
             var total_votes = "{{total_votes}}";
             var blank_votes = "{{blank_votes}}";
-            var blank_percentage = 100*(blank_votes/total_votes).toFixed(2);
+            var blank_percentage = 100 * (blank_votes / total_votes).toFixed(2);
             document.getElementById("blank_percentage").innerHTML = blank_percentage + " %"
           </script>
         </td>
-        <td>Nan</td>
+        <td>-</td>
       </tr>
       {% for candidate in candidates %}
-        <tr>
-          <td> {{ candidate.user.get_full_name }} </td>
-          <td> {{ candidate.votes }} </td>
-          <td>
-            <p id="voting_percentage-{{candidate.id}}"></p>
-            <script type="text/javascript">
-              var total_votes = "{{ total_votes }}";
-              var votes = "{{ candidate.votes }}";
-              var percentage_with_blank = (100*votes/total_votes).toFixed(2);
-              document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage_with_blank + " %";
-            </script>
-          </td>
-          <td>
-            <p id="voting_percentage-without-blank{{candidate.id}}"></p>
-            <script type="text/javascript">
-              var total_votes = "{{ total_votes }}";
-              var total_votes_without_blank = total_votes-"{{blank_votes}}";
-              var votes = "{{ candidate.votes }}";
-              var percentage_without_blank = (100*votes/total_votes_without_blank).toFixed(2);
-              document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
-            </script>
-          </td>
+      <tr>
+        <td> {{ candidate.user.get_full_name }} </td>
+        <td> {{ candidate.votes }} </td>
+        <td>
+          <p id="voting_percentage-{{candidate.id}}"></p>
+          <script type="text/javascript">
+            var total_votes = "{{ total_votes }}";
+            var votes = "{{ candidate.votes }}";
+            var percentage_with_blank = (100 * votes / total_votes).toFixed(2);
+            document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage_with_blank + " %";
+          </script>
+        </td>
+        <td>
+          <p id="voting_percentage-without-blank{{candidate.id}}"></p>
+          <script type="text/javascript">
+            var total_votes = "{{ total_votes }}";
+            var total_votes_without_blank = total_votes - "{{blank_votes}}";
+            var votes = "{{ candidate.votes }}";
+            var percentage_without_blank = (100 * votes / total_votes_without_blank).toFixed(2);
+            document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
+          </script>
+        </td>
       </tr>
       {% endfor %}
     </table>
