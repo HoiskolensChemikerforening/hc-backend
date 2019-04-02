@@ -196,7 +196,7 @@ def admin_register_positions(request):
                     )  # lager et position objetkt
                     election.positions.add(new_position_object)
                     election.save()
-        positions = election.positions.all()
+        positions = election.positions.all().order_by('position_name')
         context = {"form": form, "positions": positions}
         return render(request, "elections/admin/admin_positions.html", context)
 
@@ -247,7 +247,7 @@ def admin_register_candidates(request, pk):
                     election.start_current_election(position)
                 return redirect("elections:admin_start_voting", pk=position.id)
 
-        candidates = position.candidates.all()
+        candidates = position.candidates.all().order_by('user')
         context = {
             "candidates": candidates,
             "position": position,
@@ -280,7 +280,7 @@ def admin_register_prevotes(request, pk):
         )
         formset = CandidateFormSet(
             request.POST or None,
-            queryset=position.candidates.all(),
+            queryset=position.candidates.all().order_by('user'),
             prefix="candidate_forms",
         )
         if request.method == "POST":
@@ -288,14 +288,14 @@ def admin_register_prevotes(request, pk):
                 prevote_form.save()
                 for form in formset:
                     # Increment both candidate and positions votes
-                    candidate_pk = form.instance.pk
-                    candidate = Candidate.objects.get(pk=candidate_pk)
-                    old_votes = candidate.votes
-                    new_votes = form.cleaned_data["votes"]
+                    # candidate_pk = form.instance.pk
+                    # candidate = Candidate.objects.get(pk=candidate_pk)
+                    # old_votes = candidate.votes
+                    # new_votes = form.cleaned_data["votes"]
                     # position.total_votes = position.total_votes + (
                     #     new_votes - old_votes
                     # )
-                    position.save()
+                    # position.save()
                     form.save()
                 return redirect(
                     reverse(
