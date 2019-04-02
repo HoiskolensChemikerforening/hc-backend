@@ -1,6 +1,7 @@
 from django.db import models
 from sorl.thumbnail import ImageField
 from multiselectfield import MultiSelectField
+from django.urls import reverse
 
 
 SPECIALIZATIONS = ((1, 'Bioteknologi'),
@@ -26,3 +27,8 @@ class Interview(models.Model):
     name = models.CharField(max_length=40, verbose_name="Navn")
     interview = models.TextField(verbose_name="Intervjuet")
     picture = ImageField(upload_to="corporate", verbose_name="Bilde")
+
+    def get_absolute_url(self):
+        return reverse(
+            "corporate:interview", kwargs={"interview_id": self.id}
+        )

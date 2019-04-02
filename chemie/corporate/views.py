@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
 
@@ -33,6 +33,7 @@ def list_companies(request):
 
     return render(request, "corporate/list_companies.html", context)
 
+
 def create_company(request):
     form = CreateCompanyForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -51,3 +52,10 @@ def create_interview(request):
 
     context = {"form": form}
     return render(request, "corporate/interview_create.html", context)
+
+
+def interview_index(request, interview_id):
+    this_interview = get_object_or_404(Interview, id=interview_id)
+    context = {"interview": this_interview}
+    return render(request, "corporate/interview_index.html", context)
+
