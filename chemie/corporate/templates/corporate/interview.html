@@ -1,20 +1,79 @@
 <!DOCTYPE html>
+{% load thumbnail %}
 
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <title>Intervjuer</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </head>
 <body>
-<h>Hallo</h>
 
-<div>
-    {% for interview in interviews %}
-        {{ interview.name }}
-        <br>
-    {% empty %}}
-        <p>Det finnes ingen intervjuer enda</p>
-    {% endfor %}
+{% load static %}
+
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="">
+    <img src="{% static " images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
+    HC
+  </a>
+</nav>
+
+<div class="container-fluid" @media (min-width: 1000px  (max-width: 991.98px)>
+  <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem;margin-left: -5rem;margin-right: -15rem">
+    <div class="col-sm-12 col-md-2">
+    </div>
+    <div class="col-sm-12 col-md-7">
+      <div class="container">
+        <br><br>
+        <h1>Intervjuer</h1>
+          <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Intervjuer
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="#">Bioteknologi</a>
+            <a class="dropdown-item" href="#">Organisk kjemi</a>
+            <a class="dropdown-item" href="#">Anvendt teoretisk kjemi</a>
+            <a class="dropdown-item" href="#">Analytisk kjemi</a>
+            <a class="dropdown-item" href="#">Kjemisk prosessteknologi</a>
+            <a class="dropdown-item" href="#">Materialkjemi og energiteknologi</a>
+          </div>
+        </div>
+        <p>
+          Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt. loooooooooooooooooooooooooooooooool
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  {% for interview in interviews %}
+    <div class="col s12 m10 l6">
+      <div class="card medium">
+        <div class="card-image">
+          <a href="{{ Interview.get_absolute_url }}">
+              <img src="interview.picture.url">
+            <!--{% thumbnail interview.image "630x400" crop="center" as im %}
+              <img src="{{ im.url }}">
+            {% endthumbnail %}-->
+          </a>
+          <a class="card-title card-event-title" href="{{ Interview.get_absolute_url }}">
+            <h5 style="font-size: 1.34rem;">Hei</h5>
+          </a>
+        </div>
+        <div class="card-content">
+          <p class="flow-text truncate">
+            {{ interview.name }}
+          </p>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
 </div>
 
 
