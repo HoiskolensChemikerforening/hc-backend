@@ -15,6 +15,11 @@ urlpatterns = [
         name="create_term"
     ),
     url(
+        r"^(?P<pk>[0-9]+)/activate",
+        views.activate_deactivate,
+        name='activate_deactivate'
+    ),
+    url(
         r"^(?P<pk>[0-9]+)/$",
         views.term_detail,
         name="term_detail",

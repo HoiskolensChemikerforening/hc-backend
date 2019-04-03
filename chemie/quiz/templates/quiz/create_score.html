@@ -1,5 +1,6 @@
 {% extends 'chemie/base.html' %}
 {% load thumbnail %}
+{% load material_form %}
 
 {% block nav_header %}
   Quiz
@@ -20,6 +21,15 @@
 
     <div class="card-panel">
         <h4>{{ term }}</h4>
+
+        <form action="{% url 'quiz:activate_deactivate' term.pk %}" method="POST">{% csrf_token %}
+            {% form form=activate_form %}
+            {% endform %}
+            <input type="submit" class="btn btn-small" value="Endre">
+        </form>
+
+        <br><hr>
+
         <table class="striped responsive-table">
             <thead>
                 <tr>
@@ -74,7 +84,7 @@
                             <td id="name_col">{{ form.user }}</td>
                             <td>{{ form.score }}</td>
                             <td style="text-align:center;">
-                                <button class="btn btn-floating" name="score" type="submit">
+                                <button class="btn btn-floating" type="submit">
                                     <i class="material-icons">check</i>
                                 </button>
                             </td>

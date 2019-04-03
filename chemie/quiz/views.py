@@ -4,16 +4,17 @@ from .models import QuizTerm, QuizScore
 from .forms import QuizScoreForm, CreateQuizTermForm
 # Create your views here.
 
-# TODO: Mulighet for å aktivere en quiz i create_score
+# TODO: Permissions
+# TODO: delete_quiz_term
 
 
 def index(request):
     try:
         active_term = QuizTerm.objects.get(is_active=True)
-        terms = QuizTerm.objects.exclude(id=active_term.id)
+        terms = QuizTerm.objects.exclude(id=active_term.id).order_by('id')
     except QuizTerm.DoesNotExist:
         active_term = None
-        terms = QuizTerm.objects.all()
+        terms = QuizTerm.objects.all().order_by('id')
     top_scores = QuizScore.objects.filter(term=active_term).order_by('-score')[:3]
     context = {
         "active_term": active_term,
@@ -26,10 +27,9 @@ def index(request):
 
 def create_term(request):
     form = CreateQuizTermForm(request.POST or None)
-    if request.POST:
-        if form.is_valid():
-            form.save()
-            return redirect('quiz:term_detail', pk=form.instance.pk)
+    if form.is_valid():
+        form.save()
+        return redirect('quiz:term_detail', pk=form.instance.pk)
 
     context = {'form': form}
     return render(request, 'quiz/create_term.html', context)
@@ -45,10 +45,19 @@ def term_detail(request, pk):
     return render(request, 'quiz/term_detail.html', context)
 
 
+def activate_deactivate(request, pk):
+    term = get_object_or_404(QuizTerm, pk=pk)
+    term.is_active = not term.is_active
+    term.save()
+    return redirect('quiz:create_score', pk)
+
+
 def create_score(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
     form = QuizScoreForm(request.POST or None)
+    activate_form = CreateQuizTermForm(instance=term)
+    activate_form.fields.pop('term')
     if form.is_valid():
         instance = form.save(commit=False)
         if scores.filter(user=instance.user):
@@ -64,6 +73,7 @@ def create_score(request, pk):
         'term': term,
         'scores': scores,
         'form': form,
+        'activate_form': activate_form
     }
     return render(request, 'quiz/create_score.html', context)
 
