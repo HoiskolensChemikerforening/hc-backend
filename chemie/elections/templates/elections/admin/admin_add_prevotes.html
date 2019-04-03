@@ -11,29 +11,40 @@
 
 {% block content %}
 <div>
-    <nav class="breadcrumb" aria-label="breadcrumbs">
-        <ul>
-            <li><a href="{% url "elections:admin_register_positions" %}">Admin</a></li>
-            <li><a href="{% url "elections:admin_register_candidates" position.id %}">Posisjon</a></li>
-            <li class="is-active"><a href="#" aria-current="page">Forhåndsstemmer</a></li>
-        </ul>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+            <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
+                    style="color:#edcd2f">Admin</a></li>
+            <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
+                    style="color:#edcd2f">Register kandidater</a></li>
+            <!-- TODO change redirect url from admin_register_positions to admin_register_candidates-->
+            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndstemmer</li>
+        </ol>
     </nav>
     <!--Tittel på possisjon-->
-    <div class="">
-        <h3 class="title is-4"> Kandidater for {{ position.position_name }}</h3>
+    <div class="d-flex flex-column">
+        <div class="p-2" style="text-align:center">
+            <h3 class="title is-4"> Kandidater for {{ position.position_name }}</h3>
+        </div>
+
+
+        <!--Kandidater-->
+        <div class="p-2" style="margin-left:20%">
+            <form method="POST">{% csrf_token %}
+                {{ candidate_formset.management_form }}
+                {% for candidate_form in candidate_formset %}
+                <div class="d-flex" style="margin-top:0.5rem">
+                    {{candidate_form}}
+                </div>
+                {% endfor %}
+                <div style="margin-top:2rem">
+                    {{ prevote_form }}
+                </div>
+                <div>
+                    <input class="btn btn-secondary" type="submit" value="Legg inn forhåndsstemmer!"></input>
+                </div>
+            </form>
+        </div>
     </div>
-    <!--Kandidater-->
-    <form method="POST">{% csrf_token %}
-        {{ candidate_formset.management_form }}
-        {% for candidate_form in candidate_formset %}
-        <div>
-            {{ candidate_form }}
-        </div>
-        {% endfor %}
-        {{ prevote_form }}
-        <div>
-            <input class="button is-success" type="submit" value="Legg inn forhåndsstemmer!"></input>
-        </div>
-    </form>
 </div>
 {% endblock content %}

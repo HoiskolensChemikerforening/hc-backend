@@ -44,6 +44,9 @@ class Candidate(models.Model):
     votes = models.PositiveIntegerField(
         verbose_name="Antall stemmer", blank=True, default=0
     )
+    pre_votes = models.PositiveIntegerField(
+        verbose_name="Antall forhåndstemmer", blank=True, default=0
+    )
 
     def __str__(self):
         return self.user.get_full_name()
@@ -56,6 +59,19 @@ class Ticket(models.Model):
         related_name="ticket",
         verbose_name="kandidatene som stemmes på",
     )
+    is_blank = models.BooleanField(default=False, verbose_name="Blank stemme")
+
+    @classmethod
+    def create_ticket(cls, voted_candidates):
+        new_ticket = cls.objects.create()
+        for candidate in voted_candidates:
+            new_ticket.candidates.add(candidate)
+        return new_ticket
+
+    @classmethod
+    def create_blank_ticket(cls):
+        new_ticket = cls.objects.create(is_blank=True)
+        return new_ticket
 
 
 class Position(models.Model):
@@ -67,6 +83,9 @@ class Position(models.Model):
     # Number of spots available
     spots = models.PositiveIntegerField(
         default=1, verbose_name="Antall plasser"
+    )
+    number_of_prevote_tickets = models.PositiveIntegerField(
+        default=0, verbose_name="Antall personer som har forhåndstemt"
     )
     is_active = models.BooleanField(
         default=False, verbose_name="Er valget åpent"
@@ -89,49 +108,61 @@ class Position(models.Model):
         verbose_name="Stemmesedler",
     )
 
-    def add_candidates(self, candidates):
-        pass
+    def __str__(self):
+        return self.position_name
 
-    def delete_candidates(self, candidates):
-        pass
-        # if type(candidates) is Candidate:
-        #     deletable = candidates
-        #     if deletable in self.candidates.all():
-        #         deletable.delete()
-        #         self.save()
-        #         return
-        # elif type(candidates) is QuerySet:
-        #     deletables = candidates
-        # elif type(candidates) is list:
-        #     ids = [candidate.id for candidate in candidates]
-        #     deletables = Candidate.objects.filter(pk__in=ids)
-        # else:
-        #     raise AttributeError
-        # for candidate in deletables:
-        #     if candidate in self.candidates.all():
-        #         candidate.delete()
-        #     else:
-        #         print(
-        #             "Candidate {} was not related to position {}".format(
-        #                 candidate, self
-        #             )
-        #         )
-        # self.save()
+    def add_candidates(self, form):
+        user = form.cleaned_data["user"]
+        position_candidates = self.candidates.all()
+        to_be_added = (
+            False if user in [usr.user for usr in position_candidates] else True
+        )
+        if to_be_added:
+            candidate = Candidate.objects.create(user=user)
+            self.candidates.add(candidate)
+            self.save()
 
-    def get_total_votes(self):
-        pass
-        # candidate_votes = [cand.votes for cand in self.candidates.all()]
-        # total_votes = sum(candidate_votes) + self.blank_votes
-        # return total_votes
+    def delete_candidates(self, request):
+        candidate_username = request.POST.get("Delete", "0")
+        candidate_user_object = User.objects.get(username=candidate_username)
+        all_candidates = self.candidates.all()
+        try:
+            candidate_object = all_candidates.get(user=candidate_user_object)
+            deletable = candidate_object
+            if deletable in self.candidates.all():
+                deletable.delete()
+                self.save()
+                return
+        except ObjectDoesNotExist:
+            return
+
+    def get_number_of_voters(self):
+        number_of_ticket = self.tickets.all().count()
+        count = number_of_ticket + self.number_of_prevote_tickets
+        return count
 
     def get_blank_votes(self):
         pass
 
     def get_candidate_votes(self):
         pass
+        # candidate_votes = {}
+        # tickets = self.tickets.all()
 
-    def __str__(self):
-        return self.position_name
+    def vote(self, form, user):
+        candidates = form.cleaned_data.get("candidates")
+        ticket = Ticket.create_ticket(candidates)
+        self.tickets.add(ticket)
+        user.profile.voted = True
+        user.profile.save()
+        return
+
+    def vote_blank(self, user):
+        blank_ticket = Ticket.create_blank_ticket()
+        self.tickets.add(blank_ticket)
+        user.profile.voted = True
+        user.profile.save()
+        return
 
     def end_voting_for_position(self):
         pass
@@ -173,7 +204,10 @@ class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(
-        Position, blank=True, related_name="election_position", verbose_name="Verv"
+        Position,
+        blank=True,
+        related_name="election_position",
+        verbose_name="Verv",
     )
     current_position = models.ForeignKey(
         Position,
@@ -190,6 +224,15 @@ class Election(models.Model):
         return "{}: {}".format(self.id, self.date)
 
     @classmethod
+    def current_position_is_active(cls):
+        if cls.latest_election_is_open():
+            election = cls.get_latest_election()
+            if election.current_position is not None:
+                if election.current_position.is_active:
+                    return True
+        return False
+
+    @classmethod
     def latest_election_is_open(cls):
         "Checking if the latest election object is currently open"
         try:
@@ -203,7 +246,7 @@ class Election(models.Model):
     @classmethod
     def create_new_election(cls):
         Election.objects.create(is_open=True)
-        cls.clear_all_checkins() # setter alle RFID-checkins til False (ingen har møtt opp enda)
+        cls.clear_all_checkins()  # setter alle RFID-checkins til False (ingen har møtt opp enda)
 
     @classmethod
     def clear_all_checkins(cls):
@@ -211,6 +254,7 @@ class Election(models.Model):
         Profile.objects.filter(eligible_for_voting=True).update(
             eligible_for_voting=False
         )
+
     @classmethod
     def get_latest_election(cls):
         return cls.objects.latest("-date")
@@ -222,13 +266,13 @@ class Election(models.Model):
         if not return the redirect function to the correct url
         """
         if not cls.latest_election_is_open():
-            return True, redirect("elections:admin_start_election"),
+            return True, redirect("elections:admin_start_election")
         else:
             election = cls.get_latest_election()
             if election.current_position is not None:
                 if election.current_position.is_active:
                     pk = election.current_position.id
-                    return True, redirect("elections:admin_start_voting",pk=id)
+                    return True, redirect("elections:admin_start_voting", pk=id)
             else:
                 return False, None
 
@@ -252,41 +296,37 @@ class Election(models.Model):
                 position_name=str(new_position), spots=int(spots)
             )
 
-
         self.positions.add(positions)
         self.save()
         return
 
     def delete_position(self, request):
         position_id = request.POST.get("Delete", "0")
-        positions = self.positions.get(id=int(position_id))
-        position = positions
+        position = self.positions.get(id=int(position_id))
         position.delete_candidates(candidates=position.candidates.all())
         position.delete()
         self.save()
         return
 
-    def start_current_position_voting(self):
-        pass
+    def start_current_position_voting(self, position):
+        # Find candidates running for current position
+        candidates = position.candidates.all()
+        if len(candidates) <= 0:
+            return False
+        else:
+            profiles = Profile.objects.filter(voted=True)
+            for profile in profiles:
+                profile.voted = False
+                profile.save()
+            # forhindrer at vi ikke resetter votes ved refresh page
+            self.current_position = position
+            self.current_position.is_active = True
+            self.current_position.save()
+            self.save()
+            return True
 
     def end_current_position_voting(self):
         pass
-
-    def start_current_election(self, current_position):
-        pass
-        # Find candidates running for current position
-        # candidates = current_position.candidates.all()
-        # profiles = Profile.objects.filter(voted=True)
-        # for profile in profiles:
-        #     profile.voted = False
-        #     profile.save()
-        # if not self.current_position_is_open:
-        #     # forhindrer at vi ikke resetter votes ved refresh page
-        #     self.current_position = current_position
-        #     self.current_position.blank_votes = 0
-        #     self.current_position_is_open = True
-        #     self.current_position.save()
-        #     self.save()
 
     def end_election(self):
         pass
@@ -294,39 +334,3 @@ class Election(models.Model):
         #     self.is_open = False
         #     self.date = datetime.date.today()
         #     self.save()
-
-    def vote(self, profile, candidates=None, blank=False):
-        pass
-        # if not profile.voted:
-        #     if blank:
-        #         self.current_position.blank_votes += 1
-        #         self.current_position.number_of_voters += 1
-        #         self.current_position.save()
-        #         profile.voted = True
-        #         profile.save()
-        #         return True
-        #     else:
-        #         if type(candidates) is Candidate:
-        #             candidate = candidates
-        #             candidate.votes += 1
-        #             self.current_position.number_of_voters += 1
-        #             candidate.save()
-        #             self.current_position.save()
-        #             return True
-        #         elif type(candidates) is QuerySet:
-        #             cands = candidates
-        #         elif type(candidates) is list:
-        #             ids = [candidate.id for candidate in candidates]
-        #             cands = Candidate.objects.filter(pk__in=ids)
-        #         else:
-        #             raise AttributeError
-        #         if cands.count() is not 0:
-        #             for candidate in cands:
-        #                 candidate.votes += 1
-        #                 candidate.save()
-        #             self.current_position.number_of_voters += 1
-        #             self.current_position.save()
-        #             profile.voted = True
-        #             profile.save()
-        #             return True
-        # return False

@@ -43,11 +43,11 @@ margin-right: 0.2rem;
     </nav>
     <!--Tittel på possisjon-->
     <div class="d-flex">
-        <div class="p-2" style="margin:2rem">
-            <h3 class="title is-4"> Kandidater for {{ position.position_name }}</h3>
+        <div class="p-2" style="margin-left:2rem">
+            <h2 class="title is-4"> Kandidater for {{ position.position_name }}</h2>
         </div>
         <div class="ml-auto p-2">
-            <form method="post" href="#" onsubmit="return confirmValg(this,'Åpne valget for?')">{% csrf_token %}
+            <form method="post" href="#" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
                 <button class="btn btn-success" type="submit" name="startVoting" value="{{position.id}}" }}>Start
                     valget</button>
             </form>
@@ -90,7 +90,7 @@ margin-right: 0.2rem;
                     <p class="p-2">
                         {{candidate}}
                         <br>
-                        <b>{{candidate.votes}}</b> forhåndstemmer
+                        <b>{{candidate.pre_votes}}</b> forhåndstemmer
                     </p>
                 </div>
 
@@ -121,24 +121,6 @@ margin-right: 0.2rem;
 
 {% block footer_script %}
 {{ add_candidate_form.media }}
-<script type="text/javascript">
-    function confirmValg(form, message) {
-        if (!form) {
-            return false
-        } else {
-            var div = document.getElementsByClassName('candidate-container');
-            var selectedCandidates = [];
-            for (i = 0; i < div.length; i++) {
-                let candidateName = div[i].children[0].innerHTML;
-                let candidatePreVotes = div[i].children[1].children[4].children[0].innerHTML;
-                let name = `\n ${candidateName} : ${candidatePreVotes} `;
-                selectedCandidates.push(name);
-            }
-            console.log(typeof (selectedCandidates));
-            var message = 'Starte valget med forhåndstemmer: ' + selectedCandidates;
-            return confirm(message)
-        }
-    }
-</script>
+
 
 {% endblock footer_script %}

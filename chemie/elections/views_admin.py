@@ -25,8 +25,8 @@ def admin_start_election(request):
         return redirect("elections:admin_register_positions")
     if request.method == "POST":  # brukeren trykker på knappen
         Election.create_new_election()
-        return redirect('elections:admin_register_positions')
-    return render(request, 'elections/admin/admin_start_election.html')
+        return redirect("elections:admin_register_positions")
+    return render(request, "elections/admin/admin_start_election.html")
 
 
 @permission_required("elections.add_election")
@@ -46,59 +46,40 @@ def admin_register_positions(request):
             if form.is_valid():
                 election.add_position(form)
 
-        done_positions = election.positions.filter(is_done=True).order_by('position_name')
-        not_done_positions = election.positions.filter(is_done=False).order_by('position_name')
-        context = {"form": form, "done_positions": done_positions, "not_done_positions": not_done_positions}
+        done_positions = election.positions.filter(is_done=True).order_by(
+            "position_name"
+        )
+        not_done_positions = election.positions.filter(is_done=False).order_by(
+            "position_name"
+        )
+        context = {
+            "form": form,
+            "done_positions": done_positions,
+            "not_done_positions": not_done_positions,
+        }
         return render(request, "elections/admin/admin_positions.html", context)
 
 
 @permission_required("elections.add_election")
 @login_required
 def admin_register_candidates(request, pk):
-    if not election_is_open():
-        return redirect("elections:admin_start_election")
+    is_redirected, redir_function = Election.is_redirected()
+    if is_redirected:
+        return redir_function  # Redirect function from Election.is_redirected
     else:
-        if voting_is_active():
-            election = Election.objects.latest("id")
-            return redirect(
-                "elections:admin_start_voting", pk=election.current_position.id
-            )
-        # henter ut position som skal legge verv til
+        election = Election.get_latest_election()
         position = get_object_or_404(Position, pk=pk)
         add_candidate_form = AddCandidateForm(request.POST or None)
         if request.method == "POST":
             if "Delete" in request.POST:
-                # hvis brukeren skal slette candidaten fra posisjonen.
-                candidate_username = request.POST.get("Delete", "0")
-                candidate_user_object = User.objects.get(
-                    username=candidate_username
-                )
-                all_candidates = position.candidates.all()
-                candidate_object = all_candidates.get(
-                    user=candidate_user_object
-                )
-                position.delete_candidates(candidate_object)
-                position.save()
+                position.delete_candidates(request)
             elif "addCandidate" in request.POST:
                 if add_candidate_form.is_valid():
-                    user = add_candidate_form.cleaned_data["user"]
-                    position_candidates = position.candidates.all()
-                    to_be_added = (
-                        False
-                        if user in [usr.user for usr in position_candidates]
-                        else True
-                    )
-                    if to_be_added:
-                        candidate = Candidate.objects.create(user=user)
-                        position.candidates.add(candidate)
-                        position.save()
+                    position.add_candidates(add_candidate_form)
             elif "startVoting" in request.POST:
-                election = Election.objects.latest("id")
-                if not election.current_position_is_open:
-                    election.start_current_election(position)
-                return redirect("elections:admin_start_voting", pk=position.id)
-
-        candidates = position.candidates.all().order_by('user')
+                if(election.start_current_position_voting(position)):
+                    return redirect("elections:admin_start_voting", pk=position.id)
+        candidates = position.candidates.all().order_by("user")
         context = {
             "candidates": candidates,
             "position": position,
@@ -110,17 +91,11 @@ def admin_register_candidates(request, pk):
 @permission_required("elections.add_election")
 @login_required
 def admin_register_prevotes(request, pk):
-    if not election_is_open():
-        return redirect("elections:admin_start_election")
+    is_redirected, redir_function = Election.is_redirected()
+    if is_redirected:
+        return redir_function  # Redirect function from Election.is_redirected
     else:
-        if voting_is_active():
-            election = Election.objects.latest("id")
-            return redirect(
-                "elections:admin_start_voting", pk=election.current_position.id
-            )
-        # Fetch position
         position = get_object_or_404(Position, pk=pk)
-        # For for editing total number of people prevoting
         prevote_form = AddPrevoteForm(
             request.POST or None, instance=position, prefix="total_voters"
         )
@@ -131,22 +106,13 @@ def admin_register_prevotes(request, pk):
         )
         formset = CandidateFormSet(
             request.POST or None,
-            queryset=position.candidates.all().order_by('user'),
+            queryset=position.candidates.all().order_by("user"),
             prefix="candidate_forms",
         )
         if request.method == "POST":
             if formset.is_valid() and prevote_form.is_valid():
                 prevote_form.save()
                 for form in formset:
-                    # Increment both candidate and positions votes
-                    # candidate_pk = form.instance.pk
-                    # candidate = Candidate.objects.get(pk=candidate_pk)
-                    # old_votes = candidate.votes
-                    # new_votes = form.cleaned_data["votes"]
-                    # position.total_votes = position.total_votes + (
-                    #     new_votes - old_votes
-                    # )
-                    # position.save()
                     form.save()
                 return redirect(
                     reverse(
@@ -167,16 +133,14 @@ def admin_register_prevotes(request, pk):
 @permission_required("elections.add_election")
 @login_required
 def admin_voting_is_active(request, pk):
-    if not election_is_open():
+    if not Election.latest_election_is_open():
         return redirect("elections:admin_start_election")
-    if not voting_is_active():
-        return redirect("elections:admin_register_positions")
-    election = Election.objects.latest("id")
+    election = Election.get_latest_election()
     if request.method == "POST":
         if "endVoting" in request.POST:
             election.current_position.end_voting_for_position()
             return redirect("elections:admin_results", pk=pk)
-    total_voters = election.current_position.number_of_voters
+    total_voters = election.current_position.get_number_of_voters()
     context = {"election": election, "total_voters": total_voters}
     return render(request, "elections/admin/admin_start_voting.html", context)
 
@@ -225,31 +189,46 @@ def admin_end_election(request):
             "elections:admin_start_voting", pk=election.current_position.id
         )
     election.end_election()
-    return redirect('elections:results')
+    return redirect("elections:results")
 
 
-@permission_required('elections.add_election')
+@permission_required("elections.add_election")
 @login_required
 def change_rfid_status(request):
     form = GetRFIDForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
-            rfid = form.cleaned_data.get('rfid')
+            rfid = form.cleaned_data.get("rfid")
             em_code = ProfileManager.rfid_to_em(rfid)
             try:
                 profile = Profile.objects.get(access_card=em_code)
             except:
-                messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect(f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}")
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Studentkortnummeret er ikke registrert enda.",
+                )
+                return redirect(
+                    f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}"
+                )
             profile.eligible_for_voting = not profile.eligible_for_voting
             profile.save()
             status = profile.eligible_for_voting
             if status:
-                messages.add_message(request, messages.SUCCESS, '{} har sjekket inn'.format(profile.user.get_full_name()))
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "{} har sjekket inn".format(profile.user.get_full_name()),
+                )
             else:
-                messages.add_message(request, messages.WARNING, '{} har sjekket ut'.format(profile.user.get_full_name()))
-        return redirect('elections:checkin')
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "{} har sjekket ut".format(profile.user.get_full_name()),
+                )
+        return redirect("elections:checkin")
     else:
         is_open = election_is_open()
-        context = {'form': form, 'is_open': is_open}
-    return render(request, 'elections/check_in.html', context)
+        context = {"form": form, "is_open": is_open}
+    return render(request, "elections/check_in.html", context)
+

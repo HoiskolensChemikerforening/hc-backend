@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 
-from .models import Position, Election, Candidate
+from .models import Position, Election, Candidate, Ticket
 
 
 class AddPositionForm(forms.ModelForm):
@@ -27,22 +27,19 @@ class AddCandidateForm(forms.ModelForm):
 
 
 class AddPrevoteForm(forms.ModelForm):
-    pass
-
-
-#     class Meta:
-#         model = Position
-#         fields = ["number_of_voters"]
+    class Meta:
+        model = Position
+        fields = ["number_of_prevote_tickets"]
 
 
 class AddPreVoteToCandidateForm(forms.ModelForm):
     class Meta:
         model = Candidate
-        fields = ["votes"]
+        fields = ["pre_votes"]
 
     def __init__(self, *args, **kwargs):
         super(AddPreVoteToCandidateForm, self).__init__(*args, **kwargs)
-        self.fields["votes"].label = self.instance.user.get_full_name()
+        self.fields["pre_votes"].label = self.instance.user.get_full_name()
 
 
 class OpenElectionForm(forms.ModelForm):
@@ -97,6 +94,21 @@ class CastVoteForm(forms.Form):
         self.election = kwargs.pop("election")
         super().__init__(*args, **kwargs)
         self.fields["candidates"].queryset = candidatesChoices(self.election)
+
+    def is_valid(self, request, election):
+        valid = super(CastVoteForm, self).is_valid()
+        if not valid:
+            return False
+        candidate_list = request.POST.getlist("candidates")
+        if len(candidate_list) > election.current_position.spots:
+            return False
+        return True
+
+    def is_blank(self, request, election):
+        candidate_list = request.POST.getlist("candidates")
+        if len(candidate_list) == 0:
+            return True
+        return False
 
     def clean_candidates(self):
         candidates = self.cleaned_data["candidates"].all()

@@ -48,10 +48,9 @@ admin_urlpatterns = [
     ),
 ]
 user_urlpatterns = [
-    url(r"^$", views.vote, name="vote"),
-    url(r"^vote/$", views.voting, name="voting"),
+    url(r"^$", views.index, name="index"),
+    url(r"^vote/$", views.vote, name="vote"),
     url(r"^vote/end", views.has_voted, name="has_voted"),
-    url(r"^results", views.results, name="results"),
     url(r"^checkin/$", views_admin.change_rfid_status, name="checkin"),
 ]
 urlpatterns = admin_urlpatterns + user_urlpatterns

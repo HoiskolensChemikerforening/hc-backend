@@ -19,7 +19,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 
-from chemie.elections.views import election_is_open
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
 from .forms import (
