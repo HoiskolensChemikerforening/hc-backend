@@ -2,79 +2,124 @@
 {% load material_form %}
 
 {% block style %}
-    .submit-button{
-      margin-top: 0.9rem;
-    }
-    .delete-button{
-      margin-bottom: 0rem;
-      background-color: transparent;
-      border: None;
-    }
-    .delete-form{
-      padding-bottom: 0rem;
-    }
-    .position-title{
-      margin: auto;
-    }
+.submit-button{
+margin-top: 0.9rem;
+}
+.delete-button{
+margin-bottom: 0rem;
+background-color: transparent;
+border: None;
+}
+.delete-form{
+padding-bottom: 0rem;
+}
+.position-title{
+margin: auto;
+}
 {% endblock style %}
 
 {% block content %}
 <div class="div-container">
-    <div>
+    <div class="justify-content-center d-flex">
         <div>
-
-            <h3 class="title is-3">Legg til Verv</h3>
+            <h3>Legg til Verv</h3>
             <form method="POST" href="{%url "elections:admin_register_positions"%}">{% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit"  class="button submit-button">Legg til verv</button>
+                {{ form.as_p }}
+                <button type="submit" class="btn btn-primary">Legg til verv</button>
             </form>
         </div>
     </div>
-    <br>
+
+    <div class="d-flex flex-row" style="margin:1rem">
+        <div class="p-2" style="width:100%">
+            <h4 class="text-center">Ikke gjennomført</h4>
+            {%for position in not_done_positions%}
+            <div class="card">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <h5>{{position.position_name}}</h3>
+                    </div>
+                    <div class="p-2">
+                        <div class="d-flex">
+                            <div class="p-2"></div>
+                            {%for candidate in position.candidates.all%}
+                            <p>
+                                {{candidate}}
+                                <b> {{candidate.votes}}</b> <br>
+                            </p>
+                            {%endfor%}
+                            <div class="ml-auto p-2">
+                                <a class="btn btn-warning" href={{ position.id }}>Rediger</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+
+
+        </div>
+        <div class="p-2" style="width:100%">
+            <h4 class="text-center">Gjennomført</h4>
+            {%for position in done_positions%}
+            <div class="card">
+                <div class="d-flex flex-column">
+                    <div class="p-2">
+                        <h5>{{position.position_name}}</h3>
+                    </div>
+                    <div class="p-2">
+                        <div class="d-flex">
+                            <div class="p-2"></div>
+                            {%for candidate in position.candidates.all%}
+                            <p>
+                                {{candidate}}
+                                <b> {{candidate.votes}}</b> <br>
+                            </p>
+                            {%endfor%}
+                            <div class="ml-auto p-2">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {%endfor%}
+        </div>
+    </div>
+
     {% if positions.all %}
     {% for position in positions%}
-    <div class="card">
-        <header class="card-header" >
-            <h1 class="position-title title is-4">
-                {{position}}
-            </h1>
-        </header>
-        <div class="card-content">
-            <div class="content">
-                <h1 class="title is-5">{{position.spots}} skal velges inn</h1>
-            </div>
-        </div>
-        <footer class="card-footer">
-            <a href={{ position.id }} class="card-footer-item" >Gå til valg av posisjon</a>
-            {% if position.voting_done %}
-            <p class="card-footer-item success-message" >Gjennomført</p>
-            {% else %}
-            <p class="card-footer-item error-message" >Ikke gjennomført</p>
-            {% endif %}
-            <form method="POST" href="#" class="delete-form">{% csrf_token %}
-                <button class="card-footer-item delete-button" type="submit" name="Delete" value="{{position.id}}">&#10060;</button>
-            </form>
-        </footer>
-    </div>
-    <div>
-        <br>
-        {% endfor %}
-        <br>
+    {% if not position.voting_done %}
+    {{position}}
+    <a href={{ position.id }} class="card-footer-item">Gå til valg av posisjon</a>
+    <form method="POST" href="#" class="delete-form">{% csrf_token %}
+        <button class="card-footer-item delete-button" type="submit" name="Delete"
+            value="{{position.id}}">&#10060;</button>
+    </form>
+    {%endif%}
+
+</div>
+<div>
+    <br>
+    {% endfor %}
+    <br>
     {% endif %}
-        <div >
-            <a class="button is-danger" onclick="ConfirmAvsluttValg(); return false;" >Avslutt valg</a>
-        </div>
+    <div>
+        <a class="button is-danger" onclick="ConfirmAvsluttValg(); return false;">Avslutt valg</a>
     </div>
+</div>
+<!-- <form method="POST" href="#" class="delete-form">{% csrf_token %}
+        <button class="card-footer-item delete-button" type="submit" name="Delete" value="{{position.id}}">&#10060;</button>
+    </form> -->
+
 {% endblock content %}
 
 {% block footer_script%}
-    <script>
-        function ConfirmAvsluttValg() {
-         if (window.confirm('Avslutte valget?'))
-         {
-           return window.location.href= "{%url "elections:admin_end_election"%}"
-         }
+<script>
+    function ConfirmAvsluttValg() {
+        if (window.confirm('Avslutte valget?')) {
+            // TODO fix this %&#¤¤% black formatting which "#¤/ does not allow to have reverse urls in JS
         }
-    </script>
+    }
+</script>
 
 {% endblock footer_script %}

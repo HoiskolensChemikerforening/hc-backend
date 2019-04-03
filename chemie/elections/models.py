@@ -3,7 +3,9 @@ import datetime
 from django.contrib.auth.models import User
 from django.db import models
 from django.db.models.query import QuerySet
+from django.core.exceptions import ObjectDoesNotExist
 from chemie.customprofile.models import Profile
+from django.shortcuts import redirect
 
 VOTES_REQUIRED_FOR_VALID_ELECTION = 50
 
@@ -68,6 +70,9 @@ class Position(models.Model):
     )
     is_active = models.BooleanField(
         default=False, verbose_name="Er valget åpent"
+    )
+    is_done = models.BooleanField(
+        default=False, verbose_name="valget er gjennomført"
     )
 
     # Candidates running for position
@@ -168,7 +173,7 @@ class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(
-        Position, blank=True, related_name="election", verbose_name="Verv"
+        Position, blank=True, related_name="election_position", verbose_name="Verv"
     )
     current_position = models.ForeignKey(
         Position,
@@ -186,50 +191,105 @@ class Election(models.Model):
 
     @classmethod
     def latest_election_is_open(cls):
-        pass
+        "Checking if the latest election object is currently open"
+        try:
+            election = cls.objects.latest("-date")
+            if election.is_open:
+                return True
+        except ObjectDoesNotExist:
+            pass
+        return False
 
     @classmethod
     def create_new_election(cls):
-        pass
+        Election.objects.create(is_open=True)
+        cls.clear_all_checkins() # setter alle RFID-checkins til False (ingen har møtt opp enda)
 
-    def add_position(self, positions):
-        pass
-        # if type(positions) is Position:
-        #     self.positions.add(positions)
-        #     self.save()
-        #     return
-        # elif type(positions) is QuerySet:
-        #     self.positions.add(positions)
-        #     self.save()
-        #     return
-        # elif type(positions) is list:
-        #     self.positions.add(*positions)
-        #     self.save()
-        # else:
-        #     raise AttributeError
+    @classmethod
+    def clear_all_checkins(cls):
+        # Get all profiles where eligible_for_voting is set to True and set False
+        Profile.objects.filter(eligible_for_voting=True).update(
+            eligible_for_voting=False
+        )
+    @classmethod
+    def get_latest_election(cls):
+        return cls.objects.latest("-date")
 
-    def delete_position(self, positions):
-        pass
-        # if type(positions) is Position:
-        #     position = positions
-        #     position.delete_candidates(candidates=position.candidates.all())
-        #     position.delete()
-        #     self.save()
-        #     return
-        # elif type(positions) is QuerySet:
-        #     deletables = positions
-        # elif type(positions) is list:
-        #     ids = [position.id for position in positions]
-        #     deletables = Position.objects.filter(pk__in=ids)
-        # else:
-        #     raise AttributeError
-        # for position in deletables:
-        #     if position in self.positions.all():
-        #         position.delete_candidates(candidates=position.candidates.all())
-        #         position.delete()
-        #     else:
-        #         raise ValueError
-        # self.save()
+    @classmethod
+    def is_redirected(cls):
+        """
+        Checks if there is an active voting or the election is open,
+        if not return the redirect function to the correct url
+        """
+        if not cls.latest_election_is_open():
+            return True, redirect("elections:admin_start_election"),
+        else:
+            election = cls.get_latest_election()
+            if election.current_position is not None:
+                if election.current_position.is_active:
+                    pk = election.current_position.id
+                    return True, redirect("elections:admin_start_voting",pk=id)
+            else:
+                return False, None
+
+    def is_voting_active(self):
+        if self.current_position is not None:
+            if self.current_position.is_active:
+                return True
+        return False
+
+    def add_position(self, form):
+        # lager et nytt position objekt som vi legger inn i election
+        # position field
+        new_position = form.cleaned_data["position_name"]
+        current_positions_in_election = list()
+        for i in self.positions.all():
+            current_positions_in_election.append(i.position_name)
+        if new_position not in current_positions_in_election:
+            # hvis vi ikke har lagt til vervet allerede
+            spots = form.cleaned_data["spots"]  # spots field
+            positions = Position.objects.create(
+                position_name=str(new_position), spots=int(spots)
+            )
+
+        if type(positions) is Position:
+            self.positions.add(positions)
+            self.save()
+            return
+        elif type(positions) is QuerySet:
+            self.positions.add(positions)
+            self.save()
+            return
+        elif type(positions) is list:
+            self.positions.add(*positions)
+            self.save()
+        else:
+            raise AttributeError
+
+    def delete_position(self, request):
+        position_id = request.POST.get("Delete", "0")
+        position = election.positions.get(id=int(position_id))
+
+        if type(positions) is Position:
+            position = positions
+            position.delete_candidates(candidates=position.candidates.all())
+            position.delete()
+            self.save()
+            return
+        elif type(positions) is QuerySet:
+            deletables = positions
+        elif type(positions) is list:
+            ids = [position.id for position in positions]
+            deletables = Position.objects.filter(pk__in=ids)
+        else:
+            raise AttributeError
+        for position in deletables:
+            if position in self.positions.all():
+                position.delete_candidates(candidates=position.candidates.all())
+                position.delete()
+            else:
+                raise ValueError
+        self.save()
 
     def start_current_position_voting(self):
         pass
