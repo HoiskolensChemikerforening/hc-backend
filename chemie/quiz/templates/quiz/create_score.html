@@ -11,109 +11,110 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-        <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
-        <a href="{% url "quiz:term_detail" term.pk %}" class="breadcrumb">{{ term }}</a>
-        <a class="breadcrumb">Rediger</a>
-    </div>
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a href="{% url "quiz:term_detail" term.pk %}" class="breadcrumb">{{ term }}</a>
+    <a class="breadcrumb">Rediger</a>
+  </div>
 
-    <div id="amount_id" style="width:10%;"></div>
+  <div id="amount_id" style="width:10%;"></div>
 
-    <div class="card-panel">
-        <h4>{{ term }}</h4>
+  <div class="card-panel">
+    <h4>{{ term }}</h4>
 
-        <form action="{% url 'quiz:activate_deactivate' term.pk %}" method="POST">{% csrf_token %}
-            {% form form=activate_form %}
-            {% endform %}
-            <input type="submit" class="btn btn-small" value="Endre">
+    <form action="{% url 'quiz:activate_deactivate' term.pk %}" method="POST">{% csrf_token %}
+      {% form form=activate_form %}
+      {% endform %}
+      <input type="submit" class="btn btn-small" value="Endre">
+    </form>
+
+    <br>
+    <hr>
+
+    <table class="striped responsive-table">
+      <thead>
+      <tr>
+        <th>Plass</th>
+        <th>Navn</th>
+        <th>Poengsum</th>
+        <th>Rediger</th>
+      </tr>
+      </thead>
+
+      <tbody>
+      {% if scores %}
+        {% for score in scores %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+              {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
+                <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
+              {% endthumbnail %}
+              {{ score.user.profile }}
+            </td>
+            {% ifequal score quiz_score_edit %}
+              <form method="POST">{% csrf_token %}
+                <td>{{ score }} + {{ form.score }}</td>
+                <td style="text-align:center;">
+                  <button class="btn btn-floating" type="submit">
+                    <i class="material-icons">check</i>
+                  </button>
+                </td>
+              </form>
+            {% else %}
+              <td>{{ score }}</td>
+              <td style="text-align:center;">
+                <a href="{% url 'quiz:edit_score' score.pk %}">
+                  <button class="btn btn-floating">
+                    <i class="material-icons">edit</i>
+                  </button>
+                </a>
+              </td>
+            {% endifequal %}
+          </tr>
+        {% endfor %}
+
+      {% else %}
+        Ingen resultater å vise
+      {% endif %}
+
+      {% if not quiz_score_edit %}
+        <form method="POST">{% csrf_token %}
+          <tr>
+            <td>Ny</td>
+            <td id="name_col">{{ form.user }}</td>
+            <td>{{ form.score }}</td>
+            <td style="text-align:center;">
+              <button class="btn btn-floating" type="submit">
+                <i class="material-icons">check</i>
+              </button>
+            </td>
+          </tr>
         </form>
+      {% endif %}
 
-        <br><hr>
+      </tbody>
+    </table>
+  </div>
 
-        <table class="striped responsive-table">
-            <thead>
-                <tr>
-                    <th>Plass</th>
-                    <th>Navn</th>
-                    <th>Poengsum</th>
-                    <th>Rediger</th>
-                </tr>
-            </thead>
-
-            <tbody>
-                {% if scores %}
-                    {% for score in scores %}
-                        <tr>
-                            <td>{{ forloop.counter }}</td>
-                            <td>
-                                {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
-                                    <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
-                                {% endthumbnail %}
-                                {{ score.user.profile }}
-                            </td>
-                            {% ifequal score quiz_score_edit %}
-                                <form method="POST">{% csrf_token %}
-                                    <td>{{ score }} + {{ form.score }}</td>
-                                    <td style="text-align:center;">
-                                        <button class="btn btn-floating" type="submit">
-                                            <i class="material-icons">check</i>
-                                        </button>
-                                    </td>
-                                </form>
-                            {% else %}
-                                <td>{{ score }}</td>
-                                <td style="text-align:center;">
-                                    <a href="{% url 'quiz:edit_score' score.pk %}">
-                                        <button class="btn btn-floating">
-                                            <i class="material-icons">edit</i>
-                                        </button>
-                                    </a>
-                            </td>
-                        {% endifequal %}
-                        </tr>
-                    {% endfor %}
-
-                {% else %}
-                    Ingen resultater å vise
-                {% endif %}
-
-                {% if not quiz_score_edit %}
-                    <form method="POST">{% csrf_token %}
-                        <tr>
-                            <td>Ny</td>
-                            <td id="name_col">{{ form.user }}</td>
-                            <td>{{ form.score }}</td>
-                            <td style="text-align:center;">
-                                <button class="btn btn-floating" type="submit">
-                                    <i class="material-icons">check</i>
-                                </button>
-                            </td>
-                        </tr>
-                    </form>
-                {% endif %}
-
-            </tbody>
-        </table>
-    </div>
-
-    {% if perms.quiz.delete_quizterm %}
-        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-            <a href="" class="btn-floating btn-large">
-                <i class="large material-icons">edit</i>
+  {% if perms.quiz.delete_quizterm %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a href="" class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.quiz.delete_quizterm %}
+          <li>
+            <a class="btn-floating red" href="{% url 'quiz:delete_term' term.pk %}">
+              <i class="material-icons">delete_forever</i>
+              <a class="btn-floating mobile-fab-tip" href="{% url 'quiz:delete_term' term.pk %}">
+                Slett quiz
+              </a>
             </a>
-            <ul>
-                {% if perms.quiz.delete_quizterm %}
-                    <li>
-                        <a class="btn-floating red" href="{% url 'quiz:delete_term' term.pk %}">
-                        <i class="material-icons">delete_forever</i>
-                        <a class="btn-floating mobile-fab-tip" href="{% url 'quiz:delete_term' term.pk %}">
-                            Slett quiz
-                        </a>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
   {% endif %}
 
 
@@ -121,28 +122,28 @@
 
 
 {% block footer_script %}
-{{ form.media }}
-<script>
-    var addEvent = function (object, type, callback) {
-        if (object == null || typeof (object) == 'undefined') return;
-        if (object.addEventListener) {
-            object.addEventListener(type, callback, false);
-        } else if (object.attachEvent) {
-            object.attachEvent("on" + type, callback);
-        } else {
-            object["on" + type] = callback;
-        }
-  };
+  {{ form.media }}
+  <script>
+      var addEvent = function (object, type, callback) {
+          if (object == null || typeof (object) == 'undefined') return;
+          if (object.addEventListener) {
+              object.addEventListener(type, callback, false);
+          } else if (object.attachEvent) {
+              object.attachEvent("on" + type, callback);
+          } else {
+              object["on" + type] = callback;
+          }
+      };
 
-    var resizeReceiver = function () {
-        let amount = document.getElementById("amount_id");
-        let height = amount.offsetHeight;
-        let width = amount.offsetWidth;
-        let receiver = document.getElementsByClassName("select2 select2-container select2-container--default");
-        receiver[0].style.width = width + "px";
-    };
+      var resizeReceiver = function () {
+          let amount = document.getElementById("amount_id");
+          let height = amount.offsetHeight;
+          let width = amount.offsetWidth;
+          let receiver = document.getElementsByClassName("select2 select2-container select2-container--default");
+          receiver[0].style.width = width + "px";
+      };
 
-    addEvent(window, "resize", resizeReceiver);
-    document.addEventListener('DOMContentLoaded', resizeReceiver, false);
-</script>
+      addEvent(window, "resize", resizeReceiver);
+      document.addEventListener('DOMContentLoaded', resizeReceiver, false);
+  </script>
 {% endblock footer_script %}

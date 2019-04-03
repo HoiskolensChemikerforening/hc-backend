@@ -14,6 +14,7 @@ def index(request):
     except QuizTerm.DoesNotExist:
         active_term = None
         terms = QuizTerm.objects.all().order_by('id')
+
     top_scores = QuizScore.objects.filter(term=active_term).order_by('-score')[:3]
     context = {
         "active_term": active_term,
@@ -82,6 +83,7 @@ def create_score(request, pk):
             instance.term = term
             instance.save()
         return redirect('quiz:create_score', term.pk)
+
     context = {
         'term': term,
         'scores': scores,
@@ -98,11 +100,13 @@ def edit_score(request, pk):
     scores = QuizScore.objects.filter(term=term).order_by('-score')
     form = QuizScoreForm(request.POST or None)
     form.fields.pop('user')
+
     if form.is_valid():
         instance = form.save(commit=False)
         quiz_score_edit.score += instance.score
         quiz_score_edit.save()
         return redirect('quiz:create_score', term.pk)
+
     context = {
         'term': term,
         'scores': scores,
