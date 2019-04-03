@@ -1,41 +1,41 @@
 from . import views
-from django.conf.urls import url
+from django.urls import include, path
 
 app_name = "quiz"
 
 urlpatterns = [
-    url(
-        r"^$",
+    path(
+        "",
         views.index,
         name="index",
     ),
-    url(
-        r"^create-term",
+    path(
+        "ny",
         views.create_term,
         name="create_term"
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/delete-term",
+    path(
+        "<int:pk>/slett",
         views.delete_term,
         name="delete_term"
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/activate",
+    path(
+        "^<int:pk>/aktiver",
         views.activate_deactivate,
         name='activate_deactivate'
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/$",
+    path(
+        "<int:pk>/",
         views.term_detail,
         name="term_detail",
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/create$",
+    path(
+        "<int:pk>/rediger",
         views.create_score,
         name="create_score",
     ),
-    url(
-        r"^(?P<pk>[0-9]+)/edit$",
+    path(
+        "<int:pk>/endre-poeng",
         views.edit_score,
         name="edit_score"
     )
