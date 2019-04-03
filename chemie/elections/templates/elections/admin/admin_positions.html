@@ -40,11 +40,12 @@ border-radius:0rem
     </div>
 
     <div class="d-flex flex-row" style="margin:1rem">
-        <div class="p-2" style="width:100%">
+        <div class="p-2"
+            style="width:100%; border-style:solid; border-radius: 1rem 0rem 0rem 1rem; border-color:#343a40">
             <h4 class="text-center">Ikke gjennomført</h4>
             {%for position in not_done_positions%}
-            <div class="card">
-                <div class="d-flex flex-column">
+            <div>
+                <div class="d-flex flex-column" style="border-style:dotted none none none; border-color:#343a40">
                     <div class="p-2">
                         <div class="d-flex">
                             <div class="p-2">
@@ -54,24 +55,26 @@ border-radius:0rem
                                 <form onsubmit="return submitDelete(this)" method="POST" href="#"
                                     name="{{position.position_name}}">
                                     {% csrf_token %}
-                                    <button class="btn btn-secondary" type="submit" name="Delete"
-                                        value="{{position.id}}">&#10060;</button>
+                                    <button class="btn btn-danger" type="submit" name="Delete"
+                                        value="{{position.id}}">Slett</button>
                                 </form>
                             </div>
                         </div>
                     </div>
                     <div class="p-2">
                         <div class="d-flex">
-                            <div class="p-2"></div>
-                            {%for candidate in position.candidates.all%}
-                            <p>
-                                {{candidate}}
-                                <b> {{candidate.votes}}</b> <br>
-                            </p>
-                            {%endfor%}
+                            <div class="p-2">
+                                {%for candidate in position.candidates.all%}
+                                <p>
+                                    {{candidate}}
+                                    <b> {{candidate.votes}}</b> <br>
+                                </p>
+                                {%endfor%}
+                            </div>
                             <div class="ml-auto p-2">
                                 <a class="btn btn-warning" href={{ position.id }}>Rediger</a>
                             </div>
+
                         </div>
                     </div>
                 </div>
@@ -80,30 +83,38 @@ border-radius:0rem
 
 
         </div>
-        <div class="p-2" style="width:100%">
+        <div class="p-2"
+            style="width:100%; border-style:solid; border-radius: 0rem 1rem 1rem 0rem; border-color:#343a40">
             <h4 class="text-center">Gjennomført</h4>
             {%for position in done_positions%}
-            <div class="card">
-                <div class="d-flex flex-column">
+            <div>
+                <div class="d-flex flex-column" style="border-style:dotted none none none; border-color:#343a40">
                     <div class="p-2">
-                        <h5>{{position.position_name}}</h3>
+                        <div class="d-flex">
+                            <div class="p-2">
+                                <h5>{{position.position_name}}</h3>
+                            </div>
+
+                        </div>
                     </div>
                     <div class="p-2">
                         <div class="d-flex">
-                            <div class="p-2"></div>
-                            {%for candidate in position.candidates.all%}
-                            <p>
-                                {{candidate}}
-                                <b> {{candidate.votes}}</b> <br>
-                            </p>
-                            {%endfor%}
-                            <div class="ml-auto p-2">
+                            <div class="p-2">
+                                {%for candidate in position.candidates.all%}
+                                <p>
+                                    {{candidate}}
+                                    <b> {{candidate.votes}}</b> <br>
+                                </p>
+                                {%endfor%}
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
             {%endfor%}
+
+
         </div>
     </div>
 
