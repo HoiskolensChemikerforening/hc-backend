@@ -10,59 +10,59 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-        <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-        <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
-        <a class="breadcrumb">{{ term }}</a>
-    </div>
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a class="breadcrumb">{{ term }}</a>
+  </div>
 
-    <div class="card-panel">
-        <h4>{{ term }}</h4>
-        {% if scores %}
-            <table class="striped responsive-table">
-                <thead>
-                    <tr>
-                        <th>Plass</th>
-                        <th>Navn</th>
-                        <th>Poengsum</th>
-                    </tr>
-                </thead>
+  <div class="card-panel">
+    <h4>{{ term }}</h4>
+    {% if scores %}
+      <table class="striped responsive-table">
+        <thead>
+        <tr>
+          <th>Plass</th>
+          <th>Navn</th>
+          <th>Poengsum</th>
+        </tr>
+        </thead>
 
-            <tbody>
-                {% for score in scores %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>
-                            {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
-                                <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
-                            {% endthumbnail %}
-                            {{ score.user.profile }}
-                        </td>
-                        <td>{{ score }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-            </table>
-        {% else %}
-            Ingen resultater å vise
-        {% endif %}
-    </div>
+        <tbody>
+        {% for score in scores %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+              {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
+                <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
+              {% endthumbnail %}
+              {{ score.user.profile }}
+            </td>
+            <td>{{ score }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      Ingen resultater å vise
+    {% endif %}
+  </div>
 
-    {% if perms.quiz.add_quizscore %}
-        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-            <a  href="{% url 'quiz:create_score' term.pk %}" class="btn-floating btn-large">
-                <i class="large material-icons">edit</i>
+  {% if perms.quiz.add_quizscore %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a href="{% url 'quiz:create_score' term.pk %}" class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.quiz.add_quizscore %}
+          <li>
+            <a class="btn-floating blue" href="{% url 'quiz:create_score' term.pk %}">
+              <i class="material-icons">edit</i>
+              <a class="btn-floating mobile-fab-tip" href="{% url 'quiz:create_score' term.pk %}">Rediger</a>
             </a>
-            <ul>
-                {% if perms.quiz.add_quizscore %}
-                    <li>
-                        <a class="btn-floating blue" href="{% url 'quiz:create_score' term.pk %}">
-                        <i class="material-icons">edit</i>
-                        <a class="btn-floating mobile-fab-tip" href="{% url 'quiz:create_score' term.pk %}">Rediger</a>
-                        </a>
-                    </li>
-                {% endif %}
-            </ul>
-        </div>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
   {% endif %}
 
 {% endblock %}

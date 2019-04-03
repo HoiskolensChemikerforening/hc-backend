@@ -12,18 +12,18 @@
 
 {% block content %}
 
-<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
     <a href="#" class="breadcrumb">Opprett</a>
-</div>
+  </div>
 
-<form method="POST">{% csrf_token %}
-      {% form form=form %}
-      {% endform %}
+  <form method="POST">{% csrf_token %}
+    {% form form=form %}
+    {% endform %}
     <input class="btn btn-primary" type='submit' value='Opprett Quiz!'/>
-</form>
+  </form>
 {% endblock %}
 
 {% block footer_script %}
-    {{ form.media }}
+  {{ form.media }}
 {% endblock footer_script %}
