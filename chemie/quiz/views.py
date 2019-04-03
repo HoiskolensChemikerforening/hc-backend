@@ -10,10 +10,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 def index(request):
     try:
         active_term = QuizTerm.objects.get(is_active=True)
-        terms = QuizTerm.objects.exclude(id=active_term.id).order_by('id')
+        terms = QuizTerm.objects.exclude(id=active_term.id).order_by('-id')
     except QuizTerm.DoesNotExist:
         active_term = None
-        terms = QuizTerm.objects.all().order_by('id')
+        terms = QuizTerm.objects.all().order_by('-id')
 
     top_scores = QuizScore.objects.filter(term=active_term).order_by('-score')[:3]
     context = {
