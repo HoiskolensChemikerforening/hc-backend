@@ -1,11 +1,11 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
 from .models import QuizTerm, QuizScore
+from django.contrib import messages
 from .forms import QuizScoreForm, CreateQuizTermForm
 # Create your views here.
 
-# TODO: Permissions
-# TODO: delete_quiz_term
+# TODO: Add permissions
 
 
 def index(request):
@@ -33,6 +33,15 @@ def create_term(request):
 
     context = {'form': form}
     return render(request, 'quiz/create_term.html', context)
+
+
+def delete_term(request, pk):
+    term = get_object_or_404(QuizTerm, pk=pk)
+    term.delete()
+    messages.add_message(
+        request, messages.SUCCESS, "Quizen ble slettet", extra_tags="Slettet"
+    )
+    return redirect('quiz:index')
 
 
 def term_detail(request, pk):
