@@ -37,7 +37,19 @@ margin: auto;
             <div class="card">
                 <div class="d-flex flex-column">
                     <div class="p-2">
-                        <h5>{{position.position_name}}</h3>
+                        <div class="d-flex">
+                            <div class="p-2">
+                                <h5>{{position.position_name}}</h3>
+                            </div>
+                            <div class="ml-auto p-2">
+                                <form onsubmit="return submitDelete(this)" method="POST" href="#"
+                                    name="{{position.position_name}}">
+                                    {% csrf_token %}
+                                    <button class="btn btn-secondary" type="submit" name="Delete"
+                                        value="{{position.id}}">&#10060;</button>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                     <div class="p-2">
                         <div class="d-flex">
@@ -86,30 +98,8 @@ margin: auto;
         </div>
     </div>
 
-    {% if positions.all %}
-    {% for position in positions%}
-    {% if not position.voting_done %}
-    {{position}}
-    <a href={{ position.id }} class="card-footer-item">Gå til valg av posisjon</a>
-    <form method="POST" href="#" class="delete-form">{% csrf_token %}
-        <button class="card-footer-item delete-button" type="submit" name="Delete"
-            value="{{position.id}}">&#10060;</button>
-    </form>
-    {%endif%}
 
 </div>
-<div>
-    <br>
-    {% endfor %}
-    <br>
-    {% endif %}
-    <div>
-        <a class="button is-danger" onclick="ConfirmAvsluttValg(); return false;">Avslutt valg</a>
-    </div>
-</div>
-<!-- <form method="POST" href="#" class="delete-form">{% csrf_token %}
-        <button class="card-footer-item delete-button" type="submit" name="Delete" value="{{position.id}}">&#10060;</button>
-    </form> -->
 
 {% endblock content %}
 
@@ -118,6 +108,16 @@ margin: auto;
     function ConfirmAvsluttValg() {
         if (window.confirm('Avslutte valget?')) {
             // TODO fix this %&#¤¤% black formatting which "#¤/ does not allow to have reverse urls in JS
+        }
+    }
+    function submitDelete(el) {
+        var posName = el.name.toString();
+        var message = "Du sletter nå posisjon " + posName;
+        var retValue = confirm(message);
+        if (retValue) {
+            return true
+        } else {
+            return false
         }
     }
 </script>

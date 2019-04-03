@@ -252,44 +252,19 @@ class Election(models.Model):
                 position_name=str(new_position), spots=int(spots)
             )
 
-        if type(positions) is Position:
-            self.positions.add(positions)
-            self.save()
-            return
-        elif type(positions) is QuerySet:
-            self.positions.add(positions)
-            self.save()
-            return
-        elif type(positions) is list:
-            self.positions.add(*positions)
-            self.save()
-        else:
-            raise AttributeError
+
+        self.positions.add(positions)
+        self.save()
+        return
 
     def delete_position(self, request):
         position_id = request.POST.get("Delete", "0")
-        position = election.positions.get(id=int(position_id))
-
-        if type(positions) is Position:
-            position = positions
-            position.delete_candidates(candidates=position.candidates.all())
-            position.delete()
-            self.save()
-            return
-        elif type(positions) is QuerySet:
-            deletables = positions
-        elif type(positions) is list:
-            ids = [position.id for position in positions]
-            deletables = Position.objects.filter(pk__in=ids)
-        else:
-            raise AttributeError
-        for position in deletables:
-            if position in self.positions.all():
-                position.delete_candidates(candidates=position.candidates.all())
-                position.delete()
-            else:
-                raise ValueError
+        positions = self.positions.get(id=int(position_id))
+        position = positions
+        position.delete_candidates(candidates=position.candidates.all())
+        position.delete()
         self.save()
+        return
 
     def start_current_position_voting(self):
         pass
