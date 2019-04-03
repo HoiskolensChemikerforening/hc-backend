@@ -16,10 +16,19 @@ padding-bottom: 0rem;
 .position-title{
 margin: auto;
 }
+
+.breadcrumb{
+border-radius:0rem
+}
 {% endblock style %}
 
 {% block content %}
 <div class="div-container">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
+        </ol>
+    </nav>
     <div class="justify-content-center d-flex">
         <div>
             <h3>Legg til Verv</h3>
