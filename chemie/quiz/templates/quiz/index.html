@@ -45,16 +45,18 @@
     {% endif %}
   </div>
 
-  <div class="card-panel">
-    {% for term in terms %}
-      <br>
-      <a href="{% url 'quiz:term_detail' term.pk %}">
-        <h5 class="heading">{{ term }}</h5>
-      </a>
-      <hr>
-      <br>
-    {% endfor %}
-  </div>
+  {% if terms %}
+    <div class="card-panel">
+      {% for term in terms %}
+        <br>
+        <a href="{% url 'quiz:term_detail' term.pk %}">
+          <h5 class="heading">{{ term }}</h5>
+        </a>
+        <hr>
+        <br>
+      {% endfor %}
+    </div>
+  {% endif %}
 
 
   {% if perms.quiz.add_quizterm %}
