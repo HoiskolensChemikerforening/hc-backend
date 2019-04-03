@@ -27,9 +27,12 @@ class AddCandidateForm(forms.ModelForm):
 
 
 class AddPrevoteForm(forms.ModelForm):
-    class Meta:
-        model = Position
-        fields = ["number_of_voters"]
+    pass
+
+
+#     class Meta:
+#         model = Position
+#         fields = ["number_of_voters"]
 
 
 class AddPreVoteToCandidateForm(forms.ModelForm):
@@ -49,9 +52,12 @@ class OpenElectionForm(forms.ModelForm):
 
 
 class EndElectionForm(forms.ModelForm):
-    class Meta:
-        model = Election
-        fields = ["current_position_is_open"]
+    pass
+
+
+#     class Meta:
+#         model = Election
+#         fields = ["current_position_is_open"]
 
 
 def candidatesChoices(election=None):
