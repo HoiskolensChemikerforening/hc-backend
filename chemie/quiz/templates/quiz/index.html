@@ -57,13 +57,13 @@
     </div>
 
 
-    {% if perms.quiz.add_quiz_score %}
+    {% if perms.quiz.add_quizterm %}
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
             <a href="" class="btn-floating btn-large">
                 <i class="large material-icons">edit</i>
             </a>
             <ul>
-                {% if perms.quiz.add_quizscore %}
+                {% if perms.quiz.add_quizterm %}
                     <li>
                         <a class="btn-floating blue" href="{% url 'quiz:create_term' %}">
                         <i class="material-icons">add</i>

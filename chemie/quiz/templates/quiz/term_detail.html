@@ -47,7 +47,7 @@
         {% endif %}
     </div>
 
-    {% if perms.quiz.add_quiz_score %}
+    {% if perms.quiz.add_quizscore %}
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
             <a  href="{% url 'quiz:create_score' term.pk %}" class="btn-floating btn-large">
                 <i class="large material-icons">edit</i>

@@ -3,9 +3,8 @@ from django.shortcuts import get_object_or_404
 from .models import QuizTerm, QuizScore
 from django.contrib import messages
 from .forms import QuizScoreForm, CreateQuizTermForm
+from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
-
-# TODO: Add permissions
 
 
 def index(request):
@@ -25,6 +24,7 @@ def index(request):
     return render(request, 'quiz/index.html', context)
 
 
+@permission_required('quiz.add_quizterm')
 def create_term(request):
     form = CreateQuizTermForm(request.POST or None)
     if form.is_valid():
@@ -35,6 +35,7 @@ def create_term(request):
     return render(request, 'quiz/create_term.html', context)
 
 
+@permission_required("quiz.delete_quizterm")
 def delete_term(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     term.delete()
@@ -44,6 +45,7 @@ def delete_term(request, pk):
     return redirect('quiz:index')
 
 
+@login_required
 def term_detail(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
@@ -54,6 +56,7 @@ def term_detail(request, pk):
     return render(request, 'quiz/term_detail.html', context)
 
 
+@permission_required("quiz.change_quizterm")
 def activate_deactivate(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     term.is_active = not term.is_active
@@ -61,6 +64,7 @@ def activate_deactivate(request, pk):
     return redirect('quiz:create_score', pk)
 
 
+@permission_required("quiz.change_quizterm")
 def create_score(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
@@ -87,6 +91,7 @@ def create_score(request, pk):
     return render(request, 'quiz/create_score.html', context)
 
 
+@permission_required('quiz.change_quizscore')
 def edit_score(request, pk):
     quiz_score_edit = get_object_or_404(QuizScore, pk=pk)
     term = quiz_score_edit.term
