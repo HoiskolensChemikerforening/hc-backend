@@ -9,16 +9,16 @@ context = {
 }
 -->
 {% block content%}
-
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}" style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item "><a style="color:#edcd2fb4">{{position}}</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Resultater</li>
+  </ol>
+</nav>
 <div style="margin:1rem">
-  {% if messages %}
-  <ul class="messages">
-    {% for message in messages %}
-    <li {% if message.tags %} class="{{ message.tags }}" {% endif %}>{{ message }}</li>
-    <li> {{ message.extra_tags }}</li>
-    {% endfor %}
-  </ul>
-  {% endif %}
 
 
   <script type="text/javascript">
@@ -26,8 +26,9 @@ context = {
     const blank_votes = parseInt("{{blank_votes}}")
   </script>
   <div class="box">
-    <h4 class="title is-6">Totalt antall stemmer: {{ total_votes }}</h4>
-    <h4 class="title is-6">Blanke stemmer: {{ blank_votes }}</h4>
+    <h4>Totalt antall stemmer: {{ total_votes }}</h4>
+    <h5>Antall personer som har stemt: {{number_of_voters}}</h5>
+    <h5>Blanke stemmer: {{ blank_votes }}</h5>
     <table class="table">
       <tr>
         <th>Kandidater</th>
