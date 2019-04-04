@@ -2,16 +2,51 @@
 
 {% block content %}
 <div class="div-container">
-    <div class="card">
-        <h5 class="card-header">Resulater fra valget {{ date }}</h5>
-        <ul class="list-group list-group-flush">
-        {% for position in positions %}
-        <div class="card-body">
-            <h5 class="card-title">{{ position.position_name }}</h5>
-            <p class="card-text"></p>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+            <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
+                    style="color:#edcd2fb4">Admin</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Steng valg</li>
+            <form method="POST" href="" name="close">
+                {% csrf_token %}
+                <button class="btn btn-success" style="position:absolute; right:3rem; top:3rem" name="Steng valget">
+                    Lagre resultater</button>
+            </form>
+        </ol>
+    </nav>
+    <div class="alert alert-info" style="text-align:center">
+        <strong>Valget er steng!</strong> Du kan nå laste ned resultaene.
+    </div>
+
+    <div class="d-flex flex-wrap" style="justify-content:space-evenly">
+        {%for position in positions%}
+        <div class="p-2" style="width:20rem; border-style: solid; margin: 1rem">
+            <h6 style="text-align:center">
+                {{position}}
+            </h6>
+            {% for candidate in position.candidates.all%}
+            <div class="d-flex" style="justify-content:space-between">
+                <div class="p-2">
+                    {{candidate}}
+                </div>
+                <div class="p-2">
+                    <p id="total_votes-{{candidate.id}}">-</p>
+                    <script type="text/javascript">
+                        var votes = parseInt("{{ candidate.votes }}");
+                        var preVotes = parseInt("{{ candidate.pre_votes }}");
+                        var candTotalVotes = votes + preVotes
+                        document.getElementById("total_votes-{{candidate.id}}").innerHTML = candTotalVotes;
+                    </script>
+
+                </div>
+
+            </div>
+
+            {%endfor%}
+
         </div>
-        {% endfor %}
-        </ul>
+        {%endfor%}
     </div>
 </div>
 
