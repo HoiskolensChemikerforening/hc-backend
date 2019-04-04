@@ -66,8 +66,8 @@ border-radius:0rem
                             <div class="p-2">
                                 {%for candidate in position.candidates.all%}
                                 <p>
-                                    {{candidate}}
-                                    <b> {{candidate.pre_votes}}</b> <br>
+                                    {{candidate}}:
+                                    <b> {{candidate.pre_votes}}</b> forhåndstemmer<br>
                                 </p>
                                 {%endfor%}
                             </div>

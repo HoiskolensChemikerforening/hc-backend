@@ -19,6 +19,7 @@ def admin_start_election(request):
     if Election.latest_election_is_open():
         election = Election.get_latest_election()
         if election.is_voting_active():
+            # TODO: Fix this
             return redirect(
                 "elections:admin_start_voting", pk=election.current_position.id
             )
@@ -33,7 +34,7 @@ def admin_start_election(request):
 @login_required
 def admin_register_positions(request):
     is_redirected, redir_function = Election.is_redirected()
-    if is_redirected:
+    if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
         election = Election.get_latest_election()
@@ -231,7 +232,7 @@ def change_rfid_status(request):
                 )
         return redirect("elections:checkin")
     else:
-        is_open = election_is_open()
+        is_open = Election.latest_election_is_open()
         context = {"form": form, "is_open": is_open}
     return render(request, "elections/check_in.html", context)
 

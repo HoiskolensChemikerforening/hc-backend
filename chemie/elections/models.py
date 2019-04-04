@@ -60,6 +60,7 @@ class Ticket(models.Model):
         verbose_name="kandidatene som stemmes på",
     )
     is_blank = models.BooleanField(default=False, verbose_name="Blank stemme")
+    # position = models.ForeignKey('Position')
 
     @classmethod
     def create_ticket(cls, voted_candidates):
@@ -151,7 +152,7 @@ class Position(models.Model):
         for ticket in blank_tickets:
             if ticket.candidates.all().count() == 0:
                 number_of_blank += 1
-        if blank_tickets.count() != number_of_blank:
+        if blank_tickets.count() != number_of_blank: #TODO: hvordan vil vi sjekke error
             raise ValueError
         return number_of_blank
 
@@ -232,10 +233,10 @@ class Election(models.Model):
     def latest_election_is_open(cls):
         "Checking if the latest election object is currently open"
         try:
-            election = cls.objects.latest("-date")
+            election = cls.objects.latest("id")
             if election.is_open:
                 return True
-        except ObjectDoesNotExist:
+        except ObjectDoesNotExist: #TODO: more exceptions?
             pass
         return False
 
@@ -253,7 +254,7 @@ class Election(models.Model):
 
     @classmethod
     def get_latest_election(cls):
-        return cls.objects.latest("-date")
+        return cls.objects.latest("date")
 
     @classmethod
     def is_redirected(cls):
@@ -268,7 +269,7 @@ class Election(models.Model):
             if election.current_position is not None:
                 if election.current_position.is_active:
                     pk = election.current_position.id
-                    return True, redirect("elections:admin_start_voting", pk=pk)
+                    return True, redirect("elections:admin_start_voting", pk=pk) #TODO voting_active
             return False, None
 
     def is_voting_active(self):
