@@ -19,7 +19,7 @@ background-color:red
   <div class="d-flex flex-wrap" style="justify-content: space-evenly">
     {%for field in form%}
     {%for value in field%}
-    <div class="btn" style=" margin:1rem; background-color: lightgray">
+    <div class="btn d-flex" style=" margin:1rem; background-color: lightgray">
       {{value}}
     </div>
     {%endfor%}
