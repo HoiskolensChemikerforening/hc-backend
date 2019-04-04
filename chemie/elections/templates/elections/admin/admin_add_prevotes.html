@@ -23,7 +23,13 @@
     <!--Tittel på possisjon-->
     <div class="d-flex flex-column">
         <div class="p-2" style="text-align:center">
-            <h3 class="title is-4"> Kandidater for {{ position.position_name }}</h3>
+            <h3 class="title is-4"> Legg til forhåndstemmer</h3>
+        </div>
+        <div style="margin-left:30%; margin-right: 30%">
+            <p>
+                Legg til totalt antall forhåndstemmer for hver kandidatet og under legger du inn hvor mange personer som
+                har forholdstemt
+            </p>
         </div>
 
 
@@ -31,11 +37,15 @@
         <div class="p-2" style="margin-left:20%">
             <form method="POST">{% csrf_token %}
                 {{ candidate_formset.management_form }}
-                {% for candidate_form in candidate_formset %}
-                <div class="d-flex" style="margin-top:0.5rem">
-                    {{candidate_form}}
+                <div style="border-style:solid; padding:1rem; border-radius: 1rem; margin-right: 20%">
+                    <!-- TODO  move the input field to the right in the div-->
+                    {% for candidate_form in candidate_formset %}
+                    <div class="d-flex" style="margin-top:0.5rem" id="inputFormDiv">
+                        {{candidate_form}}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+
                 <div style="margin-top:2rem">
                     {{ prevote_form }}
                 </div>
@@ -47,3 +57,11 @@
     </div>
 </div>
 {% endblock content %}
+
+{% block footer_script%}
+<script>
+    var inputsField = document.getElementById("inputFormDiv")
+    var childDiv = inputsField.childNodes()
+
+</script>
+{% endblock footer_script %}

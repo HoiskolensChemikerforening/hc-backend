@@ -79,8 +79,58 @@
 <div style="margin:4rem; text-align: center">
     <button class="download btn btn-secondary">Last ned</button>
 </div>
+<div class="d-flex flex-wrap" style="margin:1rem">
+    {%for position in positions %}
+    <div class="p-2" style="margin:1rem; width:20rem; border-style: solid; border-radius: 1rem">
+        <div class=" flex flex-column">
+            <div class="p-1">
+                <h5>{{position}}</h5>
+            </div>
+            <div class="p-1" style="border-style:solid none solid none;">
+                <ul>
+                    <li id="list-number-voters-{{position.id}}">
+                        -
+                    </li>
+                    <li id="list-total-votes-{{position.id}}">
+                        -
+                    </li>
+                    <li id="list-blank-votes-{{position.id}}">
+                        -
+                    </li>
+                    <script type="text/javascript">
+                        var posID = "{{ position.id }}"
+                        var positionIter = parseInt("{{ forloop.counter }}") - 1
+                        document.getElementById("list-number-voters-" + posID).innerHTML = "Antall personer stemt: " + numberOfVoterList[positionIter].bold()
+                        document.getElementById("list-total-votes-" + posID).innerHTML = "Totale stemmer: " + totalVotes[positionIter].bold()
+                        document.getElementById("list-blank-votes-" + posID).innerHTML = "Blanke stemmer: " + blankVotes[positionIter].bold()
+                    </script>
+                </ul>
 
-<div class="row">
+
+            </div>
+            <div class="p-1">
+                <ul>
+                    {%for candidate in position.candidates.all%}
+
+                    <li id="cadidate-votes-{{candidate.id}}">-</li>
+                    <script>
+                        var candPreVotes = parseInt("{{candidate.pre_votes}}")
+                        var candVotes = parseInt("{{candidate.votes}}")
+                        var candidateName = "{{candidate}}"
+                        var candTotalVotes = (candPreVotes + candVotes).toString()
+                        var message = candidateName + ": " + candTotalVotes.bold()
+                        document.getElementById("cadidate-votes-{{candidate.id}}").innerHTML = message;
+                    </script>
+                    </li>
+                    {%endfor%}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {%endfor%}
+
+</div>
+<div class="row" style="">
     <div class="col s12 m12 l10">
         <table id="myTable" class="tablesorter">
             <thead>
@@ -119,7 +169,7 @@
                 </tr>
                 <tr>
                     <th>{{position.position_name}}</th>
-                    <th>Antall stemmende</th>
+                    <th>Antall personer stemt</th>
                     <th>-</th>
                     <th>-</th>
                     <th>
@@ -129,8 +179,8 @@
                     </th>
                 </tr>
                 <script type="text/javascript">
-                    var posID = "{{position.id}}"
-                    var positionIter = parseInt("{{forloop.counter}}") - 1
+                    var posID = "{{ position.id }}"
+                    var positionIter = parseInt("{{ forloop.counter }}") - 1
                     document.getElementById("number-voters-" + posID).innerHTML = numberOfVoterList[positionIter]
                     document.getElementById("total-votes-" + posID).innerHTML = totalVotes[positionIter]
                     document.getElementById("blank-votes-" + posID).innerHTML = blankVotes[positionIter]
@@ -147,9 +197,9 @@
                         </p>
                     </th>
                     <script type="text/javascript">
-                        var candPreVotes = parseInt("{{candidate.pre_votes}}")
-                        var candVotes = parseInt("{{candidate.votes}}")
-                        var candID = "{{candidate.id}}"
+                        var candPreVotes = parseInt("{{ candidate.pre_votes }}")
+                        var candVotes = parseInt("{{ candidate.votes }}")
+                        var candID = "{{ candidate.id }}"
                         var CandTotalVotes = (candPreVotes + candVotes).toString()
                         document.getElementById("candidate-total-votes-" + candID).innerHTML = CandTotalVotes
                     </script>
