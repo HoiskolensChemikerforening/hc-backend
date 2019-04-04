@@ -1,6 +1,5 @@
 from django.db import models
 from django.contrib.auth.models import User
-# Create your models here.
 
 
 class QuizTerm(models.Model):
@@ -8,10 +7,7 @@ class QuizTerm(models.Model):
     term = models.CharField(max_length=100, verbose_name='Quiz')
 
     def save(self, *args, **kwargs):
-        if self.is_active:
-            for quiz in QuizTerm.objects.exclude(pk=self.pk):
-                quiz.is_active = False
-                quiz.save()
+        QuizTerm.objects.exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
     def __str__(self):

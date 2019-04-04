@@ -20,7 +20,7 @@ urlpatterns = [
         name="delete_term"
     ),
     path(
-        "^<int:pk>/aktiver",
+        "<int:pk>/aktiver",
         views.activate_deactivate,
         name='activate_deactivate'
     ),
