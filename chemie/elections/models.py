@@ -25,11 +25,11 @@ VOTES_REQUIRED_FOR_VALID_ELECTION = 50
 - Dvs: Hvis Joachim stiller til to verv vil User "Joachim" hentes to ganger
   fra User og danne to Candidates-objekter som er knyttet til hvert sitt
   position-objekt
-- For logikken bak telling av stemmer, se admin_end_voting i views
-- Når admin starter valget vil current_position_is_open settes til True
-  og man kan da stemme på en bestemt position
-- Når admin avslutter valget vil vinnere med flest stemmer lagres i winners
-  og man kan da gå videre til neste valg
+- forhåndstemmer og stemmer under valget er avskilt så forhåndstemmer vil bli låst når
+  valget på en posisjon starter
+- Når brukeren avgir stemmer under valget vil et Ticket objekt bli laget som inneholder
+  Kandidatene som brukeren stemmer på
+- En ticket som har null kandidater vil bli sett til å bli en blank stemme
 ---------------------------------------
 """
 
@@ -60,6 +60,7 @@ class Ticket(models.Model):
         verbose_name="kandidatene som stemmes på",
     )
     is_blank = models.BooleanField(default=False, verbose_name="Blank stemme")
+    # TODO: legg til posiition for easier admin view
     # position = models.ForeignKey('Position')
 
     @classmethod
@@ -76,26 +77,21 @@ class Ticket(models.Model):
 
 
 class Position(models.Model):
-    # Name of position
     position_name = models.CharField(
         max_length=100, verbose_name="Navn på verv"
     )
-
-    # Number of spots available
     spots = models.PositiveIntegerField(
         default=1, verbose_name="Antall plasser"
     )
     number_of_prevote_tickets = models.PositiveIntegerField(
         default=0, verbose_name="Antall personer som har forhåndstemt"
     )
-    is_active = models.BooleanField(
+    is_active = models.BooleanField(  # Brukere kan gå inn og stemme på denne posisjonen
         default=False, verbose_name="Er valget åpent"
     )
-    is_done = models.BooleanField(
+    is_done = models.BooleanField(  # valget på denne posisjon er gjennomført
         default=False, verbose_name="valget er gjennomført"
     )
-
-    # Candidates running for position
     candidates = models.ManyToManyField(
         Candidate,
         blank=True,
@@ -183,7 +179,7 @@ class Position(models.Model):
 
     def vote(self, form, user):
         candidates = form.cleaned_data.get("candidates")
-        ticket = Ticket.create_ticket(candidates)
+        ticket = Ticket.create_ticket(candidates) # Lager stemmeseddelen for brukeren
         self.tickets.add(ticket)
         user.profile.voted = True
         user.profile.save()
@@ -236,7 +232,7 @@ class Election(models.Model):
             election = cls.objects.latest("id")
             if election.is_open:
                 return True
-        except ObjectDoesNotExist: #TODO: more exceptions?
+        except ObjectDoesNotExist:  # TODO: more exceptions?
             pass
         return False
 
@@ -269,7 +265,7 @@ class Election(models.Model):
             if election.current_position is not None:
                 if election.current_position.is_active:
                     pk = election.current_position.id
-                    return True, redirect("elections:admin_start_voting", pk=pk) #TODO voting_active
+                    return True, redirect("elections:voting_active", pk=pk)
             return False, None
 
     def is_voting_active(self):
@@ -333,9 +329,13 @@ class Election(models.Model):
         self.current_position = new_position
         self.save()
         return
+
     def end_election(self):
-        pass
-        # if self.is_open:
-        #     self.is_open = False
-        #     self.date = datetime.date.today()
-        #     self.save()
+        positions = self.positions.all()
+        for position in positions:
+            position.is_active = False
+            position.save()
+        self.current_position = None
+        self.is_open = False
+        self.save()
+        

@@ -34,7 +34,7 @@ admin_urlpatterns = [
     url(
         r"^admin/register/(?P<pk>\d+)/start",
         views_admin.admin_voting_is_active,
-        name="admin_start_voting",
+        name="admin_voting_active",
     ),
     url(
         r"^admin/results/(?P<pk>\d+)",
