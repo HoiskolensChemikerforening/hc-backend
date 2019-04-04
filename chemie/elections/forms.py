@@ -109,17 +109,3 @@ class CastVoteForm(forms.Form):
         if len(candidate_list) == 0:
             return True
         return False
-
-    def clean_candidates(self):
-        candidates = self.cleaned_data["candidates"].all()
-        count = candidates.count()
-        if count > self.election.current_position.spots or count <= 0:
-            raise ValidationError(
-                "Stem på litt færre folk da kis. "
-                "Du stemte på {} kandidater, "
-                "og det skal velges {} kandidater til vervet.".format(
-                    count, self.election.current_position.spots
-                )
-            )
-        else:
-            return candidates

@@ -141,13 +141,44 @@ class Position(models.Model):
         count = number_of_ticket + self.number_of_prevote_tickets
         return count
 
-    def get_blank_votes(self):
-        pass
+    def get_non_blank_votes(self):
+        non_blank_tickets = self.tickets.filter(is_blank=False)
+        return non_blank_tickets.count()
 
-    def get_candidate_votes(self):
-        pass
-        # candidate_votes = {}
-        # tickets = self.tickets.all()
+    def get_blank_votes(self):
+        blank_tickets = self.tickets.filter(is_blank=True)
+        number_of_blank = 0
+        for ticket in blank_tickets:
+            if ticket.candidates.all().count() == 0:
+                number_of_blank += 1
+        if blank_tickets.count() != number_of_blank:
+            raise ValueError
+        return number_of_blank
+
+    def calculate_candidate_votes(self):
+        tickets = self.tickets.exclude(is_blank=True).all()
+        candidates = self.candidates.all()
+        for candidate in candidates:
+            candidate.votes = 0
+            candidate.save()
+        for candidate in candidates:
+            for ticket in tickets:
+                if candidate in ticket.candidates.all():
+                    candidate.votes += 1
+            candidate.save()
+
+    def get_total_votes(self):
+        tickets = self.tickets.all()
+        total_votes = 0
+        candidates = self.candidates.all()
+        for candidate in candidates:
+            total_votes += candidate.pre_votes
+        for ticket in tickets:
+            if ticket.is_blank:
+                total_votes += 1
+            else:
+                total_votes += ticket.candidates.all().count()
+        return total_votes
 
     def vote(self, form, user):
         candidates = form.cleaned_data.get("candidates")
@@ -163,41 +194,6 @@ class Position(models.Model):
         user.profile.voted = True
         user.profile.save()
         return
-
-    def end_voting_for_position(self):
-        pass
-        # if self.candidates.all().count() > 0:
-        #     if self.spots >= self.candidates.all().count():
-        #         winners = self.candidates.all()
-        #     else:
-        #         winners = []
-        #         all_votes = {}
-        #         for candidate in self.candidates.all():
-        #             all_votes[candidate.id] = candidate.votes
-        #         winner_spots = self.spots
-        #         while len(winners) < winner_spots:
-        #             most_votes = max(all_votes.values())
-        #             winner_ids = []
-        #             for candidate_id, votes in all_votes.items():
-        #                 if votes == most_votes:
-        #                     winner_ids.append(candidate_id)
-        #                     # Now set the votes of the last found winner to -1,
-        #                     # so he is not found again
-        #                     all_votes[candidate_id] = -1
-        #             winner_candidates = Candidate.objects.filter(
-        #                 id__in=winner_ids
-        #             )
-        #             winners.extend(list(winner_candidates))
-
-        #     # All winners are now stored in a list. Add this to self.winners
-        #     self.winners.add(*winners)
-        #     """ self.number_of_voters += Profile.objects.filter(voted=True).count() """
-        #     self.voting_done = True
-        #     self.save()
-        # election = Election.objects.latest("id")
-        # election.current_position_is_open = False
-        # election.current_position = None
-        # election.save()
 
 
 class Election(models.Model):
@@ -272,9 +268,8 @@ class Election(models.Model):
             if election.current_position is not None:
                 if election.current_position.is_active:
                     pk = election.current_position.id
-                    return True, redirect("elections:admin_start_voting", pk=id)
-            else:
-                return False, None
+                    return True, redirect("elections:admin_start_voting", pk=pk)
+            return False, None
 
     def is_voting_active(self):
         if self.current_position is not None:
@@ -326,8 +321,17 @@ class Election(models.Model):
             return True
 
     def end_current_position_voting(self):
-        pass
+        self.current_position.is_active = False
+        self.current_position.is_done = True
+        self.current_position.save()
+        self.save()
+        return
 
+    def change_current_position(self,pk):
+        new_position = Position.objects.get(pk=pk)
+        self.current_position = new_position
+        self.save()
+        return
     def end_election(self):
         pass
         # if self.is_open:

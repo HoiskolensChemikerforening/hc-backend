@@ -77,8 +77,10 @@ def admin_register_candidates(request, pk):
                 if add_candidate_form.is_valid():
                     position.add_candidates(add_candidate_form)
             elif "startVoting" in request.POST:
-                if(election.start_current_position_voting(position)):
-                    return redirect("elections:admin_start_voting", pk=position.id)
+                if election.start_current_position_voting(position):
+                    return redirect(
+                        "elections:admin_start_voting", pk=position.id
+                    )
         candidates = position.candidates.all().order_by("user")
         context = {
             "candidates": candidates,
@@ -138,26 +140,29 @@ def admin_voting_is_active(request, pk):
     election = Election.get_latest_election()
     if request.method == "POST":
         if "endVoting" in request.POST:
-            election.current_position.end_voting_for_position()
+            election.end_current_position_voting()
             return redirect("elections:admin_results", pk=pk)
     total_voters = election.current_position.get_number_of_voters()
     context = {"election": election, "total_voters": total_voters}
     return render(request, "elections/admin/admin_start_voting.html", context)
 
 
-@permission_required("elections.add_election")
+@permission_required("elections.admin_results")
 @login_required
 def admin_results(request, pk):
-    if not election_is_open():
-        return redirect("elections:admin_start_election")
-    election = Election.objects.latest("id")
-    if voting_is_active():
-        return redirect("elections:admin_start_voting", pk=pk)
-    position = election.positions.get(id=pk)
+    is_redirected, redir_function = Election.is_redirected()
+    if is_redirected:
+        return redir_function  # Redirect function from Election.is_redirected
+    election = Election.get_latest_election()
+    if not election.current_position.id == pk:
+        election.change_current_position(pk)
+    position = election.current_position
+
+    position.calculate_candidate_votes()
+    blank_votes = position.get_blank_votes()
+    number_of_voters = position.get_number_of_voters()
     total_votes = position.get_total_votes()
-    winners = position.winners.all()
-    blank_votes = position.blank_votes
-    number_of_voters = position.number_of_voters
+
     if number_of_voters < VOTES_REQUIRED_FOR_VALID_ELECTION:
         messages.add_message(
             request,
@@ -167,12 +172,10 @@ def admin_results(request, pk):
                 number_of_voters
             ),
         )
-    print(blank_votes)
     context = {
         "candidates": position.candidates.all(),
-        "total_votes": total_votes,
-        "winners": winners,
         "number_of_voters": number_of_voters,
+        "total_votes": total_votes,
         "blank_votes": blank_votes,
     }
     return render(request, "elections/admin/admin_results.html", context)

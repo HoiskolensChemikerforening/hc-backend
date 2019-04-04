@@ -16,7 +16,7 @@ from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 @login_required
 def index(request):
     eligible = request.user.profile.eligible_for_voting
-    if Election.current_position_is_active:
+    if Election.current_position_is_active():
         election = Election.get_latest_election()
         voted = request.user.profile.voted
         context = {"election": election, "voted": voted, "eligible": eligible}

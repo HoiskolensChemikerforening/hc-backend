@@ -45,11 +45,11 @@ border-radius:0rem
             <h4 class="text-center">Ikke gjennomført</h4>
             {%for position in not_done_positions%}
             <div>
-                <div class="d-flex flex-column" style="border-style:dotted none none none; border-color:#343a40">
+                <div class="d-flex flex-column" style="border-style:solid none solid none; border-color:#343a40">
                     <div class="p-2">
                         <div class="d-flex">
                             <div class="p-2">
-                                <h5>{{position.position_name}}</h3>
+                                <h5>{{position.position_name}}: <b>{{position.spots}}</b> plass(er)</h3>
                             </div>
                             <div class="ml-auto p-2">
                                 <form onsubmit="return submitDelete(this)" method="POST" href="#"
@@ -88,11 +88,11 @@ border-radius:0rem
             <h4 class="text-center">Gjennomført</h4>
             {%for position in done_positions%}
             <div>
-                <div class="d-flex flex-column" style="border-style:dotted none none none; border-color:#343a40">
+                <div class="d-flex flex-column" style="border-style:solid none solid none; border-color:#343a40">
                     <div class="p-2">
                         <div class="d-flex">
                             <div class="p-2">
-                                <h5>{{position.position_name}}</h3>
+                                <h5>{{position.position_name}}: <b>{{position.spots}}</b> vinner(e)</h3>
                             </div>
 
                         </div>
@@ -101,13 +101,20 @@ border-radius:0rem
                         <div class="d-flex">
                             <div class="p-2">
                                 {%for candidate in position.candidates.all%}
-                                <p>
-                                    {{candidate}}
-                                    <b> {{candidate.votes}}</b> <br>
-                                </p>
+                                <p id="votes-{{candidate.id}}"></p>
+                                <script type="text/javascript">
+                                    var candVote = parseInt("{{candidate.votes}}")
+                                    var candPreVote = parseInt("{{candidate.pre_votes}}")
+                                    var candTotalVote = candVote + candPreVote
+                                    var message = "{{candidate}}: " + candTotalVote.toString() + " Stemmer"
+                                    document.getElementById("votes-{{candidate.id}}").innerHTML = message;
+                                </script>
                                 {%endfor%}
                             </div>
-
+                            <a class="btn btn-secondary ml-auto" style="height:2.5rem"
+                                href="{%url 'elections:admin_results' pk=position.id%}">
+                                Se resultat
+                            </a>
                         </div>
                     </div>
                 </div>
