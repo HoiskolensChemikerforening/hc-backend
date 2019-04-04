@@ -18,8 +18,7 @@ from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 def admin_start_election(request):
     if Election.latest_election_is_open():
         election = Election.get_latest_election()
-        if election.is_voting_active():
-            # TODO: Fix this
+        if election.current_position.is_active:
             return redirect(
                 "elections:admin_start_voting", pk=election.current_position.id
             )
@@ -164,16 +163,8 @@ def admin_results(request, pk):
     number_of_voters = position.get_number_of_voters()
     total_votes = position.get_total_votes()
 
-    if number_of_voters < VOTES_REQUIRED_FOR_VALID_ELECTION:
-        messages.add_message(
-            request,
-            messages.ERROR,
-            "OBS!",
-            extra_tags="Det ble kun avgitt {} stemmesedler.".format(
-                number_of_voters
-            ),
-        )
     context = {
+        "position": position,
         "candidates": position.candidates.all(),
         "number_of_voters": number_of_voters,
         "total_votes": total_votes,
