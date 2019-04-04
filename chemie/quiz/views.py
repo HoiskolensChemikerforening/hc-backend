@@ -72,6 +72,7 @@ def create_score(request, pk):
     form = QuizScoreForm(request.POST or None)
     activate_form = CreateQuizTermForm(instance=term)
     activate_form.fields.pop('term')
+
     if form.is_valid():
         instance = form.save(commit=False)
         if scores.filter(user=instance.user):

@@ -42,41 +42,38 @@
       </thead>
 
       <tbody>
-      {% if scores %}
-        {% for score in scores %}
-          <tr>
-            <td>{{ forloop.counter }}</td>
-            <td>
-              {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
-                <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
-              {% endthumbnail %}
-              {{ score.user.profile }}
-            </td>
-            {% ifequal score quiz_score_edit %}
-              <form method="POST">{% csrf_token %}
-                <td>{{ score }} + {{ form.score }}</td>
-                <td style="text-align:center;">
-                  <button class="btn btn-floating" type="submit">
-                    <i class="material-icons">check</i>
-                  </button>
-                </td>
-              </form>
-            {% else %}
-              <td>{{ score }}</td>
+      {% for score in scores %}
+        <tr>
+          <td>{{ forloop.counter }}</td>
+          <td>
+            {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
+              <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
+            {% endthumbnail %}
+            {{ score.user.profile }}
+          </td>
+          {% ifequal score quiz_score_edit %}
+            <form method="POST">{% csrf_token %}
+              <td>{{ score }} + {{ form.score }}</td>
               <td style="text-align:center;">
-                <a href="{% url 'quiz:edit_score' score.pk %}">
-                  <button class="btn btn-floating">
-                    <i class="material-icons">edit</i>
-                  </button>
-                </a>
+                <button class="btn btn-floating" type="submit">
+                  <i class="material-icons">check</i>
+                </button>
               </td>
-            {% endifequal %}
-          </tr>
-        {% endfor %}
-
-      {% else %}
+            </form>
+          {% else %}
+            <td>{{ score }}</td>
+            <td style="text-align:center;">
+              <a href="{% url 'quiz:edit_score' score.pk %}">
+                <button class="btn btn-floating">
+                  <i class="material-icons">edit</i>
+                </button>
+              </a>
+            </td>
+          {% endifequal %}
+        </tr>
+      {% empty %}
         Ingen resultater å vise
-      {% endif %}
+      {% endfor %}
 
       {% if not quiz_score_edit %}
         <form method="POST">{% csrf_token %}
