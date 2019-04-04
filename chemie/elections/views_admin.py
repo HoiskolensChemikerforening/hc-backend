@@ -11,7 +11,6 @@ from .forms import AddPositionForm, AddCandidateForm, CastVoteForm
 from .forms import AddPrevoteForm, AddPreVoteToCandidateForm
 from .models import Election, Position, Candidate
 from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
-from .admin import export_csv
 
 
 @permission_required("elections.add_election")
@@ -199,7 +198,7 @@ def admin_end_election(request):
         "positions": positions,
         "voter_list": n_voters,
         "total_votes": total_votes,
-        "blank_votes":blank_votes
+        "blank_votes": blank_votes,
     }
     return render(request, "elections/admin/admin_end_election.html", context)
 

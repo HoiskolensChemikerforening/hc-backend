@@ -39,18 +39,18 @@ margin-right: 0.2rem;
             <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
                     style="color:#edcd2f">Admin</a></li>
             <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
+            <div style="position:absolute; right:3rem; top:3rem">
+                <form method="post" href="#" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
+                    <button class="btn btn-success" type="submit" name="startVoting" value="{{position.id}}" }}>Start
+                        valget</button>
+                </form>
+            </div>
         </ol>
     </nav>
     <!--Tittel på possisjon-->
     <div class="d-flex">
         <div class="p-2" style="margin-left:2rem">
             <h2 class="title is-4"> Kandidater for {{ position.position_name }}</h2>
-        </div>
-        <div class="ml-auto p-2">
-            <form method="post" href="#" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
-                <button class="btn btn-success" type="submit" name="startVoting" value="{{position.id}}" }}>Start
-                    valget</button>
-            </form>
         </div>
     </div>
 

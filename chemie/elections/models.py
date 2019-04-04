@@ -250,7 +250,7 @@ class Election(models.Model):
 
     @classmethod
     def get_latest_election(cls):
-        return cls.objects.latest("date")
+        return cls.objects.latest("id")
 
     @classmethod
     def is_redirected(cls):
@@ -338,4 +338,3 @@ class Election(models.Model):
         self.current_position = None
         self.is_open = False
         self.save()
-        
