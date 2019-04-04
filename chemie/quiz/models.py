@@ -7,7 +7,8 @@ class QuizTerm(models.Model):
     term = models.CharField(max_length=100, verbose_name='Quiz')
 
     def save(self, *args, **kwargs):
-        QuizTerm.objects.exclude(pk=self.pk).update(is_active=False)
+        if self.is_active:
+            QuizTerm.objects.exclude(pk=self.pk).update(is_active=False)
         super().save(*args, **kwargs)
 
     def __str__(self):
