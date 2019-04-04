@@ -2,6 +2,17 @@
 {% load static %}
 
 {% block content %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
+        </li>
+        <a class="btn btn-secondary" style="position:absolute; right:3rem; top:3rem"
+            href="{% url 'elections:admin_end_election'%}">
+            Resultater fra forrige valg
+        </a>
+    </ol>
+
+</nav>
 <div class="d-flex flex-column">
     <div>
         <h2 style="text-align: center">Administrator for Valg </h2>
