@@ -32,8 +32,16 @@
       <ul>
         {% if perms.picturecarousel %}
           <li>
-            <a class="btn-floating blue" href="{% url "carousel:overview" %}"><i class="material-icons">list</i></a>
-            <a class="btn-floating mobile-fab-tip">Godkjenn</a>
+            <a class="btn-floating blue" href="{% url "carousel:view_pictures" %}">
+              <i class="material-icons">photo_album</i>
+            </a>
+            <a class="btn-floating mobile-fab-tip">Se bilder</a>
+          </li>
+          <li>
+            <a class="btn-floating blue" href="{% url "carousel:overview" %}">
+              <i class="material-icons">list</i>
+            </a>
+            <a class="btn-floating mobile-fab-tip">Godkjenn bilder</a>
           </li>
         {% endif %}
       </ul>
@@ -55,7 +63,7 @@
 
 
   <div class="row">
-    <h3>Aktive bilder</h3>
+    <h3>Tagg bilder</h3>
     <div class="card">
       <div class="card-content">
       <form class="form" method="post">{% csrf_token %}

@@ -32,7 +32,15 @@
       <ul>
         {% if perms.picturecarousel %}
           <li>
-            <a class="btn-floating blue" href="{% url "carousel:active" %}"><i class="material-icons">photo_album</i></a>
+            <a class="btn-floating blue" href="{% url "carousel:view_pictures" %}">
+              <i class="material-icons">photo_album</i>
+            </a>
+            <a class="btn-floating mobile-fab-tip">Se bilder</a>
+          </li>
+          <li>
+            <a class="btn-floating blue" href="{% url "carousel:active" %}">
+              <i class="material-icons">edit</i>
+            </a>
             <a class="btn-floating mobile-fab-tip">Tagg bilder</a>
           </li>
         {% endif %}
