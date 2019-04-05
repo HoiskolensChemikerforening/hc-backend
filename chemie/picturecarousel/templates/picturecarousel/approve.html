@@ -13,7 +13,7 @@
 
 
 {% block content %}
-<style xmlns:carousel="http://www.w3.org/1999/xhtml">
+  <style xmlns:carousel="http://www.w3.org/1999/xhtml">
     img.responsive-img, video.responsive-video {
       height: auto;
       width: auto;
@@ -21,9 +21,9 @@
     }
 
     .btn {
-        margin-top: 5px;
+      margin-top: 5px;
     }
-</style>
+  </style>
   {% if perms.picturecarousel %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -68,56 +68,56 @@
       <div class="card-content">
         <form method="post">{% csrf_token %}
           {{ awaiting_formset.management_form }}
-        <table class="responsive-table bordered">
-          <thead>
-          <tr>
-            <th data-field="image">Bilde</th>
-            <th data-field="tags">Tags</th>
-            <th data-field="who">Innsender</th>
-            <th data-field="date">Dato</th>
-            <th data-field="approve">Godkjenning</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for form in awaiting_formset %}
+          <table class="responsive-table bordered">
+            <thead>
             <tr>
-              <td>
-                <img class="responsive-img materialboxed" src="{{ form.instance.image.url }}">
-              </td>
-              <td>
-                {{ form.as_p }}
-                <button class="btn waves-effect waves-light" type="submit"
-                        name="save_tag" value="{{ page}}">Lagre tags!
-                </button>
-              </td>
-              <td><p>{{ form.instance.author }}</p></td>
-              <td><p>{{ form.instance.date|date:"j. F" }}</p></td>
-              <td>
-                <form method="POST">
-                  {% csrf_token %}
-                  <button class="btn waves-effect waves-light" type="submit"
-                          name="delete" value="{{ form.instance.id }}">Slett
-                    <i class="material-icons right">delete</i>
-                  </button>
-                </form>
-                <form action="{% url "carousel:approve" form.instance.id %}" method="POST">
-                  {% csrf_token %}
-                  <button class="btn waves-effect waves-light" type="submit"
-                          name="approve" value="{{ form.instance.id }}">Godkjenn
-                    <i class="material-icons right">check</i>
-                  </button>
-                </form>
-              </td>
+              <th data-field="image">Bilde</th>
+              <th data-field="tags">Tags</th>
+              <th data-field="who">Innsender</th>
+              <th data-field="date">Dato</th>
+              <th data-field="approve">Godkjenning</th>
             </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-         </form>
+            </thead>
+            <tbody>
+            {% for form in awaiting_formset %}
+              <tr>
+                <td>
+                  <img class="responsive-img materialboxed" src="{{ form.instance.image.url }}">
+                </td>
+                <td>
+                  {{ form.as_p }}
+                  <button class="btn waves-effect waves-light" type="submit"
+                          name="save_tag" value="{{ page }}">Lagre tags!
+                  </button>
+                </td>
+                <td><p>{{ form.instance.author }}</p></td>
+                <td><p>{{ form.instance.date|date:"j. F" }}</p></td>
+                <td>
+                  <form method="POST">
+                    {% csrf_token %}
+                    <button class="btn waves-effect waves-light" type="submit"
+                            name="delete" value="{{ form.instance.id }}">Slett
+                      <i class="material-icons right">delete</i>
+                    </button>
+                  </form>
+                  <form action="{% url "carousel:approve" form.instance.id %}" method="POST">
+                    {% csrf_token %}
+                    <button class="btn waves-effect waves-light" type="submit"
+                            name="approve" value="{{ form.instance.id }}">Godkjenn
+                      <i class="material-icons right">check</i>
+                    </button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+            </tbody>
+          </table>
+        </form>
       </div>
     </div>
   </div>
 {% endblock content %}
 
 {% block footer_script %}
-{{ awaiting_formset.form.media }}
+  {{ awaiting_formset.form.media }}
 {% endblock footer_script %}

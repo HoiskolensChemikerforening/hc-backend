@@ -13,27 +13,28 @@
 <div class="carousel carousel-slider">
   {% for picture in pictures %}
     {% thumbnail picture.image "1920" padding=True as pic %}
-      <a class="carousel-item" href="#"><img src="{{pic.url}}"></a> <!-- random image -->
+      <a class="carousel-item" href="#"><img src="{{ pic.url }}"></a> <!-- random image -->
       <div class="caption center-align">
-        <h3>{{picture.description}}</h3>
+        <h3>{{ picture.description }}</h3>
       </div>
-      {% endthumbnail %}
+    {% endthumbnail %}
   {% endfor %}
- </div>
+</div>
 
 <script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.carousel');
-    var instances = M.Carousel.init(
-      elems,
-      {
-        fullWidth: true,
-      }
-    );
-    window.setInterval(slidePictures, 7000);
-    function slidePictures() {
-      var instance = M.Carousel.getInstance(elems[0]);
-      instance.next();
-    }
+    document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.carousel');
+        var instances = M.Carousel.init(
+            elems,
+            {
+                fullWidth: true,
+            }
+        );
+        window.setInterval(slidePictures, 7000);
+
+        function slidePictures() {
+            var instance = M.Carousel.getInstance(elems[0]);
+            instance.next();
+        }
     });
 </script>
