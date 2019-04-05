@@ -76,7 +76,7 @@ def active_list(request, page=1):
                "page": page
                }
 
-    return render(request, "picturecarousel/active.html", context)
+    return render(request, "picturecarousel/tag_active.html", context)
 
 
 @permission_required("picturecarousel.change_contribution")
@@ -182,3 +182,30 @@ class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
             qs = qs.filter(tag__startswith=self.q) | qs.filter(tag__icontains=self.q)
 
         return qs.order_by('tag')
+
+
+@login_required
+def view_pictures(request, page=1):
+    picture_list = Contribution.objects.filter(
+        approved=True
+    ).prefetch_related("author").order_by('-date')
+    paginator = Paginator(picture_list, 3)
+
+    try:
+        pictures = paginator.page(page)
+    except PageNotAnInteger:
+        pictures = paginator.page(1)
+    except EmptyPage:
+        pictures = paginator.page(paginator.num_pages)
+
+    form = PictureTagForm(request.POST or None)
+    tag_id_list = request.POST.getlist('tags')
+
+    # TODO: Filter out s.t. qs matches tags
+    # TODO: Disable option to create new tags from this page
+
+    context = {
+        'form': form,
+        'pictures': pictures,
+    }
+    return render(request, 'picturecarousel/view_active.html', context)

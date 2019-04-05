@@ -1,4 +1,5 @@
 from django.conf.urls import url
+from django.urls import path
 from .views import PictureTagAutocomplete
 from . import views
 
@@ -38,5 +39,14 @@ urlpatterns = [
         r"^picturetag-autocomplete/",
         PictureTagAutocomplete.as_view(create_field='tag'),
         name='picturetag-autocomplete'
-    )
+    ),
+    path(
+        'bilder/',
+        views.view_pictures,
+        name='view_pictures'
+    ),
+    path(
+        'bilder/<int:page>',
+        views.view_pictures,
+        name="view_detail"),
 ]

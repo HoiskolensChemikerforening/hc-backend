@@ -1,0 +1,109 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load material_form %}
+{% load staticfiles %}
+{% load static %}
+{% block nav_header %}
+  Bilder
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Aktive bilder
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+<style xmlns:carousel="http://www.w3.org/1999/xhtml">
+    img.responsive-img, video.responsive-video {
+      height: auto;
+      width: auto;
+      max-width: 300px;
+    }
+
+    .btn {
+        margin-top: 5px;
+    }
+</style>
+  {% if perms.picturecarousel %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.picturecarousel %}
+          <li>
+            <a class="btn-floating blue" href="{% url "carousel:active" %}">
+              <i class="material-icons">edit</i>
+            </a>
+            <a class="btn-floating mobile-fab-tip">Tagg bilder</a>
+          </li>
+          <li>
+            <a class="btn-floating blue" href="{% url "carousel:overview" %}">
+              <i class="material-icons">list</i>
+            </a>
+            <a class="btn-floating mobile-fab-tip">Godkjenn bilder</a>
+          </li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+  <ul class="pagination nav navbar-nav">
+    {% if pictures.has_previous %}
+      <li><a href="{{ pictures.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in pictures.paginator.page_range %}
+      <li class="{% if pictures.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if pictures.has_next %}
+      <li><a href="{{ pictures.next_page_number }}">Neste</a></li>
+    {% endif %}
+  </ul>
+
+  <form method="POST" action="{% url 'picturecarousel:view_pictures' %}">{% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Filtrer" class="btn btn-primary">
+  </form>
+
+
+  <div class="row">
+    <h3>Aktive bilder</h3>
+    <div class="card">
+      <div class="card-content">
+      <form class="form" method="post">{% csrf_token %}
+        <table class="responsive-table bordered">
+          <thead>
+          <tr>
+            <th data-field="image">Bilde</th>
+            <th data-field="image">Tags</th>
+            <th data-field="who">Innsender</th>
+            <th data-field="date">Dato</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for pic in pictures %}
+            <tr>
+              <td>
+                <img class="responsive-img materialboxed" src="{{ pic.image.url }}">
+              </td>
+              <td>
+                {% for tag in pic.tags.all %}
+                  <p>{{ tag }}</p>
+                {% endfor %}
+              </td>
+              <td><p>{{ pic.author }}</p></td>
+              <td><p>{{ pic.date|date:"j. F" }}</p></td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </form>
+      </div>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block footer_script %}
+{{ form.media }}
+{% endblock footer_script %}
