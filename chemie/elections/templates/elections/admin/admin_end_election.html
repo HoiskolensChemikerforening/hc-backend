@@ -86,6 +86,7 @@
             <div class="p-1">
                 <h5>{{position}}</h5>
             </div>
+            {% if position.is_done %}
             <div class="p-1" style="border-style:solid none solid none;">
                 <ul>
                     <li id="list-number-voters-{{position.id}}">
@@ -125,6 +126,19 @@
                     {%endfor%}
                 </ul>
             </div>
+            {% else %}
+            <div class="p-1" style="border-style:solid none none none;">
+                <h6>
+                    Ikke gjennomført
+                </h6>
+
+
+
+            </div>
+            <div class="p-1">
+
+            </div>
+            {% endif %}
         </div>
     </div>
     {%endfor%}
