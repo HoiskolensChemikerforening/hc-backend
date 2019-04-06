@@ -2,20 +2,66 @@
 {% load static %}
 {% load thumbnail %}
 
+{% block header %}
 <head>
   <meta charset="UTF-8">
   <title>Chemshop admin</title>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
+{% endblock header %}
+
 
 {% block content %}
 <form method="POST"> {% csrf_token %}
   {{ form.as_p }}
-  <input class="btn btn-primary pull-right" type='submit' value='Aktiver Happy Hour!!' />
+  <input class="btn btn-primary pull-right" id="activate-button" type='submit' value='Aktiver Happy Hour!!' />
 </form>
 {% endblock content %}
 
 {% block footer_script %}
 <script>
   $('select').formSelect();
+  document.getElementById("activate-button").addEventListener("click", function (event) {
+    event.preventDefault();
+    swal({
+      title: "Dere vil selge alle Happy Hour-varer til 2 for 1",
+      text: "Er du sikker?",
+      icon: "warning",
+      buttons: {
+        cancel: {
+          text: "Nei, ikke start Happy Hour",
+          value: null,
+          visible: true,
+          className: "",
+          closeModal: true,
+        },
+        confirm: {
+          text: "Ja, start Happy Hour",
+          value: true,
+          visible: true,
+          className: "",
+          closeModal: true
+        }
+      },
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          let form = this.closest("form");
+          swal("Happy Hour startet!\nDere selger nå alt av Happy Hour-varer til 2 for 1", {
+            icon: "success",
+          }).then((ok) => {
+            if (ok) {
+              form.submit();
+            } else {
+              return false;
+            }
+          });
+          return true;
+        } else {
+          swal("Phew!", "Det var nære på! Happy Hour er IKKE aktivert");
+          return false;
+        }
+      });
+  });
 </script>
 {% endblock footer_script %}
