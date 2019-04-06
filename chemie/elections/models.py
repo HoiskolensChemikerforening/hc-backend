@@ -41,11 +41,11 @@ class Candidate(models.Model):
         verbose_name="kandidatens bruker",
         on_delete=models.CASCADE,
     )
-    votes = models.PositiveIntegerField(
-        verbose_name="Antall stemmer", blank=True, default=0
+    votes = models.PositiveSmallIntegerField(
+        verbose_name="Antall stemmer", default=0
     )
-    pre_votes = models.PositiveIntegerField(
-        verbose_name="Antall forhåndstemmer", blank=True, default=0
+    pre_votes = models.PositiveSmallIntegerField(
+        verbose_name="Antall forhåndstemmer", default=0
     )
 
     def __str__(self):
@@ -56,23 +56,22 @@ class Ticket(models.Model):
     candidates = models.ManyToManyField(
         Candidate,
         blank=True,
-        related_name="ticket",
-        verbose_name="kandidatene som stemmes på",
+        related_name="tickets",
+        verbose_name="Kandidatene som stemmes på",
     )
     is_blank = models.BooleanField(default=False, verbose_name="Blank stemme")
-    # TODO: legg til posiition for easier admin view
-    position = models.ForeignKey('Position', on_delete=models.CASCADE)
+    position = models.ForeignKey("Position", on_delete=models.CASCADE)
 
     @classmethod
-    def create_ticket(cls, voted_candidates):
-        new_ticket = cls.objects.create()
-        for candidate in voted_candidates:
-            new_ticket.candidates.add(candidate)
+    def create_ticket(cls, voted_candidates, position):
+        new_ticket = cls.objects.create(is_blank=False, position=position)
+        new_ticket.candidates.set(voted_candidates)
+        new_ticket.save()
         return new_ticket
 
     @classmethod
-    def create_blank_ticket(cls):
-        new_ticket = cls.objects.create(is_blank=True)
+    def create_blank_ticket(cls, position):
+        new_ticket = cls.objects.create(is_blank=True, position=position)
         return new_ticket
 
 
@@ -80,36 +79,35 @@ class Position(models.Model):
     position_name = models.CharField(
         max_length=100, verbose_name="Navn på verv"
     )
-    spots = models.PositiveIntegerField(
+    spots = models.PositiveSmallIntegerField(
         default=1, verbose_name="Antall plasser"
     )
-    number_of_prevote_tickets = models.PositiveIntegerField(
+    number_of_prevote_tickets = models.PositiveSmallIntegerField(
         default=0, verbose_name="Antall personer som har forhåndstemt"
     )
     is_active = models.BooleanField(  # Brukere kan gå inn og stemme på denne posisjonen
         default=False, verbose_name="Er valget åpent"
     )
     is_done = models.BooleanField(  # valget på denne posisjon er gjennomført
-        default=False, verbose_name="valget er gjennomført"
+        default=False, verbose_name="Valget er gjennomført"
     )
     candidates = models.ManyToManyField(
         Candidate,
         blank=True,
-        related_name="position",
+        related_name="candidate_position",
         verbose_name="Kandidater som stiller",
     )
     tickets = models.ManyToManyField(
         Ticket,
         blank=True,
-        related_name="current_position",
+        related_name="ticket_position",
         verbose_name="Stemmesedler",
     )
 
     def __str__(self):
         return self.position_name
 
-    def add_candidates(self, form):
-        user = form.cleaned_data["user"]
+    def add_candidates(self, user):
         position_candidates = self.candidates.all()
         to_be_added = (
             False if user in [usr.user for usr in position_candidates] else True
@@ -119,8 +117,7 @@ class Position(models.Model):
             self.candidates.add(candidate)
             self.save()
 
-    def delete_candidates(self, request):
-        candidate_username = request.POST.get("Delete", "0")
+    def delete_candidates(self, candidate_username):
         candidate_user_object = User.objects.get(username=candidate_username)
         all_candidates = self.candidates.all()
         try:
@@ -134,8 +131,8 @@ class Position(models.Model):
             return
 
     def get_number_of_voters(self):
-        number_of_ticket = self.tickets.all().count()
-        count = number_of_ticket + self.number_of_prevote_tickets
+        number_of_tickets = self.tickets.all().count()
+        count = number_of_tickets + self.number_of_prevote_tickets
         return count
 
     def get_non_blank_votes(self):
@@ -148,11 +145,13 @@ class Position(models.Model):
         for ticket in blank_tickets:
             if ticket.candidates.all().count() == 0:
                 number_of_blank += 1
-        if blank_tickets.count() != number_of_blank: #TODO: hvordan vil vi sjekke error
+        if (
+            blank_tickets.count() != number_of_blank
+        ):  # TODO: hvordan vil vi sjekke error
             raise ValueError
         return number_of_blank
 
-    def calculate_candidate_votes(self):
+    def calculate_candidate_votes(self):  # TODO Validate this fucker with tests
         tickets = self.tickets.exclude(is_blank=True).all()
         candidates = self.candidates.all()
         for candidate in candidates:
@@ -177,19 +176,22 @@ class Position(models.Model):
                 total_votes += ticket.candidates.all().count()
         return total_votes
 
-    def vote(self, form, user):
-        candidates = form.cleaned_data.get("candidates")
-        ticket = Ticket.create_ticket(candidates) # Lager stemmeseddelen for brukeren
+    def vote(self, candidates, user):
+        ticket = Ticket.create_ticket(
+            candidates, self
+        )  # Lager stemmeseddelen for brukeren
         self.tickets.add(ticket)
         user.profile.voted = True
         user.profile.save()
+        self.save()
         return
 
     def vote_blank(self, user):
-        blank_ticket = Ticket.create_blank_ticket()
+        blank_ticket = Ticket.create_blank_ticket(self)
         self.tickets.add(blank_ticket)
         user.profile.voted = True
         user.profile.save()
+        self.save()
         return
 
 
@@ -197,21 +199,18 @@ class Election(models.Model):
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     positions = models.ManyToManyField(
-        Position,
-        blank=True,
-        related_name="election_position",
-        verbose_name="Verv",
+        Position, blank=True, related_name="election", verbose_name="Verv"
     )
     current_position = models.ForeignKey(
         Position,
         blank=True,
         null=True,
         related_name="current_election",
-        on_delete=models.CASCADE,
+        on_delete=models.DO_NOTHING,
         verbose_name="Vervet som skal stemmes på",
     )
 
-    date = models.DateField(auto_now_add=True, blank=True)
+    date = models.DateTimeField(auto_now_add=True, blank=True)
 
     def __str__(self):
         return "{}: {}".format(self.id, self.date)
@@ -227,7 +226,7 @@ class Election(models.Model):
 
     @classmethod
     def latest_election_is_open(cls):
-        "Checking if the latest election object is currently open"
+        """Checking if the latest election object is currently open"""
         try:
             election = cls.objects.latest("id")
             if election.is_open:
@@ -262,38 +261,25 @@ class Election(models.Model):
             return True, redirect("elections:admin_start_election")
         else:
             election = cls.get_latest_election()
-            if election.current_position is not None:
-                if election.current_position.is_active:
-                    pk = election.current_position.id
-                    return True, redirect("elections:voting_active", pk=pk)
+            if election.current_position_is_active():
+                pk = election.current_position.id
+                return True, redirect("elections:voting_active", pk=pk)
             return False, None
 
-    def is_voting_active(self):
-        if self.current_position is not None:
-            if self.current_position.is_active:
-                return True
-        return False
-
-    def add_position(self, form):
-        # lager et nytt position objekt som vi legger inn i election
-        # position field
-        new_position = form.cleaned_data["position_name"]
-        current_positions_in_election = list()
-        for i in self.positions.all():
-            current_positions_in_election.append(i.position_name)
-        if new_position not in current_positions_in_election:
+    def add_position(self, position_name, spots):
+        if position_name not in self.positions.all().values_list(
+            "position_name", flat=True
+        ):
             # hvis vi ikke har lagt til vervet allerede
-            spots = form.cleaned_data["spots"]  # spots field
-            positions = Position.objects.create(
-                position_name=str(new_position), spots=int(spots)
+            position = Position.objects.create(
+                position_name=str(position_name), spots=int(spots)
             )
 
-        self.positions.add(positions)
-        self.save()
+            self.positions.add(position)
+            self.save()
         return
 
-    def delete_position(self, request):
-        position_id = request.POST.get("Delete", "0")
+    def delete_position(self, position_id):
         position = self.positions.get(id=int(position_id))
         position.delete_candidates(candidates=position.candidates.all())
         position.delete()
@@ -306,10 +292,7 @@ class Election(models.Model):
         if len(candidates) <= 0:
             return False
         else:
-            profiles = Profile.objects.filter(voted=True)
-            for profile in profiles:
-                profile.voted = False
-                profile.save()
+            Profile.objects.filter(voted=True).update(voted=False)
             # forhindrer at vi ikke resetter votes ved refresh page
             self.current_position = position
             self.current_position.is_active = True
@@ -324,7 +307,7 @@ class Election(models.Model):
         self.save()
         return
 
-    def change_current_position(self,pk):
+    def change_current_position(self, pk):
         new_position = Position.objects.get(pk=pk)
         self.current_position = new_position
         self.save()

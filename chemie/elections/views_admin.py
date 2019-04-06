@@ -18,7 +18,7 @@ from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 def admin_start_election(request):
     if Election.latest_election_is_open():
         election = Election.get_latest_election()
-        if election.current_position.is_active:
+        if election.current_position_is_active():
             return redirect(
                 "elections:admin_voting_active", pk=election.current_position.id
             )
@@ -40,11 +40,14 @@ def admin_register_positions(request):
         form = AddPositionForm(request.POST or None)
         if request.method == "POST":
             if "Delete" in request.POST:  # delete posisjon
-                election.delete_position(request)
+                position_id = request.POST.get("Delete", "0")
+                election.delete_position(position_id)
                 form = AddPositionForm(None)
             # Selve formen fr registrering av posisjon
             elif form.is_valid():
-                election.add_position(form)
+                new_position = form.cleaned_data["position_name"]
+                spots = form.cleaned_data["spots"]
+                election.add_position(new_position, spots)
             elif "Steng valget" in request.POST:
                 election.end_election()
                 return redirect("elections:admin_end_election")
@@ -74,10 +77,12 @@ def admin_register_candidates(request, pk):
         add_candidate_form = AddCandidateForm(request.POST or None)
         if request.method == "POST":
             if "Delete" in request.POST:
-                position.delete_candidates(request)
+                candidate_username = request.POST.get("Delete", "0")
+                position.delete_candidates(candidate_username)
             elif "addCandidate" in request.POST:
                 if add_candidate_form.is_valid():
-                    position.add_candidates(add_candidate_form)
+                    user = add_candidate_form.cleaned_data["user"]
+                    position.add_candidates(user)
             elif "startVoting" in request.POST:
                 if election.start_current_position_voting(position):
                     return redirect(

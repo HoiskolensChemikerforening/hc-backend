@@ -95,17 +95,16 @@ class CastVoteForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["candidates"].queryset = candidatesChoices(self.election)
 
-    def is_valid(self, request, election):
+    def is_valid(self, candidate_list, election):
+
         valid = super(CastVoteForm, self).is_valid()
         if not valid:
             return False
-        candidate_list = request.POST.getlist("candidates")
         if len(candidate_list) > election.current_position.spots:
             return False
         return True
 
-    def is_blank(self, request, election):
-        candidate_list = request.POST.getlist("candidates")
+    def is_blank(self, candidate_list):
         if len(candidate_list) == 0:
             return True
         return False

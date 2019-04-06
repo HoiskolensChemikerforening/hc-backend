@@ -37,9 +37,10 @@ def vote(request):
     form = CastVoteForm(request.POST or None, election=election)
     if request.method == "POST":
         user = request.user
-        if form.is_valid(request, election):
-            election.current_position.vote(form, user)
-        elif form.is_blank(request, election):
+        candidate_list = request.POST.getlist("candidates")
+        if form.is_valid(candidate_list, election):
+            election.current_position.vote(candidate_list, user)
+        elif form.is_blank(candidate_list):
             election.current_position.vote_blank(user)
         return redirect("elections:has_voted")
     cands = election.current_position.candidates.all().order_by("id")
