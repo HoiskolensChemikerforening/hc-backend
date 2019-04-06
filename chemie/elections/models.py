@@ -61,7 +61,7 @@ class Ticket(models.Model):
     )
     is_blank = models.BooleanField(default=False, verbose_name="Blank stemme")
     # TODO: legg til posiition for easier admin view
-    # position = models.ForeignKey('Position')
+    position = models.ForeignKey('Position', on_delete=models.CASCADE)
 
     @classmethod
     def create_ticket(cls, voted_candidates):
