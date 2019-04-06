@@ -208,7 +208,8 @@ def index_tabletshop(request):
     return context
 
 
-# TODO add permissions
+# TODO: Change this to a custom permission?
+@permission_required("shop.add_item")
 def admin(request):
     order_items = get_last_year_receipts()
     items = Item.objects.all()
@@ -279,9 +280,16 @@ def edit_item(request, pk):
     form = EditItemForm(
         request.POST or None, request.FILES or None, instance=item
     )
-    if request.POST:
+    if request.method == "POST":
         if form.is_valid():
             form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Varen ble endret.",
+                extra_tags="Endret!",
+            )
+            return redirect(reverse("shop:add-item"))
     context = {"form": form}
     return render(request, "shop/edit_item.html", context)
 
@@ -321,14 +329,15 @@ def activate_happyhour(request):
     except HappyHour.DoesNotExist:
         print("Ingen Happy Hour objekter eksisterer")
         return create_happyhour(request, form)
-    messages.add_message(
-        request,
-        messages.WARNING,
-        "Vi har en teknisk feil og vil prøve å rette opp i det",
-        extra_tags="Vennligst ta kontakt med Webkom",
-    )
-    context = {"form": form}
-    return render(request, "shop/happy-hour.html", context)
+    except:
+        messages.add_message(
+            request,
+            messages.WARNING,
+            "Vi har en teknisk feil og vil prøve å rette opp i det",
+            extra_tags="Vennligst ta kontakt med Webkom",
+        )
+        context = {"form": form}
+        return render(request, "shop/happy-hour.html", context)
 
 
 def create_happyhour(request, form):
