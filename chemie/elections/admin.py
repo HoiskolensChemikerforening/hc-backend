@@ -5,9 +5,15 @@ from .models import Candidate, Position, Election, Ticket
 admin.site.site_header = "Valg"
 admin.site.site_title = "Valg"
 
-
-admin.site.register(Candidate)
 admin.site.register(Election)
+
+
+@admin.register(Candidate)
+class CandidateAdmin(admin.ModelAdmin):
+    list_display = ["user", "get_position"]
+
+    def get_position(self, obj):
+        return "\n".join(obj.candidate_position.first().position_name)
 
 
 @admin.register(Ticket)
