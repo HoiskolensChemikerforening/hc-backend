@@ -8,11 +8,7 @@ admin.site.site_title = "Valg"
 
 @admin.register(Election)
 class ElectionAdmin(admin.ModelAdmin):
-    list_display = ["get_date", "is_open"]
-
-    def get_date(self, obj):
-        date = obj.date
-        return date
+    list_display = ["date", "is_open"]
 
 
 @admin.register(Candidate)
