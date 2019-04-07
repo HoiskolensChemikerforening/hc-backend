@@ -5,7 +5,14 @@ from .models import Candidate, Position, Election, Ticket
 admin.site.site_header = "Valg"
 admin.site.site_title = "Valg"
 
-admin.site.register(Election)
+
+@admin.register(Election)
+class ElectionAdmin(admin.ModelAdmin):
+    list_display = ["get_date", "is_open"]
+
+    def get_date(self, obj):
+        date = obj.date
+        return date
 
 
 @admin.register(Candidate)
