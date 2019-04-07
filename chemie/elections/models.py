@@ -51,6 +51,9 @@ class Candidate(models.Model):
     def __str__(self):
         return self.user.get_full_name()
 
+    def get_candidate_votes(self):
+        return self.votes + self.pre_votes
+
 
 class Ticket(models.Model):
     candidates = models.ManyToManyField(
