@@ -209,7 +209,7 @@ def index_tabletshop(request):
 
 
 # TODO: Change this to a custom permission?
-@permission_required("shop.add_item")
+@permission_required("customprofile.refill_balance")
 def admin(request):
     order_items = get_last_year_receipts()
     items = Item.objects.all()
