@@ -284,7 +284,8 @@ class Election(models.Model):
 
     def delete_position(self, position_id):
         position = self.positions.get(id=int(position_id))
-        position.delete_candidates(candidates=position.candidates.all())
+        for candidate in position.candidates.all():
+            position.delete_candidates(candidate_username=candidate.user.username)
         position.delete()
         self.save()
         return
