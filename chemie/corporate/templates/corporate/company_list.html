@@ -36,54 +36,63 @@
     <div class="col-sm-12 col-md-7 col-12">
       <div class="container">
         <br><br>
-        <h1>Bedrifter</h1>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                  data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-            Spesialiseringsretning
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Bioteknologi</a>
-            <a class="dropdown-item" href="#">Organisk kjemi</a>
-            <a class="dropdown-item" href="#">Anvendt teoretisk kjemi</a>
-            <a class="dropdown-item" href="#">Analytisk kjemi</a>
-            <a class="dropdown-item" href="#">Kjemisk prosessteknologi</a>
-            <a class="dropdown-item" href="#">Materialkjemi og energiteknologi</a>
+        <div class="row">
+          <div class="col center">
+            <h1>Bedrifter</h1>
+          </div>
+          <div class="col">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                Spesialiseringsretning
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Bioteknologi</a>
+                <a class="dropdown-item" href="#">Organisk kjemi</a>
+                <a class="dropdown-item" href="#">Anvendt teoretisk kjemi</a>
+                <a class="dropdown-item" href="#">Analytisk kjemi</a>
+                <a class="dropdown-item" href="#">Kjemisk prosessteknologi</a>
+                <a class="dropdown-item" href="#">Materialkjemi og energiteknologi</a>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <a class="btn btn-secondary" href="{% url "corporate:company_create" %}">
+              Legg til ny bedrift
+            </a>
           </div>
         </div>
-        <p>
-          Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
-          loooooooooooooooooooooooooooooooool
-        </p>
       </div>
+      <p>
+        Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
+        loooooooooooooooooooooooooooooooool
+      </p>
     </div>
   </div>
 
-
-<div class="row">
-  {% for company in companies %}
-  <div style="width: 22rem; height: 20rem; padding: 1.0rem;">
-    <div class="card medium">
-      <div class="card-image">
-        <a href="{% url "corporate:company_detail" company.id %}" class="stretched-link">
-        <img src="{{ company.logo.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
-        </a>
-        <a class="card-title card-event-title" href="{% url "corporate:company_detail" company.id %}">
-        <h5 style="font-size: 1.34rem;">{{ company.name }}</h5>
-        </a>
+  <div class="row">
+    {% for company in companies %}
+      <div style="width: 22rem; height: 20rem; padding: 1.0rem;">
+        <div class="card medium">
+          <div class="card-image">
+            <a href="{% url "corporate:company_detail" company.id %}" class="stretched-link">
+              <img src="{{ company.logo.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
+            </a>
+            <a class="card-title card-event-title" href="{% url "corporate:company_detail" company.id %}">
+              <h5 style="font-size: 1.34rem;">{{ company.name }}</h5>
+            </a>
+          </div>
+          <div class="card-content">
+            <p class="flow-text truncate">
+              {{ company.description }}
+            </p>
+          </div>
+        </div>
       </div>
-      <div class="card-content">
-        <p class="flow-text truncate">
-          {{ company.description }}
-        </p>
-      </div>
-    </div>
+    {% endfor %}
   </div>
-  {% endfor %}
 </div>
-</div>
-
 
 </body>
 </html>
