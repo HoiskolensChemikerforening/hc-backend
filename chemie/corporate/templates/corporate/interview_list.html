@@ -3,34 +3,42 @@
 
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>Intervjuer</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+  <meta charset="UTF-8">
+  <title>Intervjuer</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+          crossorigin="anonymous"></script>
 </head>
 <body>
 
 {% load static %}
 
 <nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="">
-    <img src="{% static "images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
-    HC
+  <a class="navbar-brand" href="/">
+    <img src="{% static " images/logo.png" %}" height="40" class="d-inline-block align-top" alt="">
+    <h5 style="display:inline; color:#edcd2f">Høiskolens Chemikerforening</h5>
   </a>
 </nav>
 
 <div class="container">
-  <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem;margin-left: -5rem;margin-right: -15rem">
+  <div class="row align-items-center"
+       style="margin-top: 2rem;margin-bottom: 2rem;margin-left: -5rem;margin-right: -15rem">
     <div class="col-sm-12 col-md-7 col-12">
       <div class="container">
         <br><br>
         <h1>Intervjuer</h1>
-          <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Intervjuer
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            Spesialiseringsretning
           </button>
           <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
             <a class="dropdown-item" href="#">Bioteknologi</a>
@@ -42,21 +50,22 @@
           </div>
         </div>
         <p>
-          Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt. loooooooooooooooooooooooooooooooool
+          Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
+          loooooooooooooooooooooooooooooooool
         </p>
       </div>
     </div>
   </div>
-<div class="row">
-  {% for interview in interviews %}
-  <div style="width: 22rem; height: 20; padding: 1.0rem;">
+  <div class="row">
+    {% for interview in interviews %}
+    <div style="width: 22rem; height: 20rem; padding: 1.0rem;">
       <div class="card medium">
         <div class="card-image">
           <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
-              <img src="{{ interview.picture.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;"
+          <img src="{{ interview.picture.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
           </a>
           <a class="card-title card-event-title" href="{% url "corporate:interview_detail" interview.id %}">
-            <h5 style="font-size: 1.34rem;">Intervju av {{ interview.name }}</h5>
+          <h5 style="font-size: 1.34rem;">Intervju av {{ interview.name }}</h5>
           </a>
         </div>
         <div class="card-content">
@@ -66,8 +75,8 @@
         </div>
       </div>
     </div>
-  {% endfor %}
-</div>
+    {% endfor %}
+  </div>
 </div>
 
 
