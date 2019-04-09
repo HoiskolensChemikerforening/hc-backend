@@ -20,18 +20,18 @@ def index(request):
     return render(request, "corporate/index.html", context)
 
 
-def interview(request):
+def interview_list(request):
     interviews = Interview.objects.order_by("id")
     context = {"interviews": interviews}
 
-    return render(request, "corporate/interview.html", context)
+    return render(request, "corporate/interview_list.html", context)
 
 
-def list_companies(request):
+def company_list(request):
     companies = Company.objects.order_by("id")
     context = {"companies": companies}
 
-    return render(request, "corporate/list_companies.html", context)
+    return render(request, "corporate/companies_list.html", context)
 
 
 def company_detail(request, pk):
@@ -40,7 +40,7 @@ def company_detail(request, pk):
     return render(request, "corporate/company_detail.html", context)
 
 
-def create_company(request):
+def company_create(request):
     form = CreateCompanyForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
@@ -50,7 +50,7 @@ def create_company(request):
     return render(request, "corporate/company_create.html", context)
 
 
-def create_interview(request):
+def interview_create(request):
     form = CreateInterviewForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
@@ -60,8 +60,8 @@ def create_interview(request):
     return render(request, "corporate/interview_create.html", context)
 
 
-def interview_index(request, interview_id):
+def interview_detail(request, interview_id):
     this_interview = get_object_or_404(Interview, id=interview_id)
     context = {"interview": this_interview}
-    return render(request, "corporate/interview_index.html", context)
+    return render(request, "corporate/interview_detail.html", context)
 
