@@ -22,11 +22,9 @@
   </a>
 </nav>
 
-<div class="container-fluid" @media min-width: 1000px  max-width: 991.98px>
+<div class="container">
   <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem;margin-left: -5rem;margin-right: -15rem">
-    <div class="col-sm-12 col-md-2">
-    </div>
-    <div class="col-sm-12 col-md-7">
+    <div class="col-sm-12 col-md-7 col-12">
       <div class="container">
         <br><br>
         <h1>Intervjuer</h1>
@@ -49,18 +47,13 @@
       </div>
     </div>
   </div>
-</div>
-
-<div class="row">
+  <div class="row">
   {% for interview in interviews %}
-    <div class="col s12 m10 l6">
+    <div style="width: 22rem; height: 20; padding: 1.0rem;">
       <div class="card medium">
         <div class="card-image">
           <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
               <img src="{{ interview.picture.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
-            <!--{% thumbnail interview.image "630x400" crop="center" as im %}
-              <img src="{{ im.url }}">
-            {% endthumbnail %}-->
           </a>
           <a class="card-title card-event-title" href="{% url "corporate:interview_detail" interview.id %}">
             <h5 style="font-size: 1.34rem;">Intervju av {{ interview.name }}</h5>
@@ -75,8 +68,6 @@
     </div>
   {% endfor %}
 </div>
-
-
-
+</div>
 </body>
 </html>
