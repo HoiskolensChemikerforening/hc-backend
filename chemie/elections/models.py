@@ -1,8 +1,5 @@
-import datetime
-
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models.query import QuerySet
 from django.core.exceptions import ObjectDoesNotExist
 from chemie.customprofile.models import Profile
 from django.shortcuts import redirect
@@ -86,7 +83,7 @@ class Position(models.Model):
         default=1, verbose_name="Antall plasser"
     )
     number_of_prevote_tickets = models.PositiveSmallIntegerField(
-        default=0, verbose_name="Antall personer som har forhåndstemt"
+        default=0, verbose_name="Antall personer som har forhåndsstemt"
     )
     is_active = models.BooleanField(  # Brukere kan gå inn og stemme på denne posisjonen
         default=False, verbose_name="Er valget åpent"

@@ -1,67 +1,61 @@
 {% extends 'chemie/base_election.html' %}
-<!--context = {
-            'candidates': candidates,
-            'form': form,
-            'position': position,
-            'search_user': search_user
-        }-->
-
 {% load thumbnail %}
 {% load static %}
 
 {% block content %}
-<div>
+  <div>
     <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-            <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
-                    style="color:#edcd2f">Admin</a></li>
-            <li class="breadcrumb-item "><a href="{%url "elections:admin_register_candidates" pk=position.id%}"
-                    style="color:#edcd2f">Register kandidater</a></li>
-            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndstemmer</li>
-        </ol>
+      <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
+                                        style="color:#edcd2f">Admin</a></li>
+        <li class="breadcrumb-item "><a href="{% url "elections:admin_register_candidates" pk=position.id %}"
+                                        style="color:#edcd2f">Registrer kandidater</a></li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndsstemmer</li>
+      </ol>
     </nav>
     <!--Tittel på posisjon-->
     <div class="d-flex flex-column">
-        <div class="p-2" style="text-align:center">
-            <h3 class="title is-4"> Legg til forhåndstemmer</h3>
-        </div>
-        <div style="margin-left:30%; margin-right: 30%">
-            <p>
-                Legg til totalt antall forhåndstemmer for hver kandidatet og under legger du inn hvor mange personer som
-                har forholdstemt
-            </p>
-        </div>
+      <div class="p-2" style="text-align:center">
+        <h3 class="title is-4"> Legg til forhåndsstemmer</h3>
+      </div>
+      <div style="margin-left:30%; margin-right: 30%">
+        <p>
+          Legg til totalt antall forhåndsstemmer for hver kandidat. Under legger du inn hvor mange personer som
+          har forhåndsstemt.
+        </p>
+      </div>
 
+      <!--Kandidater-->
+      <div class="p-2" style="margin-left:20%">
+        <form method="POST">{% csrf_token %}
+          {{ candidate_formset.management_form }}
+          <div style="border-style:solid; padding:1rem; border-radius: 1rem; margin-right: 20%">
+            <table class="responsive-table">
+              <tr>
+                <th style="padding-right:15rem;"></th>
+                <th></th>
+              </tr>
+              {% for candidate_form in candidate_formset %}
+                <tr>
+                  {{ candidate_form.as_table }}
+                </tr>
+              {% endfor %}
+            </table>
+          </div>
 
-        <!--Kandidater-->
-        <div class="p-2" style="margin-left:20%">
-            <form method="POST">{% csrf_token %}
-                {{ candidate_formset.management_form }}
-                <div style="border-style:solid; padding:1rem; border-radius: 1rem; margin-right: 20%">
-                    <!-- TODO  move the input field to the right in the div-->
-                    {% for candidate_form in candidate_formset %}
-                    <div class="d-flex" style="margin-top:0.5rem" id="inputFormDiv">
-                        {{candidate_form}}
-                    </div>
-                    {% endfor %}
-                </div>
-
-                <div style="margin-top:2rem">
-                    {{ prevote_form }}
-                </div>
-                <div>
-                    <input class="btn btn-secondary" type="submit" value="Legg inn forhåndsstemmer!"></input>
-                </div>
-            </form>
-        </div>
+          <div style="margin-top:2rem">
+            <table>
+              {% for field in prevote_form %}
+                {{ field.label }}:
+                <p>{{ field }}</p>
+              {% endfor %}
+            </table>
+          </div>
+          <div>
+            <input class="btn btn-secondary" type="submit" value="Legg inn forhåndsstemmer!">
+          </div>
+        </form>
+      </div>
     </div>
-</div>
+  </div>
 {% endblock content %}
-
-{% block footer_script%}
-<script>
-    var inputsField = document.getElementById("inputFormDiv")
-    var childDiv = inputsField.childNodes()
-
-</script>
-{% endblock footer_script %}
