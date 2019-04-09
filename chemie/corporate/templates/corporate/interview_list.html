@@ -29,52 +29,63 @@
 </nav>
 
 <div class="container">
-  <div class="row align-items-center"
-       style="margin-top: 2rem;margin-bottom: 2rem;margin-left: -5rem;margin-right: -15rem">
+  <div class="row align-items-center" style="margin:2rem -15rem 2rem -5rem;">
     <div class="col-sm-12 col-md-7 col-12">
       <div class="container">
         <br><br>
-        <h1>Intervjuer</h1>
-        <div class="dropdown">
-          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-            Spesialiseringsretning
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="#">Bioteknologi</a>
-            <a class="dropdown-item" href="#">Organisk kjemi</a>
-            <a class="dropdown-item" href="#">Anvendt teoretisk kjemi</a>
-            <a class="dropdown-item" href="#">Analytisk kjemi</a>
-            <a class="dropdown-item" href="#">Kjemisk prosessteknologi</a>
-            <a class="dropdown-item" href="#">Materialkjemi og energiteknologi</a>
+        <div class="row">
+          <div class="col center">
+            <h1>Intervjuer</h1>
           </div>
+          <div class="col center">
+            <div class="dropdown">
+              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                      data-toggle="dropdown"
+                      aria-haspopup="true" aria-expanded="false">
+                Spesialiseringsretning
+              </button>
+              <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" href="#">Bioteknologi</a>
+                <a class="dropdown-item" href="#">Organisk kjemi</a>
+                <a class="dropdown-item" href="#">Anvendt teoretisk kjemi</a>
+                <a class="dropdown-item" href="#">Analytisk kjemi</a>
+                <a class="dropdown-item" href="#">Kjemisk prosessteknologi</a>
+                <a class="dropdown-item" href="#">Materialkjemi og energiteknologi</a>
+              </div>
+            </div>
+          </div>
+          <dic class="col center">
+            <a class="btn btn-secondary" href="{% url "corporate:interview_create" %}">
+              Lag nytt intervju
+            </a>
+          </dic>
         </div>
         <p>
-          Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
-          loooooooooooooooooooooooooooooooool
+          Les om spennende intervjuer og la deg inspirere av kjemikere fra hele verden!
         </p>
       </div>
     </div>
   </div>
+
   <div class="row">
     {% for interview in interviews %}
-    <div style="width: 22rem; height: 20rem; padding: 1.0rem;">
-      <div class="card medium">
-        <div class="card-image">
-          <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
-          <img src="{{ interview.picture.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
-          </a>
-          <a class="card-title card-event-title" href="{% url "corporate:interview_detail" interview.id %}">
-          <h5 style="font-size: 1.34rem;">Intervju av {{ interview.name }}</h5>
-          </a>
-        </div>
-        <div class="card-content">
-          <p class="flow-text truncate">
-            {{ interview.name }}
-          </p>
+      <div style="width: 22rem; height: 20rem; padding: 1.0rem;">
+        <div class="card medium">
+          <div class="card-image">
+            <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
+              <img src="{{ interview.picture.url }}" class="card-img-top" style="max-height: 250px; object-fit: cover;">
+            </a>
+            <a class="card-title card-event-title" href="{% url "corporate:interview_detail" interview.id %}">
+              <h5 style="font-size: 1.34rem;">{{ interview.name }}</h5>
+            </a>
+          </div>
+          <div class="card-content">
+            <p class="flow-text truncate">
+              {{ interview.name }}
+            </p>
+          </div>
         </div>
       </div>
-    </div>
     {% endfor %}
   </div>
 </div>
