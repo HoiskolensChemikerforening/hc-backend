@@ -41,7 +41,7 @@
       <div class="card">
         <img src="{{ interview.company.logo.url }}" class="card-img-top" alt="...">
         <div class="card-body">
-          <a href="{{ Interview.get_absolute_url }}"><h4 class="card-title"> {{ interview.company }}</h4></a>
+          <a href="{% url "corporate:company_detail" interview.company.pk %}"><h4 class="card-title"> {{ interview.company }}</h4></a>
           <p class="card-text">
               <hr>
             Her kan vi skrive mer info.
