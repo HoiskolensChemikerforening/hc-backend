@@ -1,0 +1,113 @@
+{% load static %}
+{% load thumbnail %}
+{% load chemie_tags %}
+{% load cache %}
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>Bedrifter</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+          crossorigin="anonymous"></script>
+
+   <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  {% block extra_js %}
+  {% endblock %}
+
+  <style>
+    {% block style %}
+    {% endblock style %}
+  </style>
+
+  {% block header %}
+  {% endblock header %}
+  <meta name="theme-color" content="#3C91E6">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#3C91E6">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<nav class="navbar navbar-dark bg-dark">
+  <a class="navbar-brand" href="">
+    <img src="{% static "images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
+    Høiskolens Chemikerforening
+  </a>
+</nav>
+
+
+<body>
+
+<main>
+  <div class="section no-pad-bot" id="index-banner">
+    <div class="container">
+
+      <!-- Messaging framework card -->
+      {% if messages %}
+        <div class="row">
+          {% for message in messages %}
+            <div class="col s12 m6 l6">
+              <div class="card {{ message.level_tag }}-message darken-1 message-card">
+                <div class="card-content">
+                  <span class="card-title black-text valign-wrapper" style="clear: both;">
+
+                      <h5><i class="material-icons black-text"
+                             style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+                  </span>
+                  <p class="flow-text black-text">{{ message }}</p>
+                </div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      {% endif %}
+
+      <!-- Main content -->
+      {% block content %}
+      {% endblock content %}
+      <br><br>
+      <br><br>
+    </div>
+  </div>
+</main>
+
+
+{% block footer_js_files %}
+{% endblock footer_js_files %}
+
+{% block footer_script %}
+{% endblock footer_script %}
+
+
+<script>
+    (function (i, s, o, g, r, a, m) {
+        i['GoogleAnalyticsObject'] = r;
+        i[r] = i[r] || function () {
+                (i[r].q = i[r].q || []).push(arguments)
+            }, i[r].l = 1 * new Date();
+        a = s.createElement(o),
+            m = s.getElementsByTagName(o)[0];
+        a.async = 1;
+        a.src = g;
+        m.parentNode.insertBefore(a, m)
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+    ga('create', 'UA-52614731-1', 'auto');
+    ga('send', 'pageview');
+</script>
+
+</body>
+</html>
