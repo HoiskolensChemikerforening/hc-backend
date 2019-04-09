@@ -31,7 +31,7 @@ def company_list(request):
     companies = Company.objects.order_by("id")
     context = {"companies": companies}
 
-    return render(request, "corporate/companies_list.html", context)
+    return render(request, "corporate/company_list.html", context)
 
 
 def company_detail(request, pk):
