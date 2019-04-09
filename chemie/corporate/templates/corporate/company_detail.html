@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+{% load thumbnail %}
+
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Bedrifter</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+          crossorigin="anonymous"></script>
+</head>
+<body>
+
+{% load static %}
+
+<nav class="navbar navbar-light bg-dark">
+  <a class="navbar-brand" href="/">
+
+    <img src="{% static 'images/logo.png' %}" height="40" class="d-inline-block align-top" alt="">
+    <h5 style="display:inline; color:#edcd2f">Høiskolens Chemikerforening</h5>
+  </a>
+
+</nav>
+
+
+<div class="row">
+  <div class="col s6 m6 l4">
+    <div class="card" style="margin:10px; max-width:25rem;">
+      <div class="card-header">
+        <h4>{{ company.name }}</h4>
+      </div>
+      <div class="card-body">
+        <a href="#">
+          {% thumbnail company.logo "200x200" crop="center" as im %}
+            <img src="{{ im.url }}">
+          {% endthumbnail %}
+        </a>
+        <p>{{ company.description }}</p>
+        {{ company.specializations }}
+        <ul>
+          {% for linje in company.specializations %}
+            <li>{{ linje }}</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+</body>
+</html>

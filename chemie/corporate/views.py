@@ -34,6 +34,12 @@ def list_companies(request):
     return render(request, "corporate/list_companies.html", context)
 
 
+def company_detail(request, pk):
+    company = get_object_or_404(Company, pk=pk)
+    context = {"company": company}
+    return render(request, "corporate/company_detail.html", context)
+
+
 def create_company(request):
     form = CreateCompanyForm(request.POST or None, request.FILES or None)
     if form.is_valid():
