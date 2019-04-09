@@ -54,7 +54,7 @@ def interview_create(request):
     form = CreateInterviewForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
-        return redirect(reverse("corporate:interview_list"))
+        return redirect(reverse("corporate:interview"))
 
     context = {"form": form}
     return render(request, "corporate/interview_create.html", context)

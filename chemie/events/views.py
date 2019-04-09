@@ -216,7 +216,9 @@ class ViewSocialDetailsView(DetailView):
         confirmed = attendees.filter(
             event=self.object, status=REGISTRATION_STATUS.CONFIRMED
         )
-        waiting = attendees.filter(event=self.object, status=REGISTRATION_STATUS.WAITING).order_by('id')
+        waiting = attendees.filter(
+            event=self.object, status=REGISTRATION_STATUS.WAITING
+        )
         context.update({"attendees": confirmed, "waiting_list": waiting})
         return context
 
