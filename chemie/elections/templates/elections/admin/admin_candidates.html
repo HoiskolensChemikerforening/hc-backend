@@ -79,13 +79,14 @@ margin-right: 0.2rem;
     </div>
 
     <div class="d-flex flex-wrap">
-        {%for candidate in candidates%}
+
+        {% for candidate in candidates %}
         <div class="p-2"
             style="text-align:center; border-style: solid; border-radius: 1rem; margin:1rem; border-color:#343a40">
             <div class="p-2" style="height:100%">
                 <div class="d-flex flex-column"></div>
                 <div class="p-2" style="height:80%">
-                    <img src="{{candidate.user.profile.image_primary.url}}" style="max-width:6rem">
+                    <img src="{{candidate.image_url}}" style="max-width:6rem">
 
                     <p class="p-2">
                         {{candidate}}
