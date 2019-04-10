@@ -1,16 +1,9 @@
-from django.contrib import messages
-from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import ObjectDoesNotExist
-from django.forms import modelformset_factory
-from django.shortcuts import get_object_or_404, render
-from django.shortcuts import redirect, reverse
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+from django.shortcuts import redirect
 
-from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, User, Profile
-from .forms import AddPositionForm, AddCandidateForm, CastVoteForm
-from .forms import AddPrevoteForm, AddPreVoteToCandidateForm
-from .models import Election, Position, Candidate
-from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
+from .forms import CastVoteForm
+from .models import Election
 
 
 @login_required

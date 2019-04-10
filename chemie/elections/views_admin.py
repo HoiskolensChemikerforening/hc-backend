@@ -1,16 +1,14 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.core.exceptions import ObjectDoesNotExist
 from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect, reverse
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, User, Profile
-from .forms import AddPositionForm, AddCandidateForm, CastVoteForm
+from chemie.customprofile.models import ProfileManager, Profile
+from .forms import AddPositionForm, AddCandidateForm
 from .forms import AddPrevoteForm, AddPreVoteToCandidateForm
 from .models import Election, Position, Candidate
-from .models import VOTES_REQUIRED_FOR_VALID_ELECTION
 
 
 @permission_required("elections.add_election")
@@ -44,7 +42,7 @@ def admin_register_positions(request):
         form = AddPositionForm(request.POST or None)
 
         if request.method == "POST":
-            # Selve formen fr registrering av posisjon
+            # Selve formen for registrering av posisjon
 
             if form.is_valid():
                 new_position = form.cleaned_data["position_name"]
