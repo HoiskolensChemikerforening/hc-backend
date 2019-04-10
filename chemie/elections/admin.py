@@ -16,7 +16,7 @@ class CandidateAdmin(admin.ModelAdmin):
     list_display = ["user", "get_position"]
 
     def get_position(self, obj):
-        return "\n".join(obj.candidate_position.first().position_name)
+        return obj.candidate_position.first().position_name
 
 
 @admin.register(Ticket)
@@ -26,7 +26,7 @@ class TicketAdmin(admin.ModelAdmin):
     def get_candidates(self, obj):
         return "\n".join(
             [
-                candidate.user.get_full_name() + ","
+                f"{candidate.user.get_full_name()},"
                 for candidate in obj.candidates.all()
             ]
         )
@@ -48,16 +48,13 @@ class PositionAdmin(admin.ModelAdmin):
     def get_candidates_votes(self, obj):
         return "\n".join(
             [
-                candidate.user.get_full_name()
-                + ": "
-                + str(candidate.get_candidate_votes())
-                + ","
+                f"{candidate.user.get_full_name()}: {candidate.get_candidate_votes()},"
                 for candidate in obj.candidates.all()
             ]
         )
 
     def blank_votes(self, obj):
-        return "\n".join(str(obj.get_blank_votes()))
+        return str(obj.get_blank_votes())
 
     def total_votes(self, obj):
-        return "\n".join(str(obj.get_total_votes()))
+        return str(obj.get_total_votes())
