@@ -149,48 +149,48 @@
         <table id="myTable" class="tablesorter">
             <thead>
                 <tr>
-                    <th>Verv</th>
-                    <th>Kandidat</th>
-                    <th>Forhaandstemmer</th>
-                    <th>Avgitte stemmer</th>
-                    <th>Totale stemmer</th>
+                    <td>Verv</td>
+                    <td>Kandidat</td>
+                    <td>Forhaandstemmer</td>
+                    <td>Avgitte stemmer</td>
+                    <td>Totale stemmer</td>
                 </tr>
             </thead>
 
             <tbody>
                 {% for position in positions %}
                 <tr>
-                    <th>{{position.position_name}}</th>
-                    <th>Totale stemmer</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>
+                    <td>{{position.position_name}}</td>
+                    <td>Totale stemmer</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
                         <p id="total-votes-{{position.id}}">
                             -
                         </p>
-                    </th>
+                    </td>
                 </tr>
                 <tr>
-                    <th>{{position.position_name}}</th>
-                    <th>Blanke stemmer</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>
+                    <td>{{position.position_name}}</td>
+                    <td>Blanke stemmer</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
                         <p id="blank-votes-{{position.id}}">
                             -
                         </p>
-                    </th>
+                    </td>
                 </tr>
                 <tr>
-                    <th>{{position.position_name}}</th>
-                    <th>Antall personer stemt</th>
-                    <th>-</th>
-                    <th>-</th>
-                    <th>
+                    <td>{{position.position_name}}</td>
+                    <td>Antall personer stemt</td>
+                    <td>-</td>
+                    <td>-</td>
+                    <td>
                         <p id="number-voters-{{position.id}}">
 
                         </p>
-                    </th>
+                    </td>
                 </tr>
                 <script type="text/javascript">
                     var posID = "{{ position.id }}"
@@ -201,15 +201,15 @@
                 </script>
                 {%for candidate in position.candidates.all%}
                 <tr>
-                    <th>{{position.position_name}}</th>
-                    <th>{{candidate}}</th>
-                    <th>{{candidate.pre_votes}}</th>
-                    <th>{{candidate.votes}}</th>
-                    <th>
+                    <td>{{position.position_name}}</td>
+                    <td>{{candidate}}</td>
+                    <td>{{candidate.pre_votes}}</td>
+                    <td>{{candidate.votes}}</td>
+                    <td>
                         <p id="candidate-total-votes-{{candidate.id}}">
                             -
                         </p>
-                    </th>
+                    </td>
                     <script type="text/javascript">
                         var candPreVotes = parseInt("{{ candidate.pre_votes }}")
                         var candVotes = parseInt("{{ candidate.votes }}")
