@@ -31,6 +31,20 @@ class AddPrevoteForm(forms.ModelForm):
         model = Position
         fields = ["number_of_prevote_tickets"]
 
+    def prevotes_allowed(self, formset, position):
+        """
+        Check that there is not more pre_votes that is feasable for current postion
+        with respect to how many peoples that have been prevoted
+        """
+
+        n_prevoters = self.cleaned_data["number_of_prevote_tickets"]
+        total_prevoters = 0
+        for form in formset:
+            total_prevoters += form.cleaned_data["pre_votes"]
+        if total_prevoters / position.spots > n_prevoters:
+            return False
+        return True
+
 
 class AddPreVoteToCandidateForm(forms.ModelForm):
     class Meta:

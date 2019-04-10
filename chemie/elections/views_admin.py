@@ -120,6 +120,7 @@ def admin_register_prevotes(request, pk):
         )
         if request.method == "POST":
             if formset.is_valid() and prevote_form.is_valid():
+                if prevote_form.prevotes_allowed(formset, position):
                 prevote_form.save()
                 for form in formset:
                     form.save()
@@ -129,6 +130,12 @@ def admin_register_prevotes(request, pk):
                         kwargs={"pk": position.id},
                     )
                 )
+                else:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        "For mange stemmer på kandidatene enn det som er mulig med antall personer som har forhåndstemt",
+                    )
         context = {
             "prevote_form": prevote_form,
             "candidate_formset": formset,

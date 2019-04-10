@@ -13,6 +13,16 @@
         <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndsstemmer</li>
       </ol>
     </nav>
+
+    {% if messages %}
+    {% for message in messages %}
+    <article class="message is-{{ message.level_tag }}">
+      <div class="alert alert-info" style="text-align:center">
+        {{ message }}
+      </div>
+    </article>
+    {% endfor %}
+    {% endif %}
     <!--Tittel på posisjon-->
     <div class="d-flex flex-column">
       <div class="p-2" style="text-align:center">
