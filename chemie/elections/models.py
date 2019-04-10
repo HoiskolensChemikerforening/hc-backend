@@ -137,7 +137,7 @@ class Position(models.Model):
             self.candidates.add(candidate)
             self.save()
 
-    def delete_candidates(self, candidate_username):
+    def delete_candidate(self, candidate_username):
         candidate_user_object = User.objects.get(username=candidate_username)
         all_candidates = self.candidates.all()
 
@@ -300,7 +300,7 @@ class Election(models.Model):
 
             if election.current_position_is_active():
                 pk = election.current_position.id
-                return True, redirect("elections:voting_active", pk=pk)
+                return True, redirect("elections:admin_voting_active", pk=pk)
 
             return False, None
 
@@ -321,7 +321,7 @@ class Election(models.Model):
         position = self.positions.get(id=int(position_id))
 
         for candidate in position.candidates.all():
-            position.delete_candidates(
+            position.delete_candidate(
                 candidate_username=candidate.user.username
             )
 
@@ -329,12 +329,13 @@ class Election(models.Model):
         self.save()
         return
 
-    def start_current_position_voting(self, position):
+    def start_current_position_voting(self, position_id):
+        position = Position.objects.get(id=position_id)
         # Find candidates running for current position
         candidates = position.candidates.all()
 
         if len(candidates) <= 0:
-            return False
+            return
         else:
             Profile.objects.filter(voted=True).update(voted=False)
             # forhindrer at vi ikke resetter votes ved refresh page
@@ -343,7 +344,7 @@ class Election(models.Model):
             self.current_position.is_active = True
             self.current_position.save()
             self.save()
-            return True
+            return
 
     def end_current_position_voting(self):
         self.current_position.is_active = False

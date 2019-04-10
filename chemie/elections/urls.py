@@ -22,7 +22,7 @@ admin_urlpatterns = [
         name="admin_register_positions",
     ),
     url(
-        r"^admin/register/delete/(?P<pk>\d+)/$",
+        r"^admin/register/delete/$",
         views_admin.admin_delete_position,
         name="admin_delete_position",
     ),
@@ -32,12 +32,22 @@ admin_urlpatterns = [
         name="admin_register_candidates",
     ),
     url(
+        r"^admin/register/(?P<pk>\d+)/start$",
+        views_admin.admin_start_voting,
+        name="admin_start_voting",
+    ),
+    url(
+        r"^admin/register/(?P<pk>\d+)/delete/$",
+        views_admin.admin_delete_candidate,
+        name="admin_delete_candidate",
+    ),
+    url(
         r"^admin/register/(?P<pk>\d+)/prevotes/$",
         views_admin.admin_register_prevotes,
         name="admin_register_prevotes",
     ),
     url(
-        r"^admin/register/(?P<pk>\d+)/start",
+        r"^admin/register/(?P<pk>\d+)/active",
         views_admin.admin_voting_is_active,
         name="admin_voting_active",
     ),

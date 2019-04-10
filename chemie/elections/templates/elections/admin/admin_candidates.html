@@ -40,7 +40,7 @@ margin-right: 0.2rem;
                     style="color:#edcd2f">Admin</a></li>
             <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
             <div style="position:absolute; right:3rem; top:3rem">
-                <form method="post" href="#" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
+                <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
                     <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
                         valget</button>
                 </form>
@@ -91,7 +91,7 @@ margin-right: 0.2rem;
                     </p>
                 </div>
 
-                <form class="mt-auto p-2" method="post" href="#" ; style="float:bottom;">{% csrf_token %}
+                <form class="mt-auto p-2" method="post" action="delete/" ; style="float:bottom;">{% csrf_token %}
                     <button class="btn btn-danger" type="submit" name="Delete"
                         value="{{ candidate.user.username }}">Slett</button>
                 </form>
