@@ -52,11 +52,6 @@ class EndElectionForm(forms.ModelForm):
     pass
 
 
-#     class Meta:
-#         model = Election
-#         fields = ["current_position_is_open"]
-
-
 def candidatesChoices(election=None):
     try:
         position = election.current_position
@@ -69,18 +64,15 @@ def candidatesChoices(election=None):
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         name = mark_safe(
-            "<p class='vote-name p-2'>%s %s </p>"
-            % (obj.user.first_name, obj.user.last_name)
+            f"<p class='vote-name p-2'>{obj.user.first_name} {obj.user.last_name} </p>"
         )
         try:
             image = mark_safe(
-                "<img src='%s' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
-                % obj.user.profile.image_primary.url
+                f"<img src='{obj.user.profile.image_primary.url}' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
             )
         except:
             image = mark_safe(
-                "<img src='%s' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
-                % "/static/images/blank_avatar.png"
+                "<img src='/static/images/blank_avatar.png' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
             )
         return image + name
 
