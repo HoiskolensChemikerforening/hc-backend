@@ -22,6 +22,11 @@ admin_urlpatterns = [
         name="admin_register_positions",
     ),
     url(
+        r"^admin/register/delete/(?P<pk>\d+)/$",
+        views_admin.admin_delete_position,
+        name="admin_delete_position",
+    ),
+    url(
         r"^admin/register/(?P<pk>\d+)/$",
         views_admin.admin_register_candidates,
         name="admin_register_candidates",

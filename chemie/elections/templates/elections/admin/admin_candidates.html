@@ -32,7 +32,7 @@ margin-right: 0.2rem;
 }
 {% endblock style %}
 
-{%block content%}
+{% block content %}
 <div>
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
@@ -41,7 +41,7 @@ margin-right: 0.2rem;
             <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
             <div style="position:absolute; right:3rem; top:3rem">
                 <form method="post" href="#" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
-                    <button class="btn btn-success" type="submit" name="startVoting" value="{{position.id}}" }}>Start
+                    <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
                         valget</button>
                 </form>
             </div>
@@ -54,10 +54,6 @@ margin-right: 0.2rem;
         </div>
     </div>
 
-
-
-
-
     <!--Søkefelt for brukere-->
     <div>
         <div style="margin:2rem">
@@ -66,7 +62,7 @@ margin-right: 0.2rem;
                 <input type="submit" class="btn btn-secondary" name="addCandidate" value="Legg til kandidat"
                     height="10px" />
             </form>
-            {%if position.is_done%}
+            {% if position.is_done %}
             <div class="div-container">
                 <h2 class="title is-3"> Dette valget har alt blitt gjennomført*</h2>
                 <p>*Hvis det skal gjøres gjenvalg på delte vinnerplasser, så lag en ny posisjon</p>
@@ -74,7 +70,7 @@ margin-right: 0.2rem;
                     Opprett et ny posisjon som heter Festslaver-gjennvalg med 1 plass og to kandidater
                 </p>
             </div>
-            {%endif%}
+            {% endif %}
         </div>
     </div>
 
@@ -86,25 +82,22 @@ margin-right: 0.2rem;
             <div class="p-2" style="height:100%">
                 <div class="d-flex flex-column"></div>
                 <div class="p-2" style="height:80%">
-                    <img src="{{candidate.image_url}}" style="max-width:6rem">
+                    <img src="{{ candidate.image_url }}" style="max-width:6rem">
 
                     <p class="p-2">
-                        {{candidate}}
+                        {{ candidate }}
                         <br>
-                        <b>{{candidate.pre_votes}}</b> forhåndstemmer
+                        <b>{{ candidate.pre_votes }}</b> forhåndstemmer
                     </p>
                 </div>
 
                 <form class="mt-auto p-2" method="post" href="#" ; style="float:bottom;">{% csrf_token %}
                     <button class="btn btn-danger" type="submit" name="Delete"
-                        value="{{candidate.user.username}}">Slett</button>
+                        value="{{ candidate.user.username }}">Slett</button>
                 </form>
-
             </div>
-
-
         </div>
-        {%endfor%}
+        {% endfor %}
     </div>
     {% if candidates %}
     <div style="margin:2rem">
@@ -112,11 +105,7 @@ margin-right: 0.2rem;
             <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
         </a>
     </div>
-
     {% endif %}
-
-
-</div>
 </div>
 {% endblock content %}
 

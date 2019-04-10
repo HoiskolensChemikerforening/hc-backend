@@ -27,12 +27,9 @@ border-radius:0rem
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
             <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
-            <form method="POST" onsubmit="return confirm('Stenge valget og lagre resultater?')" href="" name="close">
-                {% csrf_token %}
-                <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem" name="Steng valget">Steng
+                <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem" id="closeElectionButton">Steng
                     valget og lagre
                     resultater</button>
-            </form>
 
         </ol>
 
@@ -61,7 +58,7 @@ border-radius:0rem
                                 <h5>{{position.position_name}}: <b>{{position.spots}}</b> plass(er)</h3>
                             </div>
                             <div class="ml-auto p-2">
-                                <form onsubmit="return submitDelete(this)" method="POST" href="#"
+                                <form onsubmit="return submitDelete(this)" method="POST" action="{% url 'elections:admin_delete_position' pk=position.id %}"
                                     name="{{position.position_name}}">
                                     {% csrf_token %}
                                     <button class="btn btn-danger" type="submit" name="Delete"
@@ -141,11 +138,12 @@ border-radius:0rem
 
 {% block footer_script%}
 <script>
-    function ConfirmAvsluttValg() {
+    document.getElementById("closeElectionButton").onclick = function () {
         if (window.confirm('Avslutte valget?')) {
-            // TODO fix this %&#¤¤% black formatting which "#¤/ does not allow to have reverse urls in JS
+            location.href = "{% url 'elections:admin_end_election'%}";
         }
-    }
+    };
+
     function submitDelete(el) {
         var posName = el.name.toString();
         var message = "Du sletter nå posisjon " + posName;
@@ -156,6 +154,7 @@ border-radius:0rem
             return false
         }
     }
+
 </script>
 
 {% endblock footer_script %}

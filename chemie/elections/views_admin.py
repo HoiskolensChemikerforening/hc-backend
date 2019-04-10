@@ -39,18 +39,11 @@ def admin_register_positions(request):
         election = Election.get_latest_election()
         form = AddPositionForm(request.POST or None)
         if request.method == "POST":
-            if "Delete" in request.POST:  # delete posisjon
-                position_id = request.POST.get("Delete", "0")
-                election.delete_position(position_id)
-                form = AddPositionForm(None)
             # Selve formen fr registrering av posisjon
-            elif form.is_valid():
+            if form.is_valid():
                 new_position = form.cleaned_data["position_name"]
                 spots = form.cleaned_data["spots"]
                 election.add_position(new_position, spots)
-            elif "Steng valget" in request.POST:
-                election.end_election()
-                return redirect("elections:admin_end_election")
         done_positions = election.positions.filter(is_done=True).order_by(
             "position_name"
         )
@@ -63,6 +56,14 @@ def admin_register_positions(request):
             "not_done_positions": not_done_positions,
         }
         return render(request, "elections/admin/admin_positions.html", context)
+
+@permission_required("elections.add_election")
+@login_required
+def admin_delete_position(request, pk):
+    position_id = request.POST.get("Delete", "0")
+    election = Election.get_latest_election()
+    election.delete_position(position_id)
+    return redirect("elections:admin_register_positions")
 
 
 @permission_required("elections.add_election")
@@ -79,11 +80,11 @@ def admin_register_candidates(request, pk):
             if "Delete" in request.POST:
                 candidate_username = request.POST.get("Delete", "0")
                 position.delete_candidates(candidate_username)
-            elif "addCandidate" in request.POST:
+            if "addCandidate" in request.POST:
                 if add_candidate_form.is_valid():
                     user = add_candidate_form.cleaned_data["user"]
                     position.add_candidates(user)
-            elif "startVoting" in request.POST:
+            if "startVoting" in request.POST:
                 if election.start_current_position_voting(position):
                     return redirect(
                         "elections:admin_voting_active", pk=position.id
@@ -95,6 +96,7 @@ def admin_register_candidates(request, pk):
             "add_candidate_form": add_candidate_form,
         }
         return render(request, "elections/admin/admin_candidates.html", context)
+
 
 
 @permission_required("elections.add_election")
@@ -121,15 +123,15 @@ def admin_register_prevotes(request, pk):
         if request.method == "POST":
             if formset.is_valid() and prevote_form.is_valid():
                 if prevote_form.prevotes_allowed(formset, position):
-                prevote_form.save()
-                for form in formset:
-                    form.save()
-                return redirect(
-                    reverse(
-                        "elections:admin_register_candidates",
-                        kwargs={"pk": position.id},
+                    prevote_form.save()
+                    for form in formset:
+                        form.save()
+                    return redirect(
+                        reverse(
+                            "elections:admin_register_candidates",
+                            kwargs={"pk": position.id},
+                        )
                     )
-                )
                 else:
                     messages.add_message(
                         request,
@@ -153,15 +155,14 @@ def admin_voting_is_active(request, pk):
         return redirect("elections:admin_start_election")
     election = Election.get_latest_election()
     if request.method == "POST":
-        if "endVoting" in request.POST:
-            election.end_current_position_voting()
-            return redirect("elections:admin_results", pk=pk)
+        election.end_current_position_voting()
+        return redirect("elections:admin_results", pk=pk)
     total_voters = election.current_position.get_number_of_voters()
     context = {"election": election, "total_voters": total_voters}
     return render(request, "elections/admin/admin_voting_active.html", context)
 
 
-@permission_required("elections.admin_results")
+@permission_required("elections.add_election")
 @login_required
 def admin_results(request, pk):
     is_redirected, redir_function = Election.is_redirected()
@@ -192,9 +193,9 @@ def admin_results(request, pk):
 def admin_end_election(request):
     if Election.objects.all().count() <= 0:
         return redirect("elections:admin_start_election")
-    if Election.latest_election_is_open():
-        return redirect("elections:admin_register_positions")
     election = Election.get_latest_election()
+    if election.is_open:
+        election.end_election()
     positions = election.positions.all()
     n_voters = [
         position.get_number_of_voters() for position in election.positions.all()
