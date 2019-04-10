@@ -66,14 +66,11 @@ class CustomChoiceField(forms.ModelMultipleChoiceField):
         name = mark_safe(
             f"<p class='vote-name p-2'>{obj.user.first_name} {obj.user.last_name} </p>"
         )
-        try:
-            image = mark_safe(
-                f"<img src='{obj.user.profile.image_primary.url}' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
-            )
-        except:
-            image = mark_safe(
-                "<img src='/static/images/blank_avatar.png' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
-            )
+
+        image = mark_safe(
+            f"<img src='{obj.image_url}' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
+        )
+
         return image + name
 
 

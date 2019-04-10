@@ -47,6 +47,10 @@ class Candidate(models.Model):
         verbose_name="Antall forhåndstemmer", default=0
     )
 
+    image_url = models.CharField(
+        max_length=200, default="/static/images/blank_avatar.png"
+    )
+
     def __str__(self):
         return self.user.get_full_name()
 
@@ -124,7 +128,12 @@ class Position(models.Model):
         )
 
         if to_be_added:
-            candidate = Candidate.objects.create(user=user)
+            if not user.profile.image_primary.field.null:  # checks if user has a image_primary
+                candidate = Candidate.objects.create(
+                    user=user, image_url=user.profile.image_primary.url
+                )
+            else:
+                candidate = Candidate.objects.create(user=user)
             self.candidates.add(candidate)
             self.save()
 
@@ -311,7 +320,9 @@ class Election(models.Model):
         position = self.positions.get(id=int(position_id))
 
         for candidate in position.candidates.all():
-            position.delete_candidates(candidate_username=candidate.user.username)
+            position.delete_candidates(
+                candidate_username=candidate.user.username
+            )
 
         position.delete()
         self.save()
