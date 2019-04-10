@@ -128,11 +128,11 @@ class Position(models.Model):
         )
 
         if to_be_added:
-            if not user.profile.image_primary.field.null:  # checks if user has a image_primary
+            try:  # checks if user has a image_primary
                 candidate = Candidate.objects.create(
                     user=user, image_url=user.profile.image_primary.url
                 )
-            else:
+            except ValueError:
                 candidate = Candidate.objects.create(user=user)
             self.candidates.add(candidate)
             self.save()
@@ -146,6 +146,7 @@ class Position(models.Model):
             deletable = candidate_object
 
             if deletable in self.candidates.all():
+                self.number_of_prevote_tickets -= int(deletable.pre_votes/self.spots)
                 deletable.delete()
                 self.save()
                 return
