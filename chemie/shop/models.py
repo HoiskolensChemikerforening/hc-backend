@@ -59,7 +59,7 @@ class Item(models.Model):
         Category, verbose_name="Kategori", on_delete=models.CASCADE
     )
     image = models.ImageField(upload_to="shopitems", verbose_name="Bilde")
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, verbose_name="Aktiv")
     happy_hour_duplicate = models.ForeignKey(
         "self",
         blank=True,
