@@ -3,6 +3,16 @@ from django.contrib.auth.models import User
 
 
 class QuizTerm(models.Model):
+    """
+    En QuizTerm er en quizperiode. Man samler opp poeng på hver quiz
+    over en periode (f eks ett semester)
+
+    term er navnet på quizperioden.
+    is_active angir om quizperioden er den som gjelder nå.
+    Om det opprettes en ny quizperiode som settes til aktiv (True), vil
+    den nåværende aktive settes til inaktiv (False).
+    """
+
     is_active = models.BooleanField(verbose_name='Aktiv Quiz')
     term = models.CharField(max_length=100, verbose_name='Quiz')
 
