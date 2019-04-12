@@ -3,111 +3,63 @@
 {% load static %}
 {% load shop_extras %}
 
-<head>
-  <meta charset="UTF-8">
-  <title>Chemshop</title>
-
-</head>
-
 {% block nav_header %}
 Chemshop
-{% if not is_tablet_user %}
 
-<div style="background-color: rgb(237,205,47);
-width: 12rem;
-height: 3rem;
-padding-top: 0.2rem;
-padding-left: 0.2rem;
-border: 0.2rem solid rgb(0, 0, 0);
-border-style: solid solid solid solid;
-border-radius: 1rem 1rem 1rem 1rem;
-justify-content: center;
-right: 1rem;
-">
-  <img type="image/png" src="{% static "images/HC_coin.png" %}">
-    style="width:1.8rem; display: inline; float: right; margin-right: 1rem; margin-top: 0.2rem">
-  <p
-    style=" display:inline; font-size:1.8rem;color:black; float:left; margin: -0.7rem; margin-left: 1rem; padding-top: 0rem">
-    <b>{{request.user.profile.balance}}</b></p>
-
-</div>
-{% endif %}
 {% endblock nav_header %}
 
 {% block style %}
-.card-box {
-display: grid;
-grid-template-columns: repeat(auto-fill,minmax(250px, 1fr));
-}
-.card-box>* {
-flex: 1 1 160px;
-margin: 1rem;
-margin-top: 4rem;
-}
-.activator{
-max-width:50%;
-height:10rem;
-margin-left:auto;
-margin-right:auto;
-padding:10px;
-}
-.column {
-float: left;
-width: 50%;
-padding: 10px;
-}
-.item-remove:hover {
-background-color: #f44336;
-color: white;
-}
+<style>
+  .item-box {
+    margin: 1rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+    width: 16rem;
+  }
 
-<!-- ¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤¤ -->
-/* Include the padding and border in an element's total width and height */
-* {
-box-sizing: border-box;
-}
+  .balance-box {
+    background-color: rgb(237, 205, 47);
+    width: 12rem;
+    height: 3rem;
+    padding-top: 0.2rem;
+    padding-left: 0.2rem;
+    border: 0.2rem solid rgb(0, 0, 0);
+    border-style: solid solid solid solid;
+    border-radius: 1rem 1rem 1rem 1rem;
+    justify-content: center;
+    right: 1rem;
+  }
 
-/* Remove margins and padding from the list */
-.ul-item-list {
-margin: 0;
-padding: 0;
-}
-.section{
-padding:0;
-}
+  body {
+    width: 100%;
+    height: 100%;
+  }
 
-/* Style the list items */
-.item-list{
-cursor: pointer;
-position: relative;
-padding: 12px 8px 12px 40px;
-list-style-type: none;
-background: #eee;
-font-size: 18px;
-transition: 0.2s;
+  .btn-group-sm .btn-fab {
+    position: fixed !important;
+    left: 29px;
+  }
 
-/* make the list items unselectable */
--webkit-user-select: none;
--moz-user-select: none;
--ms-user-select: none;
-user-select: none;
-}
+  .btn-group .btn-fab {
+    position: fixed !important;
+    right: 20px;
+  }
 
-/* Set all odd list items to a different color (zebra-stripes) */
-.item-list:nth-child(odd) {
-background: #f9f9f9;
-}
+  #main {
+    bottom: 20px;
+  }
 
-/* Darker background-color on hover */
-.item-list:hover {
-background: #ddd;
-}
+  #mail {
+    bottom: 80px
+  }
 
-/* Style the close button */
-.item-remove {
-margin: auto;
+  #sms {
+    bottom: 125px
+  }
 
-}
+  #autre {
+    bottom: 170px
+  }
+</style>
 {% endblock style %}
 
 {% block content %}
@@ -117,7 +69,22 @@ margin: auto;
   var categoriesFilterd = {}
   var AllItemList = {}
 </script>
+<nav class="navbar navbar-light bg-dark">
+  {% if not is_tablet_user %}
 
+
+  <div class="d-flex balance-box">
+    <div class="p-2">
+      <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
+        <b>{{request.user.profile.balance}}</b></p>
+    </div>
+    <div class="p-2">
+      <img type="image/png" src="{% static "images/HC_coin.png" %}"
+        style="width:1.8rem; float: right; margin-top:-0.2rem">
+    </div>
+  </div>
+  {% endif %}
+</nav>
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
   <script type="text/javascript">
@@ -125,46 +92,59 @@ margin: auto;
   </script>
   <p>
     <label>
-      <input type="checkbox" name="filter-checkbox" onclick="filter_category(this.checked,'{{ category.name}}')"
+      <input cla type="checkbox" name="filter-checkbox" onclick="filter_category(this.checked,'{{ category.name}}')"
         id="{{category}}" />
       <span>{{category}}</span>
     </label>
   </p>
   {% endfor %}
 </div>
-<div class="row" id="card-items" style="display: flex; flex-wrap: wrap; justify-content: center">
+<div class="d-flex flex-wrap" id="card-items" style="justify-content: center">
   {% for item in items %}
-  <div class="col s9 m5 l5" style="margin-left:1rem; margin-right: 1rem" id="{{item.category}}-{{item.id}}">
-    <div class="card sticky-action small">
-      <div class="card-image waves-effect waves-block waves-light">
+  <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
+    <div class="d-flex flex-column justify-content-between" style="height:100%">
+      <div class="p-2" style="max-height:50%; text-align:center">
         {% thumbnail item.image "630x400" as pic %}
-        <img class="activator" src="{{ pic.url }}">
+        <img class="activator" style="max-width:10rem; max-height:9rem; margin-bottom:1rem" src="{{ pic.url }}">
         {% endthumbnail %}
       </div>
 
-      <div class="card-content">
-        <span class="card-title activator grey-text text-darken-4" style="float:left">{{ item.name }}</span>
-        <span class="card-title activator grey-text text-darken-4"
-          style="float:right; margin-right: 0.3rem; font-size: medium">{{ item.price }} <img type="image/jpg"
-            src="/static/images/HC_coin.png" style="width:1.5rem; float:right; margin-top: 0.3rem"></span>
+      <div class="d-flex justify-content-center">
+        <div class="p-2">
+          <p style="float:left; margin-left: 1rem; padding-top: 0rem">
+            <b>{{item.price}}</b></p>
+        </div>
+        <div class="p-2">
+          <img type="image/png" src="{% static "images/HC_coin.png" %}"
+            style="width:1.8rem; float: right; margin-top:-0.2rem">
+        </div>
       </div>
 
-      <div class="card-action">
+      <div class="p-2">
         <script type="text/javascript">
           item_dict["{{item.name}}"] = 0; // appends item to dictionary
         </script>
-        <div>
-          <a type="button" class="btn-small waves-effect waves-light red" id="minus" onclick="minus('{{ item.name }}')">
-            <i class="material-icons white-text">remove</i></a>
-          <input style="width: 1.2rem; text-align: center" type="text" value="0" id="item_{{item.name}}">
-          <a type="button" class="btn-small waves-effect waves-light green" id="plus" onclick="plus('{{ item.name }}')">
-            <i class="material-icons white-text" style="margin:auto">add</i></a>
-          <form action="#" method="POST" style="display:inline; margin: auto">
-            {% csrf_token %}
-            <button class="waves-effect waves-light btn-small" id="{{ item.id }}" name="buy" value="{{ item.id }}-0"
-              style="float:right; margin-top: 0.5rem" onclick="changeQuantity(this,'{{item.name}}');"><i
-                class="large material-icons">add_shopping_cart</i></button>
-          </form>
+        <div class="d-flex justify-content-between">
+          <div class="p-2">
+            <a class="2-p btn btn-danger" id="minus" onclick="minus('{{ item.name }}')"><i class="material-icons">
+                remove
+              </i></a>
+            <input style="margin:0.1rem; width: 1.4rem; text-align: center" type="text" value="0"
+              id="item_{{item.name}}">
+            <a class="btn btn-success" id="minus" onclick="plus('{{ item.name }}')"><i class="material-icons">
+                add
+              </i></a>
+          </div>
+          <div class="p-2">
+            <form action="#" method="POST">
+              {% csrf_token %}
+              <button id="{{ item.id }}" class="btn btn-secondary" type="submit" name="buy" value="{{ item.id }}-0"
+                style="float:right" onclick="changeQuantity(this,'{{item.name}}');"><i
+                  class="material-icons">add_shopping_cart</i></button>
+            </form>
+          </div>
+
+
         </div>
       </div>
     </div>
@@ -214,240 +194,266 @@ margin: auto;
   </div>
 </div>
 {% if cart.cart %}
-<!-- floating shopping cart btn is styled with JS footer script -->
-<div class="fixed-action-btn" id="shopping-cart-btn" style="bottom: 3.05rem; left: 1.7rem;">
-  <a class="btn-floating btn-large modal-trigger" href="#modal1">
-    <i class="large material-icons yellow darken-2">shopping_cart</i>
-  </a>
-</div>
-<script type="text/javascript">
-  var elem = document.getElementsByClassName("btn-floating btn-large modal-trigger")[0];
-  var elemChild = document.getElementsByClassName("large material-icons yellow darken-2")[0]
-  var btnSize = 56;
-  var done = false
-  var id = setInterval(frame, 5, done);
-  function frame(done_pre) {
-    if (btnSize == 56 && done) {
-      clearInterval(id);
-    }
-    if (btnSize == 100) {
-      done = true;
-    }
-    if (!done) {
-      btnSize++;
-    } else {
-      btnSize--
-    }
-    elem.style.width = btnSize + 'px';
-    elem.style.height = btnSize + 'px';
-    elemChild.setAttribute("style", "line-height:" + btnSize + 'px');
-  }
-</script>
-{% endif %}
-{% if perms.shop.add_item or perms.customprofile.refill_balance %}
-<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-  <a class="btn-floating btn-large">
-    <i class="large material-icons">edit</i>
-  </a>
-  <ul>
-    {% if perms.customprofile.refill_balance %}
-    <li>
-      <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">attach_money</i></a>
-      <a class="btn-floating mobile-fab-tip">Fyll på HC coin</a>
-    </li>
-    {% endif %}
-    {% if perms.shop.add_item %}
-    <li>
-      <a class="btn-floating blue" href="{% url "shop:admin" %}"><i class="material-icons">build</i></a>
-      <a class="btn-floating mobile-fab-tip">Admin side</a>
-    </li>
-    {% endif %}
-  </ul>
-</div>
-{% endif %}
 
-{% endblock content %}
+<!-- hiiiiiiiiiidf -->
 
-{% block footer_script %}
-<script type="text/javascript">
-  function getCookie(name) {
-    var cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-      var cookies = document.cookie.split(';');
-      for (var i = 0; i < cookies.length; i++) {
-        var cookie = jQuery.trim(cookies[i]);
-        // Does this cookie string begin with the name we want?
-        if (cookie.substring(0, name.length + 1) === (name + '=')) {
-          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-          break;
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-group-sm hidden" id="mini-fab">
+        <a href="javascript:void(0)" class="btn btn-warning btn-fab" id="main">
+          <i class="material-icons">
+            shopping_cart
+          </i>
+        </a>
+      </div>
+    </div>
+  </div>
+
+
+
+  <!-- floating shopping cart btn is styled with JS footer script -->
+  <div class="fixed-action-btn" id="shopping-cart-btn" style="bottom: 3.05rem; left: 1.7rem;">
+    <a class="btn-floating btn-large modal-trigger" href="#modal1">
+      <i class="large material-icons yellow darken-2">shopping_cart</i>
+    </a>
+  </div>
+  <script type="text/javascript">
+    var elem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
+    var elemChild = document.getElementsByClassName("large material-icons yellow darken-2")[0]
+    var btnSize = 40;
+    var done = false
+    var id = setInterval(frame, 5, done);
+    function frame(done_pre) {
+      if (btnSize == 40 && done) {
+        clearInterval(id);
+      }
+      if (btnSize == 60) {
+        done = true;
+      }
+      if (!done) {
+        btnSize++;
+      } else {
+        btnSize--
+      }
+      elem.style.width = btnSize + 'px';
+      elem.style.height = btnSize + 'px';
+    }
+  </script>
+  {% endif %}
+  {% if perms.shop.add_item or perms.customprofile.refill_balance %}
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large">
+      <i class="large material-icons">edit</i>
+    </a>
+    <ul>
+      {% if perms.customprofile.refill_balance %}
+      <li>
+        <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">attach_money</i></a>
+        <a class="btn-floating mobile-fab-tip">Fyll på HC coin</a>
+      </li>
+      {% endif %}
+      {% if perms.shop.add_item %}
+      <li>
+        <a class="btn-floating blue" href="{% url "shop:admin" %}"><i class="material-icons">build</i></a>
+        <a class="btn-floating mobile-fab-tip">Admin side</a>
+      </li>
+      {% endif %}
+    </ul>
+  </div>
+  {% endif %}
+
+  {% endblock content %}
+
+  {% block footer_script %}
+  <script type="text/javascript">
+    function getCookie(name) {
+      var cookieValue = null;
+      if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+          var cookie = jQuery.trim(cookies[i]);
+          // Does this cookie string begin with the name we want?
+          if (cookie.substring(0, name.length + 1) === (name + '=')) {
+            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+            break;
+          }
         }
       }
+      return cookieValue;
     }
-    return cookieValue;
-  }
-  var csrftoken = getCookie('csrftoken');
-</script>
+    var csrftoken = getCookie('csrftoken');
+  </script>
 
-<script type="text/javascript">
-  // creates all items to be remembered with filtering
-  var cardItemsChildren = document.getElementById("card-items").children;
-  for (var i = 0; i < cardItemsChildren.length; i++) {
-    AllItemList[cardItemsChildren[i].id] = cardItemsChildren[i]
-  }
+  <script type="text/javascript">
+    // creates all items to be remembered with filtering
+    var cardItemsChildren = document.getElementById("card-items").children;
+    for (var i = 0; i < cardItemsChildren.length; i++) {
+      AllItemList[cardItemsChildren[i].id] = cardItemsChildren[i]
+    }
 
-  function filter_category(checked, category) {
-    categoriesFilterd[category] = checked;
+    function filter_category(checked, category) {
+      categoriesFilterd[category] = checked;
 
-    // check if any boxes are clicked
-    isActivated = false
-    for (key in categoriesFilterd) {
-      if (categoriesFilterd[key]) {
-        isActivated = true
+      // check if any boxes are clicked
+      isActivated = false
+      for (key in categoriesFilterd) {
+        if (categoriesFilterd[key]) {
+          isActivated = true
+        }
       }
-    }
-    var cardItems = document.getElementById("card-items");
-    cardItems.innerHTML = '';
-    var cardItemsList = [];
-    // append only clicked items to list
-    if (isActivated) {
-      for (var key in AllItemList) {
-        var itemCat = key.split('-')[0];
-        if (categoriesFilterd[itemCat]) {
+      var cardItems = document.getElementById("card-items");
+      cardItems.innerHTML = '';
+      var cardItemsList = [];
+      // append only clicked items to list
+      if (isActivated) {
+        for (var key in AllItemList) {
+          var itemCat = key.split('-')[0];
+          if (categoriesFilterd[itemCat]) {
+            cardItemsList.push(AllItemList[key])
+          }
+        }
+      } else {
+        // if no boxes are clicked, all item is presented
+        for (var key in AllItemList) {
           cardItemsList.push(AllItemList[key])
         }
       }
-    } else {
-      // if no boxes are clicked, all item is presented
-      for (var key in AllItemList) {
-        cardItemsList.push(AllItemList[key])
+      // append the filtered items to parent node
+      for (var i = 0; i < cardItemsList.length; i++) {
+        cardItems.appendChild(cardItemsList[i])
       }
+
+
     }
-    // append the filtered items to parent node
-    for (var i = 0; i < cardItemsList.length; i++) {
-      cardItems.appendChild(cardItemsList[i])
+  </script>
+
+  <script type="text/javascript">
+    //user presses the + button
+    function plus(item_name, item_pk) {
+      item_dict[item_name]++;
+      document.getElementById('item_' + item_name).value = item_dict[item_name];
     }
 
-
-  }
-</script>
-
-<script type="text/javascript">
-  //user presses the + button
-  function plus(item_name, item_pk) {
-    item_dict[item_name]++;
-    document.getElementById('item_' + item_name).value = item_dict[item_name];
-  }
-
-  // user presses the - button
-  function minus(item_name, item_pk) {
-    if (item_dict[item_name] > 0) {
-      item_dict[item_name]--;
+    // user presses the - button
+    function minus(item_name, item_pk) {
+      if (item_dict[item_name] > 0) {
+        item_dict[item_name]--;
+      }
+      document.getElementById('item_' + item_name).value = item_dict[item_name];
     }
-    document.getElementById('item_' + item_name).value = item_dict[item_name];
-  }
-</script>
-<script>
-  function changeQuantity(self, item_name) {
-    if (item_dict[item_name] === 0) {
-      self.preventDefault();
+  </script>
+  <script>
+    function changeQuantity(self, item_name) {
+
+      if (item_dict[item_name] === 0) {
+        self.preventDefault();
+        return false;
+      }
+      var id = self.getAttribute("id");
+      self.setAttribute("value", id + "-" + item_dict[item_name]);
       return false;
     }
-    var id = self.getAttribute("id");
-    self.setAttribute("value", id + "-" + item_dict[item_name]);
-    return false;
-  }
 
-  document.addEventListener('DOMContentLoaded', function () {
-    var elems = document.querySelectorAll('.modal');
-    var cart_modal_element = M.Modal.init(elems, {});
-  });
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('.modal');
+      var cart_modal_element = M.Modal.init(elems, {});
+    });
 
-  // Check if side bar is activated or not
-  console.log()
-  if ("{{cart.cart}}" != "{}") {
-    var floatBtn = document.getElementById("shopping-cart-btn");
-    if (window.innerWidth > 994) {
-      floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
+    // Check if side bar is activated or not
+    console.log()
+    if ("{{cart.cart}}" != "{}") {
+      var floatBtn = document.getElementById("shopping-cart-btn");
+      if (window.innerWidth > 994) {
+        floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
+      }
     }
-  }
 
-  function getTotalForItem(item_list_id) {
-    let item = document.getElementById(item_list_id);
-    let quantity = item.children[1].innerHTML;
-    let price = item.children[2].innerHTML;
-    return (parseFloat(price).toFixed(2) * parseFloat(quantity).toFixed(2)).toFixed(2);
-  }
+    function getTotalForItem(item_list_id) {
+      let item = document.getElementById(item_list_id);
+      let quantity = item.children[1].innerHTML;
+      let price = item.children[2].innerHTML;
+      return (parseFloat(price).toFixed(2) * parseFloat(quantity).toFixed(2)).toFixed(2);
+    }
 
-</script>
-<script>
-  var isTabletUserString = "{{is_tablet_user}}";
-  var isTabletUser = (isTabletUserString == "True");
-  if (isTabletUser) {
-    var sideBarNav = document.getElementsByClassName("top-nav")[0]
-    var footer = document.getElementsByClassName("page-footer")[0]
-    sideBarNav.setAttribute("style", "display:none")
-    footer.setAttribute("style", "display:none")
-  }
+  </script>
+  <script>
+    var isTabletUserString = "{{is_tablet_user}}";
+    var isTabletUser = (isTabletUserString == "True");
+    if (isTabletUser) {
+      var sideBarNav = document.getElementsByClassName("top-nav")[0]
+      var footer = document.getElementsByClassName("page-footer")[0]
+      sideBarNav.setAttribute("style", "display:none")
+      footer.setAttribute("style", "display:none")
+    }
 
-  // Create a "close" button and append it to each list item
-  var itemList = document.getElementsByClassName("item-list");
-  // var i;
-  for (i = 0; i < itemList.length; i++) {
-    var columns = itemList[i].children.length;
-    // Get total price for items: quantity*price
-    itemList[i]
-      .children[columns - 2]
-      .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
-  }
+    // Create a "close" button and append it to each list item
+    var itemList = document.getElementsByClassName("item-list");
+    // var i;
+    for (i = 0; i < itemList.length; i++) {
+      var columns = itemList[i].children.length;
+      // Get total price for items: quantity*price
+      itemList[i]
+        .children[columns - 2]
+        .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
+    }
 
-  // Click on a close button to remove the current list item
-  var closeItem = document.getElementsByClassName("item-list");
-  var i;
-  for (i = 0; i < closeItem.length; i++) {
-    // The 'x' at the far right
-    var close_button = closeItem[i].lastElementChild;
-    close_button.onclick = function () {
-      // Get the current li element
-      var current_item = this.parentNode;
-      // Get the id of the li element and put into array
-      var item_id_array = current_item.id.split("-");
-      // Get item id
-      var item_id = item_id_array[item_id_array.length - 1];
+    // Click on a close button to remove the current list item
+    var closeItem = document.getElementsByClassName("item-list");
+    var i;
+    for (i = 0; i < closeItem.length; i++) {
+      // The 'x' at the far right
+      var close_button = closeItem[i].lastElementChild;
+      close_button.onclick = function () {
+        // Get the current li element
+        var current_item = this.parentNode;
+        // Get the id of the li element and put into array
+        var item_id_array = current_item.id.split("-");
+        // Get item id
+        var item_id = item_id_array[item_id_array.length - 1];
 
-      $.ajax({
-        type: "GET",
-        url: "/shop/admin/remove-item/" + item_id,
-        datatype: "json",
+        $.ajax({
+          type: "GET",
+          url: "/shop/admin/remove-item/" + item_id,
+          datatype: "json",
 
-        success: function (json) {
-          let total_sum_element = document.getElementById("total-sum-in-cart");
-          let sum_to_remove = current_item.
-            children[current_item.children.length - 2]
-            .innerHTML;
-          let total_sum = total_sum_element.innerHTML.split(" ")[1];
-          // Nasty, but really just takes the difference between previous total sum
-          // and sum of items removed + replaces decimal separator 'dot' to 'comma'
-          let new_sum = parseFloat(
-            parseFloat(total_sum).toFixed(2) -
-            parseFloat(sum_to_remove).toFixed(2)
-          ).toFixed(2).replace(".", ",");
-          total_sum_element.innerHTML = `Total: ${new_sum}`;
-          let number_of_items_left = document.getElementsByClassName("item-list").length;
-          current_item.parentNode.removeChild(current_item);
-          if ((number_of_items_left - 1) === 0) {
-            for (let key in item_dict) {
-              item_dict[key] = 0;
+          success: function (json) {
+            let total_sum_element = document.getElementById("total-sum-in-cart");
+            let sum_to_remove = current_item.
+              children[current_item.children.length - 2]
+              .innerHTML;
+            let total_sum = total_sum_element.innerHTML.split(" ")[1];
+            // Nasty, but really just takes the difference between previous total sum
+            // and sum of items removed + replaces decimal separator 'dot' to 'comma'
+            let new_sum = parseFloat(
+              parseFloat(total_sum).toFixed(2) -
+              parseFloat(sum_to_remove).toFixed(2)
+            ).toFixed(2).replace(".", ",");
+            total_sum_element.innerHTML = `Total: ${new_sum}`;
+            let number_of_items_left = document.getElementsByClassName("item-list").length;
+            current_item.parentNode.removeChild(current_item);
+            if ((number_of_items_left - 1) === 0) {
+              for (let key in item_dict) {
+                item_dict[key] = 0;
+              }
+              let cart_modal = document.getElementById("cart-modal");
+              cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
             }
-            let cart_modal = document.getElementById("cart-modal");
-            cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
-          }
-        },
+          },
 
-        error: function (xhr, errmsg, err) {
-          // console.log(xhr.status + ": " + xhr.responseText);
-        },
-      });
+          error: function (xhr, errmsg, err) {
+            // console.log(xhr.status + ": " + xhr.responseText);
+          },
+        });
+      }
     }
-  }
-</script>
-{% endblock footer_script %}
+    $("#main").click(function () {
+      $("#mini-fab").toggleClass('hidden');
+    });
+
+    $(document).ready(function () {
+      $('[data-toggle="tooltip"]').tooltip();
+    });
+    $.material.init();
+  </script>
+  {% endblock footer_script %}
