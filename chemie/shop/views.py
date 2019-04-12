@@ -88,9 +88,10 @@ def index_user(request):
     rfid_form = None
     items = Item.get_active_items()
     try:
-        happy_category = Category.objects.get(name="Happy Hour")
-        happy_items = Item.objects.filter(category=happy_category)
-        items = items.exclude(id__in=happy_items.values("pk"))
+        happy_item_ids = items.filter(
+            happy_hour_duplicate__isnull=False
+        ).values_list("happy_hour_duplicate", flat=True)
+        items = items.exclude(id__in=happy_item_ids)
     except Category.DoesNotExist:
         pass
     categories = Category.objects.all()
@@ -142,9 +143,10 @@ def index_tabletshop(request):
     rfid_form = GetRFIDForm(request.POST or None)
     items = Item.get_active_items()
     try:
-        happy_category = Category.objects.get(name="Happy Hour")
-        happy_items = Item.objects.filter(category=happy_category)
-        items = items.exclude(id__in=happy_items.values("pk"))
+        happy_item_ids = items.filter(
+            happy_hour_duplicate__isnull=False
+        ).values_list("happy_hour_duplicate", flat=True)
+        items = items.exclude(id__in=happy_item_ids)
     except Category.DoesNotExist:
         pass
     categories = Category.objects.all()
