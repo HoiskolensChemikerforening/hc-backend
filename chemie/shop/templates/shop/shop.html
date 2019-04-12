@@ -1,5 +1,6 @@
-{% extends "chemie/base.html" %}
+{% extends "shop/base_shop.html" %}
 {% load thumbnail %}
+{% load static %}
 {% load shop_extras %}
 
 <head>
@@ -23,10 +24,10 @@ border-radius: 1rem 1rem 1rem 1rem;
 justify-content: center;
 right: 1rem;
 ">
-  <img type="image/jpg" src="/static/images/HC_coin.png"
+  <img type="image/png" src="{% static "images/HC_coin.png" %}">
     style="width:1.8rem; display: inline; float: right; margin-right: 1rem; margin-top: 0.2rem">
   <p
-    style=" display:inline; font-size:1.8rem;color:black; float:left;margin: -0.7rem;margin-left: 1rem; padding-top: 0rem">
+    style=" display:inline; font-size:1.8rem;color:black; float:left; margin: -0.7rem; margin-left: 1rem; padding-top: 0rem">
     <b>{{request.user.profile.balance}}</b></p>
 
 </div>
