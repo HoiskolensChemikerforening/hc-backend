@@ -131,7 +131,7 @@ Chemshop
               </i></a>
             <input style="margin:0.1rem; width: 1.4rem; text-align: center" type="text" value="0"
               id="item_{{item.name}}">
-            <a class="btn btn-success" id="minus" onclick="plus('{{ item.name }}')"><i class="material-icons">
+            <a class="btn btn-success" id="plus" onclick="plus('{{ item.name }}')"><i class="material-icons">
                 add
               </i></a>
           </div>
@@ -156,7 +156,7 @@ Chemshop
   <!-- Modal Structure -->
 
   <!-- Button trigger modal -->
-  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+  <button type="button" id="button-trigger" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
     Launch demo modal
   </button>
 
@@ -197,11 +197,11 @@ Chemshop
             <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
               kortet</button>
           </form>
-          <script type="text/javascript">
-            document.getElementById("modalTrigger").addEventListener("click", function () {
-              console.log("hei")
-              debugger;
-            })
+          <script>
+            $("#cart-modal").on("shown.bs.modal", function() {
+                $("#id_rfid").focus();
+                $("#id_rfid").select();
+            });
           </script>
           {% else %}
           <form method="POST"> {% csrf_token %}
@@ -213,47 +213,6 @@ Chemshop
       </div>
     </div>
   </div>
-
-
-  <div id="cart-moda2l" class="modal fade">
-    <div class="modal-content" id="cart-modal">
-      <div>
-        <h5>Handlevogn</h5>
-        <table style="width:100%" id="shopping-table">
-          <tr class="ul-item-list">
-            <th>Vare</th>
-            <th>Antall</th>
-            <th>Pris</th>
-            <th>Total</th>
-            <th></th>
-          </tr>
-          {% for item_names, item_details in cart.cart.items %}
-          <tr class="item-list" id="item-list-{{ item_names|get_item_pk_from_name }}">
-            <td>{{ item_names }}</td>
-            <td>{{ item_details.quantity }}</td>
-            <td>{{ item_details.price }}</td>
-            <td>Totalpris for denne</td>
-            <td style="text-align: center;" class="item-remove">&times;</td>
-          </tr>
-          {% endfor %}
-        </table>
-        <div id="total-sum-in-cart">Total: {{ cart.get_total_price }}</div>
-        {% if is_tablet_user %}
-        <form method="POST"> {% csrf_token %}
-          {{rfid_form}}
-          <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
-            kortet</button>
-        </form>
-        {% else %}
-        <form method="POST"> {% csrf_token %}
-          <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp
-            varer</button>
-        </form>
-        {% endif %}
-      </div>
-    </div>
-  </div>
-</div>
 {% if cart.cart %}
 
 <!-- hiiiiiiiiiidf -->
@@ -262,7 +221,7 @@ Chemshop
   <div class="row">
     <div class="col-md-12">
       <div class="btn-group-sm hidden" id="mini-fab">
-        <button href="javascript:void(0)" class="btn btn-warning btn-fab" id="modalTrigger" type="button"
+        <button class="btn btn-warning btn-fab" id="modalTrigger" type="button"
           data-toggle="modal" data-target="#cart-modal">
           <i class="material-icons">
             shopping_cart

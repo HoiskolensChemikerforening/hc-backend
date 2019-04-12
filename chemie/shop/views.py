@@ -207,6 +207,8 @@ def index_tabletshop(request):
                     ),
                     extra_tags="Ups",
                 )
+    rfid_form = GetRFIDForm(None)
+    context["rfid_form"] = rfid_form
     return context
 
 
