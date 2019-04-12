@@ -9,16 +9,18 @@
 
 
 {% block content %}
-<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-  <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
-  <a class="breadcrumb">Admin</a>
-</div>
-<div style="display:flex;justify-content: space-between;">
-  <span><a class="waves-effect waves-light btn" href="{% url "shop:add-item" %}">Legg til vare</a></span>
-  <span><a class="waves-effect waves-light btn" href="{% url "shop:add-category" %}">Legg til kategori</a></span>
-  <span><a class="waves-effect waves-light btn" href="{% url "shop:refill" %}">Fyll på konto</a></span>
-  <span><a class="waves-effect waves-light btn" href="{% url "shop:activate-happyhour" %}">Aktiver Happy
-      Hour!</a></span>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url "shop:index" %}">Shop</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Admin</li>
+  </ol>
+</nav>
+
+<div style="display:flex; justify-content: space-around;">
+  <a class="btn btn-primary" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
+  <a class="btn btn-primary" href="{% url "shop:add-category" %}" role="button">Legg til kategori</a>
+  <a class="btn btn-primary" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
+  <a class="btn btn-primary" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver Happy</a>
 </div>
 <!-- See JS footer-script for element creating -->
 <div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">

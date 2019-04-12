@@ -7,27 +7,34 @@
   <title>Chemshop</title>
 </head>
 
-{% block nav_header %}
-Chemshop
-{% endblock nav_header %}
-
-{% block nav_sub_header %}
-Opprett kategori
-{% endblock nav_sub_header %}
+{% block style %}
+  <style>
+  .asteriskField {
+    color: red;
+  }
+</style>
+{% endblock style %}
 
 {% block content %}
-<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-  <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
-  <a href="{% url "shop:admin" %}" class="breadcrumb">Admin</a>
-  <a class="breadcrumb">Legg inn Kategori</a>
-</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url "shop:index" %}">Shop</a></li>
+    <li class="breadcrumb-item"><a href="{% url "shop:admin" %}">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Legg til vare</li>
+  </ol>
+</nav>
+
+<!-- Form with add category -->
 <div>
   <form method="POST">{% csrf_token %}
     {{ form.as_p }}
     <input class="btn btn-primary pull-right" type='submit' value='Lagre kategorien!' />
   </form>
 </div>
-<div>
+
+<!-- List existing categories -->
+<div style="padding-top: 2rem">
   <h4>Alle kategorier</h4>
   {% for category in categories %}
   <div class="collection"

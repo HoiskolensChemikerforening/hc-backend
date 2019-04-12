@@ -270,6 +270,12 @@ def add_item(request):
     form = AddItemForm(request.POST or None, request.FILES or None)
     if request.POST:
         if form.is_valid():
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Varen ble opprettet",
+                extra_tags="Suksess!"
+            )
             form.save()
     items = Item.objects.all()
     context = {"form": form, "items": items}

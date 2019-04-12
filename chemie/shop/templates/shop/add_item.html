@@ -1,69 +1,68 @@
 {% extends "shop/base_shop.html" %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 
 <head>
   <meta charset="UTF-8">
   <title>Chemshop</title>
-
-  <!-- CSS -->
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-
-  <!-- JS -->
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
 </head>
 
+{% block style %}
+  <style>
+  .asteriskField {
+    color: red;
+  }
+</style>
+{% endblock style %}
+
 {% block content %}
-<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-  <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
-  <a href="{% url "shop:admin" %}" class="breadcrumb">Admin</a>
-  <a class="breadcrumb">Legg inn vare</a>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url "shop:index" %}">Shop</a></li>
+    <li class="breadcrumb-item"><a href="{% url "shop:admin" %}">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Legg til vare</li>
+  </ol>
+</nav>
 
-  <div style="display:inline">
-    <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
-      {{ form.media }}
-      {{ form.as_p }}
-      <input class="btn btn-primary pull-right" type='submit' value='Lagre varen!' />
-    </form>
-    <button onclick="location.href='{% url "shop:add-category" %}'" class="btn waves-effect waves-light"
-      style="display:inline; float: right">Lag Ny kategori
-      <i class="material-icons right">add</i>
-    </button>
-  </div>
-  <div id="itemList">
-    <table style="width:100%" id="shopping-table">
-      <tr class="ul-item-list" style="height:3rem">
-        <th>Vare</th>
-        <th>Pris</th>
-        <th>Kategori</th>
-        <th>Aktiv</th>
-        <th></th>
-      </tr>
-      {% for item in items %}
-      <tr class="item-list" id="item-list-{{item.name}}">
-        <td>{{ item.name }}</td>
-        <td>{{ item.price }}</td>
-        <td>{{ item.category }}</td>
-        {% if item.is_active %}
-        <td>
-          <i class="material-icons" style="color:green">check</i>
-        </td>
-        {% else %}
-        <td>
-          <i class="material-icons" style="color:red">clear</i>
-        </td>
-        {% endif %}
-        <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
-      </tr>
-      {% endfor %}
+<!-- Form with add item -->
+<div style="display:inline">
+  <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
+    <table style="padding-left: 4rem; padding-right: 4rem">
+    {{ form.media }}
+    {% crispy form %}
     </table>
-  </div>
-  {% endblock content %}
+  </form>
+</div>
 
-  {% block footer_script %}
-  <script>
-    $('select').formSelect();
-  </script>
-  {% endblock footer_script %}
+<!-- List of all existing items -->
+<div id="itemList">
+  <table style="width:100%" id="shopping-table">
+    <tr class="ul-item-list" style="height:3rem">
+      <th>Vare</th>
+      <th>Pris</th>
+      <th>Kategori</th>
+      <th>Aktiv</th>
+      <th></th>
+    </tr>
+    {% for item in items %}
+    <tr class="item-list" id="item-list-{{item.name}}">
+      <td>{{ item.name }}</td>
+      <td>{{ item.price }}</td>
+      <td>{{ item.category }}</td>
+      {% if item.is_active %}
+      <td>
+        <i class="material-icons" style="color:green">check</i>
+      </td>
+      {% else %}
+      <td>
+        <i class="material-icons" style="color:red">clear</i>
+      </td>
+      {% endif %}
+      <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+{% endblock content %}

@@ -1,6 +1,7 @@
 {% extends "shop/base_shop.html" %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 
 <head>
     <meta charset="UTF-8">
@@ -8,33 +9,21 @@
 </head>
 
 {% block content %}
-<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "shop:index" %}" class="breadcrumb">Shop</a>
-    <a href="{% url "shop:admin" %}" class="breadcrumb">Admin</a>
-    <a href="{% url "shop:add-item" %}" class="breadcrumb">Legg til vare</a>
-    <a class="breadcrumb">Endre vare</a>
-</div>
+<!-- Breadcrumbs -->
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url "shop:index" %}">Shop</a></li>
+    <li class="breadcrumb-item"><a href="{% url "shop:admin" %}">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Endre vare</li>
+  </ol>
+</nav>
+
+<!-- Form with edit item -->
 <div style="display:inline">
-    <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
-        {% for field in form %}
-        <p>
-            {% if field.name == "is_active" %}
-            <label>
-                {{field}}
-                <span>Aktiv</span>
-            </label>
-            {% else %}
-            {{field}}
-            {% endif %}
-            {% endfor %}
-        </p>
-        <input class="btn btn-primary pull-right" style="float:right" type='submit' value='Lagre!' />
-    </form>
+  <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
+    <table>
+      {% crispy form %}
+    </table>
+  </form>
 </div>
 {% endblock content %}
-
-{% block footer_script %}
-<script>
-    $('select').formSelect();
-</script>
-{% endblock footer_script %}

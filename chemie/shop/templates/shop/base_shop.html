@@ -41,13 +41,34 @@
   {% block style %}
   {% endblock style %}
 
-  <nav class="navbar navbar-light bg-dark">
+<nav class="navbar navbar-light bg-dark">
     <a class="navbar-brand" href="/">
 
       <img src="{% static 'images/logo.png'%}" height="40" class="d-inline-block align-top" alt="">
       <h5 style="display:inline; color:#edcd2f; margin-bottom:2 rem">Høiskolens Chemikerforening</h5>
     </a>
+</nav>
 
+<div class="container" style="margin: 1rem">
+  <!-- Messaging framework card -->
+  {% if messages %}
+    <div class="row">
+      {% for message in messages %}
+        <div class="col s12 m6 l6">
+          <div class="card bg-{{ message.level_tag }}">
+            <div class="card-body">
+              <span class="card-title black-text valign-wrapper" style="clear: both;">
+
+              <h5><i class="material-icons black-text"
+                style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+              </span>
+              <p class="flow-text black-text">{{ message }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
   </nav>
 
   {% block content %}
