@@ -154,7 +154,68 @@ Chemshop
 
 <div>
   <!-- Modal Structure -->
-  <div id="modal1" class="modal">
+
+  <!-- Button trigger modal -->
+  <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">
+    Launch demo modal
+  </button>
+
+  <!-- Modal -->
+  <div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Handlevogn</h5>
+        </div>
+        <div class="modal-body">
+          <table style="width:100%" id="shopping-table">
+            <tr class="ul-item-list">
+              <th>Vare</th>
+              <th>Antall</th>
+              <th>Pris</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+            {% for item_names, item_details in cart.cart.items %}
+            <tr class="item-list" id="item-list-{{ item_names|get_item_pk_from_name }}">
+              <td>{{ item_names }}</td>
+              <td>{{ item_details.quantity }}</td>
+              <td>{{ item_details.price }}</td>
+              <td>Totalpris for denne</td>
+              <td style="text-align: center;" class="item-remove">&times;</td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <div class="modal-footer d-flex justify-content-between">
+
+          <div id="total-sum-in-cart" class="float-left">Total: {{ cart.get_total_price }}</div>
+          {% if is_tablet_user %}
+          <form method="POST"> {% csrf_token %}
+            {{rfid_form}}
+            <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
+              kortet</button>
+          </form>
+          <script type="text/javascript">
+            document.getElementById("modalTrigger").addEventListener("click", function () {
+              console.log("hei")
+              debugger;
+            })
+          </script>
+          {% else %}
+          <form method="POST"> {% csrf_token %}
+            <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp
+              varer</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <div id="cart-moda2l" class="modal fade">
     <div class="modal-content" id="cart-modal">
       <div>
         <h5>Handlevogn</h5>
@@ -201,11 +262,12 @@ Chemshop
   <div class="row">
     <div class="col-md-12">
       <div class="btn-group-sm hidden" id="mini-fab">
-        <a href="javascript:void(0)" class="btn btn-warning btn-fab" id="main">
+        <button href="javascript:void(0)" class="btn btn-warning btn-fab" id="modalTrigger" type="button"
+          data-toggle="modal" data-target="#cart-modal">
           <i class="material-icons">
             shopping_cart
           </i>
-        </a>
+        </button>
       </div>
     </div>
   </div>
@@ -221,23 +283,23 @@ Chemshop
   <script type="text/javascript">
     var elem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
     var elemChild = document.getElementsByClassName("large material-icons yellow darken-2")[0]
-    var btnSize = 40;
+    var bottomPos = 29;
     var done = false
     var id = setInterval(frame, 5, done);
     function frame(done_pre) {
-      if (btnSize == 40 && done) {
+      if (bottomPos == 29 && done) {
         clearInterval(id);
       }
-      if (btnSize == 60) {
+      if (bottomPos == 60) {
         done = true;
       }
       if (!done) {
-        btnSize++;
+        bottomPos++
       } else {
-        btnSize--
+        bottomPos--
+
       }
-      elem.style.width = btnSize + 'px';
-      elem.style.height = btnSize + 'px';
+      elem.style.bottom = bottomPos.toString() + ".px"
     }
   </script>
   {% endif %}
@@ -360,14 +422,6 @@ Chemshop
       var cart_modal_element = M.Modal.init(elems, {});
     });
 
-    // Check if side bar is activated or not
-    console.log()
-    if ("{{cart.cart}}" != "{}") {
-      var floatBtn = document.getElementById("shopping-cart-btn");
-      if (window.innerWidth > 994) {
-        floatBtn.setAttribute("style", "left:22.5rem; bottom: 3.1rem;");
-      }
-    }
 
     function getTotalForItem(item_list_id) {
       let item = document.getElementById(item_list_id);
@@ -447,9 +501,7 @@ Chemshop
         });
       }
     }
-    $("#main").click(function () {
-      $("#mini-fab").toggleClass('hidden');
-    });
+
 
     $(document).ready(function () {
       $('[data-toggle="tooltip"]').tooltip();
