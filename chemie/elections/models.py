@@ -121,7 +121,7 @@ class Position(models.Model):
     def __str__(self):
         return self.position_name
 
-    def add_candidates(self, user):
+    def add_candidate(self, user):
         position_candidates = self.candidates.all()
         to_be_added = (
             False if user in [usr.user for usr in position_candidates] else True

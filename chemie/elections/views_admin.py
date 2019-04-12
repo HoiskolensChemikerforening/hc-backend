@@ -87,7 +87,7 @@ def admin_register_candidates(request, pk):
 
             if add_candidate_form.is_valid():
                 user = add_candidate_form.cleaned_data["user"]
-                position.add_candidates(user)
+                position.add_candidate(user)
 
         candidates = position.candidates.all().order_by("user")
         context = {
