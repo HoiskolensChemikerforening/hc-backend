@@ -13,7 +13,8 @@
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
     <a href="{% url "quiz:term_detail" term.pk %}" class="breadcrumb">{{ term }}</a>
-    <a class="breadcrumb">Rediger</a>
+    <a href="{% url "quiz:create_score" term.pk %}" class="breadcrumb">Rediger</a>
+    <a class="breadcrumb">Endre poeng</a>
   </div>
 
   <div id="amount_id" style="width:10%;"></div>
