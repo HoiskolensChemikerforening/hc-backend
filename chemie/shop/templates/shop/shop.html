@@ -519,8 +519,7 @@ Chemshop
                 for (let key in item_dict) {
                   item_dict[key] = 0;
                 }
-                let cart_modal = document.getElementById("cart-modal");
-                cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
+                window.location.replace(window.location.href.substring(0, window.location.href.length - 1))
               }
             },
 

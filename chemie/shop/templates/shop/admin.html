@@ -6,7 +6,24 @@
   <meta charset="UTF-8">
   <title>Chemshop admin</title>
 </head>
+{% block style %}
+<style>
+  .item-list {
+    padding: 0.4rem;
+    height: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
 
+  .btn-secondary {
+    cursor: pointer
+  }
+</style>
+
+{% endblock style %}
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
@@ -33,6 +50,7 @@
 {% endblock content %}
 {% block footer_script %}
 <script type="text/javascript">
+
   const monthNames = ['Desember', 'November', 'Oktober', 'September', 'August', 'Juli', 'Juni', 'Mai', 'April', 'Mars', 'Februar', 'Januar']
   // transfers the list to backwards this month first following previous month
   var monthNumber = new Date().getMonth();
@@ -93,6 +111,7 @@
     }
   }
 
+
   // Create the HTML elements for the adminList created above
   var adminDiv = document.getElementById("admin-list-parent");
   for (var i = 0; i < 12; i++) {
@@ -107,11 +126,10 @@
     else {
       for (key in adminList[i]) {
         var itemDiv = document.createElement("div");
-        itemDiv.setAttribute("style", "padding:0.4rem;  height:3rem; display:flex; flex-wrap:wrap; justify-content:center; align-items:center")
-        itemDiv.setAttribute("class", "collection")
+        itemDiv.setAttribute("class", "border item-list")
         var itemDivChildName = document.createElement("div")
-        itemDivChildName.setAttribute("style", "height:1.5rem; min-width:4rem; text-align:left")
-        itemDivChildName.innerHTML = key
+        itemDivChildName.setAttribute("style", "height:1.5rem; min-width:8rem; text-align:left")
+        itemDivChildName.innerHTML = key + ": "
         var itemDivChildQuantity = document.createElement("div")
         itemDivChildQuantity.innerHTML = adminList[i][key]
         itemDivChildQuantity.setAttribute("style", "height:1.5rem; text-align:left")
