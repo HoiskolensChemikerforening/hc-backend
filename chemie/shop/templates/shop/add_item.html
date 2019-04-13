@@ -38,7 +38,7 @@
 <!-- Form with add item -->
 <div style="display:inline">
   <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
-    <table style="padding-left: 4rem; padding-right: 4rem">
+    <table style="padding-left: 4rem; padding-right: 4rem;">
       {{ form.media }}
       {% crispy form %}
     </table>
