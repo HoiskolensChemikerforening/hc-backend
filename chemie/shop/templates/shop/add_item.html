@@ -13,6 +13,11 @@
   .asteriskField {
     color: red;
   }
+
+  #submit-id-submit {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
 </style>
 {% endblock style %}
 {% block breadcrumbs %}
@@ -64,7 +69,8 @@
         <i class="material-icons" style="color:red">clear</i>
       </td>
       {% endif %}
-      <td style="float: right;"> <a type="submit" class="btn" href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
+      <td style="float: right;"> <a type="submit" class="btn btn-secondary"
+          href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
     </tr>
     {% endfor %}
   </table>
