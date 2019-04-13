@@ -63,7 +63,7 @@
           {% else %}
             <td>{{ score }}</td>
             <td style="text-align:center;">
-              <a href="{% url 'quiz:edit_score' score.pk %}">
+              <a href="{% url 'quiz:edit_scores' term.pk %}">
                 <button class="btn btn-floating">
                   <i class="material-icons">edit</i>
                 </button>

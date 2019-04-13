@@ -1,9 +1,9 @@
 from django import forms
-from .models import QuizScore, QuizTerm
 from dal import autocomplete
+from .models import QuizScore, QuizTerm
 
 
-class QuizScoreForm(forms.ModelForm):
+class CreateQuizScoreForm(forms.ModelForm):
     class Meta:
         model = QuizScore
         fields = ['user', 'score']
@@ -15,6 +15,21 @@ class QuizScoreForm(forms.ModelForm):
                 attrs={
                     'style': 'width:10ch; margin-left: 10px;'
                 })
+        }
+
+
+class EditQuizScoreForm(forms.ModelForm):
+    class Meta:
+        model = QuizScore
+        fields = ['score']
+        widgets = {
+            'score': forms.NumberInput(
+                attrs={
+                    'style': 'width:10ch; margin-left: 10px;'
+                })
+        }
+        labels = {
+            'score': ''
         }
 
 
