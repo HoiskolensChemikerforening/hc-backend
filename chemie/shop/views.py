@@ -281,6 +281,7 @@ def add_item(request):
                 extra_tags="Suksess!",
             )
             form.save()
+            form = AddItemForm(None, None)
     items = Item.objects.all()
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
