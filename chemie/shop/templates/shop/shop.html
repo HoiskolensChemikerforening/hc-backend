@@ -136,8 +136,7 @@ Chemshop
 </script>
 
 {% if not is_tablet_user %}
-<nav class="navbar navbar-light bg-dark"></nav>
-<div class="d-flex balance-box">
+<div class="d-flex balance-box" style="margin-top:1rem">
   <div class="p-2">
     <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
       <b>{{request.user.profile.balance}}</b></p>
@@ -147,7 +146,6 @@ Chemshop
       style="width:1.8rem; float: right; margin-top:-0.2rem">
   </div>
 </div>
-</nav>
 {% endif %}
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
