@@ -39,6 +39,9 @@
   </head>
 </head>
 
+{% block header %}
+{% endblock header %}
+
 <body>
   {% block style %}
   {% endblock style %}
@@ -73,13 +76,13 @@
       {% endfor %}
     </div>
     {% endif %}
-    </nav>
 
     {% block content %}
     {% endblock content %}
 
-    {% block footer_script %}
-    {% endblock footer_script %}
+  </div>
+  {% block footer_script %}
+  {% endblock footer_script %}
 </body>
 
 </html>
