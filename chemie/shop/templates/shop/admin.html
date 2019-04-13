@@ -7,20 +7,23 @@
   <title>Chemshop admin</title>
 </head>
 
-
-{% block content %}
+{% block breadcrumbs %}
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url "shop:index" %}">Shop</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Admin</li>
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
   </ol>
 </nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
 
 <div style="display:flex; justify-content: space-around;">
-  <a class="btn btn-primary" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
-  <a class="btn btn-primary" href="{% url "shop:add-category" %}" role="button">Legg til kategori</a>
-  <a class="btn btn-primary" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
-  <a class="btn btn-primary" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver Happy</a>
+  <a class="btn btn-secondary" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
+  <a class="btn btn-secondary" href="{% url "shop:add-category" %}" role="button">Legg til kategori</a>
+  <a class="btn btn-secondary" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
+  <a class="btn btn-secondary" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver Happy</a>
 </div>
 <!-- See JS footer-script for element creating -->
 <div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">

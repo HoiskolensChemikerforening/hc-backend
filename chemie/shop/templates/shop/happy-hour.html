@@ -3,6 +3,7 @@
 {% load thumbnail %}
 
 {% block header %}
+
 <head>
   <meta charset="UTF-8">
   <title>Chemshop admin</title>
@@ -10,11 +11,22 @@
 </head>
 {% endblock header %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item "><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Happy hour</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
 
 {% block content %}
 <form method="POST"> {% csrf_token %}
   {{ form.as_p }}
-  <input class="btn btn-primary pull-right" id="activate-button" type='submit' value='Aktiver Happy Hour!!' />
+  <input class="btn btn-secondary pull-right" id="activate-button" type='submit' value='Aktiver Happy Hour!!' />
 </form>
 {% endblock content %}
 

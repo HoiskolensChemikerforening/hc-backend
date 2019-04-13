@@ -10,22 +10,26 @@
 </head>
 
 {% block style %}
-  <style>
+<style>
   .asteriskField {
     color: red;
   }
 </style>
 {% endblock style %}
 
-{% block content %}
-<!-- Breadcrumbs -->
+{% block breadcrumbs %}
 <nav aria-label="breadcrumb">
-  <ol class="breadcrumb">
-    <li class="breadcrumb-item"><a href="{% url "shop:index" %}">Shop</a></li>
-    <li class="breadcrumb-item"><a href="{% url "shop:admin" %}">Admin</a></li>
-    <li class="breadcrumb-item active" aria-current="page">Legg inn HC-coin</li>
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item "><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Fyll på konto</li>
   </ol>
 </nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
 
 <div class="row">
   <div class="col s12 m8 l8">
