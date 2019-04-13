@@ -36,7 +36,7 @@
 
 {% block content %}
 
-<div style="display:flex; justify-content: space-around;">
+<div style="display:flex flex-wrap; justify-content: space-around;">
   <a class="btn btn-secondary" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
   <a class="btn btn-secondary" href="{% url "shop:add-category" %}" role="button">Legg til kategori</a>
   <a class="btn btn-secondary" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
