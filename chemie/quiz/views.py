@@ -71,8 +71,6 @@ def create_score(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
     form = CreateQuizScoreForm(request.POST or None)
-    activate_form = CreateQuizTermForm(instance=term)
-    activate_form.fields.pop('term')
 
     if form.is_valid():
         instance = form.save(commit=False)
@@ -90,7 +88,6 @@ def create_score(request, pk):
         'term': term,
         'scores': scores,
         'form': form,
-        'activate_form': activate_form
     }
     return render(request, 'quiz/create_score.html', context)
 
