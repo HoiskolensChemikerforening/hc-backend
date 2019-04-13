@@ -1,6 +1,7 @@
 {% extends "shop/base_shop.html" %}
 {% load static %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 
 {% block header %}
 
@@ -10,6 +11,14 @@
   <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 {% endblock header %}
+
+{% block style %}
+<style>
+  .asteriskField {
+    color: red;
+  }
+</style>
+{% endblock style %}
 
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
@@ -25,8 +34,9 @@
 
 {% block content %}
 <form method="POST"> {% csrf_token %}
-  {{ form.as_p }}
-  <input class="btn btn-secondary pull-right" id="activate-button" type='submit' value='Aktiver Happy Hour!!' />
+  <table>
+    {% crispy form %}
+  </table>
 </form>
 {% endblock content %}
 
