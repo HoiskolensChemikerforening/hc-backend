@@ -367,25 +367,16 @@ Chemshop
     <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTER SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 
     {% block footer_script %}
+    <!-- Get cookie for POST request with AJAX -->
     <script type="text/javascript">
-      function getCookie(name) {
-        var cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-          var cookies = document.cookie.split(';');
-          for (var i = 0; i < cookies.length; i++) {
-            var cookie = jQuery.trim(cookies[i]);
-            // Does this cookie string begin with the name we want?
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-              break;
-            }
-          }
-        }
-        return cookieValue;
-      }
-      var csrftoken = getCookie('csrftoken');
+      $(document).ready(function () {
+          $.ajaxSetup({
+              headers: {'X-CSRFToken': Cookies.get('csrftoken')}
+          });
+      });
     </script>
 
+    <!-- Filter items by checkboxes -->
     <script type="text/javascript">
       // creates all items to be remembered with filtering
       var cardItemsChildren = document.getElementById("card-items").children;
@@ -429,6 +420,7 @@ Chemshop
       }
     </script>
 
+    <!-- User wishes to increment or decrement amount of items added to cart -->
     <script type="text/javascript">
       //user presses the + button
       function plus(item_name, item_pk) {
@@ -470,6 +462,8 @@ Chemshop
       }
 
     </script>
+
+    <!-- Add a remove item from cart button and if user presses, remove the item -->
     <script>
       // Create a "close" button and append it to each list item
       var itemList = document.getElementsByClassName("item-list");
@@ -497,7 +491,7 @@ Chemshop
           var item_id = item_id_array[item_id_array.length - 1];
 
           $.ajax({
-            type: "GET",
+            type: "POST",
             url: "/shop/admin/remove-item/" + item_id,
             datatype: "json",
 
