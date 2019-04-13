@@ -26,11 +26,20 @@ class RefillBalanceForm(forms.ModelForm):
 
 
 class AddCategoryForm(forms.ModelForm):
-    layout = M.Layout(M.Row("name"))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            "name",
+            Submit('submit', 'Lagre kategorien')
+        )
 
     class Meta:
         model = Category
         fields = ["name"]
+        widgets = {
+            "name": forms.TextInput(attrs={"placeholder": "Skriv inn kategorinavn"})
+        }
 
 
 class AddItemForm(forms.ModelForm):
@@ -53,7 +62,8 @@ class AddItemForm(forms.ModelForm):
         model = Item
         fields = ["name", "price", "category", "image", "happy_hour_duplicate"]
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "Skriv inn varenavn"})
+            "name": forms.TextInput(attrs={"placeholder": "Skriv inn varenavn"}),
+            "price": forms.NumberInput(attrs={"placeholder": "0.00"})
         }
 
 

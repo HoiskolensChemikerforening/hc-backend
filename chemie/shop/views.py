@@ -174,38 +174,42 @@ def index_tabletshop(request):
                 if duplicate:
                     cart.add(duplicate, quantity=int(quantity))
         if "checkout" in request.POST:
-            try:
-                rfid = request.POST["rfid"]
-                access_card = Profile.objects.rfid_to_em(rfid)
-                profile = Profile.objects.get(access_card=access_card)
-                balance = profile.balance
-                total_price = cart.get_total_price()
-                if balance < total_price:
+            if rfid_form.is_valid():
+                rfid = rfid_form.cleaned_data["rfid"]
+                try:
+                    access_card = Profile.objects.rfid_to_em(rfid)
+                    profile = Profile.objects.get(access_card=access_card)
+                    balance = profile.balance
+                    total_price = cart.get_total_price()
+                    if balance < total_price:
+                        messages.add_message(
+                            request,
+                            messages.ERROR,
+                            "Du har itj nok HC-coin, kiis",
+                            extra_tags="Nei!",
+                        )
+                    else:
+                        cart.buy(request, profile.user)
+                        new_balance = balance - total_price
+                        messages.add_message(
+                            request,
+                            messages.SUCCESS,
+                            (
+                                f"Kontoen din er trukket {total_price} HC-coins."
+                                f" Du har igjen {new_balance} HC-coins."
+                            ),
+                            extra_tags="Kjøp godkjent",
+                        )
+                    context["cart"] = cart
+                except ObjectDoesNotExist:
                     messages.add_message(
                         request,
-                        messages.ERROR,
-                        "Du har itj nok HC-coin, kiis",
-                        extra_tags="Nei!",
+                        messages.WARNING,
+                        "Studentkort ikke registrert, Gå inn på {}".format(
+                            reverse("profile:edit")
+                        ),
+                        extra_tags="Ups",
                     )
-                else:
-                    cart.buy(request, profile.user)
-                    new_balance = balance - total_price
-                    messages.add_message(
-                        request,
-                        messages.SUCCESS,
-                        f"Kontoen din er trukket {total_price} HC-coins. Du har igjen {new_balance} HC-coins.",
-                        extra_tags="Kjøp godkjent",
-                    )
-                context["cart"] = cart
-            except ObjectDoesNotExist:
-                messages.add_message(
-                    request,
-                    messages.WARNING,
-                    "Studentkort ikke registrert, Gå inn på {}".format(
-                        reverse("profile:edit")
-                    ),
-                    extra_tags="Ups",
-                )
     rfid_form = GetRFIDForm(None)
     context["rfid_form"] = rfid_form
     return context
@@ -277,6 +281,7 @@ def add_item(request):
                 extra_tags="Suksess!",
             )
             form.save()
+            form = AddItemForm(None, None)
     items = Item.objects.all()
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
