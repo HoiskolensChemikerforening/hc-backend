@@ -23,7 +23,6 @@ Chemshop
     padding-top: 0.2rem;
     padding-left: 0.2rem;
     border: 0.2rem solid rgb(0, 0, 0);
-    border-style: solid solid solid solid;
     border-radius: 1rem 1rem 1rem 1rem;
     justify-content: center;
     right: 1rem;
@@ -135,6 +134,7 @@ Chemshop
   var AllItemList = {}
 </script>
 
+<!-- Show money -->
 {% if not is_tablet_user %}
 <div class="d-flex balance-box" style="margin-top:1rem">
   <div class="p-2">
@@ -147,6 +147,8 @@ Chemshop
   </div>
 </div>
 {% endif %}
+
+<!-- Show category checkboxes to filter items -->
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
   <script type="text/javascript">
@@ -161,6 +163,8 @@ Chemshop
   </p>
   {% endfor %}
 </div>
+
+<!-- Display items as cards -->
 <div class="d-flex flex-wrap" id="card-items" style="justify-content: space-between">
   {% for item in items %}
   <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
@@ -171,14 +175,13 @@ Chemshop
         {% endthumbnail %}
       </div>
 
-      <div class="d-flex justify-content-center">
-        <div class="p-2">
-          <p style="float:left; margin-left: 1rem; padding-top: 0rem">
-            <b>{{item.price}}</b></p>
+      <div class="d-flex justify-content-around">
+        <div>
+          {{ item.name }}
         </div>
-        <div class="p-2">
-          <img type="image/png" src="{% static "images/HC_coin.png" %}"
-            style="width:1.8rem; float: right; margin-top:-0.2rem">
+        <div>
+          {{ item.price }}
+          <img type="image/png" style="width:1.8rem" src="{% static "images/HC_coin.png" %}">
         </div>
       </div>
 
@@ -503,7 +506,7 @@ Chemshop
               let sum_to_remove = current_item.
                 children[current_item.children.length - 2]
                 .innerHTML;
-              let total_sum = total_sum_element.innerHTML.split(" ")[1];
+              let total_sum = total_sum_element.innerText.split(" ")[1];
               // Nasty, but really just takes the difference between previous total sum
               // and sum of items removed + replaces decimal separator 'dot' to 'comma'
               let new_sum = parseFloat(

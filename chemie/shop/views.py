@@ -212,7 +212,6 @@ def index_tabletshop(request):
     return context
 
 
-# TODO: Change this to a custom permission?
 @permission_required("customprofile.refill_balance")
 def admin(request):
     order_items = get_last_year_receipts()
