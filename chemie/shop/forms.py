@@ -1,6 +1,5 @@
 from django import forms
 from dal import autocomplete
-import material as M
 from .models import Item, Category, RefillReceipt, HappyHour
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
@@ -11,9 +10,7 @@ class RefillBalanceForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            "receiver",
-            "amount",
-            Submit('submit', 'Lagre varen')
+            "receiver", "amount", Submit("submit", "Lagre varen")
         )
 
     class Meta:
@@ -21,7 +18,7 @@ class RefillBalanceForm(forms.ModelForm):
         fields = ["receiver", "amount"]
         widgets = {
             "receiver": autocomplete.ModelSelect2(url="verv:user-autocomplete"),
-            "amount": forms.NumberInput(attrs={"placeholder": "0.00"})
+            "amount": forms.NumberInput(attrs={"placeholder": "0.00"}),
         }
 
 
@@ -30,15 +27,16 @@ class AddCategoryForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            "name",
-            Submit('submit', 'Lagre kategorien')
+            "name", Submit("submit", "Lagre kategorien")
         )
 
     class Meta:
         model = Category
         fields = ["name"]
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "Skriv inn kategorinavn"})
+            "name": forms.TextInput(
+                attrs={"placeholder": "Skriv inn kategorinavn"}
+            )
         }
 
 
@@ -51,24 +49,33 @@ class AddItemForm(forms.ModelForm):
             "price",
             "image",
             Row(
-                Column("category", css_class='form-group col-md-6 mb-0'),
-                Column("happy_hour_duplicate", css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
+                Column("category", css_class="form-group col-md-6 mb-0"),
+                Column(
+                    "happy_hour_duplicate", css_class="form-group col-md-6 mb-0"
+                ),
+                css_class="form-row",
             ),
-            Submit('submit', 'Lagre varen')
+            Submit("submit", "Lagre varen"),
         )
 
     class Meta:
         model = Item
         fields = ["name", "price", "category", "image", "happy_hour_duplicate"]
         widgets = {
-            "name": forms.TextInput(attrs={"placeholder": "Skriv inn varenavn"}),
-            "price": forms.NumberInput(attrs={"placeholder": "0.00"})
+            "name": forms.TextInput(
+                attrs={"placeholder": "Skriv inn varenavn"}
+            ),
+            "price": forms.NumberInput(attrs={"placeholder": "0.00"}),
         }
 
 
 class HappyHourForm(forms.ModelForm):
-    layout = M.Layout(M.Row("duration"))
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            "duration", Submit("submit", "Aktivér happy hour!!")
+        )
 
     class Meta:
         model = HappyHour
@@ -84,12 +91,14 @@ class EditItemForm(forms.ModelForm):
             "price",
             "image",
             Row(
-                Column("category", css_class='form-group col-md-6 mb-0'),
-                Column("happy_hour_duplicate", css_class='form-group col-md-6 mb-0'),
-                css_class='form-row'
+                Column("category", css_class="form-group col-md-6 mb-0"),
+                Column(
+                    "happy_hour_duplicate", css_class="form-group col-md-6 mb-0"
+                ),
+                css_class="form-row",
             ),
             "is_active",
-            Submit('submit', 'Lagre varen')
+            Submit("submit", "Lagre varen"),
         )
 
     class Meta:
@@ -100,5 +109,5 @@ class EditItemForm(forms.ModelForm):
             "image",
             "category",
             "happy_hour_duplicate",
-            "is_active"
+            "is_active",
         ]
