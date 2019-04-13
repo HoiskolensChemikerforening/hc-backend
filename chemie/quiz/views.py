@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from django.shortcuts import get_object_or_404
-from .models import QuizTerm, QuizScore
 from django.contrib import messages
-from .forms import QuizScoreForm, CreateQuizTermForm
 from django.contrib.auth.decorators import login_required, permission_required
-# Create your views here.
+from django.forms import modelformset_factory
+
+from .models import QuizTerm, QuizScore
+from .forms import CreateQuizScoreForm, EditQuizScoreForm, CreateQuizTermForm
 
 
 def index(request):
@@ -69,7 +70,7 @@ def activate_deactivate(request, pk):
 def create_score(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = QuizScore.objects.filter(term=term).order_by('-score')
-    form = QuizScoreForm(request.POST or None)
+    form = CreateQuizScoreForm(request.POST or None)
     activate_form = CreateQuizTermForm(instance=term)
     activate_form.fields.pop('term')
 
@@ -94,24 +95,33 @@ def create_score(request, pk):
     return render(request, 'quiz/create_score.html', context)
 
 
-@permission_required('quiz.change_quizscore')
-def edit_score(request, pk):
-    quiz_score_edit = get_object_or_404(QuizScore, pk=pk)
-    term = quiz_score_edit.term
-    scores = QuizScore.objects.filter(term=term).order_by('-score')
-    form = QuizScoreForm(request.POST or None)
-    form.fields.pop('user')
+@permission_required("quiz.change_quizscore")
+def edit_scores(request, pk):
+    term = get_object_or_404(QuizTerm, pk=pk)
+    scores = term.scores.order_by('-score')
 
-    if form.is_valid():
-        instance = form.save(commit=False)
-        quiz_score_edit.score += instance.score
-        quiz_score_edit.save()
-        return redirect('quiz:create_score', term.pk)
+    MemberFormSet = modelformset_factory(
+        QuizScore, form=EditQuizScoreForm, extra=0
+    )
+    formset = MemberFormSet(
+        request.POST or None, queryset=scores
+    )
+
+    if request.method == "POST":
+        if formset.is_valid():
+            formset.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Poengene ble lagret",
+                extra_tags="Wohoo!"
+            )
+            return redirect("quiz:create_score", term.pk)
 
     context = {
         'term': term,
         'scores': scores,
-        'form': form,
-        'quiz_score_edit': quiz_score_edit
+        'formset': formset,
     }
-    return render(request, 'quiz/create_score.html', context)
+
+    return render(request, "quiz/edit_scores.html", context)

@@ -36,7 +36,7 @@ urlpatterns = [
     ),
     path(
         "<int:pk>/endre-poeng",
-        views.edit_score,
-        name="edit_score"
+        views.edit_scores,
+        name="edit_scores"
     )
 ]
