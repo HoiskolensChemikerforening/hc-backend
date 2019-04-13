@@ -242,16 +242,14 @@ Chemshop
               <th>Total</th>
               <th></th>
             </tr>
-            {% for item_names, item_details in cart.cart.items %}
-            <tr class="item-list" id="item-list-{{ item_names|get_item_pk_from_name }}">
-              <td>{{ item_names }}</td>
+            {% for item_name, item_details in cart.cart.items %}
+            <tr class="item-list" id="item-list-{{ item_name|get_item_pk_from_name }}">
+              <td>{{ item_name }}</td>
               <td>{{ item_details.quantity }}</td>
               <td>{{ item_details.price }}</td>
               <td>Totalpris for denne</td>
-              <td style="text-align: center;" class="item-remove"> <i class="material-icons pointer"
-                  style="color:darkred; cursor:pointer">
-                  clear
-                </i>
+              <td style="text-align: center;" class="item-remove">
+                <i class="material-icons pointer" style="color:darkred; cursor:pointer">clear</i>
               </td>
             </tr>
             {% endfor %}
@@ -259,13 +257,12 @@ Chemshop
         </div>
         <div class="modal-footer">
 
-          <div id="total-sum-in-cart" class="d-flex">
-            <div class="p-2">
-              <h5 style="width:3rem">Total: {{ cart.get_total_price }}</h5>
+          <div id="total-sum-in-cart" class="d-flex align-center mr-auto">
+            <div class="float-left">
+              Total: {{ cart.get_total_price }}
             </div>
-            <div class="p-2">
-
-              <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem; margin-top: 50%">
+            <div>
+              <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem; padding-left:0.3rem; padding-bottom:0.2rem;">
             </div>
 
           </div>
