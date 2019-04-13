@@ -69,22 +69,21 @@ Chemshop
   var categoriesFilterd = {}
   var AllItemList = {}
 </script>
-<nav class="navbar navbar-light bg-dark">
-  {% if not is_tablet_user %}
 
-
-  <div class="d-flex balance-box">
-    <div class="p-2">
-      <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
-        <b>{{request.user.profile.balance}}</b></p>
-    </div>
-    <div class="p-2">
-      <img type="image/png" src="{% static "images/HC_coin.png" %}"
-        style="width:1.8rem; float: right; margin-top:-0.2rem">
-    </div>
+{% if not is_tablet_user %}
+<nav class="navbar navbar-light bg-dark"></nav>
+<div class="d-flex balance-box">
+  <div class="p-2">
+    <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
+      <b>{{request.user.profile.balance}}</b></p>
   </div>
-  {% endif %}
+  <div class="p-2">
+    <img type="image/png" src="{% static "images/HC_coin.png" %}"
+      style="width:1.8rem; float: right; margin-top:-0.2rem">
+  </div>
+</div>
 </nav>
+{% endif %}
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
   <script type="text/javascript">
@@ -99,7 +98,7 @@ Chemshop
   </p>
   {% endfor %}
 </div>
-<div class="d-flex flex-wrap" id="card-items" style="justify-content: center">
+<div class="d-flex flex-wrap" id="card-items" style="justify-content: space-between">
   {% for item in items %}
   <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
     <div class="d-flex flex-column justify-content-between" style="height:100%">
@@ -198,9 +197,9 @@ Chemshop
               kortet</button>
           </form>
           <script>
-            $("#cart-modal").on("shown.bs.modal", function() {
-                $("#id_rfid").focus();
-                $("#id_rfid").select();
+            $("#cart-modal").on("shown.bs.modal", function () {
+              $("#id_rfid").focus();
+              $("#id_rfid").select();
             });
           </script>
           {% else %}
@@ -213,258 +212,268 @@ Chemshop
       </div>
     </div>
   </div>
-{% if cart.cart %}
+  {% if cart.cart %}
 
-<!-- hiiiiiiiiiidf -->
+  <!-- hiiiiiiiiiidf -->
 
-<div class="container-fluid">
-  <div class="row">
-    <div class="col-md-12">
-      <div class="btn-group-sm hidden" id="mini-fab">
-        <button class="btn btn-warning btn-fab" id="modalTrigger" type="button"
-          data-toggle="modal" data-target="#cart-modal">
-          <i class="material-icons">
-            shopping_cart
-          </i>
-        </button>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-group-sm hidden" id="mini-fab">
+          <button class="btn btn-warning btn-fab" id="modalTrigger" type="button" data-toggle="modal"
+            data-target="#cart-modal">
+            <i class="material-icons">
+              shopping_cart
+            </i>
+          </button>
+        </div>
       </div>
     </div>
-  </div>
 
 
 
-  <!-- floating shopping cart btn is styled with JS footer script -->
-  <div class="fixed-action-btn" id="shopping-cart-btn" style="bottom: 3.05rem; left: 1.7rem;">
-    <a class="btn-floating btn-large modal-trigger" href="#modal1">
-      <i class="large material-icons yellow darken-2">shopping_cart</i>
-    </a>
-  </div>
-  <script type="text/javascript">
-    var elem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
-    var elemChild = document.getElementsByClassName("large material-icons yellow darken-2")[0]
-    var bottomPos = 29;
-    var done = false
-    var id = setInterval(frame, 5, done);
-    function frame(done_pre) {
-      if (bottomPos == 29 && done) {
-        clearInterval(id);
-      }
-      if (bottomPos == 60) {
-        done = true;
-      }
-      if (!done) {
-        bottomPos++
-      } else {
-        bottomPos--
+    <!-- floating shopping cart btn is styled with JS footer script -->
+    <div class="fixed-action-btn" id="shopping-cart-btn" style="bottom: 3.05rem; left: 1.7rem;">
+      <a class="btn-floating btn-large modal-trigger" href="#modal1">
+        <i class="large material-icons yellow darken-2">shopping_cart</i>
+      </a>
+    </div>
 
-      }
-      elem.style.bottom = bottomPos.toString() + ".px"
-    }
-  </script>
-  {% endif %}
-  {% if perms.shop.add_item or perms.customprofile.refill_balance %}
-  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <a class="btn-floating btn-large">
-      <i class="large material-icons">edit</i>
-    </a>
-    <ul>
-      {% if perms.customprofile.refill_balance %}
-      <li>
-        <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">attach_money</i></a>
-        <a class="btn-floating mobile-fab-tip">Fyll på HC coin</a>
-      </li>
-      {% endif %}
-      {% if perms.shop.add_item %}
-      <li>
-        <a class="btn-floating blue" href="{% url "shop:admin" %}"><i class="material-icons">build</i></a>
-        <a class="btn-floating mobile-fab-tip">Admin side</a>
-      </li>
-      {% endif %}
-    </ul>
-  </div>
-  {% endif %}
 
-  {% endblock content %}
-
-  {% block footer_script %}
-  <script type="text/javascript">
-    function getCookie(name) {
-      var cookieValue = null;
-      if (document.cookie && document.cookie !== '') {
-        var cookies = document.cookie.split(';');
-        for (var i = 0; i < cookies.length; i++) {
-          var cookie = jQuery.trim(cookies[i]);
-          // Does this cookie string begin with the name we want?
-          if (cookie.substring(0, name.length + 1) === (name + '=')) {
-            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-            break;
+    <!-- Animation for the floating shopping cart button -->
+    <script type="text/javascript">
+      var elem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
+      var bottomPos = 29; // Same as in the CSS further up
+      var animationStep = 0;
+      var animation = [
+        // index 0 is the duration of the movement
+        // index 1 is the speed for the movement
+        // Each element array represents one movement of the animation
+        [10, 2], [10, 1], [10, 0], [10, -1], [10, -2], // First animation up and down
+        [5, 2], [5, 1], [5, 0], [5, -1], [5, -2] // Second animation up and down
+      ]
+      var id = setInterval(frame, 5, done);
+      function frame(done_pre) {
+        if (animationStep == animation.length) {
+          // Ends the animates
+          clearInterval(id);
+        } else {
+          speedDuration = animation[animationStep]
+          if (speedDuration[0] == 0) {
+            // Moves on to the next movement
+            animationStep++
+          } else {
+            bottomPos += speedDuration[1]
+            speedDuration[0]--
           }
         }
+        elem.style.bottom = bottomPos.toString() + ".px"
       }
-      return cookieValue;
-    }
-    var csrftoken = getCookie('csrftoken');
-  </script>
+    </script>
+    {% endif %}
+    {% if perms.shop.add_item or perms.customprofile.refill_balance %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.customprofile.refill_balance %}
+        <li>
+          <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">attach_money</i></a>
+          <a class="btn-floating mobile-fab-tip">Fyll på HC coin</a>
+        </li>
+        {% endif %}
+        {% if perms.shop.add_item %}
+        <li>
+          <a class="btn-floating blue" href="{% url "shop:admin" %}"><i class="material-icons">build</i></a>
+          <a class="btn-floating mobile-fab-tip">Admin side</a>
+        </li>
+        {% endif %}
+      </ul>
+    </div>
+    {% endif %}
 
-  <script type="text/javascript">
-    // creates all items to be remembered with filtering
-    var cardItemsChildren = document.getElementById("card-items").children;
-    for (var i = 0; i < cardItemsChildren.length; i++) {
-      AllItemList[cardItemsChildren[i].id] = cardItemsChildren[i]
-    }
+    {% endblock content %}
 
-    function filter_category(checked, category) {
-      categoriesFilterd[category] = checked;
-
-      // check if any boxes are clicked
-      isActivated = false
-      for (key in categoriesFilterd) {
-        if (categoriesFilterd[key]) {
-          isActivated = true
+    {% block footer_script %}
+    <script type="text/javascript">
+      function getCookie(name) {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+          var cookies = document.cookie.split(';');
+          for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+              cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+              break;
+            }
+          }
         }
+        return cookieValue;
       }
-      var cardItems = document.getElementById("card-items");
-      cardItems.innerHTML = '';
-      var cardItemsList = [];
-      // append only clicked items to list
-      if (isActivated) {
-        for (var key in AllItemList) {
-          var itemCat = key.split('-')[0];
-          if (categoriesFilterd[itemCat]) {
+      var csrftoken = getCookie('csrftoken');
+    </script>
+
+    <script type="text/javascript">
+      // creates all items to be remembered with filtering
+      var cardItemsChildren = document.getElementById("card-items").children;
+      for (var i = 0; i < cardItemsChildren.length; i++) {
+        AllItemList[cardItemsChildren[i].id] = cardItemsChildren[i]
+      }
+
+      function filter_category(checked, category) {
+        categoriesFilterd[category] = checked;
+
+        // check if any boxes are clicked
+        isActivated = false
+        for (key in categoriesFilterd) {
+          if (categoriesFilterd[key]) {
+            isActivated = true
+          }
+        }
+        var cardItems = document.getElementById("card-items");
+        cardItems.innerHTML = '';
+        var cardItemsList = [];
+        // append only clicked items to list
+        if (isActivated) {
+          for (var key in AllItemList) {
+            var itemCat = key.split('-')[0];
+            if (categoriesFilterd[itemCat]) {
+              cardItemsList.push(AllItemList[key])
+            }
+          }
+        } else {
+          // if no boxes are clicked, all item is presented
+          for (var key in AllItemList) {
             cardItemsList.push(AllItemList[key])
           }
         }
-      } else {
-        // if no boxes are clicked, all item is presented
-        for (var key in AllItemList) {
-          cardItemsList.push(AllItemList[key])
+        // append the filtered items to parent node
+        for (var i = 0; i < cardItemsList.length; i++) {
+          cardItems.appendChild(cardItemsList[i])
         }
+
+
       }
-      // append the filtered items to parent node
-      for (var i = 0; i < cardItemsList.length; i++) {
-        cardItems.appendChild(cardItemsList[i])
+    </script>
+
+    <script type="text/javascript">
+      //user presses the + button
+      function plus(item_name, item_pk) {
+        item_dict[item_name]++;
+        document.getElementById('item_' + item_name).value = item_dict[item_name];
       }
 
-
-    }
-  </script>
-
-  <script type="text/javascript">
-    //user presses the + button
-    function plus(item_name, item_pk) {
-      item_dict[item_name]++;
-      document.getElementById('item_' + item_name).value = item_dict[item_name];
-    }
-
-    // user presses the - button
-    function minus(item_name, item_pk) {
-      if (item_dict[item_name] > 0) {
-        item_dict[item_name]--;
+      // user presses the - button
+      function minus(item_name, item_pk) {
+        if (item_dict[item_name] > 0) {
+          item_dict[item_name]--;
+        }
+        document.getElementById('item_' + item_name).value = item_dict[item_name];
       }
-      document.getElementById('item_' + item_name).value = item_dict[item_name];
-    }
-  </script>
-  <script>
-    function changeQuantity(self, item_name) {
+    </script>
+    <script>
+      function changeQuantity(self, item_name) {
 
-      if (item_dict[item_name] === 0) {
-        self.preventDefault();
+        if (item_dict[item_name] === 0) {
+          self.preventDefault();
+          return false;
+        }
+        var id = self.getAttribute("id");
+        self.setAttribute("value", id + "-" + item_dict[item_name]);
         return false;
       }
-      var id = self.getAttribute("id");
-      self.setAttribute("value", id + "-" + item_dict[item_name]);
-      return false;
-    }
 
-    document.addEventListener('DOMContentLoaded', function () {
-      var elems = document.querySelectorAll('.modal');
-      var cart_modal_element = M.Modal.init(elems, {});
-    });
+      document.addEventListener('DOMContentLoaded', function () {
+        var elems = document.querySelectorAll('.modal');
+        var cart_modal_element = M.Modal.init(elems, {});
+      });
 
 
-    function getTotalForItem(item_list_id) {
-      let item = document.getElementById(item_list_id);
-      let quantity = item.children[1].innerHTML;
-      let price = item.children[2].innerHTML;
-      return (parseFloat(price).toFixed(2) * parseFloat(quantity).toFixed(2)).toFixed(2);
-    }
-
-  </script>
-  <script>
-    var isTabletUserString = "{{is_tablet_user}}";
-    var isTabletUser = (isTabletUserString == "True");
-    if (isTabletUser) {
-      var sideBarNav = document.getElementsByClassName("top-nav")[0]
-      var footer = document.getElementsByClassName("page-footer")[0]
-      sideBarNav.setAttribute("style", "display:none")
-      footer.setAttribute("style", "display:none")
-    }
-
-    // Create a "close" button and append it to each list item
-    var itemList = document.getElementsByClassName("item-list");
-    // var i;
-    for (i = 0; i < itemList.length; i++) {
-      var columns = itemList[i].children.length;
-      // Get total price for items: quantity*price
-      itemList[i]
-        .children[columns - 2]
-        .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
-    }
-
-    // Click on a close button to remove the current list item
-    var closeItem = document.getElementsByClassName("item-list");
-    var i;
-    for (i = 0; i < closeItem.length; i++) {
-      // The 'x' at the far right
-      var close_button = closeItem[i].lastElementChild;
-      close_button.onclick = function () {
-        // Get the current li element
-        var current_item = this.parentNode;
-        // Get the id of the li element and put into array
-        var item_id_array = current_item.id.split("-");
-        // Get item id
-        var item_id = item_id_array[item_id_array.length - 1];
-
-        $.ajax({
-          type: "GET",
-          url: "/shop/admin/remove-item/" + item_id,
-          datatype: "json",
-
-          success: function (json) {
-            let total_sum_element = document.getElementById("total-sum-in-cart");
-            let sum_to_remove = current_item.
-              children[current_item.children.length - 2]
-              .innerHTML;
-            let total_sum = total_sum_element.innerHTML.split(" ")[1];
-            // Nasty, but really just takes the difference between previous total sum
-            // and sum of items removed + replaces decimal separator 'dot' to 'comma'
-            let new_sum = parseFloat(
-              parseFloat(total_sum).toFixed(2) -
-              parseFloat(sum_to_remove).toFixed(2)
-            ).toFixed(2).replace(".", ",");
-            total_sum_element.innerHTML = `Total: ${new_sum}`;
-            let number_of_items_left = document.getElementsByClassName("item-list").length;
-            current_item.parentNode.removeChild(current_item);
-            if ((number_of_items_left - 1) === 0) {
-              for (let key in item_dict) {
-                item_dict[key] = 0;
-              }
-              let cart_modal = document.getElementById("cart-modal");
-              cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
-            }
-          },
-
-          error: function (xhr, errmsg, err) {
-            // console.log(xhr.status + ": " + xhr.responseText);
-          },
-        });
+      function getTotalForItem(item_list_id) {
+        let item = document.getElementById(item_list_id);
+        let quantity = item.children[1].innerHTML;
+        let price = item.children[2].innerHTML;
+        return (parseFloat(price).toFixed(2) * parseFloat(quantity).toFixed(2)).toFixed(2);
       }
-    }
+
+    </script>
+    <script>
+      var isTabletUserString = "{{is_tablet_user}}";
+      var isTabletUser = (isTabletUserString == "True");
+      if (isTabletUser) {
+        var sideBarNav = document.getElementsByClassName("top-nav")[0]
+        var footer = document.getElementsByClassName("page-footer")[0]
+        sideBarNav.setAttribute("style", "display:none")
+        footer.setAttribute("style", "display:none")
+      }
+
+      // Create a "close" button and append it to each list item
+      var itemList = document.getElementsByClassName("item-list");
+      // var i;
+      for (i = 0; i < itemList.length; i++) {
+        var columns = itemList[i].children.length;
+        // Get total price for items: quantity*price
+        itemList[i]
+          .children[columns - 2]
+          .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
+      }
+
+      // Click on a close button to remove the current list item
+      var closeItem = document.getElementsByClassName("item-list");
+      var i;
+      for (i = 0; i < closeItem.length; i++) {
+        // The 'x' at the far right
+        var close_button = closeItem[i].lastElementChild;
+        close_button.onclick = function () {
+          // Get the current li element
+          var current_item = this.parentNode;
+          // Get the id of the li element and put into array
+          var item_id_array = current_item.id.split("-");
+          // Get item id
+          var item_id = item_id_array[item_id_array.length - 1];
+
+          $.ajax({
+            type: "GET",
+            url: "/shop/admin/remove-item/" + item_id,
+            datatype: "json",
+
+            success: function (json) {
+              let total_sum_element = document.getElementById("total-sum-in-cart");
+              let sum_to_remove = current_item.
+                children[current_item.children.length - 2]
+                .innerHTML;
+              let total_sum = total_sum_element.innerHTML.split(" ")[1];
+              // Nasty, but really just takes the difference between previous total sum
+              // and sum of items removed + replaces decimal separator 'dot' to 'comma'
+              let new_sum = parseFloat(
+                parseFloat(total_sum).toFixed(2) -
+                parseFloat(sum_to_remove).toFixed(2)
+              ).toFixed(2).replace(".", ",");
+              total_sum_element.innerHTML = `Total: ${new_sum}`;
+              let number_of_items_left = document.getElementsByClassName("item-list").length;
+              current_item.parentNode.removeChild(current_item);
+              if ((number_of_items_left - 1) === 0) {
+                for (let key in item_dict) {
+                  item_dict[key] = 0;
+                }
+                let cart_modal = document.getElementById("cart-modal");
+                cart_modal.innerHTML = "Du har ingen varer i kurven. Kjøp noe da vel!";
+              }
+            },
+
+            error: function (xhr, errmsg, err) {
+              // console.log(xhr.status + ": " + xhr.responseText);
+            },
+          });
+        }
+      }
 
 
-    $(document).ready(function () {
-      $('[data-toggle="tooltip"]').tooltip();
-    });
-    $.material.init();
-  </script>
-  {% endblock footer_script %}
+      $(document).ready(function () {
+        $('[data-toggle="tooltip"]').tooltip();
+      });
+      $.material.init();
+    </script>
+    {% endblock footer_script %}
