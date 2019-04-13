@@ -11,12 +11,13 @@ from .forms import CreateQuizScoreForm, EditQuizScoreForm, CreateQuizTermForm
 def index(request):
     try:
         active_term = QuizTerm.objects.get(is_active=True)
+        top_scores = active_term.scores.order_by('-score')[:3]
         terms = QuizTerm.objects.exclude(id=active_term.id).order_by('-id')
     except QuizTerm.DoesNotExist:
-        active_term = None
+        active_term = QuizTerm.objects.none()
+        top_scores = QuizScore.objects.none()
         terms = QuizTerm.objects.all().order_by('-id')
 
-    top_scores = QuizScore.objects.filter(term=active_term).order_by('-score')[:3]
     context = {
         "active_term": active_term,
         "top_scores": top_scores,
@@ -50,7 +51,7 @@ def delete_term(request, pk):
 @login_required
 def term_detail(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
-    scores = QuizScore.objects.filter(term=term).order_by('-score')
+    scores = term.scores.order_by('-score')
     context = {
         'term': term,
         'scores': scores
@@ -69,7 +70,7 @@ def activate_deactivate(request, pk):
 @permission_required("quiz.change_quizterm")
 def create_score(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
-    scores = QuizScore.objects.filter(term=term).order_by('-score')
+    scores = term.scores.order_by('-score')
     form = CreateQuizScoreForm(request.POST or None)
 
     if form.is_valid():
