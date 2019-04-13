@@ -111,20 +111,18 @@ Chemshop
     right: 20px;
   }
 
-  #main {
-    bottom: 20px;
+  .btn-group-sm .btn-fab {
+    position: fixed !important;
+    right: 29px;
   }
 
-  #mail {
-    bottom: 80px
+  .btn-group .btn-fab {
+    position: fixed !important;
+    right: 20px;
   }
 
-  #sms {
-    bottom: 125px
-  }
-
-  #autre {
-    bottom: 170px
+  #admin {
+    bottom: 29px
   }
 </style>
 {% endblock style %}
@@ -276,7 +274,6 @@ Chemshop
   </div>
   {% if cart.cart %}
 
-  <!-- hiiiiiiiiiidf -->
 
   <div class="container-fluid">
     <div class="row">
@@ -291,16 +288,6 @@ Chemshop
         </div>
       </div>
     </div>
-
-
-
-    <!-- floating shopping cart btn is styled with JS footer script -->
-    <div class="fixed-action-btn" id="shopping-cart-btn" style="bottom: 3.05rem; left: 1.7rem;">
-      <a class="btn-floating btn-large modal-trigger" href="#modal1">
-        <i class="large material-icons yellow darken-2">shopping_cart</i>
-      </a>
-    </div>
-
 
     <!-- Animation for the floating shopping cart button -->
     <script type="text/javascript">
@@ -335,29 +322,28 @@ Chemshop
       }
     </script>
     {% endif %}
+
     {% if perms.shop.add_item or perms.customprofile.refill_balance %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large">
-        <i class="large material-icons">edit</i>
-      </a>
-      <ul>
-        {% if perms.customprofile.refill_balance %}
-        <li>
-          <a class="btn-floating blue" href="{% url "shop:refill" %}"><i class="material-icons">attach_money</i></a>
-          <a class="btn-floating mobile-fab-tip">Fyll på HC coin</a>
-        </li>
-        {% endif %}
-        {% if perms.shop.add_item %}
-        <li>
-          <a class="btn-floating blue" href="{% url "shop:admin" %}"><i class="material-icons">build</i></a>
-          <a class="btn-floating mobile-fab-tip">Admin side</a>
-        </li>
-        {% endif %}
-      </ul>
+
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-md-12">
+          <div class="btn-group-sm" id="mini-fab">
+            <a href="{% url 'shop:admin' %}" class="btn btn-info btn-fab" id="admin">
+              <i class="material-icons">
+                build
+              </i>
+            </a>
+          </div>
+        </div>
+      </div>
     </div>
+
     {% endif %}
 
     {% endblock content %}
+
+    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTER SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 
     {% block footer_script %}
     <script type="text/javascript">
