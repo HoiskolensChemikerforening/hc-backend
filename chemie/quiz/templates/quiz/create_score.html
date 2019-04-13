@@ -23,8 +23,16 @@
     <h4>{{ term }}</h4>
 
     <form action="{% url 'quiz:activate_deactivate' term.pk %}" method="POST">{% csrf_token %}
-      {% form form=activate_form %}
-      {% endform %}
+      <p>
+        <label>
+          <input type="checkbox" disabled="disabled"
+                  {% if term.is_active %}
+                 checked="checked"/><span>Aktiv</span>
+                  {% else %}
+                    /><span>Inaktiv</span>
+                  {% endif %}
+        </label>
+      </p>
       <input type="submit" class="btn btn-small" value="Endre">
     </form>
 
