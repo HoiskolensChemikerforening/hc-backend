@@ -27,7 +27,7 @@ class QuizTerm(models.Model):
 
 class QuizScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    term = models.ForeignKey(QuizTerm, on_delete=models.CASCADE)
+    term = models.ForeignKey(QuizTerm, on_delete=models.CASCADE, related_name='scores')
     score = models.IntegerField(default=0)
 
     def __str__(self):
