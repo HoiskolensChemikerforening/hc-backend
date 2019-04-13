@@ -125,6 +125,22 @@ Chemshop
   }
 </style>
 {% endblock style %}
+{% block breadcrumbs %}
+<nav class="navbar navbar-light bg-dark">
+  {% if not is_tablet_user %}
+  <div class="d-flex balance-box">
+    <div class=" p-2">
+      <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
+        <b>{{request.user.profile.balance}}</b></p>
+    </div>
+    <div class="p-2">
+      <img type="image/png" src="{% static "images/HC_coin.png" %}"
+        style="width:1.8rem; float: right; margin-top:-0.2rem">
+    </div>
+  </div>
+  {% endif %}
+</nav>
+{% endblock breadcrumbs %}
 
 {% block content %}
 <script>
@@ -135,18 +151,7 @@ Chemshop
 </script>
 
 <!-- Show money -->
-{% if not is_tablet_user %}
-<div class="d-flex balance-box" style="margin-top:1rem">
-  <div class="p-2">
-    <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
-      <b>{{request.user.profile.balance}}</b></p>
-  </div>
-  <div class="p-2">
-    <img type="image/png" src="{% static "images/HC_coin.png" %}"
-      style="width:1.8rem; float: right; margin-top:-0.2rem">
-  </div>
-</div>
-{% endif %}
+
 
 <!-- Show category checkboxes to filter items -->
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
@@ -370,9 +375,9 @@ Chemshop
     <!-- Get cookie for POST request with AJAX -->
     <script type="text/javascript">
       $(document).ready(function () {
-          $.ajaxSetup({
-              headers: {'X-CSRFToken': Cookies.get('csrftoken')}
-          });
+        $.ajaxSetup({
+          headers: { 'X-CSRFToken': Cookies.get('csrftoken') }
+        });
       });
     </script>
 
