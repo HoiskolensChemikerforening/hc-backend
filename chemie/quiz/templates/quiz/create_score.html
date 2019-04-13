@@ -50,6 +50,22 @@
       </thead>
 
       <tbody>
+      <form method="POST">{% csrf_token %}
+        <tr>
+          <td>Ny</td>
+          <td id="name_col">
+            {{ form.user }}
+            <p>Hvis du legger til én som allerede har en poengsum<br>
+              vil poengsummen bli lagt til den eksisterende.</p>
+          </td>
+          <td>{{ form.score }}</td>
+          <td style="text-align:center;">
+            <button class="btn btn-floating" type="submit">
+              <i class="material-icons">check</i>
+            </button>
+          </td>
+        </tr>
+      </form>
       {% for score in scores %}
         <tr>
           <td>{{ forloop.counter }}</td>
@@ -59,45 +75,18 @@
             {% endthumbnail %}
             {{ score.user.profile }}
           </td>
-          {% ifequal score quiz_score_edit %}
-            <form method="POST">{% csrf_token %}
-              <td>{{ score }} + {{ form.score }}</td>
-              <td style="text-align:center;">
-                <button class="btn btn-floating" type="submit">
-                  <i class="material-icons">check</i>
-                </button>
-              </td>
-            </form>
-          {% else %}
-            <td>{{ score }}</td>
-            <td style="text-align:center;">
-              <a href="{% url 'quiz:edit_scores' term.pk %}">
-                <button class="btn btn-floating">
-                  <i class="material-icons">edit</i>
-                </button>
-              </a>
-            </td>
-          {% endifequal %}
+          <td>{{ score }}</td>
+          <td style="text-align:center;">
+            <a href="{% url 'quiz:edit_scores' term.pk %}">
+              <button class="btn btn-floating">
+                <i class="material-icons">edit</i>
+              </button>
+            </a>
+          </td>
         </tr>
       {% empty %}
         Ingen resultater å vise
       {% endfor %}
-
-      {% if not quiz_score_edit %}
-        <form method="POST">{% csrf_token %}
-          <tr>
-            <td>Ny</td>
-            <td id="name_col">{{ form.user }}</td>
-            <td>{{ form.score }}</td>
-            <td style="text-align:center;">
-              <button class="btn btn-floating" type="submit">
-                <i class="material-icons">check</i>
-              </button>
-            </td>
-          </tr>
-        </form>
-      {% endif %}
-
       </tbody>
     </table>
   </div>
