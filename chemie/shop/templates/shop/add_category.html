@@ -1,6 +1,7 @@
 {% extends "shop/base_shop.html" %}
 {% load staticfiles %}
 {% load thumbnail %}
+{% load crispy_forms_tags %}
 
 <head>
   <meta charset="UTF-8">
@@ -32,8 +33,10 @@
 <!-- Form with add category -->
 <div>
   <form method="POST">{% csrf_token %}
-    {{ form.as_p }}
-    <input class="btn btn-secondary pull-right" type='submit' value='Lagre kategorien!' />
+    <table style="padding-left: 4rem; padding-right: 4rem">
+      {{ form.media }}
+      {% crispy form %}
+    </table>
   </form>
 </div>
 
