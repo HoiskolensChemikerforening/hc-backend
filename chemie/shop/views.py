@@ -1,11 +1,14 @@
+from decimal import InvalidOperation
+
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, reverse
-from django.core.exceptions import ObjectDoesNotExist
+from django.utils import timezone
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import Profile, ProfileManager
+from chemie.customprofile.models import Profile
 from .forms import (
     RefillBalanceForm,
     AddCategoryForm,
@@ -14,8 +17,6 @@ from .forms import (
     EditItemForm,
 )
 from .models import Item, ShoppingCart, Category, Order, HappyHour
-from decimal import InvalidOperation
-from django.utils import timezone
 
 
 def is_happy_hour():
@@ -111,13 +112,14 @@ def index_user(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
-            is_happy = is_happy_hour()
+            is_happy, minutes_left = is_happy_hour()
             if is_happy:
                 duplicate = item.happy_hour_duplicate
                 if duplicate:
                     cart.add(duplicate, quantity=int(quantity))
         if "checkout" in request.POST:
-            balance = request.user.profile.balance
+            user = request.user
+            balance = user.profile.balance
             total_price = cart.get_total_price()
             if balance < total_price:
                 messages.add_message(
@@ -127,7 +129,7 @@ def index_user(request):
                     extra_tags="Nei!",
                 )
             else:
-                cart.buy(request)
+                cart.buy(request, user)
                 messages.add_message(
                     request,
                     messages.SUCCESS,
@@ -166,7 +168,7 @@ def index_tabletshop(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
-            is_happy = is_happy_hour()
+            is_happy, minutes_left = is_happy_hour()
             if is_happy:
                 duplicate = item.happy_hour_duplicate
                 if duplicate:
@@ -174,9 +176,9 @@ def index_tabletshop(request):
         if "checkout" in request.POST:
             try:
                 rfid = request.POST["rfid"]
-                access_card = ProfileManager.rfid_to_em(rfid)
-                buyer = Profile.objects.get(access_card=access_card)
-                balance = buyer.balance
+                access_card = Profile.objects.rfid_to_em(rfid)
+                profile = Profile.objects.get(access_card=access_card)
+                balance = profile.balance
                 total_price = cart.get_total_price()
                 if balance < total_price:
                     messages.add_message(
@@ -186,15 +188,12 @@ def index_tabletshop(request):
                         extra_tags="Nei!",
                     )
                 else:
-                    cart.buy(request)
+                    cart.buy(request, profile.user)
                     new_balance = balance - total_price
                     messages.add_message(
                         request,
                         messages.SUCCESS,
-                        (
-                            "Kontoen din er trukket {} HC-coin. Du har igjen",
-                            " {} HC-coin".format(total_price, new_balance),
-                        ),
+                        f"Kontoen din er trukket {total_price} HC-coins. Du har igjen {new_balance} HC-coins.",
                         extra_tags="Kjøp godkjent",
                     )
                 context["cart"] = cart
@@ -275,7 +274,7 @@ def add_item(request):
                 request,
                 messages.SUCCESS,
                 "Varen ble opprettet",
-                extra_tags="Suksess!"
+                extra_tags="Suksess!",
             )
             form.save()
     items = Item.objects.all()
