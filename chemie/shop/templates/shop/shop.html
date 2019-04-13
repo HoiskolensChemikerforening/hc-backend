@@ -242,20 +242,40 @@ Chemshop
               <td>{{ item_details.quantity }}</td>
               <td>{{ item_details.price }}</td>
               <td>Totalpris for denne</td>
-              <td style="text-align: center;" class="item-remove">&times;</td>
+              <td style="text-align: center;" class="item-remove"> <i class="material-icons pointer"
+                  style="color:darkred; cursor:pointer">
+                  clear
+                </i>
+              </td>
             </tr>
             {% endfor %}
           </table>
         </div>
-        <div class="modal-footer d-flex justify-content-between">
+        <div class="modal-footer">
 
-          <div id="total-sum-in-cart" class="float-left">Total: {{ cart.get_total_price }}</div>
+          <div id="total-sum-in-cart" class="d-flex">
+            <div class="p-2">
+              <h5 style="width:3rem">Total: {{ cart.get_total_price }}</h5>
+            </div>
+            <div class="p-2">
+
+              <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem; margin-top: 50%">
+            </div>
+
+          </div>
           {% if is_tablet_user %}
-          <form method="POST"> {% csrf_token %}
-            {{rfid_form}}
-            <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
-              kortet</button>
-          </form>
+          <div class="d-flex">
+            <div class="p-2">
+              <form method="POST"> {% csrf_token %}
+                {{rfid_form.rfid}}
+                <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
+                  kortet</button>
+              </form>
+            </div>
+            <div class="p-2">
+
+            </div>
+          </div>
           <script>
             $("#cart-modal").on("shown.bs.modal", function () {
               $("#id_rfid").focus();
@@ -450,18 +470,10 @@ Chemshop
 
     </script>
     <script>
-      var isTabletUserString = "{{is_tablet_user}}";
-      var isTabletUser = (isTabletUserString == "True");
-      if (isTabletUser) {
-        var sideBarNav = document.getElementsByClassName("top-nav")[0]
-        var footer = document.getElementsByClassName("page-footer")[0]
-        sideBarNav.setAttribute("style", "display:none")
-        footer.setAttribute("style", "display:none")
-      }
-
       // Create a "close" button and append it to each list item
       var itemList = document.getElementsByClassName("item-list");
       // var i;
+
       for (i = 0; i < itemList.length; i++) {
         var columns = itemList[i].children.length;
         // Get total price for items: quantity*price
@@ -469,7 +481,6 @@ Chemshop
           .children[columns - 2]
           .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
       }
-
       // Click on a close button to remove the current list item
       var closeItem = document.getElementsByClassName("item-list");
       var i;
