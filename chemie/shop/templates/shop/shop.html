@@ -16,6 +16,12 @@ Chemshop
     width: 16rem;
   }
 
+  #btn-kvittering {
+    background-color: rgb(237, 205, 47);
+    border-color: rgb(237, 205, 47);
+    color: black
+  }
+
   .balance-box {
     background-color: rgb(237, 205, 47);
     width: 12rem;
@@ -128,16 +134,25 @@ Chemshop
 {% block breadcrumbs %}
 <nav class="navbar navbar-light bg-dark">
   {% if not is_tablet_user %}
-  <div class="d-flex balance-box">
-    <div class=" p-2">
-      <p style="font-size:1.8rem;color:black; float:left; margin-top: -0.7rem; margin-left: 1rem; padding-top: 0rem">
-        <b>{{request.user.profile.balance}}</b></p>
+  <div class="d-flex justify-content-between">
+    <div class="p-2 d-flex balance-box">
+      <div class=" p-2">
+        <p style="font-size:1.8rem;color:black; float:left; margin-top: -1rem; margin-left: 1rem; padding-top: 0rem">
+          <b>{{request.user.profile.balance}}</b></p>
+      </div>
+      <div class="p-2">
+        <img type="image/png" src="{% static "images/HC_coin.png" %}"
+          style="width:1.8rem; float: right; margin-top:-0.4rem">
+      </div>
     </div>
+
     <div class="p-2">
-      <img type="image/png" src="{% static "images/HC_coin.png" %}"
-        style="width:1.8rem; float: right; margin-top:-0.2rem">
+      <a class="btn btn-secondary" id="btn-kvittering" href="{% url 'shop:receipts' %}">
+        Kvitteringer
+      </a>
     </div>
   </div>
+
   {% endif %}
 </nav>
 {% endblock breadcrumbs %}
