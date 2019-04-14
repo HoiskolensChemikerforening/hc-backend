@@ -7,8 +7,6 @@ from chemie.committees.models import Committee
 from chemie.events.models import Bedpres
 from .forms import CreateCompanyForm, CreateInterviewForm
 
-# Create your views here.
-
 
 def index(request):
     indkom = Committee.objects.get(title="Industrikomiteen")
@@ -18,13 +16,6 @@ def index(request):
         "bedpres": bedpres,
     }
     return render(request, "corporate/index.html", context)
-
-
-def interview_list(request):
-    interviews = Interview.objects.order_by("id")
-    context = {"interviews": interviews}
-
-    return render(request, "corporate/interview_list.html", context)
 
 
 def company_list(request):
@@ -42,6 +33,7 @@ def company_detail(request, pk):
 
 def company_create(request):
     form = CreateCompanyForm(request.POST or None, request.FILES or None)
+
     if form.is_valid():
         form.save()
         return redirect(reverse("corporate:list_companies"))
@@ -50,14 +42,12 @@ def company_create(request):
     return render(request, "corporate/company_create.html", context)
 
 
-def interview_create(request):
-    form = CreateInterviewForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-        return redirect(reverse("corporate:interview_list"))
-
-    context = {"form": form}
-    return render(request, "corporate/interview_create.html", context)
+def interview_list(request):
+    interviews = Interview.objects.order_by("id")
+    context = {
+        "interviews": interviews
+    }
+    return render(request, "corporate/interview_list.html", context)
 
 
 def interview_detail(request, interview_id):
@@ -65,3 +55,13 @@ def interview_detail(request, interview_id):
     context = {"interview": this_interview}
     return render(request, "corporate/interview_detail.html", context)
 
+
+def interview_create(request):
+    form = CreateInterviewForm(request.POST or None, request.FILES or None)
+
+    if form.is_valid():
+        form.save()
+        return redirect(reverse("corporate:interview_list"))
+
+    context = {"form": form}
+    return render(request, "corporate/interview_create.html", context)
