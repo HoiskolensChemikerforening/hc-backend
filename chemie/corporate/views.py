@@ -36,7 +36,7 @@ def company_create(request):
 
     if form.is_valid():
         form.save()
-        return redirect(reverse("corporate:list_companies"))
+        return redirect(reverse("corporate:company_list"))
 
     context = {"form": form}
     return render(request, "corporate/company_create.html", context)
