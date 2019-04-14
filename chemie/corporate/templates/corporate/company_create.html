@@ -1,13 +1,6 @@
-<!DOCTYPE html>
-<html lang="no">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
+{% extends "corporate/base.html" %}
 
-<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+{% block content %}
 
 <div class="container" style="width: 60%; background-color:#eee; margin:10px; padding:20px;">
      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
@@ -18,5 +11,4 @@
      </form>
 </div>
 
-</body>
-</html>
+{% endblock content %}
