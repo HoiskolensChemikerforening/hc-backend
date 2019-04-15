@@ -1,49 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>{{ interview.company }}</title>
-
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-</head>
-<body>
-
+{% extends 'corporate/base.html' %}
 {% load static %}
 
-<nav class="navbar navbar-dark bg-dark">
-  <a class="navbar-brand" href="">
-    <img src="{% static "images/logo.png" %}" width="25" height="35" class="d-inline-block align-top" alt="">
-    HC
-  </a>
-</nav>
+{% block content %}
 
-<div class="container">
-  <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
-    <div class="col-sm-12 col-md-2">
-    </div>
-    <div class="col-sm-12 col-md-7">
-      <div class="container">
-        <br><br>
-        <h1> {{ interview.name }}</h1>
+  <div class="container">
+    <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
+      <div class="col-sm-12 col-md-2">
+      </div>
+      <div class="col-sm-12 col-md-7">
+        <div class="container">
+          <br><br>
+          <h1> {{ interview.name }}</h1>
           <div><img src="{{ interview.picture.url }}" class="img-fluid"></div>
           <br>
-        <p><b>
-          Her kan det stå en ingress.
-        </b></p>
-        <p>
-          {{ interview.interview }}
-        </p>
-        <br><br><br><br><br>
+          <p><b>
+            Her kan det stå en ingress.
+          </b></p>
+          <p>
+            {{ interview.interview }}
+          </p>
+          <br><br><br><br><br>
+        </div>
       </div>
-    </div>
-    <div class="col-sm-12 col-md-3">
-      <div class="card">
-        <img src="{{ interview.company.logo.url }}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <a href="{% url "corporate:company_detail" interview.company.pk %}"><h4 class="card-title"> {{ interview.company }}</h4></a>
-          <p class="card-text">
-              <hr>
+      <div class="col-sm-12 col-md-3">
+        <div class="card">
+          <img src="{{ interview.company.logo.url }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <a href="{% url "corporate:company_detail" interview.company.pk %}"><h4
+                    class="card-title"> {{ interview.company }}</h4></a>
+            <p class="card-text">
+            <hr>
             Her kan vi skrive mer info.
             <hr>
             Intervju av: {{ interview.name }}
@@ -55,12 +41,12 @@
             Funfacts:
             <hr>
             Fortfatter:
-          </p>
+            </p>
 
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-</body>
-</html>
+{% endblock content %}
