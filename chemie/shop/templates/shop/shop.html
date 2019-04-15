@@ -9,134 +9,16 @@ Chemshop
 {% endblock nav_header %}
 
 {% block style %}
-<style>
-  .item-box {
-    margin: 1rem;
-    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
-    width: 16rem;
-  }
-
-  #btn-kvittering {
-    background-color: rgb(237, 205, 47);
-    border-color: rgb(237, 205, 47);
-    color: black
-  }
-
-  .balance-box {
-    background-color: rgb(237, 205, 47);
-    width: 12rem;
-    height: 3rem;
-    padding-top: 0.2rem;
-    padding-left: 0.2rem;
-    border: 0.2rem solid rgb(0, 0, 0);
-    border-radius: 1rem 1rem 1rem 1rem;
-    justify-content: center;
-    right: 1rem;
-  }
-
-  .checkbox-container {
-    display: block;
-    position: relative;
-    padding-left: 35px;
-    margin-bottom: 12px;
-    cursor: pointer;
-    font-size: 22px;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-
-  /* Hide the browser's default checkbox */
-  .checkbox-container input {
-    position: absolute;
-    opacity: 0;
-    cursor: pointer;
-    height: 0;
-    width: 0;
-  }
-
-  /* Create a custom checkbox */
-  .checkmark {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 25px;
-    width: 25px;
-    background-color: #eee;
-  }
-
-  /* On mouse-over, add a grey background color */
-  .checkbox-container:hover input~.checkmark {
-    background-color: #ccc;
-  }
-
-  /* When the checkbox is checked, add a blue background */
-  .checkbox-container input:checked~.checkmark {
-    background-color: #2196F3;
-  }
-
-  /* Create the checkmark/indicator (hidden when not checked) */
-  .checkmark:after {
-    content: "";
-    position: absolute;
-    display: none;
-  }
-
-  /* Show the checkmark when checked */
-  .checkbox-container input:checked~.checkmark:after {
-    display: block;
-  }
-
-  /* Style the checkmark/indicator */
-  .checkbox-container .checkmark:after {
-    left: 9px;
-    top: 5px;
-    width: 5px;
-    height: 10px;
-    border: solid white;
-    border-width: 0 3px 3px 0;
-    -webkit-transform: rotate(45deg);
-    -ms-transform: rotate(45deg);
-    transform: rotate(45deg);
-  }
-
-  .ch body {
-    width: 100%;
-    height: 100%;
-  }
-
-  .btn-cart-sm .btn-fab {
-    position: fixed !important;
-    left: 29px;
-  }
-
-  .btn-cart .btn-fab {
-    position: fixed !important;
-    right: 20px;
-  }
-
-  .btn-group-sm .btn-fab {
-    position: fixed !important;
-    right: 29px;
-  }
-
-  .btn-group .btn-fab {
-    position: fixed !important;
-    right: 20px;
-  }
-
-  #admin {
-    bottom: 29px
-  }
-</style>
+<link rel="stylesheet" href="{% static 'css/style_shop.css' %}" type="text/css" media="screen,projection">
 {% endblock style %}
+
 {% block breadcrumbs %}
 <nav class="navbar navbar-light bg-dark">
   {% if not is_tablet_user %}
   <div class="d-flex justify-content-between">
     <div class="p-2 d-flex balance-box">
       <div class=" p-2">
+        <!-- Show money -->
         <p style="font-size:1.8rem;color:black; float:left; margin-top: -1rem; margin-left: 1rem; padding-top: 0rem">
           <b>{{request.user.profile.balance}}</b></p>
       </div>
@@ -158,16 +40,6 @@ Chemshop
 {% endblock breadcrumbs %}
 
 {% block content %}
-<script>
-  // The dictionary is the equivalent shopping cart
-  var item_dict = {}
-  var categoriesFilterd = {}
-  var AllItemList = {}
-</script>
-
-<!-- Show money -->
-
-
 <!-- Show category checkboxes to filter items -->
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
@@ -238,304 +110,120 @@ Chemshop
   {% endfor %}
 </div>
 
-<div>
-  <!-- Modal Structure -->
+<!-- Modal Structure -->
 
-  <!-- Modal -->
-  <div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5>Handlevogn</h5>
-        </div>
-        <div class="modal-body">
-          <table style="width:100%" id="shopping-table">
-            <tr class="ul-item-list">
-              <th>Vare</th>
-              <th>Antall</th>
-              <th>Pris</th>
-              <th>Total</th>
-              <th></th>
-            </tr>
-            {% for item_name, item_details in cart.cart.items %}
-            <tr class="item-list" id="item-list-{{ item_name|get_item_pk_from_name }}">
-              <td>{{ item_name }}</td>
-              <td>{{ item_details.quantity }}</td>
-              <td>{{ item_details.price }}</td>
-              <td>Totalpris for denne</td>
-              <td style="text-align: center;" class="item-remove">
-                <i class="material-icons pointer" style="color:darkred; cursor:pointer">clear</i>
-              </td>
-            </tr>
-            {% endfor %}
-          </table>
-        </div>
-        <div class="modal-footer">
+<!-- Modal -->
+<div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+  aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5>Handlevogn</h5>
+      </div>
+      <div class="modal-body">
+        <table style="width:100%" id="shopping-table">
+          <tr class="ul-item-list">
+            <th>Vare</th>
+            <th>Antall</th>
+            <th>Pris</th>
+            <th>Total</th>
+            <th></th>
+          </tr>
+          {% for item_name, item_details in cart.cart.items %}
+          <tr class="item-list" id="item-list-{{ item_name|get_item_pk_from_name }}">
+            <td>{{ item_name }}</td>
+            <td>{{ item_details.quantity }}</td>
+            <td>{{ item_details.price }}</td>
+            <td>Totalpris for denne</td>
+            <td style="text-align: center;" class="item-remove">
+              <i class="material-icons pointer" style="color:darkred; cursor:pointer">clear</i>
+            </td>
+          </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <div class="modal-footer">
 
-          <div id="total-sum-in-cart" class="d-flex align-center mr-auto">
-            <div class="float-left">
-              Total: {{ cart.get_total_price }}
-            </div>
-            <div>
-              <img type="image/png" src="{% static "images/HC_coin.png" %}"
-                style="width:1.8rem; padding-left:0.3rem; padding-bottom:0.2rem;">
-            </div>
+        <div id="total-sum-in-cart" class="d-flex align-center mr-auto">
+          <div class="float-left">
+            Total: {{ cart.get_total_price }}
+          </div>
+          <div>
+            <img type="image/png" src="{% static "images/HC_coin.png" %}"
+              style="width:1.8rem; padding-left:0.3rem; padding-bottom:0.2rem;">
+          </div>
+
+        </div>
+        {% if is_tablet_user %}
+        <div class="d-flex">
+          <div class="p-2">
+            <form method="POST"> {% csrf_token %}
+              {{rfid_form.rfid}}
+              <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
+                kortet</button>
+            </form>
+          </div>
+          <div class="p-2">
 
           </div>
-          {% if is_tablet_user %}
-          <div class="d-flex">
-            <div class="p-2">
-              <form method="POST"> {% csrf_token %}
-                {{rfid_form.rfid}}
-                <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
-                  kortet</button>
-              </form>
-            </div>
-            <div class="p-2">
-
-            </div>
-          </div>
-          <script>
-            $("#cart-modal").on("shown.bs.modal", function () {
-              $("#id_rfid").focus();
-              $("#id_rfid").select();
-            });
-          </script>
-          {% else %}
-          <form method="POST"> {% csrf_token %}
-            <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp
-              varer</button>
-          </form>
-          {% endif %}
         </div>
+        <script>
+          $("#cart-modal").on("shown.bs.modal", function () {
+            $("#id_rfid").focus();
+            $("#id_rfid").select();
+          });
+        </script>
+        {% else %}
+        <form method="POST"> {% csrf_token %}
+          <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp
+            varer</button>
+        </form>
+        {% endif %}
       </div>
     </div>
   </div>
-  {% if cart.cart %}
+</div>
 
 
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-md-12">
-        <div class="btn-cart-sm hidden" id="mini-fab">
-          <button class="btn btn-warning btn-fab" id="modalTrigger" type="button" data-toggle="modal"
-            data-target="#cart-modal">
-            <i class="material-icons">
-              shopping_cart
-            </i>
-          </button>
-        </div>
+{% if cart.cart %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-cart-sm hidden" id="mini-fab">
+        <button class="btn btn-warning btn-fab" id="modalTrigger" type="button" data-toggle="modal"
+          data-target="#cart-modal">
+          <i class="material-icons">
+            shopping_cart
+          </i>
+        </button>
       </div>
     </div>
+  </div>
+</div>
+{% endif %}
 
-    <!-- Animation for the floating shopping cart button -->
-    <script type="text/javascript">
-      var elem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
-      var bottomPos = 29; // Same as in the CSS further up
-      var animationStep = 0;
-      // index 0 is the duration of the movement
-      // index 1 is the speed for the movement
-      // Each element array represents one movement of the animation
-      // First animation up and down
-      // Second animation up and down
-      var animation = [
-        [10, 2], [10, 1], [10, 0], [10, -1], [10, -2],
-        [5, 1], [5, 0.5], [5, 0], [5, -0.5], [5, -1],
-      ]
-      var id = setInterval(frame, 5);
-      function frame() {
-        if (animationStep == animation.length) {
-          // Ends the animates
-          clearInterval(id);
-        } else {
-          speedDuration = animation[animationStep]
-          if (speedDuration[0] == 0) {
-            // Moves on to the next movement
-            animationStep++
-          } else {
-            bottomPos += speedDuration[1]
-            speedDuration[0]--
-          }
-        }
-        elem.style.bottom = bottomPos.toString() + ".px"
-      }
-    </script>
-    {% endif %}
+{% if perms.shop.add_item or perms.customprofile.refill_balance %}
 
-    {% if perms.shop.add_item or perms.customprofile.refill_balance %}
-
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="btn-group-sm" id="mini-fab">
-            <a href="{% url 'shop:admin' %}" class="btn btn-info btn-fab" id="admin">
-              <i class="material-icons">
-                build
-              </i>
-            </a>
-          </div>
-        </div>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-group-sm" id="mini-fab">
+        <a href="{% url 'shop:admin' %}" class="btn btn-info btn-fab" id="admin">
+          <i class="material-icons">
+            build
+          </i>
+        </a>
       </div>
     </div>
+  </div>
+</div>
 
-    {% endif %}
+{% endif %}
 
-    {% endblock content %}
+{% endblock content %}
 
-    <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTER SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+<!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTER SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
 
-    {% block footer_script %}
-    <!-- Get cookie for POST request with AJAX -->
-    <script type="text/javascript">
-      $(document).ready(function () {
-        $.ajaxSetup({
-          headers: { 'X-CSRFToken': Cookies.get('csrftoken') }
-        });
-      });
-    </script>
-
-    <!-- Filter items by checkboxes -->
-    <script type="text/javascript">
-      // creates all items to be remembered with filtering
-      var cardItemsChildren = document.getElementById("card-items").children;
-      for (var i = 0; i < cardItemsChildren.length; i++) {
-        AllItemList[cardItemsChildren[i].id] = cardItemsChildren[i]
-      }
-
-      function filter_category(checked, category) {
-        categoriesFilterd[category] = checked;
-
-        // check if any boxes are clicked
-        isActivated = false
-        for (key in categoriesFilterd) {
-          if (categoriesFilterd[key]) {
-            isActivated = true
-          }
-        }
-        var cardItems = document.getElementById("card-items");
-        cardItems.innerHTML = '';
-        var cardItemsList = [];
-        // append only clicked items to list
-        if (isActivated) {
-          for (var key in AllItemList) {
-            var itemCat = key.split('-')[0];
-            if (categoriesFilterd[itemCat]) {
-              cardItemsList.push(AllItemList[key])
-            }
-          }
-        } else {
-          // if no boxes are clicked, all item is presented
-          for (var key in AllItemList) {
-            cardItemsList.push(AllItemList[key])
-          }
-        }
-        // append the filtered items to parent node
-        for (var i = 0; i < cardItemsList.length; i++) {
-          cardItems.appendChild(cardItemsList[i])
-        }
-
-
-      }
-    </script>
-
-    <!-- User wishes to increment or decrement amount of items added to cart -->
-    <script type="text/javascript">
-      //user presses the + button
-      function plus(item_name, item_pk) {
-        item_dict[item_name]++;
-        document.getElementById('item_' + item_name).value = item_dict[item_name];
-      }
-
-      // user presses the - button
-      function minus(item_name, item_pk) {
-        if (item_dict[item_name] > 0) {
-          item_dict[item_name]--;
-        }
-        document.getElementById('item_' + item_name).value = item_dict[item_name];
-      }
-    </script>
-    <script>
-      function changeQuantity(self, item_name) {
-
-        if (item_dict[item_name] === 0) {
-          self.preventDefault();
-          return false;
-        }
-        var id = self.getAttribute("id");
-        self.setAttribute("value", id + "-" + item_dict[item_name]);
-        return false;
-      }
-
-      function getTotalForItem(item_list_id) {
-        let item = document.getElementById(item_list_id);
-        let quantity = item.children[1].innerHTML;
-        let price = item.children[2].innerHTML;
-        return (parseFloat(price).toFixed(2) * parseFloat(quantity).toFixed(2)).toFixed(2);
-      }
-
-    </script>
-
-    <!-- Add a remove item from cart button and if user presses, remove the item -->
-    <script>
-      // Create a "close" button and append it to each list item
-      var itemList = document.getElementsByClassName("item-list");
-      // var i;
-
-      for (i = 0; i < itemList.length; i++) {
-        var columns = itemList[i].children.length;
-        // Get total price for items: quantity*price
-        itemList[i]
-          .children[columns - 2]
-          .innerHTML = getTotalForItem(itemList[i].id).replace(".", ",");
-      }
-      // Click on a close button to remove the current list item
-      var closeItem = document.getElementsByClassName("item-list");
-      var i;
-      for (i = 0; i < closeItem.length; i++) {
-        // The 'x' at the far right
-        var close_button = closeItem[i].lastElementChild;
-        close_button.onclick = function () {
-          // Get the current li element
-          var current_item = this.parentNode;
-          // Get the id of the li element and put into array
-          var item_id_array = current_item.id.split("-");
-          // Get item id
-          var item_id = item_id_array[item_id_array.length - 1];
-
-          $.ajax({
-            type: "POST",
-            url: "/shop/admin/remove-item/" + item_id,
-            datatype: "json",
-
-            success: function (json) {
-              let total_sum_element = document.getElementById("total-sum-in-cart");
-              let sum_to_remove = current_item.
-                children[current_item.children.length - 2]
-                .innerHTML;
-              let total_sum = total_sum_element.innerText.split(" ")[1];
-              // Nasty, but really just takes the difference between previous total sum
-              // and sum of items removed + replaces decimal separator 'dot' to 'comma'
-              let new_sum = parseFloat(
-                parseFloat(total_sum).toFixed(2) -
-                parseFloat(sum_to_remove).toFixed(2)
-              ).toFixed(2).replace(".", ",");
-              total_sum_element.innerHTML = `Total: ${new_sum}`;
-              let number_of_items_left = document.getElementsByClassName("item-list").length;
-              current_item.parentNode.removeChild(current_item);
-              if ((number_of_items_left - 1) === 0) {
-                for (let key in item_dict) {
-                  item_dict[key] = 0;
-                }
-                window.location.replace(window.location.href.substring(0, window.location.href.length - 1))
-              }
-            },
-
-            error: function (xhr, errmsg, err) {
-              // console.log(xhr.status + ": " + xhr.responseText);
-            },
-          });
-        }
-      }
-    </script>
-    {% endblock footer_script %}
+{% block footer_script %}
+<script src="{% static "js/shop.js" %}"></script>
+{% endblock footer_script %}
