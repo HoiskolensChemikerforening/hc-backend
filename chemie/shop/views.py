@@ -299,7 +299,7 @@ def add_item(request):
 
 @permission_required("shop.edit_item")
 def edit_item(request, pk):
-    item = Item.objects.get(pk=pk)
+    item = get_object_or_404(Item, pk=pk)
     form = EditItemForm(
         request.POST or None, request.FILES or None, instance=item
     )
@@ -336,6 +336,7 @@ def remove_item(request, pk):
     return JsonResponse({"success": 1})
 
 
+@permission_required("shop.add_happyhour")
 def activate_happyhour(request):
     form = HappyHourForm(request.POST or None)
     try:
