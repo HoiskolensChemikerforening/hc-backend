@@ -5,12 +5,6 @@ $(document).ready(function () {
     });
 });
 
-
-// The dictionary is the equivalent shopping cart
-var item_dict = {}
-var categoriesFilterd = {}
-var AllItemList = {}
-
 /* Filter items by checkboxes */
 // creates all items to be remembered with filtering
 var cardItemsChildren = document.getElementById("card-items").children;

@@ -40,6 +40,12 @@ Chemshop
 {% endblock breadcrumbs %}
 
 {% block content %}
+<script type="text/javascript">
+  // The dictionary is the equivalent shopping cart
+  var item_dict = {};
+  var categoriesFilterd = {};
+  var AllItemList = {};
+</script>
 <!-- Show category checkboxes to filter items -->
 <div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap">
   {% for category in categories %}
