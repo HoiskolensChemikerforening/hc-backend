@@ -183,7 +183,7 @@ class ShoppingCart(object):
             for item in self.cart.values()
         )
 
-    def buy(self, request, user):
+    def buy(self, user):
         order_items = []
         for item in self.cart.keys():
             item_object = get_object_or_404(Item, name=item)

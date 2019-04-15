@@ -129,7 +129,7 @@ def index_user(request):
                     extra_tags="Nei!",
                 )
             else:
-                cart.buy(request, user)
+                cart.buy(user)
                 messages.add_message(
                     request,
                     messages.SUCCESS,
@@ -189,7 +189,7 @@ def index_tabletshop(request):
                             extra_tags="Nei!",
                         )
                     else:
-                        cart.buy(request, profile.user)
+                        cart.buy(profile.user)
                         new_balance = balance - total_price
                         messages.add_message(
                             request,
