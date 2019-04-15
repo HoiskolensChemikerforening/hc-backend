@@ -1,97 +1,99 @@
 {% extends "corporate/base.html" %}
 
+{% block breadcrumbs %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+      <li class="breadcrumb-item ">
+        <a href="{% url "corporate:index" %}" style="color:#edcd2f">Bedriftssider</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Intervjuer</li>
+    </ol>
+  </nav>
+{% endblock breadcrumbs %}
+
 {% block content %}
-
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item" aria-current="page">
-      <a href="{% url "corporate:index" %}" style="color:#edcd2f">
-        Bedrift
-      </a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Intervjuer</li>
-  </ol>
-</nav>
-
-<div class="container">
-  <br><br>
-  <div class="row">
-    <div class="col center">
-      <h1>Intervjuer</h1>
-    </div>
-    <div class="col center">
-      <div class="dropdown">
-        <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
-                data-toggle="dropdown"
-                aria-haspopup="true" aria-expanded="false">
-          Spesialiseringsretning
-        </button>
-        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <a class="dropdown-item" onclick="filterInterviews('')">Alle</a>
-          <a class="dropdown-item" onclick="filterInterviews('Bioteknologi')">Bioteknologi</a>
-          <a class="dropdown-item" onclick="filterInterviews('Organisk kjemi')">Organisk kjemi</a>
-          <a class="dropdown-item" onclick="filterInterviews('Anvendt teoretisk kjemi')">Anvendt teoretisk kjemi</a>
-          <a class="dropdown-item" onclick="filterInterviews('Analytisk kjemi')">Analytisk kjemi</a>
-          <a class="dropdown-item" onclick="filterInterviews('Kjemisk prosessteknologi')">Kjemisk prosessteknologi</a>
-          <a class="dropdown-item" onclick="filterInterviews('Materialkjemi og energiteknologi')">Materialkjemi og
-            energiteknologi</a>
-        </div>
+  <div class="container">
+    <br><br>
+    <div class="row">
+      <div class="col center">
+        <h1>Intervjuer</h1>
       </div>
-    </div>
-    <div class="col center">
-      {% if perms.corporate.add_interview %}
-        <a class="btn btn-secondary" href="{% url "corporate:interview_create" %}">
-          Lag nytt intervju
-        </a>
-      {% endif %}
-    </div>
-  </div>
-  <h5>
-    Les om spennende intervjuer og la deg inspirere av kjemikere fra hele verden!
-  </h5>
-  <br><br>
-
-  <div class="row">
-    {% for interview in interviews %}
-      <div class="filterDiv {{ interview.company.specializations }}"
-           style="width: 22rem; height: 20rem; padding: 1.0rem; margin:40px 5px;">
-        <div class="card medium">
-          <h4 class="card-header">{{ interview.name }}</h4>
-          <div class="card-image">
-            <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
-              <img src="{{ interview.picture.url }}" class="card-img-top" style="max-height: 200px; object-fit: cover;">
-            </a>
-          </div>
-          <div class="card-body">
-            <h5 class="card-title">{{ interview.company }}</h5>
-            <p class="card-text">{{ interview.interview|truncatechars:160 }}</p>
+      <div class="col center">
+        <div class="dropdown">
+          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton"
+                  data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            Spesialiseringsretning
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" onclick="filterInterviews('')">Alle</a>
+            <a class="dropdown-item" onclick="filterInterviews('Bioteknologi')">Bioteknologi</a>
+            <a class="dropdown-item" onclick="filterInterviews('Organisk kjemi')">Organisk kjemi</a>
+            <a class="dropdown-item" onclick="filterInterviews('Anvendt teoretisk kjemi')">Anvendt teoretisk kjemi</a>
+            <a class="dropdown-item" onclick="filterInterviews('Analytisk kjemi')">Analytisk kjemi</a>
+            <a class="dropdown-item" onclick="filterInterviews('Kjemisk prosessteknologi')">Kjemisk prosessteknologi</a>
+            <a class="dropdown-item" onclick="filterInterviews('Materialkjemi og energiteknologi')">Materialkjemi og
+              energiteknologi</a>
           </div>
         </div>
       </div>
-    {% endfor %}
+      <div class="col center">
+        {% if perms.corporate.add_interview %}
+          <a class="btn btn-secondary" href="{% url "corporate:interview_create" %}">
+            Lag nytt intervju
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    <h5>
+      Les om spennende intervjuer og la deg inspirere av kjemikere fra hele verden!
+    </h5>
+    <br><br>
+
+    <div class="row">
+      {% for interview in interviews %}
+        <div class="filterDiv {{ interview.company.specializations }}"
+             style="width: 22rem; height: 20rem; padding: 1.0rem; margin:40px 5px;">
+          <div class="card medium">
+            <h4 class="card-header">{{ interview.name }}</h4>
+            <div class="card-image">
+              <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
+                <img src="{{ interview.picture.url }}" class="card-img-top"
+                     style="max-height: 200px; object-fit: cover;">
+              </a>
+            </div>
+            <div class="card-body">
+              <h5 class="card-title">{{ interview.company }}</h5>
+              <p class="card-text">{{ interview.interview|truncatechars:160 }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
   </div>
-</div>
-
-<script>
-
-    filterInterviews = function (specialization) {
-        let cards = document.getElementsByClassName("filterDiv");
-        for (let i = 0; i < cards.length; i++) {
-            let className = cards[i].className;
-            if (!className.includes(specialization)) {
-                cards[i].style.display = "none";
-            } else {
-                cards[i].style.display = "block";
-            }
-        }
-
-        let dropdown = document.getElementById("dropdownMenuButton");
-        if (specialization) {
-            dropdown.innerHTML = specialization;
-        } else {
-            dropdown.innerHTML = "Spesialiseringsretning";
-        }
-    }
-</script>
 
 {% endblock content %}
+
+{% block footer_script %}
+  <script>
+
+      filterInterviews = function (specialization) {
+          let cards = document.getElementsByClassName("filterDiv");
+          for (let i = 0; i < cards.length; i++) {
+              let className = cards[i].className;
+              if (!className.includes(specialization)) {
+                  cards[i].style.display = "none";
+              } else {
+                  cards[i].style.display = "block";
+              }
+          }
+
+          let dropdown = document.getElementById("dropdownMenuButton");
+          if (specialization) {
+              dropdown.innerHTML = specialization;
+          } else {
+              dropdown.innerHTML = "Spesialiseringsretning";
+          }
+      }
+  </script>
+{% endblock footer_script %}

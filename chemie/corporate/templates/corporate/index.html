@@ -2,80 +2,81 @@
 
 {% block content %}
 
-<div class="container">
-  <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
-    <div class="col-sm-12 col-md-2">
-    </div>
-    <div class="col-sm-12 col-md-7">
-      <div class="container">
-        <br><br>
-        <h1>Bedrift</h1>
-        <p>
-          Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
-        </p>
-        <p>
-          Vi avholder bedriftspresentasjoner flere ganger hvert semester. En bedrift inviteres da til å komme og
-          fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og andre
-          emner som kan interessere studentene.
-        </p>
-        <a class="btn btn-primary" href="{% url "corporate:company_list" %}">Bedrifter</a>
-        <a class="btn btn-secondary" href="{% url "corporate:interview_list" %}">Intervjuer</a>
-        <br><br><br><br><br>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-3">
-      <div class="card">
-        <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <a href="{{ indkom.get_absolute_url }}"><h4 class="card-title">Industrikomiteen</h4></a>
-          <p class="card-text">
-            {{ indkom.one_liner }}
-          </p>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class="row" style="margin-bottom: 4rem;">
-    <div class="col-sm-12 col-md-2"></div>
-    <div class="col-sm-12 col-md-7">
-      <div class="card">
-        <div class="card-body">
-          <h2 class="card-title">Bedriftspresentasjoner</h2>
-          {% for bp in bedpres %}
-            <a href="{{ bp.get_absolute_url }}">
-              <h4>{{ bp.title }}</h4>
-            </a>
-            <p>{{ bp.date }}</p>
-          {% empty %}
-            <p>Det er ingen aktive bedpreser.</p>
-          {% endfor %}
-        </div>
-      </div>
-    </div>
-    <div class="col-sm-12 col-md-3"></div>
-  </div>
-</div>
-
-<div class="jumbotron jumbotron-fluid bg-dark">
   <div class="container">
-    <h1 class="display-4 text-light">Hovedsponsor</h1>
-    <p class="lead text-light">Dette er et eksempel på hvordan et banner for hovedsponsor kan se ut.</p>
-  </div>
-</div>
-
-<div class="container">
-  <div class="row">
-    <div class="col-sm-12 col-md-2"></div>
-    <div class="col-sm-12 col-md-7">
-      <br>
-      <h2>Statistikk</h2>
-      <p>
-        Hvert år gjennomfører Industrikomiteen diplomundersøkelsen, der de samler inn data om tidligere studenter ved
-        industriell kjemi og bioteknologi. Dataen er presentert nedenfor.
-      </p>
+    <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
+      <div class="col-sm-12 col-md-2">
+      </div>
+      <div class="col-sm-12 col-md-7">
+        <div class="container">
+          <br><br>
+          <h1>Bedrift</h1>
+          <p>
+            Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
+          </p>
+          <p>
+            Vi avholder bedriftspresentasjoner flere ganger hvert semester. En bedrift inviteres da til å komme og
+            fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og
+            andre
+            emner som kan interessere studentene.
+          </p>
+          <a class="btn btn-primary" href="{% url "corporate:company_list" %}">Bedrifter</a>
+          <a class="btn btn-secondary" href="{% url "corporate:interview_list" %}">Intervjuer</a>
+          <br><br><br><br><br>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-3">
+        <div class="card">
+          <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <a href="{{ indkom.get_absolute_url }}"><h4 class="card-title">Industrikomiteen</h4></a>
+            <p class="card-text">
+              {{ indkom.one_liner }}
+            </p>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="col-sm-12 col-md-3"></div>
+    <div class="row" style="margin-bottom: 4rem;">
+      <div class="col-sm-12 col-md-2"></div>
+      <div class="col-sm-12 col-md-7">
+        <div class="card">
+          <div class="card-body">
+            <h2 class="card-title">Bedriftspresentasjoner</h2>
+            {% for bp in bedpres %}
+              <a href="{{ bp.get_absolute_url }}">
+                <h4>{{ bp.title }}</h4>
+              </a>
+              <p>{{ bp.date }}</p>
+            {% empty %}
+              <p>Det er ingen aktive bedpreser.</p>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      <div class="col-sm-12 col-md-3"></div>
+    </div>
   </div>
-</div>
+
+  <div class="jumbotron jumbotron-fluid bg-dark">
+    <div class="container">
+      <h1 class="display-4 text-light">Hovedsponsor</h1>
+      <p class="lead text-light">Dette er et eksempel på hvordan et banner for hovedsponsor kan se ut.</p>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-sm-12 col-md-2"></div>
+      <div class="col-sm-12 col-md-7">
+        <br>
+        <h2>Statistikk</h2>
+        <p>
+          Hvert år gjennomfører Industrikomiteen diplomundersøkelsen, der de samler inn data om tidligere studenter ved
+          industriell kjemi og bioteknologi. Dataen er presentert nedenfor.
+        </p>
+      </div>
+      <div class="col-sm-12 col-md-3"></div>
+    </div>
+  </div>
 
 {% endblock %}

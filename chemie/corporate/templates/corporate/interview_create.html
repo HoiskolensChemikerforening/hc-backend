@@ -1,24 +1,37 @@
 {% extends "corporate/base.html" %}
 
-{% block content %}
+{% block breadcrumbs %}
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+      <li class="breadcrumb-item ">
+        <a href="{% url "corporate:index" %}" style="color:#edcd2f">Bedriftssider</a>
+      </li>
+      <li class="breadcrumb-item ">
+        <a href="{% url "corporate:interview_list" %}" style="color:#edcd2f">Intervjuer</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Opprett nytt intervju</li>
+    </ol>
+  </nav>
+{% endblock breadcrumbs %}
 
-<div class="container">
-  <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
-    <div class="col-sm-12 col-md-2">
-    </div>
-    <div class="col-sm-12 col-md-7 jumbotron">
-      <div class="container">
+{% block content %}
+  <div class="container">
+    <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
+      <div class="col-sm-12 col-md-2">
+      </div>
+      <div class="col-sm-12 col-md-7 jumbotron">
+        <div class="container">
           <h1>Legg til nytt intervju</h1>
           <br>
           <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-         {{ form.as_p }}
-         <br>
-         <button class="btn btn-success" type="submit">LEGG TIL!</button>
-         <br>
-     </form>
+            {{ form.as_p }}
+            <br>
+            <button class="btn btn-success" type="submit">LEGG TIL!</button>
+            <br>
+          </form>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
 {% endblock content %}
