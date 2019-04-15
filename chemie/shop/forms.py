@@ -74,7 +74,7 @@ class HappyHourForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            "duration", Submit("submit", "Aktivér happy hour!!")
+            "duration", Submit("submit", "Aktiver happy hour!!")
         )
 
     class Meta:
