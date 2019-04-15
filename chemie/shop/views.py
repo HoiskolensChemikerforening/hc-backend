@@ -214,12 +214,15 @@ def index_tabletshop(request):
     context["rfid_form"] = rfid_form
     return context
 
+
 @login_required
-def receipts(request):
-    orders = Order.objects.filter(buyer=request.user).order_by('-created')
-    return render(
-        request, "shop/user_receipts.html",{'orders':orders}
+def view_my_receipts(request):
+    orders = (
+        Order.objects.filter(buyer=request.user)
+        .order_by("-created")
+        .prefetch_related("items")
     )
+    return render(request, "shop/user_receipts.html", {"orders": orders})
 
 
 @permission_required("customprofile.refill_balance")

@@ -6,7 +6,7 @@ app_name = "shop"
 
 urlpatterns = [
     url(r"^$", views.index, name="index"),
-    url(r"^kvitteringer$", views.receipts, name="receipts"),
+    url(r"^mine-kvitteringer$", views.view_my_receipts, name="receipts"),
     url(r"^admin/$", views.admin, name="admin"),
     url(r"^admin/refill-balance", views.refill, name="refill"),
     url(r"^admin/add-item/$", views.add_item, name="add-item"),
