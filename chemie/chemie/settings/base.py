@@ -37,6 +37,7 @@ CONTACTS = [("Styret", "styret@hc.ntnu.no")]
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/"
 ROOT_URLCONF = "chemie.chemie.urls"
 WSGI_APPLICATION = "chemie.chemie.wsgi.application"
 
