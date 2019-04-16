@@ -98,6 +98,7 @@ def admin_register_candidates(request, pk):
 
         return render(request, "elections/admin/admin_candidates.html", context)
 
+
 @permission_required("elections.add_election")
 @login_required
 def admin_delete_candidate(request, pk):
@@ -110,6 +111,12 @@ def admin_delete_candidate(request, pk):
             candidate_username = request.POST.get("Delete", "0")
             position = Position.objects.get(id=pk)
             position.delete_candidate(candidate_username)
+            messages.add_message(
+                request,
+                messages.WARNING,
+                "Pass på at totalt antall forhåndsstemmer er korrekt før du starter valget!",
+                extra_tags="Obs!"
+            )
 
     return redirect("elections:admin_register_candidates", pk=pk)
 
