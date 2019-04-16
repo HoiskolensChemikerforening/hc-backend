@@ -68,7 +68,7 @@
 
   /* When the checkbox is checked, add a blue background */
   .checkbox-container input:checked~.checkmark {
-    background-color: #2196F3;
+    background-color: rgb(237, 205, 47);
   }
 
   /* Create the checkmark/indicator (hidden when not checked) */
@@ -121,6 +121,7 @@
   .btn-group .btn-fab {
     position: fixed !important;
     right: 20px;
+    margin-bottom:0.5rem;
   }
 
   #admin {
