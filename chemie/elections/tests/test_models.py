@@ -106,7 +106,7 @@ def test_voting_outcome(
     user = create_user
     election.start_current_position_voting(position.id)
 
-    position.calculate_candidate_votes() == 0
+    position.calculate_candidate_votes()
     for candidate in position.candidates.all():
         assert candidate.pre_votes == 0
         assert candidate.votes == 0
