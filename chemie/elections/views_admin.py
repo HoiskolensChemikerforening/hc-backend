@@ -263,6 +263,10 @@ def admin_end_election(request):
 @permission_required("elections.add_election")
 @login_required
 def change_rfid_status(request):
+    is_redirected, redir_function = Election.is_redirected()
+    if is_redirected:
+        return redir_function  # Redirect function from Election.is_redirected
+
     form = GetRFIDForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():

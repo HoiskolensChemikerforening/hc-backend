@@ -40,7 +40,8 @@ margin-right: 0.2rem;
                     style="color:#edcd2f">Admin</a></li>
             <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
             <div style="position:absolute; right:3rem; top:3rem">
-                <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}" onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
+                <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
+                    onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
                     <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
                         valget</button>
                 </form>
@@ -50,7 +51,8 @@ margin-right: 0.2rem;
     <!--Tittel på possisjon-->
     <div class="d-flex">
         <div class="p-2" style="margin-left:2rem">
-            <h2 class="title is-4"> Kandidater for {{ position.position_name }}</h2>
+            <h2 class="p-2"> Kandidater for {{ position.position_name }}</h2>
+            <h3 class="p-2"> Antall som har forhåndstemt: {{position.get_number_of_voters}}</h3>
         </div>
     </div>
 

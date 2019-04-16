@@ -27,9 +27,13 @@ border-radius:0rem
     <nav aria-label="breadcrumb">
         <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
             <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
-                <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem" id="closeElectionButton">Steng
-                    valget og lagre
-                    resultater</button>
+            <button class="btn btn-secondary" style="position:absolute; right:20rem; top:3rem" id="checkInDirect">Check
+                in brukere</button>
+            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
+            <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem"
+                id="closeElectionButton">Steng
+                valget og lagre
+                resultater</button>
 
         </ol>
 
@@ -58,7 +62,8 @@ border-radius:0rem
                                 <h5>{{position.position_name}}: <b>{{position.spots}}</b> plass(er)</h3>
                             </div>
                             <div class="ml-auto p-2">
-                                <form onsubmit="return submitDelete(this)" method="POST" action="{% url 'elections:admin_delete_position' %}"
+                                <form onsubmit="return submitDelete(this)" method="POST"
+                                    action="{% url 'elections:admin_delete_position' %}"
                                     name="{{position.position_name}}">
                                     {% csrf_token %}
                                     <button class="btn btn-danger" type="submit" name="Delete"
@@ -154,6 +159,9 @@ border-radius:0rem
             return false
         }
     }
+    document.getElementById("checkInDirect").onclick = function () {
+        location.href = "{% url 'elections:checkin'%}";
+    };
 
 </script>
 

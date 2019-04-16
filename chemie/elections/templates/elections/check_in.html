@@ -19,7 +19,6 @@
 {% endfor %}
 {% endif %}
 
-{% if is_open %}
 <div align="center">
   <h1 class="title is-2">Sjekk inn til valget</h1>
   <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
@@ -27,9 +26,5 @@
     <input type="submit" class="btn btn-secondary" name="addStudentcard" value="Sjekk inn/ut" height="1.7rem" />
   </form>
 </div>
-{% else %}
-<h2 class="title is-4"> Valget har ikke åpnet enda </h2>
-<h5>Åpne et valg for å sjekke inn til valget.</h5>
-{% endif %}
 
 {% endblock content %}
