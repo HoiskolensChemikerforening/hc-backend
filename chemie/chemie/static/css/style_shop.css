@@ -3,6 +3,13 @@
     box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
     width: 16rem;
   }
+#happy-hour-box{
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  padding: 1rem;
+  background-color: lightgreen
+}
 
   #btn-kvittering {
     background-color: rgb(237, 205, 47);

@@ -63,13 +63,16 @@ Chemshop
   {% endfor %}
 </div>
 {% if is_happy %}
-<h4 style="text-align:center">Nå er det happy hour! 2 for 1 på alle grønne varer</h4>
+<div id="happy-hour-box">
+  <h4 style="text-align:center">Nå er det happy hour! 2 for 1 på alle grønne varer</h4>
+</div>
+
 {% endif %}
 
 <!-- Display items as cards -->
 <div class="d-flex flex-wrap" id="card-items" style="justify-content: space-between">
   {% for item in items %}
-  {% if item.happy_hour_duplicate %}
+  {% if is_happy and item.happy_hour_duplicate %}
   <div class="p-2 item-box" id="{{item.category}}-{{item.id}}" style="background-color:lightgreen">
     {% else %}
     <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
