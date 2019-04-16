@@ -11,16 +11,10 @@ urlpatterns = [
     path("admin/fyll-konto", views.refill, name="refill"),
     path("admin/opprett-vare/", views.add_item, name="add-item"),
     path(
-        "admin/opprett-vare/endre/<int:pk>)",
-        views.edit_item,
-        name="edit-item",
+        "admin/opprett-vare/endre/<int:pk>", views.edit_item, name="edit-item"
     ),
     path("admin/opprett-kategori/", views.add_category, name="add-category"),
-    path(
-        "admin/fjern-vare/<int:pk>)",
-        views.remove_item,
-        name="remove-item",
-    ),
+    path("fjern-vare/<int:pk>", views.remove_item, name="remove-item"),
     path(
         "admin/aktiver-happyhour/",
         views.activate_happyhour,

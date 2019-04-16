@@ -113,7 +113,7 @@ for (i = 0; i < closeItem.length; i++) {
 
         $.ajax({
             type: "POST",
-            url: "/shop/admin/remove-item/" + item_id,
+            url: "/shop/fjern-vare/" + item_id,
             datatype: "json",
 
             success: function (json) {
