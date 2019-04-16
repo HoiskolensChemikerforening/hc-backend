@@ -81,6 +81,7 @@ def index(request):
         context = index_tabletshop(request)
     else:
         context = index_user(request)
+    context["is_happy"] = is_happy_hour()[0]
     return render(request, "shop/shop.html", context)
 
 
