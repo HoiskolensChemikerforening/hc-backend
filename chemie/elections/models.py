@@ -146,7 +146,6 @@ class Position(models.Model):
             deletable = candidate_object
 
             if deletable in self.candidates.all():
-                self.number_of_prevote_tickets -= int(deletable.pre_votes/self.spots)
                 deletable.delete()
                 self.save()
                 return
