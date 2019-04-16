@@ -4,6 +4,7 @@ Django settings for the chemie project.
 
 import os
 import environ
+from django.contrib.messages import constants as message_constants
 
 
 # GENERAL CONFIGURATION
@@ -73,6 +74,7 @@ THIRD_PARTY_APPS = [
     "smart_selects",
     "ckeditor",
     "django_extensions",
+    "crispy_forms",
 ]
 
 LOCAL_APPS = [
@@ -91,6 +93,8 @@ LOCAL_APPS = [
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
+# For bootstrap crispy forms
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -437,3 +441,5 @@ THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
 
+# Value used for Django's built-in messages framework
+MESSAGE_TAGS = {message_constants.ERROR: "danger"}

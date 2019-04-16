@@ -1,9 +1,11 @@
 import material as M
 from captcha.fields import ReCaptchaField
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
+from dal import autocomplete
 from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import ValidationError
-from dal import autocomplete
 
 from chemie.chemie.settings import REGISTRATION_KEY
 from .models import Profile
@@ -68,6 +70,7 @@ class RegisterProfileForm(forms.ModelForm):
         M.Row("allergies", "relationship_status"),
         M.Row("image_primary", "image_secondary"),
     )
+
     # M.Row('registration_key'),)
 
     class Meta:
@@ -259,6 +262,14 @@ class GetRFIDForm(forms.Form):
 
 class AddCardForm(forms.Form):
     user = forms.ModelChoiceField(
-       queryset=User.objects.all(),
-       widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+        queryset=User.objects.all(),
+        widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
     access_card = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            "user",
+            "access_card",
+        )
