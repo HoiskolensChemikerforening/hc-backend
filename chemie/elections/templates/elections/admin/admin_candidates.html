@@ -32,22 +32,25 @@ margin-right: 0.2rem;
 }
 {% endblock style %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
+                                    style="color:#edcd2f">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
+    <div style="position:absolute; right:3rem; top:3rem">
+      <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
+            onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
+        <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
+          valget</button>
+      </form>
+    </div>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
 {% block content %}
 <div>
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-            <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
-                    style="color:#edcd2f">Admin</a></li>
-            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
-            <div style="position:absolute; right:3rem; top:3rem">
-                <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
-                    onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
-                    <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
-                        valget</button>
-                </form>
-            </div>
-        </ol>
-    </nav>
     <!--Tittel på possisjon-->
     <div class="d-flex">
         <div class="p-2" style="margin-left:2rem">

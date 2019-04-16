@@ -1,7 +1,7 @@
 {% extends 'chemie/base_election.html' %}
 {% load static %}
 
-{% block content %}
+{% block breadcrumbs %}
 <nav aria-label="breadcrumb">
     <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
         <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
@@ -11,8 +11,10 @@
             Resultater fra forrige valg
         </a>
     </ol>
-
 </nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
 <div class="d-flex flex-column">
     <div>
         <h2 style="text-align: center">Administrator for Valg </h2>

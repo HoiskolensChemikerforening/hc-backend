@@ -2,9 +2,8 @@
 {% load thumbnail %}
 {% load static %}
 
-{% block content %}
-  <div>
-    <nav aria-label="breadcrumb">
+{% block breadcrumbs %}
+  <nav aria-label="breadcrumb">
       <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
         <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
                                         style="color:#edcd2f">Admin</a></li>
@@ -13,7 +12,10 @@
         <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndsstemmer</li>
       </ol>
     </nav>
+{% endblock breadcrumbs %}
 
+{% block content %}
+  <div>
     {% if messages %}
     {% for message in messages %}
     <article class="message is-{{ message.level_tag }}">

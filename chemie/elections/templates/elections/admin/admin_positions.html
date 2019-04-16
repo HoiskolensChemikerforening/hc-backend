@@ -22,22 +22,22 @@ border-radius:0rem
 }
 {% endblock style %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
+      <button class="btn btn-secondary" style="position:absolute; right:20rem; top:3rem" id="checkInDirect">Check
+          in brukere</button>
+      <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem"
+          id="closeElectionButton">Steng
+          valget og lagre
+          resultater</button>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
 {% block content %}
 <div class="div-container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
-            <button class="btn btn-secondary" style="position:absolute; right:20rem; top:3rem" id="checkInDirect">Check
-                in brukere</button>
-            <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
-            <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem"
-                id="closeElectionButton">Steng
-                valget og lagre
-                resultater</button>
-
-        </ol>
-
-    </nav>
     <div class="justify-content-center d-flex">
         <div>
             <h3>Legg til Verv</h3>

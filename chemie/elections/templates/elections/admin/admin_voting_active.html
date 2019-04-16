@@ -7,16 +7,19 @@ margin-bottom: 2rem;
 }
 {% endblock style %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
+        </li>
+        <li class="breadcrumb-item "><a style="color:#edcd2fb4">{{election.current_position}}</a>
+        </li>
+    </ol>
+</nav>
+{% endblock breadcrumbs %}
+
 {% block content %}
 <div class="div-container">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-            <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
-            </li>
-            <li class="breadcrumb-item "><a style="color:#edcd2fb4">{{election.current_position}}</a>
-            </li>
-        </ol>
-    </nav>
     <div>
         <div style="text-align:center; margin:1rem">
             <a href="" class="btn btn-success"> Refresh side</a>
