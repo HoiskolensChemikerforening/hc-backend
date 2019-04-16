@@ -6,6 +6,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.utils import timezone
+import operator
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import Profile
@@ -70,6 +71,10 @@ def get_last_year_receipts():
                     item_list[i][order_item.item.name] = order_item.quantity
                 else:
                     item_list[i][order_item.item.name] += order_item.quantity
+
+        if len(item_list[i]) > 0:
+            sorted_item_list = sorted(item_list[i].items(), key=operator.itemgetter(1), reverse=True)
+            item_list[i] = dict(sorted_item_list)
         m += 1
         i += 1
     return item_list
