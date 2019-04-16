@@ -15,6 +15,7 @@ urlpatterns = [
     ),
     path("admin/opprett-kategori/", views.add_category, name="add-category"),
     path("fjern-vare/<int:pk>", views.remove_item, name="remove-item"),
+    path("fjern-handlekurv/", views.remove_cart, name="remove-cart"),
     path(
         "admin/aktiver-happyhour/",
         views.activate_happyhour,

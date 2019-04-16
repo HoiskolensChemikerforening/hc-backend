@@ -337,6 +337,13 @@ def remove_item(request, pk):
     return JsonResponse({"success": 1})
 
 
+@login_required
+def remove_cart(request):
+    cart = ShoppingCart(request)
+    cart.clear()
+    return JsonResponse({"success": 1})
+
+
 @permission_required("shop.add_happyhour")
 def activate_happyhour(request):
     form = HappyHourForm(request.POST or None)

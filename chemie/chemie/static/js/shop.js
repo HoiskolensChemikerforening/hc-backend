@@ -128,6 +128,17 @@ for (i = 0; i < closeItem.length; i++) {
                     parseFloat(total_sum).toFixed(2) -
                     parseFloat(sum_to_remove).toFixed(2)
                 ).toFixed(2).replace(".", ",");
+                if (parseInt(new_sum) == 0) {
+                    $.ajax({
+                        type: "POST",
+                        url: "/shop/fjern-handlekurv/",
+                        datatype: "json",
+
+                        success: function (json) {
+                            window.location.replace(window.location.href.substring(0, window.location.href.length - 1))
+                        }
+                    })
+                }
                 total_sum_element.innerHTML = `Total: ${new_sum}`;
                 let number_of_items_left = document.getElementsByClassName("item-list").length;
                 current_item.parentNode.removeChild(current_item);
