@@ -145,35 +145,35 @@ for (i = 0; i < closeItem.length; i++) {
         });
     }
 }
-
-
-/* Animation for the floating shopping cart button */
-var elem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
-var bottomPos = 29; // Same as in the CSS further up
-var animationStep = 0;
-// index 0 is the duration of the movement
-// index 1 is the speed for the movement
-// Each element array represents one movement of the animation
-// First animation up and down
-// Second animation up and down
-var animation = [
-    [10, 2], [10, 1], [10, 0], [10, -1], [10, -2],
-    [5, 1], [5, 0.5], [5, 0], [5, -0.5], [5, -1],
-]
-var id = setInterval(frame, 5);
-function frame() {
-    if (animationStep == animation.length) {
-        // Ends the animates
-        clearInterval(id);
-    } else {
-        speedDuration = animation[animationStep]
-        if (speedDuration[0] == 0) {
-            // Moves on to the next movement
-            animationStep++
+function animateButton() {
+    /* Animation for the floating shopping cart button */
+    var btnElem = document.getElementsByClassName("btn btn-warning btn-fab")[0];
+    var bottomPos = 29; // Same as in the CSS further up
+    var animationStep = 0;
+    // index 0 is the duration of the movement
+    // index 1 is the speed for the movement
+    // Each element array represents one movement of the animation
+    // First animation up and down
+    // Second animation up and down
+    var animation = [
+        [10, 2], [10, 1], [10, 0], [10, -1], [10, -2],
+        [5, 1], [5, 0.5], [5, 0], [5, -0.5], [5, -1],
+    ]
+    var id = setInterval(frame, 5);
+    function frame() {
+        if (animationStep == animation.length) {
+            // Ends the animates
+            clearInterval(id);
         } else {
-            bottomPos += speedDuration[1]
-            speedDuration[0]--
+            speedDuration = animation[animationStep]
+            if (speedDuration[0] == 0) {
+                // Moves on to the next movement
+                animationStep++
+            } else {
+                bottomPos += speedDuration[1]
+                speedDuration[0]--
+            }
         }
+        btnElem.style.bottom = bottomPos.toString() + ".px"
     }
-    elem.style.bottom = bottomPos.toString() + ".px"
 }

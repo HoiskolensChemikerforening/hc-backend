@@ -232,4 +232,7 @@ Chemshop
 
 {% block footer_script %}
 <script src="{% static "js/shop.js" %}"></script>
+{% if cart.cart %}
+<script>animateButton()</script>
+{% endif %}
 {% endblock footer_script %}
