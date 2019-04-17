@@ -12,47 +12,47 @@ admin_urlpatterns = [
         name="admin_start_election",
     ),
     url(
-        r"^admin/end/$",
+        r"^admin/avslutt/$",
         views_admin.admin_end_election,
         name="admin_end_election",
     ),
     url(
-        r"^admin/register/$",
+        r"^admin/registrer/$",
         views_admin.admin_register_positions,
         name="admin_register_positions",
     ),
     url(
-        r"^admin/register/delete/$",
+        r"^admin/registrer/slett/$",
         views_admin.admin_delete_position,
         name="admin_delete_position",
     ),
     url(
-        r"^admin/register/(?P<pk>\d+)/$",
+        r"^admin/registrer/(?P<pk>\d+)/$",
         views_admin.admin_register_candidates,
         name="admin_register_candidates",
     ),
     url(
-        r"^admin/register/(?P<pk>\d+)/start$",
+        r"^admin/registrer/(?P<pk>\d+)/start$",
         views_admin.admin_start_voting,
         name="admin_start_voting",
     ),
     url(
-        r"^admin/register/(?P<pk>\d+)/delete/$",
+        r"^admin/registrer/(?P<pk>\d+)/slett/$",
         views_admin.admin_delete_candidate,
         name="admin_delete_candidate",
     ),
     url(
-        r"^admin/register/(?P<pk>\d+)/prevotes/$",
+        r"^admin/registrer/(?P<pk>\d+)/forhaandsstemmer/$",
         views_admin.admin_register_prevotes,
         name="admin_register_prevotes",
     ),
     url(
-        r"^admin/register/(?P<pk>\d+)/active",
+        r"^admin/registrer/(?P<pk>\d+)/aktiv",
         views_admin.admin_voting_is_active,
         name="admin_voting_active",
     ),
     url(
-        r"^admin/results/(?P<pk>\d+)",
+        r"^admin/resultater/(?P<pk>\d+)",
         views_admin.admin_results,
         name="admin_results",
     ),
@@ -64,8 +64,8 @@ admin_urlpatterns = [
 ]
 user_urlpatterns = [
     url(r"^$", views.index, name="index"),
-    url(r"^vote/$", views.vote, name="vote"),
-    url(r"^vote/end", views.has_voted, name="has_voted"),
-    url(r"^checkin/$", views_admin.change_rfid_status, name="checkin"),
+    url(r"^stem/$", views.vote, name="vote"),
+    url(r"^stem/ferdig", views.has_voted, name="has_voted"),
+    url(r"^sjekkinn/$", views_admin.change_rfid_status, name="checkin"),
 ]
 urlpatterns = admin_urlpatterns + user_urlpatterns
