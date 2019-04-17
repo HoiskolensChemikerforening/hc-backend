@@ -10,112 +10,114 @@
 {% load static %}
 
 {% block style %}
-.candidate-container{
-padding: 0.9rem;
-margin-top: 0.3rem;
-margin-bottom: 0.3rem;
-}
-.candidate-delete{
-display: inline;
-position: absolute;
-right: 1rem;
-}
-.candidate-line{
-display: inline;
-}
-.candidate-input{
-display: inline;
-width: 4rem;
-}
-.candidate-component{
-margin-right: 0.2rem;
-}
+  .candidate-container{
+  padding: 0.9rem;
+  margin-top: 0.3rem;
+  margin-bottom: 0.3rem;
+  }
+  .candidate-delete{
+  display: inline;
+  position: absolute;
+  right: 1rem;
+  }
+  .candidate-line{
+  display: inline;
+  }
+  .candidate-input{
+  display: inline;
+  width: 4rem;
+  }
+  .candidate-component{
+  margin-right: 0.2rem;
+  }
 {% endblock style %}
 
 {% block breadcrumbs %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
-                                    style="color:#edcd2f">Admin</a></li>
-    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Register kandidater</li>
-    <div style="position:absolute; right:3rem; top:3rem">
-      <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
-            onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
-        <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
-          valget</button>
-      </form>
-    </div>
-  </ol>
-</nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+      <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
+                                      style="color:#edcd2f">Admin</a></li>
+      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Registrer kandidater</li>
+      <div style="position:absolute; right:3rem; top:3rem">
+        <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
+              onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
+          <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
+            valget
+          </button>
+        </form>
+      </div>
+    </ol>
+  </nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div>
+  <div>
     <!--Tittel på possisjon-->
     <div class="d-flex">
-        <div class="p-2" style="margin-left:2rem">
-            <h2 class="p-2"> Kandidater for {{ position.position_name }}</h2>
-            <h3 class="p-2"> Antall som har forhåndstemt: {{position.get_number_of_voters}}</h3>
-        </div>
+      <div class="p-2" style="margin-left:2rem">
+        <h2 class="p-2"> Kandidater for {{ position.position_name }}</h2>
+        <h3 class="p-2"> Antall som har forhåndstemt: {{ position.get_number_of_voters }}</h3>
+      </div>
     </div>
 
     <!--Søkefelt for brukere-->
     <div>
-        <div style="margin:2rem">
-            <form method="POST" action=""> {% csrf_token %}
-                {{ add_candidate_form.user }}
-                <input type="submit" class="btn btn-secondary" name="addCandidate" value="Legg til kandidat"
-                    height="10px" />
-            </form>
-            {% if position.is_done %}
-            <div class="div-container">
-                <h2 class="title is-3"> Dette valget har alt blitt gjennomført*</h2>
-                <p>*Hvis det skal gjøres gjenvalg på delte vinnerplasser, så lag en ny posisjon</p>
-                <p>Eksempel: Festslave med 2 plasser hvor valget ga en vinner og to andreplasser.
-                    Opprett et ny posisjon som heter Festslaver-gjennvalg med 1 plass og to kandidater
-                </p>
-            </div>
-            {% endif %}
-        </div>
+      <div style="margin:2rem">
+        <form method="POST" action=""> {% csrf_token %}
+          {{ add_candidate_form.user }}
+          <input type="submit" class="btn btn-secondary" name="addCandidate" value="Legg til kandidat"
+                 height="10px"/>
+        </form>
+        {% if position.is_done %}
+          <div class="div-container">
+            <h2 class="title is-3"> Dette valget har alt blitt gjennomført*</h2>
+            <p>*Hvis det skal gjøres gjenvalg på delte vinnerplasser, så lag en ny posisjon</p>
+            <p>Eksempel: Festslave med 2 plasser hvor valget ga en vinner og to andreplasser.
+              Opprett et ny posisjon som heter Festslaver-gjennvalg med 1 plass og to kandidater
+            </p>
+          </div>
+        {% endif %}
+      </div>
     </div>
 
     <div class="d-flex flex-wrap">
 
-        {% for candidate in candidates %}
+      {% for candidate in candidates %}
         <div class="p-2"
-            style="text-align:center; border-style: solid; border-radius: 1rem; margin:1rem; border-color:#343a40">
-            <div class="p-2" style="height:100%">
-                <div class="d-flex flex-column"></div>
-                <div class="p-2" style="height:80%">
-                    <img src="{{ candidate.image_url }}" style="max-width:6rem">
+             style="text-align:center; border-style: solid; border-radius: 1rem; margin:1rem; border-color:#343a40">
+          <div class="p-2" style="height:100%">
+            <div class="d-flex flex-column"></div>
+            <div class="p-2" style="height:80%">
+              <img src="{{ candidate.image_url }}" style="max-width:6rem">
 
-                    <p class="p-2">
-                        {{ candidate }}
-                        <br>
-                        <b>{{ candidate.pre_votes }}</b> forhåndstemmer
-                    </p>
-                </div>
-
-                <form class="mt-auto p-2" method="post" action="delete/" ; style="float:bottom;">{% csrf_token %}
-                    <button class="btn btn-danger" type="submit" name="Delete"
-                        value="{{ candidate.user.username }}">Slett</button>
-                </form>
+              <p class="p-2">
+                {{ candidate }}
+                <br>
+                <b>{{ candidate.pre_votes }}</b> forhåndstemmer
+              </p>
             </div>
+
+            <form class="mt-auto p-2" method="post" action="delete/" ; style="float:bottom;">{% csrf_token %}
+              <button class="btn btn-danger" type="submit" name="Delete"
+                      value="{{ candidate.user.username }}">Slett
+              </button>
+            </form>
+          </div>
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
     {% if candidates %}
-    <div style="margin:2rem">
+      <div style="margin:2rem">
         <a href="{% url "elections:admin_register_prevotes" position.id %}" style="margin:1rem">
-            <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
+          <button class="btn btn-secondary">Legg inn forhåndstemmer</button>
         </a>
-    </div>
+      </div>
     {% endif %}
-</div>
+  </div>
 {% endblock content %}
 
 {% block footer_script %}
-{{ add_candidate_form.media }}
+  {{ add_candidate_form.media }}
 
 
 {% endblock footer_script %}

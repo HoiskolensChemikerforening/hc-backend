@@ -1,94 +1,104 @@
-{% extends 'chemie/base_election.html'%}
-
-
-<!--
-context = {
-    'candidates': position.candidates.all(),
-    'number_of_voters': number_of_voters,
-    'blank_votes': blank_votes
-}
--->
+{% extends 'chemie/base_election.html' %}
 
 {% block breadcrumbs %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}" style="color:#edcd2f">Admin</a>
-    </li>
-    <li class="breadcrumb-item "><a style="color:#edcd2fb4">{{position}}</a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Resultater</li>
-  </ol>
-</nav>
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+      <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
+                                      style="color:#edcd2f">Admin</a>
+      </li>
+      <li class="breadcrumb-item "><a style="color:#edcd2fb4">{{ position }}</a>
+      </li>
+      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Resultater</li>
+    </ol>
+  </nav>
 {% endblock breadcrumbs %}
 
-{% block content%}
-<div style="margin:1rem">
-
-
-  <script type="text/javascript">
-    const total_votes = parseInt("{{total_votes}}")
-    const blank_votes = parseInt("{{blank_votes}}")
-  </script>
-  <div class="box">
-    <div style="margin:1rem">
-      <h4>Totalt antall personer som har stemt: {{ position.get_number_of_voters }}</h4>
-      <h5>Personer som har forhåndstemt: {{position.number_of_prevote_tickets}}</h5>
-      <h5 style="margin-bottom:1rem">Personer som har stemt under valget: {{ number_of_tickets }}</h5>
-      <h4>Totalt avgitte stemmer: {{ total_votes }}</h4>
-      <h5>Avgitte kandidatforhåndstemmer: {{position.get_total_candidate_prevotes}}</h5>
-      <h5>Avgitte kandidatstemmer under valget: {{position.get_total_candidate_ticket_votes}}</h5>
-      <h5>Avgitte blanke stemmer: {{ position.get_blank_votes }}</h5>
-
+{% block content %}
+  <div style="margin:1rem">
+    <script type="text/javascript">
+        const total_votes = parseInt("{{total_votes}}");
+        const blank_votes = parseInt("{{blank_votes}}");
+    </script>
+    <!-- Show votes and tickets -->
+    <div class="box">
+      {#  <h5>Avgitte blanke stemmer: <b>{{ position.get_blank_votes }}</b></h5>#}
+      <table class="table" style="margin-bottom: 3rem">
+        <tr>
+          <th></th>
+          <th>Stemmesedler</th>
+          <th>Stemmer</th>
+        </tr>
+        <tr>
+          <td>På forhånd</td>
+          <td>{{ position.number_of_prevote_tickets }}</td>
+          <td>{{ position.get_total_candidate_prevotes }}</td>
+        </tr>
+        <tr>
+          <td>Under valget</td>
+          <td>{{ number_of_tickets }}</td>
+          <td>{{ position.get_total_candidate_ticket_votes }}</td>
+        </tr>
+        <tr>
+          <td>Hvorav blanke stemmer</td>
+          <td></td>
+          <td>{{ position.get_blank_votes }}</td>
+        </tr>
+        <tr>
+          <td>Totalt</td>
+          <td>{{ position.get_number_of_voters }}</td>
+          <td>{{ total_votes }}</td>
+        </tr>
+      </table>
+      <!-- Show candidates and their votes -->
+      <table class="table">
+        <tr>
+          <th>Kandidater</th>
+          <th>Forhåndstemmer</th>
+          <th>Avgitte stemmer</th>
+          <th>Antall stemmer</th>
+          <th>Prosent med blanke stemmer</th>
+          <th>Prosent uten blanke stemmer</th>
+        </tr>
+        {% for candidate in candidates %}
+          <tr>
+            <td> {{ candidate.user.get_full_name }} </td>
+            <td> {{ candidate.pre_votes }} </td>
+            <td> {{ candidate.votes }} </td>
+            <td>
+              <p id="total_votes-{{ candidate.id }}">2</p>
+              <script type="text/javascript">
+                  var votes = parseInt("{{ candidate.votes }}");
+                  var preVotes = parseInt("{{ candidate.pre_votes }}");
+                  var candTotalVotes = votes + preVotes;
+                  document.getElementById("total_votes-{{candidate.id}}").innerHTML = candTotalVotes;
+              </script>
+            </td>
+            <td>
+              <p id="voting_percentage-{{ candidate.id }}"></p>
+              <script type="text/javascript">
+                  var votes = parseInt("{{ candidate.votes }}");
+                  var preVotes = parseInt("{{ candidate.pre_votes }}");
+                  var percentage_with_blank = (100 * (votes + preVotes) / total_votes).toFixed(2);
+                  document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage_with_blank + " %";
+              </script>
+            </td>
+            <td>
+              <p id="voting_percentage-without-blank{{ candidate.id }}"></p>
+              <script type="text/javascript">
+                  var total_votes_without_blank = total_votes - blank_votes;
+                  var votes = parseInt("{{ candidate.votes }}");
+                  var preVotes = parseInt("{{ candidate.pre_votes }}");
+                  debugger;
+                  var percentage_without_blank = (100 * (votes + preVotes) / total_votes_without_blank).toFixed(2);
+                  document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
+              </script>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
     </div>
-    <table class="table">
-      <tr>
-        <th>Kandidater</th>
-        <th>Forhåndstemmer</th>
-        <th>Avgitte stemmer</th>
-        <th>Antall stemmer</th>
-        <th>Prosent med blanke stemmer</th>
-        <th>Prosent uten blanke stemmer</th>
-      </tr>
-      {% for candidate in candidates %}
-      <tr>
-        <td> {{ candidate.user.get_full_name }} </td>
-        <td> {{ candidate.pre_votes }} </td>
-        <td> {{ candidate.votes }} </td>
-        <td>
-          <p id="total_votes-{{candidate.id}}">2</p>
-          <script type="text/javascript">
-            var votes = parseInt("{{ candidate.votes }}");
-            var preVotes = parseInt("{{ candidate.pre_votes }}");
-            var candTotalVotes = votes + preVotes
-            document.getElementById("total_votes-{{candidate.id}}").innerHTML = candTotalVotes;
-          </script>
-        </td>
-        <td>
-          <p id="voting_percentage-{{candidate.id}}"></p>
-          <script type="text/javascript">
-            var votes = parseInt("{{ candidate.votes }}");
-            var preVotes = parseInt("{{ candidate.pre_votes }}");
-            var percentage_with_blank = (100 * (votes + preVotes) / total_votes).toFixed(2);
-            document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage_with_blank + " %";
-          </script>
-        </td>
-        <td>
-          <p id="voting_percentage-without-blank{{candidate.id}}"></p>
-          <script type="text/javascript">
-            var total_votes_without_blank = total_votes - blank_votes;
-            var votes = parseInt("{{ candidate.votes }}");
-            var preVotes = parseInt("{{ candidate.pre_votes }}");
-            debugger;
-            var percentage_without_blank = (100 * (votes + preVotes) / total_votes_without_blank).toFixed(2);
-            document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
-          </script>
-        </td>
-      </tr>
-      {% endfor %}
-    </table>
+    <br>
+    <a class="btn btn-secondary" href="{% url "elections:admin_register_positions" %}">Tilbake</a>
   </div>
-  <br>
-  <a class="btn btn-secondary" href="{% url "elections:admin_register_positions" %}">Tilbake</a>
-</div>
 
 {% endblock content %}

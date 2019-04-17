@@ -2,167 +2,169 @@
 {% load material_form %}
 
 {% block style %}
-.submit-button{
-margin-top: 0.9rem;
-}
-.delete-button{
-margin-bottom: 0rem;
-background-color: transparent;
-border: None;
-}
-.delete-form{
-padding-bottom: 0rem;
-}
-.position-title{
-margin: auto;
-}
+  .submit-button{
+  margin-top: 0.9rem;
+  }
+  .delete-button{
+  margin-bottom: 0rem;
+  background-color: transparent;
+  border: None;
+  }
+  .delete-form{
+  padding-bottom: 0rem;
+  }
+  .position-title{
+  margin: auto;
+  }
 
-.breadcrumb{
-border-radius:0rem
-}
+  .breadcrumb{
+  border-radius:0rem
+  }
 {% endblock style %}
 
 {% block breadcrumbs %}
-<nav aria-label="breadcrumb">
-  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+  <nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
       <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
       <button class="btn btn-secondary" style="position:absolute; right:20rem; top:3rem" id="checkInDirect">Check
-          in brukere</button>
+        in brukere
+      </button>
       <button class="btn btn-danger" style="position:absolute; right:3rem; top:3rem"
-          id="closeElectionButton">Steng
-          valget og lagre
-          resultater</button>
-  </ol>
-</nav>
+              id="closeElectionButton">Steng valget og lagre resultater
+      </button>
+    </ol>
+  </nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="div-container">
+  <div class="div-container">
     <div class="justify-content-center d-flex">
-        <div>
-            <h3>Legg til Verv</h3>
-            <form method="POST" href="">{% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-secondary">Legg til verv</button>
-            </form>
-        </div>
+      <div>
+        <h3>Legg til Verv</h3>
+        <form method="POST" href="">{% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-secondary">Legg til verv</button>
+        </form>
+      </div>
     </div>
 
 
     <div class="d-flex flex-row" style="margin:1rem">
-        <div class="p-2"
-            style="width:100%; border-style:solid; border-radius: 1rem 0rem 0rem 1rem; border-color:#343a40">
-            <h4 class="text-center">Ikke gjennomført</h4>
-            {%for position in not_done_positions%}
-            <div>
-                <div class="d-flex flex-column" style="border-style:solid none solid none; border-color:#343a40">
-                    <div class="p-2">
-                        <div class="d-flex">
-                            <div class="p-2">
-                                <h5>{{position.position_name}}: <b>{{position.spots}}</b> plass(er)</h3>
-                            </div>
-                            <div class="ml-auto p-2">
-                                <form onsubmit="return submitDelete(this)" method="POST"
-                                    action="{% url 'elections:admin_delete_position' %}"
-                                    name="{{position.position_name}}">
-                                    {% csrf_token %}
-                                    <button class="btn btn-danger" type="submit" name="Delete"
-                                        value="{{position.id}}">Slett</button>
-                                </form>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="d-flex">
-                            <div class="p-2">
-                                {%for candidate in position.candidates.all%}
-                                <p>
-                                    {{candidate}}:
-                                    <b> {{candidate.pre_votes}}</b> forhåndstemmer<br>
-                                </p>
-                                {%endfor%}
-                            </div>
-                            <div class="ml-auto p-2">
-                                <a class="btn btn-secondary" href={{ position.id }}>Legg til kandidater</a>
-                            </div>
-
-                        </div>
-                    </div>
+      <div class="p-2"
+           style="width:100%; border-style:solid; border-radius: 1rem 0rem 0rem 1rem; border-color:#343a40">
+        <h4 class="text-center">Ikke gjennomført</h4>
+        {% for position in not_done_positions %}
+          <div>
+            <div class="d-flex flex-column" style="border-style:solid none solid none; border-color:#343a40">
+              <div class="p-2">
+                <div class="d-flex">
+                  <div class="p-2">
+                    <h5>{{ position.position_name }}: <b>{{ position.spots }}</b> plass(er)</h3>
+                  </div>
+                  <div class="ml-auto p-2">
+                    <form onsubmit="return submitDelete(this)" method="POST"
+                          action="{% url 'elections:admin_delete_position' %}"
+                          name="{{ position.position_name }}">
+                      {% csrf_token %}
+                      <button class="btn btn-danger" type="submit" name="Delete"
+                              value="{{ position.id }}">Slett
+                      </button>
+                    </form>
+                  </div>
                 </div>
-            </div>
-            {%endfor%}
+              </div>
+              <div class="p-2">
+                <div class="d-flex">
+                  <div class="p-2">
+                    {% for candidate in position.candidates.all %}
+                      <p>
+                        {{ candidate }}:
+                        <b> {{ candidate.pre_votes }}</b> forhåndstemmer<br>
+                      </p>
+                    {% endfor %}
+                  </div>
+                  <div class="ml-auto p-2">
+                    <a class="btn btn-secondary" href={{ position.id }}>Legg til kandidater</a>
+                  </div>
 
-
-        </div>
-        <div class="p-2"
-            style="width:100%; border-style:solid; border-radius: 0rem 1rem 1rem 0rem; border-color:#343a40">
-            <h4 class="text-center">Gjennomført</h4>
-            {%for position in done_positions%}
-            <div>
-                <div class="d-flex flex-column" style="border-style:solid none solid none; border-color:#343a40">
-                    <div class="p-2">
-                        <div class="d-flex">
-                            <div class="p-2">
-                                <h5>{{position.position_name}}: <b>{{position.spots}}</b> vinner(e)</h3>
-                            </div>
-
-                        </div>
-                    </div>
-                    <div class="p-2">
-                        <div class="d-flex">
-                            <div class="p-2">
-                                {%for candidate in position.candidates.all%}
-                                <p id="votes-{{candidate.id}}"></p>
-                                <script type="text/javascript">
-                                    var candVote = parseInt("{{candidate.votes}}")
-                                    var candPreVote = parseInt("{{candidate.pre_votes}}")
-                                    var candTotalVote = candVote + candPreVote
-                                    var message = "{{candidate}}: " + candTotalVote.toString() + " Stemmer"
-                                    document.getElementById("votes-{{candidate.id}}").innerHTML = message;
-                                </script>
-                                {%endfor%}
-                            </div>
-                            <a class="btn btn-secondary ml-auto" style="height:2.5rem"
-                                href="{%url 'elections:admin_results' pk=position.id%}">
-                                Se resultat
-                            </a>
-                        </div>
-                    </div>
                 </div>
+              </div>
             </div>
-            {%endfor%}
+          </div>
+        {% endfor %}
 
 
-        </div>
+      </div>
+      <div class="p-2"
+           style="width:100%; border-style:solid; border-radius: 0rem 1rem 1rem 0rem; border-color:#343a40">
+        <h4 class="text-center">Gjennomført</h4>
+        {% for position in done_positions %}
+          <div>
+            <div class="d-flex flex-column" style="border-style:solid none solid none; border-color:#343a40">
+              <div class="p-2">
+                <div class="d-flex">
+                  <div class="p-2">
+                    <h5>{{ position.position_name }}: <b>{{ position.spots }}</b> vinner(e)</h3>
+                  </div>
+
+                </div>
+              </div>
+              <div class="p-2">
+                <div class="d-flex">
+                  <div class="p-2">
+                    {% for candidate in position.candidates.all %}
+                      <p id="votes-{{ candidate.id }}"></p>
+                      <script type="text/javascript">
+                          var candVote = parseInt("{{candidate.votes}}");
+                          var candPreVote = parseInt("{{candidate.pre_votes}}");
+                          var candTotalVote = candVote + candPreVote;
+                          var message = "{{candidate}}: " + candTotalVote.toString() + " Stemmer";
+                          document.getElementById("votes-{{candidate.id}}").innerHTML = message;
+                      </script>
+                    {% endfor %}
+                  </div>
+                  <a class="btn btn-secondary ml-auto" style="height:2.5rem"
+                     href="{% url 'elections:admin_results' pk=position.id %}">
+                    Se resultat
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% endfor %}
+
+
+      </div>
     </div>
 
 
-</div>
+  </div>
 
 {% endblock content %}
 
-{% block footer_script%}
-<script>
-    document.getElementById("closeElectionButton").onclick = function () {
-        if (window.confirm('Avslutte valget?')) {
-            location.href = "{% url 'elections:admin_end_election'%}";
-        }
-    };
+{% block footer_script %}
+  <script>
+      document.getElementById("closeElectionButton").onclick = function () {
+          if (window.confirm('Avslutte valget?')) {
+              location.href = "{% url 'elections:admin_end_election'%}";
+          }
+      };
 
-    function submitDelete(el) {
-        var posName = el.name.toString();
-        var message = "Du sletter nå posisjon " + posName;
-        var retValue = confirm(message);
-        if (retValue) {
-            return true
-        } else {
-            return false
-        }
-    }
-    document.getElementById("checkInDirect").onclick = function () {
-        location.href = "{% url 'elections:checkin'%}";
-    };
+      function submitDelete(el) {
+          var posName = el.name.toString();
+          var message = "Du sletter nå posisjon " + posName;
+          var retValue = confirm(message);
+          if (retValue) {
+              return true
+          } else {
+              return false
+          }
+      }
 
-</script>
+      document.getElementById("checkInDirect").onclick = function () {
+          location.href = "{% url 'elections:checkin'%}";
+      };
+
+  </script>
 
 {% endblock footer_script %}

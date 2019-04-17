@@ -2,37 +2,39 @@
 {% load static %}
 
 {% block breadcrumbs %}
-<nav aria-label="breadcrumb">
+  <nav aria-label="breadcrumb">
     <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-        <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
-        </li>
-        <a class="btn btn-secondary" style="position:absolute; right:3rem; top:3rem"
-            href="{% url 'elections:admin_end_election'%}">
-            Resultater fra forrige valg
-        </a>
+      <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
+      </li>
+      <a class="btn btn-secondary" style="position:absolute; right:3rem; top:3rem"
+         href="{% url 'elections:admin_end_election' %}">
+        Resultater fra forrige valg
+      </a>
     </ol>
-</nav>
+  </nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="d-flex flex-column">
+  <div class="d-flex flex-column">
     <div>
-        <h2 style="text-align: center">Administrator for Valg </h2>
-        <p style="text-align: center">
-        Først når valget er åpnet kan folk begynne å scanne seg i døren, ellers må de scanne seg på nytt når valget har åpnet <br>
-        Husk å scanne folk ut når de forlater lokalet før valget er ferdig
-        </p>
+      <h2 style="text-align: center">Administrator for Valg </h2>
+      <p style="text-align: center">
+        Først når valget er åpnet kan folk begynne å scanne seg i døren, ellers må de scanne seg på nytt når valget har
+        åpnet <br>
+        Husk å scanne folk ut om de forlater lokalet før valget er ferdig
+      </p>
     </div>
 
     <br>
     <h2 style="text-align: center">Trykk på Start for å sette igang et valg</h2>
     <form method="POST" class="post-form" href="">{% csrf_token %}
-        <button type="submit" style="margin-left:45%" class="btn btn-success" name="start">Start
-            Election</button>
+      <button type="submit" style="margin-left:45%" class="btn btn-success" name="start">Start
+        valg
+      </button>
     </form>
 
-</div>
+  </div>
 
-</div>
+  </div>
 
 {% endblock content %}
