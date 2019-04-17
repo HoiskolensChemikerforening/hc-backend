@@ -69,13 +69,13 @@
 {% endblock header %}
 
 {% block breadcrumbs %}
-  <nav aria-label="breadcrumb">
+<nav aria-label="breadcrumb">
     <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-      <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
-              style="color:#edcd2f">Admin</a></li>
-      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Valget er stengt</li>
+        <li class="breadcrumb-item "><a href="{%url "elections:admin_register_positions"%}"
+                style="color:#edcd2f">Admin</a></li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Valget er stengt</li>
     </ol>
-  </nav>
+</nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
@@ -87,30 +87,36 @@
 </div>
 <div class="d-flex flex-wrap" style="margin:1rem">
     {%for position in positions %}
-    <div class="p-2" style="margin:1rem; width:20rem; border-style: solid; border-radius: 1rem">
+    <div class="p-2" style="margin:1rem; width:23rem; border-style: solid; border-radius: 1rem">
         <div class=" flex flex-column">
             <div class="p-1">
                 <h5>{{position}}</h5>
             </div>
             {% if position.is_done %}
             <div class="p-1" style="border-style:solid none solid none;">
+                Totalt antall personer som har stemt: <b>{{ position.get_number_of_voters }}</b>
                 <ul>
-                    <li id="list-number-voters-{{position.id}}">
-                        -
+                    <li>
+                        Personer som har forhåndstemt: <b>{{position.number_of_prevote_tickets}}</b>
                     </li>
-                    <li id="list-total-votes-{{position.id}}">
-                        -
+                    <li>
+                        Personer som har stemt under valget: <b>{{ position.get_number_of_tickets }}</b>
                     </li>
-                    <li id="list-blank-votes-{{position.id}}">
-                        -
+                </ul>
+                Totalt avgitte stemmer: <b>{{ position.get_total_votes }}</b>
+                <ul>
+                    <li>
+                        Avgitte kandidatforhåndstemmer: <b>{{position.get_total_candidate_prevotes}}</b>
                     </li>
-                    <script type="text/javascript">
-                        var posID = "{{ position.id }}"
-                        var positionIter = parseInt("{{ forloop.counter }}") - 1
-                        document.getElementById("list-number-voters-" + posID).innerHTML = "Antall personer stemt: " + numberOfVoterList[positionIter].bold()
-                        document.getElementById("list-total-votes-" + posID).innerHTML = "Totale stemmer: " + totalVotes[positionIter].bold()
-                        document.getElementById("list-blank-votes-" + posID).innerHTML = "Blanke stemmer: " + blankVotes[positionIter].bold()
-                    </script>
+                    <li>
+                        Avgitte kandidatstemmer under valget: <b>{{position.get_total_candidate_ticket_votes}}</b>
+                    </li>
+                    <li>
+                        Avgitte blanke stemmer: <b>{{ position.get_blank_votes }}</b>
+                    </li>
+
+
+
                 </ul>
 
 
@@ -118,16 +124,8 @@
             <div class="p-1">
                 <ul>
                     {%for candidate in position.candidates.all%}
-
-                    <li id="cadidate-votes-{{candidate.id}}">-</li>
-                    <script>
-                        var candPreVotes = parseInt("{{candidate.pre_votes}}")
-                        var candVotes = parseInt("{{candidate.votes}}")
-                        var candidateName = "{{candidate}}"
-                        var candTotalVotes = (candPreVotes + candVotes).toString()
-                        var message = candidateName + ": " + candTotalVotes.bold()
-                        document.getElementById("cadidate-votes-{{candidate.id}}").innerHTML = message;
-                    </script>
+                    <li id="cadidate-votes-{{candidate.id}}">
+                        {{candidate}}: <b>{{candidate.get_candidate_votes}}</b>
                     </li>
                     {%endfor%}
                 </ul>
@@ -155,10 +153,10 @@
         <table id="myTable" class="tablesorter">
             <thead>
                 <tr>
-                    <td>Verv</td>
-                    <td>Kandidat</td>
-                    <td>Forhaandstemmer</td>
-                    <td>Avgitte stemmer</td>
+                    <td>Valgposisjon</td>
+                    <td>Oppsumering og kandidater</td>
+                    <td>Forhaand</td>
+                    <td>Under valget</td>
                     <td>Totalt</td>
                 </tr>
             </thead>
@@ -167,62 +165,47 @@
                 {% for position in positions %}
                 <tr>
                     <td>{{position.position_name}}</td>
-                    <td>Totale stemmer</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td>Totalt antall personer som har stemt</td>
+                    <td>{{position.number_of_prevote_tickets}}</td>
+                    <td>{{position.get_number_of_tickets}}</td>
                     <td>
-                        <p id="total-votes-{{position.id}}">
-                            -
-                        </p>
+                        {{ position.get_number_of_voters }}
                     </td>
                 </tr>
                 <tr>
                     <td>{{position.position_name}}</td>
-                    <td>Blanke stemmer</td>
+                    <td>Totalt avgitte stemmer</td>
                     <td>-</td>
                     <td>-</td>
                     <td>
-                        <p id="blank-votes-{{position.id}}">
-                            -
-                        </p>
+                        {{position.get_total_votes}}
                     </td>
                 </tr>
                 <tr>
                     <td>{{position.position_name}}</td>
-                    <td>Antall personer stemt</td>
-                    <td>-</td>
-                    <td>-</td>
+                    <td>Totalt avgitte kandidatstemmer stemmer</td>
+                    <td> {{position.get_total_candidate_prevotes}}</td>
+                    <td>{{position.get_total_candidate_ticket_votes}}</td>
                     <td>
-                        <p id="number-voters-{{position.id}}">
-
-                        </p>
+                        {{position.get_total_candidate_votes}}
                     </td>
                 </tr>
-                <script type="text/javascript">
-                    var posID = "{{ position.id }}"
-                    var positionIter = parseInt("{{ forloop.counter }}") - 1
-                    document.getElementById("number-voters-" + posID).innerHTML = numberOfVoterList[positionIter]
-                    document.getElementById("total-votes-" + posID).innerHTML = totalVotes[positionIter]
-                    document.getElementById("blank-votes-" + posID).innerHTML = blankVotes[positionIter]
-                </script>
+                <tr>
+                    <td>{{position.position_name}}</td>
+                    <td>Avgitte blanke stemmer</td>
+                    <td>-</td>
+                    <td>{{position.get_blank_votes}}</td>
+                    <td>
+                        {{position.get_blank_votes}}
+                    </td>
+                </tr>
                 {%for candidate in position.candidates.all%}
                 <tr>
                     <td>{{position.position_name}}</td>
                     <td>{{candidate}}</td>
                     <td>{{candidate.pre_votes}}</td>
                     <td>{{candidate.votes}}</td>
-                    <td>
-                        <p id="candidate-total-votes-{{candidate.id}}">
-                            -
-                        </p>
-                    </td>
-                    <script type="text/javascript">
-                        var candPreVotes = parseInt("{{ candidate.pre_votes }}")
-                        var candVotes = parseInt("{{ candidate.votes }}")
-                        var candID = "{{ candidate.id }}"
-                        var CandTotalVotes = (candPreVotes + candVotes).toString()
-                        document.getElementById("candidate-total-votes-" + candID).innerHTML = CandTotalVotes
-                    </script>
+                    <td>{{candidate.get_candidate_votes}}</td>
                 </tr>
                 {%endfor%}
                 {% endfor %}

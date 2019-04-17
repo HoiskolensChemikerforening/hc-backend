@@ -161,6 +161,25 @@ class Position(models.Model):
         non_blank_tickets = self.tickets.filter(is_blank=False)
         return non_blank_tickets.count()
 
+    def get_number_of_tickets(self):
+        return self.tickets.count()
+
+    def get_total_candidate_ticket_votes(self):
+        candidate_votes = 0
+        non_blank_tickets = self.tickets.filter(is_blank=False)
+        for ticket in non_blank_tickets:
+            candidate_votes += ticket.candidates.count()
+        return candidate_votes
+
+    def get_total_candidate_prevotes(self):
+        candidate_prevotes = 0
+        for candidate in self.candidates.all():
+            candidate_prevotes += candidate.pre_votes
+        return candidate_prevotes
+
+    def get_total_candidate_votes(self):
+        return self.get_total_candidate_prevotes() + self.get_total_candidate_ticket_votes()
+
     def get_blank_votes(self):
         blank_tickets = self.tickets.filter(is_blank=True)
         number_of_blank = 0

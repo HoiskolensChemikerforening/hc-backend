@@ -30,9 +30,16 @@ context = {
     const blank_votes = parseInt("{{blank_votes}}")
   </script>
   <div class="box">
-    <h4>Totalt antall stemmer: {{ total_votes }}</h4>
-    <h5>Antall personer som har stemt: {{number_of_voters}}</h5>
-    <h5>Blanke stemmer: {{ blank_votes }}</h5>
+    <div style="margin:1rem">
+      <h4>Totalt antall personer som har stemt: {{ position.get_number_of_voters }}</h4>
+      <h5>Personer som har forhåndstemt: {{position.number_of_prevote_tickets}}</h5>
+      <h5 style="margin-bottom:1rem">Personer som har stemt under valget: {{ number_of_tickets }}</h5>
+      <h4>Totalt avgitte stemmer: {{ total_votes }}</h4>
+      <h5>Avgitte kandidatforhåndstemmer: {{position.get_total_candidate_prevotes}}</h5>
+      <h5>Avgitte kandidatstemmer under valget: {{position.get_total_candidate_ticket_votes}}</h5>
+      <h5>Avgitte blanke stemmer: {{ position.get_blank_votes }}</h5>
+
+    </div>
     <table class="table">
       <tr>
         <th>Kandidater</th>

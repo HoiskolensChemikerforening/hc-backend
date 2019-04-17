@@ -222,13 +222,14 @@ def admin_results(request, pk):
     blank_votes = position.get_blank_votes()
     number_of_voters = position.get_number_of_voters()
     total_votes = position.get_total_votes()
-
+    number_of_tickets = position.get_number_of_tickets()
     context = {
         "position": position,
         "candidates": position.candidates.all(),
         "number_of_voters": number_of_voters,
         "total_votes": total_votes,
         "blank_votes": blank_votes,
+        "number_of_tickets": number_of_tickets,
     }
     return render(request, "elections/admin/admin_results.html", context)
 
