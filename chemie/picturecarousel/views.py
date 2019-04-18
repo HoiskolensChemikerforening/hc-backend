@@ -4,10 +4,11 @@ from django.contrib import messages
 from django.urls import reverse
 from dal import autocomplete
 from django.shortcuts import redirect, get_object_or_404
-from .forms import Pictureform, PictureTagForm
-from .models import Contribution, PictureTag
 from django.forms import modelformset_factory
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from .forms import Pictureform, PictureTagForm
+from .models import Contribution, PictureTag
 
 
 @login_required
@@ -185,27 +186,15 @@ class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
 
 
 @login_required
-def view_pictures(request, page=1):
-    picture_list = Contribution.objects.filter(
+def view_pictures(request):
+    pictures = Contribution.objects.filter(
         approved=True
     ).prefetch_related("author").order_by('-date')
-    paginator = Paginator(picture_list, 3)
 
-    try:
-        pictures = paginator.page(page)
-    except PageNotAnInteger:
-        pictures = paginator.page(1)
-    except EmptyPage:
-        pictures = paginator.page(paginator.num_pages)
-
-    form = PictureTagForm(request.POST or None)
-    tag_id_list = request.POST.getlist('tags')
-
-    # TODO: Filter out s.t. qs matches tags
-    # TODO: Disable option to create new tags from this page
+    filter_form = PictureTagForm()
 
     context = {
-        'form': form,
-        'pictures': pictures,
+        'filter_form': filter_form,
+        'pictures': pictures
     }
     return render(request, 'picturecarousel/view_active.html', context)

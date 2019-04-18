@@ -45,8 +45,4 @@ urlpatterns = [
         views.view_pictures,
         name='view_pictures'
     ),
-    path(
-        'bilder/<int:page>',
-        views.view_pictures,
-        name="view_detail"),
 ]
