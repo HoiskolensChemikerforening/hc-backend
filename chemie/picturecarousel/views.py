@@ -184,6 +184,10 @@ class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
 
         return qs.order_by('tag')
 
+    def post(self, request):
+        if request.user.permissions("picturecarousel:add_picturetag"):
+            super(self.post)
+
 
 @login_required
 def view_pictures(request):
