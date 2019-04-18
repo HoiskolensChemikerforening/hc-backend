@@ -31,12 +31,13 @@
                   Spesialiseringsretning
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item" href="#">Bioteknologi</a>
-                  <a class="dropdown-item" href="#">Organisk kjemi</a>
-                  <a class="dropdown-item" href="#">Anvendt teoretisk kjemi</a>
-                  <a class="dropdown-item" href="#">Analytisk kjemi</a>
-                  <a class="dropdown-item" href="#">Kjemisk prosessteknologi</a>
-                  <a class="dropdown-item" href="#">Materialkjemi og energiteknologi</a>
+                  <a class="dropdown-item" onclick="filterCompanies('')">Alle</a>
+                  <a class="dropdown-item" onclick="filterCompanies('Bioteknologi')">Bioteknologi</a>
+                  <a class="dropdown-item" onclick="filterCompanies('Organisk kjemi')">Organisk kjemi</a>
+                  <a class="dropdown-item" onclick="filterCompanies('Anvendt teoretisk kjemi')">Anvendt teoretisk kjemi</a>
+                  <a class="dropdown-item" onclick="filterCompanies('Analytisk kjemi')">Analytisk kjemi</a>
+                  <a class="dropdown-item" onclick="filterCompanies('Kjemisk prosessteknologi')">Kjemisk prosessteknologi</a>
+                  <a class="dropdown-item" onclick="filterCompanies('Materialkjemi og energiteknologi')">Materialkjemi og energiteknologi</a>
                 </div>
               </div>
             </div>
@@ -56,7 +57,8 @@
 
     <div class="row">
       {% for company in companies %}
-        <div style="width: 22rem; height: 20rem; padding: 1.0rem;">
+        <div class="filterDiv {{ company.specializations }}"
+             style="width: 22rem; height: 20rem; padding: 1.0rem;">
           <div class="card medium">
             <div class="card-image">
               <a href="{% url "corporate:company_detail" company.id %}" class="stretched-link">
@@ -78,3 +80,27 @@
   </div>
 
 {% endblock content %}
+
+{% block footer_script %}
+  <script>
+
+      filterCompanies = function (specialization) {
+          let cards = document.getElementsByClassName("filterDiv");
+          for (let i = 0; i < cards.length; i++) {
+              let className = cards[i].className;
+              if (!className.includes(specialization)) {
+                  cards[i].style.display = "none";
+              } else {
+                  cards[i].style.display = "block";
+              }
+          }
+
+          let dropdown = document.getElementById("dropdownMenuButton");
+          if (specialization) {
+              dropdown.innerHTML = specialization;
+          } else {
+              dropdown.innerHTML = "Spesialiseringsretning";
+          }
+      }
+  </script>
+{% endblock footer_script %}
