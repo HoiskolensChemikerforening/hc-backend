@@ -112,4 +112,11 @@
 
 {% block footer_script %}
   {{ approved_formset.form.media }}
+
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+  </script>
+
 {% endblock footer_script %}

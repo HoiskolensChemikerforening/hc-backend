@@ -120,4 +120,11 @@
 
 {% block footer_script %}
   {{ awaiting_formset.form.media }}
+
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+  </script>
+
 {% endblock footer_script %}
