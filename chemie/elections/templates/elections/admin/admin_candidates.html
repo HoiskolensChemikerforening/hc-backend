@@ -15,14 +15,6 @@
     <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
         style="color:#edcd2f">Admin</a></li>
     <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Registrer kandidater</li>
-    <div style="position:absolute; right:3rem; top:3rem">
-      <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
-        onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
-        <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
-          valget
-        </button>
-      </form>
-    </div>
   </ol>
 </nav>
 {% endblock breadcrumbs %}
@@ -31,7 +23,7 @@
 <div>
   <!--Tittel på possisjon-->
   <div class="d-flex">
-    <div class="p-2" style="margin-left:2rem">
+    <div class="p-2" style="margin-left:1rem">
       <h2 class="p-2"> Kandidater for {{ position.position_name }}</h2>
       <h3 class="p-2"> Antall som har forhåndstemt: {{ position.get_number_of_voters }}</h3>
     </div>
@@ -39,6 +31,19 @@
 
   <!--Søkefelt for brukere-->
   <div>
+    <div style="margin-left:3rem ">
+      <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
+        onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
+        <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
+          valget
+        </button>
+      </form>
+      <div style="margin-top:1rem">
+        <a href="{% url "elections:admin_register_prevotes" position.id %}">
+          <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
+        </a>
+      </div>
+    </div>
     <div style="margin:2rem">
       <form method="POST" action=""> {% csrf_token %}
         {{ add_candidate_form.user }}
@@ -56,7 +61,7 @@
     </div>
   </div>
 
-  <div class="d-flex flex-wrap">
+  <div class="d-flex flex-wrap" style="margin-left:1rem">
 
     {% for candidate in candidates %}
     <div class="p-2"
@@ -73,7 +78,7 @@
           </p>
         </div>
 
-        <form class="mt-auto p-2" method="post" action="delete/" ; style="float:bottom;">{% csrf_token %}
+        <form class="mt-auto p-2" method="post" action="slett/" ; style="float:bottom;">{% csrf_token %}
           <button class="btn btn-danger" type="submit" name="Delete" value="{{ candidate.user.username }}">Slett
           </button>
         </form>
@@ -82,11 +87,6 @@
     {% endfor %}
   </div>
   {% if candidates %}
-  <div style="margin:2rem">
-    <a href="{% url "elections:admin_register_prevotes" position.id %}" style="margin:1rem">
-      <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
-    </a>
-  </div>
   {% endif %}
 </div>
 {% endblock content %}
