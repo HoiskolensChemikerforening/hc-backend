@@ -63,6 +63,7 @@ def admin_register_positions(request):
 
         return render(request, "elections/admin/admin_positions.html", context)
 
+
 @permission_required("elections.add_election")
 @login_required
 def admin_delete_position(request):
@@ -111,13 +112,16 @@ def admin_delete_candidate(request, pk):
             candidate_username = request.POST.get("Delete", "0")
             position = Position.objects.get(id=pk)
             position.delete_candidate(candidate_username)
-            messages.add_message(
-                request,
-                messages.WARNING,
-                "Pass på at totalt antall forhåndsstemmer er korrekt før du starter valget!",
-                extra_tags="Obs!"
-            )
-
+            if position.candidates.count() == 0:
+                position.number_of_prevote_tickets = 0
+                position.save()
+            elif position.number_of_prevote_tickets != 0:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Pass på at totalt antall forhåndsstemmer er korrekt før du starter valget!",
+                    extra_tags="Obs!",
+                )
     return redirect("elections:admin_register_candidates", pk=pk)
 
 
@@ -131,9 +135,8 @@ def admin_start_voting(request, pk):
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
 
-        return redirect(
-            "elections:admin_register_candidates", pk=pk
-        )
+        return redirect("elections:admin_register_candidates", pk=pk)
+
 
 @permission_required("elections.add_election")
 @login_required
@@ -161,7 +164,9 @@ def admin_register_prevotes(request, pk):
         if request.method == "POST":
             if formset.is_valid() and prevote_form.is_valid():
 
-                if prevote_form.prevotes_allowed(formset, position): #checks that the ammount of pre_votes does not exceed feasable amount
+                if prevote_form.prevotes_allowed(
+                    formset, position
+                ):  # checks that the ammount of pre_votes does not exceed feasable amount
                     prevote_form.save()
 
                     for form in formset:
