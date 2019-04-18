@@ -82,7 +82,7 @@ class CustomChoiceField(forms.ModelMultipleChoiceField):
         )
 
         image = mark_safe(
-            f"<img src='{obj.image_url}' class='vote-image p-2 mt-auto' style='max-width:7rem; border-radius:0.5rem'/>"
+            f"<img src='{obj.image_url}' class='class-image p-2 mt-auto'/>"
         )
 
         return image + name
