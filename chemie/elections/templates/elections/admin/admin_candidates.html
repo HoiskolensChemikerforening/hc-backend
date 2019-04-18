@@ -93,7 +93,7 @@
               <p class="p-2">
                 {{ candidate }}
                 <br>
-                <b>{{ candidate.pre_votes }}</b> forhåndstemmer
+                <b>{{ candidate.pre_votes }}</b> forhåndsstemmer
               </p>
             </div>
 
@@ -109,7 +109,7 @@
     {% if candidates %}
       <div style="margin:2rem">
         <a href="{% url "elections:admin_register_prevotes" position.id %}" style="margin:1rem">
-          <button class="btn btn-secondary">Legg inn forhåndstemmer</button>
+          <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
         </a>
       </div>
     {% endif %}

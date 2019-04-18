@@ -9,7 +9,7 @@
                                       style="color:#edcd2f">Admin</a></li>
       <li class="breadcrumb-item "><a href="{% url "elections:admin_register_candidates" pk=position.id %}"
                                       style="color:#edcd2f">Registrer kandidater</a></li>
-      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndstemmer</li>
+      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til forhåndsstemmer</li>
     </ol>
   </nav>
 {% endblock breadcrumbs %}
@@ -18,11 +18,11 @@
   <div>
     <div class="d-flex flex-column">
       <div class="p-2" style="text-align:center">
-        <h3 class="title is-4"> Legg til forhåndstemmer</h3>
+        <h3 class="title is-4"> Legg til forhåndsstemmer</h3>
       </div>
       <div style="margin-left:30%; margin-right: 30%">
         <p>
-          Legg til totalt antall forhåndstemmer for hver kandidat. Under legger du inn hvor mange personer som
+          Legg til totalt antall forhåndsstemmer for hver kandidat. Under legger du inn hvor mange personer som
           har forhåndstemt.
         </p>
       </div>
@@ -54,7 +54,7 @@
             </table>
           </div>
           <div>
-            <input class="btn btn-secondary" type="submit" value="Legg inn forhåndstemmer!">
+            <input class="btn btn-secondary" type="submit" value="Legg inn forhåndsstemmer!">
           </div>
         </form>
       </div>
