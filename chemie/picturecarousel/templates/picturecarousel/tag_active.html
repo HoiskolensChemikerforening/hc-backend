@@ -93,12 +93,8 @@
                 <td><p>{{ form.instance.author }}</p></td>
                 <td><p>{{ form.instance.date|date:"j. F" }}</p></td>
                 <td>
-                  <form method="POST">{% csrf_token %}
-                    <button class="waves-effect btn btn-primary" name="delete"
-                            value="{{ form.instance.id }}" type="submit">Slett
-                      <i class="material-icons right">delete</i>
-                    </button>
-                  </form>
+                  <a class="waves-effect btn btn-primary" href="{% url "picturecarousel:deny" form.instance.id %}">
+                    Slett<i class="material-icons right">delete</i></a>
                 </td>
               </tr>
             {% endfor %}

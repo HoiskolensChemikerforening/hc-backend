@@ -61,7 +61,6 @@
     {% endif %}
   </ul>
 
-
   <div class="row">
     <h3>Avventer godkjenning</h3>
     <div class="card">
@@ -87,26 +86,16 @@
                 <td>
                   {{ form.as_p }}
                   <button class="btn waves-effect waves-light" type="submit"
-                          name="save_tag" value="{{ page }}">Lagre tags!
+                          value="{{ page }}">Lagre tags!
                   </button>
                 </td>
                 <td><p>{{ form.instance.author }}</p></td>
                 <td><p>{{ form.instance.date|date:"j. F" }}</p></td>
                 <td>
-                  <form method="POST">
-                    {% csrf_token %}
-                    <button class="btn waves-effect waves-light" type="submit"
-                            name="delete" value="{{ form.instance.id }}">Slett
-                      <i class="material-icons right">delete</i>
-                    </button>
-                  </form>
-                  <form action="{% url "carousel:approve" form.instance.id %}" method="POST">
-                    {% csrf_token %}
-                    <button class="btn waves-effect waves-light" type="submit"
-                            name="approve" value="{{ form.instance.id }}">Godkjenn
-                      <i class="material-icons right">check</i>
-                    </button>
-                  </form>
+                  <a class="btn btn-primary waves-effect" href="{% url "picturecarousel:deny" form.instance.id %}">
+                    Slett<i class="material-icons right">delete</i></a>
+                  <a class="btn btn-primary waves-effect" href="{% url "picturecarousel:approve" form.instance.id %}">
+                    Godkjenn<i class="material-icons right">check</i></a>
                 </td>
               </tr>
             {% endfor %}

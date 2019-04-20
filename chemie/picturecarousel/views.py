@@ -61,15 +61,8 @@ def active_list(request, page=1):
     )
 
     if request.method == "POST":
-        if 'save_tag' in request.POST:
-            if approved_formset.is_valid():
-                approved_formset.save()
-            return redirect("carousel:active_detail", page)
-
-        elif 'delete' in request.POST:
-            picture_id = request.POST.get('delete')
-            return redirect("carousel:deny", picture_id)
-
+        if approved_formset.is_valid():
+            approved_formset.save()
         return redirect("carousel:active_detail", page)
 
     context = {"approved_formset": approved_formset,
@@ -105,20 +98,9 @@ def approve_pictures(request, page=1):
     )
 
     if request.method == "POST":
-        if 'save_tag' in request.POST:
-            if awaiting_formset.is_valid():
-                awaiting_formset.save()
-            return redirect("carousel:detail", page)
-
-        elif 'approve' in request.POST:
-            picture_id = request.POST.get('approve')
-            return redirect("carousel:approve", picture_id)
-
-        elif 'delete' in request.POST:
-            picture_id = request.POST.get('delete')
-            return redirect("carousel:deny", picture_id)
-
-        return redirect("carousel:approve", page)
+        if awaiting_formset.is_valid():
+            awaiting_formset.save()
+        return redirect("carousel:detail", page)
 
     context = {"awaiting_formset": awaiting_formset,
                "picture_page": picture_page,
