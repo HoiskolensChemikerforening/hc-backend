@@ -44,6 +44,9 @@ class OrderItemAdmin(admin.ModelAdmin):
 
     get_order.short_description = "Ordre"
 
+    def has_delete_permission(self, request, obj=None):
+        return False
+
 
 class OrderAdmin(admin.ModelAdmin):
     list_display = ["id", "buyer", "created", "get_price"]
@@ -55,6 +58,9 @@ class OrderAdmin(admin.ModelAdmin):
 
     def get_price(self, obj):
         return obj.get_total_price()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
     get_price.short_description = "Totalpris"
 
