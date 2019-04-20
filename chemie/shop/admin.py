@@ -6,9 +6,13 @@ from .models import Item, Category, Order, OrderItem, RefillReceipt, HappyHour
 class RefillReceiptAdmin(admin.ModelAdmin):
     list_display = ["provider", "receiver", "amount"]
     search_fields = ["provider"]
+    list_display_links = None
 
     class Meta:
         model = RefillReceipt
+
+    def has_delete_permission(self, request, obj=None):
+        return False
 
 
 class ItemAdmin(admin.ModelAdmin):
