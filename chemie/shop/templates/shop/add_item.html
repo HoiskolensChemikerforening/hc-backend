@@ -18,6 +18,10 @@
     background-color: #6c757d;
     border-color: #6c757d;
   }
+
+  tr:nth-child(even) {
+    background-color: #f2f2f2
+  }
 </style>
 {% endblock style %}
 
@@ -48,29 +52,39 @@
 
 <!-- List of all existing items -->
 <div id="itemList">
-  <table style="width:100%" id="shopping-table">
+  <table style="width:95%; margin: 2rem; margin-left:0rem" id="shopping-table">
     <tr class="ul-item-list" style="height:3rem">
       <th>Vare</th>
       <th>Pris</th>
       <th>Kategori</th>
       <th>Aktiv</th>
+      <th>Kjøp uten tablet</th>
       <th></th>
     </tr>
     {% for item in items %}
     <tr class="item-list" id="item-list-{{item.name}}">
-      <td>{{ item.name }}</td>
-      <td>{{ item.price }}</td>
-      <td>{{ item.category }}</td>
+      <td style="width:18%">{{ item.name }}</td>
+      <td style="width:18%">{{ item.price }}</td>
+      <td style="width:18%">{{ item.category }}</td>
       {% if item.is_active %}
-      <td>
+      <td style="width:18%">
         <i class="material-icons" style="color:green">check</i>
       </td>
       {% else %}
-      <td>
+      <td style="width:18%">
         <i class="material-icons" style="color:red">clear</i>
       </td>
       {% endif %}
-      <td style="float: right;"> <a type="submit" class="btn btn-secondary"
+      {% if item.buy_without_tablet %}
+      <td style="width:18%">
+        <i class="material-icons" style="color:green">check</i>
+      </td>
+      {% else %}
+      <td style="width:15%">
+        <i class="material-icons" style="color:red">clear</i>
+      </td>
+      {% endif %}
+      <td style="width:15%; float: right;"> <a type="submit" class="btn btn-secondary"
           href="{% url "shop:edit-item" item.pk %}">Endre</a></td>
     </tr>
     {% endfor %}
