@@ -34,6 +34,7 @@ class CategoryAdmin(admin.ModelAdmin):
 class OrderItemAdmin(admin.ModelAdmin):
     list_display = ["item", "quantity", "get_order"]
     search_fields = ["item"]
+    list_display_links = None
 
     class Meta:
         model = OrderItem
@@ -47,6 +48,7 @@ class OrderItemAdmin(admin.ModelAdmin):
 class OrderAdmin(admin.ModelAdmin):
     list_display = ["id", "buyer", "created", "get_price"]
     search_fields = ["id", "buyer"]
+    list_display_links = None
 
     class Meta:
         model = Order
