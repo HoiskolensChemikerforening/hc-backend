@@ -149,7 +149,7 @@ def index_user(request):
 def index_tabletshop(request):
     is_tablet_user = True
     rfid_form = GetRFIDForm(request.POST or None)
-    items = Item.get_active_items()
+    items = Item.get_active_tablet_items()
     try:
         happy_item_ids = items.filter(
             happy_hour_duplicate__isnull=False

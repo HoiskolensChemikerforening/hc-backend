@@ -68,8 +68,15 @@ class Item(models.Model):
         on_delete=models.DO_NOTHING,
     )
 
+    buy_without_tablet = models.BooleanField(default=False, verbose_name="Kjøp uten tabletten")
+
     @classmethod
     def get_active_items(cls):
+        active_items = cls.objects.filter(is_active=True, buy_without_tablet=True)
+        return active_items
+
+    @classmethod
+    def get_active_tablet_items(cls):
         active_items = cls.objects.filter(is_active=True)
         return active_items
 

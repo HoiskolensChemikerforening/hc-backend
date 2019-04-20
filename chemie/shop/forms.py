@@ -55,12 +55,13 @@ class AddItemForm(forms.ModelForm):
                 ),
                 css_class="form-row",
             ),
+            "buy_without_tablet",
             Submit("submit", "Lagre varen"),
         )
 
     class Meta:
         model = Item
-        fields = ["name", "price", "category", "image", "happy_hour_duplicate"]
+        fields = ["name", "price", "category", "image", "happy_hour_duplicate", "buy_without_tablet"]
         widgets = {
             "name": forms.TextInput(
                 attrs={"placeholder": "Skriv inn varenavn"}
@@ -98,6 +99,7 @@ class EditItemForm(forms.ModelForm):
                 css_class="form-row",
             ),
             "is_active",
+            "buy_without_tablet",
             Submit("submit", "Lagre varen"),
         )
 
@@ -110,4 +112,5 @@ class EditItemForm(forms.ModelForm):
             "category",
             "happy_hour_duplicate",
             "is_active",
+            "buy_without_tablet",
         ]
