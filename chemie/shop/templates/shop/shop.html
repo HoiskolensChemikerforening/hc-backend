@@ -15,8 +15,8 @@ Chemshop
 {% block breadcrumbs %}
 <nav class="navbar navbar-light bg-dark">
   {% if not is_tablet_user %}
-  <div class="d-flex justify-content-between">
-    <div class="p-2 d-flex balance-box">
+  <div class="d-flex justify-content-between ">
+    <div class="p-2 d-flex balance-box" style="align-self: center">
       <div class=" p-2">
         <!-- Show money -->
         <p style="font-size:1.8rem;color:black; float:left; margin-top: -1rem; margin-left: 1rem; padding-top: 0rem">
@@ -29,7 +29,7 @@ Chemshop
     </div>
 
     <div class="p-2">
-      <a class="btn btn-secondary" id="btn-kvittering" href="{% url 'shop:receipts' %}">
+      <a class="btn btn-secondary" style="margin-bottom:0.rem" id="btn-kvittering" href="{% url 'shop:receipts' %}">
         Mine kvitteringer
       </a>
     </div>
