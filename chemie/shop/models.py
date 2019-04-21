@@ -36,6 +36,8 @@ class RefillReceipt(models.Model):
         max_digits=6, decimal_places=2, verbose_name="HC-coin"
     )
 
+    created = models.DateTimeField(auto_now_add=True)
+
     def __str__(self):
         return f"Påfyllingskvittering {self.id}"
 

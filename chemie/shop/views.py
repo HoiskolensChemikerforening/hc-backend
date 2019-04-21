@@ -17,7 +17,7 @@ from .forms import (
     HappyHourForm,
     EditItemForm,
 )
-from .models import Item, ShoppingCart, Category, Order, HappyHour
+from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
 
 
 def is_happy_hour():
@@ -229,6 +229,12 @@ def view_my_receipts(request):
         .prefetch_related("items")
     )
     return render(request, "shop/user_receipts.html", {"orders": orders})
+
+
+@login_required
+def view_my_refills(request):
+    refill_receipts = RefillReceipt.objects.filter(receiver=request.user).order_by("-created")
+    return render(request, "shop/user_refills.html", {"refill_receipts": refill_receipts})
 
 
 @permission_required("customprofile.refill_balance")
