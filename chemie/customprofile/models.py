@@ -10,6 +10,7 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from chemie.shop import statistics
 
 # Time the activation is valid in hourse
 VALID_TIME = 2
@@ -159,6 +160,20 @@ class Profile(models.Model):
             self.access_card = f"{self.pk} - INVALID"
 
         return super().save(*args, **kwargs)
+
+    """Functions used in shop statics"""
+
+    def get_bought_items(self):
+        return statistics.get_bought_items(self.user)
+
+    def get_most_bought_item(self):
+        return statistics.get_most_bought_item(self.user)
+
+    def get_second_most_bought_item(self):
+        return statistics.get_second_most_bought_item(self.user)
+
+    def get_third_most_bought_item(self):
+        return statistics.get_third_most_bought_item(self.user)
 
 
 class Membership(models.Model):

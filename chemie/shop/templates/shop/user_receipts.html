@@ -34,6 +34,13 @@
         margin-right: 1rem;
         color: black
     }
+
+    #redirect-statistic-btn {
+        background-color: #edcd2f;
+        border-color: #edcd2fb4;
+        margin-left: 1rem;
+        color: black
+    }
 </style>
 {% endblock style %}
 
@@ -51,7 +58,8 @@
 <div class="d-flex">
     <div class="p-2" id="order-box">
         <a class="btn btn-secondary" href="{% url 'shop:refills' %}" id="redirect-refill-btn">Påfyllhistorikk</a>
-        <h3 style="text-align:center">Kjøpshistorikk</h3>
+        <a class="btn btn-secondary" href="{% url 'shop:statistics' %}" id="redirect-statistic-btn">Statistikk</a>
+        <h3 style="text-align:center; margin-top: 1rem">Kjøpshistorikk</h3>
         <div class="d-flex flex-wrap justify-content-between">
             {% for order in orders %}
             <div class="p-2 item-box d-flex flex-column">

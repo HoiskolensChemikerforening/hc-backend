@@ -237,6 +237,17 @@ def view_my_refills(request):
     return render(request, "shop/user_refills.html", {"refill_receipts": refill_receipts})
 
 
+def view_statistics(request):
+    items = Item.objects.all()
+    orders = (
+        Order.objects.filter(buyer=request.user)
+        .order_by("-created")
+        .prefetch_related("items")
+    )
+    bought_items = request.user.profile.get_bought_items()
+    return render(request, "shop/user_statistics.html", {'items': items, 'orders': orders, 'bought_items': bought_items})
+
+
 @permission_required("customprofile.refill_balance")
 def admin(request):
     order_items = get_last_year_receipts()
