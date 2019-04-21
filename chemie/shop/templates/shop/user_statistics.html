@@ -21,8 +21,11 @@
 
     #plot-box {
         box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
-        margin: 1rem;
-        width: 24rem;
+        margin-top: 1rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
+        margin-bottom: 1rem;
+        width: 25rem;
     }
 
     #item-overview {
@@ -109,8 +112,8 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="d-flex flex-row flex-wrap justify-content-between">
-    <div class="p-2 d-flex flex-column justify-content-center">
+<div class="d-flex flex-row flex-wrap justify-content-between" style="padding:0rem">
+    <div class="p-2 d-flex flex-column" style="text-align:center;">
         <h4>Dine mest kjøpte varer</h4>
         <div class="p-2 d-flex" style="width:80%; height:10rem">
             <div class="p-2" style="width: 7rem; position: relative">
@@ -198,12 +201,14 @@
                 var itemName = "{{order_item.item.name}}"
                 var quantity = parseInt("{{order_item.quantity}}")
                 var date = new Date("{{order.created}}")
-                // var date = new Date(date_raw.getYear(), date_raw.getMonth(), date_raw.getDate())
-                if (historyItems[itemName] != undefined) {
-                    var yearIndex = dayIndex(date)
-                    var indexDelta = yearIndex - nowIndex
-                    var index = (indexDelta < 0) ? 365 + indexDelta : indexDelta
-                    historyItems[itemName][0][index] += quantity
+
+                if (now.getFullYear() - date.getFullYear() <= 1) {
+                    if (historyItems[itemName] != undefined) {
+                        var yearIndex = dayIndex(date)
+                        var indexDelta = yearIndex - nowIndex
+                        var index = (indexDelta < 0) ? 365 + indexDelta : indexDelta
+                        historyItems[itemName][0][index] += quantity
+                    }
                 }
             </script>
             {% endfor %}
