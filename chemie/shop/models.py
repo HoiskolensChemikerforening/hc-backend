@@ -51,6 +51,22 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    def check_active_without_tablet_category(self):
+        count = self.item.filter(
+            is_active=True, buy_without_tablet=True
+        ).count()
+        if count > 0:
+            return True
+        else:
+            return False
+
+    def check_active_category(self):
+        count = self.item.filter(is_active=True).count()
+        if count > 0:
+            return True
+        else:
+            return False
+
 
 class Item(models.Model):
     name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
@@ -58,7 +74,10 @@ class Item(models.Model):
         max_digits=6, decimal_places=2, verbose_name="Pris"
     )
     category = models.ForeignKey(
-        Category, verbose_name="Kategori", on_delete=models.CASCADE
+        Category,
+        verbose_name="Kategori",
+        on_delete=models.CASCADE,
+        related_name="item",
     )
     image = models.ImageField(upload_to="shopitems", verbose_name="Bilde")
     is_active = models.BooleanField(default=True, verbose_name="Aktiv")
@@ -70,11 +89,15 @@ class Item(models.Model):
         on_delete=models.DO_NOTHING,
     )
 
-    buy_without_tablet = models.BooleanField(default=False, verbose_name="Kjøp uten tabletten")
+    buy_without_tablet = models.BooleanField(
+        default=False, verbose_name="Kjøp uten tabletten"
+    )
 
     @classmethod
     def get_active_items(cls):
-        active_items = cls.objects.filter(is_active=True, buy_without_tablet=True)
+        active_items = cls.objects.filter(
+            is_active=True, buy_without_tablet=True
+        )
         return active_items
 
     @classmethod

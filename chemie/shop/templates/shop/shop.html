@@ -13,7 +13,7 @@ Chemshop
 {% endblock style %}
 
 {% block breadcrumbs %}
-<nav class="navbar navbar-light bg-dark">
+<nav class="navbar navbar-light bg-dark" style="margin-bottom:1rem">
   {% if not is_tablet_user %}
   <div class="d-flex justify-content-between ">
     <div class="p-2 d-flex balance-box" style="align-self: center">
@@ -53,6 +53,8 @@ Chemshop
   <script type="text/javascript">
     categoriesFilterd["{{category.name}}"] = false
   </script>
+  {% if is_tablet_user %}
+  {% if category.check_active_category%}
   <p>
     <label class="checkbox-container">{{category}}
       <input class="category-checkbox" type="checkbox" name="filter-checkbox"
@@ -60,6 +62,19 @@ Chemshop
       <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
     </label>
   </p>
+  {% endif %}
+  {% else %}
+  {% if category.check_active_without_tablet_category%}
+  <p>
+    <label class="checkbox-container">{{category}}
+      <input class="category-checkbox" type="checkbox" name="filter-checkbox"
+        onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
+      <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
+
+    </label>
+  </p>
+  {% endif %}
+  {% endif %}
   {% endfor %}
 </div>
 {% if is_happy %}
