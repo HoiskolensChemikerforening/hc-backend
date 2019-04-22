@@ -3,153 +3,123 @@
 
 
 {% block header %}
-  <link rel="stylesheet"
-        href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/css/theme.materialize.min.css">
-  <script type="text/javascript"
-          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.min.js"></script>
-  <script type="text/javascript"
-          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/widgets/widget-output.min.js"></script>
-  <script type="text/javascript"
-          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
-  <script>
-      $(function () {
-          var $table = $('table');
-          $('.download').click(function () {
-              // tell the output widget do it's thing
-              $table.trigger('outputTable');
-          });
+<link rel="stylesheet"
+  href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/css/theme.materialize.min.css">
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/widgets/widget-output.min.js"></script>
+<script type="text/javascript"
+  src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
+<script>
+  $(function () {
+    var $table = $('table');
+    $('.download').click(function () {
+      // tell the output widget do it's thing
+      $table.trigger('outputTable');
+    });
 
-          $table.tablesorter({
-              theme: "materialize",
-              widgets: ['zebra', 'output'],
-              widgetOptions: {
-                  output_delivery: 'd',
-                  zebra: ["even", "odd"],
-                  output_saveFileName: 'Valg_{{election.date}}.csv'
-              }
-          });
-      });
-      const numberOfVoterListPre = "{{voter_list}}";
-      const numberOfVoterList = numberOfVoterListPre.replace("[", '').replace("]", '').split(',');
-      const totalVotesPre = "{{total_votes}}";
-      const totalVotes = totalVotesPre.replace("[", '').replace("]", '').split(',');
-      const blankVotesPre = "{{blank_votes}}";
-      const blankVotes = blankVotesPre.replace("[", '').replace("]", '').split(',');
-  </script>
-
-  <style>
-    .tablesorter-materialize .tablesorter-filter-row input.tablesorter-filter,
-    .tablesorter-materialize .tablesorter-filter-row select.tablesorter-filter {
-      margin: 0 0 10px 0 !important;
-    }
-
-    .select-wrapper input.select-dropdown {
-      margin: 0 0 10px 0 !important;
-    }
-
-    .tablesorter-materialize tfoot td,
-    .tablesorter-materialize tfoot th,
-    .tablesorter-materialize thead td,
-    .tablesorter-materialize thead th {
-      background-color: transparent !important;
-    }
-
-    .tablesorter-materialize .tablesorter-filter-row {
-      background-color: transparent !important;
-    }
-
-    ul {
-      padding-left: 20px;
-    }
-
-    #foo.hide2 tr > *:nth-child(2) {
-      display: none;
-    }
-  </style>
+    $table.tablesorter({
+      theme: "materialize",
+      widgets: ['zebra', 'output'],
+      widgetOptions: {
+        output_delivery: 'd',
+        zebra: ["even", "odd"],
+        output_saveFileName: 'Valg_{{election.date}}.csv'
+      }
+    });
+  });
+  const numberOfVoterListPre = "{{voter_list}}";
+  const numberOfVoterList = numberOfVoterListPre.replace("[", '').replace("]", '').split(',');
+  const totalVotesPre = "{{total_votes}}";
+  const totalVotes = totalVotesPre.replace("[", '').replace("]", '').split(',');
+  const blankVotesPre = "{{blank_votes}}";
+  const blankVotes = blankVotesPre.replace("[", '').replace("]", '').split(',');
+</script>
 {% endblock header %}
 
 {% block breadcrumbs %}
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-      <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
-                                      style="color:#edcd2f">Admin</a></li>
-      <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Valget er stengt</li>
-    </ol>
-  </nav>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
+        style="color:#edcd2f">Admin</a></li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Valget er stengt</li>
+  </ol>
+</nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
-  <div class="alert alert-info" style="text-align:center">
-    <strong>Valget er stengt!</strong> Du kan laste ned valgresultatene!
-  </div>
-  <div style="margin:3rem; text-align: center">
-    <button class="download btn btn-secondary">Last ned</button>
-  </div>
-  <div class="d-flex flex-wrap" style="margin:1rem">
-    {% for position in positions %}
-      <div class="p-2" style="margin:1rem; width:23rem; border-style: solid; border-radius: 1rem">
-        <div class=" flex flex-column">
-          <div class="p-1">
-            <h5>{{ position }}</h5>
-          </div>
-          {% if position.is_done %}
-            <div class="p-1" style="border-style:solid none solid none;">
-              Totalt antall personer som har stemt: <b>{{ position.get_number_of_voters }}</b>
-              <ul>
-                <li>
-                  Personer som har forhåndstemt: <b>{{ position.number_of_prevote_tickets }}</b>
-                </li>
-                <li>
-                  Personer som har stemt under valget: <b>{{ position.get_number_of_tickets }}</b>
-                </li>
-              </ul>
-              Totalt avgitte stemmer: <b>{{ position.get_total_votes }}</b>
-              <ul>
-                <li>
-                  Avgitte kandidatforhåndsstemmer: <b>{{ position.get_total_candidate_prevotes }}</b>
-                </li>
-                <li>
-                  Avgitte kandidatstemmer under valget: <b>{{ position.get_total_candidate_ticket_votes }}</b>
-                </li>
-                <li>
-                  Avgitte blanke stemmer: <b>{{ position.get_blank_votes }}</b>
-                </li>
-
-
-              </ul>
-
-
-            </div>
-            <div class="p-1">
-              <ul>
-                {% for candidate in position.candidates.all %}
-                  <li id="cadidate-votes-{{ candidate.id }}">
-                    {{ candidate }}: <b>{{ candidate.get_candidate_votes }}</b>
-                  </li>
-                {% endfor %}
-              </ul>
-            </div>
-          {% else %}
-            <div class="p-1" style="border-style:solid none none none;">
-              <h6>
-                Ikke gjennomført
-              </h6>
-
-
-            </div>
-            <div class="p-1">
-
-            </div>
-          {% endif %}
-        </div>
+<div class="alert alert-info" style="text-align:center">
+  <strong>Valget er stengt!</strong> Du kan laste ned valgresultatene!
+</div>
+<div style="margin:3rem; text-align: center">
+  <button class="download btn btn-secondary">Last ned</button>
+</div>
+<div class="d-flex flex-wrap" style="margin:1rem">
+  {% for position in positions %}
+  <div class="p-2" style="margin:1rem; width:23rem; border-style: solid; border-radius: 1rem">
+    <div class=" flex flex-column">
+      <div class="p-1">
+        <h5>{{ position }}</h5>
       </div>
-    {% endfor %}
+      {% if position.is_done %}
+      <div class="p-1" style="border-style:solid none solid none;">
+        Totalt antall personer som har stemt: <b>{{ position.get_number_of_voters }}</b>
+        <ul>
+          <li>
+            Personer som har forhåndstemt: <b>{{ position.number_of_prevote_tickets }}</b>
+          </li>
+          <li>
+            Personer som har stemt under valget: <b>{{ position.get_number_of_tickets }}</b>
+          </li>
+        </ul>
+        Totalt avgitte stemmer: <b>{{ position.get_total_votes }}</b>
+        <ul>
+          <li>
+            Avgitte kandidatforhåndsstemmer: <b>{{ position.get_total_candidate_prevotes }}</b>
+          </li>
+          <li>
+            Avgitte kandidatstemmer under valget: <b>{{ position.get_total_candidate_ticket_votes }}</b>
+          </li>
+          <li>
+            Avgitte blanke stemmer: <b>{{ position.get_blank_votes }}</b>
+          </li>
 
+
+        </ul>
+
+
+      </div>
+      <div class="p-1">
+        <ul>
+          {% for candidate in position.candidates.all %}
+          <li id="cadidate-votes-{{ candidate.id }}">
+            {{ candidate }}: <b>{{ candidate.get_candidate_votes }}</b>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% else %}
+      <div class="p-1" style="border-style:solid none none none;">
+        <h6>
+          Ikke gjennomført
+        </h6>
+
+
+      </div>
+      <div class="p-1">
+
+      </div>
+      {% endif %}
+    </div>
   </div>
-  <div class="row" style="margin:1rem">
-    <div class="col s12 m12 l10">
-      <table id="myTable" class="tablesorter">
-        <thead>
+  {% endfor %}
+
+</div>
+<div class="row" style="margin:1rem">
+  <div class="col s12 m12 l10">
+    <table id="myTable" class="tablesorter">
+      <thead>
         <tr>
           <td>Valgposisjon</td>
           <td>Oppsumering og kandidater</td>
@@ -157,63 +127,63 @@
           <td>Under valget</td>
           <td>Totalt</td>
         </tr>
-        </thead>
+      </thead>
 
-        <tbody>
+      <tbody>
         {% for position in positions %}
-          <tr>
-            <td>{{ position.position_name }}</td>
-            <td>Totalt antall personer som har stemt</td>
-            <td>{{ position.number_of_prevote_tickets }}</td>
-            <td>{{ position.get_number_of_tickets }}</td>
-            <td>
-              {{ position.get_number_of_voters }}
-            </td>
-          </tr>
-          <tr>
-            <td>{{ position.position_name }}</td>
-            <td>Totalt avgitte stemmer</td>
-            <td>-</td>
-            <td>-</td>
-            <td>
-              {{ position.get_total_votes }}
-            </td>
-          </tr>
-          <tr>
-            <td>{{ position.position_name }}</td>
-            <td>Totalt avgitte kandidatstemmer stemmer</td>
-            <td> {{ position.get_total_candidate_prevotes }}</td>
-            <td>{{ position.get_total_candidate_ticket_votes }}</td>
-            <td>
-              {{ position.get_total_candidate_votes }}
-            </td>
-          </tr>
-          <tr>
-            <td>{{ position.position_name }}</td>
-            <td>Avgitte blanke stemmer</td>
-            <td>-</td>
-            <td>{{ position.get_blank_votes }}</td>
-            <td>
-              {{ position.get_blank_votes }}
-            </td>
-          </tr>
-          {% for candidate in position.candidates.all %}
-            <tr>
-              <td>{{ position.position_name }}</td>
-              <td>{{ candidate }}</td>
-              <td>{{ candidate.pre_votes }}</td>
-              <td>{{ candidate.votes }}</td>
-              <td>{{ candidate.get_candidate_votes }}</td>
-            </tr>
-          {% endfor %}
+        <tr>
+          <td>{{ position.position_name }}</td>
+          <td>Totalt antall personer som har stemt</td>
+          <td>{{ position.number_of_prevote_tickets }}</td>
+          <td>{{ position.get_number_of_tickets }}</td>
+          <td>
+            {{ position.get_number_of_voters }}
+          </td>
+        </tr>
+        <tr>
+          <td>{{ position.position_name }}</td>
+          <td>Totalt avgitte stemmer</td>
+          <td>-</td>
+          <td>-</td>
+          <td>
+            {{ position.get_total_votes }}
+          </td>
+        </tr>
+        <tr>
+          <td>{{ position.position_name }}</td>
+          <td>Totalt avgitte kandidatstemmer stemmer</td>
+          <td> {{ position.get_total_candidate_prevotes }}</td>
+          <td>{{ position.get_total_candidate_ticket_votes }}</td>
+          <td>
+            {{ position.get_total_candidate_votes }}
+          </td>
+        </tr>
+        <tr>
+          <td>{{ position.position_name }}</td>
+          <td>Avgitte blanke stemmer</td>
+          <td>-</td>
+          <td>{{ position.get_blank_votes }}</td>
+          <td>
+            {{ position.get_blank_votes }}
+          </td>
+        </tr>
+        {% for candidate in position.candidates.all %}
+        <tr>
+          <td>{{ position.position_name }}</td>
+          <td>{{ candidate }}</td>
+          <td>{{ candidate.pre_votes }}</td>
+          <td>{{ candidate.votes }}</td>
+          <td>{{ candidate.get_candidate_votes }}</td>
+        </tr>
+        {% endfor %}
         {% endfor %}
 
-        </tbody>
-      </table>
-    </div>
+      </tbody>
+    </table>
   </div>
+</div>
 {% endblock content %}
 
 {% block footer_script %}
-  <script src="{% static 'js/boolean_status_widget.js' %}" type='text/javascript'></script>
+<script src="{% static 'js/boolean_status_widget.js' %}" type='text/javascript'></script>
 {% endblock %}
