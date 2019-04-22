@@ -112,9 +112,10 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
+<h2 style="text-align:center">Statistikk over dine varekjøp i Shoppen</h2>
 <div class="d-flex flex-row flex-wrap justify-content-between" style="padding:0rem">
     <div class="p-2 d-flex flex-column" style="text-align:center;">
-        <h4>Dine mest kjøpte varer</h4>
+
         <div class="p-2 d-flex" style="width:80%; height:10rem">
             <div class="p-2" style="width: 7rem; position: relative">
                 <img class="activator" style="max-width:5rem; position: absolute; bottom:-3rem"
@@ -144,10 +145,10 @@
             </div>
         </div>
     </div>
-    <div id="plot-box" class="p-2">
+    <div id="plot-box" class="p-2 flex-grow-1">
         <div class="p-2">
             <div class="dropdown" style="margin:auto">
-                <p>Velg vare for plot av årlig kjøp</p>
+                <h4>Plot av årlig kjøp</h4>
                 <button onclick="dropDownFunction()" class="dropbtn btn btn-secondary">Velg vare</button>
                 <div id="dropdown-btn" class="dropdown-content">
                     <input type="text" placeholder="Skriv inn varenavn..." id="item-input" onkeyup="filterFunction()">
@@ -168,6 +169,7 @@
                 var historyItems = {}
                 var now = new Date()
                 var yearEarlier = new Date()
+                var start = new Date(now.getFullYear(), 0, 0);
                 yearEarlier.setFullYear(now.getFullYear() - 1)
                 var getDateArray = function (start, end) {
                     var arr = new Array();
@@ -179,9 +181,7 @@
                     return arr;
                 }
                 var dayIndex = function (date) {
-                    var now = new Date();
-                    var start = new Date(now.getFullYear(), 0, 0);
-                    var diff = (now - start) + ((start.getTimezoneOffset() - now.getTimezoneOffset()) * 60 * 1000);
+                    var diff = (date - start) + ((start.getTimezoneOffset() - date.getTimezoneOffset()) * 60 * 1000);
                     var oneDay = 1000 * 60 * 60 * 24;
                     var day = Math.floor(diff / oneDay);
                     return day
@@ -191,7 +191,7 @@
             {% for item in items %}
             <script>
                 itemName = "{{item.name}}"
-                var dateArray = getDateArray(yearEarlier, now).reverse()
+                var dateArray = getDateArray(yearEarlier, now)
                 historyItems[itemName] = [new Array(365).fill(0), dateArray]
             </script>
             {% endfor %}
@@ -206,7 +206,7 @@
                     if (historyItems[itemName] != undefined) {
                         var yearIndex = dayIndex(date)
                         var indexDelta = yearIndex - nowIndex
-                        var index = (indexDelta < 0) ? 365 + indexDelta : indexDelta
+                        var index = (indexDelta <= 0) ? 365 + indexDelta : indexDelta
                         historyItems[itemName][0][index] += quantity
                     }
                 }
@@ -224,23 +224,35 @@
             <tr>
                 <th>Vare</th>
                 <th>Antall</th>
+                <th>HC-coin brukt</th>
             </tr>
             {% for item in bought_items %}
             <tr>
                 <td id="product-{{forloop.counter0}}">-</td>
                 <td id="quantity-{{forloop.counter0}}">-</td>
+                <td id="sum-{{forloop.counter0}}">-</td>
                 <script>
                     var data = "{{item}}"
+                    debugger
                     data = data.replace(/&#39;/g, '')
                     data = data.split(',')
+
                     var itemName = data[0].trim()
                     itemName = itemName.split('(')[1]
+
                     var quantity = data[1].trim()
-                    quantity = quantity.split(')')[0]
+                    quantity = quantity.replace(')', "")
+                    quantity = quantity.replace('[', "")
+
+                    var purchaseSum = data[2].trim()
+                    purchaseSum = purchaseSum.replace(')', "")
+                    purchaseSum = purchaseSum.replace(']', "")
 
                     var counter = "{{forloop.counter0}}"
-                    document.getElementById("quantity-" + counter).innerHTML = quantity
+
                     document.getElementById("product-" + counter).innerHTML = itemName
+                    document.getElementById("quantity-" + counter).innerHTML = quantity
+                    document.getElementById("sum-" + counter).innerHTML = purchaseSum
 
                 </script>
             </tr>
@@ -251,6 +263,7 @@
     </div>
 
     <script>
+        debugger
         function plotPurchase(itemName) {
 
             var data = [
