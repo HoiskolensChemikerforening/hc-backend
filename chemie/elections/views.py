@@ -1,6 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from django.shortcuts import redirect
+from django.core.exceptions import ObjectDoesNotExist
 
 from .forms import CastVoteForm
 from .models import Election
@@ -9,12 +10,11 @@ from .models import Election
 @login_required
 def index(request):
     eligible = request.user.profile.eligible_for_voting
-
-    if Election.current_position_is_active():
+    try:
         election = Election.get_latest_election()
         voted = request.user.profile.voted
         context = {"election": election, "voted": voted, "eligible": eligible}
-    else:
+    except ObjectDoesNotExist:
         context = {"election": None, "voted": False, "eligible": eligible}
 
     return render(request, "elections/election/index.html", context)

@@ -4,20 +4,20 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-  <div align="center">
-    <h1>Legg til studentkort</h1>
-    <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
-      <div class="form-group col-md-6 mb-0">
-        {{ form.user|as_crispy_field }}
-      </div>
-      <div class="form-group col-md-6 mb-0">
-        {{ form.access_card|as_crispy_field }}
-      </div>
-      <button type="submit" class="btn btn-primary">Legg til studentkortnummer</button>
-    </form>
-  </div>
+<div align="center">
+  <h1>Legg til studentkort</h1>
+  <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <div class="form-group col-md-6 mb-0">
+      {{ form.user|as_crispy_field }}
+    </div>
+    <div class="form-group col-md-6 mb-0">
+      {{ form.access_card|as_crispy_field }}
+    </div>
+    <button type="submit" class="btn btn-secondary">Legg til studentkortnummer</button>
+  </form>
+</div>
 {% endblock content %}
 
 {% block footer_script %}
-  {{ form.media }}
+{{ form.media }}
 {% endblock footer_script %}

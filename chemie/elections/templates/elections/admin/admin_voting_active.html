@@ -30,7 +30,7 @@
   </div>
 
   <form style="text-align: center" method="post" onsubmit="return confirm('Stenge valget?')" href="#">{% csrf_token %}
-    <button class="btn btn-danger" type="submit" name="endVoting" value="{{ position.id }}">End Voting</button>
+    <button class="btn btn-danger" type="submit" name="endVoting" value="{{ position.id }}">Avslutt</button>
   </form>
 </div>
 {% endblock content %}
