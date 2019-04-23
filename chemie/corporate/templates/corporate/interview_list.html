@@ -52,10 +52,10 @@
 
     <div class="row">
       {% for interview in interviews %}
-        <div class="filterDiv {{ interview.company.specializations }}"
+        <div class="filterDiv {{ interview.specializations }}"
              style="width: 22rem; height: 20rem; padding: 1.0rem; margin: 40px 5px;">
           <div class="card medium">
-            <h4 class="card-header">{{ interview.name }}</h4>
+            <h4 class="card-header">Intervju av {{ interview.interview_object }}</h4>
             <div class="card-image">
               <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
                 <img src="{{ interview.picture.url }}" class="card-img-top"
@@ -64,7 +64,7 @@
             </div>
             <div class="card-body">
               <h5 class="card-title">{{ interview.company }}</h5>
-              <p class="card-text">{{ interview.interview|truncatechars:160 }}</p>
+              <p class="card-text">{{ interview.text|truncatechars:160 }}</p>
             </div>
           </div>
         </div>

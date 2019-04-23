@@ -24,19 +24,16 @@
       <div class="col-sm-12 col-md-7">
         <div class="container">
           <br><br>
-          <h1> {{ interview.name }}</h1>
+          <h1> Intervju av {{ interview.interview_object }}</h1>
           <div><img src="{{ interview.picture.url }}" class="img-fluid"></div>
           <br>
-          <p><b>
-            Her kan det stå en ingress.
-          </b></p>
           <p>
-            {{ interview.interview }}
+            {{ interview.text }}
           </p>
           <br><br><br><br><br>
         </div>
       </div>
-      <div class="col-sm-12 col-md-3">
+      <div class="col- col-md-3">
         <div class="card">
           <img src="{{ interview.company.logo.url }}" class="card-img-top" alt="...">
           <div class="card-body">
@@ -44,19 +41,12 @@
                     class="card-title"> {{ interview.company }}</h4></a>
             <p class="card-text">
             <hr>
-            Her kan vi skrive mer info.
-            <hr>
-            Intervju av: {{ interview.name }}
-            <hr>
-            Dato:
-            <hr>
-            Aktuelle linjer:
-            <hr>
-            Funfacts:
-            <hr>
-            Fortfatter:
-            </p>
-
+            Aktuelle linjer
+            <ul>
+              {% for specialization in interview.company.specializations %}
+                <li>{{ specialization }}</li>
+              {% endfor %}
+            </ul>
           </div>
         </div>
       </div>
