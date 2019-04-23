@@ -30,6 +30,7 @@
   <div class="d-flex flex-row" style="margin:1rem">
     <div class="p-2" style="width:50%; border-style:solid; border-radius: 1rem 0rem 0rem 1rem; border-color:#343a40">
       <h4 class="text-center">Ikke gjennomført</h4>
+      {% if not_done_positions %}
       {% for position in not_done_positions %}
       <div>
         <div class="d-flex flex-column" style="border-style:solid none none none; border-color:#343a40">
@@ -73,11 +74,16 @@
         </div>
       </div>
       {% endfor %}
-
+      {% else %}
+      <p style="text-align: center">
+        Ingen posisjoner lagt til
+      </p>
+      {% endif %}
 
     </div>
     <div class="p-2" style="width:50%; border-style:solid; border-radius: 0rem 1rem 1rem 0rem; border-color:#343a40">
       <h4 class="text-center">Gjennomført</h4>
+      {% if done_positions %}
       {% for position in done_positions %}
       <div>
         <div class="d-flex flex-column" style="border-style:solid none none none; border-color:#343a40">
@@ -111,7 +117,11 @@
         </div>
       </div>
       {% endfor %}
-
+      {% else %}
+      <p style="text-align: center">
+        Ingen posisjoner gjennomført
+      </p>
+      {% endif %}
 
     </div>
   </div>

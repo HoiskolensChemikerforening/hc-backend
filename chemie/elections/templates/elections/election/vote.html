@@ -3,6 +3,7 @@
 {% load static %}
 
 {% block content %}
+<h2 style="text-align:center">{{position.spots}} skal velges til {{position}} </h2>
 <form method="POST" onsubmit="return submitVote(this)" class="post-form" href="">{% csrf_token %}
   <div class="d-flex flex-wrap" style="justify-content: space-evenly">
     {% for field in form %}
