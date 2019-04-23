@@ -53,13 +53,13 @@
     <div class="row">
       {% for interview in interviews %}
         <div class="filterDiv {{ interview.company.specializations }}"
-             style="width: 22rem; height: 20rem; padding: 1.0rem; margin:40px 5px;">
+             style="width: 22rem; height: 20rem; padding: 1.0rem; margin: 40px 5px;">
           <div class="card medium">
             <h4 class="card-header">{{ interview.name }}</h4>
             <div class="card-image">
               <a href="{% url "corporate:interview_detail" interview.id %}" class="stretched-link">
                 <img src="{{ interview.picture.url }}" class="card-img-top"
-                     style="max-height: 200px; object-fit: cover;">
+                     style="max-height: 250px; object-fit: cover;">
               </a>
             </div>
             <div class="card-body">
