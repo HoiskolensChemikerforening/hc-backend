@@ -32,4 +32,3 @@ class Interview(models.Model):
     specializations = MultiSelectField(choices=SPECIALIZATIONS,
                                        verbose_name="Aktuelle retninger",
                                        blank=True)
-    date = models.DateTimeField(verbose_name="Dato", null=True)
