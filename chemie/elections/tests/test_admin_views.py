@@ -394,8 +394,8 @@ def test_admin_view_results(
     winners = candidates[:position.spots]
     for candidate in winners:
         position.vote([candidate], admin)
-        admin.voted = False
-        admin.save()
+        admin.profile.voted = False
+        admin.profile.save()
     election.start_current_position_voting(position.id)
     election.end_current_position_voting()
 
