@@ -18,7 +18,7 @@ from .forms import (
     EditItemForm,
 )
 from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
-
+from .statistics import get_plot_item
 
 def is_happy_hour():
     now = timezone.now()
@@ -237,6 +237,7 @@ def view_my_refills(request):
     return render(request, "shop/user_refills.html", {"refill_receipts": refill_receipts})
 
 
+@login_required
 def view_statistics(request):
     items = Item.objects.all()
     orders = (
@@ -245,7 +246,14 @@ def view_statistics(request):
         .prefetch_related("items")
     )
     bought_items = request.user.profile.get_bought_items()
-    return render(request, "shop/user_statistics.html", {'items': items, 'orders': orders, 'bought_items': bought_items})
+
+    context = {'items': items, 'orders': orders, 'bought_items': bought_items}
+    if request.method == 'POST':
+        plot_time, plot_quantity = get_plot_item(request.user, request.POST['item'])
+        context['plot_time'] = plot_time
+        context['plot_quantity'] = plot_quantity
+        context['plot_item'] = request.POST['item']
+    return render(request, "shop/user_statistics.html", context)
 
 
 @permission_required("customprofile.refill_balance")
