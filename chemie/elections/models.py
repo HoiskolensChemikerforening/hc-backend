@@ -4,8 +4,6 @@ from django.core.exceptions import ObjectDoesNotExist
 from chemie.customprofile.models import Profile
 from django.shortcuts import redirect
 
-VOTES_REQUIRED_FOR_VALID_ELECTION = 50
-
 """
 ---------------READ ME-----------------
 - I appen er elections delt inn i to deler, en admin del og en bruker del
@@ -224,22 +222,24 @@ class Position(models.Model):
         return total_votes
 
     def vote(self, candidates, user):
-        ticket = Ticket.create_ticket(
-            candidates, self
-        )  # Lager stemmeseddelen for brukeren
+        if not user.profile.voted:
+            ticket = Ticket.create_ticket(
+                candidates, self
+            )  # Lager stemmeseddelen for brukeren
 
-        self.tickets.add(ticket)
-        user.profile.voted = True
-        user.profile.save()
-        self.save()
+            self.tickets.add(ticket)
+            user.profile.voted = True
+            user.profile.save()
+            self.save()
         return
 
     def vote_blank(self, user):
-        blank_ticket = Ticket.create_blank_ticket(self)
-        self.tickets.add(blank_ticket)
-        user.profile.voted = True
-        user.profile.save()
-        self.save()
+        if not user.profile.voted:
+            blank_ticket = Ticket.create_blank_ticket(self)
+            self.tickets.add(blank_ticket)
+            user.profile.voted = True
+            user.profile.save()
+            self.save()
         return
 
 
