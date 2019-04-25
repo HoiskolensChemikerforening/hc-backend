@@ -4,7 +4,7 @@ from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 
-from .models import Position, Election, Candidate, Ticket
+from .models import Position, Election, Candidate
 
 
 class AddPositionForm(forms.ModelForm):

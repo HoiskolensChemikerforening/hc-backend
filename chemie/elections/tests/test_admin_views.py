@@ -1,8 +1,6 @@
 import pytest
 from django.shortcuts import reverse
-from django.forms import modelformset_factory
-from ..models import Election, Candidate
-from ..forms import AddPreVoteToCandidateForm
+from ..models import Election, Candidate, Ticket
 from chemie.customprofile.models import Profile
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -91,12 +89,11 @@ def test_admin_open_election(client, create_admin_user):
     election = Election.objects.all().first()
     assert election.positions.all().count() == 0
     assert election.is_open
-    assert not election.current_position_is_open
+    assert not election.current_position_is_active()
     assert election.current_position is None
 
     request = client.get(reverse("elections:admin_end_election"))
-    assert request.status_code == 302
-    assert request.url == reverse("elections:results")
+    assert request.status_code == 200
 
 
 @pytest.mark.django_db
@@ -114,10 +111,9 @@ def test_admin_add_positions(client, create_admin_user, create_open_election):
     assert election.positions.all().count() == 1
     assert election.positions.all().first().position_name == position_name
     assert election.positions.all().first().spots == position_spots
-    assert election.positions.all().first().total_votes == 0
+    assert election.positions.all().first().get_total_votes() == 0
     assert election.positions.all().first().candidates.all().count() == 0
-    assert not election.positions.all().first().voting_done
-    assert election.positions.all().first().winners.all().count() == 0
+    assert not election.positions.all().first().is_done
 
 
 @pytest.mark.django_db
@@ -126,17 +122,17 @@ def test_delete_position(
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
-    election, postitions = create_election_with_positions
+    election, positions = create_election_with_positions
     election.is_open = True
-    election.add_position(postitions)
+    [election.positions.add(position) for position in positions]
 
     # create_election_with_positions will allways create five positions
     assert election.positions.all().count() == 5
 
-    position = postitions[0]
+    position = positions[0]
     assert position in election.positions.all()
     client.post(
-        reverse("elections:admin_register_positions"), {"Delete": position.id}
+        reverse("elections:admin_delete_position"), {"Delete": position.id}
     )
     assert election.positions.all().count() == 4
     with pytest.raises(ObjectDoesNotExist) as e_info:
@@ -152,7 +148,7 @@ def test_add_candidates(
     election, postitions = create_election_with_positions
     election.is_open = True
     position = postitions[0]
-    election.add_position(position)
+    election.add_position(position.position_name, position.spots)
     election.save()
     user = create_user
 
@@ -168,7 +164,6 @@ def test_add_candidates(
     candidate = Candidate.objects.get(user=user)
     assert candidate is not None
     assert candidate.votes == 0
-    assert not candidate.winner
     assert candidate in position.candidates.all()
 
 
@@ -180,25 +175,28 @@ def test_add_pre_votes_to_candidate(
     client.login(username=admin.username, password="defaultpassword")
     election = create_open_election_with_position_and_candidates
     position = election.positions.all().first()
+    # Votes before trying to add pre_votes
+    old_votes = position.get_total_votes()
     cands = position.candidates.all()
     number_of_candidates = cands.count()
     cands = list(cands)  # Do not remove this bad boy!
     candidate = cands[0]
+
     pre_votes = 5
     post_data = {
         "candidate_forms-TOTAL_FORMS": number_of_candidates,
         "candidate_forms-INITIAL_FORMS": number_of_candidates,
         "candidate_forms-MIN_NUM_FORMS": "0",
         "candidate_forms-MAX_NUM_FORMS": "1000",
-        "candidate_forms-0-votes": pre_votes,
+        "candidate_forms-0-pre_votes": pre_votes,
         "candidate_forms-0-id": cands[0].pk,
-        "candidate_forms-1-votes": 0,
+        "candidate_forms-1-pre_votes": 0,
         "candidate_forms-1-id": cands[1].pk,
-        "candidate_forms-2-votes": 0,
+        "candidate_forms-2-pre_votes": 0,
         "candidate_forms-2-id": cands[2].pk,
-        "candidate_forms-3-votes": 0,
+        "candidate_forms-3-pre_votes": 0,
         "candidate_forms-3-id": cands[3].pk,
-        "total_voters-number_of_voters": 5,
+        "total_voters-number_of_prevote_tickets": pre_votes,
     }
     client.post(
         reverse(
@@ -208,15 +206,14 @@ def test_add_pre_votes_to_candidate(
         follow=True,
     )
     candidate.refresh_from_db()
-    old_votes = position.total_votes
     position.refresh_from_db()
 
-    assert candidate.votes == pre_votes
-    assert position.total_votes == (old_votes + pre_votes)
+    assert candidate.pre_votes == pre_votes
+    assert position.get_total_votes() == (old_votes + pre_votes)
 
     # Testing that the votes of other candidates has not changed.
     assert (
-        position.candidates.filter(votes=0).count() == number_of_candidates - 1
+        position.candidates.filter(pre_votes=0).count() == number_of_candidates - 1
     )
 
 
@@ -234,9 +231,9 @@ def test_delete_candidate_from_position(
 
     client.post(
         reverse(
-            "elections:admin_register_candidates", kwargs={"pk": position.id}
+            "elections:admin_delete_candidate", kwargs={"pk": position.id}
         ),
-        {"preVotes": candidate.votes, "Delete": candidate.user.username},
+        {"Delete": candidate.user.username},
     )
     position.refresh_from_db()
     assert position.candidates.all().count() == number_of_candidates - 1
@@ -252,7 +249,7 @@ def test_start_voting_for_current_position(
     client.login(username=admin.username, password="defaultpassword")
     election = create_open_election_with_position_and_candidates
     position = election.positions.all().first()
-    assert not election.current_position_is_open
+    assert not election.current_position_is_active()
     client.post(
         reverse(
             "elections:admin_register_candidates", kwargs={"pk": position.id}
@@ -260,7 +257,7 @@ def test_start_voting_for_current_position(
         {"startVoting": position.id},
     )
     position.refresh_from_db()
-    assert position.total_votes == 0
+    assert position.get_total_votes() == 0
     for profile in Profile.objects.all():
         assert not profile.voted
 
@@ -275,18 +272,16 @@ def test_start_voting_for_current_position_with_pre_votes(
     position = election.positions.all().first()
     number_of_candidates = position.candidates.all().count()
 
-    assert not election.current_position_is_open
     for candidate in position.candidates.all():
-        candidate.votes += 1
+        candidate.pre_votes = 1
         candidate.save()
     client.post(
         reverse(
-            "elections:admin_register_candidates", kwargs={"pk": position.id}
+            "elections:admin_start_voting", kwargs={"pk": position.id}
         ),
-        {"startVoting": position.id},
     )
     position.refresh_from_db()
-    assert position.total_votes == number_of_candidates
+    assert position.get_total_votes() == number_of_candidates
     for profile in Profile.objects.all():
         assert not profile.voted
 
@@ -318,15 +313,15 @@ def test_admin_urls_when_voting_is_active(
         follow=True,
     )
     assert (
-        reverse("elections:admin_register_positions"),
+        reverse("elections:admin_register_candidates", kwargs={"pk": position.id}),
         302,
     ) == request.redirect_chain[0]
     for pos in election.positions.all():
         assert pos.position_name in request.content.decode("utf-8")
 
     # Open current position for voting
-    election.current_position_is_open = True
-    election.save()
+    election.current_position.is_active = True
+    election.current_position.save()
 
     request = client.get(
         reverse(
@@ -335,46 +330,45 @@ def test_admin_urls_when_voting_is_active(
     )
     assert request.status_code == 302
     assert (
-        reverse("elections:admin_start_voting", kwargs={"pk": position.id})
+        reverse("elections:admin_voting_active", kwargs={"pk": position.id})
         == request.url
     )
+
     request = client.get(
         reverse("elections:admin_results", kwargs={"pk": position.id})
     )
     assert request.status_code == 302
     assert (
-        reverse("elections:admin_start_voting", kwargs={"pk": position.id})
+        reverse("elections:admin_voting_active", kwargs={"pk": position.id})
         == request.url
     )
+
     request = client.get(reverse("elections:admin_start_election"))
     assert request.status_code == 302
     assert (
-        reverse("elections:admin_start_voting", kwargs={"pk": position.id})
+        reverse("elections:admin_voting_active", kwargs={"pk": position.id})
         == request.url
     )
-    request = client.get(reverse("elections:admin_end_election"))
-    assert request.status_code == 302
-    assert (
-        reverse("elections:admin_start_voting", kwargs={"pk": position.id})
-        == request.url
-    )
+
     request = client.get(reverse("elections:admin_register_positions"))
     assert request.status_code == 302
 
     # Check that when user tries to access open voting for position
     # and voting is already open, he is redirected
-    request = client.get(reverse("elections:admin_start_election"), follow=True)
-    assert (
+    request = client.get(
         reverse("elections:admin_start_voting", kwargs={"pk": position.id}),
+        follow=True
+    )
+    assert request.redirect_chain[0] == (
+        reverse("elections:admin_voting_active", kwargs={"pk": position.id}),
         302,
-    ) == request.redirect_chain[0]
+    )
     assert "personer har stemt" in request.content.decode("utf-8")
 
     # Now end voting for position by pressing "end" button
     # and see that voting for position closes
     request = client.post(
-        reverse("elections:admin_start_voting", kwargs={"pk": position.id}),
-        data={"endVoting": position.id},
+        reverse("elections:admin_voting_active", kwargs={"pk": position.id}),
         follow=True,
     )
     assert (
@@ -383,6 +377,9 @@ def test_admin_urls_when_voting_is_active(
     ) == request.redirect_chain[0]
     for cand in position.candidates.all():
         assert cand.user.get_full_name() in request.content.decode("utf-8")
+
+    request = client.get(reverse("elections:admin_end_election"))
+    assert request.status_code == 200
 
 
 @pytest.mark.django_db
@@ -393,28 +390,24 @@ def test_admin_view_results(
     client.login(username=admin.username, password="defaultpassword")
     election = create_open_election_with_position_and_candidates
     position = election.positions.all().first()
-    # election.current_position = position
-    # election.current_position_is_open = True
-    # election.save()
-
-    # Fake a number of votes for first candidate
     candidates = position.candidates.all()
-    predeclared_winners = candidates[: position.spots]
-    for winner in predeclared_winners:
-        winner.votes = 2
-        winner.save()
-    position.save()
-    position.refresh_from_db()
-    election.start_current_election(position)
-    position.end_voting_for_position()
-    position.refresh_from_db()
-    election.refresh_from_db()
+    winners = candidates[:position.spots]
+    for candidate in winners:
+        position.vote([candidate], admin)
+        admin.voted = False
+        admin.save()
+    election.start_current_position_voting(position.id)
+    election.end_current_position_voting()
 
-    # Check results
+    # Refresh election and position and check results
+    election.refresh_from_db()
+    position.refresh_from_db()
     request = client.get(
         reverse("elections:admin_results", kwargs={"pk": position.id})
     )
+    total_votes = position.get_total_votes()
     assert request.status_code == 200
-    for cand in position.winners.all():
-        assert cand.votes == 2
-    assert position.spots * 2 == position.total_votes
+    assert total_votes == position.spots
+    assert position.get_total_candidate_ticket_votes() == total_votes
+    assert position.get_total_candidate_prevotes() == 0
+    assert position.get_blank_votes() == 0
