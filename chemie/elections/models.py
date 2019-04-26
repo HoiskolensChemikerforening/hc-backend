@@ -151,6 +151,7 @@ class Position(models.Model):
             return
 
     def get_number_of_voters(self):
+        # Amount of people voting. Counts all tickets and all prevote tickets
         number_of_tickets = self.tickets.all().count()
         count = number_of_tickets + self.number_of_prevote_tickets
         return count
@@ -163,6 +164,7 @@ class Position(models.Model):
         return self.tickets.count()
 
     def get_total_candidate_ticket_votes(self):
+        # Total votes received on candidates in the form of tickets (not prevotes)
         candidate_votes = 0
         non_blank_tickets = self.tickets.filter(is_blank=False)
         for ticket in non_blank_tickets:
@@ -170,15 +172,18 @@ class Position(models.Model):
         return candidate_votes
 
     def get_total_candidate_prevotes(self):
+        # Total votes received on candidates in the form of prevotes (not tickets)
         candidate_prevotes = 0
         for candidate in self.candidates.all():
             candidate_prevotes += candidate.pre_votes
         return candidate_prevotes
 
     def get_total_candidate_votes(self):
+        # Total votes on candidates in the form of both tickets and prevotes
         return self.get_total_candidate_prevotes() + self.get_total_candidate_ticket_votes()
 
     def get_blank_votes(self):
+        # Number of tickets that are blank (not voted for any candidates)
         blank_tickets = self.tickets.filter(is_blank=True)
         number_of_blank = 0
 
@@ -193,6 +198,7 @@ class Position(models.Model):
         return number_of_blank
 
     def calculate_candidate_votes(self):  # TODO Validate this fucker with tests
+        # Go over all tickets and assign votes to each candidate
         tickets = self.tickets.exclude(is_blank=True).all()
         candidates = self.candidates.all()
 
@@ -207,6 +213,7 @@ class Position(models.Model):
             candidate.save()
 
     def get_total_votes(self):
+        # Total votes on candidates AND blank votes
         tickets = self.tickets.all()
         total_votes = 0
         candidates = self.candidates.all()
