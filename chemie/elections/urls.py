@@ -67,5 +67,7 @@ user_urlpatterns = [
     url(r"^stem/$", views.vote, name="vote"),
     url(r"^stem/ferdig", views.has_voted, name="has_voted"),
     url(r"^sjekkinn/$", views_admin.change_rfid_status, name="checkin"),
+    url(r"^tidligere-valg/$", views.view_previous_elections_index, name="previous_index"),
+    url(r"^tidligere-valg/(?P<pk>\d+)", views.view_previous_election, name="previous_election"),
 ]
 urlpatterns = admin_urlpatterns + user_urlpatterns

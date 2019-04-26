@@ -248,29 +248,9 @@ def admin_end_election(request):
     election = Election.get_latest_election()
     if election.is_open:
         election.end_election()
-
-    positions = election.positions.all()
-    n_voters = [
-        position.get_number_of_voters() for position in election.positions.all()
-    ]
-
-    total_votes = [
-        position.get_total_votes() for position in election.positions.all()
-    ]
-
-    blank_votes = [
-        position.get_blank_votes() for position in election.positions.all()
-    ]
-
-    context = {
-        "election": election,
-        "positions": positions,
-        "voter_list": n_voters,
-        "total_votes": total_votes,
-        "blank_votes": blank_votes,
-    }
-
-    return render(request, "elections/admin/admin_end_election.html", context)
+        return redirect("elections:previous_election", pk=election.pk)
+    else:
+        return redirect("elections:admin_start_election")
 
 
 @permission_required("elections.add_election")

@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-from django.shortcuts import redirect
 from django.core.exceptions import ObjectDoesNotExist
+from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import render
 
 from .forms import CastVoteForm
 from .models import Election
@@ -69,3 +69,39 @@ def has_voted(request):
 
     return render(request, "elections/election/vote_ended.html")
 
+
+@login_required
+def view_previous_elections_index(request):
+    elections = Election.objects.all().order_by("-date")
+    context = {"elections": elections}
+    return render(request, "elections/election/previous_election_index.html", context)
+
+
+@login_required
+def view_previous_election(request, pk):
+    election = get_object_or_404(Election, pk=pk)
+    if election.is_open:
+        return redirect("elections:admin_register_positions")
+    else:
+        positions = election.positions.all()
+        n_voters = [
+            position.get_number_of_voters() for position in election.positions.all()
+        ]
+
+        total_votes = [
+            position.get_total_votes() for position in election.positions.all()
+        ]
+
+        blank_votes = [
+            position.get_blank_votes() for position in election.positions.all()
+        ]
+
+        context = {
+            "election": election,
+            "positions": positions,
+            "voter_list": n_voters,
+            "total_votes": total_votes,
+            "blank_votes": blank_votes,
+        }
+
+        return render(request, "elections/election/previous_election.html", context)
