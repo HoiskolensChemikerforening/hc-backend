@@ -1,54 +1,56 @@
 {% extends "chemie/base_election.html" %}
 
 {% block breadcrumbs %}
-  <nav aria-label="breadcrumb">
-    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-      <li class="breadcrumb-item "><a style="color:#edcd2fb4">Indeks</a>
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a style="color:#edcd2fb4">Indeks</a>
+      {% if not election.is_open %}
       <a class="btn btn-secondary" style="position:absolute; right:3rem; top:3rem"
-         href="{% url 'elections:previous_index' %}">
+        href="{% url 'elections:previous_index' %}">
         Resultater fra forrige valg
       </a>
-    </ol>
-  </nav>
+      {% endif %}
+  </ol>
+</nav>
 {% endblock breadcrumbs %}
 
 {% block content %}
-  <div style="text-align:center">
-    <h1 class="title is-2">Velkommen til valg</h1>
-    {% if election.is_open %}
-      {% if eligible %}
-        {% if election.current_position.is_active %}
-          {% if not voted %}
-            <a href="{% url "elections:vote" %}" class="btn btn-secondary">Gå til avstemming</a>
-          {% else %}
-            <h5 class="card-title">Du har alt stemt, vennligst vent</h5>
-          {% endif %}
-        {% else %}
-          <h5 class="card-title">Klargjøres til valg av ny posisjon. Vennligst vent</h5>
-        {% endif %}
-      {% else %}
-        <h5 class="card-tile">Du har ikke sjekket inn på valget enda. Vennligst scann studentkortet ditt ved døra.</h5>
-      {% endif %}
-    {% else %}
-      <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
-    {% endif %}
-  </div>
+<div style="text-align:center">
+  <h1 class="title is-2">Velkommen til valg</h1>
+  {% if election.is_open %}
+  {% if eligible %}
+  {% if election.current_position.is_active %}
+  {% if not voted %}
+  <a href="{% url "elections:vote" %}" class="btn btn-secondary">Gå til avstemming</a>
+  {% else %}
+  <h5 class="card-title">Du har alt stemt, vennligst vent</h5>
+  {% endif %}
+  {% else %}
+  <h5 class="card-title">Klargjøres til valg av ny posisjon. Vennligst vent</h5>
+  {% endif %}
+  {% else %}
+  <h5 class="card-tile">Du har ikke sjekket inn på valget enda. Vennligst scann studentkortet ditt ved døra.</h5>
+  {% endif %}
+  {% else %}
+  <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
+  {% endif %}
+</div>
 
-  <!-- Floating admin button -->
-  {% if perms.elections.add_election %}
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col-md-12">
-          <div class="btn-group-sm" id="mini-fab" style="position:fixed !important; right: 29px; bottom:29px">
-            <a href="{% url 'elections:admin_start_election' %}" class="btn btn-info btn-fab" id="admin">
-              <i class="material-icons">
-                build
-              </i>
-            </a>
-          </div>
-        </div>
+<!-- Floating admin button -->
+{% if perms.elections.add_election %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-group-sm" id="mini-fab" style="position:fixed !important; right: 29px; bottom:29px">
+        <a href="{% url 'elections:admin_start_election' %}" class="btn btn-info btn-fab" id="admin">
+          <i class="material-icons">
+            build
+          </i>
+        </a>
       </div>
     </div>
-  {% endif %}
+  </div>
+</div>
+{% endif %}
 
 {% endblock %}

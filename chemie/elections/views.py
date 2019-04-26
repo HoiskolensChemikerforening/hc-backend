@@ -72,6 +72,9 @@ def has_voted(request):
 
 @login_required
 def view_previous_elections_index(request):
+    election = Election.get_latest_election()
+    if election.is_open:
+        return redirect("elections:admin_register_positions")
     elections = Election.objects.all().order_by("-date")
     context = {"elections": elections}
     return render(request, "elections/election/previous_election_index.html", context)

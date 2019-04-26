@@ -41,9 +41,11 @@
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
-        style="color:#edcd2f">Admin</a></li>
-    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Valget er stengt</li>
+    <li class="breadcrumb-item "><a href="{% url "elections:index" %}" style="color:#edcd2f">Indeks</a></li>
+    <li class="breadcrumb-item "><a href="{% url "elections:previous_index" %}" style="color:#edcd2f">Tidligere valg</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Resultater for valget
+      {{election.date}}</li>
   </ol>
 </nav>
 {% endblock breadcrumbs %}
