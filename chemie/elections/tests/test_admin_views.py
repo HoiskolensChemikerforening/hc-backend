@@ -93,7 +93,8 @@ def test_admin_open_election(client, create_admin_user):
     assert election.current_position is None
 
     request = client.get(reverse("elections:admin_end_election"))
-    assert request.status_code == 200
+    assert request.status_code == 302
+    assert request.url == reverse("elections:previous_election", kwargs={"pk": election.pk})
 
 
 @pytest.mark.django_db
@@ -379,7 +380,8 @@ def test_admin_urls_when_voting_is_active(
         assert cand.user.get_full_name() in request.content.decode("utf-8")
 
     request = client.get(reverse("elections:admin_end_election"))
-    assert request.status_code == 200
+    assert request.status_code == 302
+    assert request.url == reverse("elections:previous_election", kwargs={"pk": election.pk})
 
 
 @pytest.mark.django_db
