@@ -20,7 +20,7 @@ def test_election_not_open(client, create_user):
     request = client.get(reverse("elections:index"))
     assert "Valget har ikke åpnet enda" in request.content.decode("utf-8")
     assert (
-            "Resultater fra forrige valg"
+            "Resultater fra tidligere valg"
             in request.content.decode("utf-8")
     )
 
