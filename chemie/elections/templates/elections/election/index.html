@@ -21,7 +21,7 @@
   {% if eligible %}
   {% if election.current_position.is_active %}
   {% if not voted %}
-  <a href="{% url "elections:vote" %}" class="btn btn-secondary">Gå til avstemming</a>
+  <a href="{% url "elections:vote" %}" class="btn btn-secondary">Gå til avstemning</a>
   {% else %}
   <h5 class="card-title">Du har alt stemt, vennligst vent</h5>
   {% endif %}
