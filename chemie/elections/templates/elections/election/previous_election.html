@@ -63,6 +63,9 @@
     <div class=" flex flex-column">
       <div class="p-1">
         <h5>{{ position }}</h5>
+        {% if position.by_acclamation %}
+        <b>Alle kandidater vant ved akklamasjon</b>
+        {% endif %}
       </div>
       {% if position.is_done %}
       <div class="p-1" style="border-style:solid none solid none;">
@@ -133,6 +136,15 @@
 
       <tbody>
         {% for position in positions %}
+        <tr>
+          <td>{{ position.position_name }}</td>
+          <td>Gjennomført ved akklamasjon</td>
+          <td> - </td>
+          <td> - </td>
+          <td>
+            {{ position.by_acclamation }}
+          </td>
+        </tr>
         <tr>
           <td>{{ position.position_name }}</td>
           <td>Totalt antall personer som har stemt</td>

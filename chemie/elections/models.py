@@ -102,6 +102,8 @@ class Position(models.Model):
         default=False, verbose_name="Valget er gjennomført"
     )
 
+    by_acclamation = models.BooleanField(default=False, verbose_name="Alle kandidater vant med akklamasjon")
+
     candidates = models.ManyToManyField(
         Candidate,
         blank=True,
@@ -367,6 +369,14 @@ class Election(models.Model):
     def end_current_position_voting(self):
         self.current_position.is_active = False
         self.current_position.is_done = True
+        self.current_position.save()
+        self.save()
+        return
+
+    def end_current_position_voting_by_acclamation(self):
+        self.current_position.is_active = False
+        self.current_position.is_done = True
+        self.current_position.by_acclamation = True
         self.current_position.save()
         self.save()
         return

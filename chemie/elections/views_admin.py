@@ -125,6 +125,8 @@ def admin_delete_candidate(request, pk):
     return redirect("elections:admin_register_candidates", pk=pk)
 
 
+@permission_required("elections.add_election")
+@login_required
 def admin_start_voting(request, pk):
     is_redirected, redir_function = Election.is_redirected()
     if is_redirected:  # either voting is active, or election is not open
@@ -136,6 +138,21 @@ def admin_start_voting(request, pk):
             election.start_current_position_voting(pk)
 
         return redirect("elections:admin_register_candidates", pk=pk)
+
+
+@permission_required("elections.add_election")
+@login_required
+def admin_acclamation(request, pk):
+    is_redirected, redir_function = Election.is_redirected()
+    if is_redirected:  # either voting is active, or election is not open
+        return redir_function  # Redirect function from Election.is_redirected
+    else:
+
+        if request.method == "POST":
+            election = Election.get_latest_election()
+            election.start_current_position_voting(pk)
+            election.end_current_position_voting_by_acclamation()
+        return redirect("elections:admin_register_positions")
 
 
 @permission_required("elections.add_election")

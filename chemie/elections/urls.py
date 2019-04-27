@@ -47,6 +47,11 @@ admin_urlpatterns = [
         name="admin_register_prevotes",
     ),
     url(
+        r"^admin/registrer/(?P<pk>\d+)/akklamasjon/$",
+        views_admin.admin_acclamation,
+        name="admin_acclamation",
+    ),
+    url(
         r"^admin/registrer/(?P<pk>\d+)/aktiv",
         views_admin.admin_voting_is_active,
         name="admin_voting_active",

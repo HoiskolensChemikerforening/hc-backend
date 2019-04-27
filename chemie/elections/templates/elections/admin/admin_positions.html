@@ -5,10 +5,10 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
     <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
-    <button class="btn btn-secondary" style="margin-left:auto" id="checkInDirect">Check
+    <button class="btn btn-secondary" style="margin-left:auto; margin-top:-0.8rem" id="checkInDirect">Check
       in brukere
     </button>
-    <button class="btn btn-danger" style="margin-left: 1rem" id="closeElectionButton">Steng valget
+    <button class="btn btn-danger" style="margin-left: 1rem; margin-top:-0.8rem" id="closeElectionButton">Steng valget
     </button>
   </ol>
 </nav>
@@ -97,6 +97,9 @@
                   plasser
                   {%endif%}
                   </h3>
+                  {% if position.by_acclamation %}
+                  <b>Alle kandidater vant ved akklamasjon</b>
+                  {% endif %}
               </div>
 
             </div>
@@ -105,7 +108,10 @@
             <div class="d-flex">
               <div class="p-2">
                 {% for candidate in position.candidates.all %}
-                <p> {{candidate}}: Totalt <b>{{candidate.get_candidate_votes}}</b> stemmer </p>
+                <p> {{candidate}}
+                  {% if not position.by_acclamation %}
+                  : Totalt <b>{{candidate.get_candidate_votes}}</b> stemmer </p>
+                {% endif %}
                 {% endfor %}
               </div>
               <a class="btn btn-secondary ml-auto" style="height:2.5rem"

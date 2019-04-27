@@ -21,6 +21,9 @@
   </script>
   <!-- Show votes and tickets -->
   <div class="box">
+    {% if position.by_acclamation %}
+    <h4 style="text-align:center; margin:1rem">Valget ble ikke gjennomført, alle kandidater vant ved akklamasjon</h4>
+    {% endif %}
     {#  <h5>Avgitte blanke stemmer: <b>{{ position.get_blank_votes }}</b></h5>#}
     <table class="table" style="margin-bottom: 3rem">
       <tr>
@@ -88,7 +91,6 @@
             var total_votes_without_blank = total_votes - blank_votes;
             var votes = parseInt("{{ candidate.votes }}");
             var preVotes = parseInt("{{ candidate.pre_votes }}");
-            debugger;
             var percentage_without_blank = (100 * (votes + preVotes) / total_votes_without_blank).toFixed(2);
             document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
           </script>
