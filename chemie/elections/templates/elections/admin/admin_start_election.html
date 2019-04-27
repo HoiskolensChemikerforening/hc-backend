@@ -27,7 +27,7 @@
 
   <br>
   <h2 style="text-align: center">Trykk på Start for å sette igang et valg</h2>
-  <form method="POST" class="post-form" href="">{% csrf_token %}
+  <form method="POST" class="post-form" onsubmit="return confirm('Åpne et nytt valg?')" href="">{% csrf_token %}
     <button type="submit" style="margin-left:45%" class="btn btn-success" name="start">Start
       valg
     </button>
