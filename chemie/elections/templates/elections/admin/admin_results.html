@@ -91,7 +91,7 @@
             var total_votes_without_blank = total_votes - blank_votes;
             var votes = parseInt("{{ candidate.votes }}");
             var preVotes = parseInt("{{ candidate.pre_votes }}");
-            var percentage_without_blank = (100 * (votes + preVotes) / total_votes_without_blank).toFixed(2);
+            var percentage_without_blank = (100 * (votes + preVotes) / total_votes_without_blank).toFixed(1);
             document.getElementById("voting_percentage-without-blank{{candidate.id}}").innerHTML = percentage_without_blank + " %";
           </script>
         </td>
