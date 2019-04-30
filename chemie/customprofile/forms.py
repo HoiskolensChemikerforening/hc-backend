@@ -270,8 +270,8 @@ class AddCardForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            "user",
-            "access_card",
+            "Brukernavn",
+            "Studentkort",
         )
 
 
@@ -285,5 +285,5 @@ class ManualRFIDForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.layout = Layout(
-            "user",
+            "Brukernavn",
         )
