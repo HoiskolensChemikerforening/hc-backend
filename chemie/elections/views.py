@@ -29,7 +29,7 @@ def vote(request):
         return redirect("elections:index")
 
     if request.user.profile.voted:
-        return redirect("elections:has_voted")
+        return redirect("elections:index")
 
     election = Election.get_latest_election()
     form = CastVoteForm(request.POST or None, election=election)
@@ -72,12 +72,22 @@ def has_voted(request):
 
 @login_required
 def view_previous_elections_index(request):
-    election = Election.get_latest_election()
-    if election.is_open:
-        return redirect("elections:admin_register_positions")
-    elections = Election.objects.all().order_by("-date")
+    try:
+        election = Election.get_latest_election()
+        if election.is_open:
+            return redirect("elections:admin_register_positions")
+    except ObjectDoesNotExist:
+        return redirect("elections:index")
+
+    elections = Election.objects.filter(
+        date__range=["2019-04-29", "2200-01-01"]
+    ).order_by(
+        "-date"
+    )  # Reason for filtering after 29.04.2019 is because of changes to the old system
     context = {"elections": elections}
-    return render(request, "elections/election/previous_election_index.html", context)
+    return render(
+        request, "elections/election/previous_election_index.html", context
+    )
 
 
 @login_required
@@ -88,7 +98,8 @@ def view_previous_election(request, pk):
     else:
         positions = election.positions.all()
         n_voters = [
-            position.get_number_of_voters() for position in election.positions.all()
+            position.get_number_of_voters()
+            for position in election.positions.all()
         ]
 
         total_votes = [
@@ -107,4 +118,6 @@ def view_previous_election(request, pk):
             "blank_votes": blank_votes,
         }
 
-        return render(request, "elections/election/previous_election.html", context)
+        return render(
+            request, "elections/election/previous_election.html", context
+        )

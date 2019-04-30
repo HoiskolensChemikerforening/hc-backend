@@ -39,6 +39,12 @@
           valget
         </button>
       </form>
+      <form method="post" style="margin-top:1rem" action="{% url 'elections:admin_acclamation' pk=position.id %}"
+        onsubmit="return confirm('Skal alle kandidater vinne ved akklamasjon?')">{% csrf_token %}
+        <button class="btn btn-success" type="submit" name="akkamation" value="{{ position.id }}" }}>Vinn ved
+          akklamasjon
+        </button>
+      </form>
       <div style="margin-top:1rem">
         <a href="{% url "elections:admin_register_prevotes" position.id %}">
           <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>

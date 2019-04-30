@@ -4,7 +4,7 @@ from django.forms import modelformset_factory
 from django.shortcuts import get_object_or_404, render
 from django.shortcuts import redirect, reverse
 
-from chemie.customprofile.forms import GetRFIDForm
+from chemie.customprofile.forms import GetRFIDForm, ManualRFIDForm
 from chemie.customprofile.models import ProfileManager, Profile
 from .forms import AddPositionForm, AddCandidateForm
 from .forms import AddPrevoteForm, AddPreVoteToCandidateForm
@@ -125,6 +125,8 @@ def admin_delete_candidate(request, pk):
     return redirect("elections:admin_register_candidates", pk=pk)
 
 
+@permission_required("elections.add_election")
+@login_required
 def admin_start_voting(request, pk):
     is_redirected, redir_function = Election.is_redirected()
     if is_redirected:  # either voting is active, or election is not open
@@ -136,6 +138,21 @@ def admin_start_voting(request, pk):
             election.start_current_position_voting(pk)
 
         return redirect("elections:admin_register_candidates", pk=pk)
+
+
+@permission_required("elections.add_election")
+@login_required
+def admin_acclamation(request, pk):
+    is_redirected, redir_function = Election.is_redirected()
+    if is_redirected:  # either voting is active, or election is not open
+        return redir_function  # Redirect function from Election.is_redirected
+    else:
+
+        if request.method == "POST":
+            election = Election.get_latest_election()
+            election.start_current_position_voting(pk)
+            election.end_current_position_voting_by_acclamation()
+        return redirect("elections:admin_register_positions")
 
 
 @permission_required("elections.add_election")
@@ -300,3 +317,42 @@ def change_rfid_status(request):
 
     return render(request, "elections/check_in.html", context)
 
+
+@permission_required("elections.add_election")
+@login_required
+def manual_rfid_status(request):
+    form = ManualRFIDForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            user = form.cleaned_data.get("user")
+            try:
+                profile = Profile.objects.get(user=user)
+                profile.eligible_for_voting = not profile.eligible_for_voting
+                profile.save()
+                status = profile.eligible_for_voting
+
+                if status:
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        "{} har sjekket inn".format(profile.user.get_full_name()),
+                    )
+
+                else:
+                    messages.add_message(
+                        request,
+                        messages.WARNING,
+                        "{} har sjekket ut".format(profile.user.get_full_name()),
+                    )
+            except:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Brukeren finnes ikke.",
+                )
+        return redirect("elections:checkin-manually")
+    else:
+        is_open = Election.latest_election_is_open()
+        context = {"form": form, "is_open": is_open}
+
+    return render(request, "elections/check_in_manually.html", context)
