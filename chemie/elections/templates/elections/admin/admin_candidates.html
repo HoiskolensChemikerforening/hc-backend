@@ -40,7 +40,7 @@
         </button>
       </form>
       <form method="post" style="margin-top:1rem" action="{% url 'elections:admin_acclamation' pk=position.id %}"
-        onsubmit="return confirm('Skal alle kandidaters vinne ved aklamasjon?')">{% csrf_token %}
+        onsubmit="return confirm('Skal alle kandidater vinne ved akklamasjon?')">{% csrf_token %}
         <button class="btn btn-success" type="submit" name="akkamation" value="{{ position.id }}" }}>Vinn ved
           akklamasjon
         </button>
