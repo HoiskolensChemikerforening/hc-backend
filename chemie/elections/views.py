@@ -72,9 +72,13 @@ def has_voted(request):
 
 @login_required
 def view_previous_elections_index(request):
-    election = Election.get_latest_election()
-    if election.is_open:
-        return redirect("elections:admin_register_positions")
+    try:
+        election = Election.get_latest_election()
+        if election.is_open:
+            return redirect("elections:admin_register_positions")
+    except ObjectDoesNotExist:
+        return redirect("elections:index")
+
     elections = Election.objects.filter(
         date__range=["2019-04-29", "2200-01-01"]
     ).order_by(
