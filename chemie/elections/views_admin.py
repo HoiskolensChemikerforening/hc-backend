@@ -350,7 +350,7 @@ def manual_rfid_status(request):
                     messages.WARNING,
                     "Brukeren finnes ikke.",
                 )
-        return redirect("elections:checkin-manually")
+        return redirect("elections:checkin_manually")
     else:
         is_open = Election.latest_election_is_open()
         context = {"form": form, "is_open": is_open}
