@@ -3,6 +3,14 @@
 {% load thumbnail %}
 {% load crispy_forms_tags %}
 
+{% block style %}
+<style>
+    .asteriskField {
+        color: red;
+    }
+</style>
+{% endblock style %}
+
 {% block content %}
 <div align="center">
   <h1>Sjekk inn brukere manuelt</h1>
