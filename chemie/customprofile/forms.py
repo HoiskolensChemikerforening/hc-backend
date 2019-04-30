@@ -273,3 +273,17 @@ class AddCardForm(forms.Form):
             "user",
             "access_card",
         )
+
+
+class ManualRFIDForm(forms.Form):
+
+    user = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            "user",
+        )
