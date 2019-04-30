@@ -5,31 +5,42 @@
 {% load chemie_tags %}
 {% load cache %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
+        style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Sjekk inn medlemmer</li>
+    <a class="btn btn-secondary" style="position:absolute; right:3rem; top:3rem"
+      href="{% url 'elections:checkin_manually' %}">
+      Sjekk inn manuelt
+    </a>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
 
 {% block content %}
-
 <!-- Messaging framework card -->
 {% if messages %}
-  {% for message in messages %}
-    <article class="message is-{{ message.level_tag }}">
-      <div class="message-header">
-          <p>{{ message }}</p>
-      </div>
-    </article>
-  {% endfor %}
+{% for message in messages %}
+<article class="message is-{{ message.level_tag }}">
+  <div class="alert alert-info" style="text-align:center">
+    {{ message }}
+  </div>
+</article>
+{% endfor %}
 {% endif %}
 
-{% if is_open %}
-    <div align="center">
-        <h1 class="title is-2">Sjekk inn til valget</h1>
-        <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
-          {{ form.rfid }}
-          <input type="submit" class="button" name="addStudentcard" value="Sjekk inn/ut" height="1.7rem"/>
-        </form>
-    </div>
-{% else %}
-    <h2 class="title is-4"> Valget har ikke åpnet enda </h2>
-    <h5>Åpne et valg for å sjekke inn til valget.</h5>
-{% endif %}
+<div align="center">
+  <h1 class="title is-2">Sjekk inn til valget</h1>
+  <form id="target" method="POST" enctype="multipart/form-data">{% csrf_token %}
+    {{ form.rfid }}
+    <input type="submit" class="btn btn-secondary" name="addStudentcard" value="Sjekk inn/ut" height="1.7rem" />
+  </form>
+  <p>
+    Koble til en kort scanner og la brukere scanne kortet sitt for å registrere at de har møtt opp
+  </p>
+</div>
 
 {% endblock content %}

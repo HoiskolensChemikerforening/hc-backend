@@ -1,18 +1,39 @@
 {% extends 'chemie/base_election.html' %}
 {% load static %}
 
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a style="color:#edcd2fb4">Admin</a>
+    </li>
+    <a class="btn btn-secondary" style="position:absolute; right:3rem; top:3rem"
+      href="{% url 'elections:previous_index' %}">
+      Resultater fra tidligere valg
+    </a>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
 {% block content %}
-    <div class="div-container">
-        <h2 class="title is-2">Administrator for Valg </h2>
-            <div>
-                <a href="{ %url "elections:results" %}" class="button">Se Resultater fra forrige valg</a>
-            </div>
-        <br>
-        <h3 class="title is-5">Trykk på Start for å sette igang et valg</h3>
-        <form method="POST" class="post-form" href="valg/admin/register/">{% csrf_token %}
-            <button type="submit" class="button is-success" name="start" class="btn btn-primary pull-right" >Start Election</button>
-        </form>
-    </div>
+<div class="d-flex flex-column">
+  <div>
+    <h2 style="text-align: center">Administrator for Valg </h2>
+    <p style="text-align: center">
+      Først når valget er åpnet kan folk begynne å scanne seg i døren, ellers må de scanne seg på nytt når valget har
+      åpnet <br>
+      Husk å scanne folk ut om de forlater lokalet
+    </p>
+  </div>
+
+  <br>
+  <h2 style="text-align: center">Trykk på Start for å sette igang et valg</h2>
+  <form method="POST" class="post-form" onsubmit="return confirm('Åpne et nytt valg?')" href="">{% csrf_token %}
+    <button type="submit" style="margin-left:45%" class="btn btn-success" name="start">Start
+      valg
+    </button>
+  </form>
+
+</div>
 
 </div>
 
