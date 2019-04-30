@@ -286,6 +286,7 @@ def change_rfid_status(request):
                     request,
                     messages.WARNING,
                     "Studentkortnummeret er ikke registrert enda.",
+                    extra_tags='Advarsel',
                 )
 
                 return redirect(
@@ -301,6 +302,7 @@ def change_rfid_status(request):
                     request,
                     messages.SUCCESS,
                     "{} har sjekket inn".format(profile.user.get_full_name()),
+                    extra_tags='Innsjekk',
                 )
 
             else:
@@ -308,6 +310,7 @@ def change_rfid_status(request):
                     request,
                     messages.WARNING,
                     "{} har sjekket ut".format(profile.user.get_full_name()),
+                    extra_tags='Utsjekk',
                 )
 
         return redirect("elections:checkin")
@@ -336,6 +339,7 @@ def manual_rfid_status(request):
                         request,
                         messages.SUCCESS,
                         "{} har sjekket inn".format(profile.user.get_full_name()),
+                        extra_tags='Innsjekk',
                     )
 
                 else:
@@ -343,12 +347,14 @@ def manual_rfid_status(request):
                         request,
                         messages.WARNING,
                         "{} har sjekket ut".format(profile.user.get_full_name()),
+                        extra_tags='Utsjekk',
                     )
             except:
                 messages.add_message(
                     request,
                     messages.WARNING,
                     "Brukeren finnes ikke.",
+                    extra_tags='Advarsel',
                 )
         return redirect("elections:checkin_manually")
     else:

@@ -41,9 +41,9 @@ def register_user(request):
     )
     approved_terms_form = ApprovedTermsForm(request.POST or None)
     if (
-        user_core_form.is_valid()
-        and user_profile_form.is_valid()
-        and approved_terms_form.is_valid()
+            user_core_form.is_valid()
+            and user_profile_form.is_valid()
+            and approved_terms_form.is_valid()
     ):
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
@@ -96,7 +96,7 @@ def edit_profile(request):
                 profile_form.save()
 
         if not (
-            user_form.errors or profile_form.errors or new_password_form.errors
+                user_form.errors or profile_form.errors or new_password_form.errors
         ):
             messages.add_message(
                 request, messages.SUCCESS, "Dine endringer har blitt lagret!"
@@ -263,16 +263,19 @@ def add_rfid(request):
                 card_nr = ProfileManager.rfid_to_em(rfid)
                 profile.access_card = card_nr
                 profile.save()
-                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
+                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret', extra_tags='Hurra')
                 if redirect_URL:
                     return redirect(redirect_URL)
                 form = AddCardForm()
             except ObjectDoesNotExist:
-                #Hvis en bruker ikke finnes vil koden gå hit
-                messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
+                # Hvis en bruker ikke finnes vil koden gå hit
+                messages.add_message(request, messages.WARNING,
+                                     'Finner ingen bruker ved brukernavn {}'.format(user.username),
+                                     extra_tags='Advarsel')
             except IntegrityError:
                 messages.add_message(request, messages.WARNING,
-                                     'Studentkortnummeret {} er allerede registrert på en annen bruker'.format(card_nr))
+                                     'Studentkortnummeret {} er allerede registrert på en annen bruker'.format(card_nr),
+                                     extra_tags='Advarsel')
             except Exception as e:
                 messages.add_message(request, messages.WARNING,
                                      'Det skjedde noe galt. {}'.format(e))
