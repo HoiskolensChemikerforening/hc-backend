@@ -256,7 +256,7 @@ class ApprovedTermsForm(forms.Form):
 
 
 class GetRFIDForm(forms.Form):
-    rfid = forms.IntegerField(label='Studentkortnr', max_value=99999999999,
+    rfid = forms.CharField(label='Studentkortnr', max_value=99999999999,
                               widget=forms.NumberInput(attrs={'autofocus': True}))
 
 
@@ -264,7 +264,7 @@ class AddCardForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=User.objects.all(),
         widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
-    access_card = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
+    access_card = forms.CharField(label='Studentkortnr', max_value=99999999999)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
