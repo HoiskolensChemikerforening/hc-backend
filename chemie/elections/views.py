@@ -29,7 +29,7 @@ def vote(request):
         return redirect("elections:index")
 
     if request.user.profile.voted:
-        return redirect("elections:has_voted")
+        return redirect("elections:index")
 
     election = Election.get_latest_election()
     form = CastVoteForm(request.POST or None, election=election)
