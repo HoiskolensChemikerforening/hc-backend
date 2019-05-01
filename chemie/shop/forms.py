@@ -1,6 +1,6 @@
 from django import forms
 from dal import autocomplete
-from .models import Item, Category, RefillReceipt, HappyHour
+from .models import Item, Category, RefillReceipt, HappyHour, Order
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
 
@@ -61,7 +61,14 @@ class AddItemForm(forms.ModelForm):
 
     class Meta:
         model = Item
-        fields = ["name", "price", "category", "image", "happy_hour_duplicate", "buy_without_tablet"]
+        fields = [
+            "name",
+            "price",
+            "category",
+            "image",
+            "happy_hour_duplicate",
+            "buy_without_tablet",
+        ]
         widgets = {
             "name": forms.TextInput(
                 attrs={"placeholder": "Skriv inn varenavn"}
@@ -114,3 +121,31 @@ class EditItemForm(forms.ModelForm):
             "is_active",
             "buy_without_tablet",
         ]
+
+
+class GetUserRefillForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout("receiver", Submit("submit", "Hent bruker"))
+
+    class Meta:
+        model = RefillReceipt
+        fields = ["receiver"]
+        widgets = {
+            "receiver": autocomplete.ModelSelect2(url="verv:user-autocomplete")
+        }
+
+
+class GetUserReceiptsForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout("buyer", Submit("submit", "Hent bruker"))
+
+    class Meta:
+        model = Order
+        fields = ["buyer"]
+        widgets = {
+            "buyer": autocomplete.ModelSelect2(url="verv:user-autocomplete")
+        }

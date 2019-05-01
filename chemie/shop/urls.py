@@ -21,12 +21,15 @@ admin_shop_urlpatterns = [
     ),
     path("admin/fyll-konto", views.refill, name="refill"),
     path("fjern-vare/<int:pk>", views.remove_item, name="remove-item"),
-
     path(
         "admin/aktiver-happyhour/",
         views.activate_happyhour,
         name="activate-happyhour",
     ),
+    path(
+        "admin/alle-kvitteringer", views.view_all_receipts, name="all_receipts"
+    ),
+    path("admin/alle-paafyll", views.view_all_refills, name="all_refills"),
 ]
 
 urlpatterns = shop_url_patterns + admin_shop_urlpatterns

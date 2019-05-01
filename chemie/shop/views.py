@@ -16,6 +16,8 @@ from .forms import (
     AddItemForm,
     HappyHourForm,
     EditItemForm,
+    GetUserRefillForm,
+    GetUserReceiptsForm
 )
 from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
 from .statistics import get_plot_item
@@ -418,3 +420,44 @@ def create_happyhour(request, form):
             return redirect(reverse("shop:admin"))
     context = {"form": form}
     return render(request, "shop/happy-hour.html", context)
+
+
+@permission_required("customprofile.refill_balance")
+def view_all_receipts(request):
+    form = GetUserReceiptsForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                user = form.cleaned_data.get("buyer")
+                orders = (
+                    Order.objects.filter(buyer=user)
+                    .order_by("-created")
+                    .prefetch_related("items")
+                )
+                context['orders'] = orders
+                context['user'] = user
+            except ObjectDoesNotExist:
+                pass
+
+    return render(request, "shop/all_receipts.html", context)
+
+
+@permission_required("customprofile.refill_balance")
+def view_all_refills(request):
+    form = GetUserRefillForm(request.POST or None)
+    context = {
+        "form": form
+    }
+    if request.method == 'POST':
+        if form.is_valid():
+            try:
+                receiver = form.cleaned_data.get("receiver")
+                refill_receipts = RefillReceipt.objects.filter(receiver=receiver).order_by("-created")
+                context['refill_receipts'] = refill_receipts
+                context['receiver'] = receiver
+            except ObjectDoesNotExist:
+                pass
+    return render(request, "shop/all_refills.html", context)
