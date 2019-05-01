@@ -22,6 +22,7 @@ from .forms import (
 from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
 from .statistics import get_plot_item
 
+
 def is_happy_hour():
     now = timezone.now()
     try:
@@ -403,7 +404,7 @@ def activate_happyhour(request):
         context = {"form": form}
         return render(request, "shop/happy-hour.html", context)
 
-
+@permission_required("shop.add_happyhour")
 def create_happyhour(request, form):
     if request.method == "POST":
         if form.is_valid():
