@@ -25,15 +25,13 @@
     <form action="{% url 'quiz:activate_deactivate' term.pk %}" method="POST">{% csrf_token %}
       <p>
         <label>
-          <input type="checkbox" disabled="disabled"
-                  {% if term.is_active %}
-                 checked="checked"/><span>Aktiv</span>
-                  {% else %}
-                    /><span>Inaktiv</span>
-                  {% endif %}
+          {% if term.is_active %}
+            <input type="checkbox" checked="checked" onclick="this.form.submit()"><span>Aktiv</span>
+          {% else %}
+            <input type="checkbox" onclick="this.form.submit()"><span>Inaktiv</span>
+          {% endif %}
         </label>
       </p>
-      <input type="submit" class="btn btn-small" value="Endre">
     </form>
 
     <br>
