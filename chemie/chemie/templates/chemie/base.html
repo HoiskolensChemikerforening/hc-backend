@@ -11,23 +11,22 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
   <title>Høiskolens Chemikerforening</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static " favicons
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons
   /apple-touch-icon.png" %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static " favicons
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons
   /favicon-32x32.png" %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static " favicons
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons
   /favicon-16x16.png" %}">
-  <link rel="manifest" href="{% static " favicons
+  <link rel="manifest" href="{% static "favicons
   /manifest.json" %}">
-  <link rel="mask-icon" href="{% static " favicons
+  <link rel="mask-icon" href="{% static "favicons
   /safari-pinned-tab.svg" %}" color="#5bbad5">
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link href="{% static " css
-  /style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
   {% block extra_css %}
   {% endblock %}
 
@@ -88,7 +87,7 @@
   <ul id="nav-mobile" class="sidenav sidenav-fixed">
     <li class="logo">
       <a id="logo-container" href="/" class="brand-logo">
-        <img id="front-page-logo" type="image/jpg" src="{% static " images/logo.png" %}"></img>
+        <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
       </a>
       <a href="/" style="height: 100%">
         <h4 class="logo-text">Høiskolens Chemikerforening</h4>
@@ -112,8 +111,8 @@
           </div>
           <div class="collapsible-body">
             <ul>
-              <li><a href="{% url " profile:edit" %}" class="waves-effect">Endre profil</a></li>
-              <li><a href="{% url " logout" %}" class="waves-effect">Logg ut</a></li>
+              <li><a href="{% url "profile:edit" %}" class="waves-effect">Endre profil</a></li>
+              <li><a href="{% url "logout" %}" class="waves-effect">Logg ut</a></li>
             </ul>
           </div>
         </li>
@@ -121,7 +120,7 @@
     </li>
 
     {% else %}
-    <li class="bold"><a href="{% url " login" %}">Logg inn</a></li>
+    <li class="bold"><a href="{% url "login" %}">Logg inn</a></li>
     {% endif %}
     <li>
       <ul class="collapsible collapsible-accordion">
@@ -129,7 +128,7 @@
           <div class="collapsible-body">
             <ul>
               <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
-              <li><a href="{% url " verv:list_all" %}">Undergrupper</a></li>
+              <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
               <li><a href="/s/kontoret/" class="waves-effect">Kontoret</a></li>
             </ul>
           </div>
@@ -151,8 +150,8 @@
             class="material-icons micon">local_drink</i>Sosialt</a>
           <div class="collapsible-body">
             <ul>
-              <li><a href="{% url " events:index_social" %}" class="waves-effect">Arrangementer</a></li>
-              <li><a href="{% url " events:index_bedpres" %}" class="waves-effect">Bedpres</a></li>
+              <li><a href="{% url "events:index_social" %}" class="waves-effect">Arrangementer</a></li>
+              <li><a href="{% url "events:index_bedpres" %}" class="waves-effect">Bedpres</a></li>
             </ul>
           </div>
         </li>
@@ -160,29 +159,29 @@
             class="material-icons micon">people</i>Internt</a>
           <div class="collapsible-body">
             <ul>
-              <li><a href="{% url " profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
-              <li><a href="{% url " elections:index" %}" class="waves-effect">Valg</a></li>
-              <li><a href="{% url " wiki:root" %}" class="waves-effect">Wiki</a></li>
-              <li><a href="{% url " frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
-              <li><a href="{% url " frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
-              <li><a href="{% url " carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
-              <li><a href="{% url " shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
-              <li><a href="{% url " quiz:index" %}" class="waves-effect waves-teal">Quiz</a></li>
+              <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
+              <li><a href="{% url "elections:index" %}" class="waves-effect">Valg</a></li>
+              <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
+              <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+              <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
+              <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
+              <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
+              <li><a href="{% url "quiz:index" %}" class="waves-effect waves-teal">Quiz</a></li>
             </ul>
           </div>
         </li>
       </ul>
     </li>
-    <li class="bold"><a href="{% url " bokskap:index" %}" class="waves-effect"><i
+    <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
         class="material-icons micon">inbox</i>Bokskap</a>
     </li>
     <li class="bold"><a href="/s/bedrift/" class="waves-effect"><i class="material-icons micon">business</i>
       For bedrifter</a></li>
-    <li class="bold"><a href="{% url " frontpage:kontakt" %}" class="waves-effect"><i
+    <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
         class="material-icons micon">contact_mail</i>Kontakt</a>
     </li>
 
-    <li class="bold"><a href="{% url " frontpage:calendar" %}"><i
+    <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
         class="material-icons micon">date_range</i>Kalender</a></li>
   </ul>
 </header>
@@ -232,7 +231,7 @@
         </p>
 
         <a href="https://github.com/HoiskolensChemikerforening/website">
-          <img src="{% static " images/github.svg" %}" alt="Github"
+          <img src="{% static "images/github.svg" %}" alt="Github"
           style="display: inline-block;vertical-align: middle;">
           <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
         </a>
