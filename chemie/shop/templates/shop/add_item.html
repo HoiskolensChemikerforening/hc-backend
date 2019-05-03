@@ -47,6 +47,9 @@
       {{ form.media }}
       {% crispy form %}
     </table>
+    <a class="btn btn-secondary" href="{% url "shop:add-category" %}" role="button"
+      style="float:right; margin-top:-2.5rem">Legg til ny
+      kategori</a>
   </form>
 </div>
 
