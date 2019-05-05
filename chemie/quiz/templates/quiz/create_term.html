@@ -1,0 +1,27 @@
+{% extends 'chemie/base.html' %}
+{% load material_form %}
+
+{% block nav_header %}
+  Quiz
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Opprett
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a href="#" class="breadcrumb">Opprett</a>
+  </div>
+
+  <form method="POST">{% csrf_token %}
+    {% form form=form %}
+    {% endform %}
+    <input class="btn btn-primary" type='submit' value='Opprett Quiz!'/>
+  </form>
+{% endblock %}
+
+{% block footer_script %}
+  {{ form.media }}
+{% endblock footer_script %}

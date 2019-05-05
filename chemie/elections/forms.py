@@ -29,17 +29,31 @@ class AddCandidateForm(forms.ModelForm):
 class AddPrevoteForm(forms.ModelForm):
     class Meta:
         model = Position
-        fields = ["number_of_voters"]
+        fields = ["number_of_prevote_tickets"]
+
+    def prevotes_allowed(self, formset, position):
+        """
+        Check that there is not more pre_votes that is feasable for current postion
+        with respect to how many peoples that have been prevoted
+        """
+
+        n_prevoters = self.cleaned_data["number_of_prevote_tickets"]
+        total_prevoters = 0
+        for form in formset:
+            total_prevoters += form.cleaned_data["pre_votes"]
+        if total_prevoters / position.spots > n_prevoters:
+            return False
+        return True
 
 
 class AddPreVoteToCandidateForm(forms.ModelForm):
     class Meta:
         model = Candidate
-        fields = ["votes"]
+        fields = ["pre_votes"]
 
     def __init__(self, *args, **kwargs):
         super(AddPreVoteToCandidateForm, self).__init__(*args, **kwargs)
-        self.fields["votes"].label = self.instance.user.get_full_name()
+        self.fields["pre_votes"].label = self.instance.user.get_full_name()
 
 
 class OpenElectionForm(forms.ModelForm):
@@ -49,9 +63,7 @@ class OpenElectionForm(forms.ModelForm):
 
 
 class EndElectionForm(forms.ModelForm):
-    class Meta:
-        model = Election
-        fields = ["current_position_is_open"]
+    pass
 
 
 def candidatesChoices(election=None):
@@ -66,18 +78,13 @@ def candidatesChoices(election=None):
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         name = mark_safe(
-            "<p>%s %s </p>" % (obj.user.first_name, obj.user.last_name)
+            f"<p class='vote-name p-2'>{obj.user.first_name} {obj.user.last_name} </p>"
         )
-        try:
-            image = mark_safe(
-                "<img src='%s' class='vote-image' />"
-                % obj.user.profile.image_primary.url
-            )
-        except:
-            image = mark_safe(
-                "<img src='%s' class='vote-image' />"
-                % "/static/images/blank_avatar.png"
-            )
+
+        image = mark_safe(
+            f"<img src='{obj.image_url}' class='class-image p-2 mt-auto'/>"
+        )
+
         return image + name
 
 
@@ -91,16 +98,16 @@ class CastVoteForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["candidates"].queryset = candidatesChoices(self.election)
 
-    def clean_candidates(self):
-        candidates = self.cleaned_data["candidates"].all()
-        count = candidates.count()
-        if count > self.election.current_position.spots or count <= 0:
-            raise ValidationError(
-                "Stem på litt færre folk da kis. "
-                "Du stemte på {} kandidater, "
-                "og det skal velges {} kandidater til vervet.".format(
-                    count, self.election.current_position.spots
-                )
-            )
-        else:
-            return candidates
+    def is_valid(self, candidate_list, election):
+
+        valid = super(CastVoteForm, self).is_valid()
+        if not valid:
+            return False
+        if len(candidate_list) > election.current_position.spots:
+            return False
+        return True
+
+    def is_blank(self, candidate_list):
+        if len(candidate_list) == 0:
+            return True
+        return False

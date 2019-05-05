@@ -1,5 +1,7 @@
 import material as M
 from captcha.fields import ReCaptchaField
+from crispy_forms.helper import FormHelper
+from crispy_forms.layout import Layout
 from dal import autocomplete
 from django import forms
 from django.contrib.auth.models import User
@@ -254,12 +256,34 @@ class ApprovedTermsForm(forms.Form):
 
 
 class GetRFIDForm(forms.Form):
-    rfid = forms.CharField(label='Studentkortnr',
-                           widget=forms.TextInput(attrs={'autofocus': True}))
+
+    rfid = forms.CharField(label='Studentkortnr', max_length=255, widget=forms.NumberInput(attrs={'autofocus': True}))
 
 
 class AddCardForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=User.objects.all(),
         widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
-    access_card = forms.IntegerField(label='Studentkortnr', max_value=99999999999)
+    access_card = forms.CharField(label='Studentkortnr', max_length=255)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            "Brukernavn",
+            "Studentkort",
+        )
+
+
+class ManualRFIDForm(forms.Form):
+
+    user = forms.ModelChoiceField(
+        queryset=User.objects.all(),
+        widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.layout = Layout(
+            "Brukernavn",
+        )

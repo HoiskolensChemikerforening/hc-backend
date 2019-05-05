@@ -5,14 +5,14 @@
 
 <!DOCTYPE html>
 <html lang="no">
+
 <head>
   <!--Specific for Base_elections-->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
   <!--From Base template-->
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
   <title>Høiskolens Chemikerforening</title>
   <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon.png" %}">
@@ -21,30 +21,34 @@
   <link rel="manifest" href="{% static "favicons/manifest.json" %}">
   <link rel="mask-icon" href="{% static "favicons/safari-pinned-tab.svg" %}" color="#5bbad5">
 
-<!--Bootstrap CSS-->
-  <!--<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/css/bootstrap.min.css" integrity="sha384-/Y6pD6FV/Vv2HJnA6t+vslU6fwYXjCFtcEpHbNJ0lyAFsXTsjBbfaDjzALeQsN6M" crossorigin="anonymous">-->
-
   <!-- CSS from base -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.7.1/css/bulma.min.css">
-  <link href="{% static 'css/style_election.css' %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   {% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/style_election.css' %}" type="text/css" media="screen,projection">
   {% endblock %}
 
   <!-- JS -->
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+    integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+    crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+    integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+    integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+    crossorigin="anonymous"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
   <script src="{% static "js/timepicker.js" %}"></script>
   <script src="{% static "js/init.js" %}" defer></script>
 
   {% block extra_js %}
   {% endblock %}
 
-  <style>
-    {% block style %}
-    {% endblock style %}
-  </style>
+  {% block style %}
+  {% endblock style %}
 
   {% block header %}
   {% endblock header %}
@@ -57,29 +61,46 @@
 </head>
 
 
-
 <body>
-  <div>
-    <header>
-    <nav class="navbar is-dark" role="navigation" aria-label="main navigation">
-  <div class="navbar-brand">
-    <a class="navbar-item" href="/" >
-      <img class="nav-bar-image"src="{% static 'images/logo.png'%}">
-      <h2 class="title is-4 nav-bar-title">Høiskolens Chemikerforening</h2>
+  <nav class="navbar navbar-light bg-dark">
+    <a class="navbar-brand" href="/">
+
+      <img src="{% static 'images/logo.png' %}" height="40" class="d-inline-block align-top" alt="">
+      <h5 style="display:inline; color:#edcd2f; margin-bottom:2 rem">Høiskolens Chemikerforening</h5>
     </a>
+  </nav>
+  {% block breadcrumbs %}
+  {% endblock breadcrumbs %}
 
-  </div>
-</nav>
-    </header>
-    <div class="main-container">
-      {% block content %}
-      {% endblock content %}
+  <div class="main-container">
+    {% if messages %}
+    <div class="row" style="padding-bottom: 1rem;">
+      {% for message in messages %}
+      <div class="col s12 m6 l6">
+        <div class="card bg-{{ message.level_tag }}">
+          <div class="card-body">
+            <span class="card-title black-text valign-wrapper" style="clear: both;">
+
+              <h5><i class="material-icons black-text"
+                  style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+            </span>
+            <p class="flow-text black-text">{{ message }}</p>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
     </div>
+    {% endif %}
+
+
+    {% block content %}
+    {% endblock content %}
   </div>
 
-{% block footer_script %}
+  {% block footer_script %}
 
-{% endblock footer_script %}
+  {% endblock footer_script %}
 
 </body>
+
 </html>

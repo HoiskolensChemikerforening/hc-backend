@@ -9,7 +9,7 @@ asn1crypto==0.24.0        # via cryptography
 atomicwrites==1.3.0       # via pytest
 attrs==19.1.0             # via pytest
 bleach==2.1.4             # via wiki
-cffi==1.12.2              # via cryptography
+cffi==1.12.3              # via cryptography
 click==7.0                # via pip-tools
 coverage==4.5.2
 cryptography==2.6.1       # via pyopenssl

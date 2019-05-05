@@ -11,11 +11,16 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
   <title>Høiskolens Chemikerforening</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon.png" %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons/favicon-32x32.png" %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons/favicon-16x16.png" %}">
-  <link rel="manifest" href="{% static "favicons/manifest.json" %}">
-  <link rel="mask-icon" href="{% static "favicons/safari-pinned-tab.svg" %}" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons
+  /apple-touch-icon.png" %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons
+  /favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons
+  /favicon-16x16.png" %}">
+  <link rel="manifest" href="{% static "favicons
+  /manifest.json" %}">
+  <link rel="mask-icon" href="{% static "favicons
+  /safari-pinned-tab.svg" %}" color="#5bbad5">
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -148,11 +153,13 @@
             <div class="collapsible-body">
               <ul>
                 <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
+                <li><a href="{% url "elections:index" %}" class="waves-effect">Valg</a></li>
                 <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
                 <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
                 <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
                 <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
                 <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
+                <li><a href="{% url "quiz:index" %}" class="waves-effect waves-teal">Quiz</a></li>
               </ul>
             </div>
           </li>
@@ -223,6 +230,24 @@
             <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
           </a>
         </div>
+      </div>
+      </main>
+
+      <!-- Media/Social -->
+      <div class="col s12 m6 l4">
+        <h5 class="white-text">Sosialt</h5>
+        <div class="valign-wrapper">
+          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
+            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+              <path fill="#FFF"
+                d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z">
+              </path>
+            </svg>
+          </a>
+          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
+            <p class="left-align white-text" style="margin-left: 10px">Facebook</p>
+          </a>
+        </div>
 
         <!-- Media/Social -->
         <div class="col s12 m6 l4">
@@ -255,21 +280,26 @@
         {% show_sponsors %}
         {% endcache %}
       </div>
-    </div>
 
-    <!-- Copyright, credits -->
-    <div class="footer-copyright">
-      <div class="container">
-        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+      <!-- Copyright, credits -->
+      <div class="footer-copyright">
+        <div class="container">
+          <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+        </div>
       </div>
-    </div>
   </footer>
 
   {% block footer_js_files %}
   {% endblock footer_js_files %}
 
-  {% block footer_script %}
-  {% endblock footer_script %}
+  <script>
+    $(document).ready(function () {
+      $('.sidenav').sidenav();
+      $('.collapsible').collapsible();
+      $('.fixed-action-btn').floatingActionButton();
+      $('.tabs').tabs();
+    });
+  </script>
 
   <script>
     $(document).ready(function () {

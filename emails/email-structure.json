@@ -16,7 +16,7 @@
 {
 "name": "contact_email",
 "description": "Kontakt-epost",
-"subject":"Kontaktskjema - chemie.no",
+"subject":"Kontaktskjema - hc.ntnu.no",
 "path":"misc/contact_email"
 },
 

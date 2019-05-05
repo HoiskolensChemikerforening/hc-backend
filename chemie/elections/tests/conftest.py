@@ -48,7 +48,7 @@ def create_open_election_with_position_and_candidates():
         candidates.append(candidate)
     position.candidates.add(*candidates)
     position.save()
-    new_election.add_position(position)
+    new_election.positions.add(position)
     new_election.save()
     return new_election
 

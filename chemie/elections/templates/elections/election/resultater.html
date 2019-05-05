@@ -1,39 +1,39 @@
 {% extends "chemie/base_election.html" %}
 
 {% block content %}
-<div>
+  <div>
     <div>
-        <a href="/elections/" class="button" style="margin-bottom: 10px">&#8592; Gå tilbake</a>
-        {%for election in elections%}
+      <a href="/elections/" class="button" style="margin-bottom: 10px">&#8592; Gå tilbake</a>
+      {% for election in elections %}
         <div class="box">
-            <h5 class="title is-3">Resulater fra valget {{ election.date }}</h5>
-            <table class="table">
+          <h5 class="title is-3">Resulater fra valget {{ election.date }}</h5>
+          <table class="table">
+            <tr>
+              <th>Posisjon</th>
+              <th>Vinner</th>
+            </tr>
+            {% for position in election.positions.all %}
+              {% if position.voting_done %}
                 <tr>
-                    <th>Posisjon</th>
-                    <th>Vinner</th>
+                  <td>{{ position }}</td>
+                  <td>
+                    {% for winner in position.winners.all %}
+                      {% if forloop.last %}
+                        {{ winner }}
+                      {% else %}
+                        {{ winner }},
+                      {% endif %}
+                    {% endfor %}
+                  </td>
                 </tr>
-                {% for position in election.positions.all %}
-                {% if position.voting_done %}
-                    <tr>
-                        <td>{{ position }}</td>
-                        <td>
-                        {% for winner in position.winners.all %}
-                          {% if forloop.last %}
-                            {{ winner }}
-                          {% else %}
-                            {{ winner }},
-                          {% endif %}
-                        {% endfor %}
-                        </td>
-                    </tr>
-                {% endif %}
-                {% endfor %}
-            </table>
-            {{ position }}
+              {% endif %}
+            {% endfor %}
+          </table>
+          {{ position }}
         </div>
-        {% endfor %}
+      {% endfor %}
     </div>
-</div>
+  </div>
 
 
-{% endblock content%}
+{% endblock content %}
