@@ -5,9 +5,10 @@
 
 <!DOCTYPE html>
 <html lang="no">
+
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-  <meta http-equiv="Content-type" content="text/html; charset=utf-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
   <title>Høiskolens Chemikerforening</title>
   <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon.png" %}">
@@ -20,7 +21,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
   {% block extra_css %}
   {% endblock %}
 
@@ -28,13 +29,18 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
-  
+
   {% block extra_js %}
   {% endblock %}
 
   <style>
-    {% block style %}
-    {% endblock style %}
+    {
+      % block style %
+    }
+
+      {
+      % endblock style %
+    }
   </style>
 
   {% block header %}
@@ -47,243 +53,255 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
 </head>
+
 <body>
 
-    <header>
-        <nav class="top-nav">
-          <div class="container">
-            <div class="nav-wrapper">
-                <div class="container"><a href="#" data-target="nav-mobile" class="top-nav sidenav-trigger full hide-on-large-only"><i class="material-icons">menu</i></a></div>
-                <div><h2 id="heading">{% block nav_header %}{% endblock nav_header %}</h2></div>
-                <div><h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4></div>
-            </div>
+  <header>
+    <nav class="top-nav">
+      <div class="container">
+        <div class="nav-wrapper">
+          <div class="container"><a href="#" data-target="nav-mobile"
+              class="top-nav sidenav-trigger full hide-on-large-only"><i class="material-icons">menu</i></a></div>
+          <div>
+            <h2 id="heading">{% block nav_header %}{% endblock nav_header %}</h2>
           </div>
-        </nav>
-        
-        <ul id="nav-mobile" class="sidenav sidenav-fixed">
-            <li class="logo">
-                <a id="logo-container" href="/" class="brand-logo">
-                  <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
-                </a>
-                  <a href="/" style="height: 100%"><h4 class="logo-text">Høiskolens Chemikerforening</h4></a>
-                <div class="divider"></div>
-              </li>
-              {% if user.is_authenticated %}
-        <li>
-          <ul class="collapsible" data-collapsible="accordion">
-            <li>
-              <div class="collapsible-header">
-                <div class="valign-wrapper">
+          <div>
+            <h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4>
+          </div>
+        </div>
+      </div>
+    </nav>
 
-                  <span
-                      style="padding-left: 20px; vertical-align: 20px; line-height: 20px;">{{ request.user.get_full_name }}</span>
-                  {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
-                    <img src="{{ im.url }}" width="{{ im.width }}px" height="{{ im.height }}px" alt=""
-                         class="circle profile-circle">
-                  {% endthumbnail %}
-                </div>
+    <ul id="nav-mobile" class="sidenav sidenav-fixed">
+      <li class="logo">
+        <a id="logo-container" href="/" class="brand-logo">
+          <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
+        </a>
+        <a href="/" style="height: 100%">
+          <h4 class="logo-text">Høiskolens Chemikerforening</h4>
+        </a>
+        <div class="divider"></div>
+      </li>
+      {% if user.is_authenticated %}
+      <li>
+        <ul class="collapsible" data-collapsible="accordion">
+          <li>
+            <div class="collapsible-header">
+              <div class="valign-wrapper">
+
+                <span
+                  style="padding-left: 20px; vertical-align: 20px; line-height: 20px;">{{ request.user.get_full_name }}</span>
+                {% thumbnail request.user.profile.image_primary "100x100" crop="center" as im %}
+                <img src="{{ im.url }}" width="{{ im.width }}px" height="{{ im.height }}px" alt=""
+                  class="circle profile-circle">
+                {% endthumbnail %}
               </div>
-              <div class="collapsible-body">
-                <ul>
-                  <li><a href="{% url "profile:edit" %}" class="waves-effect">Endre profil</a></li>
-                  <li><a href="{% url "logout" %}" class="waves-effect">Logg ut</a></li>
-                </ul>
-              </div>
-            </li>
-          </ul>
-        </li>
+            </div>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "profile:edit" %}" class="waves-effect">Endre profil</a></li>
+                <li><a href="{% url "logout" %}" class="waves-effect">Logg ut</a></li>
+              </ul>
+            </div>
+          </li>
+        </ul>
+      </li>
 
       {% else %}
-        <li class="bold"><a href="{% url "login" %}">Logg inn</a></li>
+      <li class="bold"><a href="{% url "login" %}">Logg inn</a></li>
       {% endif %}
-          <li>
-            <ul class="collapsible collapsible-accordion">
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">info</i>Om HC</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
-                      <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
-                      <li><a href="/s/kontoret/" class="waves-effect">Kontoret</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">stars</i>Ny student</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="/s/velkommen/" class="waves-effect">Velkommen!</a></li>
-                      <li><a href="/s/praktisk/" class="waves-effect">Praktisk info</a></li>
-                      <li><a href="/s/fadderperioden/" class="waves-effect">Fadderperioden</a></li>
-                      <li><a href="/s/teknostart/" class="waves-effect">Teknostart</a></li>
-                      <li><a href="/s/HC/" class="waves-effect">Høiskolens Chemikerforening</a></li>
-                      <li><a href="/s/kontakt/" class="waves-effect">Kontaktinfo</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">local_drink</i>Sosialt</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="{% url "events:index_social" %}" class="waves-effect">Arrangementer</a></li>
-                      <li><a href="{% url "events:index_bedpres" %}" class="waves-effect">Bedpres</a></li>
-                  </ul>
-                </div>
-              </li>
-              <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">people</i>Internt</a>
-                <div class="collapsible-body">
-                  <ul>
-                      <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
-                      <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
-                      <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
-                      <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
-                      <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
-                      <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
-                  </ul>
-                </div>
-              </li>
-            </ul>
+      <li>
+        <ul class="collapsible collapsible-accordion">
+          <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">info</i>Om HC</a>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
+                <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
+                <li><a href="/s/kontoret/" class="waves-effect">Kontoret</a></li>
+              </ul>
+            </div>
           </li>
-          <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
-            class="material-icons micon">inbox</i>Bokskap</a>
-        </li>
-        <li class="bold"><a href="/s/bedrift/" class="waves-effect"><i
-            class="material-icons micon">business</i>
-          For bedrifter</a></li>
-        <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
-            class="material-icons micon">contact_mail</i>Kontakt</a>
-        </li>
-        <li class="bold"><a href="{% url "shop:index" %}" class="waves-effect"><i
-          class="material-icons micon">shopping_basket</i>Shop</a></li>
-        <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
-          class="material-icons micon">date_range</i>Kalender</a></li>
+          <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">stars</i>Ny
+              student</a>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="/s/velkommen/" class="waves-effect">Velkommen!</a></li>
+                <li><a href="/s/praktisk/" class="waves-effect">Praktisk info</a></li>
+                <li><a href="/s/fadderperioden/" class="waves-effect">Fadderperioden</a></li>
+                <li><a href="/s/teknostart/" class="waves-effect">Teknostart</a></li>
+                <li><a href="/s/HC/" class="waves-effect">Høiskolens Chemikerforening</a></li>
+                <li><a href="/s/kontakt/" class="waves-effect">Kontaktinfo</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="bold"><a class="collapsible-header waves-effect"><i
+                class="material-icons micon">local_drink</i>Sosialt</a>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "events:index_social" %}" class="waves-effect">Arrangementer</a></li>
+                <li><a href="{% url "events:index_bedpres" %}" class="waves-effect">Bedpres</a></li>
+              </ul>
+            </div>
+          </li>
+          <li class="bold"><a class="collapsible-header waves-effect"><i
+                class="material-icons micon">people</i>Internt</a>
+            <div class="collapsible-body">
+              <ul>
+                <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
+                <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
+                <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
+                <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bildekarusell</a></li>
+                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
+              </ul>
+            </div>
+          </li>
         </ul>
-    </header>
+      </li>
+      <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
+            class="material-icons micon">inbox</i>Bokskap</a>
+      </li>
+      <li class="bold"><a href="/s/bedrift/" class="waves-effect"><i class="material-icons micon">business</i>
+          For bedrifter</a></li>
+      <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
+            class="material-icons micon">contact_mail</i>Kontakt</a>
+      </li>
+      <li class="bold"><a href="{% url "shop:index" %}" class="waves-effect"><i
+            class="material-icons micon">shopping_basket</i>Butikk</a></li>
+      <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
+            class="material-icons micon">date_range</i>Kalender</a></li>
+    </ul>
+  </header>
 
-<main>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
+  <main>
+    <div class="section no-pad-bot" id="index-banner">
+      <div class="container">
 
-      <!-- Messaging framework card -->
-      {% if messages %}
+        <!-- Messaging framework card -->
+        {% if messages %}
         <div class="row">
           {% for message in messages %}
-            <div class="col s12 m6 l6">
-              <div class="card {{ message.level_tag }}-message darken-1 message-card">
-                <div class="card-content">
-                  <span class="card-title black-text valign-wrapper" style="clear: both;">
+          <div class="col s12 m6 l6">
+            <div class="card {{ message.level_tag }}-message darken-1 message-card">
+              <div class="card-content">
+                <span class="card-title black-text valign-wrapper" style="clear: both;">
 
-                      <h5><i class="material-icons black-text"
-                             style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
-                  </span>
-                  <p class="flow-text black-text">{{ message }}</p>
-                </div>
+                  <h5><i class="material-icons black-text"
+                      style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+                </span>
+                <p class="flow-text black-text">{{ message }}</p>
               </div>
             </div>
+          </div>
           {% endfor %}
         </div>
-      {% endif %}
+        {% endif %}
 
-      <!-- Main content -->
-      {% block content %}
-      {% endblock content %}
-      <br><br>
-      <br><br>
-    </div>
-  </div>
-</main>
-
-<footer class="page-footer">
-  <div class="container">
-    <div class="row">
-
-      <!-- About -->
-      <div class="col s12 m6 l4">
-        <h5 class="white-text">Om oss</h5>
-        <p class="grey-text text-lighten-4">
-          Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
-        </p>
-
-        <a href="https://github.com/HoiskolensChemikerforening/website">
-          <img src="{% static "images/github.svg" %}" alt="Github"
-               style="display: inline-block;vertical-align: middle;">
-          <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
-        </a>
+        <!-- Main content -->
+        {% block content %}
+        {% endblock content %}
+        <br><br>
+        <br><br>
       </div>
-
-      <!-- Media/Social -->
-      <div class="col s12 m6 l4">
-        <h5 class="white-text">Sosialt</h5>
-        <div class="valign-wrapper">
-          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-            <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-              <path fill="#FFF"
-                    d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"></path>
-            </svg>
-          </a>
-          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-            <p class="left-align white-text" style="margin-left: 10px">Facebook</p>
-          </a>
-        </div>
-        <div class="valign-wrapper">
-          <a href="mailto:styret@hc.ntnu.no">
-            <i class="material-icons valign left white-text">email</i>
-          </a>
-          <a href="mailto:styret@hc.ntnu.no">
-            <p class="left-align white-text">Epost</p>
-          </a>
-        </div>
-        <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
-      </div>
-
-      <!-- Sponsors -->
-      {% cache 86400 sponsors %}
-        {% show_sponsors %}
-      {% endcache %}
     </div>
-  </div>
+  </main>
 
-  <!-- Copyright, credits -->
-  <div class="footer-copyright">
+  <footer class="page-footer">
     <div class="container">
-      <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+      <div class="row">
+
+        <!-- About -->
+        <div class="col s12 m6 l4">
+          <h5 class="white-text">Om oss</h5>
+          <p class="grey-text text-lighten-4">
+            Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
+          </p>
+
+          <a href="https://github.com/HoiskolensChemikerforening/website">
+            <img src="{% static "images/github.svg" %}" alt="Github"
+              style="display: inline-block;vertical-align: middle;">
+            <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
+          </a>
+        </div>
+
+        <!-- Media/Social -->
+        <div class="col s12 m6 l4">
+          <h5 class="white-text">Sosialt</h5>
+          <div class="valign-wrapper">
+            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
+              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
+                <path fill="#FFF"
+                  d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z">
+                </path>
+              </svg>
+            </a>
+            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
+              <p class="left-align white-text" style="margin-left: 10px">Facebook</p>
+            </a>
+          </div>
+          <div class="valign-wrapper">
+            <a href="mailto:styret@hc.ntnu.no">
+              <i class="material-icons valign left white-text">email</i>
+            </a>
+            <a href="mailto:styret@hc.ntnu.no">
+              <p class="left-align white-text">Epost</p>
+            </a>
+          </div>
+          <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
+        </div>
+
+        <!-- Sponsors -->
+        {% cache 86400 sponsors %}
+        {% show_sponsors %}
+        {% endcache %}
+      </div>
     </div>
-  </div>
-</footer>
 
-{% block footer_js_files %}
-{% endblock footer_js_files %}
+    <!-- Copyright, credits -->
+    <div class="footer-copyright">
+      <div class="container">
+        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+      </div>
+    </div>
+  </footer>
 
-{% block footer_script %}
-{% endblock footer_script %}
+  {% block footer_js_files %}
+  {% endblock footer_js_files %}
 
-<script>
-  $(document).ready(function(){
-    $('.collapsible').collapsible();
-    $('.fixed-action-btn').floatingActionButton();
-    $('.tabs').tabs();
-  });
-</script>
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.sidenav');
-    var instances = M.Sidenav.init(elems, {});
-  });
-</script>
+  {% block footer_script %}
+  {% endblock footer_script %}
 
-<script>
+  <script>
+    $(document).ready(function () {
+      $('.collapsible').collapsible();
+      $('.fixed-action-btn').floatingActionButton();
+      $('.tabs').tabs();
+    });
+  </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var elems = document.querySelectorAll('.sidenav');
+      var instances = M.Sidenav.init(elems, {});
+    });
+  </script>
+
+  <script>
     (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                (i[r].q = i[r].q || []).push(arguments)
-            }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
+      i['GoogleAnalyticsObject'] = r;
+      i[r] = i[r] || function () {
+        (i[r].q = i[r].q || []).push(arguments)
+      }, i[r].l = 1 * new Date();
+      a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+      a.async = 1;
+      a.src = g;
+      m.parentNode.insertBefore(a, m)
     })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
     ga('create', 'UA-52614731-1', 'auto');
     ga('send', 'pageview');
-</script>
+  </script>
 
 </body>
+
 </html>
