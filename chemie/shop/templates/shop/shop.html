@@ -5,7 +5,6 @@
 
 {% block nav_header %}
 Chemshop
-
 {% endblock nav_header %}
 
 {% block style %}
@@ -85,7 +84,7 @@ Chemshop
 {% endif %}
 
 <!-- Display items as cards -->
-<div class="d-flex flex-wrap justify-content-evenly" id="card-items" style="justify-content: space-between">
+<div class="d-flex flex-wrap justify-content-center" id="card-items">
   {% for item in items %}
   {% if is_happy and item.happy_hour_duplicate %}
   <div class="p-2 item-box" id="{{item.category}}-{{item.id}}"
@@ -255,7 +254,6 @@ Chemshop
   </div>
 
   {% endif %}
-
   {% endblock content %}
 
   <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTER SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
@@ -264,5 +262,15 @@ Chemshop
   <script src="{% static "js/shop.js" %}"></script>
   {% if cart.cart %}
   <script>animateButton()</script>
+  {% endif %}
+  {% if is_tablet_user %}
+  <script>
+    activatePressForNavigationScrolling()
+    setTimeout(function () {
+      // if tablet user has been inactive for 5 miniutes,
+      // the page is refhreshed and cart is cleared
+      removeCart()
+    }, 300000);
+  </script>
   {% endif %}
   {% endblock footer_script %}
