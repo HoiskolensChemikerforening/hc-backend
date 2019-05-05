@@ -182,16 +182,6 @@ class ShoppingCart(object):
         if quantity > 0:
             self.add(product, -quantity)
 
-    def set(self, product, quantity=1):
-        # Used for
-        item = product.name
-        if item not in self.cart:
-            # Necessary conversion to comma for items to use same decimal separator
-            price = str(product.price).replace(".", ",")
-            self.cart[item] = {"quantity": 0, "price": price}
-        self.cart[item]["quantity"] = quantity
-        self.save()
-
     def save(self):
         self.session[settings.CART_SESSION_ID] = self.cart
         self.session.modified = True
