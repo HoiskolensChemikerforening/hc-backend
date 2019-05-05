@@ -127,3 +127,8 @@
   #admin {
     bottom: 29px
   }
+
+  .item-remove{
+    color:darkred;
+    cursor:pointer;
+  }
