@@ -46,12 +46,18 @@
   {% block style %}
   {% endblock style %}
 
-  <nav class="navbar navbar-light bg-dark">
-    <a class="navbar-brand" href="/">
-
-      <img src="{% static 'images/logo.png'%}" height="40" class="d-inline-block align-top" alt="">
-      <h5 style="display:inline; color:#edcd2f; margin-bottom:2 rem">Høiskolens Chemikerforening</h5>
-    </a>
+  <nav class="navbar navbar-light bg-dark d-flex flex-row">
+    <div class="p-2">
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'images/logo.png'%}" height="40" class="d-inline-block align-top" alt="">
+        <h5 style="display:inline; color:#edcd2f; margin-bottom:2 rem">Høiskolens Chemikerforening</h5>
+      </a>
+    </div>
+    <div class="p-2 -d-flex justify-content-center" style="margin:auto; color:#edcd2f">
+      <div class="p-2">
+        <h1>HC-konterts butikk</h1>
+      </div>
+    </div>
   </nav>
   {% block breadcrumbs %}
   {% endblock breadcrumbs %}
