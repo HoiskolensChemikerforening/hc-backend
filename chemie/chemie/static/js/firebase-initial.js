@@ -15,19 +15,19 @@ const messaging = firebase.messaging();
 navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     .then(function (registration) {
         messaging.useServiceWorker(registration);
-        if (window.location.href == "https://chemie.no/" || window.location.href == "https://hc.ntnu.no/") { //Only prompts permission on home page
+        if (window.location.href == "https://hc.ntnu.no/" || window.location.href == "http://127.0.0.1:8000/") { //Only prompts permission on home page
             messaging.requestPermission()
                 .then(function () {
                     return messaging.getToken();
                 }).then(function (token) {
-                // Saving device token backend as Device object to be used when notification is to be sent
-                var browser = getBrowser();
-                postAjax("web_push/save/", {'token': token, 'browser': browser});
-            }).catch(function (err) {
-            if (!err.code == "messaging/permission-blocked"){
-                throw err;
-            }
-        });
+                    // Saving device token backend as Device object to be used when notification is to be sent
+                    var browser = getBrowser();
+                    postAjax("web_push/save/", { 'token': token, 'browser': browser });
+                }).catch(function (err) {
+                    if (!err.code == "messaging/permission-blocked") {
+                        throw err;
+                    }
+                });
         }
     });
 
