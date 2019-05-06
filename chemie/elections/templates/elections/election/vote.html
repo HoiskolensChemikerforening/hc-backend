@@ -2,113 +2,73 @@
 {% load thumbnail %}
 {% load static %}
 
-{% block extra_css %}
-  <link href="{% static "elections/css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
-{% endblock %}
-
 {% block content %}
-<div>
-  <div class="div-container">
-    {% if form.errors %}
-      {% for field in form %}
-        {% for error in field.errors %}
-          <!-- TODO: Style alert for user not voting correctly-->
-          <div class="alert alert-dismissable">
-            <a class="close" href="#" data-dismiss="alert">×</a>
-              {{ error }}
-          </div>
-        {% endfor %}
-      {% endfor %}
-    {% endif %}
-    <div>
-      <h3 class="title is-2">{{ position.position_name }}</h3>
-      <h4>Det skal velges <b class="title is-4">{{ position.spots }}</b> til dette vervet</h4>
-      <hr color="black">
+<h2 style="text-align:center">{{position.spots}} skal velges til {{position}} </h2>
+<form method="POST" onsubmit="return submitVote(this)" class="post-form" href="">{% csrf_token %}
+  <div class="d-flex flex-wrap" style="justify-content: space-evenly">
+    {% for field in form %}
+    {% for value in field %}
+    <div class="btn d-flex" style=" margin:1rem;padding:0rem; background-color: lightgray">
+      {{ value }}
     </div>
-    <br>
-    <div>
-      <form method="POST"  onsubmit="return confirmValg(this)">{% csrf_token %}
-        <div class="vote-div">
-          {% for candidate in form.candidates %}
-            <div class='vote-box' onclick="changeColor(this)">
-              {{ candidate }}
-            </div>
-          {% endfor %}
-        </div>
-        <hr color="black">
-        <input class="button is-success" type='submit' name="Stem" value='Avgi stemme'/>
-      </form>
-      <div class="div-blank">
-        <hr color="black">
-        <form method="POST" onsubmit="return confirmBlank(this)">{% csrf_token %}
-            <input class="button is-danger" type='submit' name="Blank" value='Stem blankt'/>
-        </form>
-        <p>
-            NB: Å stemme blankt betyr at du er imot alle alternativene du har tilgjengelig.
-            Du benytter kun dette alternativet dersom du ikke vil stemme på NOEN av kandidatene.
-            Husk at du har lov til å stemme på færre enn det antallet som skal velges inn.
-        </p>
-      </div>
-    </div>
+    {% endfor %}
   </div>
-</div>
+  {% endfor %}
+  </div>
+  <div class="justify-content-center d-flex" style="margin:1rem">
+    <button type="submit" class="btn btn-success">Stem</button>
+  </div>
+  <p style="text-align:center; margin:1rem">For å stemme blankt må du stemme uten å ha valgt noen kandidater</p>
+</form>
+
 {% endblock content %}
 
 {% block footer_script %}
-<script src="{% static 'material/js/jquery.js' %}"></script>
-<script>
-    changeColor = function (block) {
-        var input = block.children[0].children[0];
-        var image = block.children[0].children[1];
-        //removing or adding shadow to box to visualize checked or not checked
-        if (input.checked) {
-            image.style.backgroundColor = '#edcd2f';
-            image.style.boxShadow = '1px 1px 2px 0px #ccc';
-        } else {
-            // block.style.backgroundColor='transparent';
-            image.style.backgroundColor = 'transparent';
-            image.style.borderColor = 'transparent';
-            image.style.boxShadow = '2px 2px 4px 3px #ccc';
-        }
+<script type="text/javascript">
+  var checkboxes = document.getElementsByName("candidates");
+  for (var i = 0; i < checkboxes.length; i++) {
+    checkboxes[i].setAttribute("class", "vote-field");
+    checkboxes[i].setAttribute("style", "width:0;opacity:0");
+    checkboxes[i].checked = false
+  }
+  $(document).ready(function (e) {
+    $(".vote-field").click(function () {
+      var divElem = this.parentNode.parentNode;
+      if (this.checked) {
+        divElem.style.backgroundColor = "#28A745"
+      } else {
+        divElem.style.backgroundColor = "lightGray"
+      }
+
+    });
+  });
+
+  function submitVote(el) {
+    var positionSpots = parseInt("{{position.spots}}");
+    var checkBoxes = document.getElementsByName("candidates");
+    var message = "Du stemmer nå på ";
+    var numberOfCandidates = 0;
+    for (var i = 0; i < checkBoxes.length; i++) {
+      if (checkBoxes[i].checked) {
+        var candidateName = checkBoxes[i].parentNode.childNodes[3].innerHTML;
+        message = message.concat("\n");
+        message = message.concat(candidateName.toString());
+        numberOfCandidates++
+      }
     }
-</script>
-<script>
-    var spots = {{ position.spots }};
-    console.log(spots);
-    function confirmValg(form) {
-        if (!form) {
-            return false
-        } else {
-            var inputs = document.getElementsByClassName('vote-box');
-            var lengthOfInputs = inputs.length;
-            var selectedCandidates = [];
-            // Extracting the names of candidates which are checked to confirmation message.
-            for (i = 0; i < lengthOfInputs; i++) {
-                var candidateChecked = inputs[i].childNodes[1].childNodes[0].checked;
-                if (candidateChecked) {
-                    var candidateName = inputs[i].childNodes[1].childNodes[3].innerText;
-                    var name = `\n${candidateName}`;
-                    selectedCandidates.push(name);
-                }
-            }
-            if (selectedCandidates.length == 0){
-                var message = "Du har ikke valg noen kandidater";
-            } else if (selectedCandidates.length < spots) {
-                var message = `Du stemmer kun på ${selectedCandidates.length} av ${spots} plasser \n` + selectedCandidates;
-            } else {
-                var message = 'Du stemmer nå på: \n' + selectedCandidates;
-            }
-            return confirm(message)
-        }
+    if (numberOfCandidates <= positionSpots) {
+      if (numberOfCandidates <= 0) {
+        message = "Du stemmer nå BLANK!\nDu har ikke valgt noen kandidater. Dette valget vil si å stemme mot alle kandidatene"
+      }
+      returnVal = confirm(message);
+      if (returnVal) {
+        return true
+      }
+    } else {
+      alert("Du har valgt flere kandidater enn det som er tillatt\nVelg færre kandidater kis")
     }
+    return false
+  }
 </script>
-<script>
-    function confirmBlank(form){
-        if (!form){
-            return false
-        } else {
-            return confirm("Du stemmer nå blankt")
-        }
-    }
-</script>
+
 {% endblock footer_script %}

@@ -1,0 +1,136 @@
+.item-box {
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:1rem;
+    box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+    width: 16rem;
+  }
+#happy-hour-box{
+  margin-left: 1rem;
+  margin-right: 1rem;
+  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+  padding: 1rem;
+  background-image: url(/static/images/fireworks_background.png);
+}
+
+  #btn-kvittering {
+    background-color: rgb(237, 205, 47);
+    border-color: rgb(237, 205, 47);
+    color: black
+  }
+
+  .balance-box {
+    background-color: rgb(237, 205, 47);
+    width: 12rem;
+    height: 3rem;
+    padding-top: 0.2rem;
+    padding-left: 0.2rem;
+    border: 0.2rem solid rgb(0, 0, 0);
+    border-radius: 1rem 1rem 1rem 1rem;
+    justify-content: center;
+    right: 1rem;
+  }
+
+  .checkbox-container {
+    display: block;
+    position: relative;
+    padding-left: 35px;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
+
+  /* Hide the browser's default checkbox */
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    background-color: #eee;
+  }
+
+  /* On mouse-over, add a grey background color */
+  .checkbox-container:hover input~.checkmark {
+    background-color: #ccc;
+  }
+
+  /* When the checkbox is checked, add a blue background */
+  .checkbox-container input:checked~.checkmark {
+    background-color: rgb(237, 205, 47);
+  }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the checkmark when checked */
+  .checkbox-container input:checked~.checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  .checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  .ch body {
+    width: 100%;
+    height: 100%;
+  }
+
+  .btn-cart-sm .btn-fab {
+    position: fixed !important;
+    left: 29px;
+    margin-bottom:0.5rem;
+  }
+
+  .btn-cart .btn-fab {
+    position: fixed !important;
+    right: 20px;
+    margin-bottom:0.5rem;
+  }
+
+  .btn-group-sm .btn-fab {
+    position: fixed !important;
+    right: 29px;
+  }
+
+  .btn-group .btn-fab {
+    position: fixed !important;
+    right: 20px;
+    margin-bottom:0.5rem;
+  }
+
+  #admin {
+    bottom: 29px
+  }
+
+  .item-remove{
+    color:darkred;
+    cursor:pointer;
+  }

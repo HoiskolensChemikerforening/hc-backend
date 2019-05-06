@@ -1,0 +1,61 @@
+{% extends "shop/base_shop.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chemshop</title>
+</head>
+
+{% block style %}
+<style>
+  .asteriskField {
+    color: red;
+  }
+
+  #submit-id-submit {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+</style>
+{% endblock style %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item "><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Legg til kategori</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+
+<!-- Form with add category -->
+<div>
+  <form method="POST">{% csrf_token %}
+    <table style="padding-left: 4rem; padding-right: 4rem">
+      {{ form.media }}
+      {% crispy form %}
+    </table>
+  </form>
+</div>
+
+<!-- List existing categories -->
+<div style="padding-top: 2rem">
+  <h4>Alle kategorier</h4>
+  {% for category in categories %}
+  <div class="border"
+    style="padding:0.4rem;  height:3rem; display:flex; flex-wrap:wrap; justify-content:center; align-items:center">
+    {{category.name}}
+  </div>
+  {% endfor%}
+
+</div>
+</div>
+
+{% endblock content %}

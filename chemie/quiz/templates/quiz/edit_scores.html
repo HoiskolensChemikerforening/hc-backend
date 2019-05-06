@@ -1,0 +1,62 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+
+{% block nav_header %}
+  Quiz
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Rediger
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a href="{% url "quiz:term_detail" term.pk %}" class="breadcrumb">{{ term }}</a>
+    <a href="{% url "quiz:create_score" term.pk %}" class="breadcrumb">Rediger</a>
+    <a class="breadcrumb">Endre poeng</a>
+  </div>
+
+  <div id="amount_id" style="width:10%;"></div>
+
+  <div class="card-panel">
+    <h4>{{ term }}</h4>
+    <br>
+    <hr>
+    <form class="form" method="POST">{% csrf_token %}
+      <table class="striped responsive-table">
+        <thead>
+        <tr>
+          <th>Plass</th>
+          <th>Navn</th>
+          <th>Poengsum</th>
+        </tr>
+        </thead>
+
+        <tbody>
+        {{ formset.management_form }}
+        {% for form in formset %}
+          <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>
+              {% thumbnail form.instance.user.profile.image_primary "200x200" crop="center" as image %}
+                <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
+              {% endthumbnail %}
+              {{ form.instance.user.profile }}
+            </td>
+            <td>{{ form.as_p }}</td>
+          </tr>
+        {% endfor %}
+        <tr>
+          <td></td>
+          <td></td>
+          <td>
+            <input class="btn" type="submit" value="Lagre!">
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </form>
+  </div>
+
+{% endblock %}

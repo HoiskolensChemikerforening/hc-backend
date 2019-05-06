@@ -1,0 +1,87 @@
+{% extends "shop/base_shop.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Chemshop</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+{% endblock header %}
+
+
+{% block style %}
+<style>
+    .asteriskField {
+        color: red;
+    }
+
+    #submit-id-submit {
+        background-color: #6c757d;
+        border-color: #6c757d;
+    }
+</style>
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+        </li>
+        <li class="breadcrumb-item "><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Påfyllinger</li>
+    </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m8 l8">
+        <div class="card">
+            <div class="card-content" id="card-content" style="margin:1rem">
+                <form id="refill-balance-form" method="POST"> {% csrf_token %}
+                    <table>
+                        {% crispy form %}
+                    </table>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% if refill_receipts %}
+<div class="d-flex flex-row justify-content-center">
+    <div class="p-2">
+        <h5>{{receiver.get_full_name}} sine påfyllinger av </h5>
+    </div>
+    <div class="p-2">
+        <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem">
+    </div>
+</div>
+<div id="refill-box">
+    <table style="width:100%">
+        <tr>
+            <th>Dato</th>
+            <th>Påfyller</th>
+            <th>Beløp</th>
+        </tr>
+        {% for receipt in refill_receipts %}
+        <tr>
+            <td>{{receipt.created}}</td>
+            <td>{{receipt.provider.get_full_name}}</td>
+            <td>{{receipt.amount}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endif %}
+{% endblock content %}
+
+
+{% block footer_script %}
+
+{% endblock footer_script %}

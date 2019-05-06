@@ -65,6 +65,7 @@ class DropdownFilter(ChoicesFieldListFilter):
 
 class UserInline(admin.StackedInline):
     model = Profile
+    readonly_fields = ('balance', )
 
 
 class UserAdmin(BuiltinUserAdmin):

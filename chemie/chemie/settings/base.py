@@ -4,6 +4,7 @@ Django settings for the chemie project.
 
 import os
 import environ
+from django.contrib.messages import constants as message_constants
 
 
 # GENERAL CONFIGURATION
@@ -36,6 +37,7 @@ CONTACTS = [("Styret", "styret@hc.ntnu.no")]
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/"
 ROOT_URLCONF = "chemie.chemie.urls"
 WSGI_APPLICATION = "chemie.chemie.wsgi.application"
 
@@ -74,6 +76,7 @@ THIRD_PARTY_APPS = [
     "ckeditor",
     "django_extensions",
     'push_notifications',
+    "crispy_forms",
 ]
 
 LOCAL_APPS = [
@@ -89,10 +92,14 @@ LOCAL_APPS = [
     "chemie.picturecarousel",
     "chemie.elections",
     'chemie.web_push',
+    "chemie.shop",
+    "chemie.quiz"
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
+# For bootstrap crispy forms
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -446,4 +453,10 @@ THUMBNAIL_PRESERVE_FORMAT = True
 THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
+
+
+CART_SESSION_ID = "cart"
+
+# Value used for Django's built-in messages framework
+MESSAGE_TAGS = {message_constants.ERROR: "danger"}
 

@@ -1,0 +1,29 @@
+{% extends "chemie/base_election.html" %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item"><a href="{% url "elections:index" %}" style="color:#edcd2f">Indeks</a>
+    <li class="breadcrumb-item"><a style="color:#edcd2fb4">Tidligere valg</a></li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<table class="table" style="margin:1rem">
+  <thead>
+    <tr>
+      <th scope="col">Dato gjennomført</th>
+      <th scope="col"></th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for election in elections %}
+    <tr>
+      <td>{{ election.date.date }}</td>
+      <td><a href="{% url "elections:previous_election" election.id %}" class="btn btn-secondary">Se resultater</a></td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock content %}

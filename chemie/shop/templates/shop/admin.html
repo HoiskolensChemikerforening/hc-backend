@@ -1,0 +1,148 @@
+{% extends "shop/base_shop.html" %}
+{% load static %}
+{% load thumbnail %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chemshop admin</title>
+</head>
+{% block style %}
+<style>
+  .item-list {
+    padding: 0.4rem;
+    height: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .btn-secondary {
+    cursor: pointer
+  }
+</style>
+
+{% endblock style %}
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+<div style="display:flex flex-wrap; justify-content: space-around;">
+  <a class="btn btn-secondary" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
+  <a class="btn btn-secondary" href="{% url "shop:add-category" %}" role="button">Legg til kategori</a>
+  <a class="btn btn-secondary" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
+  <a class="btn btn-secondary" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver Happy</a>
+  <a class="btn btn-secondary" href="{% url "shop:all_receipts" %}" role="button">Kvitteringer</a>
+  <a class="btn btn-secondary" href="{% url "shop:all_refills" %}" role="button">Påfyllinger</a>
+</div>
+<!-- See JS footer-script for element creating -->
+<div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">
+</div>
+
+
+{% endblock content %}
+{% block footer_script %}
+<script type="text/javascript">
+
+  const monthNames = ['Desember', 'November', 'Oktober', 'September', 'August', 'Juli', 'Juni', 'Mai', 'April', 'Mars', 'Februar', 'Januar']
+  // transfers the list to backwards this month first following previous month
+  var monthNumber = new Date().getMonth();
+  for (i = 0; i < (11 - monthNumber); i++) {
+    let firthElement = monthNames.shift()
+    monthNames.push(firthElement)
+  }
+
+  // preprocess string to create list of item names
+  var items = "{{items}}"
+  items = items.replace(/&#39;/g, '');
+  items = items.replace('[', '');
+  items = items.replace(']', '');
+  var itemList = items.split(',');
+  for (var i = 0; i < itemList.length; i++) {
+    var itemName = itemList[i]
+    if (itemName[0] == ' ') {
+      itemName = itemName.replace(' ', '')
+    }
+    itemList[i] = itemName
+  }
+
+  // create a empty list of dictionaries for each month
+  var adminList = []
+  for (var i = 0; i < 12; i++) {
+    var itemDict = {}
+    for (var j = 0; j < itemList.length; j++) {
+      itemList[itemList[j]] = 0
+    }
+    adminList.push(itemDict)
+  }
+
+
+  // Create a list of dictionaries where each dictionary represents the total purchase of
+  // items for each month. First index is the dictionary for the current month
+  // following by the previous month untill 12 month
+  var orderItems = "{{order_items}}"
+  orderItems = orderItems.replace(/&#39;/g, '');
+  orderItems = orderItems.replace('[', '');
+  orderItems = orderItems.replace(']', '');
+  orderItems = orderItems.replace(/{/g, '');
+  var orderItemList = orderItems.split('},');
+  for (var i = 0; i < 12; i++) {
+    var monthOrder = orderItemList[i]
+    monthOrder = monthOrder.replace(/}/g, '');
+    var monthOrderItems = monthOrder.split(',')
+    for (var j = 0; j < monthOrderItems.length; j++) {
+      let it = monthOrderItems[j].trim();
+      if (it === "") {
+        continue;
+      }
+      else {
+        var orderNameQuantity = monthOrderItems[j].split(':');
+        var quantity = parseInt(orderNameQuantity[1]);
+        var itemName = orderNameQuantity[0].replace(' ', '');
+        adminList[i][itemName] = quantity;
+      }
+    }
+  }
+
+
+  // Create the HTML elements for the adminList created above
+  var adminDiv = document.getElementById("admin-list-parent");
+  for (var i = 0; i < 12; i++) {
+    var monthTitle = document.createElement("h4")
+    monthTitle.innerHTML = monthNames[i]
+    adminDiv.appendChild(monthTitle)
+    var monthDiv = document.createElement("div");
+    monthDiv.setAttribute("style", "display: flex; flex-wrap:wrap; margin-top:2rem")
+    if (adminList[i] === {}) {
+      continue
+    }
+    else {
+      for (key in adminList[i]) {
+        var itemDiv = document.createElement("div");
+        itemDiv.setAttribute("class", "border item-list")
+        var itemDivChildName = document.createElement("div")
+        itemDivChildName.setAttribute("style", "height:1.5rem; min-width:8rem; text-align:left")
+        itemDivChildName.innerHTML = key + ": "
+        var itemDivChildQuantity = document.createElement("div")
+        itemDivChildQuantity.innerHTML = adminList[i][key]
+        itemDivChildQuantity.setAttribute("style", "height:1.5rem; text-align:left")
+        itemDiv.appendChild(itemDivChildName)
+        itemDiv.appendChild(itemDivChildQuantity)
+        monthDiv.appendChild(itemDiv);
+      }
+    }
+    adminDiv.appendChild(monthDiv)
+  }
+
+
+</script>
+{% endblock footer_script %}

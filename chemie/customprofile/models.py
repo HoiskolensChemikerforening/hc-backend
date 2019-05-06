@@ -10,6 +10,7 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
+from chemie.shop import statistics
 
 # Time the activation is valid in hourse
 VALID_TIME = 2
@@ -83,7 +84,10 @@ class ProfileManager(models.Manager):
 
 class Profile(models.Model):
     user = models.OneToOneField(
-        User, related_name="profile", on_delete=models.CASCADE, verbose_name="Bruker"
+        User,
+        related_name="profile",
+        on_delete=models.CASCADE,
+        verbose_name="Bruker",
     )
 
     grade = models.PositiveSmallIntegerField(
@@ -128,16 +132,18 @@ class Profile(models.Model):
         on_delete=models.CASCADE,
     )
 
-    objects = ProfileManager()
-
     approved_terms = models.BooleanField(default=False)
 
     voted = models.BooleanField(default=False)
     eligible_for_voting = models.BooleanField(default=False)
+    balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+
+    objects = ProfileManager()
 
     class Meta:
         permissions = (
-            ('can_edit_access_card', 'Can change access card of profiles'),
+            ("can_edit_access_card", "Can change access card of profiles"),
+            ("refill_balance", "Can refill balance"),
         )
 
     def __str__(self):
@@ -154,6 +160,20 @@ class Profile(models.Model):
             self.access_card = f"{self.pk} - INVALID"
 
         return super().save(*args, **kwargs)
+
+    """Functions used in shop statics"""
+
+    def get_bought_items(self):
+        return statistics.get_bought_items(self.user)
+
+    def get_most_bought_item(self):
+        return statistics.get_most_bought_item(self.user)
+
+    def get_second_most_bought_item(self):
+        return statistics.get_second_most_bought_item(self.user)
+
+    def get_third_most_bought_item(self):
+        return statistics.get_third_most_bought_item(self.user)
 
 
 class Membership(models.Model):
@@ -194,4 +214,3 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
-
