@@ -90,7 +90,7 @@ class Item(models.Model):
     )
 
     buy_without_tablet = models.BooleanField(
-        default=False, verbose_name="Kjøp uten tabletten"
+        default=False, verbose_name="Kunde kan kjøpe vare med telefon?"
     )
 
     @classmethod
