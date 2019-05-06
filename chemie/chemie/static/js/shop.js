@@ -189,23 +189,57 @@ function animateButton() {
     }
 }
 function activatePressForNavigationScrolling() {
-    var curYPos, curXPos, curDown;
+    (function ($) {
+        $.dragScroll = function (options) {
+            var settings = $.extend({
+                scrollVertical: true,
+                scrollHorizontal: true,
+                cursor: null
+            }, options);
 
-    window.addEventListener('mousemove', function (e) {
-        if (curDown) {
-            window.scrollTo(document.body.scrollLeft + (curXPos - e.pageX), document.body.scrollTop + (curYPos - e.pageY));
+            var clicked = false,
+                clickY, clickX;
+
+            var getCursor = function () {
+                if (settings.cursor) return settings.cursor;
+                if (settings.scrollVertical && settings.scrollHorizontal) return 'move';
+                if (settings.scrollVertical) return 'row-resize';
+                if (settings.scrollHorizontal) return 'col-resize';
+            }
+
+            var updateScrollPos = function (e, el) {
+                $('html').css('cursor', getCursor());
+                var $el = $(el);
+                settings.scrollVertical && $el.scrollTop($el.scrollTop() + (clickY - e.pageY));
+                settings.scrollHorizontal && $el.scrollLeft($el.scrollLeft() + (clickX - e.pageX));
+            }
+
+            $(document).on({
+                'mousemove': function (e) {
+                    clicked && updateScrollPos(e, this);
+                    pauseEvent(e)
+                },
+                'mousedown': function (e) {
+                    clicked = true;
+                    clickY = e.pageY;
+                    clickX = e.pageX;
+                },
+                'mouseup': function () {
+                    clicked = false;
+                    $('html').css('cursor', 'auto');
+                }
+            });
         }
-    });
+        function pauseEvent(e) {
+            if (e.stopPropagation) e.stopPropagation();
+            if (e.preventDefault) e.preventDefault();
+            e.cancelBubble = true;
+            e.returnValue = false;
+            return false;
+        }
+    }(jQuery))
 
-    window.addEventListener('mousedown', function (e) {
-        curYPos = e.pageY;
-        curXPos = e.pageX;
-        curDown = true;
-    });
-
-    window.addEventListener('mouseup', function (e) {
-        curDown = false;
-    });
+    $.dragScroll();
 }
 
 function removeCart() {
