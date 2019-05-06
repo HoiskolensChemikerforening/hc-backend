@@ -440,9 +440,14 @@ def view_all_receipts(request):
                     .prefetch_related("items")
                 )
                 context['orders'] = orders
-                context['user'] = user
+                context['buyer'] = user
+
         else:
-            orders = Orde.objects.all().order_by('-created')
+            orders = (
+                Order.objects.all()
+                .order_by('-created')
+                .prefetch_related("items")
+            )
             context['orders'] = orders
     except ObjectDoesNotExist:
         pass
