@@ -194,8 +194,8 @@ def index_tabletshop(request):
                         messages.add_message(
                             request,
                             messages.ERROR,
-                            "Du har itj nok HC-coin, kiis",
-                            extra_tags="Nei!",
+                            f"Du har itj nok HC-coin, kiis. Saldo på konto er {balance} HC-coin",
+                            extra_tags="Avvist",
                         )
                     else:
                         cart.buy(profile.user)
