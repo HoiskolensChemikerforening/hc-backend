@@ -56,7 +56,11 @@
 {% if refill_receipts %}
 <div class="d-flex flex-row justify-content-center">
     <div class="p-2">
+        {% if receiver %}
         <h5>{{receiver.get_full_name}} sine påfyllinger av </h5>
+        {% else %}
+        <h5>Alle påfyllinger av </h5>
+        {% endif %}
     </div>
     <div class="p-2">
         <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem">
@@ -66,12 +70,14 @@
     <table style="width:100%">
         <tr>
             <th>Dato</th>
+            <th>Mottaker</th>
             <th>Påfyller</th>
             <th>Beløp</th>
         </tr>
         {% for receipt in refill_receipts %}
         <tr>
             <td>{{receipt.created}}</td>
+            <td>{{receipt.receiver.get_full_name}}</td>
             <td>{{receipt.provider.get_full_name}}</td>
             <td>{{receipt.amount}}</td>
         </tr>
