@@ -93,13 +93,13 @@ Chemshop
     <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
       {% endif %}
       <div class="d-flex flex-column justify-content-between" style="height:100%">
-        <div class="p-2" style="max-height:50%; text-align:center">
+        <div class="p-2" style="max-height:70%; text-align:center">
           {% thumbnail item.image "630x400" as pic %}
           <img class="activator" style="max-width:10rem; max-height:9rem; margin-bottom:1rem" src="{{ pic.url }}">
           {% endthumbnail %}
         </div>
 
-        <div class="d-flex justify-content-around">
+        <div class="d-flex justify-content-around" style="margin-top: auto">
           <div style="max-width: 7rem;">
             {{ item.name }}
           </div>
