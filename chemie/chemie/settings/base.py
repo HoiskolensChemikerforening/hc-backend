@@ -90,6 +90,7 @@ LOCAL_APPS = [
     "chemie.customprofile",
     "chemie.picturecarousel",
     "chemie.elections",
+    "chemie.shop",
     "chemie.quiz"
 ]
 
@@ -443,5 +444,9 @@ THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
 
+
+CART_SESSION_ID = "cart"
+
 # Value used for Django's built-in messages framework
 MESSAGE_TAGS = {message_constants.ERROR: "danger"}
+

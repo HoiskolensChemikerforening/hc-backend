@@ -32,7 +32,7 @@ django-post-office==3.1.0
 django-recaptcha==1.4.0
 django-sekizai==1.0.0     # via wiki
 django-smart-selects==1.5.4
-django==2.1.7
+django==2.1.5
 djangorestframework==3.9.0
 execnet==1.6.0            # via pytest-xdist
 freezegun==0.3.11

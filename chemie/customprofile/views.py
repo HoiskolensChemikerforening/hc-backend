@@ -31,6 +31,8 @@ from .forms import (
     NameSearchForm,
     AddCardForm,
 )
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import ApprovedTermsForm
 from .models import UserToken, Profile, Membership, GRADES, ProfileManager
 
 

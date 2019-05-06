@@ -21,7 +21,7 @@ urlpatterns = [
         name="membership",
     ),
     url(r"^profile/medlemmer", views.view_memberships, name="memberships"),
-    url(r'^profile/add_card', views.add_rfid, name='add_rfid'),
+    url(r"^profile/add_card", views.add_rfid, name="add_rfid"),
     url(r"^yearbook/(?P<year>[0-9]+)/$", views.yearbook, name="yearbook-grade"),
     url(r"^yearbook$", views.yearbook, name="yearbook-index"),
 ]

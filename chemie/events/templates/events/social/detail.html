@@ -141,16 +141,16 @@
     </div>
 
     <!-- Payment info -->
-    {% if social.price_member or social.price_companion or social.price_companion %}
-      <div class="col s12 m12 l12">
-        <div class="card">
-          <div class="card-content">
-            <h5>Betalingsinformasjon:</h5>
-            <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
-          </div>
+      {% if social.price_member or social.price_companion or social.price_companion %}
+    <div class="col s12 m12 l12">
+      <div class="card">
+        <div class="card-content">
+          <h5>Betalingsinformasjon:</h5>
+          <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
         </div>
       </div>
-    {% endif %}
+        {% endif %}
+    </div>
   </div>
 
   <div class="row">

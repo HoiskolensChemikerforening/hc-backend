@@ -1,0 +1,93 @@
+{% extends "shop/base_shop.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>Chemshop admin</title>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+{% endblock header %}
+
+{% block style %}
+<style>
+  .asteriskField {
+    color: red;
+  }
+
+  #submit-id-submit {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+</style>
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item "><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Happy hour</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<form method="POST"> {% csrf_token %}
+  <table>
+    {% crispy form %}
+  </table>
+</form>
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.getElementById("activate-button").addEventListener("click", function (event) {
+    event.preventDefault();
+    swal({
+      title: "Dere vil selge alle Happy Hour-varer til 2 for 1",
+      text: "Er du sikker?",
+      icon: "warning",
+      buttons: {
+        cancel: {
+          text: "Nei, ikke start Happy Hour",
+          value: null,
+          visible: true,
+          className: "",
+          closeModal: true,
+        },
+        confirm: {
+          text: "Ja, start Happy Hour",
+          value: true,
+          visible: true,
+          className: "",
+          closeModal: true
+        }
+      },
+    })
+      .then((willDelete) => {
+        if (willDelete) {
+          let form = this.closest("form");
+          swal("Happy Hour startet!\nDere selger nå alt av Happy Hour-varer til 2 for 1", {
+            icon: "success",
+          }).then((ok) => {
+            if (ok) {
+              form.submit();
+            } else {
+              return false;
+            }
+          });
+          return true;
+        } else {
+          swal("Phew!", "Det var nære på! Happy Hour er IKKE aktivert");
+          return false;
+        }
+      });
+  });
+</script>
+{% endblock footer_script %}

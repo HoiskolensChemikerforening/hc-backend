@@ -256,8 +256,8 @@ class ApprovedTermsForm(forms.Form):
 
 
 class GetRFIDForm(forms.Form):
-    rfid = forms.CharField(label='Studentkortnr', max_length=255,
-                              widget=forms.NumberInput(attrs={'autofocus': True}))
+
+    rfid = forms.CharField(label='Studentkortnr', max_length=255, widget=forms.NumberInput(attrs={'autofocus': True}))
 
 
 class AddCardForm(forms.Form):
