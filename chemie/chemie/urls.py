@@ -51,9 +51,6 @@ urlpatterns = [
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     url(r"^valg/", include("chemie.elections.urls", namespace="elections")),
-    url(
-        r"^elections/", include("chemie.elections.urls", namespace="elections")
-    ),
     url(r"^butikk/", include("chemie.shop.urls", namespace="shop")),
     url(
         r"^quiz/", include("chemie.quiz.urls", namespace="quiz")
