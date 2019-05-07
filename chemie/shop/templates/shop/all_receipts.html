@@ -84,7 +84,7 @@
 {% if buyer %}
 <h3 style="text-align:center; margin-top: 1rem">Kjøpshistorikk for {{buyer.get_full_name}}</h3>
 {% else %}
-<h3 style="text-align:center; margin-top: 1rem">Alle kvitteringer</h3>
+<h3 style="text-align:center; margin-top: 1rem">De 100 siste kvitteringer</h3>
 {% endif %}
 <div class="d-flex flex-wrap" style="align-items:flex-start">
     {% for order in orders %}
