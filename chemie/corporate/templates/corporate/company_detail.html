@@ -17,25 +17,46 @@
 
 {% block content %}
 
-  <div class="row">
-    <div class="col s6 m6 l4">
-      <div class="card" style="margin:10px; max-width:25rem;">
-        <div class="card-header">
-          <h4>{{ company.name }}</h4>
+
+  <div class="container">
+    <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
+      <div class="col-sm-12 col-md-2">
+      </div>
+      <div class="col-sm-12 col-md-7">
+        <div class="container">
+          <br><br>
+          <h1> {{ company.name }}</h1>
+          <div><img src="{{ company.picture.url }}" class="img-fluid"></div>
+          <br>
+          <p><b>
+            Her kan det stå en ingress.
+          </b></p>
+          <p>
+            {{ company.company }}
+          </p>
+          <br><br><br><br><br>
         </div>
-        <div class="card-body">
-          <a href="#">
-            {% thumbnail company.logo "200x200" crop="center" as im %}
-              <img src="{{ im.url }}">
-            {% endthumbnail %}
-          </a>
-          <p>{{ company.description }}</p>
-          {{ company.specializations }}
-          <ul>
-            {% for linje in company.specializations %}
-              <li>{{ linje }}</li>
-            {% endfor %}
-          </ul>
+      </div>
+      <div class="col-sm-12 col-md-3">
+        <div class="card">
+          <img src="{{ company.logo.url }}" class="card-img-top" alt="...">
+          <div class="card-body">
+            <p class="card-text">
+              <hr>
+              Her kan vi skrive mer info.
+              <hr>
+              Eier(e):
+              <hr>
+              Grunnlagt:
+              <hr>
+              Holder til:
+              <hr>
+              Aktuelle linjer:
+              <hr>
+              Funfacts:
+            </p>
+
+          </div>
         </div>
       </div>
     </div>
