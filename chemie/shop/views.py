@@ -331,7 +331,8 @@ def add_item(request):
     return render(request, "shop/add_item.html", context)
 
 
-@permission_required("shop.edit_item")
+
+@permission_required("shop.add_item")
 def edit_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
     form = EditItemForm(
