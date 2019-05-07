@@ -4,7 +4,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Chemshop admin</title>
+  <title>Butikk admin</title>
 </head>
 {% block style %}
 <style>
@@ -36,13 +36,15 @@
 
 {% block content %}
 
-<div style="display:flex flex-wrap; justify-content: space-around;">
-  <a class="btn btn-secondary" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
-  <a class="btn btn-secondary" href="{% url "shop:add-category" %}" role="button">Legg til kategori</a>
-  <a class="btn btn-secondary" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
-  <a class="btn btn-secondary" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver Happy</a>
-  <a class="btn btn-secondary" href="{% url "shop:all_receipts" %}" role="button">Kvitteringer</a>
-  <a class="btn btn-secondary" href="{% url "shop:all_refills" %}" role="button">Påfyllinger</a>
+<div class="d-flex flex-wrap justify-content-around">
+  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
+  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:add-category" %}" role="button">Legg til
+    kategori</a>
+  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
+  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver
+    Happy</a>
+  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:all_receipts" %}" role="button">Kvitteringer</a>
+  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:all_refills" %}" role="button">Påfyllinger</a>
 </div>
 <!-- See JS footer-script for element creating -->
 <div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">

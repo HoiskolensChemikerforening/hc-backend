@@ -8,7 +8,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Chemshop</title>
+  <title>Butikk</title>
   <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon.png" %}">
   <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons/favicon-32x32.png" %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons/favicon-16x16.png" %}">
@@ -46,12 +46,18 @@
   {% block style %}
   {% endblock style %}
 
-  <nav class="navbar navbar-light bg-dark">
-    <a class="navbar-brand" href="/">
-
-      <img src="{% static 'images/logo.png'%}" height="40" class="d-inline-block align-top" alt="">
-      <h5 style="display:inline; color:#edcd2f; margin-bottom:2 rem">Høiskolens Chemikerforening</h5>
-    </a>
+  <nav class="navbar navbar-light bg-dark d-flex flex-row">
+    <div class="p-2">
+      <a class="navbar-brand" href="/">
+        <img src="{% static 'images/logo.png'%}" height="40" class="d-inline-block align-top" alt="">
+        <h5 style="display:inline; color:#edcd2f; margin-bottom:2 rem">Høiskolens Chemikerforening</h5>
+      </a>
+    </div>
+    <div class="p-2 -d-flex justify-content-center" style="margin:auto; color:#edcd2f">
+      <div class="p-2">
+        <h2>HC-kontorets butikk</h2>
+      </div>
+    </div>
   </nav>
   {% block breadcrumbs %}
   {% endblock breadcrumbs %}
