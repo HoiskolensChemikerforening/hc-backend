@@ -431,7 +431,6 @@ def view_all_receipts(request):
         "form": form
     }
     try:
-
         if request.method == 'POST':
             if form.is_valid():
                 user = form.cleaned_data.get("buyer")
@@ -442,13 +441,8 @@ def view_all_receipts(request):
                 )
                 context['orders'] = orders
                 context['buyer'] = user
-
         else:
-            orders = (
-                Order.objects.all()
-                .order_by('-created')
-                .prefetch_related("items")
-            )
+            orders = Order.objects.order_by('-created')[:100]
             context['orders'] = orders
     except ObjectDoesNotExist:
         pass
@@ -466,7 +460,7 @@ def view_all_refills(request):
         if request.method == 'POST':
             if form.is_valid():
                 receiver = form.cleaned_data.get("receiver")
-                refill_receipts = RefillReceipt.objects.filter(receiver=receiver).order_by("-created")
+                refill_receipts = RefillReceipt.objects.order_by("-created")[:100]
                 context['refill_receipts'] = refill_receipts
                 context['receiver'] = receiver
         else:
