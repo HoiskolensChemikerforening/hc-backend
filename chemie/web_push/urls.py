@@ -6,5 +6,5 @@ app_name = 'notifications'
 
 urlpatterns = [
     url(r'send/$', send_notification, name='send'),
-    url(r'save/$',save_device, name='save'),
+    url(r'save/$', save_device, name='save'),
 ]

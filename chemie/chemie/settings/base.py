@@ -253,7 +253,9 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or ''
+        "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or '',
+        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or '',
+        "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or ''
 }
 
 # HAYSTACK CONFIGURATION

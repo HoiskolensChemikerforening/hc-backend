@@ -16,18 +16,32 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     .then(function (registration) {
         messaging.useServiceWorker(registration);
         if (window.location.href == "https://hc.ntnu.no/" || window.location.href == "http://127.0.0.1:8000/") { //Only prompts permission on home page
-            messaging.requestPermission()
-                .then(function () {
-                    return messaging.getToken();
-                }).then(function (token) {
-                    // Saving device token backend as Device object to be used when notification is to be sent
-                    var browser = getBrowser();
-                    postAjax("web_push/save/", { 'token': token, 'browser': browser });
-                }).catch(function (err) {
-                    if (!err.code == "messaging/permission-blocked") {
-                        throw err;
-                    }
-                });
+            var browser = getBrowser();
+            if (browser == "Chrome") {
+                messaging.requestPermission()
+                    .then(function () {
+                        return messaging.getToken();
+                    }).then(function (token) {
+                        // Saving device token backend as Device object to be used when notification is to be sent
+                        postAjax("web_push/save/", { 'token': token, 'browser': browser });
+                    }).catch(function (err) {
+                        if (!err.code == "messaging/permission-blocked") {
+                            throw err;
+                        }
+                    });
+            } else if (browser == 'Safari') {
+                // messaging.requestPermission()
+                //     .then(function () {
+                //         return messaging.getToken();
+                //     }).then(function (token) {
+                //         // Saving device token backend as Device object to be used when notification is to be sent
+                //         postAjax("web_push/save/", { 'token': token, 'browser': browser });
+                //     }).catch(function (err) {
+                //         if (!err.code == "messaging/permission-blocked") {
+                //             throw err;
+                //         }
+                //     });
+            }
         }
     });
 
