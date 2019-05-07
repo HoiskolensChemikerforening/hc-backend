@@ -332,7 +332,7 @@ def add_item(request):
 
 
 
-@permission_required("shop.add_item")
+@permission_required("shop.change_item")
 def edit_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
     form = EditItemForm(
