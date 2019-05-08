@@ -52,7 +52,7 @@
 
     <div class="row">
       {% for interview in interviews %}
-        <div class="filterDiv {{ interview.specializations }}"
+        <div class="filterDiv {{ interview.specializations.all }}"
              style="width: 22rem; height: 20rem; padding: 1.0rem; margin: 40px 5px;">
           <div class="card medium">
             <h4 class="card-header">Intervju av {{ interview.interview_object }}</h4>

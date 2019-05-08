@@ -43,7 +43,7 @@
             <hr>
             Aktuelle linjer
             <ul>
-              {% for specialization in interview.company.specializations %}
+              {% for specialization in interview.company.specializations.all %}
                 <li>{{ specialization }}</li>
               {% endfor %}
             </ul>

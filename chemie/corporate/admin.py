@@ -1,7 +1,7 @@
 from django.contrib import admin
-from .models import Company, Interview
+from .models import Company, Interview, Specialization
 
-# Register your models here.
 
 admin.site.register(Company)
 admin.site.register(Interview)
+admin.site.register(Specialization)

@@ -55,7 +55,7 @@
 
     <div class="row">
       {% for company in companies %}
-        <div class="filterDiv {{ company.specializations }}"
+        <div class="filterDiv {{ company.specializations.all }}"
              style="width: 22rem; height: 20rem; padding: 1.0rem; margin: 40px 5px;">
           <div class="card medium">
             <h4 class="card-header">{{ company.name }}</h4>
