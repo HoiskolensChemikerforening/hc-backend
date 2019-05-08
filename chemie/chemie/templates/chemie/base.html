@@ -230,8 +230,6 @@
             <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
           </a>
         </div>
-      </div>
-      </main>
 
       <!-- Media/Social -->
       <div class="col s12 m6 l4">
@@ -248,45 +246,29 @@
             <p class="left-align white-text" style="margin-left: 10px">Facebook</p>
           </a>
         </div>
-
-        <!-- Media/Social -->
-        <div class="col s12 m6 l4">
-          <h5 class="white-text">Sosialt</h5>
-          <div class="valign-wrapper">
-            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-              <svg style="width:24px;height:24px" viewBox="0 0 24 24">
-                <path fill="#FFF"
-                  d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z">
-                </path>
-              </svg>
-            </a>
-            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-              <p class="left-align white-text" style="margin-left: 10px">Facebook</p>
-            </a>
-          </div>
-          <div class="valign-wrapper">
-            <a href="mailto:styret@hc.ntnu.no">
-              <i class="material-icons valign left white-text">email</i>
-            </a>
-            <a href="mailto:styret@hc.ntnu.no">
-              <p class="left-align white-text">Epost</p>
-            </a>
-          </div>
-          <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
+        <div class="valign-wrapper">
+          <a href="mailto:styret@hc.ntnu.no">
+            <i class="material-icons valign left white-text">email</i>
+          </a>
+          <a href="mailto:styret@hc.ntnu.no">
+            <p class="left-align white-text">Epost</p>
+          </a>
         </div>
+        <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
+      </div>
 
         <!-- Sponsors -->
         {% cache 86400 sponsors %}
         {% show_sponsors %}
         {% endcache %}
-      </div>
+    </div>
 
-      <!-- Copyright, credits -->
-      <div class="footer-copyright">
-        <div class="container">
-          <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
-        </div>
+    <!-- Copyright, credits -->
+    <div class="footer-copyright">
+      <div class="container">
+        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
       </div>
+    </div>
   </footer>
 
   {% block footer_js_files %}
