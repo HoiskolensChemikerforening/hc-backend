@@ -80,7 +80,6 @@ class CoffeeAdmin(admin.ModelAdmin):
     list_display = ("date",)
 
 
-admin.site.unregister(APNSDevice)
-admin.site.unregister(GCMDevice)
+
 admin.site.unregister(WNSDevice)
 admin.site.unregister(WebPushDevice)
