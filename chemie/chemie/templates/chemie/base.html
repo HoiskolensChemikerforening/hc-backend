@@ -11,16 +11,11 @@
   <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
   <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
   <title>Høiskolens Chemikerforening</title>
-  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons
-  /apple-touch-icon.png" %}">
-  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons
-  /favicon-32x32.png" %}">
-  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons
-  /favicon-16x16.png" %}">
-  <link rel="manifest" href="{% static "favicons
-  /manifest.json" %}">
-  <link rel="mask-icon" href="{% static "favicons
-  /safari-pinned-tab.svg" %}" color="#5bbad5">
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons apple-touch-icon.png" %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons favicon-16x16.png" %}">
+  <link rel="manifest" href="{% static "favicons manifest.json" %}">
+  <link rel="mask-icon" href="{% static "favicons safari-pinned-tab.svg" %}" color="#5bbad5">
 
   <!-- CSS  -->
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
@@ -38,6 +33,7 @@
   {% if request.user.is_authenticated %}
   <script src="{% static "js/firebase-initial.js" %}"></script>
   {%endif%}
+
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
@@ -190,7 +186,6 @@
   <main>
     <div class="section no-pad-bot" id="index-banner">
       <div class="container">
-
         <!-- Messaging framework card -->
         {% if messages %}
         <div class="row">
@@ -298,6 +293,9 @@
 
   {% block footer_js_files %}
   {% endblock footer_js_files %}
+
+  {% block footer_script %}
+  {% endblock footer_script %}
 
   <script>
     $(document).ready(function () {
