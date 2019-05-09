@@ -80,7 +80,7 @@ def send_notification(request):
             payload_json["notification_key"], payload_json["topic"]
         )
         if is_authorized:
-            if CoffeeSubmission.check_last_submission():
+            if CoffeeSubmission.fifteen_minutes_has_passed():
                 serializer.save()
 
                 gcm_devices = Device.objects.filter(

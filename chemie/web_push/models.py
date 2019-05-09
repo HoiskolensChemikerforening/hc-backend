@@ -13,7 +13,7 @@ class CoffeeSubmission(models.Model):
     date = models.DateTimeField(default=datetime.datetime.now)
 
     @classmethod
-    def check_last_submission(cls):
+    def fifteen_minutes_has_passed(cls):
         """ Make sure that the send_notification is not activated too frequently """
         if cls.objects.count() == 0:
             return True
@@ -55,10 +55,13 @@ class Device(models.Model):
     #   verbose_name="Tredje parts api for apple telefoner"
     # )
     coffee_subscription = models.BooleanField(
-        default=True, verbose_name="Aboner på kaffe pushvsler"
+        default=True, verbose_name="Aboner på kaffe pushvarsler"
     )
 
-    """Hvis det er ønskelig kan feltet under brukes senere"""
+    """
+    Hvis det er ønskelig kan feltet under brukes senere,
+    inspirasjon for videre utvikling
+    """
     # news_subscription = models.BooleanField(default=True)
 
     date_created = models.DateTimeField(auto_now_add=True)
