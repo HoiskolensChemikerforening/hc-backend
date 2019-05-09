@@ -1,13 +1,12 @@
 from django.contrib import admin
 from .models import Device, CoffeeSubmission
-from django.contrib import admin
 from push_notifications.models import (
     APNSDevice,
     GCMDevice,
     WebPushDevice,
     WNSDevice,
 )
-from push_notifications.admin import DeviceAdmin, GCMDeviceAdmin
+from push_notifications.admin import DeviceAdmin
 
 
 def delete_inactive_devices(modeladmin, request, queryset):

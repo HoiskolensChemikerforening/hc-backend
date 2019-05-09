@@ -75,9 +75,11 @@ def send_notification(request):
         payload_bytes_decoded = payload_bytes.decode("utf8")
         payload_json = json.loads(payload_bytes_decoded)
         serializer = CoffeeSubmissionSerializer(data=payload_json)
-        if serializer.is_authorized(
+
+        is_authorized = serializer.is_authorized(
             payload_json["notification_key"], payload_json["topic"]
-        ):
+        )
+        if is_authorized:
             if CoffeeSubmission.check_last_submission():
                 serializer.save()
 
