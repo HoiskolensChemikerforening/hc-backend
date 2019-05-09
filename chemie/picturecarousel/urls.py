@@ -24,25 +24,20 @@ urlpatterns = [
     url(r"^active/(?P<page>[0-9]+)$",
         views.active_list,
         name="active_detail"),
-    url(
-        r"^overview/approve/(?P<picture_id>[0-9]+)",
+    url(r"^overview/approve/(?P<picture_id>[0-9]+)",
         views.approve_deny,
-        name="approve",
-    ),
-    url(
-        r"^overview/deny/(?P<picture_id>[0-9]+)",
+        name="approve"),
+    url(r"^overview/deny/(?P<picture_id>[0-9]+)",
         views.approve_deny,
         {"deny": True},
-        name="deny",
-    ),
-    url(
-        r"^picturetag-autocomplete/",
+        name="deny"),
+    url(r"^picturetag-autocomplete/",
         PictureTagAutocomplete.as_view(create_field='tag'),
-        name='picturetag-autocomplete'
-    ),
-    path(
-        'bilder/',
-        views.view_pictures,
-        name='view_pictures'
-    ),
+        name='picturetag-autocomplete'),
+    path("bilder/",
+         views.view_pictures,
+         name='view_pictures'),
+    path("bilder/<int:page>",
+         views.view_pictures,
+         name='view_pictures_detail'),
 ]

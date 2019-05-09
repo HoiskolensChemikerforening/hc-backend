@@ -3,6 +3,7 @@
 {% load material_form %}
 {% load staticfiles %}
 {% load static %}
+
 {% block nav_header %}
   Bilder
 {% endblock nav_header %}
@@ -44,24 +45,22 @@
   {% endif %}
 
   <ul class="pagination nav navbar-nav">
-    {% if pictures.has_previous %}
-      <li><a href="{{ pictures.previous_page_number }}">Forrige</a></li>
+    {% if picture_page.has_previous %}
+      <li><a href="{{ picture_page.previous_page_number }}">Forrige</a></li>
     {% endif %}
-    {% for page in pictures.paginator.page_range %}
-      <li class="{% if pictures.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+    {% for page in picture_page.paginator.page_range %}
+      <li class="{% if picture_page.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
     {% endfor %}
 
-    {% if pictures.has_next %}
-      <li><a href="{{ pictures.next_page_number }}">Neste</a></li>
+    {% if picture_page.has_next %}
+      <li><a href="{{ picture_page.next_page_number }}">Neste</a></li>
     {% endif %}
   </ul>
 
-  <div id="filterDiv">
-    {{ filter_form }}
-  </div>
-  <button class="btn btn-default" style="margin-top:5px;"
-          onclick="filterPictures()">Filtrer!
-  </button>
+  <form id="filterDiv" method="POST">{% csrf_token %}
+    {{ filter_form.as_p }}
+  <input type="submit" class="btn btn-default" value="Filtrer!">
+  </form>
 
 
   <div class="row">
@@ -78,16 +77,14 @@
           </tr>
           </thead>
           <tbody>
-          {% for pic in pictures %}
+          {% for pic in picture_page %}
             <tr class="pictureTr {{ pic.tags.all }}">
               <td>
                 <img class="responsive-img materialboxed" src="{{ pic.image.url }}" alt="">
               </td>
               <td>
                 {% for tag in pic.tags.all %}
-                  <p>
-                  <div class="chip">{{ tag }}</div>
-                  </p>
+                  <div class="chip">{{ tag }}</div><br>
                 {% endfor %}
               </td>
               <td><p>{{ pic.author }}</p></td>
@@ -105,38 +102,9 @@
   {{ filter_form.media }}
 
   <script>
-      let filterPictures = function () {
-          let filterDiv = document.getElementById("filterDiv");
-          let tagDivs = filterDiv.childNodes[2].childNodes[0].childNodes[0].childNodes[0].childNodes;
-          let tags = [];
-
-          for (let i = 1; i < tagDivs.length - 1; i++) {
-              tags.push(tagDivs[i].innerText.slice(1));
-          }
-
-          let pictures = document.getElementsByClassName("pictureTr");
-
-          for (let i = 0; i < pictures.length; i++) {
-              console.log(pictures[i].className);
-              let isShown = true;
-              for (let j = 0; j < tags.length; j++) {
-                  if (!pictures[i].className.includes(tags[j])) {
-                      isShown = false;
-                  }
-              }
-
-              if (isShown) {
-                  pictures[i].style.removeProperty("display");
-              } else {
-                  pictures[i].style.display = "none";
-              }
-          }
-      };
-
       $(document).ready(function () {
           $('.materialboxed').materialbox();
       });
-
   </script>
 
 {% endblock footer_script %}

@@ -2,6 +2,7 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from django.urls import reverse
+from django.db.models import Count
 from dal import autocomplete
 from django.shortcuts import redirect, get_object_or_404
 from django.forms import modelformset_factory
@@ -167,20 +168,47 @@ class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
         return qs.order_by('tag')
 
     def post(self, request):
-        if request.user.permissions("picturecarousel:add_picturetag"):
-            super(self.post)
+        if request.user.has_perm("picturecarousel.add_picturetag"):
+            return super(PictureTagAutocomplete, self).post(request)
 
 
 @login_required
-def view_pictures(request):
-    pictures = Contribution.objects.filter(
-        approved=True
-    ).prefetch_related("author").order_by('-date')
+def view_pictures(request, page=1):
+    filter_form = PictureTagForm(request.POST or None)
+    if request.method == "POST":
+        tags_ids = filter_form["tags"].value()
+        tags = PictureTag.objects.filter(id__in=tags_ids).order_by('id')
 
-    filter_form = PictureTagForm()
+        if tags:
+            # Queryset for Contribution objects which contain ALL tags from POST request
+            pictures = Contribution.objects.filter(
+                approved=True,
+                tags__in=tags
+            ).annotate(num_tags=Count("tags")
+                       ).filter(num_tags=tags.count()
+                                ).prefetch_related("author").order_by('-date')
+
+        else:
+            pictures = Contribution.objects.filter(
+                approved=True,
+            ).prefetch_related("author").order_by('-date')
+
+    else:
+        pictures = Contribution.objects.filter(
+            approved=True,
+        ).prefetch_related("author").order_by('-date')
+
+    paginator = Paginator(pictures, 10)
+
+    try:
+        picture_page = paginator.page(page)
+    except PageNotAnInteger:
+        picture_page = paginator.page(1)
+    except EmptyPage:
+        picture_page = paginator.page(paginator.num_pages)
 
     context = {
         'filter_form': filter_form,
-        'pictures': pictures
+        "picture_page": picture_page
     }
     return render(request, 'picturecarousel/view_active.html', context)
