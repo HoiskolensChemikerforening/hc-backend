@@ -62,14 +62,10 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
         }
     });
 
-// When user is present on the site, they are presented with a toast message instead of the notification.
+// When user is present on the site,
+// they are presented with a toast message instead of the service workers push notification.
 messaging.onMessage(function (payload) {
-    var snackbar = document.getElementById("snackbar");
-    snackbar.innerHTML = payload.notification.body;
-    snackbar.className = "show";
-    setTimeout(function () {
-        snackbar.className = snackbar.className.replace("show", "");
-    }, 3000);
+    M.toast({ html: payload.notification.body })
 });
 
 // Functions
