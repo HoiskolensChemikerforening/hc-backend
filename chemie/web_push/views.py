@@ -10,7 +10,7 @@ from django.http import HttpResponse, JsonResponse
 
 
 class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
-    queryset = CoffeeSubmission.objects.all().order_by("date")
+    queryset = CoffeeSubmission.objects.order_by("date")
     serializer_class = CoffeeSubmissionSerializer
 
 
@@ -25,7 +25,7 @@ def save_device(request):
                 registered_device = GCMDevice.objects.filter(
                     registration_id=token
                 )
-                if len(registered_device) == 0:
+                if registered_device.count() == 0:
                     gcm_device = GCMDevice.objects.create(
                         registration_id=token,
                         cloud_message_type="FCM",
@@ -59,18 +59,15 @@ def save_device(request):
             #         if len(users_devices) > 5:
             #             users_devices.latest("-date_created").delete()
             #         return HttpResponse(status=201)
-    return HttpResponse(status=301)
+        return HttpResponse(status=301)
+    else:
+        return redirect(reverse("frontpage:home"))
 
 
 @csrf_exempt
 def send_notification(request):
     """ Send notification to all users from notification/send url """
-    if request.method == "GET":
-        submissions = CoffeeSubmission.objects.all()
-        serializer = CoffeeSubmissionSerializer(submissions, many=True)
-        return JsonResponse(serializer.data, safe=False)
-
-    elif request.method == "POST":
+    if request.method == "POST":
         payload_bytes = request.body
         payload_bytes_decoded = payload_bytes.decode("utf8")
         payload_json = json.loads(payload_bytes_decoded)
