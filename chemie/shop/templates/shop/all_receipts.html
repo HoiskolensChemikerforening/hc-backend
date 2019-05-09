@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Chemshop</title>
+    <title>Butikk admin</title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 </head>
 {% endblock header %}
@@ -81,10 +81,19 @@
     </div>
 </div>
 {% if orders %}
-<h3 style="text-align:center; margin-top: 1rem">Kjøpshistorikk for {{user.get_full_name}}</h3>
+{% if buyer %}
+<h3 style="text-align:center; margin-top: 1rem">Kjøpshistorikk for {{buyer.get_full_name}}</h3>
+{% else %}
+<h3 style="text-align:center; margin-top: 1rem">De 100 siste kvitteringer</h3>
+{% endif %}
 <div class="d-flex flex-wrap" style="align-items:flex-start">
     {% for order in orders %}
     <div class="p-2 item-box d-flex flex-column">
+        {% if not buyer %}
+        <div class="p-2" style="text-align:center">
+            {{order.buyer.get_full_name}}
+        </div>
+        {% endif %}
         <div class="p-2" style="text-align:center">
             <b>Dato: </b> {{order.created}}
         </div>
@@ -109,7 +118,7 @@
         </div>
 
         <div class="p-2 d-flex align-items-start" style="display:inline">
-            <p class=""><b>Total price: </b> {{order.get_total_price}}</p>
+            <p class=""><b>Totalpris: </b> {{order.get_total_price}}</p>
             <img type="image/png" src="{% static "images/HC_coin.png" %}"
                 style="width:1.8rem; float: right; margin-left: 0.2rem">
         </div>

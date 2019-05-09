@@ -7,7 +7,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>Chemshop</title>
+    <title>Butikk</title>
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
@@ -118,7 +118,7 @@
 
 {% block content %}
 
-<h2 style="text-align:center">Statistikk over dine varekjøp i Shoppen</h2>
+<h2 style="text-align:center">Statistikk over dine varekjøp i butikken</h2>
 <div class="d-flex flex-row flex-wrap justify-content-between" style="padding:0rem">
     <div class="p-2 d-flex flex-column" style="text-align:center;">
 
@@ -154,7 +154,7 @@
     <div id="plot-box" class="p-2 flex-grow-1">
         <div class="p-2">
             <div class="dropdown" style="margin:auto">
-                <h4>Plot av årlig kjøp</h4>
+                <h4>Plot av varekjøp i butikken</h4>
                 <button onclick="dropDownFunction()" class="dropbtn btn btn-secondary">Velg vare</button>
                 <div id="dropdown-btn" class="dropdown-content">
                     <form method="POST">{% csrf_token %}
@@ -255,7 +255,7 @@
             }
         ]
         var layout = {
-            title: 'Kjøpshistorikk \n ' + itemName,
+            title: 'Kjøpshistorikk: ' + itemName,
             yaxis: {
                 range: [0, null]
             },

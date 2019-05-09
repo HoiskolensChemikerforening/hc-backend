@@ -194,8 +194,8 @@ def index_tabletshop(request):
                         messages.add_message(
                             request,
                             messages.ERROR,
-                            "Du har itj nok HC-coin, kiis",
-                            extra_tags="Nei!",
+                            f"Du har itj nok HC-coin, kiis. Saldo på konto er {balance} HC-coin",
+                            extra_tags="Avvist",
                         )
                     else:
                         cart.buy(profile.user)
@@ -331,7 +331,8 @@ def add_item(request):
     return render(request, "shop/add_item.html", context)
 
 
-@permission_required("shop.edit_item")
+
+@permission_required("shop.change_item")
 def edit_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
     form = EditItemForm(
@@ -429,9 +430,9 @@ def view_all_receipts(request):
     context = {
         "form": form
     }
-    if request.method == 'POST':
-        if form.is_valid():
-            try:
+    try:
+        if request.method == 'POST':
+            if form.is_valid():
                 user = form.cleaned_data.get("buyer")
                 orders = (
                     Order.objects.filter(buyer=user)
@@ -439,9 +440,12 @@ def view_all_receipts(request):
                     .prefetch_related("items")
                 )
                 context['orders'] = orders
-                context['user'] = user
-            except ObjectDoesNotExist:
-                pass
+                context['buyer'] = user
+        else:
+            orders = Order.objects.order_by('-created')[:100]
+            context['orders'] = orders
+    except ObjectDoesNotExist:
+        pass
 
     return render(request, "shop/all_receipts.html", context)
 
@@ -452,13 +456,16 @@ def view_all_refills(request):
     context = {
         "form": form
     }
-    if request.method == 'POST':
-        if form.is_valid():
-            try:
+    try:
+        if request.method == 'POST':
+            if form.is_valid():
                 receiver = form.cleaned_data.get("receiver")
-                refill_receipts = RefillReceipt.objects.filter(receiver=receiver).order_by("-created")
+                refill_receipts = RefillReceipt.objects.order_by("-created")[:100]
                 context['refill_receipts'] = refill_receipts
                 context['receiver'] = receiver
-            except ObjectDoesNotExist:
-                pass
+        else:
+            refill_receipts = RefillReceipt.objects.all().order_by('-created')
+            context['refill_receipts'] = refill_receipts
+    except ObjectDoesNotExist:
+        pass
     return render(request, "shop/all_refills.html", context)
