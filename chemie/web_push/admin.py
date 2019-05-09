@@ -10,20 +10,34 @@ from push_notifications.models import (
 from push_notifications.admin import DeviceAdmin, GCMDeviceAdmin
 
 
-# TODO fix deletion of device and gcm device
-# TODO style admin page
-# TODO remove gcm_device/apns_device from admin page
-
-
 def delete_inactive_devices(modeladmin, request, queryset):
+
+    unregistered_gcm_devices = queryset.filter(gcm_device=None)
+    """
+    The commented lines below is the implementation for Safari browser
+    Apples APNS certificat would be needed, cost ~1000 NOK/year
+    The code has not been testet so no garanties it would work
+    """
+    # unregistered_apns_devices = unregistered_gcm_devices.exclude(apns_device__isnull=True)
+    # unregistered_device = unregistered_gcm_devices.filter(apns_device__isnull=True)
+    # unregistered_device.delete()
+    # unregistered_apns_devices.delte()
+    unregistered_gcm_devices.delete()
+
     inactive_gcm_devices = queryset.filter(gcm_device__active=False)
     inactive_gcm_devices.delete()
+
+    """
+    The commented lines below is the implementation for Safari browser
+    Apples APNS certificat would be needed, cost ~1000 NOK/year
+    The code has not been testet so no garanties it would work
+    """
 
     # inactive_apns_devices = queryset.filter(apns_device__active=False)
     # inactive_apns_devices.delete()
 
 
-delete_inactive_devices.short_description = "Delete inactive devices"
+delete_inactive_devices.short_description = "Slett inactive devices"
 
 
 @admin.register(Device)
@@ -38,10 +52,28 @@ class DeviceAdmin(admin.ModelAdmin):
     actions = [delete_inactive_devices]
 
     def Device_token(cls, obj):
-        return obj.gcm_device.registration_id
+        if obj.gcm_device is not None:
+            return obj.gcm_device.registration_id
+        """
+        The commented lines below is the implementation for Safari browser
+        Apples APNS certificat would be needed, cost ~1000 NOK/year
+        The code has not been testet so no garanties it would work
+        """
+        # if obj.apns_device is not None:
+        #     return obj.apns_device.registration_id
+        return "No device registred"
 
     def Is_active(cls, obj):
-        return obj.gcm_device.active
+        if obj.gcm_device is not None:
+            return obj.gcm_device.active
+        """
+        The commented lines below is the implementation for Safari browser
+        Apples APNS certificat would be needed, cost ~1000 NOK/year
+        The code has not been testet so no garanties it would work
+        """
+        # if obj.apns_device is not None:
+        #     return obj.apns_device.active
+        return "No device registred"
 
 
 @admin.register(CoffeeSubmission)
