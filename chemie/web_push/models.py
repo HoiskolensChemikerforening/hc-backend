@@ -6,6 +6,7 @@ from django.contrib.auth.models import User
 
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
+
 class CoffeeSubmission(models.Model):
     """ Submission that's created each time a notification is send """
 
@@ -51,7 +52,7 @@ class Device(models.Model):
     #   null=True,
     #   related_name="Device",
     #   on_delete=models.DO_NOTHING,
-    #   verbose_name="Tredje parts api for android telefoner"
+    #   verbose_name="Tredje parts api for apple telefoner"
     # )
     coffee_subscription = models.BooleanField(
         default=True, verbose_name="Aboner på kaffe pushvsler"
@@ -104,7 +105,6 @@ def delete_device_signal(sender, instance, **kwargs):
     """
     # if instance.apns_device is not None:
     #     instance.apns_device.delete()
-
 
 
 # Connects delete_device_signal with the pre_delete signal reciever

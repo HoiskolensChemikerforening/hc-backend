@@ -20,7 +20,6 @@ def save_device(request):
     if request.method == "POST":
         browser = request.POST["browser"]
         token = request.POST["token"]
-        #  todo check if user has a device
         if browser is not None and token != "":
             if browser == "Chrome":
                 registered_device = GCMDevice.objects.filter(
@@ -40,6 +39,11 @@ def save_device(request):
                         users_devices.latest("-date_created").delete()
                     return HttpResponse(status=201)
 
+            """
+            The commented lines below is the implementation for Safari browser
+            Apples APNS certificat would be needed, cost ~1000 NOK/year
+            The code has not been testet so no garanties it would work
+            """
             # elif browser == "Safari":
             #     registered_device = APNSDevice.objects.filter(
             #         registration_id=token
@@ -86,6 +90,12 @@ def send_notification(request):
                     )
                     for device in gcm_devices
                 ]
+
+                """
+                The commented lines below is the implementation for Safari browser
+                Apples APNS certificat would be needed, cost ~1000 NOK/year
+                The code has not been testet so no garanties it would work
+                """
                 # apns_devices = Device.objects.filter(
                 #     coffee_subscription=True, apns_device__active=True
                 # )
