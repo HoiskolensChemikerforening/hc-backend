@@ -2,7 +2,9 @@
 // For better understanding of firebase initial se url:
 // https://firebase.google.com/docs/cloud-messaging/js/client
 //----------------------------------------
-var config = { // Firebase front-end configurations
+
+// Firebase front-end configurations, these API key are suppost to be public,
+var config = {
     apiKey: "AIzaSyDZ8vCkF4evPls5g708fgYnV2grx4FmJkk",
     authDomain: "chemie-da469.firebaseapp.com",
     databaseURL: "https://chemie-da469.firebaseio.com",
@@ -11,18 +13,27 @@ var config = { // Firebase front-end configurations
     messagingSenderId: "775983543184"
 };
 firebase.initializeApp(config);
+
+// JS initializer a Service worker which is running in the brower while you are not present
+// on hc.ntnu.no, this allowes for push notification when you are not active on site
 const messaging = firebase.messaging();
 navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
     .then(function (registration) {
         messaging.useServiceWorker(registration);
-        if (window.location.href == "https://hc.ntnu.no/" || window.location.href == "http://127.0.0.1:8000/") { //Only prompts permission on home page
+
+        // The user is requestet for permission to recieve notifications
+        if (window.location.href == "https://hc.ntnu.no/" || window.location.href == "http://127.0.0.1:8000/") { //Only prompts permission on home page or running as local host
             var browser = getBrowser();
             if (browser == "Chrome") {
                 messaging.requestPermission()
                     .then(function () {
+                        // The token is the device personalized ID which is auto generated
+                        // every time the user accept the requested permission
                         return messaging.getToken();
                     }).then(function (token) {
-                        // Saving device token backend as Device object to be used when notification is to be sent
+                        // Saving device token backend as Device object
+                        // at hc.ntnu.no server to be used when notification is to be sent
+
                         postAjax("web_push/save/", { 'token': token, 'browser': browser });
                     }).catch(function (err) {
                         if (!err.code == "messaging/permission-blocked") {
@@ -30,6 +41,12 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
                         }
                     });
             } else if (browser == 'Safari') {
+                /*
+                The commented lines below is the implementation for Safari browser
+                Apples APNS certificat would be needed, cost ~1000 NOK/year
+                The code has not been testet so no garanties it would work
+                */
+
                 // messaging.requestPermission()
                 //     .then(function () {
                 //         return messaging.getToken();
@@ -75,6 +92,7 @@ function getCookie(name) {
     return cookieValue
 }
 
+// A post function which fetched the CSRF-token before posting
 function postAjax(url, data) {
     var params = typeof data == 'string' ? data : Object.keys(data).map(
         function (k) {
