@@ -19,7 +19,7 @@ class CoffeeSubmission(models.Model):
             return True
 
         # Checks if fifteen minutes have passed since last CoffeSubmission object was created
-        fifteen_minutes = datetime.timedelta(0, 900)
+        fifteen_minutes = datetime.timedelta(0, 1) # TODO change to 900 when working properlygu
         if CoffeeSubmission.objects.filter(
             date__gte=datetime.datetime.now() - fifteen_minutes
         ).exists():
