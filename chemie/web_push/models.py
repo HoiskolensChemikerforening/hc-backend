@@ -3,6 +3,7 @@ from push_notifications.models import APNSDevice, GCMDevice
 import datetime
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
+import pytz
 
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
@@ -20,8 +21,10 @@ class CoffeeSubmission(models.Model):
 
         # Checks if fifteen minutes have passed since last CoffeSubmission object was created
         fifteen_minutes = datetime.timedelta(0, 1) # TODO change to 900 when working properlygu
+        last_coffee_submission_date = (datetime.datetime.utcnow() - fifteen_minutes).replace(tzinfo=pytz.UTC)
+
         if CoffeeSubmission.objects.filter(
-            date__gte=datetime.datetime.now() - fifteen_minutes
+            date__gte=last_coffee_submission_date
         ).exists():
             return False
         return True
