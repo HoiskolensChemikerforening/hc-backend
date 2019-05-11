@@ -513,4 +513,7 @@ p {
     bottom: 10%;
     left:50%;
   }
+.toast {
+    background: rgb(237, 205, 47)
+}
 

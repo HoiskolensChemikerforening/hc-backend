@@ -64,8 +64,13 @@ navigator.serviceWorker.register('/static/js/firebase-messaging-sw.js')
 
 // When user is present on the site,
 // they are presented with a toast message instead of the service workers push notification.
+
 messaging.onMessage(function (payload) {
-    M.toast({ html: payload.notification.body, classes: 'blue darken-3 rounded' })
+    var html = document.createElement("P")
+    html.innerHTML = payload.notification.title + "<br>" + payload.notification.body
+    html.style.color = "black"
+
+    M.toast({ html: html, classes: 'rounded'})
 });
 
 // Functions

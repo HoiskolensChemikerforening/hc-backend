@@ -7,7 +7,7 @@ import json
 from rest_framework import viewsets
 from .serializers import CoffeeSubmissionSerializer
 from django.http import HttpResponse, JsonResponse
-
+import datetime
 
 class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
     queryset = CoffeeSubmission.objects.order_by("date")
@@ -83,9 +83,13 @@ def send_notification(request):
                 gcm_devices = Device.objects.filter(
                     coffee_subscription=True, gcm_device__active=True
                 )
+                time_mark = datetime.datetime.now().time()
+                hour_mark = str(time_mark.hour)
+                minute_mark = str(time_mark.minute)
+                coffee_message = "Laget klokken: " + hour_mark + ":" + minute_mark
                 [
                     device.send_notification(
-                        "Kaffe", "Nytraktet kaffe på kontoret"
+                        "Kaffe på kontoret", coffee_message
                     )
                     for device in gcm_devices
                 ]
