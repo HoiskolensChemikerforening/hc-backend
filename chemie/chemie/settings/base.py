@@ -75,6 +75,7 @@ THIRD_PARTY_APPS = [
     "smart_selects",
     "ckeditor",
     "django_extensions",
+    'push_notifications',
     "crispy_forms",
 ]
 
@@ -90,6 +91,7 @@ LOCAL_APPS = [
     "chemie.customprofile",
     "chemie.picturecarousel",
     "chemie.elections",
+    'chemie.web_push',
     "chemie.shop",
     "chemie.quiz"
 ]
@@ -245,6 +247,14 @@ REST_FRAMEWORK = {
     ),
 }
 
+# FIREBASE PUSH NOTIFICATION CONFIGURATION
+# ------------------------------------------------------------------------------
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+        "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or '',
+        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or '',
+        "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or ''
+}
 
 # HAYSTACK CONFIGURATION
 # ------------------------------------------------------------------------------
