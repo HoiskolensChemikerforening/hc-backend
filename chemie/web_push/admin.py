@@ -83,3 +83,5 @@ class CoffeeAdmin(admin.ModelAdmin):
 
 admin.site.unregister(WNSDevice)
 admin.site.unregister(WebPushDevice)
+admin.site.unregister(APNSDevice)
+admin.site.unregister(GCMDevice)
