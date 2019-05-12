@@ -93,3 +93,11 @@
   {{ committee.description|safe }}
 
 {% endblock content %}
+
+{% block footer_js_files %}
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+  </script>
+{% endblock footer_js_files %}
