@@ -20,7 +20,7 @@ class CoffeeSubmission(models.Model):
             return True
 
         # Checks if fifteen minutes have passed since last CoffeSubmission object was created
-        fifteen_minutes = datetime.timedelta(0, 1) # TODO change to 900 when working properlygu
+        fifteen_minutes = datetime.timedelta(0, 900)
         last_coffee_submission_date = (datetime.datetime.utcnow() - fifteen_minutes).replace(tzinfo=pytz.UTC)
 
         if CoffeeSubmission.objects.filter(
