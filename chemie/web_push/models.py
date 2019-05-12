@@ -100,6 +100,16 @@ class Device(models.Model):
         # if self.apns_device is not None:
         #     return self.apns_device.active
 
+    @classmethod
+    def delete_inactive_gcm_device(cls):
+        count = GCMDevice.objects.count()
+        unregistered_gcm_devices = Device.objects.filter(gcm_device=None)
+        unregistered_gcm_devices.delete()
+
+        inactive_gcm_devices = Device.objects.filter(gcm_device__active=False)
+        inactive_gcm_devices.delete()
+        return count - GCMDevice.objects.count()
+
 
 def delete_device_signal(sender, instance, **kwargs):
     """ Deletes gcm_device when deleting Device """
