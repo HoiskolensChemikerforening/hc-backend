@@ -3,7 +3,6 @@
 {% load staticfiles %}
 {% load static %}
 
-
 {% block nav_header %}
   Komiteer
 {% endblock nav_header %}
@@ -56,17 +55,8 @@
     </div>
   </div>
 
-
 {% endblock content %}
 
-
 {% block footer_script %}
-
-  <script type="text/javascript" src="{% static 'admin/js/vendor/jquery/jquery.js' %}"></script>
 {{ formset.form.media }}
-
 {% endblock footer_script %}
-
-
-
-
