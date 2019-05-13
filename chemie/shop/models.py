@@ -144,7 +144,7 @@ class Order(models.Model):
     def get_total_price(self):
         totalprice = 0
         for item in self.items.all():
-            totalprice += item.item.price * item.quantity
+            totalprice += item.price
         return totalprice
 
 
