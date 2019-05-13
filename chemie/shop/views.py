@@ -286,6 +286,7 @@ def refill(request):
             try:
                 receiver.profile.balance += amount
                 receiver.profile.save()
+                return redirect(reverse('shop:refill'))
             except InvalidOperation:
                 messages.add_message(
                     request,
