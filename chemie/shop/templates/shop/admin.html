@@ -181,12 +181,18 @@ debugger
         itemDivChildQuantity.setAttribute("style", "margin:auto; width:100%")
 
         var itemDivChildPrice = document.createElement("p")
-        itemDivChildPrice.innerHTML = "Antall HC-coin: " + "<b>" +adminList1[i][key] + "</b>"
-        itemDivChildPrice.setAttribute("style", "margin:auto; width:100%")
+        var itemDivChildImg = document.createElement("img")
+        itemDivChildImg.setAttribute("type","image/png")
+        itemDivChildImg.setAttribute("src","{% static 'images/HC_coin.png' %}")
+        itemDivChildImg.setAttribute("style","margin-top:-2.5rem; width:1.8rem; padding-bottom:0.2rem;")
+
+        itemDivChildPrice.innerHTML = "Totalt: <b>" +adminList1[i][key] + "</b>"
+        itemDivChildPrice.setAttribute("style", "margin:auto;  width:100%")
 
         itemDiv.appendChild(itemDivChildName)
-        itemDiv.appendChild(itemDivChildQuantity)
         itemDiv.appendChild(itemDivChildPrice)
+        itemDiv.appendChild(itemDivChildImg)
+        itemDiv.appendChild(itemDivChildQuantity)
 
         monthDiv.appendChild(itemDiv);
       }
