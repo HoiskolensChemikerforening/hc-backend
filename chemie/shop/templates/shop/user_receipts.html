@@ -68,16 +68,15 @@
             {% for order_item in order.items.all %}
             <div class="d-flex justify-content-between">
                 <div class="p-0">
-                    <p style="margin-bottom:0rem">{{order_item}}</p>
+                    <p style="margin-bottom:0rem">{{order_item}} x {{order_item.quantity}}</p>
                 </div>
                 <div class="p-0 d-flex justify-content-between">
                     <div class="p-2">
-                        <p style="margin-bottom:0rem">{{order_item.item.price}} x {{order_item.quantity}}</p>
+                        <p style="margin-bottom:0rem">{{order_item.price}} </p>
                     </div>
                     <div class="p-2">
-
-                        <p style="margin-bottom:0rem" class="item-total-price"
-                            id={{order_item.item.price}}-{{order_item.quantity}}></p>
+                        <img type="image/png" src="{% static "images/HC_coin.png" %}"
+                        style="width:1rem; float: right; margin-left: 0.2rem; margin-top:0.3rem">
                     </div>
                 </div>
             </div>
@@ -85,7 +84,7 @@
         </div>
 
         <div class="p-2 d-flex align-items-start" style="display:inline">
-            <p class=""><b>Total price: </b> {{order.get_total_price}}</p>
+            <p class=""><b>Total pris: </b> {{order.get_total_price}}</p>
             <img type="image/png" src="{% static "images/HC_coin.png" %}"
                 style="width:1.8rem; float: right; margin-left: 0.2rem">
         </div>
@@ -96,15 +95,4 @@
 {% endblock content %}
 
 {% block footer_script %}
-<script>
-    var totalPrices = document.getElementsByClassName("item-total-price");
-    for (var i = 0; i < totalPrices.length; i++) {
-        var Pricequantity = totalPrices[i].id;
-        Pricequantity = Pricequantity.split('-')
-        var price = parseFloat(Pricequantity[0]);
-        var quantity = parseInt(Pricequantity[1]);
-        var totalPrice = price * quantity
-        totalPrices[i].innerHTML = totalPrice.toString()
-    }
-</script>
 {% endblock footer_script %}
