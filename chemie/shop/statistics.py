@@ -12,12 +12,12 @@ def get_bought_items(user):
             if order_item.item.name in item_history:
                 item_history[order_item.item.name][0] += order_item.quantity
                 item_history[order_item.item.name][1] += float(
-                    order_item.quantity * order_item.item.price
+                    order_item.quantity * order_item.price
                 )
             else:
                 item_history[order_item.item.name] = [
                     order_item.quantity,
-                    order_item.quantity * float(order_item.item.price),
+                    order_item.quantity * float(order_item.price),
                 ]
     sorted_item_history = sorted(
         item_history.items(), reverse=True, key=lambda x: x[1]
