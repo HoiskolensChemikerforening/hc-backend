@@ -122,6 +122,8 @@ class OrderItem(models.Model):
     )
     quantity = models.PositiveIntegerField(verbose_name="Antall")
 
+    price = models.PositiveIntegerField(verbose_name="Pris", default=0)
+
     def __str__(self):
         return self.item.name
 
@@ -211,7 +213,9 @@ class ShoppingCart(object):
             item_object = get_object_or_404(Item, name=item)
             order_items.append(
                 OrderItem.objects.create(
-                    item=item_object, quantity=self.cart[item]["quantity"]
+                    item=item_object,
+                    quantity=self.cart[item]["quantity"],
+                    price=self.cart[item]['quantity']*item_object.price
                 )
             )
         order = Order.objects.create(buyer=user)
