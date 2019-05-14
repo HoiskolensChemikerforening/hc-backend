@@ -158,7 +158,6 @@
   }
 // Create the HTML elements for the adminList created above
 var adminDiv = document.getElementById("admin-list-parent");
-debugger
   for (var i = 0; i < 12; i++) {
     var monthTitle = document.createElement("h4")
     monthTitle.innerHTML = monthNames[i]
@@ -172,7 +171,7 @@ debugger
       for (key in adminList[i]) {
         var itemDiv = document.createElement("div");
         itemDiv.setAttribute("class", "border item-list d-flex")
-        itemDiv.setAttribute("style", "height:8rem; margin:1rem")
+        itemDiv.setAttribute("style", "height:8rem; margin:1rem; width:12rem")
         var itemDivChildName = document.createElement("h6")
         itemDivChildName.setAttribute("style",  "text-align:center")
         itemDivChildName.innerHTML = key
@@ -184,7 +183,7 @@ debugger
         var itemDivChildImg = document.createElement("img")
         itemDivChildImg.setAttribute("type","image/png")
         itemDivChildImg.setAttribute("src","{% static 'images/HC_coin.png' %}")
-        itemDivChildImg.setAttribute("style","margin-top:-2.5rem; width:1.8rem; padding-bottom:0.2rem;")
+        itemDivChildImg.setAttribute("style","margin-top:-2.5rem; margin-right:-1.7rem; width:1.8rem; padding-bottom:0.2rem;")
 
         itemDivChildPrice.innerHTML = "Totalt: <b>" +adminList1[i][key] + "</b>"
         itemDivChildPrice.setAttribute("style", "margin:auto;  width:100%")
