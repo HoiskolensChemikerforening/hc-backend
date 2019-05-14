@@ -36,7 +36,7 @@ class CategoryAdmin(admin.ModelAdmin):
 
 
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ["item", "quantity", "price", "get_order"]
+    list_display = ["item", "quantity", "total_price", "get_order"]
     search_fields = ["item"]
     list_display_links = None
 
