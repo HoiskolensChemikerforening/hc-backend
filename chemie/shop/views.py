@@ -318,7 +318,7 @@ def refill(request):
                 ),
                 extra_tags="Suksess",
             )
-            form = RefillBalanceForm(None)
+            return redirect("shop:refill")
     return render(request, "shop/refill-balance.html", {"form": form})
 
 
