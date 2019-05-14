@@ -122,7 +122,7 @@ class OrderItem(models.Model):
     )
     quantity = models.PositiveIntegerField(verbose_name="Antall")
 
-    price = models.PositiveIntegerField(verbose_name="Pris", default=0)
+    total_price = models.PositiveIntegerField(verbose_name="Totalpris", default=0)
 
     def __str__(self):
         return self.item.name
@@ -144,7 +144,7 @@ class Order(models.Model):
     def get_total_price(self):
         totalprice = 0
         for item in self.items.all():
-            totalprice += item.price
+            totalprice += item.total_price
         return totalprice
 
 
@@ -215,7 +215,7 @@ class ShoppingCart(object):
                 OrderItem.objects.create(
                     item=item_object,
                     quantity=self.cart[item]["quantity"],
-                    price=self.cart[item]['quantity']*item_object.price
+                    total_price=self.cart[item]['quantity']*item_object.price
                 )
             )
         order = Order.objects.create(buyer=user)

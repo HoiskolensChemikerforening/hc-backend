@@ -75,11 +75,11 @@ def get_last_year_receipts():
                 order_item_key = order_item.item.name
                 if order_item_key not in item_quantity[i]:
                     item_quantity[i][order_item_key] = order_item.quantity
-                    item_price[i][order_item_key] = order_item.price
+                    item_price[i][order_item_key] = order_item.total_price
 
                 else:
                     item_quantity[i][order_item_key] += order_item.quantity
-                    item_price[i][order_item_key] += order_item.price
+                    item_price[i][order_item_key] += order_item.total_price
 
         if len(item_quantity[i]) > 0:
             sorted_item_quantity = sorted(item_quantity[i].items(), key=operator.itemgetter(1), reverse=True)
