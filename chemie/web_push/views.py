@@ -8,6 +8,7 @@ from rest_framework import viewsets
 from .serializers import CoffeeSubmissionSerializer
 from django.http import HttpResponse, JsonResponse
 import datetime
+from chemie.customprofile.models import Profile
 
 class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
     queryset = CoffeeSubmission.objects.order_by("date")
@@ -31,12 +32,12 @@ def save_device(request):
                         cloud_message_type="FCM",
                         user=request.user,
                     )
-                    Device.objects.create(
-                        owner=request.user, gcm_device=gcm_device
+                    device = Device.objects.create(
+                        gcm_device=gcm_device, owner=request.user
                     )
-                    users_devices = Device.objects.filter(owner=request.user)
-                    if len(users_devices) > 5:
-                        users_devices.latest("-date_created").delete()
+                    if request.user.profile.devices.count() > 5:
+                        request.user.profile.devices.latest("-date_created").delete()
+                    request.user.profile.devices.add(device)
                     return HttpResponse(status=201)
 
             """
@@ -53,12 +54,11 @@ def save_device(request):
             #             registration_id=token, user=request.user
             #         )
             #         Device.objects.create(
-            #             owner=request.user, apns_device=apns_device
+            #             apns_device=apns_device, owner=request.user
             #         )
-            #         users_devices = Device.objects.filter(owner=request.user)
-            #         if len(users_devices) > 5:
-            #             users_devices.latest("-date_created").delete()
-            #         return HttpResponse(status=201)
+            #         if request.user.devices.count() > 5:
+            #             request.user.devices.latest("-date_created").delete()
+            #         request.user.profile.devices.add(device)
         return HttpResponse(status=301)
     else:
         return redirect(reverse("frontpage:home"))
@@ -77,38 +77,31 @@ def send_notification(request):
             payload_json["notification_key"], payload_json["topic"]
         )
         if is_authorized:
-            if CoffeeSubmission.fifteen_minutes_has_passed():
-                serializer.save()
-
-                gcm_devices = Device.objects.filter(
-                    coffee_subscription=True, gcm_device__active=True
-                )
-                time_mark = datetime.datetime.now().time()
-                hour_mark = str(time_mark.hour)
-                minute_mark = str(time_mark.minute)
-                coffee_message = "Laget klokken: " + hour_mark + ":" + minute_mark
-                [
-                    device.send_notification(
-                        "Kaffe på kontoret", coffee_message
-                    )
-                    for device in gcm_devices
-                ]
-
-                """
-                The commented lines below is the implementation for Safari browser
-                Apples APNS certificat would be needed, cost ~1000 NOK/year
-                The code has not been testet so no garanties it would work
-                """
-                # apns_devices = Device.objects.filter(
-                #     coffee_subscription=True, apns_device__active=True
-                # )
-                # [
-                #     device.send_notification(
-                #         "Kaffe", "Nytraktet kaffe på kontoret"
-                #     )
-                #     for device in apns_devices
-                # ]
-            return JsonResponse(serializer.errors, status=201)
+            topic = payload_json["topic"]
+            if topic == "coffee":
+                if CoffeeSubmission.fifteen_minutes_has_passed():
+                    serializer.save()
+                    subscribers = Profile.objects.filter(coffee_subscription=True)
+                    for subscriber in subscribers:
+                        devices = subscriber.devices.all()
+                    
+                        time_mark = datetime.datetime.now().time()
+                        hour_mark = str(time_mark.hour)
+                        minute_mark = int(time_mark.minute)
+                        if int(minute_mark) < 10:
+                            minute_mark = "0" + str(minute_mark)
+                        coffee_message = "Laget klokken: " + hour_mark + ":" + str(minute_mark)
+                        [
+                            device.send_notification(
+                                "Kaffe på kontoret", coffee_message
+                            )
+                            for device in devices
+                        ] # one-liner for loop
+                    return JsonResponse(serializer.errors, status=201)
+                else:
+                    return JsonResponse(serializer.errors, status=402)
+            else:
+                return JsonResponse(serializer.errors, status=401)
         return JsonResponse(serializer.errors, status=401)
     else:  # PUT eller DELETE request
         return redirect(reverse("frontpage:home"))

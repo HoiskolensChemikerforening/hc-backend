@@ -33,7 +33,7 @@ class CoffeeSubmission(models.Model):
 
 class Device(models.Model):
     """ Overall model which saves gcm/apns device and the users subsciption settings """
-
+    
     owner = models.ForeignKey(
         User, verbose_name="eier", on_delete=models.CASCADE
     )
@@ -58,15 +58,7 @@ class Device(models.Model):
     #   on_delete=models.DO_NOTHING,
     #   verbose_name="Tredje parts api for apple telefoner"
     # )
-    coffee_subscription = models.BooleanField(
-        default=True, verbose_name="Aboner på kaffe pushvarsler"
-    )
-
-    """
-    Hvis det er ønskelig kan feltet under brukes senere,
-    inspirasjon for videre utvikling
-    """
-    # news_subscription = models.BooleanField(default=True)
+    
 
     date_created = models.DateTimeField(auto_now_add=True)
 

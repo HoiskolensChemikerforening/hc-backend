@@ -90,6 +90,7 @@ class UserAdmin(BuiltinUserAdmin):
         ("profile__start_year", DropdownFilter),
         ("profile__end_year", DropdownFilter),
         "profile__relationship_status",
+        "profile__devices",
     )
     inlines = [UserInline]
     actions = [export_csv]
