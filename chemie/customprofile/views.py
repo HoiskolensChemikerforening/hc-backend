@@ -30,6 +30,7 @@ from .forms import (
     SetNewPassword,
     NameSearchForm,
     AddCardForm,
+    EditPushForm,
 )
 from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
@@ -113,7 +114,17 @@ def edit_profile(request):
 
 @login_required
 def edit_push(request):
-    context = {}
+    form = EditPushForm(request.POST or None)
+    if request.method == "POST":
+        if form.is_valid():
+            coffee_checked = form.cleaned_data['coffee_subscription']
+            request.user.profile.coffee_subscription = coffee_checked
+            request.user.profile.save()
+            return redirect(reverse('customprofile:edit-push'))
+    form = EditPushForm(initial={'coffee_subscription': request.user.profile.coffee_subscription})
+    context = {
+        'form':form,
+    }
     return render(request, "customprofile/editpush.html", context)
     
 def forgot_password(request):

@@ -13,17 +13,14 @@
 
 {% block content %}
 
-
 <div style="display:inline">
-    <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
-        <table style="margin:1rem">
+    <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
             {% for field in form %}
             <label>
-                <input type="checkbox" checked="{{field.value}}"/>
-                <span style="width:100%; margin:0.5rem">{{field.label}}</span>
+                {{field}}
+                <span style="width:100%; margin:0.5rem" id="span-{{field.label}}">{{field.label}}</span>
             </label>
             {% endfor %}
-        </table>
         <button class="btn btn-primary pull-right" type="submit">Lagre endringer</button>
     </form>
 </div>
@@ -31,4 +28,7 @@
 {% endblock content %}
 
 {% block footer_script %}
+<script>
+  
+</script>
 {% endblock footer_script %}
