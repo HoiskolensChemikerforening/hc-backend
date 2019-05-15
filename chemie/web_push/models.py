@@ -110,6 +110,51 @@ class Device(models.Model):
         #     return self.apns_device.active
 
     @classmethod
+    def add_device(cls, device_type, token, user):
+        status = 301
+        if device_type=="FCM":
+            registered_device = GCMDevice.objects.filter(
+                registration_id=token
+            )
+            if registered_device.count() == 0:
+                gcm_device = GCMDevice.objects.create(
+                    registration_id=token,
+                    cloud_message_type="FCM",
+                    user=user,
+                    #apns_device=None
+                )
+                device = cls.objects.create(
+                    gcm_device=gcm_device, owner=user
+                )
+                user.profile.devices.add(device)
+                status = 201
+        """
+        The commented lines below is the implementation for Safari browser
+        Apples APNS certificat would be needed, cost ~1000 NOK/year
+        The code has not been testet so no garanties it would work
+        """
+        # elif device_type=="APNS":
+        #     registered_device = APNSDevice.objects.filter(
+        #         registration_id=token
+        #     )
+        #     if registered_device.count() == 0:
+        #         apns_device = APNSDevice.objects.create(
+        #             registration_id=token,
+        #             user=user,
+        #         )
+        #         device = cls.objects.create(
+        #             apns_device=apns_device, 
+        #             owner=user,
+        #             gcm_device=None       
+        #         )
+        #         user.profile.devices.add(device)
+        #         status = 201
+
+        if cls.objects.filter(owner=user).count() > 5:
+            cls.objects.latest("-date_created").delete()
+        return status
+
+    @classmethod
     def delete_inactive_gcm_device(cls):
         count = GCMDevice.objects.count()
         unregistered_gcm_devices = Device.objects.filter(gcm_device=None)

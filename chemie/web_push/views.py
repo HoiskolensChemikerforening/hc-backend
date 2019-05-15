@@ -23,43 +23,17 @@ def save_device(request):
         token = request.POST["token"]
         if browser is not None and token != "":
             if browser == "Chrome":
-                registered_device = GCMDevice.objects.filter(
-                    registration_id=token
-                )
-                if registered_device.count() == 0:
-                    gcm_device = GCMDevice.objects.create(
-                        registration_id=token,
-                        cloud_message_type="FCM",
-                        user=request.user,
-                    )
-                    device = Device.objects.create(
-                        gcm_device=gcm_device, owner=request.user
-                    )
-                    if request.user.profile.devices.count() > 5:
-                        request.user.profile.devices.latest("-date_created").delete()
-                    request.user.profile.devices.add(device)
-                    return HttpResponse(status=201)
-
+                status = Device.add_device("FCM", token, request.user)
+                return HttpResponse(status=status)
+            
             """
             The commented lines below is the implementation for Safari browser
             Apples APNS certificat would be needed, cost ~1000 NOK/year
             The code has not been testet so no garanties it would work
             """
             # elif browser == "Safari":
-            #     registered_device = APNSDevice.objects.filter(
-            #         registration_id=token
-            #     )
-            #     if len(registered_device) == 0:
-            #         apns_device = APNSDevice.objects.create(
-            #             registration_id=token, user=request.user
-            #         )
-            #         Device.objects.create(
-            #             apns_device=apns_device, owner=request.user
-            #         )
-            #         if request.user.devices.count() > 5:
-            #             request.user.devices.latest("-date_created").delete()
-            #         request.user.profile.devices.add(device)
-        return HttpResponse(status=301)
+            #     status = Device.add_device("APNS", token, request.user)
+            #     return HttpResponse(status=status)
     else:
         return redirect(reverse("frontpage:home"))
 
@@ -78,16 +52,19 @@ def send_notification(request):
         )
         if is_authorized:
             topic = payload_json["topic"]
+
             if topic == "coffee":
                 if CoffeeSubmission.fifteen_minutes_has_passed():
                     serializer.save()
                     subscribers = Profile.objects.filter(coffee_subscription=True)
+
                     CoffeeSubmission.send_coffee_notification(subscribers)
                     return JsonResponse(serializer.errors, status=201)
                 else:
                     return JsonResponse(serializer.errors, status=402)
             else:
                 return JsonResponse(serializer.errors, status=401)
+
         return JsonResponse(serializer.errors, status=401)
-    else:  # PUT eller DELETE request
+    else: 
         return redirect(reverse("frontpage:home"))
