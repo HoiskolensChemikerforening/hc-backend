@@ -14,6 +14,9 @@
 {% block content %}
 
 <div style="display:inline">
+    <h5>
+      Rediger dine push varsler her.
+    </h5>
     <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
             {% for field in form %}
             <label>
@@ -21,8 +24,9 @@
                 <span style="width:100%; margin:0.5rem" id="span-{{field.label}}">{{field.label}}</span>
             </label>
             {% endfor %}
-        <button class="btn btn-primary pull-right" type="submit">Lagre endringer</button>
+        <button class="btn btn-primary pull-right" style="margin:1rem" type="submit">Lagre endringer</button>
     </form>
+    <img type="image/png" src="{% static "images/instruction_webpush.png" %}">
 </div>
   
 {% endblock content %}

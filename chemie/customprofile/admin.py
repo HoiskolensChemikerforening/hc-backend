@@ -91,6 +91,9 @@ class UserAdmin(BuiltinUserAdmin):
         ("profile__end_year", DropdownFilter),
         "profile__relationship_status",
         "profile__devices",
+        "profile__coffee_subscription",
+        "profile__news_subscription",
+        "profile__happyhour_subscription"
     )
     inlines = [UserInline]
     actions = [export_csv]

@@ -137,7 +137,9 @@ class EditPushForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = [
-            'coffee_subscription'
+            'coffee_subscription',
+            'news_subscription',
+            'happyhour_subscription',
         ]
 
 class ChangePasswordForm(forms.ModelForm):
