@@ -14,9 +14,11 @@
 {% block content %}
 
 <div style="display:inline">
-    <h5>
+  <a class="btn" style="float:right" href="{% url 'customprofile:edit' %}">Tilbake</a>  
+  <h5>
       Rediger dine push varsler her.
     </h5>
+    
     <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
             {% for field in form %}
             <label>
@@ -26,7 +28,7 @@
             {% endfor %}
         <button class="btn btn-primary pull-right" style="margin:1rem" type="submit">Lagre endringer</button>
     </form>
-    <img type="image/png" src="{% static "images/instruction_webpush.png" %}">
+    <img type="image/png" style="max-width: 100%"  src="{% static "images/instruction_webpush.png" %}">
 </div>
   
 {% endblock content %}
