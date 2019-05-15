@@ -111,7 +111,11 @@ def edit_profile(request):
     }
     return render(request, "customprofile/editprofile.html", context)
 
-
+@login_required
+def edit_push(request):
+    context = {}
+    return render(request, "customprofile/editpush.html", context)
+    
 def forgot_password(request):
     form = ForgotPassword(request.POST or None)
     if request.POST:
