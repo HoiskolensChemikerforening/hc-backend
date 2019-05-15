@@ -133,6 +133,12 @@ class EditProfileForm(forms.ModelForm):
             "relationship_status",
         ]
 
+class EditPushForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = [
+            'coffee_subscription'
+        ]
 
 class ChangePasswordForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Old password")
