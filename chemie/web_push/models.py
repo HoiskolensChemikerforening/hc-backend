@@ -30,7 +30,7 @@ class CoffeeSubmission(models.Model):
             return False
         return True
     
-    @classmethod
+    @staticmethod
     def send_coffee_notification(subscribers):
         for subscriber in subscribers:
             devices = subscriber.devices.all()

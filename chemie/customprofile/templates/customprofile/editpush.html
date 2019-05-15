@@ -1,0 +1,34 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block nav_header %}
+  Profil 
+{% endblock nav_header %}
+{% block nav_sub_header %}
+  Endre push varsel
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+
+<div style="display:inline">
+    <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
+        <table style="margin:1rem">
+            {% for field in form %}
+            <label>
+                <input type="checkbox" checked="{{field.value}}"/>
+                <span style="width:100%; margin:0.5rem">{{field.label}}</span>
+            </label>
+            {% endfor %}
+        </table>
+        <button class="btn btn-primary pull-right" type="submit">Lagre endringer</button>
+    </form>
+</div>
+  
+{% endblock content %}
+
+{% block footer_script %}
+{% endblock footer_script %}
