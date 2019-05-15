@@ -158,7 +158,14 @@ class HappyHour(models.Model):
     def __str__(self):
         return f"Happy Hour {self.id} av {self.provider.get_full_name()}"
 
-
+    def send_push(self, subscribers):
+        for subscriber in subscribers:
+            devices = subscriber.devices.all()
+            tag = "1 time" if self.duration == 1 else "{} timer".format(self.duration)
+            happyhour_message = "Nå er det happyhour i {} på kontoret".format(tag)
+            for device in devices:
+                device.send_notification("Happyhour!", happyhour_message)
+                
 class ShoppingCart(object):
     def __init__(self, request):
         self.session = request.session

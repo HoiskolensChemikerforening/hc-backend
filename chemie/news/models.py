@@ -37,8 +37,7 @@ class Article(models.Model):
             kwargs={"article_id": self.id, "slug": self.slug},
         )
     
-    def send_push(self):
-        subscribers = Profile.objects.filter(news_subscription=True)
+    def send_push(self, subscribers):
         for subscriber in subscribers:
             devices = subscriber.devices.all()
             [
@@ -47,7 +46,6 @@ class Article(models.Model):
                 )
                 for device in devices
             ] # one-liner for loop
-
 def pre_save_article_receiver(sender, instance, *args, **kwargs):
     slug = slugify(instance.title)
     instance.slug = slug
