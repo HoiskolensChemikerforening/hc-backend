@@ -10,7 +10,7 @@
   Endre
 {% endblock nav_sub_header %}
 {% block content %}
-<a class="btn btn-primary" style="float:right" href="{% url 'customprofile:edit-push' %}">Endre push varseler</a>
+<a class="btn btn-primary" style="float:right; margin:1rem" href="{% url 'customprofile:edit-push' %}">Endre push varsler</a>
   <div class="row">
     <div class="col m4 l3">{% thumbnail request.user.profile.image_primary "412x551" crop="center" as im %}
       <img class="materialboxed" data-caption="Høyreklikk for å laste ned" src="{{ im.url }}" width="103" height="138"
