@@ -29,7 +29,24 @@ class CoffeeSubmission(models.Model):
         ).exists():
             return False
         return True
-
+    
+    @classmethod
+    def send_coffee_notification(subscribers):
+        for subscriber in subscribers:
+            devices = subscriber.devices.all()
+        
+            time_mark = datetime.datetime.now().time()
+            hour_mark = str(time_mark.hour)
+            minute_mark = int(time_mark.minute)
+            if int(minute_mark) < 10:
+                minute_mark = "0" + str(minute_mark)
+            coffee_message = "Laget klokken: " + hour_mark + ":" + str(minute_mark)
+            [
+                device.send_notification(
+                    "Kaffe på kontoret", coffee_message
+                )
+                for device in devices
+            ] # one-liner for loop
 
 class Device(models.Model):
     """ Overall model which saves gcm/apns device and the users subsciption settings """

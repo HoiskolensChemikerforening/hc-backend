@@ -82,21 +82,7 @@ def send_notification(request):
                 if CoffeeSubmission.fifteen_minutes_has_passed():
                     serializer.save()
                     subscribers = Profile.objects.filter(coffee_subscription=True)
-                    for subscriber in subscribers:
-                        devices = subscriber.devices.all()
-                    
-                        time_mark = datetime.datetime.now().time()
-                        hour_mark = str(time_mark.hour)
-                        minute_mark = int(time_mark.minute)
-                        if int(minute_mark) < 10:
-                            minute_mark = "0" + str(minute_mark)
-                        coffee_message = "Laget klokken: " + hour_mark + ":" + str(minute_mark)
-                        [
-                            device.send_notification(
-                                "Kaffe på kontoret", coffee_message
-                            )
-                            for device in devices
-                        ] # one-liner for loop
+                    CoffeeSubmission.send_coffee_notification(subscribers)
                     return JsonResponse(serializer.errors, status=201)
                 else:
                     return JsonResponse(serializer.errors, status=402)
