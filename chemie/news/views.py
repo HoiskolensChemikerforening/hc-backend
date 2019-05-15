@@ -17,6 +17,7 @@ def create_post(request):
             instance = post.save(commit=False)
             instance.author = request.user
             instance.save()
+            instance.send_push()
             return HttpResponseRedirect(reverse("news:index"))
     context = {"post": post}
     return render(request, "news/create_post.html", context)
