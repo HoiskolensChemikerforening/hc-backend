@@ -11,7 +11,7 @@ from sorl.thumbnail import ImageField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from chemie.shop import statistics
-
+from chemie.web_push.models import Device
 # Time the activation is valid in hourse
 VALID_TIME = 2
 
@@ -137,6 +137,11 @@ class Profile(models.Model):
     voted = models.BooleanField(default=False)
     eligible_for_voting = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
+    
+    coffee_subscription = models.BooleanField(
+        default=True, verbose_name="Aboner på kaffe pushvarsler"
+    )
+    devices = models.ManyToManyField(Device, blank=True, verbose_name="Push notification enheter")
 
     objects = ProfileManager()
 

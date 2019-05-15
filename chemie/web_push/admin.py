@@ -15,7 +15,6 @@ from push_notifications.gcm import GCMError
 class WebPushDeviceAdmin(admin.ModelAdmin):
     list_display = (
         "owner",
-        "coffee_subscription",
         "date_created",
         "is_active",
         "Device_token",
