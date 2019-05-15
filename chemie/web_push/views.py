@@ -50,6 +50,7 @@ def send_notification(request):
         is_authorized = serializer.is_authorized(
             payload_json["notification_key"], payload_json["topic"]
         )
+        
         if is_authorized:
             topic = payload_json["topic"]
 

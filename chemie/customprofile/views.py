@@ -118,10 +118,20 @@ def edit_push(request):
     if request.method == "POST":
         if form.is_valid():
             coffee_checked = form.cleaned_data['coffee_subscription']
+            news_checked = form.cleaned_data['news_subscription']
+            happyhour_checked = form.cleaned_data['happyhour_subscription']
+            
             request.user.profile.coffee_subscription = coffee_checked
+            request.user.profile.news_subscription = news_checked
+            request.user.profile.happyhour_subscription = happyhour_checked
+            
             request.user.profile.save()
             return redirect(reverse('customprofile:edit-push'))
-    form = EditPushForm(initial={'coffee_subscription': request.user.profile.coffee_subscription})
+    form = EditPushForm(initial={
+        'coffee_subscription': request.user.profile.coffee_subscription,
+        'news_subscription': request.user.profile.news_subscription,
+        'happyhour_subscription': request.user.profile.happyhour_subscription
+        })
     context = {
         'form':form,
     }

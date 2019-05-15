@@ -141,6 +141,15 @@ class Profile(models.Model):
     coffee_subscription = models.BooleanField(
         default=True, verbose_name="Aboner på kaffe pushvarsler"
     )
+    
+    news_subscription = models.BooleanField(
+        default=True, verbose_name="Aboner på nyheter pushvarsler"
+    )
+
+    happyhour_subscription = models.BooleanField(
+        default=True, verbose_name="Aboner på happy hour pushvarsler"
+    )
+
     devices = models.ManyToManyField(Device, blank=True, verbose_name="Push notification enheter")
 
     objects = ProfileManager()
