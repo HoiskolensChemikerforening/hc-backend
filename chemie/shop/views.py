@@ -57,6 +57,7 @@ def get_last_year_receipts():
     year, month = now.year, now.month
     item_quantity = []
     item_price = []
+    monthTotal = []
     while i < months:
         # Get the receipts at current_month - m
         if (month - m) > 0:
@@ -68,6 +69,7 @@ def get_last_year_receipts():
         current_receipts = receipts.filter(
             created__year=year, created__month=month_c
         )
+        monthTotal.append(0)
         item_quantity.append({})
         item_price.append({})
         for r in current_receipts:
@@ -76,10 +78,12 @@ def get_last_year_receipts():
                 if order_item_key not in item_quantity[i]:
                     item_quantity[i][order_item_key] = order_item.quantity
                     item_price[i][order_item_key] = order_item.total_price
+                    monthTotal[i] += order_item.total_price
 
                 else:
                     item_quantity[i][order_item_key] += order_item.quantity
                     item_price[i][order_item_key] += order_item.total_price
+                    monthTotal[i] += order_item.total_price
 
         if len(item_quantity[i]) > 0:
             sorted_item_quantity = sorted(item_quantity[i].items(), key=operator.itemgetter(1), reverse=True)
@@ -89,7 +93,7 @@ def get_last_year_receipts():
             item_price[i] = dict(sorted_item_price)
         m += 1
         i += 1
-    return item_quantity, item_price
+    return item_quantity, item_price, monthTotal
 
 
 @login_required
@@ -270,12 +274,13 @@ def view_statistics(request):
 
 @permission_required("customprofile.refill_balance")
 def admin(request):
-    order_items, order_price = get_last_year_receipts()
+    order_items, order_price, monthTotal = get_last_year_receipts()
     items = Item.objects.all()
     return render(
         request,
         "shop/admin.html",
         {
+            "monthTotal": monthTotal,
             "order_items": order_items,
             "order_price": order_price,
             "items": items
