@@ -38,16 +38,15 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<form method="POST"> {% csrf_token %}
-  <table>
+<form method="POST" id="happyhourForm"> {% csrf_token %}
     {% crispy form %}
-  </table>
+    <input id="submit_value" class="btn btn-seccondary" type="button" name="submit_value" value="Aktiver happy hour">
 </form>
 {% endblock content %}
 
 {% block footer_script %}
 <script>
-  document.getElementById("activate-button").addEventListener("click", function (event) {
+  document.getElementById("submit_value").addEventListener("click", function (event) {
     event.preventDefault();
     swal({
       title: "Dere vil selge alle Happy Hour-varer til 2 for 1",
@@ -72,7 +71,7 @@
     })
       .then((willDelete) => {
         if (willDelete) {
-          let form = this.closest("form");
+          let form = document.getElementById("happyhourForm")
           swal("Happy Hour startet!\nDere selger nå alt av Happy Hour-varer til 2 for 1", {
             icon: "success",
           }).then((ok) => {
