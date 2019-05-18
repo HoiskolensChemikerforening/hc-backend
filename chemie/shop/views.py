@@ -207,7 +207,7 @@ def index_tabletshop(request):
                         messages.add_message(
                             request,
                             messages.ERROR,
-                            f"Du har itj nok HC-coin, kiis. Saldo på konto er {balance} HC-coin",
+                            f"{request.user.get_full_name()} sin konto har itj nok HC-coin, kiis. Saldo på konto er {balance} HC-coin",
                             extra_tags="Avvist",
                         )
                     else:
@@ -217,8 +217,8 @@ def index_tabletshop(request):
                             request,
                             messages.SUCCESS,
                             (
-                                f"Kontoen din er trukket {total_price} HC-coins."
-                                f" Du har igjen {new_balance} HC-coins."
+                                f"{request.user.get_full_name()} sin kontoen din er trukket {total_price} HC-coins."
+                                f"Ny saldo på konto er: {new_balance} HC-coins."
                             ),
                             extra_tags="Kjøp godkjent",
                         )
