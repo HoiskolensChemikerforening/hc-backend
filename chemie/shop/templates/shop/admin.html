@@ -69,7 +69,7 @@
       </div>
       <div class="modal-body">
         <p><b>Logge inn på kontorets PC:</b> For å logge inn på PC'en kan hvem som helt med NTNU brukernavn 
-          logge seg inn. anbefales å bruke kaffeknappen sin NTNU-brukeren.
+          logge seg inn. Anbefales å bruke kaffeknappen sin NTNU-brukeren.
         </p>
         <p>
           <b>brukernavn: </b> hc_pi01@ntnu.no <br>
@@ -220,7 +220,7 @@ var adminDiv = document.getElementById("admin-list-parent");
     var TitleImg = document.createElement("img")
     TitleImg.setAttribute("type","image/png")
     TitleImg.setAttribute("src","{% static 'images/HC_coin.png' %}")
-    TitleImg.setAttribute("style","width:1.8rem; margin-left:1rem")
+    TitleImg.setAttribute("style","width:1.8rem; margin-left:1rem; margin-top:-0.5rem")
     monthTitle.append(TitleImg)
     adminDiv.appendChild(monthTitle)
 
@@ -240,7 +240,7 @@ var adminDiv = document.getElementById("admin-list-parent");
         itemDivChildName.innerHTML = key
         var itemDivChildQuantity = document.createElement("p")
         itemDivChildQuantity.innerHTML = "Antall solgt: " + "<b>" +adminList[i][key] + "</b>"
-        itemDivChildQuantity.setAttribute("style", "margin:auto; width:100%")
+        itemDivChildQuantity.setAttribute("style", "margin:auto; width:100%;")
 
         var itemDivChildPrice = document.createElement("p")
         var itemDivChildImg = document.createElement("img")
