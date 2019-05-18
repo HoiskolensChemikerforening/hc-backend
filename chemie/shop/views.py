@@ -318,8 +318,8 @@ def refill(request):
             messages.add_message(
                 request,
                 messages.SUCCESS,
-                "Du har fylt på {} HC-coins til brukeren {}".format(
-                    amount, receiver.username
+                "Du har fylt på {} HC-coins til {}".format(
+                    amount, receiver.get_full_name()
                 ),
                 extra_tags="Suksess",
             )
