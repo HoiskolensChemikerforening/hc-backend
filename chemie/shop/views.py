@@ -217,7 +217,7 @@ def index_tabletshop(request):
                             request,
                             messages.SUCCESS,
                             (
-                                f"{request.user.get_full_name()} sin kontoen din er trukket {total_price} HC-coins."
+                                f"{request.user.get_full_name()} sin kontoen er trukket {total_price} HC-coins."
                                 f"Ny saldo på konto er: {new_balance} HC-coins."
                             ),
                             extra_tags="Kjøp godkjent",
@@ -227,7 +227,7 @@ def index_tabletshop(request):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        "Studentkort er ikke registrert. Log inn på https://hc.ntnu.no{} og legg in ditt studentkorts EM-nummer".format(
+                        "Studentkort er ikke registrert. Logg inn på https://hc.ntnu.no{} og legg in ditt studentkorts EM-nummer".format(
                             reverse("profile:edit")
                         ),
                         extra_tags="Ups",
@@ -401,8 +401,7 @@ def activate_happyhour(request):
             messages.add_message(
                 request,
                 messages.WARNING,
-                f"Det er {round(time_left_minutes)} minutter igjen",
-                extra_tags="Happy Hour er allerede aktivert!",
+                f"Happy hour er allerede aktivert. Det er {round(time_left_minutes)} minutter igjen",
             )
             return redirect(reverse("shop:admin"))
         return create_happyhour(request, form)
