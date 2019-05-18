@@ -40,7 +40,7 @@
 {% block content %}
 <form method="POST" id="happyhourForm"> {% csrf_token %}
     {% crispy form %}
-    <input id="submit_value" class="btn btn-seccondary" type="button" name="submit_value" value="Aktiver happy hour">
+    <input id="submit_value" class="btn btn-secondary" type="button" name="submit_value" value="Aktiver happy hour" style="color:black; margin: 1rem; background-image: url('/static/images/fireworks_background.png'); background-color: transparent; background-size: cover" href="{% url "shop:activate-happyhour" %}">
 </form>
 {% endblock content %}
 
@@ -72,15 +72,7 @@
       .then((willDelete) => {
         if (willDelete) {
           let form = document.getElementById("happyhourForm")
-          swal("Happy Hour startet!\nDere selger nå alt av Happy Hour-varer til 2 for 1", {
-            icon: "success",
-          }).then((ok) => {
-            if (ok) {
-              form.submit();
-            } else {
-              return false;
-            }
-          });
+          form.submit();
           return true;
         } else {
           swal("Phew!", "Det var nære på! Happy Hour er IKKE aktivert");
