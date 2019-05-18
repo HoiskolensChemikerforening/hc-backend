@@ -227,7 +227,7 @@ def index_tabletshop(request):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        "Studentkort ikke registrert, Gå inn på {}".format(
+                        "Studentkort er ikke registrert. Log inn på https://hc.ntnu.no{} og legg in ditt studentkorts EM-nummer".format(
                             reverse("profile:edit")
                         ),
                         extra_tags="Ups",
