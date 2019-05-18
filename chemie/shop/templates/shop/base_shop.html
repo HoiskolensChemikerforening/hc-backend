@@ -32,6 +32,7 @@
     crossorigin="anonymous"></script>
   <!-- Javscript cookie library for csrf_tokens -->
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+  <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
   <head>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -62,30 +63,46 @@
   {% block breadcrumbs %}
   {% endblock breadcrumbs %}
 
-  <div class="container" style="margin: auto">
+  </div>
     <!-- Messaging framework card -->
     {% if messages %}
-    <div class="row" style="padding-bottom: 1rem;">
       {% for message in messages %}
-      <div class="col s12 m6 l6">
-        <div class="card bg-{{ message.level_tag }}">
-          <div class="card-body">
-            <span class="card-title black-text valign-wrapper" style="clear: both;">
-
-              <h5><i class="material-icons black-text"
-                  style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
-            </span>
-            <p class="flow-text black-text">{{ message }}</p>
-          </div>
-        </div>
-      </div>
+      <script>
+        var message = "{{message}}"
+        var messageLevel = parseInt("{{message.level}}")
+        if (messageLevel == 10){
+          swal(message),{
+            timer: 3000
+          }
+        }  else if (messageLevel == 20){
+          swal(message, {
+            icon: "question",
+            timer: 3000
+          })
+        } else if (messageLevel == 25){
+          swal(message, {
+            icon: "success",
+            timer: 3000
+          })
+        } else if (messageLevel == 30){
+          swal(message, {
+            icon: "warning",
+            timer: 3000
+          })
+        } else if (messageLevel == 40){
+          swal(message, {
+            icon: "error",
+            timer: 5000
+          })
+        } 
+      </script>
       {% endfor %}
     </div>
     {% endif %}
-
+    <div class="container" style="margin: auto">
     {% block content %}
     {% endblock content %}
-
+  </div>
   </div>
   {% block footer_script %}
   {% endblock footer_script %}
