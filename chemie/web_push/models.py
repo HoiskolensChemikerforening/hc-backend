@@ -41,7 +41,18 @@ class CoffeeSubmission(models.Model):
     @classmethod
     def get_latest_submission(cls):
         try:
-            coffee = cls.objects.latest("date")
+            coffee = cls.objects.latest("id")
+            coffee_date = coffee.date
+            delta = datetime.datetime.utcnow() - coffee_date.replace(tzinfo=None)
+            seconds_since_press = delta.total_seconds()
+            if seconds_since_press < 300:
+                return "Akkurat nå!"
+            elif seconds_since_press < 3600:
+                return "For {} minutter siden".format(int(seconds_since_press/60))
+            elif seconds_since_press < 86400:
+                return "For {} timer siden".format(int(seconds_since_press/3600))
+            else:
+                return coffee.date
         except ObjectDoesNotExist:
             coffee = None
         return coffee

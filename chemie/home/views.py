@@ -31,8 +31,7 @@ def index(request):
         "-published_date"
     )[:4]
     coffee = CoffeeSubmission.get_latest_submission()
-
-    context = {"social": all_social, "bedpres": all_bedpres, "posts": all_posts, "coffee":coffee}
+    context = {"social": all_social, "bedpres": all_bedpres, "posts": all_posts, "coffee": coffee}
     return render(request, "chemie/index.html", context)
 
 
