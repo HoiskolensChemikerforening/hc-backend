@@ -18,22 +18,72 @@
     position: relative;
     opacity: 1;
   }
-</style>
+  .checkbox-container {
+    display: block;
+    position: relative;
+    margin-bottom: 12px;
+    cursor: pointer;
+    font-size: 22px;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+  }
 
+  /* Hide the browser's default checkbox */
+  .checkbox-container input {
+    position: absolute;
+    opacity: 0;
+    cursor: pointer;
+    height: 0;
+    width: 0;
+  }
+
+  /* Create a custom checkbox */
+  .checkmark {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 25px;
+    width: 25px;
+    margin-left:1rem;
+  }
+
+  /* Create the checkmark/indicator (hidden when not checked) */
+  .checkmark:after {
+    content: "";
+    position: absolute;
+    display: none;
+  }
+
+  /* Show the checkmark when checked */
+  .checkbox-container input:checked~.checkmark:after {
+    display: block;
+  }
+
+  /* Style the checkmark/indicator */
+  .checkbox-container .checkmark:after {
+    left: 9px;
+    top: 5px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 3px 3px 0;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+</style>
 <div style="display:inline">
   <a class="btn" style="float:right" href="{% url 'customprofile:edit' %}">Tilbake</a>
   <h5>
       Rediger dine push varsler her.
     </h5>
-    <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
-        {% for field in form %}
 
-        <label>
-            {% for value in field %}
-            {{value}}
-              <br>
-            {% endfor %}
-        </label>
+    <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
+        {%for field in form%}
+          {{field}}
         {% endfor %}
         <button class="btn btn-primary pull-right" style="margin:1rem" type="submit">Lagre endringer</button>
     </form>
@@ -45,6 +95,16 @@
 {% block footer_script %}
 <script>
   var userSettings = []
+  var checkBoxes = document.getElementById("id_subscriptions").getElementsByTagName("li")
+  for (var i=0; i<checkBoxes.length; i++){
+    var label = checkBoxes[i].firstChild
+    label.setAttribute("class","checkbox-container")
+    var input = label.getElementsByTagName("input")[0]
+    input.setAttribute("class","category-checkbox")
+    var span = document.createElement("span")
+    span.setAttribute("class","checkmark")
+    label.appendChild(span)
+  }
 </script>
 {% for sub in form.fields.subscriptions.queryset.all %}
         <script>
