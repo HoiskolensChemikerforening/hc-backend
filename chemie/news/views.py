@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import permission_required
 
 from .models import Article
 from .forms import ArticleForm
+from chemie.web_push.models import Subscription
 
 
 @permission_required("news.add_article")

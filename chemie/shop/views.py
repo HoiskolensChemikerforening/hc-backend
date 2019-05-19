@@ -9,6 +9,7 @@ from django.utils import timezone
 import operator
 
 from chemie.customprofile.forms import GetRFIDForm
+from chemie.web_push.models import Subscription
 from chemie.customprofile.models import Profile
 from .forms import (
     RefillBalanceForm,
