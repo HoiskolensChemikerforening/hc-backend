@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import permission_required
 
 from .models import Article
 from .forms import ArticleForm
+from chemie.web_push.models import Subscription
 
 
 @permission_required("news.add_article")
@@ -17,7 +18,10 @@ def create_post(request):
             instance = post.save(commit=False)
             instance.author = request.user
             instance.save()
-            instance.send_push()
+
+            subscriptions = Subscription.objects.filter(subscription_type=2)
+            subscribers = [sub.owner for sub in subscriptions] 
+            instance.send_push(subscribers)
             return HttpResponseRedirect(reverse("news:index"))
     context = {"post": post}
     return render(request, "news/create_post.html", context)

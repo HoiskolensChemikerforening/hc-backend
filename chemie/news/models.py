@@ -39,7 +39,7 @@ class Article(models.Model):
     
     def send_push(self, subscribers):
         for subscriber in subscribers:
-            devices = subscriber.devices.all()
+            devices = subscriber.profile.devices.all()
             [
                 device.send_notification(
                     "Nyhet!", self.title

@@ -13,6 +13,7 @@ from django.views.generic import ListView
 from post_office import mail
 
 from chemie.events.models import Social, Bedpres
+from chemie.web_push.models import CoffeeSubmission
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
 from .forms import ContactForm, PostFundsForm, PostOfficeForms
@@ -29,8 +30,9 @@ def index(request):
     all_posts = Article.objects.filter(published=True).order_by(
         "-published_date"
     )[:4]
+    coffee = CoffeeSubmission.get_latest_submission()
 
-    context = {"social": all_social, "bedpres": all_bedpres, "posts": all_posts}
+    context = {"social": all_social, "bedpres": all_bedpres, "posts": all_posts, "coffee":coffee}
     return render(request, "chemie/index.html", context)
 
 
