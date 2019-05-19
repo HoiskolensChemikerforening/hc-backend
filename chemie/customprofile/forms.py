@@ -9,6 +9,7 @@ from django.core.validators import ValidationError
 
 from chemie.chemie.settings import REGISTRATION_KEY
 from .models import Profile
+from chemie.web_push.models import Subscription
 
 
 class RegisterUserForm(forms.ModelForm):
@@ -136,11 +137,14 @@ class EditProfileForm(forms.ModelForm):
 class EditPushForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = [
-            'coffee_subscription',
-            'news_subscription',
-            'happyhour_subscription',
-        ]
+        fields = ('subscriptions',)
+    
+    def __init__ (self, *args, **kwargs):
+        user = kwargs.pop("user")
+        super(EditPushForm, self).__init__(*args, **kwargs)
+        self.fields["subscriptions"].widget = forms.widgets.CheckboxSelectMultiple()
+        self.fields["subscriptions"].help_text = ""
+        self.fields["subscriptions"].queryset = Subscription.objects.filter(owner=user)
 
 class ChangePasswordForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Old password")

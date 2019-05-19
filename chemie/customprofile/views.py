@@ -114,24 +114,24 @@ def edit_profile(request):
 
 @login_required
 def edit_push(request):
-    form = EditPushForm(request.POST or None)
+    form = EditPushForm(request.POST or None, user=request.user)
     if request.method == "POST":
         if form.is_valid():
-            coffee_checked = form.cleaned_data['coffee_subscription']
-            news_checked = form.cleaned_data['news_subscription']
-            happyhour_checked = form.cleaned_data['happyhour_subscription']
+            # coffee_checked = form.cleaned_data['coffee_subscription']
+            # news_checked = form.cleaned_data['news_subscription']
+            # happyhour_checked = form.cleaned_data['happyhour_subscription']
             
-            request.user.profile.coffee_subscription = coffee_checked
-            request.user.profile.news_subscription = news_checked
-            request.user.profile.happyhour_subscription = happyhour_checked
+            # request.user.profile.coffee_subscription = coffee_checked
+            # request.user.profile.news_subscription = news_checked
+            # request.user.profile.happyhour_subscription = happyhour_checked
             
-            request.user.profile.save()
+            # request.user.profile.save()
             return redirect(reverse('customprofile:edit-push'))
-    form = EditPushForm(initial={
-        'coffee_subscription': request.user.profile.coffee_subscription,
-        'news_subscription': request.user.profile.news_subscription,
-        'happyhour_subscription': request.user.profile.happyhour_subscription
-        })
+    # form = EditPushForm(initial={
+    #     'coffee_subscription': request.user.profile.coffee_subscription,
+    #     'news_subscription': request.user.profile.news_subscription,
+    #     'happyhour_subscription': request.user.profile.happyhour_subscription
+    #     })
     context = {
         'form':form,
     }
