@@ -63,6 +63,7 @@ class CoffeeSubmission(models.Model):
                 for device in devices
             ] # one-liner for loop
 
+
 class Device(models.Model):
     """ Overall model which saves gcm/apns device and the users subsciption settings """
     
@@ -206,6 +207,7 @@ def delete_device_signal(sender, instance, **kwargs):
 
 # Connects delete_device_signal with the pre_delete signal reciever
 pre_delete.connect(delete_device_signal, sender=Device)
+
 
 class Subscription(models.Model):
     active = models.BooleanField(default=True)
