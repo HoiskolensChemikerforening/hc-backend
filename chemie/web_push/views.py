@@ -1,14 +1,13 @@
 from django.shortcuts import redirect, reverse
 from django.contrib.auth.decorators import login_required
 from push_notifications.models import GCMDevice, APNSDevice
-from .models import Device, CoffeeSubmission
+from .models import Device, CoffeeSubmission, Subscription
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework import viewsets
 from .serializers import CoffeeSubmissionSerializer
 from django.http import HttpResponse, JsonResponse
 import datetime
-from chemie.customprofile.models import Profile
 
 class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
     queryset = CoffeeSubmission.objects.order_by("date")
@@ -57,7 +56,8 @@ def send_notification(request):
             if topic == "coffee":
                 if CoffeeSubmission.fifteen_minutes_has_passed():
                     serializer.save()
-                    subscribers = Profile.objects.filter(coffee_subscription=True)
+                    subscriptions = Subscription.objects.filter(subscription_type=1)
+                    subscribers = [sub.owner for sub in subscriptions] 
 
                     CoffeeSubmission.send_coffee_notification(subscribers)
                     return JsonResponse(serializer.errors, status=201)
