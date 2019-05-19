@@ -523,6 +523,7 @@ p {
     display: flex;
     justify-content: space-between;
     background-color: white;
-    margin:1rem;
+    margin-top: 1rem;
+    border-radius: 0.5rem;
 }
 

@@ -117,26 +117,28 @@ def edit_push(request):
     form = EditPushForm(request.POST or None, user=request.user)
     if request.method == "POST":
         if form.is_valid():
-            # coffee_checked = form.cleaned_data['coffee_subscription']
-            # news_checked = form.cleaned_data['news_subscription']
-            # happyhour_checked = form.cleaned_data['happyhour_subscription']
-            
-            # request.user.profile.coffee_subscription = coffee_checked
-            # request.user.profile.news_subscription = news_checked
-            # request.user.profile.happyhour_subscription = happyhour_checked
-            
-            # request.user.profile.save()
+            # Sets all subscriptions to false
+            user_subscriptions = request.user.profile.subscriptions.all()
+            for sub in user_subscriptions:
+                sub.active = False
+                sub.save()
+
+            # sets the picked subscriptions to True
+            subscription_query = form.cleaned_data['subscriptions']
+            for sub in subscription_query:
+                if sub in user_subscriptions:
+                    user_sub = user_subscriptions.get(subscription_type=sub.subscription_type)
+                    user_sub.active = True
+                    user_sub.save()
             return redirect(reverse('customprofile:edit-push'))
-    # form = EditPushForm(initial={
-    #     'coffee_subscription': request.user.profile.coffee_subscription,
-    #     'news_subscription': request.user.profile.news_subscription,
-    #     'happyhour_subscription': request.user.profile.happyhour_subscription
-    #     })
+    userSubSettings = request.user.profile.get_sub_settings()
     context = {
-        'form':form,
+        'form': form,
+        'sub_settings': userSubSettings
     }
+    print(userSubSettings)
     return render(request, "customprofile/editpush.html", context)
-    
+
 def forgot_password(request):
     form = ForgotPassword(request.POST or None)
     if request.POST:

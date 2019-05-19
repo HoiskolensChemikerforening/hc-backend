@@ -139,13 +139,14 @@ class EditPushForm(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ('subscriptions',)
-    
+
     def __init__ (self, *args, **kwargs):
         user = kwargs.pop("user")
         super(EditPushForm, self).__init__(*args, **kwargs)
         self.fields["subscriptions"].widget = forms.widgets.CheckboxSelectMultiple()
         self.fields["subscriptions"].help_text = ""
-        self.fields["subscriptions"].queryset = Subscription.objects.filter(owner=user)
+        self.fields["subscriptions"].queryset = Subscription.objects.filter(owner=user).order_by("id")
+
 
 
 class ChangePasswordForm(forms.ModelForm):

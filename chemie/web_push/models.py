@@ -217,6 +217,4 @@ class Subscription(models.Model):
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Eier av abonomentet")
 
     def __str__(self):
-        sub_type = SUSBSCRIPTION_CHOICES[self.subscription_type-1][-1]
-        sub_type += ": {}".format(str(self.active))
-        return sub_type
+        return "Aboner på {} varsler".format(SUSBSCRIPTION_CHOICES[self.subscription_type-1][-1])

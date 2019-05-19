@@ -5,7 +5,7 @@
 {% load crispy_forms_tags %}
 
 {% block nav_header %}
-  Profil 
+  Profil
 {% endblock nav_header %}
 {% block nav_sub_header %}
   Endre push varsel
@@ -19,26 +19,43 @@
     opacity: 1;
   }
 </style>
+
 <div style="display:inline">
-  <a class="btn" style="float:right" href="{% url 'customprofile:edit' %}">Tilbake</a>  
+  <a class="btn" style="float:right" href="{% url 'customprofile:edit' %}">Tilbake</a>
   <h5>
       Rediger dine push varsler her.
     </h5>
-    
     <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
-      {{ form.subscriptions.label }}
-      {% for field in form %}
-            {{ field }}
-      {% endfor %}
+        {% for field in form %}
+
+        <label>
+            {% for value in field %}
+            {{value}}
+              <br>
+            {% endfor %}
+        </label>
+        {% endfor %}
         <button class="btn btn-primary pull-right" style="margin:1rem" type="submit">Lagre endringer</button>
     </form>
     <img type="image/png" style="max-width: 100%"  src="{% static "images/instruction_webpush.png" %}">
 </div>
-  
+
 {% endblock content %}
 
 {% block footer_script %}
 <script>
-  
+  var userSettings = []
 </script>
+{% for sub in form.fields.subscriptions.queryset.all %}
+        <script>
+          var checked = "{{sub.active}}"
+          userSettings.push(JSON.parse(checked.toLowerCase()))
+         </script>
+        {% endfor %}
+        <script>
+          for (i=0; i< userSettings.length; i++){
+            var elem = document.getElementById("id_subscriptions_" + i.toString())
+            elem.checked = userSettings[i]
+          }
+        </script>
 {% endblock footer_script %}
