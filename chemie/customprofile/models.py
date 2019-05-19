@@ -11,7 +11,7 @@ from sorl.thumbnail import ImageField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from chemie.shop import statistics
-from chemie.web_push.models import Device
+from chemie.web_push.models import Device, Subscription
 # Time the activation is valid in hourse
 VALID_TIME = 2
 
@@ -28,6 +28,7 @@ GRADES = Choices(
 RELATIONSHIP_STATUS = Choices(
     ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!")
 )
+
 
 COMMENCE_YEAR = 1980
 CURRENT_YEAR = timezone.now().year
@@ -138,19 +139,9 @@ class Profile(models.Model):
     eligible_for_voting = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
     
-    coffee_subscription = models.BooleanField(
-        default=True, verbose_name="Aboner på kaffe pushvarsler"
-    )
-    
-    news_subscription = models.BooleanField(
-        default=True, verbose_name="Aboner på nyheter pushvarsler"
-    )
-
-    happyhour_subscription = models.BooleanField(
-        default=True, verbose_name="Aboner på happy hour pushvarsler"
-    )
-
     devices = models.ManyToManyField(Device, blank=True, verbose_name="Push notification enheter")
+    
+    subscriptions = models.ManyToManyField(Subscription, blank=True, verbose_name="Abonomenter på push varsler", related_name="profile")
 
     objects = ProfileManager()
 
