@@ -134,6 +134,7 @@ class EditProfileForm(forms.ModelForm):
             "relationship_status",
         ]
 
+
 class EditPushForm(forms.ModelForm):
     class Meta:
         model = Profile
@@ -145,6 +146,7 @@ class EditPushForm(forms.ModelForm):
         self.fields["subscriptions"].widget = forms.widgets.CheckboxSelectMultiple()
         self.fields["subscriptions"].help_text = ""
         self.fields["subscriptions"].queryset = Subscription.objects.filter(owner=user)
+
 
 class ChangePasswordForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Old password")

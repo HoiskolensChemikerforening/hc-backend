@@ -11,8 +11,14 @@
   Endre push varsel
 {% endblock nav_sub_header %}
 
-{% block content %}
 
+{% block content %}
+<style>
+  [type="checkbox"]:not(:checked), [type="checkbox"]:checked {
+    position: relative;
+    opacity: 1;
+  }
+</style>
 <div style="display:inline">
   <a class="btn" style="float:right" href="{% url 'customprofile:edit' %}">Tilbake</a>  
   <h5>
@@ -20,12 +26,10 @@
     </h5>
     
     <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
-            {% for field in form %}
-            <label>
-                {{field}}
-                <span style="width:100%; margin:0.5rem" id="span-{{field.label}}">{{field.label}}</span>
-            </label>
-            {% endfor %}
+      {{ form.subscriptions.label }}
+      {% for field in form %}
+            {{ field }}
+      {% endfor %}
         <button class="btn btn-primary pull-right" style="margin:1rem" type="submit">Lagre endringer</button>
     </form>
     <img type="image/png" style="max-width: 100%"  src="{% static "images/instruction_webpush.png" %}">
