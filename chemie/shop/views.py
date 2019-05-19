@@ -419,7 +419,8 @@ def create_happyhour(request, form):
                 "Happy Hour aktivert!",
                 extra_tags=f"Aktivert i {instance.duration} time(r)",
             )
-            subscribers = Profile.objects.filter(news_subscription=True)
+            subscriptions = Subscription.objects.filter(subscription_type=3)
+            subscribers = [sub.owner for sub in subscriptions] 
             instance.send_push(subscribers)
             return redirect(reverse("shop:admin"))
     context = {"form": form}

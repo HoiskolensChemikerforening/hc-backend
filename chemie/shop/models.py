@@ -160,7 +160,7 @@ class HappyHour(models.Model):
 
     def send_push(self, subscribers):
         for subscriber in subscribers:
-            devices = subscriber.devices.all()
+            devices = subscriber.profile.devices.all()
             tag = "1 time" if self.duration == 1 else "{} timer".format(self.duration)
             happyhour_message = "Nå er det happyhour i {} på kontoret".format(tag)
             for device in devices:
