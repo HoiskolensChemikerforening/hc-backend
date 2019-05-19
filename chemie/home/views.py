@@ -30,7 +30,7 @@ def index(request):
     all_posts = Article.objects.filter(published=True).order_by(
         "-published_date"
     )[:4]
-    coffee = CoffeeSubmission.objects.latest('-date')
+    coffee = CoffeeSubmission.get_latest_submission()
 
     context = {"social": all_social, "bedpres": all_bedpres, "posts": all_posts, "coffee":coffee}
     return render(request, "chemie/index.html", context)

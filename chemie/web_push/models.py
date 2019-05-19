@@ -2,6 +2,7 @@ from django.db import models
 from extended_choices import Choices
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
+from django.core.exceptions import ObjectDoesNotExist
 from push_notifications.models import APNSDevice, GCMDevice
 import datetime
 import pytz
@@ -36,6 +37,14 @@ class CoffeeSubmission(models.Model):
             return False
         return True
     
+    @classmethod
+    def get_latest_submission(cls):
+        try:
+            coffee = cls.objects.latest("-date")
+        except ObjectDoesNotExist:
+            coffee = None
+        return coffee
+        
     @staticmethod
     def send_coffee_notification(subscribers):
         for subscriber in subscribers:
