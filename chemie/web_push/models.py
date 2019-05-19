@@ -10,10 +10,11 @@ import pytz
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
 SUSBSCRIPTION_CHOICES = Choices(
-    ("COFFEE", 1, "Coffee"), 
+    ("COFFEE", 1, "Coffee"),
     ("NEWS", 2, "News"),
     ("HAPPY", 3, "Happy"),
 )
+
 
 class CoffeeSubmission(models.Model):
     """ Submission that's created each time a notification is send """
@@ -36,20 +37,20 @@ class CoffeeSubmission(models.Model):
         ).exists():
             return False
         return True
-    
+
     @classmethod
     def get_latest_submission(cls):
         try:
-            coffee = cls.objects.latest("-date")
+            coffee = cls.objects.latest("date")
         except ObjectDoesNotExist:
             coffee = None
         return coffee
-        
+
     @staticmethod
     def send_coffee_notification(subscribers):
         for subscriber in subscribers:
             devices = subscriber.profile.devices.all()
-        
+
             time_mark = datetime.datetime.now().time()
             hour_mark = str(time_mark.hour)
             minute_mark = int(time_mark.minute)
@@ -66,7 +67,7 @@ class CoffeeSubmission(models.Model):
 
 class Device(models.Model):
     """ Overall model which saves gcm/apns device and the users subsciption settings """
-    
+
     owner = models.ForeignKey(
         User, verbose_name="eier", on_delete=models.CASCADE
     )
@@ -91,7 +92,6 @@ class Device(models.Model):
     #   on_delete=models.DO_NOTHING,
     #   verbose_name="Tredje parts api for apple telefoner"
     # )
-    
 
     date_created = models.DateTimeField(auto_now_add=True)
 
@@ -160,14 +160,14 @@ class Device(models.Model):
         #             user=user,
         #         )
         #         device = cls.objects.create(
-        #             apns_device=apns_device, 
+        #             apns_device=apns_device,
         #             owner=user,
-        #             gcm_device=None       
+        #             gcm_device=None
         #         )
         #         user.profile.devices.add(device)
         #         status = 201
 
-        if user.profile.subscriptions.count() < len(SUSBSCRIPTION_CHOICES): 
+        if user.profile.subscriptions.count() < len(SUSBSCRIPTION_CHOICES):
             for sub_type in SUSBSCRIPTION_CHOICES:
                 if user.profile.subscriptions.filter(subscription_type=sub_type[0]).count() == 0:
                     sub = Subscription.objects.create(
@@ -176,7 +176,7 @@ class Device(models.Model):
                         )
                     user.profile.subscriptions.add(sub)
             user.profile.save()
-            
+
         if cls.objects.filter(owner=user).count() > 5:
             cls.objects.latest("-date_created").delete()
         return status
@@ -211,9 +211,9 @@ pre_delete.connect(delete_device_signal, sender=Device)
 
 class Subscription(models.Model):
     active = models.BooleanField(default=True)
-    
+
     subscription_type = models.PositiveSmallIntegerField(choices=SUSBSCRIPTION_CHOICES)
-    
+
     owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Eier av abonomentet")
 
     def __str__(self):
