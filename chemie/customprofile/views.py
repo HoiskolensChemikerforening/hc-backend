@@ -131,13 +131,11 @@ def edit_push(request):
                     user_sub.active = True
                     user_sub.save()
             return redirect(reverse('customprofile:edit-push'))
-    userSubSettings = request.user.profile.get_sub_settings()
     context = {
         'form': form,
-        'sub_settings': userSubSettings
     }
-    print(userSubSettings)
     return render(request, "customprofile/editpush.html", context)
+
 
 def forgot_password(request):
     form = ForgotPassword(request.POST or None)
