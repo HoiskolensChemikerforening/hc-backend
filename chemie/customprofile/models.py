@@ -4,7 +4,7 @@ from functools import reduce
 
 from django.contrib.auth.models import User
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Sum
 from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
@@ -174,6 +174,10 @@ class Profile(models.Model):
 
     def get_third_most_bought_item(self):
         return statistics.get_third_most_bought_item(self.user)
+
+    @classmethod
+    def get_all_refill_sum(cls):
+        return cls.objects.aggregate(Sum('balance'))['balance__sum']
 
 
 class Membership(models.Model):
