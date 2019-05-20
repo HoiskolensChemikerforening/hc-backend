@@ -481,4 +481,6 @@ def view_all_refills(request):
             context['refill_receipts'] = refill_receipts
     except ObjectDoesNotExist:
         pass
+    refill_sum = Profile.get_all_refill_sum()
+    context['refill_sum'] = refill_sum
     return render(request, "shop/all_refills.html", context)
