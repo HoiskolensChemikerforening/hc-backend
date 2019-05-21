@@ -31,11 +31,16 @@
     right: 1rem;
   }
 
+  #checkboxes{
+    align-items: center
+  }
+
   .checkbox-container {
     display: block;
     position: relative;
     padding-left: 35px;
     margin-bottom: 12px;
+    margin-left:1rem;
     cursor: pointer;
     font-size: 22px;
     -webkit-user-select: none;
