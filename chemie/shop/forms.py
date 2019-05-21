@@ -152,12 +152,16 @@ class GetUserReceiptsForm(forms.ModelForm):
 
 
 class SearchItemForm(forms.ModelForm):
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
             "name"
         )
+        for k, field in self.fields.items():
+            if 'required' in field.error_messages:
+                field.error_messages['required'] = ''
 
     class Meta:
         model = Item
