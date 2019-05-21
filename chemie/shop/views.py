@@ -123,14 +123,22 @@ def index_user(request):
         pass
     categories = Category.objects.all()
     cart = ShoppingCart(request)
+    search_form = SearchItemForm(request.POST or None)
     context = {
         "items": items,
         "categories": categories,
         "cart": cart,
         "is_tablet_user": is_tablet_user,
         "rfid_form": rfid_form,
+        'search_form': search_form
     }
     if request.method == "POST":
+        if 'name' in request.POST:
+            if search_form.is_valid():
+                item_id = search_form.data['name']
+                items = items.filter(id=item_id)
+                context['items'] = items
+                context['is_searched'] = True
         if "buy" in request.POST:
             post_str = request.POST["buy"]
             item_id, quantity = post_str.split("-")
@@ -179,14 +187,22 @@ def index_tabletshop(request):
         pass
     categories = Category.objects.all()
     cart = ShoppingCart(request)
+    search_form = SearchItemForm(request.POST or None)
     context = {
         "items": items,
         "categories": categories,
         "cart": cart,
         "is_tablet_user": is_tablet_user,
         "rfid_form": rfid_form,
+        'search_form': search_form
     }
     if request.method == "POST":
+        if 'name' in request.POST:
+            if search_form.is_valid():
+                item_id = search_form.data['name']
+                items = items.filter(id=item_id)
+                context['items'] = items
+                context['is_searched'] = True
         if "buy" in request.POST:
             post_str = request.POST["buy"]
             item_id, quantity = post_str.split("-")
