@@ -149,3 +149,19 @@ class GetUserReceiptsForm(forms.ModelForm):
         widgets = {
             "buyer": autocomplete.ModelSelect2(url="verv:user-autocomplete")
         }
+
+
+class SearchItemForm(forms.ModelForm):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            "name"
+        )
+
+    class Meta:
+        model = Item
+        fields = ["name"]
+        widgets = {
+            "name": autocomplete.ListSelect2(url="shop:item-autocomplete")
+        }

@@ -109,10 +109,11 @@ class Item(models.Model):
         return self.name
 
     def clean(self, *args, **kwargs):
-        if self.price < 0:
-            raise ValidationError(
-                "Du kan ikke legge inn en vare som gjør at vi taper penger. Wtf?"
-            )
+        if self.price is not None:
+            if self.price < 0:
+                raise ValidationError(
+                    "Du kan ikke legge inn en vare som gjør at vi taper penger. Wtf?"
+                )
         super().clean(*args, **kwargs)
 
 

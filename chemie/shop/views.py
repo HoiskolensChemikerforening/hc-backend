@@ -1,12 +1,15 @@
 from decimal import InvalidOperation
 
+from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.utils import timezone
+from django.utils.html import format_html
 import operator
+
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.customprofile.models import Profile
@@ -17,7 +20,8 @@ from .forms import (
     HappyHourForm,
     EditItemForm,
     GetUserRefillForm,
-    GetUserReceiptsForm
+    GetUserReceiptsForm,
+    SearchItemForm
 )
 from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
 from .statistics import get_plot_item
@@ -253,6 +257,26 @@ def view_my_refills(request):
     return render(request, "shop/user_refills.html", {"refill_receipts": refill_receipts})
 
 
+class ItemAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Item.objects.none()
+
+        qs = Item.objects.all()
+
+        if self.q:
+            qs = (
+                qs.filter(name__icontains=self.q)
+            )
+
+        return qs
+
+    def get_result_label(self, item):
+        return format_html("{}", item.name)
+
+
+
 @login_required
 def view_statistics(request):
     items = Item.objects.all()
@@ -262,13 +286,16 @@ def view_statistics(request):
         .prefetch_related("items")
     )
     bought_items = request.user.profile.get_bought_items()
-
-    context = {'items': items, 'orders': orders, 'bought_items': bought_items}
+    search_form = SearchItemForm(request.POST or None)
+    context = {'items': items, 'orders': orders, 'bought_items': bought_items, 'search_form': search_form}
     if request.method == 'POST':
-        plot_time, plot_quantity = get_plot_item(request.user, request.POST['item'])
-        context['plot_time'] = plot_time
-        context['plot_quantity'] = plot_quantity
-        context['plot_item'] = request.POST['item']
+        if search_form.is_valid():
+            plot_item_id = search_form.data['name']
+            plot_item, plot_time, plot_quantity = get_plot_item(request.user, plot_item_id)
+            context['plot_time'] = plot_time
+            context['plot_quantity'] = plot_quantity
+            context['plot_item'] = plot_item
+            context['seatch_form'] = SearchItemForm(None)
     return render(request, "shop/user_statistics.html", context)
 
 

@@ -10,6 +10,7 @@ shop_url_patterns = [
     path("mine-paafyll", views.view_my_refills, name="refills"),
     path("statistikk", views.view_statistics, name="statistics"),
     path("fjern-handlekurv/", views.remove_cart, name="remove-cart"),
+    path("item-autocomplete/", views.ItemAutocomplete.as_view(), name="item-autocomplete")
 ]
 
 admin_shop_urlpatterns = [
