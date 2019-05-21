@@ -49,8 +49,10 @@ def get_third_most_bought_item(user):
         return
 
 
-def get_plot_item(user, item_name):
+def get_plot_item(user, id):
     try:
+        item = Item.objects.get(id=int(id))
+        item_name = item.name
         orders = Order.objects.filter(buyer=user)
         now = datetime.datetime.now().replace(tzinfo=pytz.UTC)
         plot_time = [now.date()]
@@ -74,4 +76,4 @@ def get_plot_item(user, item_name):
     except ObjectDoesNotExist:
         return None, None
     plot_time = [str(time) for time in plot_time]
-    return plot_time, plot_quantity
+    return item, plot_time, plot_quantity
