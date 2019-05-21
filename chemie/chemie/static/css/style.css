@@ -517,3 +517,6 @@ p {
     background: rgb(237, 205, 47)
 }
 
+.select2-selection{
+    padding:0rem
+}

@@ -39,3 +39,7 @@ ul {
 #foo.hide2 tr > *:nth-child(2) {
   display: none;
 }
+
+.select2-selection{
+  padding:0rem
+}
