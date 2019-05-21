@@ -134,3 +134,7 @@
     color:darkred;
     cursor:pointer;
   }
+
+  .select2-selection{
+    padding:0rem
+  }
