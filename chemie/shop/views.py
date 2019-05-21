@@ -139,6 +139,7 @@ def index_user(request):
                 items = items.filter(id=item_id)
                 context['items'] = items
                 context['is_searched'] = True
+        search_form = SearchItemForm(None)
         if "buy" in request.POST:
             post_str = request.POST["buy"]
             item_id, quantity = post_str.split("-")
@@ -203,6 +204,7 @@ def index_tabletshop(request):
                 items = items.filter(id=item_id)
                 context['items'] = items
                 context['is_searched'] = True
+        search_form = SearchItemForm(None)
         if "buy" in request.POST:
             post_str = request.POST["buy"]
             item_id, quantity = post_str.split("-")
@@ -279,7 +281,7 @@ class ItemAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return Item.objects.none()
 
-        qs = Item.objects.all()
+        qs = Item.objects.all().order_by('name')
 
         if self.q:
             qs = (
