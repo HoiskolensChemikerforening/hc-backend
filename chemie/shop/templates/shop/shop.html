@@ -2,7 +2,6 @@
 {% load thumbnail %}
 {% load static %}
 {% load shop_extras %}
-{% load crispy_forms_tags %}
 
 {% block nav_header %}
 Butikk
@@ -48,55 +47,34 @@ Butikk
 </script>
 
 <!-- Show category checkboxes to filter items -->
-<div id="checkboxes" class="d-flex justify-content-between flex-wrap align-center" style="margin:1rem">
-  <div class="p-2 d-flex justify-content-between flex-wrap" style="max-width: 30rem">
+<div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap; margin:1rem">
+  {% for category in categories %}
+  <script type="text/javascript">
+    categoriesFilterd["{{category.name}}"] = false
+  </script>
+  {% if is_tablet_user %}
+  {% if category.check_active_category%}
+  <p>
+    <label class="checkbox-container">{{category}}
+      <input class="category-checkbox" type="checkbox" name="filter-checkbox"
+        onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
+      <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
+    </label>
+  </p>
+  {% endif %}
+  {% else %}
+  {% if category.check_active_without_tablet_category%}
+  <p>
+    <label class="checkbox-container">{{category}}
+      <input class="category-checkbox" type="checkbox" name="filter-checkbox"
+        onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
+      <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
 
-    {% for category in categories %}
-    <script type="text/javascript">
-      categoriesFilterd["{{category.name}}"] = false
-    </script>
-    {% if is_tablet_user %}
-    {% if category.check_active_category%}
-    <div class="p-2" style="margin:1rem">
-      <label class="checkbox-container">{{category}}
-        <input class="category-checkbox" type="checkbox" name="filter-checkbox"
-          onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
-        <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
-      </label>
-    </div>
-    {% endif %}
-    {% else %}
-    {% if category.check_active_without_tablet_category%}
-    <p>
-      <label class="checkbox-container">{{category}}
-        <input class="category-checkbox" type="checkbox" name="filter-checkbox"
-          onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
-        <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
-
-      </label>
-    </p>
-    {% endif %}
-    {% endif %}
-    {% endfor %}
-  </div>
-  <div class="p-2">
-      <form id="refill-balance-form" method="POST"> {% csrf_token %}
-          <table>
-              {% crispy search_form %}
-              <div class="d-flex justify-content-between">
-                <div class="p-2">
-                    <button type="submit" class="btn" style="background-color:#edcd2f; border-color: #edcd2f ">Søk</button>
-                </div>
-                {% if is_searched %}
-                <div class="p-2">
-                    <a class="btn" href="{% url 'shop:index' %}"  style="color:black; background-color:#edcd2f; border-color: #edcd2f "> Nullstill søk</a>
-                </div>
-                {% endif %}
-              </div>
-          </table>
-          </form>
-  </div>
-
+    </label>
+  </p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
 </div>
 {% if is_happy %}
 <div id="happy-hour-box">
