@@ -190,6 +190,9 @@
           {% endif %}
 
         </tr>
+        <script>
+          paymentList["{{attendee.id}}"] = ["{{attendee.user.profile}}",("{{ attendee.payment_status}}".toLowerCase() == "true")]
+        </script>
       {% endfor %}
       </tbody>
     </table>
@@ -214,6 +217,13 @@
               event.preventDefault();
               var myID = $(this).attr("id").split('-')[1];
               var csrftoken = getCookie('csrftoken');
+
+            var changePayment = true
+            if (paymentList[myID][1]){
+              changePayment = confirm("Endre betalingsstatus for " +  paymentList[myID][0] + " fra betalt til ikke betalt?")
+            }
+            if (changePayment){
+              paymentList[myID][1] = !paymentList[myID][1]
               $.ajax({
                   type: "GET",
                   url: "/events/social/adminlist/paymentstatus/" + myID,
