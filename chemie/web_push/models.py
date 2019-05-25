@@ -52,7 +52,7 @@ class CoffeeSubmission(models.Model):
             elif seconds_since_press < 86400:
                 return "For {} timer siden".format(int(seconds_since_press/3600))
             else:
-                return coffee.date
+                return "For {} dager siden".format(delta.days)
         except ObjectDoesNotExist:
             coffee = None
         return coffee
