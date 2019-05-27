@@ -42,7 +42,7 @@
     kategori</a>
   <a class="btn btn-secondary" style="color: black; margin: 1rem; background-color: #edcd2f; border-color: #edcd2f" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
   <a class="btn btn-secondary" style="color:black; margin: 1rem; background-image: url('/static/images/fireworks_background.png'); background-color: transparent; background-size: cover" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver
-    happy hour</a>
+    Happy Hour</a>
   <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:all_receipts" %}" role="button">Kvitteringer</a>
   <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:all_refills" %}" role="button">Påfyllinger</a>
   <button type="button" class="btn btn-seccondary" data-toggle="modal" data-target="#instruksModal"
@@ -62,32 +62,32 @@
   <div class="modal-dialog" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title">Instruks for administrere butikken på kontoret</h5>
+        <h5 class="modal-title">Instruks for å administrere butikken på kontoret</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
       <div class="modal-body">
-        <p><b>Logge inn på kontorets PC:</b> For å logge inn på PC'en kan hvem som helt med NTNU brukernavn 
-          logge seg inn. Anbefales å bruke kaffeknappen sin NTNU-bruker.
+        <p><b>Logge inn på kontorets PC:</b> For å logge inn på PC-en kan hvem som helt med NTNU-brukernavn
+          logge seg inn. Det anbefales å bruke kaffeknappen sin NTNU-bruker.
         </p>
         <p>
-          <b>brukernavn: </b> hc_pi01@ntnu.no <br>
-          <b>passord:</b> 9CfY3PTWATzY
+          <b>Brukernavn: </b> hc_pi01@ntnu.no <br>
+          <b>Passord:</b> 9CfY3PTWATzY
         </p>
-          
+
         <p>
-          hc_pi01 er en NTNU bruker orakeltjenesten har gitt oss, den er koblet til Bendik Sannes 
+          hc_pi01 er en NTNU-bruker Orakeltjenesten har gitt oss. Den er koblet til Bendik Støa Sannes,
           så når han forsvinner vil hc_pi01 deaktiveres.
         </p>
-        <p><b>Logge inn på butikken:</b> På hc.ntnu.no er det lagt opp en egen bruker som skal 
-          være logget inn slik at folk kan betale med studentkortet sitt. 
+        <p><b>Logge inn på butikken:</b> På hc.ntnu.no er det lagt opp en egen bruker som skal
+          være logget inn slik at folk kan betale med studentkortet sitt.
         </p>
         <p>
-          <b>brukernavn: </b>tabletshop<br>
-          <b>passord:</b> 3x9p4PTWATzY
+          <b>Brukernavn: </b>tabletshop<br>
+          <b>Passord:</b> 3x9p4PTWATzY
         </p>
-        
+
 
       </div>
       <div class="modal-footer">
@@ -190,7 +190,7 @@
   monthTotal = monthTotal.replace('[', '');
   monthTotal = monthTotal.replace(']', '');
   monthTotal = monthTotal.split(",")
-  
+
   var orderItemList = orderItems.split('},');
   for (var i = 0; i < 12; i++) {
     var monthOrder = orderItemList[i]

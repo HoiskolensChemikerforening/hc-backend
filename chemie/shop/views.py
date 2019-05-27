@@ -151,7 +151,7 @@ def index_user(request):
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    "Du har itj nok HC-coin, kiis",
+                    "Du har itj nok HC-coins, kiis",
                     extra_tags="Nei!",
                 )
             else:
@@ -211,7 +211,7 @@ def index_tabletshop(request):
                         messages.add_message(
                             request,
                             messages.ERROR,
-                            f"{request.user.get_full_name()} sin konto har itj nok HC-coin, kiis. Saldo på konto er {balance} HC-coin",
+                            f"{request.user.get_full_name()} sin konto har itj nok HC-coins, kiis. Saldo på konto er {balance} HC-coins",
                             extra_tags="Avvist",
                         )
                     else:
@@ -221,7 +221,7 @@ def index_tabletshop(request):
                             request,
                             messages.SUCCESS,
                             (
-                                f"{request.user.get_full_name()} sin kontoen er trukket {total_price} HC-coins."
+                                f"{request.user.get_full_name()} sin konto er trukket {total_price} HC-coins."
                                 f"Ny saldo på konto er: {new_balance} HC-coins."
                             ),
                             extra_tags="Kjøp godkjent",
@@ -231,7 +231,7 @@ def index_tabletshop(request):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        "Studentkort er ikke registrert. Logg inn på https://hc.ntnu.no{} og legg in ditt studentkorts EM-nummer".format(
+                        "Studentkort er ikke registrert. Logg inn på https://hc.ntnu.no{} og legg inn ditt studentkorts EM-nummer".format(
                             reverse("profile:edit")
                         ),
                         extra_tags="Ups",
@@ -274,7 +274,6 @@ class ItemAutocomplete(autocomplete.Select2QuerySetView):
 
     def get_result_label(self, item):
         return format_html("{}", item.name)
-
 
 
 @login_required
@@ -372,7 +371,6 @@ def add_item(request):
     return render(request, "shop/add_item.html", context)
 
 
-
 @permission_required("shop.change_item")
 def edit_item(request, pk):
     item = get_object_or_404(Item, pk=pk)
@@ -428,12 +426,12 @@ def activate_happyhour(request):
             messages.add_message(
                 request,
                 messages.WARNING,
-                f"Happy hour er allerede aktivert. Det er {round(time_left_minutes)} minutter igjen",
+                f"Happy Hour er allerede aktivert. Det er {round(time_left_minutes)} minutter igjen",
             )
             return redirect(reverse("shop:admin"))
         return create_happyhour(request, form)
     except HappyHour.DoesNotExist:
-        print("Ingen Happy Hour objekter eksisterer")
+        print("Ingen Happy Hour-objekter eksisterer")
         return create_happyhour(request, form)
     except:
         messages.add_message(
@@ -444,6 +442,7 @@ def activate_happyhour(request):
         )
         context = {"form": form}
         return render(request, "shop/happy-hour.html", context)
+
 
 @permission_required("shop.add_happyhour")
 def create_happyhour(request, form):
