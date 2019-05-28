@@ -40,7 +40,7 @@
 {% block content %}
 <form method="POST" id="happyhourForm"> {% csrf_token %}
     {% crispy form %}
-    <input id="submit-form-button" class="btn btn-secondary" type="button" name="submit_value" value="Aktiver Happy Hour" style="color:black; margin: 1rem; background-image: url('/static/images/fireworks_background.png'); background-color: transparent; background-size: cover" href="{% url "shop:activate-happyhour" %}">
+    <input id="submit-form-button" class="btn btn-secondary" type="button" name="submit_value" value="Aktiver Happy Hour" style="color:black; margin: 1rem; background-image: url('{% static "/images/fireworks_background.png" %}'); background-color: transparent; background-size: cover" href="{% url "shop:activate-happyhour" %}">
 </form>
 {% endblock content %}
 
