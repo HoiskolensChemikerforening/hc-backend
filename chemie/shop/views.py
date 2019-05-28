@@ -321,34 +321,45 @@ def refill(request):
     if request.method == "POST":
         if form.is_valid():
             receiver = form.cleaned_data.get("receiver")
-            amount = form.cleaned_data.get("amount")
-            try:
-                receiver.profile.balance += amount
-                receiver.profile.save()
-            except InvalidOperation:
+            if receiver == request.user:
                 messages.add_message(
                     request,
                     messages.ERROR,
                     (
-                        "Brukeren vil få mer enn 9999 HC-coins på "
-                        "konto om du fyller på med beløpet."
+                        "Du kan ikke fyle på HC-coin til deg selv. "
+                        "Påfyller kan ikke være den samme som mottaker"
                     ),
                     extra_tags="Feil",
                 )
-                return render(
-                    request, "shop/refill-balance.html", {"form": form}
+            else:
+                amount = form.cleaned_data.get("amount")
+                try:
+                    receiver.profile.balance += amount
+                    receiver.profile.save()
+                except InvalidOperation:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        (
+                            "Brukeren vil få mer enn 9999 HC-coins på "
+                            "konto om du fyller på med beløpet."
+                        ),
+                        extra_tags="Feil",
+                    )
+                    return render(
+                        request, "shop/refill-balance.html", {"form": form}
+                    )
+                instance = form.save(commit=False)
+                instance.provider = provider
+                instance.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Du har fylt på {} HC-coins til {}".format(
+                        amount, receiver.get_full_name()
+                    ),
+                    extra_tags="Suksess",
                 )
-            instance = form.save(commit=False)
-            instance.provider = provider
-            instance.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Du har fylt på {} HC-coins til {}".format(
-                    amount, receiver.get_full_name()
-                ),
-                extra_tags="Suksess",
-            )
             return redirect("shop:refill")
     return render(request, "shop/refill-balance.html", {"form": form})
 
