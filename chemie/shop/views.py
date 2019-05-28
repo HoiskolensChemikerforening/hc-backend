@@ -326,8 +326,8 @@ def refill(request):
                     request,
                     messages.ERROR,
                     (
-                        "Du kan ikke fyle på HC-coin til deg selv. "
-                        "Påfyller kan ikke være den samme som mottaker"
+                        "Du kan ikke fylle på HC-coins til deg selv. "
+                        "Påfyller kan ikke være den samme som mottaker."
                     ),
                     extra_tags="Feil",
                 )
