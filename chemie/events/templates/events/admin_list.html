@@ -11,6 +11,8 @@
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/widgets/widget-output.min.js"></script>
   <script type="text/javascript"
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
   <script>
       var paymentList = {}
       $(function () {
@@ -242,7 +244,7 @@
             if (changePayment){
               paymentList[myID][1] = !paymentList[myID][1]
               $.ajax({
-                type: "GET",
+                type: "POST",
                 url: "/events/social/adminlist/paymentstatus/" + myID,
                 datatype: "json",
 
@@ -280,6 +282,10 @@
               });
           })
       });
-
+      $(document).ready(function () {
+    $.ajaxSetup({
+        headers: { 'X-CSRFToken': Cookies.get('csrftoken') }
+    });
+});
   </script>
 {% endblock %}
