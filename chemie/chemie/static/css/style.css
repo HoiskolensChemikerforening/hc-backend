@@ -528,3 +528,6 @@ p {
     border-radius: 0.5rem;
 }
 
+.select2-selection{
+    padding:0rem
+}

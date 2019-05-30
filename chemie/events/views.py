@@ -688,10 +688,13 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
 @login_required
 @permission_required("events.change_socialeventregistration")
 def change_payment_status(request, registration_id):
-    registration = SocialEventRegistration.objects.get(pk=registration_id)
-    registration.payment_status = not registration.payment_status
-    registration.save()
-    return JsonResponse({"payment_status": registration.payment_status})
+    if request.method == "POST":
+        registration = SocialEventRegistration.objects.get(pk=registration_id)
+        registration.payment_status = not registration.payment_status
+        registration.save()
+        return JsonResponse({"payment_status": registration.payment_status})
+    else:
+        return redirect(reverse('home:home'))
 
 
 @login_required

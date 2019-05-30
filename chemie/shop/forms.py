@@ -82,7 +82,7 @@ class HappyHourForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
         self.helper.layout = Layout(
-            "duration", Submit("submit", "Aktiver happy hour!!")
+            "duration",
         )
 
     class Meta:
@@ -148,4 +148,24 @@ class GetUserReceiptsForm(forms.ModelForm):
         fields = ["buyer"]
         widgets = {
             "buyer": autocomplete.ModelSelect2(url="verv:user-autocomplete")
+        }
+
+
+class SearchItemForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.helper = FormHelper(self)
+        self.helper.layout = Layout(
+            "name"
+        )
+        for k, field in self.fields.items():
+            if 'required' in field.error_messages:
+                field.error_messages['required'] = ''
+
+    class Meta:
+        model = Item
+        fields = ["name"]
+        widgets = {
+            "name": autocomplete.ListSelect2(url="shop:item-autocomplete")
         }

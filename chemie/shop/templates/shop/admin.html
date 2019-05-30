@@ -37,17 +37,64 @@
 {% block content %}
 
 <div class="d-flex flex-wrap justify-content-around">
-  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
-  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:add-category" %}" role="button">Legg til
+  <a class="btn btn-secondary" style="margin: 1rem; background-color: green; border-color: green" href="{% url "shop:add-item" %}" role="button">Legg til vare</a>
+  <a class="btn btn-secondary" style="margin: 1rem; background-color: green; border-color: green" href="{% url "shop:add-category" %}" role="button">Legg til
     kategori</a>
-  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
-  <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver
-    Happy</a>
+  <a class="btn btn-secondary" style="color: black; margin: 1rem; background-color: #edcd2f; border-color: #edcd2f" href="{% url "shop:refill" %}" role="button">Fyll på konto</a>
+  <a class="btn btn-secondary" style="color:black; margin: 1rem; background-image: url('{% static "/images/fireworks_background.png" %}'); background-color: transparent; background-size: cover" href="{% url "shop:activate-happyhour" %}" role="button">Aktiver
+    Happy Hour</a>
   <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:all_receipts" %}" role="button">Kvitteringer</a>
   <a class="btn btn-secondary" style="margin: 1rem" href="{% url "shop:all_refills" %}" role="button">Påfyllinger</a>
+  <button type="button" class="btn btn-seccondary" data-toggle="modal" data-target="#instruksModal"
+        style="background-color: transparent">
+        <a><i class="material-icons">
+            help_outline
+          </i></a>
+      </button>
+
 </div>
 <!-- See JS footer-script for element creating -->
 <div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">
+</div>
+
+<!-- Modal for intruction -->
+<div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Instruks for å administrere butikken på kontoret</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>Logge inn på kontorets PC:</b> For å logge inn på PC-en kan hvem som helt med NTNU-brukernavn
+          logge seg inn. Det anbefales å bruke kaffeknappen sin NTNU-bruker.
+        </p>
+        <p>
+          <b>Brukernavn: </b> hc_pi01@ntnu.no <br>
+          <b>Passord:</b> 9CfY3PTWATzY
+        </p>
+
+        <p>
+          hc_pi01 er en NTNU-bruker Orakeltjenesten har gitt oss. Den er koblet til Bendik Støa Sannes,
+          så når han forsvinner vil hc_pi01 deaktiveres.
+        </p>
+        <p><b>Logge inn på butikken:</b> På hc.ntnu.no er det lagt opp en egen bruker som skal
+          være logget inn slik at folk kan betale med studentkortet sitt.
+        </p>
+        <p>
+          <b>Brukernavn: </b>tabletshop<br>
+          <b>Passord:</b> 3x9p4PTWATzY
+        </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
 </div>
 
 
@@ -133,16 +180,22 @@
   // Create a list of dictionaries where each dictionary represents the total purchase of
   // items for each month. First index is the dictionary for the current month
   // following by the previous month untill 12 month
-  var orderItems = "{{order_price}}"
+  var orderItems = "{{order_price}}";
   orderItems = orderItems.replace(/&#39;/g, '');
   orderItems = orderItems.replace('[', '');
   orderItems = orderItems.replace(']', '');
   orderItems = orderItems.replace(/{/g, '');
+
+  var monthTotal = "{{monthTotal}}";
+  monthTotal = monthTotal.replace('[', '');
+  monthTotal = monthTotal.replace(']', '');
+  monthTotal = monthTotal.split(",");
+
   var orderItemList = orderItems.split('},');
   for (var i = 0; i < 12; i++) {
-    var monthOrder = orderItemList[i]
+    var monthOrder = orderItemList[i];
     monthOrder = monthOrder.replace(/}/g, '');
-    var monthOrderItems = monthOrder.split(',')
+    var monthOrderItems = monthOrder.split(',');
     for (var j = 0; j < monthOrderItems.length; j++) {
       let it = monthOrderItems[j].trim();
       if (it === "") {
@@ -159,44 +212,54 @@
 // Create the HTML elements for the adminList created above
 var adminDiv = document.getElementById("admin-list-parent");
   for (var i = 0; i < 12; i++) {
-    var monthTitle = document.createElement("h4")
-    monthTitle.innerHTML = monthNames[i]
-    adminDiv.appendChild(monthTitle)
+    var monthTitle = document.createElement("h4");
+    monthTitle.innerHTML = monthNames[i];
+    monthTitle.innerHTML += ": ";
+    monthTitle.innerHTML += monthTotal[i];
+
+    var TitleImg = document.createElement("img");
+    TitleImg.setAttribute("type","image/png");
+    TitleImg.setAttribute("src","{% static 'images/HC_coin.png' %}");
+    TitleImg.setAttribute("style","width:1.8rem; margin-left:1rem; margin-top:-0.5rem");
+    monthTitle.append(TitleImg);
+    adminDiv.appendChild(monthTitle);
+
     var monthDiv = document.createElement("div");
-    monthDiv.setAttribute("style", "display: flex; flex-wrap:wrap; margin-top:2rem")
+    monthDiv.setAttribute("style", "display: flex; margin:1rem; flex-wrap:wrap; margin-top:2rem; justify-content:center; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)");
+
     if (adminList[i] === {}) {
       continue
     }
     else {
       for (key in adminList[i]) {
         var itemDiv = document.createElement("div");
-        itemDiv.setAttribute("class", "border item-list d-flex")
-        itemDiv.setAttribute("style", "height:8rem; margin:1rem; width:12rem")
-        var itemDivChildName = document.createElement("h6")
-        itemDivChildName.setAttribute("style",  "text-align:center")
-        itemDivChildName.innerHTML = key
-        var itemDivChildQuantity = document.createElement("p")
-        itemDivChildQuantity.innerHTML = "Antall solgt: " + "<b>" +adminList[i][key] + "</b>"
-        itemDivChildQuantity.setAttribute("style", "margin:auto; width:100%")
+        itemDiv.setAttribute("class", "border item-list d-flex");
+        itemDiv.setAttribute("style", "height:8rem; margin:1rem; width:13rem");
+        var itemDivChildName = document.createElement("h6");
+        itemDivChildName.setAttribute("style",  "text-align:center");
+        itemDivChildName.innerHTML = key;
+        var itemDivChildQuantity = document.createElement("p");
+        itemDivChildQuantity.innerHTML = "Antall solgt: " + "<b>" +adminList[i][key] + "</b>";
+        itemDivChildQuantity.setAttribute("style", "margin:auto; width:100%;");
 
-        var itemDivChildPrice = document.createElement("p")
-        var itemDivChildImg = document.createElement("img")
-        itemDivChildImg.setAttribute("type","image/png")
-        itemDivChildImg.setAttribute("src","{% static 'images/HC_coin.png' %}")
-        itemDivChildImg.setAttribute("style","margin-top:-2.5rem; margin-right:-1.7rem; width:1.8rem; padding-bottom:0.2rem;")
+        var itemDivChildPrice = document.createElement("p");
+        var itemDivChildImg = document.createElement("img");
+        itemDivChildImg.setAttribute("type","image/png");
+        itemDivChildImg.setAttribute("src","{% static 'images/HC_coin.png' %}");
+        itemDivChildImg.setAttribute("style","margin-top:-2.5rem; margin-left:8rem; width:1.8rem; padding-bottom:0.2rem;");
 
-        itemDivChildPrice.innerHTML = "Totalt: <b>" +adminList1[i][key] + "</b>"
-        itemDivChildPrice.setAttribute("style", "margin:auto;  width:100%")
+        itemDivChildPrice.innerHTML = "Totalt: <b>" +adminList1[i][key] + "</b>";
+        itemDivChildPrice.setAttribute("style", "margin:auto;  width:100%");
 
-        itemDiv.appendChild(itemDivChildName)
-        itemDiv.appendChild(itemDivChildPrice)
-        itemDiv.appendChild(itemDivChildImg)
-        itemDiv.appendChild(itemDivChildQuantity)
+        itemDiv.appendChild(itemDivChildName);
+        itemDiv.appendChild(itemDivChildPrice);
+        itemDiv.appendChild(itemDivChildImg);
+        itemDiv.appendChild(itemDivChildQuantity);
 
         monthDiv.appendChild(itemDiv);
       }
     }
-    adminDiv.appendChild(monthDiv)
+    adminDiv.appendChild(monthDiv);
   }
 </script>
 {% endblock footer_script %}

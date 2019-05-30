@@ -38,16 +38,15 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<form method="POST"> {% csrf_token %}
-  <table>
+<form method="POST" id="happyhourForm"> {% csrf_token %}
     {% crispy form %}
-  </table>
+    <input id="submit-form-button" class="btn btn-secondary" type="button" name="submit_value" value="Aktiver Happy Hour" style="color:black; margin: 1rem; background-image: url('{% static "/images/fireworks_background.png" %}'); background-color: transparent; background-size: cover" href="{% url "shop:activate-happyhour" %}">
 </form>
 {% endblock content %}
 
 {% block footer_script %}
 <script>
-  document.getElementById("activate-button").addEventListener("click", function (event) {
+  document.getElementById("submit-form-button").addEventListener("click", function (event) {
     event.preventDefault();
     swal({
       title: "Dere vil selge alle Happy Hour-varer til 2 for 1",
@@ -70,18 +69,10 @@
         }
       },
     })
-      .then((willDelete) => {
-        if (willDelete) {
-          let form = this.closest("form");
-          swal("Happy Hour startet!\nDere selger nå alt av Happy Hour-varer til 2 for 1", {
-            icon: "success",
-          }).then((ok) => {
-            if (ok) {
-              form.submit();
-            } else {
-              return false;
-            }
-          });
+      .then((willStartHappyHour) => {
+        if (willStartHappyHour) {
+          let form = document.getElementById("happyhourForm")
+          form.submit();
           return true;
         } else {
           swal("Phew!", "Det var nære på! Happy Hour er IKKE aktivert");

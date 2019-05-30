@@ -55,7 +55,7 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<a class="btn btn-secondary" href="{% url 'shop:refills' %}" id="redirect-refill-btn">Påfyllhistorikk</a>
+<a class="btn btn-secondary" href="{% url 'shop:refills' %}" id="redirect-refill-btn">Påfyllshistorikk</a>
 <a class="btn btn-secondary" href="{% url 'shop:statistics' %}" id="redirect-statistic-btn">Statistikk</a>
 <h3 style="text-align:center; margin-top: 1rem">Kjøpshistorikk</h3>
 <div class="d-flex flex-wrap" style="align-items:flex-start">
@@ -93,6 +93,3 @@
     {% endfor %}
 </div>
 {% endblock content %}
-
-{% block footer_script %}
-{% endblock footer_script %}

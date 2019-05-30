@@ -1,12 +1,15 @@
 from decimal import InvalidOperation
 
+from dal import autocomplete
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.utils import timezone
+from django.utils.html import format_html
 import operator
+
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.web_push.models import Subscription
@@ -18,7 +21,8 @@ from .forms import (
     HappyHourForm,
     EditItemForm,
     GetUserRefillForm,
-    GetUserReceiptsForm
+    GetUserReceiptsForm,
+    SearchItemForm
 )
 from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
 from .statistics import get_plot_item
@@ -58,6 +62,7 @@ def get_last_year_receipts():
     year, month = now.year, now.month
     item_quantity = []
     item_price = []
+    monthTotal = []
     while i < months:
         # Get the receipts at current_month - m
         if (month - m) > 0:
@@ -69,6 +74,7 @@ def get_last_year_receipts():
         current_receipts = receipts.filter(
             created__year=year, created__month=month_c
         )
+        monthTotal.append(0)
         item_quantity.append({})
         item_price.append({})
         for r in current_receipts:
@@ -77,10 +83,12 @@ def get_last_year_receipts():
                 if order_item_key not in item_quantity[i]:
                     item_quantity[i][order_item_key] = order_item.quantity
                     item_price[i][order_item_key] = order_item.total_price
+                    monthTotal[i] += order_item.total_price
 
                 else:
                     item_quantity[i][order_item_key] += order_item.quantity
                     item_price[i][order_item_key] += order_item.total_price
+                    monthTotal[i] += order_item.total_price
 
         if len(item_quantity[i]) > 0:
             sorted_item_quantity = sorted(item_quantity[i].items(), key=operator.itemgetter(1), reverse=True)
@@ -90,7 +98,7 @@ def get_last_year_receipts():
             item_price[i] = dict(sorted_item_price)
         m += 1
         i += 1
-    return item_quantity, item_price
+    return item_quantity, item_price, monthTotal
 
 
 @login_required
@@ -144,7 +152,7 @@ def index_user(request):
                 messages.add_message(
                     request,
                     messages.ERROR,
-                    "Du har itj nok HC-coin, kiis",
+                    "Du har itj nok HC-coins, kiis",
                     extra_tags="Nei!",
                 )
             else:
@@ -204,7 +212,7 @@ def index_tabletshop(request):
                         messages.add_message(
                             request,
                             messages.ERROR,
-                            f"Du har itj nok HC-coin, kiis. Saldo på konto er {balance} HC-coin",
+                            f"{request.user.get_full_name()} sin konto har itj nok HC-coins, kiis. Saldo på konto er {balance} HC-coins",
                             extra_tags="Avvist",
                         )
                     else:
@@ -214,8 +222,8 @@ def index_tabletshop(request):
                             request,
                             messages.SUCCESS,
                             (
-                                f"Kontoen din er trukket {total_price} HC-coins."
-                                f" Du har igjen {new_balance} HC-coins."
+                                f"{request.user.get_full_name()} sin konto er trukket {total_price} HC-coins."
+                                f"Ny saldo på konto er: {new_balance} HC-coins."
                             ),
                             extra_tags="Kjøp godkjent",
                         )
@@ -224,7 +232,7 @@ def index_tabletshop(request):
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        "Studentkort ikke registrert, Gå inn på {}".format(
+                        "Studentkort er ikke registrert. Logg inn på https://hc.ntnu.no{} og legg inn ditt studentkorts EM-nummer".format(
                             reverse("profile:edit")
                         ),
                         extra_tags="Ups",
@@ -250,6 +258,25 @@ def view_my_refills(request):
     return render(request, "shop/user_refills.html", {"refill_receipts": refill_receipts})
 
 
+class ItemAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return Item.objects.none()
+
+        qs = Item.objects.all().order_by('name')
+
+        if self.q:
+            qs = (
+                qs.filter(name__icontains=self.q)
+            )
+
+        return qs
+
+    def get_result_label(self, item):
+        return format_html("{}", item.name)
+
+
 @login_required
 def view_statistics(request):
     items = Item.objects.all()
@@ -259,24 +286,28 @@ def view_statistics(request):
         .prefetch_related("items")
     )
     bought_items = request.user.profile.get_bought_items()
-
-    context = {'items': items, 'orders': orders, 'bought_items': bought_items}
+    search_form = SearchItemForm(request.POST or None)
+    context = {'items': items, 'orders': orders, 'bought_items': bought_items, 'search_form': search_form}
     if request.method == 'POST':
-        plot_time, plot_quantity = get_plot_item(request.user, request.POST['item'])
-        context['plot_time'] = plot_time
-        context['plot_quantity'] = plot_quantity
-        context['plot_item'] = request.POST['item']
+        if search_form.is_valid():
+            plot_item_id = search_form.data['name']
+            plot_item, plot_time, plot_quantity = get_plot_item(request.user, plot_item_id)
+            context['plot_time'] = plot_time
+            context['plot_quantity'] = plot_quantity
+            context['plot_item'] = plot_item
+            context['seatch_form'] = SearchItemForm(None)
     return render(request, "shop/user_statistics.html", context)
 
 
 @permission_required("customprofile.refill_balance")
 def admin(request):
-    order_items, order_price = get_last_year_receipts()
+    order_items, order_price, monthTotal = get_last_year_receipts()
     items = Item.objects.all()
     return render(
         request,
         "shop/admin.html",
         {
+            "monthTotal": monthTotal,
             "order_items": order_items,
             "order_price": order_price,
             "items": items
@@ -291,34 +322,45 @@ def refill(request):
     if request.method == "POST":
         if form.is_valid():
             receiver = form.cleaned_data.get("receiver")
-            amount = form.cleaned_data.get("amount")
-            try:
-                receiver.profile.balance += amount
-                receiver.profile.save()
-            except InvalidOperation:
+            if receiver == request.user:
                 messages.add_message(
                     request,
                     messages.ERROR,
                     (
-                        "Brukeren vil få mer enn 9999 HC-coins på "
-                        "konto om du fyller på med beløpet."
+                        "Du kan ikke fylle på HC-coins til deg selv. "
+                        "Påfyller kan ikke være den samme som mottaker."
                     ),
                     extra_tags="Feil",
                 )
-                return render(
-                    request, "shop/refill-balance.html", {"form": form}
+            else:
+                amount = form.cleaned_data.get("amount")
+                try:
+                    receiver.profile.balance += amount
+                    receiver.profile.save()
+                except InvalidOperation:
+                    messages.add_message(
+                        request,
+                        messages.ERROR,
+                        (
+                            "Brukeren vil få mer enn 9999 HC-coins på "
+                            "konto om du fyller på med beløpet."
+                        ),
+                        extra_tags="Feil",
+                    )
+                    return render(
+                        request, "shop/refill-balance.html", {"form": form}
+                    )
+                instance = form.save(commit=False)
+                instance.provider = provider
+                instance.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Du har fylt på {} HC-coins til {}".format(
+                        amount, receiver.get_full_name()
+                    ),
+                    extra_tags="Suksess",
                 )
-            instance = form.save(commit=False)
-            instance.provider = provider
-            instance.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Du har fylt på {} HC-coins til brukeren {}".format(
-                    amount, receiver.username
-                ),
-                extra_tags="Suksess",
-            )
             return redirect("shop:refill")
     return render(request, "shop/refill-balance.html", {"form": form})
 
@@ -339,7 +381,6 @@ def add_item(request):
     items = Item.objects.all()
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
-
 
 
 @permission_required("shop.change_item")
@@ -397,13 +438,12 @@ def activate_happyhour(request):
             messages.add_message(
                 request,
                 messages.WARNING,
-                f"Det er {round(time_left_minutes)} minutter igjen",
-                extra_tags="Happy Hour er allerede aktivert!",
+                f"Happy Hour er allerede aktivert. Det er {round(time_left_minutes)} minutter igjen",
             )
             return redirect(reverse("shop:admin"))
         return create_happyhour(request, form)
     except HappyHour.DoesNotExist:
-        print("Ingen Happy Hour objekter eksisterer")
+        print("Ingen Happy Hour-objekter eksisterer")
         return create_happyhour(request, form)
     except:
         messages.add_message(
@@ -414,6 +454,7 @@ def activate_happyhour(request):
         )
         context = {"form": form}
         return render(request, "shop/happy-hour.html", context)
+
 
 @permission_required("shop.add_happyhour")
 def create_happyhour(request, form):
@@ -481,4 +522,6 @@ def view_all_refills(request):
             context['refill_receipts'] = refill_receipts
     except ObjectDoesNotExist:
         pass
+    refill_sum = Profile.get_all_refill_sum()
+    context['refill_sum'] = refill_sum
     return render(request, "shop/all_refills.html", context)
