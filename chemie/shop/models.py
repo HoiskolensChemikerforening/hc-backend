@@ -164,10 +164,11 @@ class HappyHour(models.Model):
         for subscriber in subscribers:
             devices = subscriber.profile.devices.all()
             tag = "1 time" if self.duration == 1 else "{} timer".format(self.duration)
-            happyhour_message = "Nå er det happyhour i {} på kontoret".format(tag)
+            happyhour_message = "Nå er det Happy Hour i {} på kontoret".format(tag)
             for device in devices:
-                device.send_notification("Happyhour!", happyhour_message)
-                
+                device.send_notification("Happy Hour!", happyhour_message)
+
+
 class ShoppingCart(object):
     def __init__(self, request):
         self.session = request.session

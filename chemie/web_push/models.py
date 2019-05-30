@@ -158,8 +158,8 @@ class Device(models.Model):
 
         """
         The commented lines below is the implementation for Safari browser
-        Apples APNS certificat would be needed, cost ~1000 NOK/year
-        The code has not been testet so no garanties it would work
+        Apples APNS certificat would be needed, costs ~1000 NOK/year
+        The code has not been tested, so no garanties it would work
         """
         # elif device_type=="APNS":
         #     registered_device = APNSDevice.objects.filter(
@@ -209,8 +209,8 @@ def delete_device_signal(sender, instance, **kwargs):
         instance.gcm_device.delete()
     """
     The commented lines below is the implementation for Safari browser
-    Apples APNS certificat would be needed, cost ~1000 NOK/year
-    The code has not been testet so no garanties it would work
+    Apples APNS certificat would be needed, costs ~1000 NOK/year
+    The code has not been tested, so no garanties it would work
     """
     # if instance.apns_device is not None:
     #     instance.apns_device.delete()
@@ -225,7 +225,7 @@ class Subscription(models.Model):
 
     subscription_type = models.PositiveSmallIntegerField(choices=SUSBSCRIPTION_CHOICES)
 
-    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Eier av abonomentet")
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, verbose_name="Eier av abonnomentet")
 
     def __str__(self):
-        return "Aboner på {} varsler".format(SUSBSCRIPTION_CHOICES[self.subscription_type-1][-1])
+        return "Abonner på {}-varsler".format(SUSBSCRIPTION_CHOICES[self.subscription_type-1][-1])

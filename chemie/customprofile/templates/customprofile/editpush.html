@@ -8,7 +8,7 @@
   Profil
 {% endblock nav_header %}
 {% block nav_sub_header %}
-  Endre push varsel
+  Endre push-varsel
 {% endblock nav_sub_header %}
 
 
@@ -78,7 +78,7 @@
 <div style="display:inline">
   <a class="btn" style="float:right" href="{% url 'customprofile:edit' %}">Tilbake</a>
   <h5>
-      Rediger dine push varsler her.
+      Rediger dine push-varsler her.
     </h5>
 
     <form method="POST" style="display:inline; margin:auto">{% csrf_token %}
@@ -90,7 +90,7 @@
     <ul>
         <li><b>Coffee:</b> Når det er nytraktet kaffe på kontoret</li>
         <li><b>News:</b> Når det opprettes en nyhet på hc.ntnu.no</li>
-        <li><b>Happy:</b> Når det er happy hour på kontoret (2 for 1 priser)</li>
+        <li><b>Happy:</b> Når det er Happy Hour på kontoret (2-for-1-priser)</li>
       </ul>
     <img type="image/png" style="max-width: 100%"  src="{% static "images/instruction_webpush.png" %}">
 </div>

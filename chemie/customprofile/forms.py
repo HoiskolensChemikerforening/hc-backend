@@ -148,7 +148,6 @@ class EditPushForm(forms.ModelForm):
         self.fields["subscriptions"].queryset = Subscription.objects.filter(owner=user).order_by("id")
 
 
-
 class ChangePasswordForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput, label="Old password")
     password_new = forms.CharField(
