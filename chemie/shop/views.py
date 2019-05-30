@@ -12,6 +12,7 @@ import operator
 
 
 from chemie.customprofile.forms import GetRFIDForm
+from chemie.web_push.models import Subscription
 from chemie.customprofile.models import Profile
 from .forms import (
     RefillBalanceForm,
@@ -469,6 +470,9 @@ def create_happyhour(request, form):
                 "Happy Hour aktivert!",
                 extra_tags=f"Aktivert i {instance.duration} time(r)",
             )
+            subscriptions = Subscription.objects.filter(subscription_type=3)
+            subscribers = [sub.owner for sub in subscriptions] 
+            instance.send_push(subscribers)
             return redirect(reverse("shop:admin"))
     context = {"form": form}
     return render(request, "shop/happy-hour.html", context)

@@ -1,5 +1,6 @@
 {% extends "chemie/base.html" %}
 {% load cache %}
+{% load static %}
 
 {% block nav_header %}
   Forsiden
@@ -48,7 +49,17 @@
       {% else %}
         <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
       {% endif %}
-    </div>
+
+      <!-- Coffee -->
+      <div class="col coffee-box">
+          <img type="image/png" src="{% static "images/caffeine.png" %}"
+          style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
+          <p style="margin: auto">
+              Kaffeknappen sist trykket: <br>
+              {{coffee}}
+            </p>
+        </div>
+      </div>
     <div class="col s12 pull-m6 m6 pull-l5 l7">
       <!-- News -->
       {% if posts %}
@@ -59,5 +70,8 @@
       {% endif %}
     </div>
   </div>
+
+
+
 
 {% endblock content %}

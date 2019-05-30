@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, reverse
 from django.contrib.auth.decorators import login_required
 from push_notifications.models import GCMDevice, APNSDevice
-from .models import Device, CoffeeSubmission
+from .models import Device, CoffeeSubmission, Subscription
 from django.views.decorators.csrf import csrf_exempt
 import json
 from rest_framework import viewsets
@@ -22,44 +22,17 @@ def save_device(request):
         token = request.POST["token"]
         if browser is not None and token != "":
             if browser == "Chrome":
-                registered_device = GCMDevice.objects.filter(
-                    registration_id=token
-                )
-                if registered_device.count() == 0:
-                    gcm_device = GCMDevice.objects.create(
-                        registration_id=token,
-                        cloud_message_type="FCM",
-                        user=request.user,
-                    )
-                    Device.objects.create(
-                        owner=request.user, gcm_device=gcm_device
-                    )
-                    users_devices = Device.objects.filter(owner=request.user)
-                    if len(users_devices) > 5:
-                        users_devices.latest("-date_created").delete()
-                    return HttpResponse(status=201)
-
+                status = Device.add_device("FCM", token, request.user)
+                return HttpResponse(status=status)
+            
             """
             The commented lines below is the implementation for Safari browser
             Apples APNS certificat would be needed, cost ~1000 NOK/year
             The code has not been testet so no garanties it would work
             """
             # elif browser == "Safari":
-            #     registered_device = APNSDevice.objects.filter(
-            #         registration_id=token
-            #     )
-            #     if len(registered_device) == 0:
-            #         apns_device = APNSDevice.objects.create(
-            #             registration_id=token, user=request.user
-            #         )
-            #         Device.objects.create(
-            #             owner=request.user, apns_device=apns_device
-            #         )
-            #         users_devices = Device.objects.filter(owner=request.user)
-            #         if len(users_devices) > 5:
-            #             users_devices.latest("-date_created").delete()
-            #         return HttpResponse(status=201)
-        return HttpResponse(status=301)
+            #     status = Device.add_device("APNS", token, request.user)
+            #     return HttpResponse(status=status)
     else:
         return redirect(reverse("frontpage:home"))
 
@@ -76,39 +49,23 @@ def send_notification(request):
         is_authorized = serializer.is_authorized(
             payload_json["notification_key"], payload_json["topic"]
         )
+        
         if is_authorized:
-            if CoffeeSubmission.fifteen_minutes_has_passed():
-                serializer.save()
+            topic = payload_json["topic"]
 
-                gcm_devices = Device.objects.filter(
-                    coffee_subscription=True, gcm_device__active=True
-                )
-                time_mark = datetime.datetime.now().time()
-                hour_mark = str(time_mark.hour)
-                minute_mark = str(time_mark.minute)
-                coffee_message = "Laget klokken: " + hour_mark + ":" + minute_mark
-                [
-                    device.send_notification(
-                        "Kaffe på kontoret", coffee_message
-                    )
-                    for device in gcm_devices
-                ]
+            if topic == "coffee":
+                if CoffeeSubmission.fifteen_minutes_has_passed():
+                    serializer.save()
+                    subscriptions = Subscription.objects.filter(subscription_type=1)
+                    subscribers = [sub.owner for sub in subscriptions] 
 
-                """
-                The commented lines below is the implementation for Safari browser
-                Apples APNS certificat would be needed, cost ~1000 NOK/year
-                The code has not been testet so no garanties it would work
-                """
-                # apns_devices = Device.objects.filter(
-                #     coffee_subscription=True, apns_device__active=True
-                # )
-                # [
-                #     device.send_notification(
-                #         "Kaffe", "Nytraktet kaffe på kontoret"
-                #     )
-                #     for device in apns_devices
-                # ]
-            return JsonResponse(serializer.errors, status=201)
+                    CoffeeSubmission.send_coffee_notification(subscribers)
+                    return JsonResponse(serializer.errors, status=201)
+                else:
+                    return JsonResponse(serializer.errors, status=402)
+            else:
+                return JsonResponse(serializer.errors, status=401)
+
         return JsonResponse(serializer.errors, status=401)
-    else:  # PUT eller DELETE request
+    else: 
         return redirect(reverse("frontpage:home"))
