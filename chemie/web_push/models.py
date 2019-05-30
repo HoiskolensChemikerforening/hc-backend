@@ -45,14 +45,22 @@ class CoffeeSubmission(models.Model):
             coffee_date = coffee.date
             delta = datetime.datetime.utcnow() - coffee_date.replace(tzinfo=None)
             seconds_since_press = delta.total_seconds()
-            if seconds_since_press < 300:
+            if seconds_since_press < 300:  # Less than five minutes
                 return "Akkurat nå!"
-            elif seconds_since_press < 3600:
+            elif seconds_since_press < 3600:  # Less than one hour
                 return "For {} minutter siden".format(int(seconds_since_press/60))
-            elif seconds_since_press < 86400:
-                return "For {} timer siden".format(int(seconds_since_press/3600))
+            elif seconds_since_press < 86400:  # Less than one day
+                if seconds_since_press < 7200:  # Less than two hours
+                    tag = "time"
+                else:
+                    tag = "timer"
+                return "For {} {} siden".format(int(seconds_since_press/3600), tag)
             else:
-                return "For {} dager siden".format(delta.days)
+                if seconds_since_press < 172800:  # Less than two days
+                    tag = "dag"
+                else:
+                    tag = "dager"
+                return "For {} {} siden".format(delta.days, tag)
         except ObjectDoesNotExist:
             coffee = None
         return coffee
