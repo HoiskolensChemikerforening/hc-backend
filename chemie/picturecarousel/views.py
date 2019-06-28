@@ -174,8 +174,8 @@ class PictureTagAutocomplete(autocomplete.Select2QuerySetView):
 
 @login_required
 def view_pictures(request, page=1):
-    filter_form = PictureTagForm(request.POST or None)
     if request.method == "POST":
+        filter_form = PictureTagForm(request.POST)
         tags_ids = filter_form["tags"].value()
         tags = PictureTag.objects.filter(id__in=tags_ids).order_by('id')
 
@@ -194,9 +194,27 @@ def view_pictures(request, page=1):
             ).prefetch_related("author").order_by('-date')
 
     else:
-        pictures = Contribution.objects.filter(
-            approved=True,
-        ).prefetch_related("author").order_by('-date')
+        if request.GET.get("tags"):
+            tags_ids = request.GET.get("tags").split(",")
+            tags = PictureTag.objects.filter(id__in=tags_ids).order_by('id')
+            filter_form = PictureTagForm()
+            filter_form.fields["tags"].queryset = tags
+            # TODO: MAKE THIS THING WORK
+            # TODO: Fjerne tags parameter fra urlen hvis det ikke skal filtreres
+            pictures = Contribution.objects.filter(
+                approved=True,
+                tags__in=tags
+            ).annotate(num_tags=Count("tags")
+                       ).filter(num_tags=tags.count()
+                                ).prefetch_related("author").order_by('-date')
+
+        else:
+            filter_form = PictureTagForm()
+            pictures = Contribution.objects.filter(
+                approved=True,
+            ).prefetch_related("author").order_by('-date')
+
+            tags_ids = []
 
     paginator = Paginator(pictures, 10)
 
@@ -209,6 +227,7 @@ def view_pictures(request, page=1):
 
     context = {
         'filter_form': filter_form,
-        "picture_page": picture_page
+        'picture_page': picture_page,
+        'tags': ",".join(tags_ids)
     }
     return render(request, 'picturecarousel/view_active.html', context)
