@@ -48,6 +48,7 @@
     {% if picture_page.has_previous %}
       <li><a href="{{ picture_page.previous_page_number }}?tags={{ tags }}">Forrige</a></li>
     {% endif %}
+
     {% for page in picture_page.paginator.page_range %}
       <li class="{% if picture_page.number == page %}active{% endif %}"><a href="{{ page }}?tags={{ tags }}">{{ page }}</a></li>
     {% endfor %}

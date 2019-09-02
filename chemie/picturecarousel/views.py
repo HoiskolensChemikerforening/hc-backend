@@ -199,8 +199,6 @@ def view_pictures(request, page=1):
             tags = PictureTag.objects.filter(id__in=tags_ids).order_by('id')
             filter_form = PictureTagForm()
             filter_form.fields["tags"].queryset = tags
-            # TODO: MAKE THIS THING WORK
-            # TODO: Fjerne tags parameter fra urlen hvis det ikke skal filtreres
             pictures = Contribution.objects.filter(
                 approved=True,
                 tags__in=tags
