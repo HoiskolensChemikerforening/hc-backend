@@ -11,7 +11,10 @@
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/widgets/widget-output.min.js"></script>
   <script type="text/javascript"
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
   <script>
+      var paymentList = {}
       $(function () {
           var $table = $('table');
           $('.download').click(function () {
@@ -96,9 +99,11 @@
 </div>
 <div class="row">
   <div class="col s12 m12 l10">
-    <p class="flow-text">
-      Søk og filtrering blant de påmeldte. Exportering av data tar kun med de som er synlig i listen. Velger man
-      "Ikke betalt" deretter "Last ned" så får man kun de som ikke har betalt.
+    <p class="flow-text" >
+      Søk og filtrering blant de påmeldte. <br>
+      Trykk på "LAST NED" for å laste ned påmeldinglisten som excelfil.
+      Filtrering og sortering påvirker innholdet og oppsettet til excelfilen som lastes ned
+
     </p>
     <button class="download btn">Last ned</button>
   </div>
@@ -188,6 +193,9 @@
           {% endif %}
 
         </tr>
+        <script>
+          paymentList["{{attendee.id}}"] = ["{{attendee.user.profile}}",("{{ attendee.payment_status}}".toLowerCase() == "true")]
+        </script>
       {% endfor %}
       </tbody>
     </table>
@@ -197,7 +205,23 @@
         <div class="determinate" style="width:{{ percentage_paid }}%"></div>
       </div>
     </p>
-    <div align="right" id="paidcounter">{{ total_paid }} har betalt • {{ total_not_paid }} har ikke betalt</div>
+    <div align="right" id="paidcounter"></div>
+    <script>
+      var totalPaid = 0;
+      var totalNotPaid = 0
+      for (var key in paymentList) {
+    // check if the property/key is defined in the object itself, not in parent
+        if (paymentList.hasOwnProperty(key)) {
+            if (paymentList[key][1]){
+              totalPaid += 1
+            } else {
+              totalNotPaid += 1
+            }
+        }
+    }
+
+    document.getElementById("paidcounter").innerHTML = "{{ total_paid }} har betalt • {{ total_not_paid }} har ikke betalt"
+    </script>
     {% endif %}
   </div>
 </div>
@@ -205,27 +229,39 @@
 
 {% block footer_script %}
 <script src="{% static 'js/boolean_status_widget.js' %}" type='text/javascript'></script>
-  <script>
-      $(document).ready(function () {
-          $('.payment').on('click', function (event) {
-              //$('.payment').live('click', function(event){
-              event.preventDefault();
-              var myID = $(this).attr("id").split('-')[1];
-              var csrftoken = getCookie('csrftoken');
+<script>
+    $(document).ready(function () {
+        $('.payment').on('click', function (event) {
+            //$('.payment').live('click', function(event){
+            event.preventDefault();
+            var myID = $(this).attr("id").split('-')[1];
+            var csrftoken = getCookie('csrftoken');
+
+            var changePayment = true
+            if (paymentList[myID][1]){
+              changePayment = confirm("Endre betalingsstatus for " +  paymentList[myID][0] + " fra betalt til ikke betalt?")
+            }
+            if (changePayment){
+              paymentList[myID][1] = !paymentList[myID][1]
               $.ajax({
-                  type: "GET",
-                  url: "/events/social/adminlist/paymentstatus/" + myID,
-                  datatype: "json",
+                type: "POST",
+                url: "/events/social/adminlist/paymentstatus/" + myID,
+                datatype: "json",
 
-                  success: function (json) {
-                      icon_changer("#payment-" + myID, json.payment_status)
-                  },
+                success: function (json) {
+                    totalPaid += (paymentList[myID][1]) ? 1 : -1
+                    totalNotPaid += (paymentList[myID][1]) ? -1: 1
+                    icon_changer("#payment-" + myID, json.payment_status)
+                    document.getElementById("paidcounter").innerHTML = totalPaid.toString() + " har betalt • " + totalNotPaid.toString() + " har ikke betalt"
+                },
 
-                  error: function (xhr, errmsg, err) {
-                      // console.log(xhr.status + ": " + xhr.responseText);
-                  },
-              });
-          })
+                error: function (xhr, errmsg, err) {
+                    // console.log(xhr.status + ": " + xhr.responseText);
+                },
+            });
+            }
+        })
+
 
           $('.arrival').on('click', function (event) {
               event.preventDefault();
@@ -246,6 +282,10 @@
               });
           })
       });
-
+      $(document).ready(function () {
+    $.ajaxSetup({
+        headers: { 'X-CSRFToken': Cookies.get('csrftoken') }
+    });
+});
   </script>
 {% endblock %}

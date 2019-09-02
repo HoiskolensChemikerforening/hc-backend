@@ -1,0 +1,67 @@
+{% extends "shop/base_shop.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Butikk</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+{% endblock header %}
+
+{% block style %}
+<style>
+    #refill-box {
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+        padding: 1rem;
+        margin-top: 0.5rem;
+    }
+
+    tr:nth-child(even) {
+        background-color: #f2f2f2
+    }
+</style>
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+        </li>
+        <li class="breadcrumb-item "><a href="{%url "shop:receipts"%}" style="color:#edcd2f">Kvitteringer</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Påfyllskvitteringer</li>
+    </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+<div class="d-flex flex-row justify-content-center">
+    <div class="p-2">
+        <h5>Mine påfyllinger av </h5>
+    </div>
+    <div class="p-2">
+        <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem">
+    </div>
+</div>
+<div id="refill-box">
+    <table style="width:100%">
+        <tr>
+            <th>Dato</th>
+            <th>Påfyller</th>
+            <th>Beløp</th>
+        </tr>
+        {% for receipt in refill_receipts %}
+        <tr>
+            <td>{{receipt.created}}</td>
+            <td>{{receipt.provider.get_full_name}}</td>
+            <td>{{receipt.amount}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+</div>
+{% endblock content %}

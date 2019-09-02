@@ -142,7 +142,7 @@
     <!-- List of users on waiting list -->
       {% if waiting_list %}
         <h2>Venteliste</h2>
-        {% include "events/waiting_list.html" with user_list=attendees_waiting %}
+        {% include "events/waiting_list.html" with user_list=waiting_list %}
       {% endif %}
     </div>
   </div>
@@ -151,4 +151,9 @@
 
 {% block footer_js_files %}
   <script src="{% static "events/transpose_table.js" %}"></script>
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+      </script>
 {% endblock footer_js_files %}

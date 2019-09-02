@@ -4,6 +4,7 @@ Django settings for the chemie project.
 
 import os
 import environ
+from django.contrib.messages import constants as message_constants
 
 
 # GENERAL CONFIGURATION
@@ -36,6 +37,7 @@ CONTACTS = [("Styret", "styret@hc.ntnu.no")]
 
 LOGIN_REDIRECT_URL = "/"
 LOGIN_URL = "/login/"
+LOGOUT_REDIRECT_URL = "/"
 ROOT_URLCONF = "chemie.chemie.urls"
 WSGI_APPLICATION = "chemie.chemie.wsgi.application"
 
@@ -74,6 +76,8 @@ THIRD_PARTY_APPS = [
     "smart_selects",
     "ckeditor",
     "django_extensions",
+    'push_notifications',
+    "crispy_forms",
 ]
 
 LOCAL_APPS = [
@@ -88,11 +92,16 @@ LOCAL_APPS = [
     "chemie.customprofile",
     "chemie.picturecarousel",
     "chemie.elections",
-    "chemie.corporate"
+    "chemie.corporate",
+    'chemie.web_push',
+    "chemie.shop",
+    "chemie.quiz"
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
+# For bootstrap crispy forms
+CRISPY_TEMPLATE_PACK = "bootstrap4"
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -240,6 +249,14 @@ REST_FRAMEWORK = {
     ),
 }
 
+# FIREBASE PUSH NOTIFICATION CONFIGURATION
+# ------------------------------------------------------------------------------
+
+PUSH_NOTIFICATIONS_SETTINGS = {
+        "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or '',
+        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or '',
+        "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or ''
+}
 
 # HAYSTACK CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -438,4 +455,10 @@ THUMBNAIL_PRESERVE_FORMAT = True
 THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
+
+
+CART_SESSION_ID = "cart"
+
+# Value used for Django's built-in messages framework
+MESSAGE_TAGS = {message_constants.ERROR: "danger"}
 

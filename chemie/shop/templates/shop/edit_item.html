@@ -1,0 +1,48 @@
+{% extends "shop/base_shop.html" %}
+{% load staticfiles %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+<head>
+  <meta charset="UTF-8">
+  <title>Butikk admin</title>
+</head>
+
+{% block style %}
+<style>
+  .asteriskField {
+    color: red;
+  }
+
+  #submit-id-submit {
+    background-color: #6c757d;
+    border-color: #6c757d;
+  }
+</style>
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+    </li>
+    <li class="breadcrumb-item "><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a>
+    </li>
+    <li class="breadcrumb-item "><a href="{%url "shop:add-item"%}" style="color:#edcd2f">Legg til vare</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Endre vare</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+<!-- Form with edit item -->
+<div style="display:inline">
+  <form enctype="multipart/form-data" method="POST" style="display:inline; margin:auto">{% csrf_token %}
+    <table>
+      {% crispy form %}
+    </table>
+  </form>
+</div>
+{% endblock content %}

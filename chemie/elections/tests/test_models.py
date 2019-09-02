@@ -1,48 +1,50 @@
 import pytest
 from django.core.exceptions import ObjectDoesNotExist
-import collections
-
-from chemie.customprofile.factories import RandomProfileFactory
-
+import factory
+from chemie.customprofile.models import Profile
 
 @pytest.mark.django_db
 def test_initial_election(create_election_with_positions):
     election, positions = create_election_with_positions
     assert not election.is_open
-    assert not election.current_position_is_open
+    assert election.positions.count() == 0
     assert not election.current_position
-    assert len(election.positions.all()) is 0
+    for profile in Profile.objects.all():
+        assert profile.eligible_for_voting is False
+        assert profile.voted is False
 
 
 @pytest.mark.django_db
 def test_add_positions_to_election(create_election_with_positions):
-    election, positions = create_election_with_positions
-    election.positions.add(*positions)
-    assert len(election.positions.all()) is not 0
+    election, _ = create_election_with_positions
+    spots = [1, 2, 3]
+    for i in range(len(spots)):
+        position_name = factory.Faker("first_name")
+        election.add_position(position_name, spots[i])
+        assert election.positions.latest("id").spots == spots[i]
+
     assert not election.current_position
     assert not election.is_open
-    election.current_position = positions[0]
-    assert election.current_position is not None
-    for position in positions:
-        assert position.candidates.all().count() is 0
-        assert position.winners.all().count() is 0
-        assert position.total_votes is 0
-        assert position.voting_done is False
+    assert election.current_position is None
+    for position in election.positions.all():
+        assert position.candidates.all().count() == 0
+        assert position.tickets.all().count() == 0
+        assert position.number_of_prevote_tickets == 0
+        assert position.is_active is False
+        assert position.is_done is False
+    assert election.positions.count() == len(spots)
 
 
 @pytest.mark.django_db
-def test_add_candidate(create_election_with_positions, create_candidates):
+def test_add_candidate(create_election_with_positions, create_user):
     election, positions = create_election_with_positions
     election.positions.add(*positions)
     for position in positions:
-        candidates = create_candidates
-        position.candidates.add(*candidates)
-        assert len(position.candidates.all()) is len(candidates)
-        assert position.winners.all().count() is 0
-        assert position.total_votes is 0
+        user = create_user
+        position.add_candidate(user)
+        assert len(position.candidates.all()) == 1
         for candidate in position.candidates.all():
-            assert candidate.votes is 0
-            assert candidate.winner is False
+            assert candidate.votes == 0
             assert candidate.user is not None
 
 
@@ -51,7 +53,7 @@ def test_delete_single_candidate(
     create_election_with_positions, create_candidates
 ):
     election, positions = create_election_with_positions
-    election.add_position(positions)
+    election.positions.add(*positions)
 
     candidates = create_candidates
     position = positions[0]
@@ -61,146 +63,87 @@ def test_delete_single_candidate(
     assert candidate not in list(position.candidates.all())
     position.candidates.add(candidate)
     assert candidate in list(position.candidates.all())
-    position.delete_candidates(candidate)
-    with pytest.raises(ObjectDoesNotExist) as e_info:
+    position.delete_candidate(candidate.user.username)
+    with pytest.raises(ObjectDoesNotExist) as _:
         candidate.refresh_from_db()
+    assert candidate not in list(position.candidates.all())
 
 
 @pytest.mark.django_db
-def test_delete_position(create_election_with_positions, create_candidates):
-    election, positions = create_election_with_positions
-    candidates = create_candidates
-    election.add_position(positions)
-
-    position = positions[0]
-    position.candidates.add(*candidates)
-    election.delete_position(position)
-    election.delete_position(positions)
-
-    # Refetch all objects, since they have been deleted, and references are stale
-    with pytest.raises(ObjectDoesNotExist) as e_info:
-        for position in positions:
-            position.refresh_from_db()
-        for candidate in candidates:
-            candidate.refresh_from_db()
-
-
-@pytest.mark.django_db
-def test_get_current_position_winners(
-    create_election_with_positions, create_candidates
-):
-    election, positions = create_election_with_positions
-    candidates = create_candidates
-
-    position = positions[0]
-    number_of_winners = position.spots
-    winner_candidates = []
-    for i in range(number_of_winners):
-        candidates[i].votes = i + 1
-        candidates[i].save()
-        candidates[i].refresh_from_db()
-        winner_candidates.append(candidates[i])
-
-    position.candidates.add(*candidates)
-    position.end_voting_for_position()
-    assert collections.Counter(
-        list(position.winners.all())
-    ) == collections.Counter(winner_candidates)
-
-
-@pytest.mark.django_db
-def test_start_current_election(
-    create_election_with_positions, create_candidates
-):
-    election, positions = create_election_with_positions
-    candidates = create_candidates
-
-    total_votes = 0
-    for i in range(len(candidates)):
-        candidates[i].votes = i + 1
-        candidates[i].save()
-        total_votes += candidates[i].votes
-
-    position = positions[0]
-    position.candidates.add(*candidates)
-
-    # Fetch all profiles and fake that they have voted
-    profiles = RandomProfileFactory.create_batch(10)
-    for profile in profiles:
-        profile.voted = True
-        profile.save()
-
-    election.start_current_election(position)
-    assert election.current_position == position
-
-    # Check that users can now vote again
-    for profile in profiles:
-        profile.refresh_from_db()
-        assert profile.voted is False
-
-    assert election.current_position_is_open is True
-    assert election.current_position.total_votes is total_votes
-
-
-@pytest.mark.django_db
-def test_end_election(create_election_with_positions):
-    election, _ = create_election_with_positions
-
-    election.end_election()
-    assert election.is_open is False
-
-    election.is_open = True
-    election.save()
-    assert election.is_open is True
-
-    election.end_election()
-    assert election.is_open is False
-
-
-@pytest.mark.django_db
-def test_all_possible_vote_outcomes(
+def test_delete_position(
     create_election_with_positions, create_candidates, create_user
 ):
     election, positions = create_election_with_positions
     candidates = create_candidates
-    candidate = candidates[0]
+    election.positions.add(*positions)
+    n_positions = election.positions.count()
+    election.positions.first().candidates.add(*candidates)
+    for position in election.positions.all():
+        election.delete_position(position.id)
+        assert election.positions.count() == n_positions - 1
+        n_positions -= 1
+    assert n_positions == 0
 
-    # Prepare the election
-    position = positions[0]
-    position.candidates.add(*candidates)
-    election.start_current_election(position)
+    with pytest.raises(ObjectDoesNotExist) as _:
+        for position in positions:
+            position.refresh_from_db()
+        for candidate in candidates:
+            candidate.refresh_from_db()
+    assert election.positions.count() == 0
 
-    # Fetch user
-    profile = create_user.profile
 
-    # Set a vote variable
-    votes = 0
+@pytest.mark.django_db
+def test_voting_outcome(
+    create_open_election_with_position_and_candidates, create_user
+):
+    election = create_open_election_with_position_and_candidates
+    position = election.positions.first()
+    assert position.number_of_prevote_tickets == 0
+    assert position.get_number_of_voters() == 0
+    assert position.get_non_blank_votes() == 0
+    assert position.get_blank_votes() == 0
 
-    # Let user vote blank
-    election.vote(profile, candidates=None, blank=True)
-    votes += 1
-    assert election.current_position.total_votes is votes
-    for cand in candidates:
-        assert cand.votes is 0
+    user = create_user
+    election.start_current_position_voting(position.id)
 
-    # Let user vote for single candidate
-    profile.voted = False
-    profile.save()
-    election.vote(profile, candidate, blank=False)
-    votes += 1
-    assert election.current_position.total_votes is votes
-    assert candidate.votes is 1
+    position.calculate_candidate_votes()
+    for candidate in position.candidates.all():
+        assert candidate.pre_votes == 0
+        assert candidate.votes == 0
 
-    # Let user vote for several candidates
-    profile.voted = False
-    profile.save()
-    election.vote(profile, candidates, blank=False)
-    votes += len(candidates)
-    for cand in candidates:
-        cand.refresh_from_db()
-        if cand is candidate:
-            assert cand.votes is 2
+    position.vote_blank(user)
+    assert user.profile.voted is True
+    assert position.number_of_prevote_tickets == 0
+    assert position.get_number_of_voters() == 1
+    assert position.get_non_blank_votes() == 0
+    assert position.get_blank_votes() == 1
+
+    position.calculate_candidate_votes() == 0
+    for candidate in position.candidates.all():
+        assert candidate.pre_votes == 0
+        assert candidate.votes == 0
+
+    user.profile.voted = False
+    vote_candidates = position.candidates.all()[0:2]
+
+    position.vote(vote_candidates, user)
+    assert user.profile.voted is True
+    assert position.number_of_prevote_tickets == 0
+    assert position.get_number_of_voters() == 2
+    assert position.get_non_blank_votes() == 1
+    assert position.get_blank_votes() == 1
+
+    position.calculate_candidate_votes() == 0
+    for candidate in position.candidates.all():
+        assert candidate.pre_votes == 0
+
+        if candidate.id == vote_candidates[0].id:
+            assert candidate.votes == 1
+        elif candidate.id == vote_candidates[1].id:
+            assert candidate.votes == 1
         else:
-            assert cand.votes is 1
-    assert election.current_position.total_votes is votes
-    assert profile.voted is True
+            assert candidate.votes == 0
+    election.end_current_position_voting()
+    assert not election.current_position.is_active
+    assert election.current_position.is_done
+

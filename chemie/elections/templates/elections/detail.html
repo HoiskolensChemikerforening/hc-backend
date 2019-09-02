@@ -6,9 +6,9 @@
     <p>Antall som skal velges: {{ position.seats }}</p>
 
     <ul>
-    {% for candidate in position.candidate_set.all %}
-      <li>{{ candidate }}</li>
-    {% endfor %}
+      {% for candidate in position.candidate_set.all %}
+        <li>{{ candidate }}</li>
+      {% endfor %}
     </ul>
   {% endfor %}
 {% endblock %}

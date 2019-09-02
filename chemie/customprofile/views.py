@@ -19,7 +19,6 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 
-from chemie.elections.views import election_is_open
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
 from .forms import (
@@ -31,7 +30,10 @@ from .forms import (
     SetNewPassword,
     NameSearchForm,
     AddCardForm,
+    EditPushForm,
 )
+from django.contrib.auth.forms import AuthenticationForm
+from .forms import ApprovedTermsForm
 from .models import UserToken, Profile, Membership, GRADES, ProfileManager
 
 
@@ -42,9 +44,9 @@ def register_user(request):
     )
     approved_terms_form = ApprovedTermsForm(request.POST or None)
     if (
-        user_core_form.is_valid()
-        and user_profile_form.is_valid()
-        and approved_terms_form.is_valid()
+            user_core_form.is_valid()
+            and user_profile_form.is_valid()
+            and approved_terms_form.is_valid()
     ):
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
@@ -97,7 +99,7 @@ def edit_profile(request):
                 profile_form.save()
 
         if not (
-            user_form.errors or profile_form.errors or new_password_form.errors
+                user_form.errors or profile_form.errors or new_password_form.errors
         ):
             messages.add_message(
                 request, messages.SUCCESS, "Dine endringer har blitt lagret!"
@@ -109,6 +111,30 @@ def edit_profile(request):
         "change_password_form": new_password_form,
     }
     return render(request, "customprofile/editprofile.html", context)
+
+@login_required
+def edit_push(request):
+    form = EditPushForm(request.POST or None, user=request.user)
+    if request.method == "POST":
+        if form.is_valid():
+            # Sets all subscriptions to false
+            user_subscriptions = request.user.profile.subscriptions.all()
+            for sub in user_subscriptions:
+                sub.active = False
+                sub.save()
+
+            # sets the picked subscriptions to True
+            subscription_query = form.cleaned_data['subscriptions']
+            for sub in subscription_query:
+                if sub in user_subscriptions:
+                    user_sub = user_subscriptions.get(subscription_type=sub.subscription_type)
+                    user_sub.active = True
+                    user_sub.save()
+            return redirect(reverse('customprofile:edit-push'))
+    context = {
+        'form': form,
+    }
+    return render(request, "customprofile/editpush.html", context)
 
 
 def forgot_password(request):
@@ -252,28 +278,31 @@ class LoginView(OldLoginView):
 @permission_required('customprofile.can_edit_access_card')
 @login_required
 def add_rfid(request):
-    form = AddCardForm(request.POST or None)
-    context = {'form': form}
     redirect_URL = request.GET.get('redirect')
+    rfid = request.GET.get('cardnr')
+    form = AddCardForm(request.POST or None, initial={"access_card": rfid})
+    context = {'form': form}
     if request.method == 'POST':
         if form.is_valid():
             user = form.cleaned_data.get('user')
             try:
                 profile = Profile.objects.get(user=user)
-                rfid = form.cleaned_data.get('access_card')
                 card_nr = ProfileManager.rfid_to_em(rfid)
                 profile.access_card = card_nr
                 profile.save()
-                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret')
+                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret', extra_tags='Hurra')
                 if redirect_URL:
                     return redirect(redirect_URL)
                 form = AddCardForm()
             except ObjectDoesNotExist:
-                #Hvis en bruker ikke finnes vil koden gå hit
-                messages.add_message(request, messages.WARNING, 'Finner ingen bruker ved brukernavn {}'.format(user.username))
+                # Hvis en bruker ikke finnes vil koden gå hit
+                messages.add_message(request, messages.WARNING,
+                                     'Finner ingen bruker ved brukernavn {}'.format(user.username),
+                                     extra_tags='Advarsel')
             except IntegrityError:
                 messages.add_message(request, messages.WARNING,
-                                     'Studentkortnummeret {} er allerede registrert på en annen bruker'.format(card_nr))
+                                     'Studentkortnummeret {} er allerede registrert på en annen bruker'.format(card_nr),
+                                     extra_tags='Advarsel')
             except Exception as e:
                 messages.add_message(request, messages.WARNING,
                                      'Det skjedde noe galt. {}'.format(e))

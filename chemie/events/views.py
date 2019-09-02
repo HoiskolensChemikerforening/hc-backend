@@ -216,9 +216,11 @@ class ViewSocialDetailsView(DetailView):
         confirmed = attendees.filter(
             event=self.object, status=REGISTRATION_STATUS.CONFIRMED
         )
-        waiting = attendees.filter(
-            event=self.object, status=REGISTRATION_STATUS.WAITING
-        )
+
+        waiting = attendees \
+            .filter(event=self.object, status=REGISTRATION_STATUS.WAITING) \
+            .order_by('created')
+
         context.update({"attendees": confirmed, "waiting_list": waiting})
         return context
 
@@ -686,10 +688,13 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
 @login_required
 @permission_required("events.change_socialeventregistration")
 def change_payment_status(request, registration_id):
-    registration = SocialEventRegistration.objects.get(pk=registration_id)
-    registration.payment_status = not registration.payment_status
-    registration.save()
-    return JsonResponse({"payment_status": registration.payment_status})
+    if request.method == "POST":
+        registration = SocialEventRegistration.objects.get(pk=registration_id)
+        registration.payment_status = not registration.payment_status
+        registration.save()
+        return JsonResponse({"payment_status": registration.payment_status})
+    else:
+        return redirect(reverse('home:home'))
 
 
 @login_required
@@ -711,7 +716,9 @@ def change_arrival_status(request, registration_id):
 @transaction.atomic
 def set_user_event_status(event, registration):
     if event.allowed_grade(registration.user):
-        if event.has_spare_slots:
+        slots = event.sluts - event.registered_users()
+        has_spare_slots = (slots > 0)
+        if has_spare_slots:
             registration.confirm()
             registration.save()
             return REGISTRATION_STATUS.CONFIRMED
@@ -735,7 +742,7 @@ def checkin_to_bedpres(request, pk):
                 user = Profile.objects.get(access_card=em_code).user
             except:
                 messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect(f"{reverse('profile:add_rfid')}?redirect={request.get_full_path()}")
+                return redirect(f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}")
             try:
                 registration = BedpresRegistration.objects.get(user=user, event=bedpres)
             except:

@@ -1,13 +1,13 @@
 {% extends "chemie/base.html" %}
 {% block content %}
-<html>
-    <body>
-        <p></p>
-        <form method='POST' action=''>{% csrf_token %}
-            {{ form.as_p }}
-            <input type='submit' value='Create Post' />
-        </form>
+  <html>
+  <body>
+  <p></p>
+  <form method='POST' action=''>{% csrf_token %}
+    {{ form.as_p }}
+    <input type='submit' value='Create Post'/>
+  </form>
 
-    </body>
-</html>
+  </body>
+  </html>
 {% endblock content %}

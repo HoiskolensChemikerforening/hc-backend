@@ -1,0 +1,95 @@
+{% extends "shop/base_shop.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Butikk</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</head>
+{% endblock header %}
+
+{% block style %}
+<style>
+    .item-box {
+        margin: 1rem;
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+        width: 20rem;
+        border-radius: 0.1rem;
+    }
+
+    #order-box {
+        align-items: flex-start;
+        float: left;
+        width: 100%;
+    }
+
+    #redirect-refill-btn {
+        background-color: #edcd2f;
+        border-color: #edcd2fb4;
+        float: right;
+        margin-right: 1rem;
+        color: black
+    }
+
+    #redirect-statistic-btn {
+        background-color: #edcd2f;
+        border-color: #edcd2fb4;
+        margin-left: 1rem;
+        color: black
+    }
+</style>
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Kvitteringer</li>
+    </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<a class="btn btn-secondary" href="{% url 'shop:refills' %}" id="redirect-refill-btn">Påfyllshistorikk</a>
+<a class="btn btn-secondary" href="{% url 'shop:statistics' %}" id="redirect-statistic-btn">Statistikk</a>
+<h3 style="text-align:center; margin-top: 1rem">Kjøpshistorikk</h3>
+<div class="d-flex flex-wrap" style="align-items:flex-start">
+    {% for order in orders %}
+    <div class="p-2 item-box d-flex flex-column">
+        <div class="p-2" style="text-align:center">
+            <b>Dato: </b> {{order.created}}
+        </div>
+        <div class="p-2">
+            {% for order_item in order.items.all %}
+            <div class="d-flex justify-content-between">
+                <div class="p-0">
+                    <p style="margin-bottom:0rem">{{order_item}} x {{order_item.quantity}}</p>
+                </div>
+                <div class="p-0 d-flex justify-content-between">
+                    <div class="p-2">
+                        <p style="margin-bottom:0rem">{{order_item.total_price}} </p>
+                    </div>
+                    <div class="p-2">
+                        <img type="image/png" src="{% static "images/HC_coin.png" %}"
+                        style="width:1rem; float: right; margin-left: 0.2rem; margin-top:0.3rem">
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <div class="p-2 d-flex align-items-start" style="display:inline">
+            <p class=""><b>Total pris: </b> {{order.get_total_price}}</p>
+            <img type="image/png" src="{% static "images/HC_coin.png" %}"
+                style="width:1.8rem; float: right; margin-left: 0.2rem">
+        </div>
+
+    </div>
+    {% endfor %}
+</div>
+{% endblock content %}

@@ -1,0 +1,218 @@
+{% extends "shop/base_shop.html" %}
+{% load static %}
+{% load thumbnail %}
+{% load crispy_forms_tags %}
+
+{% block header %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Butikk</title>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+</head>
+{% endblock header %}
+
+{% block style %}
+<style>
+    tr:nth-child(even) {
+        background-color: #f2f2f2
+    }
+
+    #plot-box {
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+        margin-top: 1rem;
+        margin-left: 0rem;
+        margin-right: 0rem;
+        margin-bottom: 1rem;
+        width: 25rem;
+    }
+
+    #item-overview {
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+        width: 100%;
+        margin: 1rem;
+        margin-bottom: 5rem;
+        padding: 1rem;
+    }
+
+    #podium-box {
+        box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24);
+        margin: 1rem;
+
+    }
+    .select2-selection{
+        padding:0rem
+    }
+
+</style>
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+        <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Shop</a>
+        </li>
+        <li class="breadcrumb-item "><a href="{%url "shop:receipts"%}" style="color:#edcd2f">Kvitteringer</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Statistikk</li>
+    </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+
+<h2 style="text-align:center">Statistikk over dine varekjøp i butikken</h2>
+<div class="d-flex flex-row flex-wrap justify-content-between" style="padding:0rem">
+    <div class="p-2 d-flex flex-column" style="text-align:center;">
+
+        <div class="p-2 d-flex" style="width:80%; height:10rem">
+            <div class="p-2" style="width: 7rem; position: relative">
+                <img class="activator" style="max-width:5rem; position: absolute; bottom:-3rem"
+                    src="{{user.profile.get_second_most_bought_item.image.url}}">
+            </div>
+            <div class="p-2" style="width: 7rem; position: relative">
+                <img class="activator" style="max-width:5rem; position: absolute; bottom:-1rem"
+                    src="{{user.profile.get_most_bought_item.image.url}}">
+            </div>
+            <div class="p-2" style="width: 7rem; position: relative">
+                <img class="activator" style="max-width:5rem; position: absolute; bottom:-5rem"
+                    src="{{user.profile.get_third_most_bought_item.image.url}}">
+            </div>
+        </div>
+        <div class="p-2 d-flex" style="width:80%; height:10rem">
+            <div class="p-2" style="width: 7rem; position: relative;">
+                <img class="activator" style="max-width:5rem; position: absolute; bottom:0.7rem"" src="
+                    {% static "images/podium_silver.png" %}">
+            </div>
+            <div class="p-2" style="width: 7rem; position: relative;">
+                <img class="activator" style="max-width:5rem; position: absolute; bottom:0.7rem"" src="
+                    {% static "images/podium_gold.png" %}">
+            </div>
+            <div class="p-2" style="width: 7rem; position: relative;">
+                <img class="activator" style="max-width:5rem; position: absolute; bottom:0rem"
+                    src="{% static "images/podium_bronze.png" %}">
+            </div>
+        </div>
+    </div>
+    <div id="plot-box" class="p-2 flex-grow-1">
+        <div class="p-2">
+            <div class="p-2 row">
+                <div class="col s12 m8 l8">
+
+                    <form id="refill-balance-form" method="POST"> {% csrf_token %}
+                    <table>
+                        {% crispy search_form %}
+                        <button type="submit" class="btn" style="background-color:#edcd2f; border-color: #edcd2f ">Hent vare</button>
+                    </table>
+                    </form>
+
+                </div>
+              </div>
+        </div>
+        <div class="p-2" id="plotDiv" style="width:auto; height:25rem; margin:0rem">
+        </div>
+    </div>
+    <h4 style=" text-align:center; width:100%">Totalkjøp av varer</h4>
+    <div id="item-overview">
+        <table style="width:100%">
+
+            <tr>
+                <th>Vare</th>
+                <th>Antall</th>
+                <th>HC-coins brukt</th>
+            </tr>
+            {% for item in bought_items %}
+            <tr>
+                <td id="product-{{forloop.counter0}}">-</td>
+                <td id="quantity-{{forloop.counter0}}">-</td>
+                <td id="sum-{{forloop.counter0}}">-</td>
+                <script>
+                    var data = "{{item}}"
+                    data = data.replace(/&#39;/g, '')
+                    data = data.split(',')
+
+                    var itemName = data[0].trim()
+                    itemName = itemName.split('(')[1]
+
+                    var quantity = data[1].trim()
+                    quantity = quantity.replace(')', "")
+                    quantity = quantity.replace('[', "")
+
+                    var purchaseSum = data[2].trim()
+                    purchaseSum = purchaseSum.replace(')', "")
+                    purchaseSum = purchaseSum.replace(']', "")
+
+                    var counter = "{{forloop.counter0}}"
+
+                    document.getElementById("product-" + counter).innerHTML = itemName
+                    document.getElementById("quantity-" + counter).innerHTML = quantity
+                    document.getElementById("sum-" + counter).innerHTML = purchaseSum
+
+                </script>
+            </tr>
+            {%endfor %}
+        </table>
+    </div>
+
+</div>
+
+
+{% endblock content %}
+
+
+{% block footer_script %}
+<script>
+    /* When the user clicks on the button,
+    toggle between hiding and showing the dropdown content */
+    function dropDownFunction() {
+        document.getElementById("dropdown-btn").classList.toggle("show");
+    }
+
+    function filterFunction() {
+        var input, filter, ul, li, a, i;
+        input = document.getElementById("item-input");
+        filter = input.value.toUpperCase();
+        div = document.getElementById("dropdown-btn");
+        a = div.getElementsByTagName("a");
+        for (i = 0; i < a.length; i++) {
+            txtValue = a[i].textContent || a[i].innerText;
+            if (txtValue.toUpperCase().indexOf(filter) > -1) {
+                a[i].style.display = "";
+            } else {
+                a[i].style.display = "none";
+            }
+        }
+    }
+
+    function plotPurchase() {
+        var plot_time = "{{plot_time}}"
+        var plot_quantity = "{{plot_quantity}}"
+        plot_quantity = plot_quantity.replace('[', "").replace(']', "")
+        plot_time = plot_time.replace(/&#39;/g, '').replace('[', "").replace(']', "")
+        var data = [
+            {
+                x: plot_time.split(','),
+                y: plot_quantity.split(','),
+                type: 'bar'
+            }
+        ]
+        var layout = {
+            title: 'Kjøpshistorikk: ' + itemName,
+            yaxis: {
+                range: [0, null]
+            },
+        };
+
+        Plotly.newPlot('plotDiv', data, layout, {});
+        document.getElementsByClassName('main-svg')[0].setAttribute("style", "height:30rem")
+        document.getElementById("dropdown-btn").setAttribute("class", "dropdown-content")
+    }
+</script>
+{% if plot_item %}
+<script>
+    plotPurchase()
+</script>
+{% endif %}
+{% endblock footer_script %}

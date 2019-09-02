@@ -141,16 +141,16 @@
     </div>
 
     <!-- Payment info -->
-    {% if social.price_member or social.price_companion or social.price_companion %}
-      <div class="col s12 m12 l12">
-        <div class="card">
-          <div class="card-content">
-            <h5>Betalingsinformasjon:</h5>
-            <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
-          </div>
+      {% if social.price_member or social.price_companion or social.price_companion %}
+    <div class="col s12 m12 l12">
+      <div class="card">
+        <div class="card-content">
+          <h5>Betalingsinformasjon:</h5>
+          <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
         </div>
       </div>
-    {% endif %}
+        {% endif %}
+    </div>
   </div>
 
   <div class="row">
@@ -176,4 +176,9 @@
 
 {% block footer_js_files %}
   <script src="{% static "events/transpose_table.js" %}"></script>
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+  </script>
 {% endblock footer_js_files %}

@@ -1,0 +1,276 @@
+{% extends "shop/base_shop.html" %}
+{% load thumbnail %}
+{% load static %}
+{% load shop_extras %}
+
+{% block nav_header %}
+Butikk
+{% endblock nav_header %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style_shop.css' %}" type="text/css" media="screen,projection">
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav class="navbar navbar-light bg-dark" style="margin-bottom:1rem">
+  {% if not is_tablet_user %}
+  <div class="d-flex justify-content-between ">
+    <div class="p-2 d-flex balance-box" style="align-self: center">
+      <div class=" p-2">
+        <!-- Show money -->
+        <p style="font-size:1.8rem;color:black; float:left; margin-top: -1rem; margin-left: 1rem; padding-top: 0rem">
+          <b>{{request.user.profile.balance}}</b></p>
+      </div>
+      <div class="p-2">
+        <img type="image/png" src="{% static "images/HC_coin.png" %}"
+          style="width:1.8rem; float: right; margin-top:-0.4rem">
+      </div>
+    </div>
+
+    <div class="p-2">
+      <a class="btn btn-secondary" style="margin-bottom:0.rem" id="btn-kvittering" href="{% url 'shop:receipts' %}">
+        Mine kvitteringer
+      </a>
+    </div>
+  </div>
+
+  {% endif %}
+</nav>
+{% endblock breadcrumbs %}
+
+{% block content %}
+<script type="text/javascript">
+  // The dictionary is the equivalent shopping cart
+  var item_dict = {};
+  var categoriesFilterd = {};
+  var AllItemList = {};
+</script>
+
+<!-- Show category checkboxes to filter items -->
+<div id="checkboxes" style="display:flex; justify-content: space-evenly; flex-wrap: wrap; margin:1rem">
+  {% for category in categories %}
+  <script type="text/javascript">
+    categoriesFilterd["{{category.name}}"] = false
+  </script>
+  {% if is_tablet_user %}
+  {% if category.check_active_category%}
+  <p>
+    <label class="checkbox-container">{{category}}
+      <input class="category-checkbox" type="checkbox" name="filter-checkbox"
+        onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
+      <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
+    </label>
+  </p>
+  {% endif %}
+  {% else %}
+  {% if category.check_active_without_tablet_category%}
+  <p>
+    <label class="checkbox-container">{{category}}
+      <input class="category-checkbox" type="checkbox" name="filter-checkbox"
+        onclick="filter_category(this.checked,'{{ category.name}}')" id="{{category}}" />
+      <span class="checkmark" style="margin-top:0.2rem">{{category.field}}</span>
+
+    </label>
+  </p>
+  {% endif %}
+  {% endif %}
+  {% endfor %}
+</div>
+{% if is_happy %}
+<div id="happy-hour-box">
+  <h4 style="text-align:center">Nå er det Happy Hour! 2 for 1 på alle varer med fyrverkeri</h4>
+</div>
+
+{% endif %}
+
+<!-- Display items as cards -->
+<div class="d-flex flex-wrap justify-content-center" id="card-items">
+  {% for item in items %}
+  {% if is_happy and item.happy_hour_duplicate %}
+  <div class="p-2 item-box" id="{{item.category}}-{{item.id}}"
+    style="background-image: url(/static/images/fireworks_background.png);">
+    {% else %}
+    <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
+      {% endif %}
+      <div class="d-flex flex-column justify-content-between" style="height:100%">
+        <div class="p-2" style="max-height:70%; text-align:center">
+          {% thumbnail item.image "630x400" as pic %}
+          <img class="activator" style="max-width:10rem; max-height:9rem; margin-bottom:1rem" src="{{ pic.url }}">
+          {% endthumbnail %}
+        </div>
+
+        <div class="d-flex justify-content-around" style="margin-top: auto">
+          <div style="max-width: 7rem;">
+            {{ item.name }}
+          </div>
+          <div class="align-self-center">
+            {{ item.price }}
+            <img type="image/png" style="width:1.8rem" src="{% static "images/HC_coin.png" %}">
+          </div>
+        </div>
+
+        <div class="p-2">
+          <script type="text/javascript">
+            item_dict["{{item.name}}"] = 0; // appends item to dictionary
+          </script>
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <a class="2-p btn btn-danger" id="minus" onclick="minus('{{ item.name }}')"><i class="material-icons">
+                  remove
+                </i></a>
+              <input style="margin:0.1rem; width: 1.4rem; text-align: center" type="text" value="0" max="99"
+                id="item_{{item.name}}">
+              <a class="btn btn-success" id="plus" onclick="plus('{{ item.name }}')"><i class="material-icons">
+                  add
+                </i></a>
+            </div>
+            <div class="p-2">
+              <form action="#" method="POST">
+                {% csrf_token %}
+                <button id="{{ item.id }}" class="btn btn-secondary" style="background-color:white" type="submit"
+                  name="buy" value="{{ item.id }}-0" style="float:right"
+                  onclick="changeQuantity(this,'{{item.name}}');"><i class="material-icons"
+                    style="color:black;">add_shopping_cart</i></button>
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    {% endfor %}
+  </div>
+
+  <!-- Modal Structure -->
+
+  <!-- Modal -->
+  <div class="modal fade" id="cart-modal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5>Handlevogn</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <table style="width:100%" id="shopping-table">
+            <tr class="ul-item-list">
+              <th>Vare</th>
+              <th>Antall</th>
+              <th>Pris</th>
+              <th>Total</th>
+              <th></th>
+            </tr>
+            {% for item_name, item_details in cart.cart.items %}
+            <tr class="item-list" id="item-list-{{ item_name|get_item_pk_from_name }}">
+              <td>{{ item_name }}</td>
+              <td>{{ item_details.quantity }}</td>
+              <td>{{ item_details.price }}</td>
+              <td>Totalpris for denne</td>
+              <td style="text-align: center;" class="item-remove">
+                <i class="material-icons pointer">delete</i>
+              </td>
+            </tr>
+            {% endfor %}
+          </table>
+        </div>
+        <div class="modal-footer">
+
+          <div class="d-flex align-center mr-auto">
+            <div class="float-left" id="total-sum-in-cart">
+              Total: {{ cart.get_total_price }}
+            </div>
+            <div>
+              <img type="image/png" src="{% static "images/HC_coin.png" %}"
+                style="width:1.8rem; padding-left:0.3rem; padding-bottom:0.2rem;">
+            </div>
+
+          </div>
+          {% if is_tablet_user %}
+          <div class="d-flex">
+            <div class="p-2">
+              <form method="POST"> {% csrf_token %}
+                {{rfid_form.rfid}}
+                <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Scan
+                  kortet</button>
+              </form>
+            </div>
+            <div class="p-2">
+
+            </div>
+          </div>
+          <script>
+            $("#cart-modal").on("shown.bs.modal", function () {
+              $("#id_rfid").focus();
+              $("#id_rfid").select();
+            });
+          </script>
+          {% else %}
+          <form method="POST"> {% csrf_token %}
+            <button class="waves-effect waves-light btn" type="submit" name="checkout" value="checkout">Kjøp
+              varer</button>
+          </form>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  {% if cart.cart %}
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-cart-sm hidden" id="mini-fab">
+          <button class="btn btn-warning btn-fab" id="modalTrigger" type="button" data-toggle="modal"
+            data-target="#cart-modal">
+            <i class="material-icons">
+              shopping_cart
+            </i>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
+  {% if perms.shop.add_item or perms.customprofile.refill_balance %}
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="btn-group-sm" id="mini-fab">
+          <a href="{% url 'shop:admin' %}" class="btn btn-info btn-fab" id="admin">
+            <i class="material-icons">
+              build
+            </i>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {% endif %}
+  {% endblock content %}
+
+  <!-- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% FOOTER SCRIPT %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% -->
+
+  {% block footer_script %}
+  <script src="{% static "js/shop.js" %}"></script>
+  {% if cart.cart %}
+  <script>animateButton()</script>
+  {% endif %}
+  {% if is_tablet_user %}
+  <script>
+    activatePressForNavigationScrolling()
+    setTimeout(function () {
+      // if tablet user has been inactive for 5 miniutes,
+      // the page is refhreshed and cart is cleared
+      removeCart()
+    }, 3600000);
+  </script>
+  {% endif %}
+  {% endblock footer_script %}

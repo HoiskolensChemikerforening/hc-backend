@@ -14,7 +14,7 @@
       </ul>
       <div id="pastEvents" class="col s12">
         {% include "events/list_events.html" %}
-        {% if not events %}
+        {% if not object_list %}
           <p class="flow-text">Det finnes ingen tidligere bedpreser.</p>
         {% endif %}
       </div>

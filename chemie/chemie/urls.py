@@ -49,11 +49,12 @@ urlpatterns = [
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     url(
-        r"^elections/", include("chemie.elections.urls", namespace="elections")
-    ),
-    url(
         r"^bedrift/", include("chemie.corporate.urls", namespace="corporate")
-    )
+    ),
+    url(r"^valg/", include("chemie.elections.urls", namespace="elections")),
+    url(r"^web_push/", include("chemie.web_push.urls", namespace="web_push")),
+    url(r"^butikk/", include("chemie.shop.urls", namespace="shop")),
+    url(r"^quiz/", include("chemie.quiz.urls", namespace="quiz")),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
