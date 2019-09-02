@@ -36,8 +36,8 @@ django-push-notifications==1.6.0
 django-recaptcha==1.4.0
 django-sekizai==1.0.0     # via wiki
 django-smart-selects==1.5.4
-django==2.1.5
-djangorestframework==3.9.0
+django==2.1.12
+djangorestframework==3.9.4
 execnet==1.6.0            # via pytest-xdist
 freezegun==0.3.11
 future==0.17.1            # via django-extended-choices
@@ -76,5 +76,5 @@ six==1.12.0               # via bleach, cryptography, django-extensions, freezeg
 sorl-thumbnail==12.5.0    # via wiki
 urllib3==1.24.3           # via requests
 webencodings==0.5.1       # via html5lib
-werkzeug==0.14.1
+werkzeug==0.15.5
 wiki==0.4.2
