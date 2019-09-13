@@ -93,7 +93,7 @@ LOCAL_APPS = [
     "chemie.picturecarousel",
     "chemie.elections",
     "chemie.corporate",
-    'chemie.web_push',
+    "chemie.web_push",
     "chemie.shop",
     "chemie.quiz"
 ]
