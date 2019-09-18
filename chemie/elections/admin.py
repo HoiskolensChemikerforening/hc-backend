@@ -2,7 +2,6 @@ from django.contrib import admin
 
 from .models import Candidate, Position, Election, Ticket
 
-admin.site.site_header = "Valg"
 admin.site.site_title = "Valg"
 
 
