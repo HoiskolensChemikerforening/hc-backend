@@ -77,6 +77,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     'push_notifications',
     "crispy_forms",
+    'audiofield',
 ]
 
 LOCAL_APPS = [
@@ -93,6 +94,7 @@ LOCAL_APPS = [
     "chemie.elections",
     'chemie.web_push',
     "chemie.shop",
+    "chemie.sugepodden",
     "chemie.quiz"
 ]
 
@@ -111,6 +113,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    'audiofield.middleware.threadlocals.ThreadLocals',
 ]
 
 
@@ -270,6 +273,13 @@ HAYSTACK_CONNECTIONS = {
 CACHES = {
     "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}
 }
+
+# AUDIOFIELD CONFIGURATION
+# ------------------------------------------------------------------------------
+
+CHANNEL_TYPE_VALUE = 0
+FREQ_TYPE_VALUE = 8000
+CONVERT_TYPE_VALUE = 0
 
 
 # CKEDITOR CONFIGURATION
