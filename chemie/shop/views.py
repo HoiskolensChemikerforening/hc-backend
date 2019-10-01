@@ -222,7 +222,7 @@ def index_tabletshop(request):
                             request,
                             messages.SUCCESS,
                             (
-                                f"{request.user.get_full_name()} sin konto er trukket {total_price} HC-coins."
+                                f"{profile.user.get_full_name()} sin konto er trukket {total_price} HC-coins."
                                 f"Ny saldo på konto er: {new_balance} HC-coins."
                             ),
                             extra_tags="Kjøp godkjent",
