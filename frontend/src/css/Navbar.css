@@ -1,0 +1,38 @@
+.Navbar {
+    padding-top: 2.5rem;
+    height: 8rem;
+}
+
+.Logo {
+}
+
+.Logo-overlayed {
+    position: relative;
+}
+
+.Logo-text {
+    font-size: 1.7rem;
+    margin: 0;
+    color: #F5F5F2;
+}
+
+.Logo-text span {
+    background: black;
+    display: inline-block;
+}
+
+.overlay {
+    overflow: hidden;
+    position: absolute;
+    bottom: 0.8rem;
+    left: 0.8rem;
+    height: 100%;
+    width: 15rem;
+    opacity: 0;
+    transition: .2s ease;
+    background-color: rgba(255, 217, 0, 0.5);
+}
+
+.Logo:hover .overlay {
+    opacity: 1;
+}

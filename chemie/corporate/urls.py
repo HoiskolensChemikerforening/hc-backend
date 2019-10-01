@@ -3,6 +3,13 @@ from . import views
 
 app_name = "corporate"
 
+
+urlpatterns = [
+    path("", views.ListCompany.as_view()),
+    path("<int:pk>/", views.DetailCompany.as_view())
+]
+
+"""
 urlpatterns = [
     path("", views.index, name="index"),
     path("oversikt/", views.company_list, name="company_list"),
@@ -12,3 +19,4 @@ urlpatterns = [
     path("intervju/lag", views.interview_create, name="interview_create"),
     path("intervju/<int:interview_id>/", views.interview_detail, name="interview_detail")
 ]
+"""

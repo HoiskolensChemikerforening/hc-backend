@@ -1,0 +1,16 @@
+.Company-wrapper {
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.Company {
+  width: 31%;
+  margin-right: 2%;
+  margin-bottom: 2rem;
+  overflow: hidden;
+}
+
+.Company-logo {
+  width: 100%;
+  overflow: hidden;
+}

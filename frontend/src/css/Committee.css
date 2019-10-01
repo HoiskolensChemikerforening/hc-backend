@@ -1,0 +1,22 @@
+.Committee-wrapper {
+    width: 60rem;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+.Committee {
+    width: 19rem;
+    margin-right: 1rem;
+    margin-bottom: 2rem;
+    overflow: hidden;
+}
+
+.Committee > h2 {
+    font-weight: 600;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
+}
+
+.Committee > p {
+    margin-top: 0;
+}

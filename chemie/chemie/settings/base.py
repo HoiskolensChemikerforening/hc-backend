@@ -78,6 +78,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     'push_notifications',
     "crispy_forms",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -106,6 +107,8 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
+    'django.middleware.common.CommonMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -442,6 +445,23 @@ CKEDITOR_CONFIGS = {
         "width": "100%",
     },
 }
+
+CORS_ALLOW_HEADERS = (
+    'accept',
+    'accept-encoding',
+    'authorization',
+    'content-type',
+    'dnt',
+    'origin',
+    'user-agent',
+    'x-csrftoken',
+    'x-requested-with',
+)
+
+CORS_ORIGIN_WHITELIST = [
+    'https://localhost:3000',
+    'localhost:3000'
+]
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
 

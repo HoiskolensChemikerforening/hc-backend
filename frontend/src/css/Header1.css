@@ -1,0 +1,14 @@
+.List {
+  width: 100%;
+  display: flex;
+  flex-flow: row wrap;
+}
+
+.List > h1 {
+  width: 98%;
+  margin-right: 2%;
+  text-transform: uppercase;
+  color: #353535;
+  font-size: 1rem;
+  border-top: #353535 0.2rem solid;
+}

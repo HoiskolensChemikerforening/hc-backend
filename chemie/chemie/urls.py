@@ -49,7 +49,7 @@ urlpatterns = [
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     url(
-        r"^bedrift/", include("chemie.corporate.urls", namespace="corporate")
+        r"^bedrift_api/", include("chemie.corporate.urls", namespace="corporate")
     ),
     url(r"^valg/", include("chemie.elections.urls", namespace="elections")),
     url(r"^web_push/", include("chemie.web_push.urls", namespace="web_push")),
