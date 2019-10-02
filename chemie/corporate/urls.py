@@ -5,8 +5,8 @@ app_name = "corporate"
 
 
 urlpatterns = [
-    path("", views.ListCompany.as_view()),
-    path("<int:pk>/", views.DetailCompany.as_view())
+    path("bedrift/", views.ListCompany.as_view()),
+    path("bedrift/<int:pk>/", views.DetailCompany.as_view())
 ]
 
 """

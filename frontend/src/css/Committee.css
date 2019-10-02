@@ -1,3 +1,7 @@
+.Committee-width {
+    width: 31%;
+}
+
 .Committee-wrapper {
     width: 60rem;
     display: flex;
@@ -5,9 +9,7 @@
 }
 
 .Committee {
-    width: 19rem;
-    margin-right: 1rem;
-    margin-bottom: 2rem;
+    width: 100%;
     overflow: hidden;
 }
 

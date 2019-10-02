@@ -4,7 +4,7 @@
 }
 
 .Company {
-  width: 31%;
+  width: 48%;
   margin-right: 2%;
   margin-bottom: 2rem;
   overflow: hidden;
@@ -13,4 +13,9 @@
 .Company-logo {
   width: 100%;
   overflow: hidden;
+}
+
+.Company-list {
+  width: 65%;
+  margin-right: 2%;
 }

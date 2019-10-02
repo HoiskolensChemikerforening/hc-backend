@@ -21,7 +21,7 @@ h2 {
   margin-bottom: 0.5rem;
 }
 
-#root {
+.Front-page {
   display: flex;
-  flex-flow: wrap row;
+  flex-flow: row wrap;
 }

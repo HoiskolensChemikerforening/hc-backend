@@ -9,9 +9,9 @@ import * as serviceWorker from './serviceWorker';
 ReactDOM.render(Navbar, document.getElementById('navbar'));
 
 ReactDOM.render(
-    [<div>
-      <Company/>
-      <Committee/>
+    [<div className="Front-page">
+      <Company />
+      <Committee />
     </div>], document.getElementById('root')
 );
 
