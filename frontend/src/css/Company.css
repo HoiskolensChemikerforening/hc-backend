@@ -1,21 +1,32 @@
+.Company-list {
+    width: 100%;
+    margin-right: 0;
+}
+
 .Company-wrapper {
-  display: flex;
-  flex-flow: row wrap;
+    display: flex;
+    flex-flow: row wrap;
 }
 
 .Company {
-  width: 48%;
-  margin-right: 2%;
-  margin-bottom: 2rem;
-  overflow: hidden;
+    width: 100%;
+    margin-bottom: 2rem;
+    overflow: hidden;
 }
 
 .Company-logo {
-  width: 100%;
-  overflow: hidden;
+    width: 100%;
+    overflow: hidden;
 }
 
-.Company-list {
-  width: 65%;
-  margin-right: 2%;
+@media screen and (min-width: 600px) {
+    .Company-list {
+        width: 65%;
+        margin-right: 2%;
+    }
+
+    .Company {
+        width: 48%;
+        margin-right: 2%;
+    }
 }

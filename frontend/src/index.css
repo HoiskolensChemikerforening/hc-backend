@@ -1,27 +1,33 @@
 @import url('https://fonts.googleapis.com/css?family=IBM+Plex+Sans:400,600,700&display=swap');
 
 body {
-  margin: 0 10rem;
-  font-family: 'IBM Plex Sans', "Helvetica Neue", Arial, Roboto, sans-serif !important;
-  background: #F5F5F2;
+    margin: 0 1rem;
+    font-family: 'IBM Plex Sans', "Helvetica Neue", Arial, Roboto, sans-serif !important;
+    background: #F5F5F2;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
 
 h1 {
-  font-weight: 700;
+    font-weight: 700;
 }
 
 h2 {
-  font-weight: 600;
-  margin-top: 0.2rem;
-  margin-bottom: 0.5rem;
+    font-weight: 600;
+    margin-top: 0.2rem;
+    margin-bottom: 0.5rem;
 }
 
 .Front-page {
-  display: flex;
-  flex-flow: row wrap;
+    display: flex;
+    flex-flow: row wrap;
+}
+
+@media screen and (min-width: 600px) {
+    body {
+        margin: 0 10rem;
+    }
 }

@@ -1,16 +1,19 @@
 .Committee-width {
-    width: 31%;
+    width: 100%;
 }
 
 .Committee-wrapper {
-    width: 60rem;
     display: flex;
     flex-flow: row wrap;
 }
 
 .Committee {
-    width: 100%;
+    width: 97%;
     overflow: hidden;
+}
+
+.Committee-image {
+    width: 100%;
 }
 
 .Committee > h2 {
@@ -21,4 +24,10 @@
 
 .Committee > p {
     margin-top: 0;
+}
+
+@media screen and (min-width: 600px) {
+    .Committee-width {
+        width: 31%;
+    }
 }
