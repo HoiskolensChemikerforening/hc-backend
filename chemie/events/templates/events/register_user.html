@@ -39,8 +39,7 @@
 
       {% endform %}
 
-      {# Add if statement checking if event is social or bedpres, and render appropriate link #}
-      {% if event.committee.title == "Industrikomiteen" %}
+      {% if event.committee.title == "Industrikomiteen" or event.get_model_type == "bedpres" %}
         <p style="margin-bottom: 2px"><a href="https://hc.ntnu.no/wiki/komiteer-og-undergrupper/indkom/prikksystem/" target="_blank">Industrikomiteens prikksystem</a></p>
       {% endif %}
 
