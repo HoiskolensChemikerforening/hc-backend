@@ -40,8 +40,12 @@
       {% endform %}
 
       {# Add if statement checking if event is social or bedpres, and render appropriate link #}
-      <h6>Høiskolens Chemikerforenings <a href="https://chemie.no/wiki/webkom/samtykkeerklaering-arrangement/"
-                                         target="_blank">samtykkeerklæring for arrangementer</a></h6>
+      {% if event.committee.title == "Industrikomiteen" %}
+        <p style="margin-bottom: 2px"><a href="https://hc.ntnu.no/wiki/komiteer-og-undergrupper/indkom/prikksystem/" target="_blank">Industrikomiteens prikksystem</a></p>
+      {% endif %}
+
+      <p style="margin-top: 2px"><a href="https://hc.ntnu.no/wiki/webkom/samtykkeerklaering-arrangement/"
+                                         target="_blank">Samtykkeerklæring for arrangementer</a></p>
 
       <button class="waves-effect waves-light btn btn-primary" name="register_or_edit"
       id="register_or_edit" type="submit" disabled>{% if registered %}
