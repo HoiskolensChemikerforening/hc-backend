@@ -23,8 +23,8 @@
 {% block maincontent %}
 
   <div class="row">
-      <p class="col s12 m12 l12">
-      <h1 class="heading">{{ social.title }}</h1>
+    <p class="col s12 m12 l12">
+    <h1 class="heading">{{ social.title }}</h1>
   </div>
 
   <div class="row">
@@ -54,13 +54,15 @@
             <p>{{ social.date|date:"j. F - H:i" }}</p>
           </div>
           <div class="divider"></div>
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">contacts</i>
-              <h5 class="left-align">Komité</h5>
+          {% if social.committee %}
+            <div class="section">
+              <div class="valign-wrapper">
+                <i class="material-icons valign left">contacts</i>
+                <h5 class="left-align">Komité</h5>
+              </div>
+              <p>{{ social.committee }}</p>
             </div>
-            <p>{{ social.committee }}</p>
-          </div>
+          {% endif %}
           <div class="section">
             <div class="valign-wrapper">
               <i class="material-icons valign left">edit</i>
@@ -124,11 +126,11 @@
   </div>
 
   <!-- Button for signup page -->
-        {% if social.sluts != 0 %}
-  <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
-    {% endif %}
+  {% if social.sluts != 0 %}
+    <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
+  {% endif %}
 
-    <!-- Desription info -->
+  <!-- Desription info -->
   <div class="row">
     <div class="col s12 m12 l12">
       <div class="card">
@@ -141,19 +143,19 @@
 
     <!-- Payment info -->
     {% if social.price_member or social.price_companion or social.price_companion %}
-    <div class="col s12 m12 l12">
-      <div class="card">
-        <div class="card-content">
-          <h5>Betalingsinformasjon:</h5>
-          <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
+      <div class="col s12 m12 l12">
+        <div class="card">
+          <div class="card-content">
+            <h5>Betalingsinformasjon:</h5>
+            <p class="flow-text"> {{ social.payment_information|linebreaksbr }} </p>
+          </div>
         </div>
       </div>
-    </div>
     {% endif %}
   </div>
 
   <div class="row">
-  <!-- List of attending users -->
+    <!-- List of attending users -->
     <div class="col s12 m6 l6">
       {% if attendees %}
         <h2>Påmeldte</h2>
@@ -162,7 +164,7 @@
     </div>
 
     <div class="col s12 m6 l6">
-    <!-- List of users on waiting list -->
+      <!-- List of users on waiting list -->
       {% if waiting_list %}
         <h2>Venteliste</h2>
         {% include "events/waiting_list.html" with user_list=waiting_list %}
@@ -176,8 +178,8 @@
 {% block footer_js_files %}
   <script src="{% static "events/transpose_table.js" %}"></script>
   <script>
-      $(document).ready(function () {
-          $('.materialboxed').materialbox();
-      });
+    $(document).ready(function () {
+      $('.materialboxed').materialbox();
+    });
   </script>
 {% endblock footer_js_files %}
