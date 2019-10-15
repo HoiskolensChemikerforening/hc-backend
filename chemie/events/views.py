@@ -567,9 +567,6 @@ class BedpresRegisterUserView(SocialRegisterUserView):
     def get_success_url(self):
         return reverse("events:register_bedpres", kwargs={"pk": self.pk})
 
-    # TODO: Add boolean function - returns True if event is a bedpres, false if not.
-    # Can be added in view or in Bedpres model. Send boolean to template
-
 
 class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     model = Social

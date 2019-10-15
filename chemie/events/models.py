@@ -190,6 +190,9 @@ class Social(BaseEvent):
         attendees_with_companion = attendees.filter(companion__gt="")
         return attendees_with_companion.count() + attendees.count()
 
+    def get_model_type(self):
+        return "social"
+
 
 class Bedpres(BaseEvent):
     author = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
@@ -203,6 +206,9 @@ class Bedpres(BaseEvent):
 
     def get_absolute_delete_url(self):
         return reverse("events:delete_bedpres", kwargs={"pk": self.pk})
+
+    def get_model_type(self):
+        return "bedpres"
 
 
 class RegistrationManager(models.Manager):
