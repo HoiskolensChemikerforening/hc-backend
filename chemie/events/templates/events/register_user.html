@@ -39,6 +39,7 @@
 
       {% endform %}
 
+      <!-- Checks if committee "Industrikomiteen" is the one in charge of the event, regardless of event type -->
       {% if event.committee.title == "Industrikomiteen" or event.get_model_type == "bedpres" %}
         <p style="margin-bottom: 2px"><a href="https://hc.ntnu.no/wiki/komiteer-og-undergrupper/indkom/prikksystem/" target="_blank">Industrikomiteens prikksystem</a></p>
       {% endif %}
