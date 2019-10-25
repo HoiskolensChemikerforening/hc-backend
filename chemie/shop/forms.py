@@ -3,7 +3,6 @@ from dal import autocomplete
 from .models import Item, Category, RefillReceipt, HappyHour, Order
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout, Submit, Row, Column
-from django.utils.safestring import mark_safe
 
 
 class RefillBalanceForm(forms.ModelForm):
@@ -59,7 +58,6 @@ class AddItemForm(forms.ModelForm):
             "buy_without_tablet",
             Submit("submit", "Lagre varen"),
         )
-        self.fields['name'].value = mark_safe(self.fields['name'].value)
 
     class Meta:
         model = Item
@@ -77,6 +75,7 @@ class AddItemForm(forms.ModelForm):
             ),
             "price": forms.NumberInput(attrs={"placeholder": "0.00"}),
         }
+
 
 class HappyHourForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):

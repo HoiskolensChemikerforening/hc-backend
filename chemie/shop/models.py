@@ -8,7 +8,6 @@ from django.db.models.signals import pre_save
 from extended_choices import Choices
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
-from django.utils.safestring import mark_safe
 
 
 HAPPY_HOUR_DURATION = Choices(
@@ -116,6 +115,7 @@ class Item(models.Model):
                     "Du kan ikke legge inn en vare som gjør at vi taper penger. Wtf?"
                 )
         super().clean(*args, **kwargs)
+
 
 class OrderItem(models.Model):
     item = models.ForeignKey(
