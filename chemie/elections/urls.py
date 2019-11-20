@@ -77,6 +77,11 @@ user_urlpatterns = [
         views_admin.manual_rfid_status,
         name="checkin_manually",
     ),
+]
+urlpatterns = admin_urlpatterns + user_urlpatterns
+
+
+""",
     url(
         r"^tidligere-valg/$",
         views.view_previous_elections_index,
@@ -86,6 +91,6 @@ user_urlpatterns = [
         r"^tidligere-valg/(?P<pk>\d+)",
         views.view_previous_election,
         name="previous_election",
-    ),
-]
-urlpatterns = admin_urlpatterns + user_urlpatterns
+    )"""
+
+#The links for previous elections are commented out, because we dont want people to have access to them
