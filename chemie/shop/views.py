@@ -54,9 +54,14 @@ def get_last_year_receipts():
     all_receipts = Order.objects.all()
     now = timezone.now()
     # Get 11 months back
-    first_date = timezone.datetime(
-        year=now.year - 1, month=now.month + 1, day=1
-    )
+    if now.month == 12
+        first_date = timezone.datetime(
+            year=now.year, month=1, day=1
+        )
+    else:
+        first_date = timezone.datetime(
+            year=now.year - 1, month=now.month + 1, day=1
+        )
     receipts = all_receipts.filter(created__gte=first_date, created__lte=now)
     months, m, i = 12, 0, 0
     year, month = now.year, now.month
