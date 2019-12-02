@@ -54,7 +54,7 @@ def get_last_year_receipts():
     all_receipts = Order.objects.all()
     now = timezone.now()
     # Get 11 months back
-    if now.month == 12
+    if now.month == 12:
         first_date = timezone.datetime(
             year=now.year, month=1, day=1
         )
