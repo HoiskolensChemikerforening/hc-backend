@@ -265,9 +265,8 @@ def admin_end_election(request):
     election = Election.get_latest_election()
     if election.is_open:
         election.end_election()
-        return redirect("elections:previous_election", pk=election.pk)
-    else:
-        return redirect("elections:admin_start_election")
+
+    return redirect("elections:admin_start_election")
 
 
 @permission_required("elections.add_election")
