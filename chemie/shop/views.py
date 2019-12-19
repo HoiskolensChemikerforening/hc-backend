@@ -301,6 +301,7 @@ def view_statistics(request):
             context['plot_quantity'] = plot_quantity
             context['plot_item'] = plot_item
             context['seatch_form'] = SearchItemForm(None)
+            context['item_name'] = plot_item.name
     return render(request, "shop/user_statistics.html", context)
 
 
