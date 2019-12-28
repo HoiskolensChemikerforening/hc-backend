@@ -92,7 +92,9 @@ def test_view_create_page_item_with_refill_perms(
 
 # ----------- Refill ----------- #
 @pytest.mark.django_db
-def test_view_refill_balance_page_with_all_perms(client, create_user_all_perms):
+def test_view_refill_balance_page_with_all_perms(
+    client, create_user_all_perms
+):
     user = create_user_all_perms
     client.login(username=user.username, password="defaultpassword")
     request = client.get(reverse("shop:refill"))
@@ -133,7 +135,9 @@ def test_view_refill_balance_page_with_refill_perms(
 
 # ----------- Happy Hour ----------- #
 @pytest.mark.django_db
-def test_view_refill_balance_page_with_all_perms(client, create_user_all_perms):
+def test_view_refill_balance_page_with_all_perms(
+    client, create_user_all_perms
+):
     user = create_user_all_perms
     client.login(username=user.username, password="defaultpassword")
     request = client.get(reverse("shop:refill"))

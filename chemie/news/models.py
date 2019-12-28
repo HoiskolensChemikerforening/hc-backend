@@ -8,6 +8,7 @@ from sorl.thumbnail import ImageField
 from chemie.web_push.models import Device
 from chemie.customprofile.models import Profile
 
+
 class Article(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField()
@@ -36,16 +37,16 @@ class Article(models.Model):
             "news:edit_article",
             kwargs={"article_id": self.id, "slug": self.slug},
         )
-    
+
     def send_push(self, subscribers):
         for subscriber in subscribers:
             devices = subscriber.profile.devices.all()
             [
-                device.send_notification(
-                    "Nyhet!", self.title
-                )
+                device.send_notification("Nyhet!", self.title)
                 for device in devices
-            ] # one-liner for loop
+            ]  # one-liner for loop
+
+
 def pre_save_article_receiver(sender, instance, *args, **kwargs):
     slug = slugify(instance.title)
     instance.slug = slug

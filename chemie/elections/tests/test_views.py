@@ -19,10 +19,7 @@ def test_election_not_open(client, create_user):
 
     request = client.get(reverse("elections:index"))
     assert "Valget har ikke åpnet enda" in request.content.decode("utf-8")
-    assert (
-            "Resultater fra tidligere valg"
-            in request.content.decode("utf-8")
-    )
+    assert "Resultater fra tidligere valg" in request.content.decode("utf-8")
 
     request = client.get(reverse("elections:vote"))
     assert request.status_code == 302
@@ -34,7 +31,9 @@ def test_election_not_open(client, create_user):
 
 
 @pytest.mark.django_db
-def test_election_is_open_no_position_open(client, create_user, create_election_with_positions):
+def test_election_is_open_no_position_open(
+    client, create_user, create_election_with_positions
+):
     election, positions = create_election_with_positions
     user = create_user
     client.login(username=user.username, password="defaultpassword")
@@ -58,7 +57,7 @@ def test_election_is_open_no_position_open(client, create_user, create_election_
 
 @pytest.mark.django_db
 def test_open_for_voting_with_and_without_checkin(
-        client, create_user, create_open_election_with_position_and_candidates
+    client, create_user, create_open_election_with_position_and_candidates
 ):
     election = create_open_election_with_position_and_candidates
     position = election.positions.first()
@@ -94,9 +93,10 @@ def test_open_for_voting_with_and_without_checkin(
 # assert request.status_code is 200
 # assert "Klargjøres til valg" in request.content.decode("utf-8")
 
+
 @pytest.mark.django_db
 def test_get_vote_page(
-        client, create_user, create_open_election_with_position_and_candidates
+    client, create_user, create_open_election_with_position_and_candidates
 ):
     election = create_open_election_with_position_and_candidates
     position = election.positions.first()
@@ -123,12 +123,14 @@ def test_get_vote_page(
     assert position.position_name in request.content.decode("utf-8")
     assert str(position.spots) in request.content.decode("utf-8")
     for candidate in position.candidates.all():
-        assert candidate.user.get_full_name() in request.content.decode("utf-8")
+        assert candidate.user.get_full_name() in request.content.decode(
+            "utf-8"
+        )
 
 
 @pytest.mark.django_db
 def test_vote_for_one_user(
-        client, create_user, create_election_with_positions, create_candidates
+    client, create_user, create_election_with_positions, create_candidates
 ):
     election, positions = create_election_with_positions
     candidates = create_candidates
@@ -152,8 +154,7 @@ def test_vote_for_one_user(
     # Vote for the candidate chosen
     client.login(username=user.username, password="defaultpassword")
     request = client.post(
-        reverse("elections:vote"),
-        {"candidates": candidate.id},
+        reverse("elections:vote"), {"candidates": candidate.id},
     )
     assert request.url == reverse("elections:has_voted")
 
@@ -191,7 +192,7 @@ def test_vote_for_one_user(
 
 @pytest.mark.django_db
 def test_vote_for_multiple_users(
-        client, create_user, create_election_with_positions, create_candidates
+    client, create_user, create_election_with_positions, create_candidates
 ):
     election, positions = create_election_with_positions
     candidates = create_candidates
@@ -214,9 +215,7 @@ def test_vote_for_multiple_users(
     client.login(username=user.username, password="defaultpassword")
     client.post(
         reverse("elections:vote"),
-        {
-            "candidates": [cand.id for cand in winner_candidates],
-        },
+        {"candidates": [cand.id for cand in winner_candidates],},
     )
     # Close voting and assign votes to candidates by counting tickets
     election.end_current_position_voting()
@@ -228,7 +227,7 @@ def test_vote_for_multiple_users(
         cand.refresh_from_db()
         assert cand.votes == 1
         assert cand.pre_votes == 0
-    for cand in candidates[number_of_winners + 1:]:
+    for cand in candidates[number_of_winners + 1 :]:
         cand.refresh_from_db()
         assert cand.votes == 0
     position.refresh_from_db()
@@ -239,7 +238,7 @@ def test_vote_for_multiple_users(
 
 @pytest.mark.django_db
 def test_vote_blank(
-        client, create_user, create_election_with_positions, create_candidates
+    client, create_user, create_election_with_positions, create_candidates
 ):
     election, positions = create_election_with_positions
     candidates = create_candidates
@@ -274,7 +273,7 @@ def test_vote_blank(
 
 @pytest.mark.django_db
 def test_invalid_vote(
-        client, create_user, create_election_with_positions, create_candidates
+    client, create_user, create_election_with_positions, create_candidates
 ):
     election, positions = create_election_with_positions
     candidates = create_candidates

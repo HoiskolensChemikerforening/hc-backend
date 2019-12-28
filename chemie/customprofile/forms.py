@@ -138,18 +138,24 @@ class EditProfileForm(forms.ModelForm):
 class EditPushForm(forms.ModelForm):
     class Meta:
         model = Profile
-        fields = ('subscriptions',)
+        fields = ("subscriptions",)
 
-    def __init__ (self, *args, **kwargs):
+    def __init__(self, *args, **kwargs):
         user = kwargs.pop("user")
         super(EditPushForm, self).__init__(*args, **kwargs)
-        self.fields["subscriptions"].widget = forms.widgets.CheckboxSelectMultiple()
+        self.fields[
+            "subscriptions"
+        ].widget = forms.widgets.CheckboxSelectMultiple()
         self.fields["subscriptions"].help_text = ""
-        self.fields["subscriptions"].queryset = Subscription.objects.filter(owner=user).order_by("id")
+        self.fields["subscriptions"].queryset = Subscription.objects.filter(
+            owner=user
+        ).order_by("id")
 
 
 class ChangePasswordForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput, label="Old password")
+    password = forms.CharField(
+        widget=forms.PasswordInput, label="Old password"
+    )
     password_new = forms.CharField(
         widget=forms.PasswordInput, label="New password"
     )
@@ -265,39 +271,42 @@ class NameSearchForm(forms.Form):
 
 class ApprovedTermsForm(forms.Form):
     approval = forms.BooleanField(
-        required=True, label="Jeg godkjenner ", validators=[lambda x: x == True]
+        required=True,
+        label="Jeg godkjenner ",
+        validators=[lambda x: x == True],
     )
 
 
 class GetRFIDForm(forms.Form):
 
-    rfid = forms.CharField(label='Studentkortnr', max_length=255, widget=forms.NumberInput(attrs={'autofocus': True}))
+    rfid = forms.CharField(
+        label="Studentkortnr",
+        max_length=255,
+        widget=forms.NumberInput(attrs={"autofocus": True}),
+    )
 
 
 class AddCardForm(forms.Form):
     user = forms.ModelChoiceField(
         queryset=User.objects.all(),
-        widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
-    access_card = forms.CharField(label='Studentkortnr', max_length=255)
+        widget=autocomplete.ModelSelect2(url="verv:user-autocomplete"),
+    )
+    access_card = forms.CharField(label="Studentkortnr", max_length=255)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.layout = Layout(
-            "Brukernavn",
-            "Studentkort",
-        )
+        self.helper.layout = Layout("Brukernavn", "Studentkort",)
 
 
 class ManualRFIDForm(forms.Form):
 
     user = forms.ModelChoiceField(
         queryset=User.objects.all(),
-        widget=autocomplete.ModelSelect2(url='verv:user-autocomplete'))
+        widget=autocomplete.ModelSelect2(url="verv:user-autocomplete"),
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.layout = Layout(
-            "Brukernavn",
-        )
+        self.helper.layout = Layout("Brukernavn",)

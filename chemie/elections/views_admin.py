@@ -19,7 +19,8 @@ def admin_start_election(request):
 
         if election.current_position_is_active():
             return redirect(
-                "elections:admin_voting_active", pk=election.current_position.id
+                "elections:admin_voting_active",
+                pk=election.current_position.id,
             )
         return redirect("elections:admin_register_positions")
 
@@ -97,7 +98,9 @@ def admin_register_candidates(request, pk):
             "add_candidate_form": add_candidate_form,
         }
 
-        return render(request, "elections/admin/admin_candidates.html", context)
+        return render(
+            request, "elections/admin/admin_candidates.html", context
+        )
 
 
 @permission_required("elections.add_election")
@@ -285,7 +288,7 @@ def change_rfid_status(request):
                     request,
                     messages.WARNING,
                     "Studentkortnummeret er ikke registrert enda.",
-                    extra_tags='Advarsel',
+                    extra_tags="Advarsel",
                 )
 
                 return redirect(
@@ -301,7 +304,7 @@ def change_rfid_status(request):
                     request,
                     messages.SUCCESS,
                     "{} har sjekket inn".format(profile.user.get_full_name()),
-                    extra_tags='Innsjekk',
+                    extra_tags="Innsjekk",
                 )
 
             else:
@@ -309,7 +312,7 @@ def change_rfid_status(request):
                     request,
                     messages.WARNING,
                     "{} har sjekket ut".format(profile.user.get_full_name()),
-                    extra_tags='Utsjekk',
+                    extra_tags="Utsjekk",
                 )
 
         return redirect("elections:checkin")
@@ -337,23 +340,27 @@ def manual_rfid_status(request):
                     messages.add_message(
                         request,
                         messages.SUCCESS,
-                        "{} har sjekket inn".format(profile.user.get_full_name()),
-                        extra_tags='Innsjekk',
+                        "{} har sjekket inn".format(
+                            profile.user.get_full_name()
+                        ),
+                        extra_tags="Innsjekk",
                     )
 
                 else:
                     messages.add_message(
                         request,
                         messages.WARNING,
-                        "{} har sjekket ut".format(profile.user.get_full_name()),
-                        extra_tags='Utsjekk',
+                        "{} har sjekket ut".format(
+                            profile.user.get_full_name()
+                        ),
+                        extra_tags="Utsjekk",
                     )
             except:
                 messages.add_message(
                     request,
                     messages.WARNING,
                     "Brukeren finnes ikke.",
-                    extra_tags='Advarsel',
+                    extra_tags="Advarsel",
                 )
         return redirect("elections:checkin_manually")
     else:

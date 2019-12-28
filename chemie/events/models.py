@@ -17,7 +17,9 @@ REGISTRATION_STATUS = Choices(
 )
 
 ARRIVAL_STATUS = Choices(
-    ("NONE", 1, "Ikke satt"), ("PRESENT", 2, "Møtt"), ("TRUANT", 3, "Ikke møtt")
+    ("NONE", 1, "Ikke satt"),
+    ("PRESENT", 2, "Møtt"),
+    ("TRUANT", 3, "Ikke møtt"),
 )
 
 
@@ -195,7 +197,9 @@ class Social(BaseEvent):
 
 
 class Bedpres(BaseEvent):
-    author = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        User, related_name="+", on_delete=models.CASCADE
+    )
     attendees = models.ManyToManyField(User, through="BedpresRegistration")
 
     def get_absolute_url(self):
@@ -235,7 +239,7 @@ class BaseRegistration(models.Model):
     arrival_status = models.IntegerField(
         choices=ARRIVAL_STATUS,
         default=ARRIVAL_STATUS.NONE,
-        verbose_name="Oppmøtestatus"
+        verbose_name="Oppmøtestatus",
     )
 
     objects = RegistrationManager()
@@ -285,7 +289,9 @@ class BedpresRegistration(BaseRegistration):
 class RegistrationMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
-    author = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        User, related_name="+", on_delete=models.CASCADE
+    )
 
     # TODO: legge til author
     def __str__(self):
@@ -305,4 +311,3 @@ class BedpresEventMessage(RegistrationMessage):
     event = models.ForeignKey(
         Bedpres, related_name="custom_message", on_delete=models.CASCADE
     )
-

@@ -75,7 +75,7 @@ THIRD_PARTY_APPS = [
     "smart_selects",
     "ckeditor",
     "django_extensions",
-    'push_notifications',
+    "push_notifications",
     "crispy_forms",
 ]
 
@@ -91,9 +91,9 @@ LOCAL_APPS = [
     "chemie.customprofile",
     "chemie.picturecarousel",
     "chemie.elections",
-    'chemie.web_push',
+    "chemie.web_push",
     "chemie.shop",
-    "chemie.quiz"
+    "chemie.quiz",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -151,7 +151,9 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
     },
@@ -251,9 +253,9 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-        "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or '',
-        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or '',
-        "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or ''
+    "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or "",
+    "FCM_API_KEY": os.environ.get("FIREBASE_SERVER_KEY") or "",
+    "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or "",
 }
 
 # HAYSTACK CONFIGURATION
@@ -379,7 +381,10 @@ CKEDITOR_CONFIGS = {
                     "Redo",
                 ],
             },
-            {"name": "editing", "items": ["Find", "Replace", "-", "SelectAll"]},
+            {
+                "name": "editing",
+                "items": ["Find", "Replace", "-", "SelectAll"],
+            },
             "/",
             {
                 "name": "basicstyles",
@@ -459,4 +464,3 @@ CART_SESSION_ID = "cart"
 
 # Value used for Django's built-in messages framework
 MESSAGE_TAGS = {message_constants.ERROR: "danger"}
-

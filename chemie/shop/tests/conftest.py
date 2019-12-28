@@ -23,9 +23,7 @@ def create_user_base():
 def create_permissions():
     p_item = Permission.objects.get_or_create(name="Can add item")[0]
     p_category = Permission.objects.get_or_create(name="Can add category")[0]
-    p_refill = Permission.objects.get_or_create(
-        name="Can refill balance"
-    )[0]
+    p_refill = Permission.objects.get_or_create(name="Can refill balance")[0]
     return p_item, p_category, p_refill
 
 
@@ -95,12 +93,17 @@ def create_multiple_items():
 
 @pytest.fixture(scope="function")
 def create_image():
-    im = Image.new(mode='RGB', size=(200, 200))  # create a new image using PIL
+    im = Image.new(mode="RGB", size=(200, 200))  # create a new image using PIL
     im_io = BytesIO()  # a BytesIO object for saving image
-    im.save(im_io, 'JPEG')  # save the image to im_io
+    im.save(im_io, "JPEG")  # save the image to im_io
     im_io.seek(0)  # seek to the beginning
 
     image = InMemoryUploadedFile(
-        im_io, None, 'random-name.jpg', 'image/jpeg', len(im_io.getvalue()), None
+        im_io,
+        None,
+        "random-name.jpg",
+        "image/jpeg",
+        len(im_io.getvalue()),
+        None,
     )
     return image

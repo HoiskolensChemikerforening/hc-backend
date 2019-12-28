@@ -10,7 +10,6 @@ from push_notifications.admin import GCMDeviceAdmin
 from push_notifications.gcm import GCMError
 
 
-
 @admin.register(Device)
 class WebPushDeviceAdmin(admin.ModelAdmin):
     list_display = (
@@ -70,8 +69,10 @@ class WebPushDeviceAdmin(admin.ModelAdmin):
                 errors.append(r["results"][0]["error"])
         if errors:
             self.message_user(
-                request, "Some messages could not be processed: %r" % (", ".join(errors)),
-                level=messages.ERROR
+                request,
+                "Some messages could not be processed: %r"
+                % (", ".join(errors)),
+                level=messages.ERROR,
             )
         if ret:
             if len(errors) == len(ret):
@@ -84,6 +85,7 @@ class WebPushDeviceAdmin(admin.ModelAdmin):
 
     def send_message(self, request, queryset):
         self.send_messages(request, queryset)
+
 
 @admin.register(CoffeeSubmission)
 class CoffeeAdmin(admin.ModelAdmin):

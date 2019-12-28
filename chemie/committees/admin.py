@@ -13,8 +13,20 @@ class CommitteeAdmin(admin.ModelAdmin):
 
 @admin.register(Position)
 class PositionAdmin(admin.ModelAdmin):
-    list_filter = ('can_manage_committee', ('committee', DropdownFilter),)
-    ordering = ('-committee',)
-    search_fields = ('users__username', 'users__first_name', 'users__last_name',
-                     'title',)
-    list_display = ('title', 'committee', 'email', 'can_manage_committee',)
+    list_filter = (
+        "can_manage_committee",
+        ("committee", DropdownFilter),
+    )
+    ordering = ("-committee",)
+    search_fields = (
+        "users__username",
+        "users__first_name",
+        "users__last_name",
+        "title",
+    )
+    list_display = (
+        "title",
+        "committee",
+        "email",
+        "can_manage_committee",
+    )

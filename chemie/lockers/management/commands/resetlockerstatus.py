@@ -39,8 +39,12 @@ class Command(BaseCommand):
 
 
 def reset_locker_ownerships():
-    taken_lockers_owner_id = Locker.objects.filter(owner__isnull=False).values('owner__id')
-    ownerships_to_reset = Ownership.objects.filter(id__in=taken_lockers_owner_id)
+    taken_lockers_owner_id = Locker.objects.filter(owner__isnull=False).values(
+        "owner__id"
+    )
+    ownerships_to_reset = Ownership.objects.filter(
+        id__in=taken_lockers_owner_id
+    )
 
     for ownership in ownerships_to_reset:
         ownership.is_active = False

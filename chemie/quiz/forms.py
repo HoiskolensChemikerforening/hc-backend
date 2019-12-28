@@ -6,34 +6,28 @@ from .models import QuizScore, QuizTerm
 class CreateQuizScoreForm(forms.ModelForm):
     class Meta:
         model = QuizScore
-        fields = ['user', 'score']
+        fields = ["user", "score"]
         widgets = {
-            'user': autocomplete.ModelSelect2(
-                url="verv:user-autocomplete"
+            "user": autocomplete.ModelSelect2(url="verv:user-autocomplete"),
+            "score": forms.NumberInput(
+                attrs={"style": "width:10ch; margin-left: 10px;"}
             ),
-            'score': forms.NumberInput(
-                attrs={
-                    'style': 'width:10ch; margin-left: 10px;'
-                })
         }
 
 
 class EditQuizScoreForm(forms.ModelForm):
     class Meta:
         model = QuizScore
-        fields = ['score']
+        fields = ["score"]
         widgets = {
-            'score': forms.NumberInput(
-                attrs={
-                    'style': 'width:10ch; margin-left: 10px;'
-                })
+            "score": forms.NumberInput(
+                attrs={"style": "width:10ch; margin-left: 10px;"}
+            )
         }
-        labels = {
-            'score': ''
-        }
+        labels = {"score": ""}
 
 
 class CreateQuizTermForm(forms.ModelForm):
     class Meta:
         model = QuizTerm
-        fields = ['term', 'is_active']
+        fields = ["term", "is_active"]

@@ -34,7 +34,9 @@ class PositionTest(TestCase):
         a = []
         for client, user in zip(client_users, self.users):
             a.append(
-                client.login(username=user.username, password="defaultpassword")
+                client.login(
+                    username=user.username, password="defaultpassword"
+                )
             )
 
         self.low_user, self.high_user, self.no_perms_user = client_users[:3]

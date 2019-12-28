@@ -12,6 +12,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
 from chemie.shop import statistics
 from chemie.web_push.models import Device, Subscription
+
 # Time the activation is valid in hourse
 VALID_TIME = 2
 
@@ -138,10 +139,17 @@ class Profile(models.Model):
     voted = models.BooleanField(default=False)
     eligible_for_voting = models.BooleanField(default=False)
     balance = models.DecimalField(max_digits=6, decimal_places=2, default=0)
-    
-    devices = models.ManyToManyField(Device, blank=True, verbose_name="Push notification-enheter")
-    
-    subscriptions = models.ManyToManyField(Subscription, blank=True, verbose_name="Abonnomenter på push-varsler", related_name="profile")
+
+    devices = models.ManyToManyField(
+        Device, blank=True, verbose_name="Push notification-enheter"
+    )
+
+    subscriptions = models.ManyToManyField(
+        Subscription,
+        blank=True,
+        verbose_name="Abonnomenter på push-varsler",
+        related_name="profile",
+    )
 
     objects = ProfileManager()
 
@@ -182,7 +190,7 @@ class Profile(models.Model):
 
     @classmethod
     def get_all_refill_sum(cls):
-        return cls.objects.aggregate(Sum('balance'))['balance__sum']
+        return cls.objects.aggregate(Sum("balance"))["balance__sum"]
 
 
 class Membership(models.Model):

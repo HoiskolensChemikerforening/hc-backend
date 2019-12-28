@@ -48,7 +48,8 @@ def test_refill_balance(client, create_user_refill_perms):
     receiver = user
     amount = Decimal(100)
     request = client.post(
-        reverse("shop:refill"), data={"receiver": receiver.id, "amount": amount}
+        reverse("shop:refill"),
+        data={"receiver": receiver.id, "amount": amount},
     )
     user.profile.refresh_from_db()
     assert request.status_code == 200

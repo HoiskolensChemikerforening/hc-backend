@@ -13,8 +13,8 @@ class QuizTerm(models.Model):
     den nåværende aktive settes til inaktiv (False).
     """
 
-    is_active = models.BooleanField(verbose_name='Aktiv Quiz')
-    term = models.CharField(max_length=100, verbose_name='Quiz')
+    is_active = models.BooleanField(verbose_name="Aktiv Quiz")
+    term = models.CharField(max_length=100, verbose_name="Quiz")
 
     def save(self, *args, **kwargs):
         if self.is_active:
@@ -27,7 +27,9 @@ class QuizTerm(models.Model):
 
 class QuizScore(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    term = models.ForeignKey(QuizTerm, on_delete=models.CASCADE, related_name='scores')
+    term = models.ForeignKey(
+        QuizTerm, on_delete=models.CASCADE, related_name="scores"
+    )
     score = models.IntegerField(default=0)
 
     def __str__(self):

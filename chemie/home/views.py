@@ -31,7 +31,12 @@ def index(request):
         "-published_date"
     )[:4]
     coffee = CoffeeSubmission.get_latest_submission()
-    context = {"social": all_social, "bedpres": all_bedpres, "posts": all_posts, "coffee": coffee}
+    context = {
+        "social": all_social,
+        "bedpres": all_bedpres,
+        "posts": all_posts,
+        "coffee": coffee,
+    }
     return render(request, "chemie/index.html", context)
 
 
@@ -86,7 +91,10 @@ def request_funds(request):
             mail_to,
             "Webkom <webkom@hc.ntnu.no>",
             template="funds_request_form",
-            context={"form_data": instance, "root_url": get_current_site(None)},
+            context={
+                "form_data": instance,
+                "root_url": get_current_site(None),
+            },
             attachments=attachments,
         )
         messages.add_message(
@@ -103,11 +111,14 @@ def request_funds(request):
 
 @login_required()
 def request_office(request):
-    office_form = PostOfficeForms(request.POST or None, initial={'student_username': ""})
-    author = request.user #hente student username fra form
+    office_form = PostOfficeForms(
+        request.POST or None, initial={"student_username": ""}
+    )
+    author = request.user  # hente student username fra form
     already_applied = OfficeApplication.objects.filter(
-            author=author,
-            created__gte=timezone.now() - timezone.timedelta(days=30)).exists()
+        author=author,
+        created__gte=timezone.now() - timezone.timedelta(days=30),
+    ).exists()
     if already_applied:
         messages.add_message(
             request,
@@ -120,7 +131,9 @@ def request_office(request):
             return redirect(reverse("frontpage:home"))
         instance = office_form.save(commit=False)
         instance.author = author
-        instance.student_username = office_form.cleaned_data.get('student_username')
+        instance.student_username = office_form.cleaned_data.get(
+            "student_username"
+        )
         instance.save()
         messages.add_message(
             request,
@@ -130,10 +143,7 @@ def request_office(request):
         )
         return redirect(reverse("frontpage:home"))
 
-    context = {
-        "office_form": office_form,
-        "already_applied": already_applied
-    }
+    context = {"office_form": office_form, "already_applied": already_applied}
     return render(request, "home/office_access_form.html", context)
 
 
@@ -177,4 +187,3 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     template_name = "home/office_access_list.html"
     queryset = OfficeApplication.objects.order_by("-created")
     permission_required = "home.change_officeapplication"
-

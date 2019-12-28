@@ -102,7 +102,9 @@ class Position(models.Model):
         default=False, verbose_name="Valget er gjennomført"
     )
 
-    by_acclamation = models.BooleanField(default=False, verbose_name="Alle kandidater vant med akklamasjon")
+    by_acclamation = models.BooleanField(
+        default=False, verbose_name="Alle kandidater vant med akklamasjon"
+    )
 
     candidates = models.ManyToManyField(
         Candidate,
@@ -124,7 +126,9 @@ class Position(models.Model):
     def add_candidate(self, user):
         position_candidates = self.candidates.all()
         to_be_added = (
-            False if user in [usr.user for usr in position_candidates] else True
+            False
+            if user in [usr.user for usr in position_candidates]
+            else True
         )
 
         if to_be_added:
@@ -182,7 +186,10 @@ class Position(models.Model):
 
     def get_total_candidate_votes(self):
         # Total votes on candidates in the form of both tickets and prevotes
-        return self.get_total_candidate_prevotes() + self.get_total_candidate_ticket_votes()
+        return (
+            self.get_total_candidate_prevotes()
+            + self.get_total_candidate_ticket_votes()
+        )
 
     def get_blank_votes(self):
         # Number of tickets that are blank (not voted for any candidates)
@@ -199,7 +206,9 @@ class Position(models.Model):
             raise ValueError
         return number_of_blank
 
-    def calculate_candidate_votes(self):  # TODO Validate this fucker with tests
+    def calculate_candidate_votes(
+        self,
+    ):  # TODO Validate this fucker with tests
         # Go over all tickets and assign votes to each candidate
         tickets = self.tickets.exclude(is_blank=True).all()
         candidates = self.candidates.all()

@@ -37,7 +37,9 @@ def edit_description(request, slug):
     managers = Position.objects.filter(
         can_manage_committee=True, committee=committee
     )
-    admin_of_this_group = any([request.user in p.users.all() for p in managers])
+    admin_of_this_group = any(
+        [request.user in p.users.all() for p in managers]
+    )
     enough_perms = admin_of_this_group or request.user.has_perm(
         "committees.add_committee"
     )
@@ -48,7 +50,9 @@ def edit_description(request, slug):
             "Du har bare lov å endre egne undergrupper.",
             extra_tags="Manglende rettigheter!",
         )
-        return redirect(reverse("verv:committee_detail", kwargs={"slug": slug}))
+        return redirect(
+            reverse("verv:committee_detail", kwargs={"slug": slug})
+        )
 
     form = EditDescription(
         request.POST or None, request.FILES or None, instance=committee
@@ -97,7 +101,9 @@ def edit_committee_memberships(request, slug):
     # A user may have change_committee permission,
     # but must have "add_position" to edit all committees or be
     # an administrator of the committee
-    admin_of_this_group = any([request.user in p.users.all() for p in managers])
+    admin_of_this_group = any(
+        [request.user in p.users.all() for p in managers]
+    )
     enough_perms = admin_of_this_group or request.user.has_perm(
         "committees.add_position"
     )
@@ -108,7 +114,9 @@ def edit_committee_memberships(request, slug):
             "Du har bare lov å endre egne undergrupper.",
             extra_tags="Manglende rettigheter!",
         )
-        return redirect(reverse("verv:committee_detail", kwargs={"slug": slug}))
+        return redirect(
+            reverse("verv:committee_detail", kwargs={"slug": slug})
+        )
 
     MemberFormSet = modelformset_factory(
         Position, form=EditPositionForm, extra=0

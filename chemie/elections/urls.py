@@ -93,4 +93,4 @@ urlpatterns = admin_urlpatterns + user_urlpatterns
         name="previous_election",
     )"""
 
-#The links for previous elections are commented out, because we dont want people to have access to them
+# The links for previous elections are commented out, because we dont want people to have access to them

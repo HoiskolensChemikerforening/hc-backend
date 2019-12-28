@@ -184,8 +184,9 @@ class RegisterBedpresForm(BaseRegisterEventForm):
 class SocialRegisterUserForm(forms.ModelForm):
     approval = forms.BooleanField(
         required=True,
-        label='Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer',
-        validators=[lambda x: x == True])
+        label="Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer",
+        validators=[lambda x: x == True],
+    )
 
     class Meta:
         model = SocialEventRegistration
@@ -208,8 +209,9 @@ class SocialRegisterUserForm(forms.ModelForm):
 class BedpresRegisterUserForm(forms.ModelForm):
     approval = forms.BooleanField(
         required=True,
-        label='Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer',
-        validators=[lambda x: x == True])
+        label="Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer",
+        validators=[lambda x: x == True],
+    )
 
     class Meta:
         model = BedpresRegistration
@@ -220,4 +222,3 @@ class DeRegisterUserForm(forms.Form):
     really_sure = forms.BooleanField(
         required=True, label="Er dette ditt endelige svar?"
     )
-

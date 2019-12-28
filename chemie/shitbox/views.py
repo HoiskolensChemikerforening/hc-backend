@@ -73,4 +73,3 @@ def submissions_overview(request, page=1):
     }
 
     return render(request, "shitbox/list_submissions.html", context=context)
-

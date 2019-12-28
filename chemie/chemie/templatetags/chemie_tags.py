@@ -12,4 +12,3 @@ register = template.Library()
 def show_sponsors():
     sponsors = Sponsor.objects.filter(end_date__gte=timezone.now())
     return {"sponsors": sponsors}
-

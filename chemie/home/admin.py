@@ -7,5 +7,5 @@ admin.site.register(FundsApplication)
 
 @admin.register(OfficeApplication)
 class OfficeApplication(admin.ModelAdmin):
-    ordering = ('-created',)
-    list_display = ('author', 'student_username', 'created')
+    ordering = ("-created",)
+    list_display = ("author", "student_username", "created")

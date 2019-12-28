@@ -22,11 +22,12 @@ class ContactForm(forms.Form):
 
 
 class PostFundsForm(forms.ModelForm):
-    layout = M.Layout(M.Row('applier', 'bank_account_holder'),
-                      M.Row('price_range', 'bank_account_id'),
-                      M.Row('purpose'),
-                      M.Row('description'),
-                      )
+    layout = M.Layout(
+        M.Row("applier", "bank_account_holder"),
+        M.Row("price_range", "bank_account_id"),
+        M.Row("purpose"),
+        M.Row("description"),
+    )
 
     class Meta:
         model = FundsApplication

@@ -17,7 +17,9 @@ class RefillBalanceForm(forms.ModelForm):
         model = RefillReceipt
         fields = ["receiver", "amount"]
         widgets = {
-            "receiver": autocomplete.ModelSelect2(url="verv:user-autocomplete"),
+            "receiver": autocomplete.ModelSelect2(
+                url="verv:user-autocomplete"
+            ),
             "amount": forms.NumberInput(attrs={"placeholder": "0.00"}),
         }
 
@@ -51,7 +53,8 @@ class AddItemForm(forms.ModelForm):
             Row(
                 Column("category", css_class="form-group col-md-6 mb-0"),
                 Column(
-                    "happy_hour_duplicate", css_class="form-group col-md-6 mb-0"
+                    "happy_hour_duplicate",
+                    css_class="form-group col-md-6 mb-0",
                 ),
                 css_class="form-row",
             ),
@@ -81,9 +84,7 @@ class HappyHourForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            "duration",
-        )
+        self.helper.layout = Layout("duration",)
 
     class Meta:
         model = HappyHour
@@ -101,7 +102,8 @@ class EditItemForm(forms.ModelForm):
             Row(
                 Column("category", css_class="form-group col-md-6 mb-0"),
                 Column(
-                    "happy_hour_duplicate", css_class="form-group col-md-6 mb-0"
+                    "happy_hour_duplicate",
+                    css_class="form-group col-md-6 mb-0",
                 ),
                 css_class="form-row",
             ),
@@ -127,7 +129,9 @@ class GetUserRefillForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.layout = Layout("receiver", Submit("submit", "Hent bruker"))
+        self.helper.layout = Layout(
+            "receiver", Submit("submit", "Hent bruker")
+        )
 
     class Meta:
         model = RefillReceipt
@@ -152,16 +156,13 @@ class GetUserReceiptsForm(forms.ModelForm):
 
 
 class SearchItemForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper(self)
-        self.helper.layout = Layout(
-            "name"
-        )
+        self.helper.layout = Layout("name")
         for k, field in self.fields.items():
-            if 'required' in field.error_messages:
-                field.error_messages['required'] = ''
+            if "required" in field.error_messages:
+                field.error_messages["required"] = ""
 
     class Meta:
         model = Item
