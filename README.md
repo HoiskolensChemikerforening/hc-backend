@@ -67,6 +67,11 @@ docker-compose up -d --build
 ```
 git stash && git pull --rebase && git pop && docker-compose restart
 ```
+Run this in the terminal
+```
+export DOCKER_BUILDKIT=1
+export COMPOSE_DOCKER_CLI_BUILD=1
+```
 
 ## Add packages to requirements
 We use pip-tools to make our requirement files easy to understand. To 
