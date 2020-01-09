@@ -44,16 +44,16 @@
 
 
               <div class="card-content">
-                    {% include "registration/terms_and_conditions.html" %}
-                    <div style="float: left; clear:none; margin-right: 3px">
-                      {% form form=approved_terms_form %}
-                      {% endform %}
-                    </div>
-                    <div style="font-size: 15px; padding-top: 1.2px">
-                      <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
-                    </div>
-                  </div>
+                {% include "registration/terms_and_conditions.html" %}
+                <div style="float: left; clear:none; margin-right: 3px">
+                  {% form form=approved_terms_form %}
+                  {% endform %}
+                </div>
+                <div style="font-size: 15px; padding-top: 1.2px">
+                  <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
+                </div>
               </div>
+            </div>
 
             <div class="card-action">
               <div class="right-align">
@@ -67,3 +67,11 @@
   </div>
 
 {% endblock content %}
+
+{% block footer_js_files %}
+  <script>
+    $(document).ready(function () {
+      $('select').formSelect();
+    });
+  </script>
+{% endblock footer_js_files %}
