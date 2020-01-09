@@ -13,6 +13,11 @@ from chemie.web_push.models import Subscription
 
 
 class RegisterUserForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["email"].required = True
+
     password = forms.CharField(widget=forms.PasswordInput, label="Passord")
     password_confirm = forms.CharField(
         widget=forms.PasswordInput, label="Gjenta passord"
