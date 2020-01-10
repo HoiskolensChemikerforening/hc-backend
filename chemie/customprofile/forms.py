@@ -13,7 +13,6 @@ from chemie.web_push.models import Subscription
 
 
 class RegisterUserForm(forms.ModelForm):
-
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["email"].required = True
@@ -301,7 +300,7 @@ class AddCardForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.layout = Layout("Brukernavn", "Studentkort",)
+        self.helper.layout = Layout("Brukernavn", "Studentkort")
 
 
 class ManualRFIDForm(forms.Form):
@@ -314,4 +313,4 @@ class ManualRFIDForm(forms.Form):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.helper = FormHelper()
-        self.helper.layout = Layout("Brukernavn",)
+        self.helper.layout = Layout("Brukernavn")
