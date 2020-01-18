@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.urls import reverse
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import Pictureform
 from .models import Contribution
 
@@ -68,3 +69,24 @@ def approve_deny(request, picture_id, deny=False):
             )
         return HttpResponseRedirect(reverse("carousel:overview"))
     return HttpResponseRedirect(reverse("carousel:overview"))
+
+
+@login_required
+def view_pictures(request, page=1):
+    pictures = (
+        Contribution.objects.filter(approved=True)
+        .prefetch_related("author")
+        .order_by("-date")
+    )
+
+    paginator = Paginator(pictures, 10)
+
+    try:
+        picture_page = paginator.page(page)
+    except PageNotAnInteger:
+        picture_page = paginator.page(1)
+    except EmptyPage:
+        picture_page = paginator.page(paginator.num_pages)
+
+    context = {"picture_page": picture_page}
+    return render(request, "picturecarousel/view_active.html", context)

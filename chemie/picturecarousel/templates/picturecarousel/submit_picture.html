@@ -10,7 +10,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    {% if perms.picturecarousel %}
+  {% if perms.picturecarousel %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
         <i class="large material-icons">edit</i>
@@ -27,7 +27,10 @@
   {% endif %}
   <div class="row">
     <div class="col s12 m12 l8">
-      <a class="waves-effect btn" href="{% url "carousel:display" %}"><i class="material-icons left">view_carousel</i>Til karusellen!</a>
+      <a class="waves-effect btn" href="{% url "carousel:display" %}">
+        <i class="material-icons left">view_carousel</i>Til karusellen!</a>
+      <a class="waves-effect btn" href="{% url "carousel:view_pictures" %}">
+        <i class="material-icons left">photo_album</i>Se bilder</a>
       <p class="flow-text">
         Her kan du sende inn bilder til bildekarusellen på kontoret! <br>
       </p>
