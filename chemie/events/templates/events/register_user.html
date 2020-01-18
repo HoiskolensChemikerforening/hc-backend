@@ -7,7 +7,7 @@
 {% endblock header %}
 
 {% block nav_header %}
-   Arrangementer
+  Arrangementer
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
@@ -16,12 +16,12 @@
 
 {% block content %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-      <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
-      <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{ event.title }}</a>
-      <a class="breadcrumb">Påmelding</a>
+    <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
+    <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{ event.title }}</a>
+    <a class="breadcrumb">Påmelding</a>
   </div>
 
-{% include 'events/registration_header.html' with event=event %}
+  {% include 'events/registration_header.html' with event=event %}
 
   {% if registration_form %}
     <p class="flow-text">Okei folkens! Gløym at dykk ikkje fekk væra me på soleis store slåttemda festen sist
@@ -31,7 +31,7 @@
         Ditt klassetrinn er ikke invitert til dette arrangementet.
         Du kan fortsatt melde din interesse dersom det åpnes plasser.
       </p>
-      {% endif %}
+    {% endif %}
 
     <form method='POST' id="registration">{% csrf_token %}
 
@@ -41,15 +41,16 @@
 
       <!-- Checks if committee "Industrikomiteen" is the one in charge of the event, regardless of event type -->
       {% if event.committee.title == "Industrikomiteen" or event.get_model_type == "bedpres" %}
-        <p style="margin-bottom: 2px"><a href="https://hc.ntnu.no/wiki/om/komiteer-og-undergrupper/indkom/prikksystem/" target="_blank">Industrikomiteens prikksystem</a></p>
+        <p style="margin-bottom: 2px"><a href="https://hc.ntnu.no/wiki/om/komiteer-og-undergrupper/indkom/prikksystem/"
+                                         target="_blank">Industrikomiteens prikksystem</a></p>
       {% endif %}
 
       <p style="margin-top: 2px"><a href="https://hc.ntnu.no/wiki/personvernerklaering/samtykkeerklaering-arrangement/"
-                                         target="_blank">Samtykkeerklæring for arrangementer</a></p>
+                                    target="_blank">Samtykkeerklæring for arrangementer</a></p>
 
       <button class="waves-effect waves-light btn btn-primary" name="register_or_edit"
-      id="register_or_edit" type="submit" disabled>{% if registered %}
-      Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
+              id="register_or_edit" type="submit" disabled>{% if registered %}
+        Endre registrasjon{% else %}Meld meg på!{% endif %}</button>
 
     </form>
   {% else %}
@@ -59,7 +60,7 @@
     {% else %}
       Påmeldingsfristen har passert.
     {% endif %}
-{% endif %}
+  {% endif %}
 {% endblock content %}
 
 {% block footer_js_files %}
