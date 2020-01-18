@@ -1,4 +1,5 @@
 -r base.in
 
 uwsgi==2.0.17.1
-raven==6.9.0
+#raven==6.9.0
+sentry-sdk==0.14.0

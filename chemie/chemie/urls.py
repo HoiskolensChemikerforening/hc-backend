@@ -22,6 +22,11 @@ from django_nyt.urls import get_pattern as get_nyt_pattern
 from wiki.urls import get_pattern as get_wiki_pattern
 from ..customprofile.views import LoginView
 
+
+def trigger_error(request):
+    division_by_zero = 1 / 0
+
+
 urlpatterns = [
     url(r"^admin/", admin.site.urls),
     url(r"^", include("chemie.home.urls", namespace="frontpage")),
@@ -54,6 +59,7 @@ urlpatterns = [
     url(r"^web_push/", include("chemie.web_push.urls", namespace="web_push")),
     url(r"^butikk/", include("chemie.shop.urls", namespace="shop")),
     url(r"^quiz/", include("chemie.quiz.urls", namespace="quiz")),
+    url("sentry-debug/", trigger_error),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
