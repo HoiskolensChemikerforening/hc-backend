@@ -55,6 +55,9 @@
 
   <div class="row">
     <h3>Aktive bilder</h3>
+    {% if perms.picturecarousel.change_contribution %}
+      <h6>NB: Personer som er lett gjenkjennbare på bilder skal være tagget.</h6>
+    {% endif %}
     <div class="card">
       <div class="card-content">
         <table class="responsive-table bordered">
