@@ -18,6 +18,11 @@
     }
   </style>
 
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "carousel:submit" %}" class="breadcrumb">Bilder</a>
+    <a class="breadcrumb">Godkjenn</a>
+  </div>
+
   <ul class="pagination nav navbar-nav">
     {% if picture_page.has_previous %}
       <li><a href="{{ picture_page.previous_page_number }}">< Forrige</a></li>
@@ -32,8 +37,11 @@
   </ul>
 
   <div class="row">
-    <h3>Avventer godkjenning</h3>
+    <br>
+    <a class="waves-effect btn" href="{% url "carousel:view_pictures" %}" style="float:right">
+      <i class="material-icons right">arrow_right</i>Godkjente bilder</a>
     <h6>NB: Hvis det er personer som er lett gjenkjennbare på bildene, må de tagges før de godkjennes.</h6>
+  <br>
     <div class="card">
       <div class="card-content">
         <table class="responsive-table bordered">
@@ -68,7 +76,8 @@
                   </button>
                 </form>
                 <br>
-                <a class="waves-effect btn" href="{% url "carousel:tag_users" picture.pk %}">
+                <a class="waves-effect btn"
+                   href="{% url "carousel:tag_users" picture.pk %}?from={{ request.path|urlencode }}">
                   <i class="material-icons right">photo_album</i>Tagg personer</a>
               </td>
             </tr>

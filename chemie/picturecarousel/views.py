@@ -37,9 +37,11 @@ def view_carousel(request):
 
 @permission_required("picturecarousel.change_contribution")
 def approve_pictures(request, page=1):
-    awaiting_approval = Contribution.objects.filter(
-        approved=False
-    ).prefetch_related("author")
+    awaiting_approval = (
+        Contribution.objects.filter(approved=False)
+        .prefetch_related("author")
+        .order_by("-date")
+    )
 
     paginator = Paginator(awaiting_approval, 10)
 
@@ -104,10 +106,19 @@ def view_pictures(request, page=1):
 def tag_users(request, id):
     pic = Contribution.objects.get(id=id)
     form = TagForm(request.POST or None, instance=pic)
+
     if request.method == "POST":
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
             form.save_m2m()
+
+            # Redirect user to the page he came from
+            # (either carousel:overview or carousel:view_pictures)
+            came_from = request.GET.get("from", None)
+            if came_from:
+                return redirect(came_from)
+            else:
+                return redirect(reverse("carousel:overview"))
     context = {"pic": pic, "form": form}
     return render(request, "picturecarousel/tag_users.html", context)
