@@ -17,21 +17,20 @@
       max-width: 300px;
     }
   </style>
-  {% if perms.picturecarousel %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large">
-        <i class="large material-icons">edit</i>
-      </a>
-      <ul>
-        {% if perms.picturecarousel %}
-          <li>
-            <a class="btn-floating blue" href="{% url "carousel:overview" %}"><i class="material-icons">list</i></a>
-            <a class="btn-floating mobile-fab-tip">Godkjenn</a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  {% endif %}
+
+  <ul class="pagination nav navbar-nav">
+    {% if picture_page.has_previous %}
+      <li><a href="{{ picture_page.previous_page_number }}">< Forrige</a></li>
+    {% endif %}
+    {% for page in picture_page.paginator.page_range %}
+      <li class="{% if picture_page.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if picture_page.has_next %}
+      <li><a href="{{ picture_page.next_page_number }}">Neste ></a></li>
+    {% endif %}
+  </ul>
+
   <div class="row">
     <h3>Avventer godkjenning</h3>
     <div class="card">
@@ -46,7 +45,7 @@
           </tr>
           </thead>
           <tbody>
-          {% for picture in awaiting_approval %}
+          {% for picture in picture_page %}
             <tr>
               <td>
                 <img class="responsive-img materialboxed" src="{{ picture.image.url }}">
@@ -75,40 +74,24 @@
       </div>
     </div>
   </div>
-  <div class="row">
-    <h3>Aktive bilder</h3>
-    <div class="card">
-      <div class="card-content">
-        <table class="responsive-table bordered">
-          <thead>
-          <tr>
-            <th data-field="image">Bilde</th>
-            <th data-field="who">Innsender</th>
-            <th data-field="date">Dato</th>
-            <th data-field="approve">Godkjenning</th>
-          </tr>
-          </thead>
-          <tbody>
-          {% for picture in approved %}
-            <tr>
-              <td>
-                <img class="responsive-img materialboxed" src="{{ picture.image.url }}">
-              </td>
-              <td><p>{{ picture.author }}</p></td>
-              <td><p>{{ picture.date|date:"j. F" }}</p></td>
-              <td>
-                <form action="{% url "carousel:deny" picture.id %}" method="POST">
-                  {% csrf_token %}
-                  <button class="waves-effect btn btn-primary" name="delete" type="submit">
-                    Slett
-                  </button>
-                </form>
-              </td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      </div>
-    </div>
-  </div>
+
+  <ul class="pagination nav navbar-nav" style="float:right;">
+    {% if picture_page.has_previous %}
+      <li><a href="{{ picture_page.previous_page_number }}">< Forrige</a></li>
+    {% endif %}
+
+    {% if picture_page.has_next %}
+      <li><a href="{{ picture_page.next_page_number }}">Neste ></a></li>
+    {% endif %}
+  </ul>
+
 {% endblock %}
+
+{% block footer_script %}
+
+  <script>
+    $(document).ready(function () {
+      $('.materialboxed').materialbox();
+    });
+  </script>
+{% endblock footer_script %}

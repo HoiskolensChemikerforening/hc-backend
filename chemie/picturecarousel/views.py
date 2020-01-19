@@ -35,14 +35,21 @@ def view_carousel(request):
 
 
 @permission_required("picturecarousel.change_contribution")
-def approve_pictures(request):
+def approve_pictures(request, page=1):
     awaiting_approval = Contribution.objects.filter(
         approved=False
     ).prefetch_related("author")
-    approved = Contribution.objects.filter(approved=True).prefetch_related(
-        "author"
-    )
-    context = {"awaiting_approval": awaiting_approval, "approved": approved}
+
+    paginator = Paginator(awaiting_approval, 10)
+
+    try:
+        picture_page = paginator.page(page)
+    except PageNotAnInteger:
+        picture_page = paginator.page(1)
+    except EmptyPage:
+        picture_page = paginator.page(paginator.num_pages)
+
+    context = {"picture_page": picture_page}
     return render(request, "picturecarousel/approve.html", context)
 
 
