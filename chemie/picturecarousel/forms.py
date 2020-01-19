@@ -18,3 +18,17 @@ class Pictureform(forms.ModelForm):
         }
 
         labels = {"image": "Bilde", "tagged_users": "Personer"}
+
+
+class TagForm(forms.ModelForm):
+    class Meta:
+        model = Contribution
+        fields = ["tagged_users"]
+
+        widgets = {
+            "tagged_users": autocomplete.ModelSelect2Multiple(
+                url="verv:user-autocomplete"
+            )
+        }
+
+        labels = {"tagged_users": ""}

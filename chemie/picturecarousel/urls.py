@@ -27,4 +27,5 @@ urlpatterns = [
     path(
         "bilder/<int:page>", views.view_pictures, name="view_pictures_detail"
     ),
+    path("tag/<int:id>", views.tag_users, name="tag_users"),
 ]

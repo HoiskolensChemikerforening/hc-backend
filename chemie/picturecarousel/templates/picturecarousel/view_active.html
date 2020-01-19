@@ -63,6 +63,9 @@
             <th data-field="image">Bilde</th>
             <th data-field="who">Innsender</th>
             <th data-field="date">Dato</th>
+            {% if perms.picturecarousel.change_contribution %}
+              <th></th>
+            {% endif %}
           </tr>
           </thead>
           <tbody>
@@ -73,6 +76,12 @@
               </td>
               <td><p>{{ pic.author }}</p></td>
               <td><p>{{ pic.date|date:"j. F" }}</p></td>
+              {% if perms.picturecarousel.change_contribution %}
+                <td>
+                  <a class="waves-effect btn" href="{% url "carousel:tag_users" pic.pk %}">
+                    <i class="material-icons right">photo_album</i>Tagg personer</a>
+                </td>
+              {% endif %}
             </tr>
           {% endfor %}
           </tbody>

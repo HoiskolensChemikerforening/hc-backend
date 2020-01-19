@@ -5,7 +5,7 @@ from django.urls import reverse
 from django.shortcuts import redirect, get_object_or_404
 from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
-from .forms import Pictureform
+from .forms import Pictureform, TagForm
 from .models import Contribution
 
 
@@ -16,6 +16,7 @@ def submit_picture(request):
         instance = form.save(commit=False)
         instance.author = request.user
         instance.save()
+        form.save_m2m()
         messages.add_message(
             request,
             messages.SUCCESS,
@@ -97,3 +98,16 @@ def view_pictures(request, page=1):
 
     context = {"picture_page": picture_page}
     return render(request, "picturecarousel/view_active.html", context)
+
+
+@permission_required("picturecarousel.change_contribution")
+def tag_users(request, id):
+    pic = Contribution.objects.get(id=id)
+    form = TagForm(request.POST or None, instance=pic)
+    if request.method == "POST":
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            form.save_m2m()
+    context = {"pic": pic, "form": form}
+    return render(request, "picturecarousel/tag_users.html", context)
