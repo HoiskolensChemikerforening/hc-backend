@@ -46,23 +46,26 @@
     <div class="col s12 m12 l8">
       <a class="waves-effect btn" href="{% url "carousel:view_pictures" %}">
         <i class="material-icons left">photo_album</i>Se bilder</a>
+      &emsp;
       <a class="waves-effect btn" href="{% url "carousel:display" %}">
         <i class="material-icons left">view_carousel</i>Bildekarusell</a>
-      <p class="flow-text">
-        Her kan du sende inn bilder til bildekarusellen på kontoret!
-      </p>
-      <p>Hvis det er personer som er tydelige på bildet må de bli tagget i bildet før du sender inn.</p>
-      <br>
-
-      <div>
-        <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
-          {{ form.media }}
-          {{ form.as_p }}
-          <input class="btn" type='submit' value='Send inn bilder!'/>
-        </form>
-      </div>
     </div>
   </div>
 
+  <div class="row">
+    <div class="col s12 m12 l8">
+      <p class="flow-text">
+        Her kan du sende inn bilder til bildekarusellen på kontoret!
+      </p>
+      <h6>Hvis det er personer som er lett gjenkjennbare på bildet, må de tagges før du sender inn.</h6>
+      <br>
+
+      <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn" type='submit' value='Send inn bilder!'/>
+      </form>
+    </div>
+  </div>
 
 {% endblock content %}
