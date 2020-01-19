@@ -1,0 +1,87 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load staticfiles %}
+{% load static %}
+
+{% block nav_header %}
+  Bilder
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Tagg bilde
+{% endblock nav_sub_header %}
+
+{% block header %}
+  <style>
+    span.select2-container {
+      width: inherit !important;
+      display: block;
+    }
+
+    label {
+      display: block;
+    }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
+  </style>
+{% endblock header %}
+
+{% block content %}
+  <style xmlns:carousel="http://www.w3.org/1999/xhtml">
+    img.responsive-img {
+      height: auto;
+      width: auto;
+      max-width: 300px;
+    }
+  </style>
+
+
+  <div class="row">
+    <div class="card">
+      <div class="card-content">
+        <table class="responsive-table bordered">
+          <thead>
+          <tr>
+            <th>Bilde</th>
+            <th>Personer</th>
+            <th>Innsender</th>
+            <th>Dato</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr class="pictureTr">
+            <td>
+              <img class="responsive-img materialboxed" src="{{ pic.image.url }}" alt="">
+            </td>
+            <td>
+              <form method="POST">{% csrf_token %}
+                {{ form.as_p }}
+                {{ form.media }}
+                <br>
+                <button class="btn waves-effect waves-light"
+                        type="submit">Lagre!
+                </button>
+              </form>
+            </td>
+            <td><p>{{ pic.author }}</p></td>
+            <td><p>{{ pic.date|date:"j. F" }}</p></td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}
+
+{% block footer_script %}
+
+  <script>
+    $(document).ready(function () {
+      $('.materialboxed').materialbox();
+    });
+  </script>
+
+{% endblock footer_script %}
