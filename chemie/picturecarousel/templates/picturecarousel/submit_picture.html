@@ -9,6 +9,23 @@
   Send inn bilder
 {% endblock nav_sub_header %}
 
+{% block header %}
+  <style>
+    span.select2-container {
+      width: inherit !important;
+      display: block;
+    }
+
+    label {
+      display: block;
+    }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
+  </style>
+{% endblock header %}
+
 {% block content %}
   {% if perms.picturecarousel %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -32,14 +49,18 @@
       <a class="waves-effect btn" href="{% url "carousel:view_pictures" %}">
         <i class="material-icons left">photo_album</i>Se bilder</a>
       <p class="flow-text">
-        Her kan du sende inn bilder til bildekarusellen på kontoret! <br>
+        Her kan du sende inn bilder til bildekarusellen på kontoret!
       </p>
+      <p>Hvis det er personer som er tydelige på bildet må de bli tagget i bildet før du sender inn.</p>
+      <br>
 
-      <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
-        {% form form=form %}
-        {% endform %}
-        <input class="btn" type='submit' value='Send inn bilder!'/>
-      </form>
+      <div>
+        <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
+          {{ form.media }}
+          {{ form.as_p }}
+          <input class="btn" type='submit' value='Send inn bilder!'/>
+        </form>
+      </div>
     </div>
   </div>
 
