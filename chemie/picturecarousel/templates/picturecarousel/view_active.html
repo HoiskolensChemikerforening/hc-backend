@@ -39,7 +39,7 @@
 
   <ul class="pagination nav navbar-nav">
     {% if picture_page.has_previous %}
-      <li><a href="{{ picture_page.previous_page_number }}">Forrige</a></li>
+      <li><a href="{{ picture_page.previous_page_number }}">< Forrige</a></li>
     {% endif %}
 
     {% for page in picture_page.paginator.page_range %}
@@ -48,7 +48,7 @@
     {% endfor %}
 
     {% if picture_page.has_next %}
-      <li><a href="{{ picture_page.next_page_number }}">Neste</a></li>
+      <li><a href="{{ picture_page.next_page_number }}">Neste ></a></li>
     {% endif %}
   </ul>
 
@@ -83,16 +83,11 @@
 
   <ul class="pagination nav navbar-nav" style="float:right">
     {% if picture_page.has_previous %}
-      <li><a href="{{ picture_page.previous_page_number }}">Forrige</a></li>
+      <li><a href="{{ picture_page.previous_page_number }}">< Forrige</a></li>
     {% endif %}
 
-    {% for page in picture_page.paginator.page_range %}
-      <li class="{% if picture_page.number == page %}active{% endif %}"><a
-              href="{{ page }}">{{ page }}</a></li>
-    {% endfor %}
-
     {% if picture_page.has_next %}
-      <li><a href="{{ picture_page.next_page_number }}">Neste</a></li>
+      <li><a href="{{ picture_page.next_page_number }}">Neste ></a></li>
     {% endif %}
   </ul>
 
