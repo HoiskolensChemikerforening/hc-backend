@@ -66,6 +66,9 @@
                     <i class="material-icons right">check</i>
                   </button>
                 </form>
+                <br>
+                <a class="waves-effect btn" href="{% url "carousel:tag_users" picture.pk %}">
+                  <i class="material-icons right">photo_album</i>Tagg personer</a>
               </td>
             </tr>
           {% endfor %}
