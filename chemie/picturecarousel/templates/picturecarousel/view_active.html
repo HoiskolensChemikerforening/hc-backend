@@ -37,6 +37,11 @@
     </div>
   {% endif %}
 
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "carousel:submit" %}" class="breadcrumb">Bilder</a>
+    <a class="breadcrumb">Aktive bilder</a>
+  </div>
+
   <ul class="pagination nav navbar-nav">
     {% if picture_page.has_previous %}
       <li><a href="{{ picture_page.previous_page_number }}">< Forrige</a></li>
@@ -54,9 +59,11 @@
 
 
   <div class="row">
-    <h3>Aktive bilder</h3>
     {% if perms.picturecarousel.change_contribution %}
-      <h6>NB: Personer som er lett gjenkjennbare på bilder skal være tagget.</h6>
+      <div>
+        <br>
+        <h6>NB: Personer som er lett gjenkjennbare på bilder skal være tagget.</h6>
+      </div>
     {% endif %}
     <div class="card">
       <div class="card-content">
@@ -81,7 +88,8 @@
               <td><p>{{ pic.date|date:"j. F" }}</p></td>
               {% if perms.picturecarousel.change_contribution %}
                 <td>
-                  <a class="waves-effect btn" href="{% url "carousel:tag_users" pic.pk %}">
+                  <a class="waves-effect btn"
+                     href="{% url "carousel:tag_users" pic.pk %}?from={{ request.path|urlencode }}">
                     <i class="material-icons right">photo_album</i>Tagg personer</a>
                 </td>
               {% endif %}
