@@ -68,9 +68,19 @@ def my_lockers(request):
 def register_locker(request, number):
     # Fetch requested locker
     locker = Locker.objects.get(number=number)
+
     if not locker.is_free():
         # Locker was already taken
-        raise Http404
+        messages.add_message(
+            request,
+            messages.ERROR,
+            "Skapet du prøver å registrere er allerede opptatt."
+            "Vennligst velg et annet skap",
+            extra_tags="Bokskap opptatt",
+        )
+
+        return redirect(reverse("lockers:index"))
+
     else:
         form_data = RegisterExternalLockerUserForm(request.POST or None)
         if form_data.is_valid():
@@ -84,7 +94,15 @@ def register_locker(request, number):
             # Create a new ownership for the user
             new_ownership = Ownership(locker=locker, user=user)
             if new_ownership.reached_limit():
-                raise Http404
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Du har allerede to registrerte bokskap. "
+                    "For å kunne reservere et nytt må du fjerne ett av de gamle.",
+                    extra_tags="For mange skap",
+                )
+
+                return redirect(reverse("lockers:index"))
 
             new_ownership.save()
 
