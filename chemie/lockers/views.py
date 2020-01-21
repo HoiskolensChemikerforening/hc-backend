@@ -74,7 +74,7 @@ def register_locker(request, number):
         messages.add_message(
             request,
             messages.ERROR,
-            "Skapet du prøver å registrere er allerede opptatt."
+            "Skapet du prøver å registrere er allerede opptatt. "
             "Vennligst velg et annet skap",
             extra_tags="Bokskap opptatt",
         )
@@ -98,7 +98,7 @@ def register_locker(request, number):
                     request,
                     messages.ERROR,
                     "Du har allerede to registrerte bokskap. "
-                    "For å kunne reservere et nytt må du fjerne ett av de gamle.",
+                    "For å kunne reservere et nytt må du fjerne et av de gamle.",
                     extra_tags="For mange skap",
                 )
 
