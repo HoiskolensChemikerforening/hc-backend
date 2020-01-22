@@ -11,5 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v1
+
+      - name: Show worktree
+        run: ls
+
       - name: Build with docker-compose
         run: docker-compose up -d --build
