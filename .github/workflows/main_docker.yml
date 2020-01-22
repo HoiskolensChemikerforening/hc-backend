@@ -12,8 +12,8 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: Show worktree
-        run: ls
+      - name: Create an empty .env file
+        run: touch .env
 
       - name: Build with docker-compose
         run: docker-compose up -d --build
