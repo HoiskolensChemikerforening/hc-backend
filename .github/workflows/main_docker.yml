@@ -15,5 +15,8 @@ jobs:
       - name: Create an empty .env file
         run: touch .env
 
+      - name: Create an empty ssh_key
+        run: touch ssh_key
+
       - name: Build with docker-compose
         run: docker-compose up -d --build
