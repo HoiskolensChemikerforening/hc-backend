@@ -47,7 +47,7 @@ urlpatterns = [
     ),
     url(r"^chaining/", include("smart_selects.urls")),
     url(
-        r"^carousel/",
+        r"^bilder/",
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     url(r"^valg/", include("chemie.elections.urls", namespace="elections")),

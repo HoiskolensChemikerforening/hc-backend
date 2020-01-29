@@ -2,15 +2,32 @@
 {% load material_form %}
 
 {% block nav_header %}
-  Bildekarusell
+  Bilder
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
   Send inn bilder
 {% endblock nav_sub_header %}
 
+{% block header %}
+  <style>
+    span.select2-container {
+      width: inherit !important;
+      display: block;
+    }
+
+    label {
+      display: block;
+    }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
+  </style>
+{% endblock header %}
+
 {% block content %}
-    {% if perms.picturecarousel %}
+  {% if perms.picturecarousel %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
         <i class="large material-icons">edit</i>
@@ -27,18 +44,28 @@
   {% endif %}
   <div class="row">
     <div class="col s12 m12 l8">
-      <a class="waves-effect btn" href="{% url "carousel:display" %}"><i class="material-icons left">view_carousel</i>Til karusellen!</a>
+      <a class="waves-effect btn" href="{% url "carousel:view_pictures" %}">
+        <i class="material-icons left">photo_album</i>Se bilder</a>
+      &emsp;
+      <a class="waves-effect btn" href="{% url "carousel:display" %}">
+        <i class="material-icons left">view_carousel</i>Bildekarusell</a>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col s12 m12 l8">
       <p class="flow-text">
-        Her kan du sende inn bilder til bildekarusellen på kontoret! <br>
+        Her kan du sende inn bilder til bildekarusellen på kontoret!
       </p>
+      <h6>Hvis det er personer som er lett gjenkjennbare på bildet, må de tagges før du sender inn.</h6>
+      <br>
 
       <form class="editContent" method='POST' enctype="multipart/form-data">{% csrf_token %}
-        {% form form=form %}
-        {% endform %}
+        {{ form.media }}
+        {{ form.as_p }}
         <input class="btn" type='submit' value='Send inn bilder!'/>
       </form>
     </div>
   </div>
-
 
 {% endblock content %}
