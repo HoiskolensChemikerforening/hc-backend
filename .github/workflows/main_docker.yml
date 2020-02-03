@@ -19,4 +19,4 @@ jobs:
         run: touch backupjob/ssh_key
 
       - name: Build with docker-compose
-        run: docker-compose up -d --build
+        run: COMPOSE_DOCKER_CLI_BUILD=1 DOCKER_BUILDKIT=1 docker-compose up -d --build
