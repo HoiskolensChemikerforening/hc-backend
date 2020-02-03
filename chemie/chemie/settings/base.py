@@ -24,7 +24,8 @@ SHELL_PLUS = "ipython"
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
-
+# ADMINS is a list of recipients which errors are sent to, see link below
+# https://docs.djangoproject.com/en/3.0/howto/error-reporting/
 ADMINS = [
     ("Webkom", "webkom@hc.ntnu.no"),
     ("Carl Johan Hambro", "carljohan.hambro@gmail.com"),
@@ -151,9 +152,7 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
-    },
+    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
     },
@@ -381,10 +380,7 @@ CKEDITOR_CONFIGS = {
                     "Redo",
                 ],
             },
-            {
-                "name": "editing",
-                "items": ["Find", "Replace", "-", "SelectAll"],
-            },
+            {"name": "editing", "items": ["Find", "Replace", "-", "SelectAll"]},
             "/",
             {
                 "name": "basicstyles",
