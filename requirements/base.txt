@@ -47,14 +47,13 @@ http-ece==1.1.0           # via pywebpush
 hyper==0.7.0              # via apns2
 hyperframe==3.2.0         # via h2, hyper
 idna==2.8                 # via requests
-importlib-metadata==1.5.0  # via pluggy
 jsonfield==2.0.2          # via django-post-office
 markdown2==2.3.6
 markdown==3.1.1           # via wiki
 more-itertools==8.2.0     # via pytest
 olefile==0.46
 passlib==1.7.2            # via django-hashers-passlib
-pillow==7.0.0             # via wiki
+pillow==6.2.0             # via wiki
 pip-tools==4.4.0
 pluggy==0.13.1            # via pytest
 psycopg2==2.7.6.1
@@ -79,7 +78,6 @@ urllib3==1.25.8           # via requests
 webencodings==0.5.1       # via html5lib
 werkzeug==0.15.5
 wiki==0.5
-zipp==2.1.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools

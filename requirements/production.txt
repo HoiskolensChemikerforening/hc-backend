@@ -54,7 +54,7 @@ markdown==3.1.1           # via wiki
 more-itertools==7.0.0     # via pytest
 olefile==0.46
 passlib==1.7.1            # via django-hashers-passlib
-pillow==6.0.0             # via wiki
+pillow==6.2.0             # via wiki
 pip-tools==4.4.0
 pluggy==0.11.0            # via pytest
 psycopg2==2.7.6.1
