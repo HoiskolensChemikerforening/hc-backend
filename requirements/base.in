@@ -19,9 +19,9 @@ django-smart-selects==1.5.4
 
 pyopenssl==18.0.0
 pytest==5.3.5
-pytest-cov==2.6.0
-pytest-django==3.4.4
-pytest-xdist==1.24.1
+pytest-cov==2.8.1
+pytest-django==3.8.0
+pytest-xdist==1.31.0
 
 freezegun==0.3.11
 werkzeug==0.15.5
