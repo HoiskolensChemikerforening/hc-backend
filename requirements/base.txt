@@ -12,7 +12,6 @@ bleach==2.1.4             # via wiki
 certifi==2019.11.28       # via requests
 cffi==1.13.2              # via cryptography
 chardet==3.0.4            # via requests
-click==7.0                # via pip-tools
 coverage==4.5.2
 cryptography==2.8         # via apns2, http-ece, py-vapid, pyopenssl, pywebpush
 django-autocomplete-light==3.3.2
@@ -55,7 +54,6 @@ more-itertools==8.2.0     # via pytest
 olefile==0.46
 passlib==1.7.2            # via django-hashers-passlib
 pillow==7.0.0             # via wiki
-pip-tools==4.4.0
 pluggy==0.13.1            # via pytest
 psycopg2==2.7.6.1
 py-vapid==1.7.0           # via pywebpush
@@ -72,7 +70,7 @@ python-dateutil==2.8.1    # via freezegun
 pytz==2019.3              # via django
 pywebpush==1.10.1         # via django-push-notifications
 requests==2.22.0          # via pywebpush
-six==1.14.0               # via bleach, cryptography, django-classy-tags, django-extensions, django-sekizai, freezegun, html5lib, pip-tools, pyopenssl, pytest, pytest-xdist, python-dateutil
+six==1.14.0               # via bleach, cryptography, django-classy-tags, django-extensions, django-sekizai, freezegun, html5lib, pyopenssl, pytest, pytest-xdist, python-dateutil
 sorl-thumbnail==12.6.2    # via wiki
 sqlparse==0.3.0           # via django
 urllib3==1.25.8           # via requests
