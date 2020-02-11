@@ -1,24 +1,22 @@
-from django.conf.urls import include, url
+from django.urls import path
 
 from . import views
 
 app_name = "committees"
 
 urlpatterns = [
-    url(r"^$", views.index, name="list_all"),
-    url(
-        r"^user-autocomplete/",
+    path("", views.index, name="list_all"),
+    path(
+        "user-autocomplete/",
         views.UserAutocomplete.as_view(),
         name="user-autocomplete",
     ),
-    url(r"^(?P<slug>[\w-]+)/$", views.view_committee, name="committee_detail"),
-    url(
-        r"^(?P<slug>[\w-]+)/edit/",
-        views.edit_description,
-        name="edit_description",
+    path("<slug:slug>/", views.view_committee, name="committee_detail"),
+    path(
+        "<slug:slug>/rediger/", views.edit_description, name="edit_description"
     ),
-    url(
-        r"^(?P<slug>[\w-]+)/edit-members/",
+    path(
+        "<slug:slug>/rediger-medlemmmer/",
         views.edit_committee_memberships,
         name="edit_memberships",
     ),
