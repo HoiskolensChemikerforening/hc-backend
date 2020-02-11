@@ -56,12 +56,14 @@ def admin_register_positions(request):
         not_done_positions = election.positions.filter(is_done=False).order_by(
             "position_name"
         )
-        checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
+        checkin_count = Profile.objects.filter(
+            eligible_for_voting=True
+        ).count()
         context = {
             "form": form,
             "done_positions": done_positions,
             "not_done_positions": not_done_positions,
-            "checkin_count": checkin_count
+            "checkin_count": checkin_count,
         }
 
         return render(request, "elections/admin/admin_positions.html", context)
