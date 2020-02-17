@@ -18,9 +18,9 @@
       <ul>
         {% if perms.news.add_article %}
           <li>
-            <a class="btn-floating blue" href="create/">
+            <a class="btn-floating blue" href={% url "news:create" %}>
               <i class="material-icons">add</i>
-              <a class="btn-floating mobile-fab-tip" href="create/">Lag ny artikkel</a>
+              <a class="btn-floating mobile-fab-tip" href={% url "news:create" %}>Lag ny artikkel</a>
             </a></li>
         {% endif %}
       </ul>
