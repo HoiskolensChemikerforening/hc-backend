@@ -288,9 +288,9 @@ class SocialEditRemoveUserRegistration(
 
         # Remove edit forms if none of the fields are present
         edit_form_boolean = (
-            self.object.companion
-            or self.object.sleepover
-            or self.object.night_snack
+                self.object.companion
+                or self.object.sleepover
+                or self.object.night_snack
         )
         # Remove edit if no fields and editform is in context
         if not (edit_form_boolean) and context["forms"].get("edit"):
@@ -301,12 +301,12 @@ class SocialEditRemoveUserRegistration(
         if registration:
             if registration.status == REGISTRATION_STATUS.WAITING:
                 queue_position = (
-                    self.registration_model.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
+                        self.registration_model.objects.filter(
+                            event=registration.event,
+                            created__lt=registration.created,
+                            status=REGISTRATION_STATUS.WAITING,
+                        ).count()
+                        + 1
                 )
                 context.update({"queue_position": queue_position})
 
@@ -402,12 +402,12 @@ class BedpresEditRemoveUserRegistration(
         if registration:
             if registration.status == REGISTRATION_STATUS.WAITING:
                 queue_position = (
-                    self.registration_model.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
+                        self.registration_model.objects.filter(
+                            event=registration.event,
+                            created__lt=registration.created,
+                            status=REGISTRATION_STATUS.WAITING,
+                        ).count()
+                        + 1
                 )
                 context.update({"queue_position": queue_position})
 
