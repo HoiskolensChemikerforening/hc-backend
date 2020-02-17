@@ -6,11 +6,7 @@ app_name = "news"
 
 urlpatterns = [
     path("", views.list_all, name="index"),
-    path(
-        "<int:article_id>/<slug:slug>/",
-        views.news_details,
-        name="detail",
-    ),
+    path("<int:article_id>/<slug:slug>/", views.news_details, name="detail"),
     path("opprett/", views.create_post, name="create"),
     path(
         "slett/<int:article_id>/<slug:slug>/",

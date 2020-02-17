@@ -40,8 +40,7 @@ urlpatterns = [
     path("wiki/_accounts/sign-up/", LoginView.as_view()),
     path("wiki/", include("wiki.urls")),
     path(
-        "api-auth/",
-        include("rest_framework.urls", namespace="rest_framework"),
+        "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
     path("chaining/", include("smart_selects.urls")),
     path(
@@ -49,7 +48,10 @@ urlpatterns = [
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     path("valg/", include("chemie.elections.urls", namespace="elections")),
-    path("push-notifikasjoner/", include("chemie.web_push.urls", namespace="web_push")),
+    path(
+        "push-notifikasjoner/",
+        include("chemie.web_push.urls", namespace="web_push"),
+    ),
     path("butikk/", include("chemie.shop.urls", namespace="shop")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
 ]
