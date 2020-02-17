@@ -125,9 +125,12 @@ class ListSocialView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        future_events = self.model.objects.filter(
+        future_events_date = self.model.objects.filter(
             date__gt=timezone.now(), published=True
         ).order_by("date")
+        future_events_enrollment_date = self.model.objects.filter(
+            date__gt=timezone.now(), published=True
+        ).order_by("register_startdate")
 
         my_events = None
         if self.request.user.is_authenticated:
@@ -137,7 +140,8 @@ class ListSocialView(ListView):
                 attending_events | authored_events
             ).distinct()
 
-        context.update({"events": future_events, "my_events": my_events})
+        context.update({"events": future_events_date, "events_enrollment": future_events_enrollment_date,
+                        "my_events": my_events})
         return context
 
 
@@ -655,6 +659,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
             context["attendees"] = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED, event=self.object
             ).select_related("user__profile__membership")
+            context["event"] = self.object
             paid = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED,
                 event=self.object,
@@ -665,6 +670,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 event=self.object,
                 payment_status=False,
             ).count()
+
             try:
                 context["percentage_paid"] = round(
                     (paid // (not_paid + paid)) * 100
