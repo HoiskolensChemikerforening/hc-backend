@@ -674,6 +674,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
             context["total_paid"] = paid
             context["total_not_paid"] = not_paid
             context["is_bedpres"] = False
+            context["social_has_checkin"] = self.object.check_in
         return context
 
 
@@ -712,6 +713,22 @@ def change_arrival_status(request, registration_id):
     status = registration.arrival_status
     if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
         registration.arrival_status = ARRIVAL_STATUS.PRESENT
+        registration.save()
+        return JsonResponse({"arrival_status": 1})
+    else:
+        # status is neither 'not set' nor 'not met' => status is 'met'
+        registration.arrival_status = ARRIVAL_STATUS.TRUANT
+        registration.save()
+        return JsonResponse({"arrival_status": 0})
+
+
+@login_required
+@permission_required("events.change_socialeventregistration")
+def change_arrival_status_social(request, registrations_id):
+    registration = SocialEventRegistration.objects.get(pk=registrations_id)
+    status = registration.arrival_status
+    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
+        registration.arrival_status == ARRIVAL_STATUS.PRESENT
         registration.save()
         return JsonResponse({"arrival_status": 1})
     else:
@@ -795,3 +812,63 @@ def checkin_to_bedpres(request, pk):
             )
     context = {"form": form, "bedpres": bedpres}
     return render(request, "events/bedpres/check_in.html", context)
+
+
+@permission_required("events.change_socialeventregistration")
+@login_required
+def check_in_to_social(request, pk):
+    form = GetRFIDForm(request.POST or None)
+    social = Social.objects.get(id=pk)
+    if request.method == "POST":
+        if form.is_valid():
+            rfid = form.cleaned_data.get("rfid")
+            em_code = ProfileManager.rfid_to_em(rfid)
+            try:
+                user = Profile.objects.get(access_card=em_code).user
+            except:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Studentkortnummeret er ikke registrert enda.",
+                )
+                return redirect(
+                    f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}"
+                )
+            try:
+                registration = SocialEventRegistration.objects.get(
+                    user=user, event=social
+                )
+            except:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "{} er ikke påmeldt {}".format(
+                        user.get_full_name(), social.title
+                    ),
+                )
+                return redirect(
+                    reverse("events:checkin_social", kwargs={"pk": pk})
+                )
+            if registration.status == REGISTRATION_STATUS.CONFIRMED:
+                registration.arrival_status = ARRIVAL_STATUS.PRESENT
+                registration.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "{} har sjekket inn på {}".format(
+                        user.get_full_name(), registration.event.title,
+                    ),
+                )
+            else:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "{} står enda på venteliste. Sjekk inn manuelt.".format(
+                        user.get_full_name(),
+                    ),
+                )
+            return redirect(
+                reverse("events:checkin_social", kwargs={"pk": pk})
+            )
+    context = {"form": form, "social": social}
+    return render(request, "events/social/check_in.html", context)

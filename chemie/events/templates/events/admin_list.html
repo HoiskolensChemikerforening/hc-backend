@@ -131,7 +131,7 @@
               <th>Overnatting</th>
             {% endif %}
             <th>Epost</th>
-          {% if is_bedpres %}
+          {% if is_bedpres or social_has_checkin %}
             <th>Oppmøtestatus</th>
           {% endif %}
         </tr>
@@ -180,7 +180,7 @@
 
             <td>{{ attendee.user.email }} </td>
 
-            {% if is_bedpres %}
+            {% if is_bedpres or social_has_checkin %}
             <td><center>
             {% if attendee.arrival_status == 2 %} <!-- This means present -->
               <a class="arrival btn-floating btn-tiny waves-effect waves-light green"

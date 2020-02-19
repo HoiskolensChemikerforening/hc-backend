@@ -1,6 +1,6 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required, permission_required
-
+from django.urls import path
 
 from . import views
 
@@ -29,7 +29,7 @@ urlpatterns = [
         name="edit_social",
     ),
     url(
-        r"^social/(?P<pk>[0-9]+)",
+        r"^social/(?P<pk>[0-9]+)/$",
         login_required(views.ViewSocialDetailsView.as_view()),
         name="detail_social",
     ),
@@ -38,6 +38,11 @@ urlpatterns = [
         login_required(views.SocialBaseRegisterUserView.as_view()),
         name="register_social",
     ),
+    path(
+        "social/<int:pk>/checkin/",
+        views.check_in_to_social,
+        name="checkin_social",
+         ),
     url(
         r"^social/adminlist/(?P<pk>[0-9]+)",
         views.SocialEnlistedUsersView.as_view(),
@@ -47,6 +52,11 @@ urlpatterns = [
         r"^social/adminlist/paymentstatus/(?P<registration_id>[0-9]+)",
         views.change_payment_status,
         name="payment_status_social",
+    ),
+    path(
+        "social/adminlist/arrivalstatus/<int:registration_id>",
+        views.change_arrival_status_social,
+        name="arrival_status_social"
     ),
     url(
         r"^social/delete/(?P<pk>[0-9]+)",
