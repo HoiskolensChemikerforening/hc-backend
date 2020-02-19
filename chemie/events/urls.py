@@ -42,7 +42,7 @@ urlpatterns = [
         "social/<int:pk>/checkin/",
         views.check_in_to_social,
         name="checkin_social",
-         ),
+    ),
     url(
         r"^social/adminlist/(?P<pk>[0-9]+)",
         views.SocialEnlistedUsersView.as_view(),
@@ -56,7 +56,7 @@ urlpatterns = [
     path(
         "social/adminlist/arrivalstatus/<int:registration_id>",
         views.change_arrival_status_social,
-        name="arrival_status_social"
+        name="arrival_status_social",
     ),
     url(
         r"^social/delete/(?P<pk>[0-9]+)",
