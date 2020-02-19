@@ -796,7 +796,7 @@ def checkin_to_bedpres(request, pk):
                     request,
                     messages.SUCCESS,
                     "{} har sjekket inn på {}".format(
-                        user.get_full_name(), registration.event.title,
+                        user.get_full_name(), registration.event.title
                     ),
                 )
             else:
@@ -804,7 +804,7 @@ def checkin_to_bedpres(request, pk):
                     request,
                     messages.WARNING,
                     "{} står enda på venteliste. Sjekk inn manuelt.".format(
-                        user.get_full_name(),
+                        user.get_full_name()
                     ),
                 )
             return redirect(
@@ -856,7 +856,7 @@ def check_in_to_social(request, pk):
                     request,
                     messages.SUCCESS,
                     "{} har sjekket inn på {}".format(
-                        user.get_full_name(), registration.event.title,
+                        user.get_full_name(), registration.event.title
                     ),
                 )
             else:
@@ -864,7 +864,7 @@ def check_in_to_social(request, pk):
                     request,
                     messages.WARNING,
                     "{} står enda på venteliste. Sjekk inn manuelt.".format(
-                        user.get_full_name(),
+                        user.get_full_name()
                     ),
                 )
             return redirect(

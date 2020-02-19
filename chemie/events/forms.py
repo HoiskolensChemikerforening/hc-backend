@@ -159,7 +159,6 @@ class RegisterEventForm(BaseRegisterEventForm):
             "sleepover",
             "night_snack",
             "check_in",
-
         ]
 
 
