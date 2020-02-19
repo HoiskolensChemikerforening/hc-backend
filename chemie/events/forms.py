@@ -142,7 +142,7 @@ class RegisterEventForm(BaseRegisterEventForm):
         M.Row("payment_information"),
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("price_member", "price_not_member", "price_companion"),
-        M.Row("companion", "sleepover", "night_snack"),
+        M.Row("companion", "sleepover", "night_snack", "check_in"),
         M.Row("allowed_grades"),
     )
 
@@ -158,6 +158,8 @@ class RegisterEventForm(BaseRegisterEventForm):
             "companion",
             "sleepover",
             "night_snack",
+            "check_in",
+
         ]
 
 
