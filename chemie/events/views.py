@@ -128,9 +128,6 @@ class ListSocialView(ListView):
         future_events_date = self.model.objects.filter(
             date__gt=timezone.now(), published=True
         ).order_by("date")
-        future_events_enrollment_date = self.model.objects.filter(
-            date__gt=timezone.now(), published=True
-        ).order_by("register_startdate")
 
         my_events = None
         if self.request.user.is_authenticated:
@@ -140,8 +137,7 @@ class ListSocialView(ListView):
                 attending_events | authored_events
             ).distinct()
 
-        context.update({"events": future_events_date, "events_enrollment": future_events_enrollment_date,
-                        "my_events": my_events})
+        context.update({"events": future_events_date, "my_events": my_events})
         return context
 
 
