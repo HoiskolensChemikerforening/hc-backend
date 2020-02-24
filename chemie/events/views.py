@@ -726,8 +726,8 @@ def change_arrival_status(request, registration_id):
 
 @login_required
 @permission_required("events.change_socialeventregistration")
-def change_arrival_status_social(request, registrations_id):
-    registration = SocialEventRegistration.objects.get(pk=registrations_id)
+def change_arrival_status_social(request, registration_id):
+    registration = SocialEventRegistration.objects.get(pk=registration_id)
     status = registration.arrival_status
     if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
         registration.arrival_status == ARRIVAL_STATUS.PRESENT

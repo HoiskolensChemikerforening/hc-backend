@@ -277,11 +277,16 @@
               event.preventDefault();
               var myID = $(this).attr("id").split('-')[1];
               var csrftoken = getCookie('csrftoken');
+              var bedpres = '{{is_bedpres}}';
+              if (bedpres){
+                var url = '/events/bedpres/adminlist/arrivalstatus/';
+              }else{
+                var url = '/events/social/adminlist/arrivalstatus/';
+              };
               $.ajax({
                   type: "GET",
-                  url: "/events/bedpres/adminlist/arrivalstatus/" + myID,
+                  url: url + myID,
                   datatype: "json",
-
                   success: function (json) {
                       icon_changer("#arrival-" + myID, json.arrival_status)
                   },
