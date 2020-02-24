@@ -125,7 +125,7 @@ class ListSocialView(ListView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        future_events_date = self.model.objects.filter(
+        future_events = self.model.objects.filter(
             date__gt=timezone.now(), published=True
         ).order_by("date")
 
@@ -137,7 +137,7 @@ class ListSocialView(ListView):
                 attending_events | authored_events
             ).distinct()
 
-        context.update({"events": future_events_date, "my_events": my_events})
+        context.update({"events": future_events, "my_events": my_events})
         return context
 
 
