@@ -284,9 +284,9 @@ class SocialEditRemoveUserRegistration(
 
         # Remove edit forms if none of the fields are present
         edit_form_boolean = (
-                self.object.companion
-                or self.object.sleepover
-                or self.object.night_snack
+            self.object.companion
+            or self.object.sleepover
+            or self.object.night_snack
         )
         # Remove edit if no fields and editform is in context
         if not (edit_form_boolean) and context["forms"].get("edit"):
@@ -297,12 +297,12 @@ class SocialEditRemoveUserRegistration(
         if registration:
             if registration.status == REGISTRATION_STATUS.WAITING:
                 queue_position = (
-                        self.registration_model.objects.filter(
-                            event=registration.event,
-                            created__lt=registration.created,
-                            status=REGISTRATION_STATUS.WAITING,
-                        ).count()
-                        + 1
+                    self.registration_model.objects.filter(
+                        event=registration.event,
+                        created__lt=registration.created,
+                        status=REGISTRATION_STATUS.WAITING,
+                    ).count()
+                    + 1
                 )
                 context.update({"queue_position": queue_position})
 
@@ -398,12 +398,12 @@ class BedpresEditRemoveUserRegistration(
         if registration:
             if registration.status == REGISTRATION_STATUS.WAITING:
                 queue_position = (
-                        self.registration_model.objects.filter(
-                            event=registration.event,
-                            created__lt=registration.created,
-                            status=REGISTRATION_STATUS.WAITING,
-                        ).count()
-                        + 1
+                    self.registration_model.objects.filter(
+                        event=registration.event,
+                        created__lt=registration.created,
+                        status=REGISTRATION_STATUS.WAITING,
+                    ).count()
+                    + 1
                 )
                 context.update({"queue_position": queue_position})
 
@@ -781,7 +781,7 @@ def checkin_to_bedpres(request, pk):
                     request,
                     messages.SUCCESS,
                     "{} har sjekket inn på {}".format(
-                        user.get_full_name(), registration.event.title,
+                        user.get_full_name(), registration.event.title
                     ),
                 )
             else:
@@ -789,7 +789,7 @@ def checkin_to_bedpres(request, pk):
                     request,
                     messages.WARNING,
                     "{} står enda på venteliste. Sjekk inn manuelt.".format(
-                        user.get_full_name(),
+                        user.get_full_name()
                     ),
                 )
             return redirect(
