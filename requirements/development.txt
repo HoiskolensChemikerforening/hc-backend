@@ -10,7 +10,7 @@ appdirs==1.4.3            # via black
 atomicwrites==1.3.0       # via pytest
 attrs==19.3.0             # via black, pytest
 black==18.9b0
-bleach==2.1.4             # via wiki
+bleach==3.1.1             # via wiki
 certifi==2019.11.28       # via requests
 cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
