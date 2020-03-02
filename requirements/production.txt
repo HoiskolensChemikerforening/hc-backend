@@ -34,7 +34,7 @@ django-push-notifications==1.6.0
 django-recaptcha==1.4.0
 django-sekizai==1.1.0     # via wiki
 django-smart-selects==1.5.4
-django==2.2.9
+django==2.2.10
 djangorestframework==3.9.4
 execnet==1.7.1            # via pytest-xdist
 freezegun==0.3.11
@@ -46,7 +46,6 @@ http-ece==1.1.0           # via pywebpush
 hyper==0.7.0              # via apns2
 hyperframe==3.2.0         # via h2, hyper
 idna==2.8                 # via requests
-importlib-metadata==1.5.0  # via pluggy
 jsonfield==3.0.0          # via django-post-office
 markdown2==2.3.6
 markdown==3.1.1           # via wiki
@@ -82,7 +81,6 @@ wcwidth==0.1.8            # via pytest
 webencodings==0.5.1       # via html5lib
 werkzeug==0.15.5
 wiki==0.5
-zipp==3.0.0               # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
