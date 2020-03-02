@@ -709,35 +709,25 @@ def change_payment_status(request, registration_id):
 
 
 @login_required
-@permission_required("events.change_bedpresregistration")
+@permission_required("events.change_bedpresregistration" or "events.change_socialeventregistration")
 def change_arrival_status(request, registration_id):
-    registration = BedpresRegistration.objects.get(pk=registration_id)
-    status = registration.arrival_status
-    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
-        registration.arrival_status = ARRIVAL_STATUS.PRESENT
-        registration.save()
-        return JsonResponse({"arrival_status": 1})
+    if request.method == "POST":
+        if "bedpres" in request.path:
+            registration = BedpresRegistration.objects.get(pk=registration_id)
+        else:
+            registration = SocialEventRegistration.objects.get(pk=registration_id)
+        status = registration.arrival_status
+        if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
+            registration.arrival_status = ARRIVAL_STATUS.PRESENT
+            registration.save()
+            return JsonResponse({"arrival_status": 1})
+        else:
+            # status is neither 'not set' nor 'not met' => status is 'met'
+            registration.arrival_status = ARRIVAL_STATUS.TRUANT
+            registration.save()
+            return JsonResponse({"arrival_status": 0})
     else:
-        # status is neither 'not set' nor 'not met' => status is 'met'
-        registration.arrival_status = ARRIVAL_STATUS.TRUANT
-        registration.save()
-        return JsonResponse({"arrival_status": 0})
-
-
-@login_required
-@permission_required("events.change_socialeventregistration")
-def change_arrival_status_social(request, registration_id):
-    registration = SocialEventRegistration.objects.get(pk=registration_id)
-    status = registration.arrival_status
-    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
-        registration.arrival_status == ARRIVAL_STATUS.PRESENT
-        registration.save()
-        return JsonResponse({"arrival_status": 1})
-    else:
-        # status is neither 'not set' nor 'not met' => status is 'met'
-        registration.arrival_status = ARRIVAL_STATUS.TRUANT
-        registration.save()
-        return JsonResponse({"arrival_status": 0})
+        return redirect(reverse("home:home"))
 
 
 @transaction.atomic

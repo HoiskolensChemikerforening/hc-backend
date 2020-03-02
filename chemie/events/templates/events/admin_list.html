@@ -278,13 +278,15 @@
               var myID = $(this).attr("id").split('-')[1];
               var csrftoken = getCookie('csrftoken');
               var bedpres = '{{is_bedpres}}';
+              var social_has_checkin = '{{social_has_checkin}}';
               if (bedpres){
                 var url = '/events/bedpres/adminlist/arrivalstatus/';
-              }else{
+              } if (social_has_checkin) {
                 var url = '/events/social/adminlist/arrivalstatus/';
+                console.log(url + myID);
               };
               $.ajax({
-                  type: "GET",
+                  type: "POST",
                   url: url + myID,
                   datatype: "json",
                   success: function (json) {
