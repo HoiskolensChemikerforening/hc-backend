@@ -655,6 +655,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
             context["attendees"] = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED, event=self.object
             ).select_related("user__profile__membership")
+            context["event"] = self.object
             paid = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED,
                 event=self.object,
@@ -665,6 +666,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 event=self.object,
                 payment_status=False,
             ).count()
+
             try:
                 context["percentage_paid"] = round(
                     (paid // (not_paid + paid)) * 100
