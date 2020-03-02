@@ -121,17 +121,17 @@
           {% if social %}
             <th class="filter-select filter-exact">Betalingsstatus</th>
           {% endif %}
-          {% if event.night_snack %}
-            <th>Nattmat</th>
-          {% endif %}
-          {% if event.companion %}
-            <th>Følge</th>
-          {% endif %}
-          {% if event.sleepover %}
-            <th>Overnatting</th>
-          {% endif %}
-          <th>Epost</th>
-          {% if is_bedpres %}
+           {% if event.night_snack %}
+              <th>Nattmat</th>
+            {% endif %}
+            {% if event.companion %}
+              <th>Følge</th>
+            {% endif %}
+            {% if event.sleepover %}
+              <th>Overnatting</th>
+            {% endif %}
+            <th>Epost</th>
+          {% if is_bedpres or social_has_checkin %}
             <th>Oppmøtestatus</th>
           {% endif %}
         </tr>
@@ -190,17 +190,17 @@
 
             <td>{{ attendee.user.email }} </td>
 
-            {% if is_bedpres %}
-              <td style="position: center">
-                {% if attendee.arrival_status == 2 %} <!-- This means present -->
-                  <a class="arrival btn-floating btn-tiny waves-effect waves-light green"
-                     id="arrival-{{ attendee.id }}"><i class="material-icons">done</i></a>
-                {% else %}
-                  <a class="arrival btn-floating btn-tiny waves-effect waves-light red"
-                     id="arrival-{{ attendee.id }}"><i class="material-icons">error</i></a>
-                {% endif %}
-              </td>
+            {% if is_bedpres or social_has_checkin %}
+            <td><center>
+            {% if attendee.arrival_status == 2 %} <!-- This means present -->
+              <a class="arrival btn-floating btn-tiny waves-effect waves-light green"
+                 id="arrival-{{ attendee.id }}"><i class="material-icons">done</i></a>
+            {% else %}
+              <a class="arrival btn-floating btn-tiny waves-effect waves-light red"
+                 id="arrival-{{ attendee.id }}"><i class="material-icons">error</i></a>
             {% endif %}
+            </center></td>
+          {% endif %}
 
           </tr>
           <script>
