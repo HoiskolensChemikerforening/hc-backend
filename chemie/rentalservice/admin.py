@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import RentalObject
 
-# Register your models here.
+admin.site.register(RentalObject)
+
