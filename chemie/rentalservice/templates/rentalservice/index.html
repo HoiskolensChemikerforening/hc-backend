@@ -1,5 +1,21 @@
-<!DOCTYPE html>
-<html lang="en">
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
 
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
 
-</html>
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{% for object in rentalObjects %}
+    <h3> {{object.name}} </h3>
+    <img src="{{object.image.url}}"  height="200" width="200">
+    {{object.description|safe}}
+
+{% endfor %}
+
+{% endblock %}
