@@ -12,3 +12,6 @@ class Submission(models.Model):
     author = models.ForeignKey(
         User, verbose_name="Innsender", on_delete=models.CASCADE
     )
+    used = models.BooleanField(
+        default=False
+    )  # For Sugepumpa to keep track on used submissions
