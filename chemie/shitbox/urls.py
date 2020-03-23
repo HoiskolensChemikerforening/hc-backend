@@ -8,5 +8,5 @@ urlpatterns = [
     url(r"list/$", submissions_overview, name="list"),
     url(r"list/(?P<page>[0-9]*)$", submissions_overview, name="list-page"),
     url(r"^$", post_votes, name="index"),
-    path("toggle-used", toggle_used, name="toggle-used")
+    path("toggle-used", toggle_used, name="toggle-used"),
 ]
