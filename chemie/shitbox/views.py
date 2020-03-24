@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import PostForm
 from .models import Submission
-from django.http import HttpResponse
 
 
 @login_required
@@ -82,7 +81,6 @@ def toggle_used(request):
         submission = Submission.objects.get(id=request.POST["id"])
         submission.used = not submission.used
         submission.save()
-        message = "Success! used is now set to %s" % submission.used
-        return HttpResponse(message)
+        return
     else:
         return redirect("shitbox:list")
