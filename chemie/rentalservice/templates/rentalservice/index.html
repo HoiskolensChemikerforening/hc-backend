@@ -6,16 +6,33 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-
+Oversikt
 {% endblock nav_sub_header %}
 
 {% block content %}
-
-{% for object in rentalObjects %}
-    <h3> {{object.name}} </h3>
-    <img src="{{object.image.url}}"  height="200" width="200">
-    {{object.description|safe}}
-
-{% endfor %}
+<div class="row">
+    {% for object in rentalObjects %}
+    <div class="col s12 m10 l6"> <!---size of the layout--->
+        <div class="card">
+            <div class="card-image">
+                <a href="{{ object.get_absolute_url }}">
+                    {% thumbnail object.image "630x400" crop="center" as im %} <!--- standard image crop for HC--->
+                        <img src="{{ im.url }}"> <!--- locates image url--->
+                    {% endthumbnail %}
+                </a>
+                <a class="card-title card-event-title" href="{{ object.get_absolute_url }}">
+                    <h4>{{ object.name }}</h4>
+                </a>
+            </div>
+            <div class="card-content">
+                <p class="card-text"> {{ object.description|safe }} </p>
+            </div>
+            <div class="card-action center">
+                <a href="{{ object.get_absolute_url }}" class=""">Jeg vil leie denne!</a> <!--- det er ingen hyperlenke her nå--->
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
 
 {% endblock %}
