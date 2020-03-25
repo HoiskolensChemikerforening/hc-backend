@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import PostForm
@@ -81,6 +82,6 @@ def toggle_used(request):
         submission = Submission.objects.get(id=request.POST["id"])
         submission.used = not submission.used
         submission.save()
-        return
+        return JsonResponse({"used": submission.used})
     else:
         return redirect("shitbox:list")
