@@ -54,7 +54,7 @@ urlpatterns = [
         name="payment_status_social",
     ),
     url(
-        r"^social/adminlist/arrivalstatus/(?P<registration_id>[0-9]+)",
+        r"^social/adminlist/change-arrivalstatus/",
         views.change_arrival_status,
         name="arrival_status_social",
     ),
@@ -111,7 +111,7 @@ urlpatterns += [
         name="adminlist_bedpres",
     ),
     url(
-        r"^bedpres/adminlist/arrivalstatus/(?P<registration_id>[0-9]+)",
+        r"^bedpres/adminlist/change-arrivalstatus/",
         views.change_arrival_status,
         name="arrival_status_bedpres",
     ),

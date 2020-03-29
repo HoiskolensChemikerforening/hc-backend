@@ -709,13 +709,19 @@ def change_payment_status(request, registration_id):
 
 
 @login_required
-@permission_required("events.change_bedpresregistration" or "events.change_socialeventregistration")
-def change_arrival_status(request, registration_id):
+@permission_required(
+    "events.change_bedpresregistration"
+    or "events.change_socialeventregistration"
+)
+def change_arrival_status(request):
     if request.method == "POST":
+        registration_id = request.POST["registration_id"]
         if "bedpres" in request.path:
             registration = BedpresRegistration.objects.get(pk=registration_id)
         else:
-            registration = SocialEventRegistration.objects.get(pk=registration_id)
+            registration = SocialEventRegistration.objects.get(
+                pk=registration_id
+            )
         status = registration.arrival_status
         if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
             registration.arrival_status = ARRIVAL_STATUS.PRESENT
