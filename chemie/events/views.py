@@ -652,6 +652,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
+            context["event"] = self.object
             context["attendees"] = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED, event=self.object
             ).select_related("user__profile__membership")
