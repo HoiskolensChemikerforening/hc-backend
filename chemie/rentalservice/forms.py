@@ -5,3 +5,4 @@ from .models import RentalObject
 class RentalObjectForm(forms.ModelForm):
     class Meta:
         model = RentalObject
+        fields = '__all__'

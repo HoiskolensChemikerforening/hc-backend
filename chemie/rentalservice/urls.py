@@ -1,8 +1,8 @@
 from . import views
-from django.urls import path
+from django.urls import path, re_path
 
 app_name = "rentalservice"
 
 urlpatterns = [path("", views.index, name="index"),
-               path("ny", views.new_object, name="new_object")]
+               re_path(r"^ny", views.new_object, name="new_object")]
 

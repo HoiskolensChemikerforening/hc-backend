@@ -1,0 +1,24 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+  <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %}
+    {{ post.media }}
+    {{ post.as_p }}
+    <div>
+      <input class="btn" type='submit' value='Bilde!'/>
+      <input class="btn" type='submit' value='Tekst!'/>
+      <input class="btn" type='submit' value='Lagre objekt!'/>
+    </div>
+  </form>
+
+{% endblock %}
