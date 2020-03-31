@@ -39,7 +39,7 @@ urlpatterns = [
          name="checkin_social",
          ),
     path(
-        "adminliste/betalingsstatus/<int:registration_id>/",
+        "adminliste/betalingsstatus/",
         views.change_payment_status,
         name="payment_status_social",
     ),
@@ -48,8 +48,8 @@ urlpatterns = [
         views.DeleteSocialView.as_view(),
         name="delete_social",
     ),
-    url(
-        r"^social/adminlist/change-arrivalstatus/",
+    path(
+        "adminliste/oppmotestatus/",
         views.change_arrival_status,
         name="arrival_status_social",
     ),
@@ -101,7 +101,7 @@ urlpatterns += [
         name="adminlist_bedpres",
     ),
     path(
-        "bedpres/adminliste/oppmotestatus/<int:registration_id>/",
+        "bedpres/adminliste/oppmotestatus/",
         views.change_arrival_status,
         name="arrival_status_bedpres",
     ),
