@@ -12,9 +12,7 @@ urlpatterns = [
         "profil/glemt-passord/", views.forgot_password, name="forgotpassword"
     ),
     path(
-        "profil/aktiver/<uuid:code>",
-        views.activate_password,
-        name="activate",
+        "profil/aktiver/<uuid:code>", views.activate_password, name="activate"
     ),
     path(
         "profil/medlemmer/endre/<int:profile_id>/",

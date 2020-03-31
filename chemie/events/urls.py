@@ -32,12 +32,9 @@ urlpatterns = [
     path(
         "adminliste/<int:pk>/",
         views.SocialEnlistedUsersView.as_view(),
-        name = "adminlist_social",
+        name="adminlist_social",
     ),
-    path("<int:pk>/checkin/",
-         views.check_in_to_social,
-         name="checkin_social",
-         ),
+    path("<int:pk>/checkin/", views.check_in_to_social, name="checkin_social"),
     path(
         "adminliste/betalingsstatus/",
         views.change_payment_status,
@@ -53,12 +50,12 @@ urlpatterns = [
         views.change_arrival_status,
         name="arrival_status_social",
     ),
-
     path(
         "slett/",
         permission_required("events.delete_event")(
-            views.ListSocialDeleteView.as_view()),
-        name="delete_list_social"
+            views.ListSocialDeleteView.as_view()
+        ),
+        name="delete_list_social",
     ),
 ]
 
