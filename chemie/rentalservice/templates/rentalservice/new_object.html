@@ -1,0 +1,21 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load material_form %}
+
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+  <form enctype="multipart/form-data" method='POST'>{% csrf_token %}
+    {% form form=form %}
+    {% endform %}
+    <input class="btn" type='submit' value='Lagre!'/>
+  </form>
+
+{% endblock %}
