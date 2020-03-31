@@ -1,7 +1,6 @@
-from django.urls import path
+from django.conf.urls import url
 from django.contrib.auth.decorators import login_required, permission_required
-
-
+from django.urls import path
 from . import views
 
 app_name = "events"
@@ -33,8 +32,12 @@ urlpatterns = [
     path(
         "adminliste/<int:pk>/",
         views.SocialEnlistedUsersView.as_view(),
-        name="adminlist_social",
+        name = "adminlist_social",
     ),
+    path("<int:pk>/checkin/",
+         views.check_in_to_social,
+         name="checkin_social",
+         ),
     path(
         "adminliste/betalingsstatus/<int:registration_id>/",
         views.change_payment_status,
@@ -45,12 +48,17 @@ urlpatterns = [
         views.DeleteSocialView.as_view(),
         name="delete_social",
     ),
+    url(
+        r"^social/adminlist/change-arrivalstatus/",
+        views.change_arrival_status,
+        name="arrival_status_social",
+    ),
+
     path(
         "slett/",
         permission_required("events.delete_event")(
-            views.ListSocialDeleteView.as_view()
-        ),
-        name="delete_list_social",
+            views.ListSocialDeleteView.as_view()),
+        name="delete_list_social"
     ),
 ]
 

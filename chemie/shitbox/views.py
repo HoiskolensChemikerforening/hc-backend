@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.urls import reverse
 from django.shortcuts import redirect
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from .forms import PostForm
@@ -73,3 +74,14 @@ def submissions_overview(request, page=1):
     }
 
     return render(request, "shitbox/list_submissions.html", context=context)
+
+
+@permission_required("shitbox.change_submission")
+def toggle_used(request):
+    if request.method == "POST":
+        submission = Submission.objects.get(id=request.POST["id"])
+        submission.used = not submission.used
+        submission.save()
+        return JsonResponse({"used": submission.used})
+    else:
+        return redirect("shitbox:list")

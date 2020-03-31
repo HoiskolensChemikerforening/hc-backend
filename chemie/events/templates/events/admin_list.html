@@ -131,7 +131,7 @@
               <th>Overnatting</th>
             {% endif %}
             <th>Epost</th>
-          {% if is_bedpres %}
+          {% if is_bedpres or social_has_checkin %}
             <th>Oppmøtestatus</th>
           {% endif %}
         </tr>
@@ -166,9 +166,9 @@
               {% endif %}</td>
             {% endif %}
 
-            {% if event.registration.companion %}
+            {% if event.companion%}
               <td>{% if attendee.companion %}
-                {{ attendee.companion }}
+                <p>{{ attendee.companion }}<p/>
               {% endif %}</td>
             {% endif %}
 
@@ -180,7 +180,7 @@
 
             <td>{{ attendee.user.email }} </td>
 
-            {% if is_bedpres %}
+            {% if is_bedpres or social_has_checkin %}
             <td><center>
             {% if attendee.arrival_status == 2 %} <!-- This means present -->
               <a class="arrival btn-floating btn-tiny waves-effect waves-light green"
@@ -267,11 +267,18 @@
               event.preventDefault();
               var myID = $(this).attr("id").split('-')[1];
               var csrftoken = getCookie('csrftoken');
+              var bedpres = '{{is_bedpres}}';
+              var social_has_checkin = '{{social_has_checkin}}';
+              if (bedpres){
+                var url = '{% url 'events:arrival_status_bedpres' %}';
+              } if (social_has_checkin) {
+                var url = '{% url 'events:arrival_status_social' %}';
+              }
               $.ajax({
-                  type: "GET",
-                  url: "/events/bedpres/adminlist/arrivalstatus/" + myID,
+                  type: "POST",
+                  url: url,
                   datatype: "json",
-
+                  data: {"registration_id": myID},
                   success: function (json) {
                       icon_changer("#arrival-" + myID, json.arrival_status)
                   },

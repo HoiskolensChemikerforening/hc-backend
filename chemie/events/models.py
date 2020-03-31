@@ -173,6 +173,7 @@ class Social(BaseEvent):
     companion = models.BooleanField(default=False, verbose_name="Følge")
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
+    check_in = models.BooleanField(default=False, verbose_name="Innsjekking")
 
     attendees = models.ManyToManyField(User, through="SocialEventRegistration")
 

@@ -127,7 +127,10 @@
 
   <!-- Button for signup page -->
   {% if social.sluts != 0 %}
-    <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
+  <a class="waves-effect waves-light btn" href="{{ social.get_absolute_registration_url }}">Til påmelding</a>
+  {% endif %}
+  {% if social.check_in and perms.events.change_socialeventregistration %}
+  <a class="waves-effect waves-light btn" href="{% url 'events:checkin_social' social.pk %}">Til innsjekking</a>
   {% endif %}
 
   <!-- Desription info -->
