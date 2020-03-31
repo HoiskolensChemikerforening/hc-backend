@@ -1,4 +1,4 @@
-from django.urls import path, re_path
+from django.urls import path
 
 from . import views
 
@@ -11,8 +11,8 @@ urlpatterns = [
     path(
         "profil/glemt-passord/", views.forgot_password, name="forgotpassword"
     ),
-    re_path(
-        r"^profil/aktiver/(?P<code>[a-z0-9]{32})/?",
+    path(
+        "profil/aktiver/<uuid:code>",
         views.activate_password,
         name="activate",
     ),

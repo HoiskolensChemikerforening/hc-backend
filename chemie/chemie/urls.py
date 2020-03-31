@@ -44,7 +44,7 @@ urlpatterns = [
     ),
     path("chaining/", include("smart_selects.urls")),
     path(
-        r"^bilder/",
+        "bilder/",
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     path("valg/", include("chemie.elections.urls", namespace="elections")),
@@ -79,8 +79,10 @@ if settings.DEBUG:
     from chemie.chemie.views import page_not_found
     from django.views.defaults import server_error
 
-    urlpatterns += [path("test404", page_not_found, name="404")]
-    urlpatterns += [path("test500", server_error, name="404")]
+    urlpatterns += [
+        path("test404", page_not_found, name="404"),
+        path("test500", server_error, name="404"),
+    ]
 
 if "debug_toolbar" in settings.INSTALLED_APPS:
     import debug_toolbar
