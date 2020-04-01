@@ -153,7 +153,7 @@ input:not([type]):focus:not([readonly]), input[type="text"]:not(.browser-default
 
 /* IBM Plex as main font */
 html {
-    font-family: 'IBM Plex Sans', "Helvetica Neue", Arial, Roboto, sans-serif !important;
+    font-family: 'Comic Sans MS', "Helvetica Neue", Arial, Roboto, sans-serif !important;
     background-color: #FFF;
 }
 
@@ -317,7 +317,7 @@ ul.sidenav.sidenav-fixed li.logo {
 }
 
 .logo-text {
-    font-family: 'IBM Plex Sans', "Helvetica Neue", Arial, Roboto, sans-serif;
+    font-family: 'Comic Sans MS', "Helvetica Neue", Arial, Roboto, sans-serif;
     font-weight: 300;
     margin-top: 10px;
 }
