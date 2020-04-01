@@ -113,7 +113,7 @@ for (i = 0; i < closeItem.length; i++) {
 
         $.ajax({
             type: "POST",
-            url: "/butikk/fjern-vare/" + item_id,
+            url: "/kontoret/fjern-vare/" + item_id,
             datatype: "json",
 
             success: function (json) {
@@ -131,7 +131,7 @@ for (i = 0; i < closeItem.length; i++) {
                 if (parseInt(new_sum) == 0) {
                     $.ajax({
                         type: "POST",
-                        url: "/shop/fjern-handlekurv/",
+                        url: "/kontoret/fjern-handlekurv/",
                         datatype: "json",
 
                         success: function (json) {
@@ -245,7 +245,7 @@ function activatePressForNavigationScrolling() {
 function removeCart() {
     $.ajax({
         type: "POST",
-        url: "/butikk/fjern-handlekurv/",
+        url: "/kontoret/fjern-handlekurv/",
         datatype: "json",
 
         success: function (json) {
