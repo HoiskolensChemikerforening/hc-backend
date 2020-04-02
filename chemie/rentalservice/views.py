@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .models import RentalObject
-from django.http import HttpResponse
 from .forms import RentalObjectForm
 
 
