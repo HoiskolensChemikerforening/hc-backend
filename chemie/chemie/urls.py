@@ -52,7 +52,7 @@ urlpatterns = [
         "push-notifikasjoner/",
         include("chemie.web_push.urls", namespace="web_push"),
     ),
-    path("butikk/", include("chemie.shop.urls", namespace="shop")),
+    path("kontoret/", include("chemie.shop.urls", namespace="shop")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
 ]
 
