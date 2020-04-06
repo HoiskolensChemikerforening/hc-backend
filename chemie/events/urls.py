@@ -1,70 +1,57 @@
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import path
-
 from . import views
 
 app_name = "events"
 
 # Events
 urlpatterns = [
-    url(
-        r"^social/$",
-        login_required(views.ListSocialView.as_view()),
-        name="index_social",
+    path(
+        "", login_required(views.ListSocialView.as_view()), name="index_social"
     ),
-    url(
-        r"^social/past",
+    path(
+        "tidligere/",
         login_required(views.ListPastSocialView.as_view()),
         name="past_social",
     ),
-    url(
-        r"^social/create",
-        views.CreateSocialView.as_view(),
-        name="create_social",
+    path("opprett/", views.CreateSocialView.as_view(), name="create_social"),
+    path(
+        "rediger/<int:pk>/", views.EditSocialView.as_view(), name="edit_social"
     ),
-    url(
-        r"^social/edit/(?P<pk>[0-9]+)/$",
-        views.EditSocialView.as_view(),
-        name="edit_social",
-    ),
-    url(
-        r"^social/(?P<pk>[0-9]+)/$",
+    path(
+        "<int:pk>/",
         login_required(views.ViewSocialDetailsView.as_view()),
         name="detail_social",
     ),
-    url(
-        r"^social/register/(?P<pk>[0-9]+)",
+    path(
+        "registrer/<int:pk>/",
         login_required(views.SocialBaseRegisterUserView.as_view()),
         name="register_social",
     ),
     path(
-        "social/<int:pk>/checkin/",
-        views.check_in_to_social,
-        name="checkin_social",
-    ),
-    url(
-        r"^social/adminlist/(?P<pk>[0-9]+)",
+        "adminliste/<int:pk>/",
         views.SocialEnlistedUsersView.as_view(),
         name="adminlist_social",
     ),
-    url(
-        r"^social/adminlist/paymentstatus/(?P<registration_id>[0-9]+)",
+    path("<int:pk>/checkin/", views.check_in_to_social, name="checkin_social"),
+    path(
+        "adminliste/betalingsstatus/",
         views.change_payment_status,
         name="payment_status_social",
     ),
-    url(
-        r"^social/adminlist/change-arrivalstatus/",
-        views.change_arrival_status,
-        name="arrival_status_social",
-    ),
-    url(
-        r"^social/delete/(?P<pk>[0-9]+)",
+    path(
+        "slett/<int:pk>/",
         views.DeleteSocialView.as_view(),
         name="delete_social",
     ),
-    url(
-        r"^social/delete/",
+    path(
+        "adminliste/oppmotestatus/",
+        views.change_arrival_status,
+        name="arrival_status_social",
+    ),
+    path(
+        "slett/",
         permission_required("events.delete_event")(
             views.ListSocialDeleteView.as_view()
         ),
@@ -74,54 +61,54 @@ urlpatterns = [
 
 # Bedpres
 urlpatterns += [
-    url(r"^bedpres/$", views.ListBedpresView.as_view(), name="index_bedpres"),
-    url(
-        r"^bedpres/past",
+    path("bedpres/", views.ListBedpresView.as_view(), name="index_bedpres"),
+    path(
+        "bedpres/tidligere/",
         views.ListPastBedpresView.as_view(),
         name="past_bedpres",
     ),
-    url(
-        r"^bedpres/create",
+    path(
+        "bedpres/opprett/",
         views.CreateBedpresView.as_view(),
         name="create_bedpres",
     ),
-    url(
-        r"^bedpres/edit/(?P<pk>[0-9]+)/$",
+    path(
+        "bedpres/rediger/<int:pk>/",
         views.EditBedpresView.as_view(),
         name="edit_bedpres",
     ),
-    url(
-        r"^bedpres/(?P<pk>[0-9]+)/$",
+    path(
+        "bedpres/<int:pk>/",
         views.ViewBedpresDetailsView.as_view(),
         name="detail_bedpres",
     ),
-    url(
-        r"^bedpres/(?P<pk>[0-9]+)/checkin/$",
+    path(
+        "bedpres/<int:pk>/sjekkinn/",
         views.checkin_to_bedpres,
         name="checkin_bedpres",
     ),
-    url(
-        r"^bedpres/register/(?P<pk>[0-9]+)",
+    path(
+        "bedpres/registrer/<int:pk>/",
         views.BedpresBaseRegisterUserView.as_view(),
         name="register_bedpres",
     ),
-    url(
-        r"^bedpres/adminlist/(?P<pk>[0-9]+)",
+    path(
+        "bedpres/adminliste/<int:pk>/",
         views.BedpresEnlistedUsersView.as_view(),
         name="adminlist_bedpres",
     ),
-    url(
-        r"^bedpres/adminlist/change-arrivalstatus/",
+    path(
+        "bedpres/adminliste/oppmotestatus/",
         views.change_arrival_status,
         name="arrival_status_bedpres",
     ),
-    url(
-        r"^bedpres/delete/(?P<pk>[0-9]+)",
+    path(
+        "bedpres/slett/<int:pk>/",
         views.DeleteBedpresView.as_view(),
         name="delete_bedpres",
     ),
-    url(
-        r"^bedpres/delete",
+    path(
+        "bedpres/slett/",
         views.ListBedpresDeleteView.as_view(),
         name="delete_list_bedpres",
     ),

@@ -697,8 +697,9 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
 
 @login_required
 @permission_required("events.change_socialeventregistration")
-def change_payment_status(request, registration_id):
+def change_payment_status(request):
     if request.method == "POST":
+        registration_id = request.POST["registration_id"]
         registration = SocialEventRegistration.objects.get(pk=registration_id)
         registration.payment_status = not registration.payment_status
         registration.save()

@@ -237,21 +237,22 @@
             var myID = $(this).attr("id").split('-')[1];
             var csrftoken = getCookie('csrftoken');
 
-            var changePayment = true
+            var changePayment = true;
             if (paymentList[myID][1]){
               changePayment = confirm("Endre betalingsstatus for " +  paymentList[myID][0] + " fra betalt til ikke betalt?")
             }
             if (changePayment){
-              paymentList[myID][1] = !paymentList[myID][1]
+              paymentList[myID][1] = !paymentList[myID][1];
               $.ajax({
                 type: "POST",
-                url: "/events/social/adminlist/paymentstatus/" + myID,
+                url: '{% url 'events:payment_status_social' %}',
                 datatype: "json",
+                data: {"registration_id": myID},
 
                 success: function (json) {
-                    totalPaid += (paymentList[myID][1]) ? 1 : -1
-                    totalNotPaid += (paymentList[myID][1]) ? -1: 1
-                    icon_changer("#payment-" + myID, json.payment_status)
+                    totalPaid += (paymentList[myID][1]) ? 1 : -1;
+                    totalNotPaid += (paymentList[myID][1]) ? -1: 1;
+                    icon_changer("#payment-" + myID, json.payment_status);
                     document.getElementById("paidcounter").innerHTML = totalPaid.toString() + " har betalt • " + totalNotPaid.toString() + " har ikke betalt"
                 },
 
@@ -260,7 +261,7 @@
                 },
             });
             }
-        })
+        });
 
 
           $('.arrival').on('click', function (event) {
