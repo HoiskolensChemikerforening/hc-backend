@@ -16,3 +16,11 @@
       <input class="btn" type='submit' value='Lagre objekt!'/>
   </form>
 {% endblock content %}
+
+{% block footer_script %}
+  <script>
+    $(document).ready(function(){
+    $('select').formSelect();
+    });
+  </script>
+{% endblock footer_script %}
