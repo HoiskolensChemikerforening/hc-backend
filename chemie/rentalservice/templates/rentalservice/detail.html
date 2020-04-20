@@ -3,7 +3,7 @@
 {% load staticfiles %}
 
 {% block nav_header %}
-  Artikler
+  Utstyr til leie
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
@@ -12,9 +12,41 @@
 
 {% block content %}
 
-<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-        <a href="{% url "rentalservice:index" %}" class="breadcrumb">Oversikt</a>
-        <a class="breadcrumb">{{ article.title }}</a>
-</div>
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+            <a href="{% url "rentalservice:index" %}" class="breadcrumb">Oversikt</a>
+            <a class="breadcrumb">{{ rental_object.name }}</a>
+    </div>
+    <div class="row">
+        <div class="col l12 m12">  <!--makes image responsive to screen size%-->
+          {% thumbnail rental_object.image "1600" crop="center" as im %}
+            <img class="responsive-img materialboxed" src="{{ im.url }}">
+          {% endthumbnail %}
+        </div>
+    </div>
 
+    <!-- Desription info -->
+
+    <div class="row">
+        <div class="col s7 m7 l7">
+            <div class="card">
+                <div class="card-content">
+                    <h5>Beskrivelse:</h5>
+                        <p class="flow-text">{{rental_object.description|linebreaksbr}}</p>
+                </div>
+            </div>
+        </div>
+
+
+    <!-- Rental info -->
+
+
+        <div class="col s5 m5 l5">
+          <div class="card">
+            <div class="card-content">
+              <h5> Kontakt:</h5>
+                <p class="flow-text"> Vi vil gjerne svare på det du lurer på, så ta kontakt med oss! </p>
+                <blockquote class="flow-text"> {{ rental_object.owner|linebreaksbr }} </blockquote>
+            </div>
+          </div>
+    </div>
 {% endblock content %}
