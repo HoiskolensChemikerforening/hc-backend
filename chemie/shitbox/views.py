@@ -30,47 +30,47 @@ def post_votes(request):
 
 
 @permission_required("shitbox.change_submission")
-def submissions_overview(request, page=1):
-    page = int(page)
+def submissions_overview(request):
     all_submissions = (
         Submission.objects.all()
         .order_by("-date")
         .prefetch_related("author__profile")
     )
+
     paginator = Paginator(all_submissions, 20)
+    page_number = int(request.GET.get("page", 1))
 
     try:
-        submissions = paginator.page(page)
+        submission_page = paginator.page(page_number)
     except PageNotAnInteger:
-        submissions = paginator.page(1)
+        submission_page = paginator.page(1)
     except EmptyPage:
-        submissions = paginator.page(paginator.num_pages)
+        submission_page = paginator.page(paginator.num_pages)
 
-    useful_page_range = list(submissions.paginator.page_range)
+    useful_page_range = list(submission_page.paginator.page_range)
     limit_useful_page_range = []
 
-    if page - 2 in paginator.page_range:
-        limit_useful_page_range.append(page - 2)
-    if page - 1 in paginator.page_range:
-        limit_useful_page_range.append(page - 1)
-    if page in paginator.page_range:
-        limit_useful_page_range.append(page)
-    if page + 1 in paginator.page_range:
-        limit_useful_page_range.append(page + 1)
-    if page + 2 in paginator.page_range:
-        limit_useful_page_range.append(page + 2)
+    if page_number - 2 in paginator.page_range:
+        limit_useful_page_range.append(page_number - 2)
+    if page_number - 1 in paginator.page_range:
+        limit_useful_page_range.append(page_number - 1)
+    if page_number in paginator.page_range:
+        limit_useful_page_range.append(page_number)
+    if page_number + 1 in paginator.page_range:
+        limit_useful_page_range.append(page_number + 1)
+    if page_number + 2 in paginator.page_range:
+        limit_useful_page_range.append(page_number + 2)
 
-    submissions.paginator.first_page = paginator.page(
+    submission_page.paginator.first_page = paginator.page(
         useful_page_range[0]
     ).number
-    submissions.paginator.last_page = paginator.page(
+    submission_page.paginator.last_page = paginator.page(
         useful_page_range[-1]
     ).number
 
     context = {
-        "submissions": submissions,
+        "submission_page": submission_page,
         "limit_useful_page_range": limit_useful_page_range,
-        "page": page,
     }
 
     return render(request, "shitbox/list_submissions.html", context=context)
