@@ -16,21 +16,23 @@ from .forms import (
 from .models import Locker, LockerUser, Ownership, LockerToken
 
 
-def view_lockers(request, page=1):
+def view_lockers(request):
     free_locker_list = Locker.objects.filter(
         owner__isnull=True
     ).prefetch_related("owner")
     free_lockers = Locker.objects.filter(owner__isnull=True).count()
+
     paginator = Paginator(free_locker_list, 40)
+    page_number = request.GET.get("page", 1)
 
     try:
-        lockers = paginator.page(page)
+        locker_page = paginator.page(page_number)
     except PageNotAnInteger:
-        lockers = paginator.page(1)
+        locker_page = paginator.page(1)
     except EmptyPage:
-        lockers = paginator.page(paginator.num_pages)
+        locker_page = paginator.page(paginator.num_pages)
 
-    context = {"lockers": lockers, "free_lockers": free_lockers}
+    context = {"locker_page": locker_page, "free_lockers": free_lockers}
     return render(request, "lockers/list.html", context)
 
 
