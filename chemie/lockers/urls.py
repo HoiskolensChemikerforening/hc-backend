@@ -6,7 +6,6 @@ app_name = "lockers"
 
 urlpatterns = [
     path("", views.view_lockers, name="index"),
-    path("<int:page>/", views.view_lockers, name="index"),
     path("registrer/<int:number>/", views.register_locker, name="registrer"),
     re_path(
         r"^aktiver/(?P<code>[a-z0-9]{32})/?",

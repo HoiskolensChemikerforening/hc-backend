@@ -29,15 +29,15 @@
   {% endif %}
 
   <ul class="pagination nav navbar-nav">
-    {% if lockers.has_previous %}
-      <li><a href="{{ lockers.previous_page_number }}">Forrige</a></li>
+    {% if locker_page.has_previous %}
+      <li><a href="?page={{ locker_page.previous_page_number }}">Forrige</a></li>
     {% endif %}
-    {% for page in lockers.paginator.page_range %}
-      <li class="{% if lockers.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
+    {% for page in locker_page.paginator.page_range %}
+      <li class="{% if locker_page.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
     {% endfor %}
 
-    {% if lockers.has_next %}
-      <li><a href="{{ lockers.next_page_number }}">Neste</a></li>
+    {% if locker_page.has_next %}
+      <li><a href="?page={{ locker_page.next_page_number }}">Neste</a></li>
     {% endif %}
   </ul>
 
@@ -50,7 +50,7 @@
   <div class="row">
   <div class="col s12 m3">
     <div class="collection">
-      {% for locker in lockers %}
+      {% for locker in locker_page %}
         {% if forloop.counter0|divisibleby:5 and not forloop.first %}</div></div>
           <div class="col s12 m3">
           <div class="collection">{% endif %}
