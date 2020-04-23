@@ -53,7 +53,7 @@
             <div class="card">
                 <div class="card-content">
                     <h5>Beskrivelse:</h5>
-                        <p class="flow-text">{{rental_object.description|linebreaksbr}}</p>
+                        <p class="flow-text">{{rental_object.description| safe }}</p>
                 </div>
             </div>
         </div>
@@ -67,8 +67,9 @@
             <div class="card-content">
               <h5> Kontakt:</h5>
                 <p class="flow-text"> Vi vil gjerne svare på det du lurer på, så ta kontakt med oss! </p>
-                <blockquote class="flow-text"> {{ rental_object.owner|linebreaksbr }} </blockquote>
+                <blockquote class="flow-text"> {{ rental_object.owner }} </blockquote>
             </div>
           </div>
+        </div>
     </div>
 {% endblock content %}
