@@ -67,6 +67,7 @@
             <div class="card-content">
               <h5> Kontakt:</h5>
                 <p class="flow-text"> Vi vil gjerne svare på det du lurer på, så ta kontakt med oss! </p>
+                <a href="{% url "rentalservice:contact" rental_object.id %}"><p class="flow-text">Kontakt oss</p></a>
                 <blockquote class="flow-text"> {{ rental_object.owner }} </blockquote>
             </div>
           </div>

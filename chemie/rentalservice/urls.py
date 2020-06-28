@@ -17,4 +17,5 @@ urlpatterns = [
         views.edit_rentalobject,
         name="edit_rentalobject",
     ),
+    path("<int:rentalobject_id>/kontakt/", views.contact, name="contact"),
 ]

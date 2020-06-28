@@ -1,12 +1,16 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from post_office import mail
 
 
 from .models import RentalObject
 from .forms import RentalObjectForm
+from chemie.home.forms import ContactForm
 
 
 def index(request):
@@ -65,3 +69,40 @@ def edit_rentalobject(request, rentalobject_id):
     context = {"form": form}
 
     return render(request, "rentalservice/new_object.html", context)
+
+
+def contact(request, rentalobject_id):
+    rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
+    contact_form = ContactForm(request.POST or None)
+
+    if contact_form.is_valid():
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Meldingen ble mottatt. Takk for at du tar kontakt!",
+            extra_tags="Mottatt!",
+        )
+
+        _, mail_to = zip(*settings.CONTACTS)
+
+        mail.send(
+            mail_to,
+            template="rental_contact",
+            context={
+                "rentalobject": rental_object,
+                "message": contact_form.cleaned_data.get("content"),
+                "contact_name": contact_form.cleaned_data.get("contact_name"),
+                "contact_email": contact_form.cleaned_data.get(
+                    "contact_email"
+                ),
+                "root_url": get_current_site(None)
+            },
+        )
+
+        return redirect(reverse("rentalservice:index"))
+
+    else:
+
+        context = {"contact_form": contact_form, "rentalobject": rental_object}
+
+        return render(request, "rentalservice/contact.html", context)
