@@ -12,6 +12,12 @@
 
 {% block content %}
 
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a href="{% url "quiz:name_quiz_index" %}" class="breadcrumb">Navnequiz</a>
+    <a class="breadcrumb">{{ year }}. klasse</a>
+  </div>
+
   <div class="row">
     <h4 id="points">Poeng: 0</h4>
   </div>

@@ -25,8 +25,11 @@ def name_quiz(request, year=1):
     profiles = list(profiles_qs)
     profiles_count = profiles_qs.count()
     shuffle(profiles)
-    context = {"profiles": profiles,
-               "profiles_count": profiles_count}
+    context = {
+        "profiles": profiles,
+        "profiles_count": profiles_count,
+        "year": year,
+    }
     return render(request, "quiz/name_quiz/name_quiz.html", context)
 
 
@@ -104,11 +107,7 @@ def create_score(request, pk):
             instance.save()
         return redirect("quiz:create_score", term.pk)
 
-    context = {
-        "term": term,
-        "scores": scores,
-        "form": form,
-    }
+    context = {"term": term, "scores": scores, "form": form}
     return render(request, "quiz/kjellerquiz/create_score.html", context)
 
 
@@ -133,10 +132,6 @@ def edit_scores(request, pk):
             )
             return redirect("quiz:create_score", term.pk)
 
-    context = {
-        "term": term,
-        "scores": scores,
-        "formset": formset,
-    }
+    context = {"term": term, "scores": scores, "formset": formset}
 
     return render(request, "quiz/kjellerquiz/edit_scores.html", context)

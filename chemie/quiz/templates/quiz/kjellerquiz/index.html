@@ -11,6 +11,11 @@
 
 {% block content %}
 
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a class="breadcrumb">Kjellerquiz</a>
+  </div>
+
   <div class="card-panel">
     {% if active_term %}
       <a href="{% url 'quiz:term_detail' active_term.pk %}">

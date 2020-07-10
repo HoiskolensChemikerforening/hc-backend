@@ -10,10 +10,28 @@
 
 {% block content %}
 
-  <a href="{% url "quiz:name_quiz" 1 %}"><p>1. klasse</p></a>
-  <a href="{% url "quiz:name_quiz" 2 %}"><p>2. klasse</p></a>
-  <a href="{% url "quiz:name_quiz" 3 %}"><p>3. klasse</p></a>
-  <a href="{% url "quiz:name_quiz" 4 %}"><p>4. klasse</p></a>
-  <a href="{% url "quiz:name_quiz" 5 %}"><p>5. klasse</p></a>
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a class="breadcrumb">Navnequiz</a>
+  </div>
+
+  <div class="row">
+    <h5>Her kan du øve på navnene til klassekameratene dine her!</h5>
+  </div>
+  <div class="row">
+    <a class="btn" href="{% url "quiz:name_quiz" 1 %}">1. klasse</a>
+  </div>
+  <div class="row">
+    <a class="btn" href="{% url "quiz:name_quiz" 2 %}">2. klasse</a>
+  </div>
+  <div class="row">
+    <a class="btn" href="{% url "quiz:name_quiz" 3 %}">3. klasse</a>
+  </div>
+  <div class="row">
+    <a class="btn" href="{% url "quiz:name_quiz" 4 %}">4. klasse</a>
+  </div>
+  <div class="row">
+    <a class="btn" href="{% url "quiz:name_quiz" 5 %}">5. klasse</a>
+  </div>
 
 {% endblock content %}
