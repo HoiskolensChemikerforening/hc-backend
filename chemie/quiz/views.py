@@ -22,6 +22,8 @@ def name_quiz_index(request):
 @login_required
 def name_quiz(request, year=1):
     profiles_qs = Profile.objects.filter(grade=year, user__is_active=True)
+    if not profiles_qs:
+        return redirect("quiz:index")
     profiles = list(profiles_qs)
     profiles_count = profiles_qs.count()
     shuffle(profiles)

@@ -20,11 +20,12 @@
 
   <div class="row">
     <h4 id="points">Poeng: 0</h4>
+    <h4 id="profile-count">Navn: 1 / {{ profiles_count }}</h4>
   </div>
 
   <div class="row">
     {% for profile in profiles %}
-      <div class="card" id="card-{{ forloop.counter0 }}" style="display:none; width:350px;">
+      <div class="card" id="card-{{ forloop.counter0 }}" style="display:none; width:300px; margin:10px;">
         <!-- Showing the pictures. -->
         <div class="card-image">
           {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
@@ -76,6 +77,7 @@
     let points_value = 0;
 
     let points_display = document.getElementById("points");
+    let profile_count_display = document.getElementById("profile-count");
     points_display.innerHTML = "Poeng: " + points_value.toString();
 
     for (let index = 0; index < {{ profiles_count }}; index++) {
@@ -123,20 +125,35 @@
       jQuery("#name-" + index.toString()).fadeIn();
       let solution_name_list = getSolutionNameList(index);
       let answer_list = getInput(index);
+      let answeredCorrectly = false;
 
       max_points++;
       for (let i = 0; i < answer_list.length; i++) {
         if (solution_name_list.includes(answer_list[i])) {
           points_value++;
+          answeredCorrectly = true;
           break;
         }
       }
 
       points_display.innerHTML = "Poeng: " + points_value.toString() + " / " + max_points.toString();
+      profile_count_display.innerHTML =
+          "Navn: " + (profile_index_count + 1).toString() + " / " + ({{ profiles_count }}).toString();
 
       let btn = document.getElementById("submit_btn-" + index.toString());
       let id = "name_guess-" + index.toString();
-      document.getElementById(id).disabled = true;
+      let name_guess = document.getElementById(id);
+
+      // Styling depending on guess
+      if (answeredCorrectly) {
+        name_guess.style.borderBottom = "1px solid green";
+        name_guess.style.boxShadow = "0 1px 0 0 green";
+      } else {
+        name_guess.style.borderBottom = "1px solid red";
+        name_guess.style.boxShadow = "0 1px 0 0 red";
+      }
+
+      name_guess.disabled = true;
 
       if (profile_index_count === {{ profiles_count }} -1) {
         btn.innerText = "Avslutt";
@@ -157,10 +174,9 @@
     }
 
     function showImage(index) {
-      console.log(index);
       let id = "card-" + index.toString();
       let card = document.getElementById(id);
-      card.style.display = "block";
+      card.style.display = "inline-block";
       document.getElementById("name_guess-" + index.toString()).focus();
     }
 
@@ -171,8 +187,17 @@
     }
 
     function endGame() {
-      // Remove eventListeners
       hideImage(profile_index_count);
+
+      for (let index = 0; index < {{ profiles_count }}; index++) {
+        showImage(index);
+        let btn_id = "submit_btn-" + index.toString();
+        document.getElementById(btn_id).style.display = "none";
+      }
+      points_display.innerHTML = "Du fikk " +
+          points_value.toString() + " av " + (profile_index_count + 1).toString() +
+          " poeng. Nedenfor kan du se hvilke navn du må øve litt mer på";
+      profile_count_display.style.display = "none";
     }
 
   </script>
