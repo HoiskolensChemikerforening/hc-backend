@@ -1,0 +1,19 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Quiz
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Navnequiz
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+  <a href="{% url "quiz:name_quiz" 1 %}"><p>1. klasse</p></a>
+  <a href="{% url "quiz:name_quiz" 2 %}"><p>2. klasse</p></a>
+  <a href="{% url "quiz:name_quiz" 3 %}"><p>3. klasse</p></a>
+  <a href="{% url "quiz:name_quiz" 4 %}"><p>4. klasse</p></a>
+  <a href="{% url "quiz:name_quiz" 5 %}"><p>5. klasse</p></a>
+
+{% endblock content %}

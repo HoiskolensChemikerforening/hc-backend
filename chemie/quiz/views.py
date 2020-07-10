@@ -6,9 +6,31 @@ from django.forms import modelformset_factory
 
 from .models import QuizTerm, QuizScore
 from .forms import CreateQuizScoreForm, EditQuizScoreForm, CreateQuizTermForm
+from chemie.customprofile.models import Profile
+
+from random import shuffle
 
 
 def index(request):
+    return render(request, "quiz/index.html")
+
+
+def name_quiz_index(request):
+    return render(request, "quiz/name_quiz/index.html")
+
+
+@login_required
+def name_quiz(request, year=1):
+    profiles_qs = Profile.objects.filter(grade=year, user__is_active=True)
+    profiles = list(profiles_qs)
+    profiles_count = profiles_qs.count()
+    shuffle(profiles)
+    context = {"profiles": profiles,
+               "profiles_count": profiles_count}
+    return render(request, "quiz/name_quiz/name_quiz.html", context)
+
+
+def kjellerquiz_index(request):
     try:
         active_term = QuizTerm.objects.get(is_active=True)
         top_scores = active_term.scores.order_by("-score")[:3]
@@ -24,7 +46,7 @@ def index(request):
         "terms": terms,
     }
 
-    return render(request, "quiz/index.html", context)
+    return render(request, "quiz/kjellerquiz/index.html", context)
 
 
 @permission_required("quiz.add_quizterm")
@@ -35,7 +57,7 @@ def create_term(request):
         return redirect("quiz:term_detail", pk=form.instance.pk)
 
     context = {"form": form}
-    return render(request, "quiz/create_term.html", context)
+    return render(request, "quiz/kjellerquiz/create_term.html", context)
 
 
 @permission_required("quiz.delete_quizterm")
@@ -45,7 +67,7 @@ def delete_term(request, pk):
     messages.add_message(
         request, messages.SUCCESS, "Quizen ble slettet", extra_tags="Slettet"
     )
-    return redirect("quiz:index")
+    return redirect("quiz:kjellerquiz_index")
 
 
 @login_required
@@ -53,7 +75,7 @@ def term_detail(request, pk):
     term = get_object_or_404(QuizTerm, pk=pk)
     scores = term.scores.order_by("-score")
     context = {"term": term, "scores": scores}
-    return render(request, "quiz/term_detail.html", context)
+    return render(request, "quiz/kjellerquiz/term_detail.html", context)
 
 
 @permission_required("quiz.change_quizterm")
@@ -87,7 +109,7 @@ def create_score(request, pk):
         "scores": scores,
         "form": form,
     }
-    return render(request, "quiz/create_score.html", context)
+    return render(request, "quiz/kjellerquiz/create_score.html", context)
 
 
 @permission_required("quiz.change_quizscore")
@@ -117,4 +139,4 @@ def edit_scores(request, pk):
         "formset": formset,
     }
 
-    return render(request, "quiz/edit_scores.html", context)
+    return render(request, "quiz/kjellerquiz/edit_scores.html", context)
