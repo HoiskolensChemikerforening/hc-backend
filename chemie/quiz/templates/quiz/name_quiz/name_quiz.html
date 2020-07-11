@@ -1,0 +1,204 @@
+{% extends "chemie/base.html" %}
+{% load thumbnail %}
+{% load staticfiles %}
+
+{% block nav_header %}
+  Navnequiz
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Lykke til
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a href="{% url "quiz:name_quiz_index" %}" class="breadcrumb">Navnequiz</a>
+    <a class="breadcrumb">{{ year }}. klasse</a>
+  </div>
+
+  <div class="row">
+    <h4 id="points">Poeng: 0</h4>
+    <h4 id="profile-count">Navn: 1 / {{ profiles_count }}</h4>
+  </div>
+
+  <div class="row">
+    {% for profile in profiles %}
+      <div class="card" id="card-{{ forloop.counter0 }}" style="display:none; width:300px; margin:10px;">
+        <!-- Showing the pictures. -->
+        <div class="card-image">
+          {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
+            <img src="{{ primary.url }}" data-field-id="#modal-{{ profile.pk }}"
+                    {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
+                 data-alt-src="{{ secondary.url }}"
+                    {% endthumbnail %}>
+          {% empty %}
+            <img src="{% static "images/blank_avatar.png" %}">
+          {% endthumbnail %}
+        </div>
+
+        <!-- The box under each picture -->
+        <div class="card-content">
+
+          <div class="row">
+            <div class="col s6">
+              <input placeholder="Gjett navn" id="name_guess-{{ forloop.counter0 }}" type="text" class="validate">
+            </div>
+            <div class="col s6">
+              <button class="btn btn-primary pull-right" style="float:right;" id="submit_btn-{{ forloop.counter0 }}"
+                      onclick="submitAnswer({{ forloop.counter0 }})" type="submit">Gjett
+              </button>
+            </div>
+          </div>
+          <div class="row">
+
+          </div>
+          <a class="card-title" id="name-{{ forloop.counter0 }}" style="display:none">{{ profile }}</a>
+          {% if profile.relationship_status == 1 %}
+            <i class="material-icons icon-green">favorite</i>
+          {% elif profile.relationship_status == 2 %}
+            <i class="material-icons icon-red">favorite</i>
+          {% else %}
+            <i class="material-icons icon-gray">favorite</i>
+          {% endif %}
+        </div>
+      </div>
+
+    {% endfor %}
+  </div>
+
+{% endblock content %}
+
+{% block footer_script %}
+  <script>
+    // Setup
+    let max_points = 0;
+    let points_value = 0;
+
+    let points_display = document.getElementById("points");
+    let profile_count_display = document.getElementById("profile-count");
+    points_display.innerHTML = "Poeng: " + points_value.toString();
+
+    for (let index = 0; index < {{ profiles_count }}; index++) {
+      let id = "name_guess-" + index.toString();
+      let input = document.getElementById(id);
+
+      input.addEventListener("keydown", function (event) {
+        if (event.keyCode === 13) {
+          event.preventDefault();
+          document.getElementById("submit_btn-" + index.toString()).click();
+        }
+      });
+    }
+
+    let profile_index_count = 0;
+    showImage(profile_index_count);
+
+    // Gameplay functions
+
+    function getInput(index) {
+      let id = "name_guess-" + index.toString();
+      let answer = document.getElementById(id).value;
+      let answer_list = [];
+
+      for (let i = 0; i < answer.split(" ").length; i++) {
+        answer_list.push(answer.split(" ")[i].toLowerCase());
+      }
+
+      return answer_list;
+    }
+
+    function getSolutionNameList(index) {
+      let id = "name-" + index.toString();
+      let name = document.getElementById(id).innerHTML;
+      let solution_name_list = [];
+
+      for (let i = 0; i < name.split(" ").length; i++) {
+        solution_name_list.push(name.split(" ")[i].toLowerCase());
+      }
+
+      return solution_name_list;
+    }
+
+    function submitAnswer(index) {
+      jQuery("#name-" + index.toString()).fadeIn();
+      let solution_name_list = getSolutionNameList(index);
+      let answer_list = getInput(index);
+      let answeredCorrectly = false;
+
+      max_points++;
+      for (let i = 0; i < answer_list.length; i++) {
+        if (solution_name_list.includes(answer_list[i])) {
+          points_value++;
+          answeredCorrectly = true;
+          break;
+        }
+      }
+
+      points_display.innerHTML = "Poeng: " + points_value.toString() + " / " + max_points.toString();
+      profile_count_display.innerHTML =
+          "Navn: " + (profile_index_count + 1).toString() + " / " + ({{ profiles_count }}).toString();
+
+      let btn = document.getElementById("submit_btn-" + index.toString());
+      let id = "name_guess-" + index.toString();
+      let name_guess = document.getElementById(id);
+
+      // Styling depending on guess
+      if (answeredCorrectly) {
+        name_guess.style.borderBottom = "1px solid green";
+        name_guess.style.boxShadow = "0 1px 0 0 green";
+      } else {
+        name_guess.style.borderBottom = "1px solid red";
+        name_guess.style.boxShadow = "0 1px 0 0 red";
+      }
+
+      name_guess.disabled = true;
+
+      if (profile_index_count === {{ profiles_count }} -1) {
+        btn.innerText = "Avslutt";
+        btn.onclick = endGame;
+        btn.focus();
+      } else {
+
+        btn.innerText = "Neste";
+        btn.onclick = nextImage;
+        btn.focus();
+      }
+    }
+
+    function hideImage(index) {
+      let id = "card-" + index.toString();
+      let card = document.getElementById(id);
+      card.style.display = "none";
+    }
+
+    function showImage(index) {
+      let id = "card-" + index.toString();
+      let card = document.getElementById(id);
+      card.style.display = "inline-block";
+      document.getElementById("name_guess-" + index.toString()).focus();
+    }
+
+    function nextImage() {
+      hideImage(profile_index_count);
+      profile_index_count++;
+      showImage(profile_index_count);
+    }
+
+    function endGame() {
+      hideImage(profile_index_count);
+
+      for (let index = 0; index < {{ profiles_count }}; index++) {
+        showImage(index);
+        let btn_id = "submit_btn-" + index.toString();
+        document.getElementById(btn_id).style.display = "none";
+      }
+      points_display.innerHTML = "Du fikk " +
+          points_value.toString() + " av " + (profile_index_count + 1).toString() +
+          " poeng. Nedenfor kan du se hvilke navn du må øve litt mer på";
+      profile_count_display.style.display = "none";
+    }
+
+  </script>
+{% endblock %}

@@ -4,39 +4,41 @@
   Quiz
 {% endblock nav_header %}
 
+{% block nav_sub_header %}
+  Navnequiz
+{% endblock nav_sub_header %}
+
 {% block content %}
-  <div>
-    <h4>Kjellerquiz</h4>
-      <p class="flow-text">Her kan du se poengoversiktene fra tidligere kjellerquizer!</p>
-      <a href="{% url "quiz:kjellerquiz_index" %}" class="btn">Kjellerquiz ></a>
+
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
+    <a class="breadcrumb">Navnequiz</a>
   </div>
 
-  <br><hr><br>
-
   <div>
-    <h4>Navnequiz</h4>
     <p class="flow-text">Her kan du øve på navnene til klassekameratene dine her!</p>
     <div class="row">
       <div class="col">
-        <a class="btn" href="{% url "quiz:name_quiz" 1 %}">
+        <a class="waves-effect btn" href="{% url "quiz:name_quiz" 1 %}">
           <i class="material-icons right">chevron_right</i>1. klasse</a>
       </div>
       <div class="col">
-        <a class="btn" href="{% url "quiz:name_quiz" 2 %}">
+        <a class="waves-effect btn" href="{% url "quiz:name_quiz" 2 %}">
           <i class="material-icons right">chevron_right</i>2. klasse</a>
       </div>
       <div class="col">
-        <a class="btn" href="{% url "quiz:name_quiz" 3 %}">
+        <a class="waves-effect btn" href="{% url "quiz:name_quiz" 3 %}">
           <i class="material-icons right">chevron_right</i>3. klasse</a>
       </div>
       <div class="col">
-        <a class="btn" href="{% url "quiz:name_quiz" 4 %}">
+        <a class="waves-effect btn" href="{% url "quiz:name_quiz" 4 %}">
           <i class="material-icons right">chevron_right</i>4. klasse</a>
       </div>
       <div class="col">
-        <a class="btn" href="{% url "quiz:name_quiz" 5 %}">
+        <a class="waves-effect btn" href="{% url "quiz:name_quiz" 5 %}">
           <i class="material-icons right">chevron_right</i>5. klasse</a>
       </div>
     </div>
   </div>
+
 {% endblock content %}
