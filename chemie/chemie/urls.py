@@ -20,9 +20,13 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from ..customprofile.views import LoginView
 
+from chemie.home.views import index
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("chemie.home.urls", namespace="frontpage")),
+    # Temporary url for front page during Fadderperioden
+    path("forside/", index),
     path("sladreboks/", include("chemie.shitbox.urls", namespace="shitbox")),
     path("verv/", include("chemie.committees.urls", namespace="verv")),
     path("bokskap/", include("chemie.lockers.urls", namespace="bokskap")),
