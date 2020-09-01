@@ -69,7 +69,9 @@ class Category(models.Model):
 
 
 class Item(models.Model):
-    name = models.CharField(max_length=40, verbose_name="Varenavn", unique=True)
+    name = models.CharField(
+        max_length=40, verbose_name="Varenavn", unique=True
+    )
     price = models.DecimalField(
         max_digits=6, decimal_places=2, verbose_name="Pris"
     )
@@ -123,7 +125,9 @@ class OrderItem(models.Model):
     )
     quantity = models.PositiveIntegerField(verbose_name="Antall")
 
-    total_price = models.PositiveIntegerField(verbose_name="Totalpris", default=0)
+    total_price = models.PositiveIntegerField(
+        verbose_name="Totalpris", default=0
+    )
 
     def __str__(self):
         return self.item.name
@@ -164,8 +168,14 @@ class HappyHour(models.Model):
     def send_push(self, subscribers):
         for subscriber in subscribers:
             devices = subscriber.profile.devices.all()
-            tag = "1 time" if self.duration == 1 else "{} timer".format(self.duration)
-            happyhour_message = "Nå er det Happy Hour i {} på kontoret".format(tag)
+            tag = (
+                "1 time"
+                if self.duration == 1
+                else "{} timer".format(self.duration)
+            )
+            happyhour_message = "Nå er det Happy Hour i {} på kontoret".format(
+                tag
+            )
             for device in devices:
                 device.send_notification("Happy Hour!", happyhour_message)
 
@@ -224,7 +234,8 @@ class ShoppingCart(object):
                 OrderItem.objects.create(
                     item=item_object,
                     quantity=self.cart[item]["quantity"],
-                    total_price=self.cart[item]['quantity']*item_object.price
+                    total_price=self.cart[item]["quantity"]
+                    * item_object.price,
                 )
             )
         order = Order.objects.create(buyer=user)

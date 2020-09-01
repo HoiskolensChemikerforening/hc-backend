@@ -10,12 +10,12 @@
 {% block content %}
   <div class="row">
     <p class="flow-text">
-      Kontakt Webkom for å soft-resette bokskap. Dette krever at alle bokskap-eiere må bekrefte at de vil beholde
+      Kontakt Webkom for å soft-resette bokskap. Dette krever at alle bokskapeiere må bekrefte at de vil beholde
       skapet.
-      Etter en uke skal bokskapene gjennomgåes og lapper (advarsler) henges på uregistrerte skap.
+      Etter en uke skal bokskapene gjennomgås og lapper (advarsler) henges på uregistrerte skap.
       Etter to uker skal alle gjenværende skap tømmes.
 
-      Ved feil og mangler: kontakt Webkom.
+      Ved feil og mangler: Kontakt Webkom.
     </p>
 
     <div class="card">
@@ -23,22 +23,22 @@
         <table class="highlight">
           <thead>
           <tr>
-            <th data-field="id"><p class="flow-text">Skapnummer</p></th>
-            <th data-field="name"><p class="flow-text">Eies av</p></th>
-            <th data-field="price"><p class="flow-text">Tidligere eid av</p></th>
+            <th data-field="id">Skapnummer</th>
+            <th data-field="name">Eies av</th>
+            <th data-field="price">Tidligere eid av</th>
           </tr>
           </thead>
           <tbody>
           {% for locker in lockers %}
             <tr>
               <td><a name="locker{{ locker.number }}"></a>
-                <p class="flow-text">{{ locker.number }}</p></td>
+                {{ locker.number }}</td>
               <td>
                 <div class="valign-wrapper">
                   {% if locker.owner %}
                     <i class="material-icons valign left"
                        onclick=remove_and_redirect({{ locker.number }}) href="#">remove_circle</i>
-                    <p class="flow-text valign">{{ locker.owner.user }}</p>
+                    {{ locker.owner.user }}
                   {% else %} - {% endif %}
                 </div>
               </td>
@@ -48,7 +48,7 @@
                     <a href="mailto:{{ ownership.user.email }}">
                       <div class="valign-wrapper">
                         <i class="material-icons valign left">email</i>
-                        <p class="flow-text valign">{{ ownership.user }}, {{ ownership.created|date:"j F Y" }} </p>
+                        {{ ownership.user }}, {{ ownership.created|date:"j. F Y" }}
                       </div>
                     </a>
                   {% endif %}

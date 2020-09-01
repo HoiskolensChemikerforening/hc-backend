@@ -63,4 +63,4 @@ class OfficeApplication(models.Model):
     )
 
     def __str__(self):
-        return f'{self.author.get_full_name()} - {self.student_username}'
+        return f"{self.author.get_full_name()} - {self.student_username}"

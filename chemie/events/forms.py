@@ -142,7 +142,7 @@ class RegisterEventForm(BaseRegisterEventForm):
         M.Row("payment_information"),
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("price_member", "price_not_member", "price_companion"),
-        M.Row("companion", "sleepover", "night_snack"),
+        M.Row("companion", "sleepover", "night_snack", "check_in"),
         M.Row("allowed_grades"),
     )
 
@@ -158,6 +158,7 @@ class RegisterEventForm(BaseRegisterEventForm):
             "companion",
             "sleepover",
             "night_snack",
+            "check_in",
         ]
 
 
@@ -184,8 +185,9 @@ class RegisterBedpresForm(BaseRegisterEventForm):
 class SocialRegisterUserForm(forms.ModelForm):
     approval = forms.BooleanField(
         required=True,
-        label='Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer',
-        validators=[lambda x: x == True])
+        label="Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer",
+        validators=[lambda x: x == True],
+    )
 
     class Meta:
         model = SocialEventRegistration
@@ -208,8 +210,9 @@ class SocialRegisterUserForm(forms.ModelForm):
 class BedpresRegisterUserForm(forms.ModelForm):
     approval = forms.BooleanField(
         required=True,
-        label='Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer',
-        validators=[lambda x: x == True])
+        label="Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring for arrangementer",
+        validators=[lambda x: x == True],
+    )
 
     class Meta:
         model = BedpresRegistration
@@ -220,4 +223,3 @@ class DeRegisterUserForm(forms.Form):
     really_sure = forms.BooleanField(
         required=True, label="Er dette ditt endelige svar?"
     )
-

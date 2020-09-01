@@ -1,10 +1,10 @@
-from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
 app_name = "yearbook"
 
 urlpatterns = [
-    url(r"^$", views.index, name="index"),
-    url(r"^(?P<year>[0-9]+)/$", views.index),
+    path("", views.index, name="index"),
+    path("<int:year>/", views.index),
 ]

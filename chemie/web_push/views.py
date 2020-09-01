@@ -9,6 +9,7 @@ from .serializers import CoffeeSubmissionSerializer
 from django.http import HttpResponse, JsonResponse
 import datetime
 
+
 class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
     queryset = CoffeeSubmission.objects.order_by("date")
     serializer_class = CoffeeSubmissionSerializer
@@ -24,7 +25,7 @@ def save_device(request):
             if browser == "Chrome":
                 status = Device.add_device("FCM", token, request.user)
                 return HttpResponse(status=status)
-            
+
             """
             The commented lines below is the implementation for Safari browser
             Apples APNS certificat would be needed, cost ~1000 NOK/year
@@ -49,15 +50,17 @@ def send_notification(request):
         is_authorized = serializer.is_authorized(
             payload_json["notification_key"], payload_json["topic"]
         )
-        
+
         if is_authorized:
             topic = payload_json["topic"]
 
             if topic == "coffee":
                 if CoffeeSubmission.fifteen_minutes_has_passed():
                     serializer.save()
-                    subscriptions = Subscription.objects.filter(subscription_type=1)
-                    subscribers = [sub.owner for sub in subscriptions] 
+                    subscriptions = Subscription.objects.filter(
+                        subscription_type=1
+                    )
+                    subscribers = [sub.owner for sub in subscriptions]
 
                     CoffeeSubmission.send_coffee_notification(subscribers)
                     return JsonResponse(serializer.errors, status=201)
@@ -67,5 +70,5 @@ def send_notification(request):
                 return JsonResponse(serializer.errors, status=401)
 
         return JsonResponse(serializer.errors, status=401)
-    else: 
+    else:
         return redirect(reverse("frontpage:home"))

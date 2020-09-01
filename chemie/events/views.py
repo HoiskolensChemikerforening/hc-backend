@@ -40,7 +40,8 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
-    ARRIVAL_STATUS)
+    ARRIVAL_STATUS,
+)
 
 
 class SuccessMessageMixin(object):
@@ -217,9 +218,9 @@ class ViewSocialDetailsView(DetailView):
             event=self.object, status=REGISTRATION_STATUS.CONFIRMED
         )
 
-        waiting = attendees \
-            .filter(event=self.object, status=REGISTRATION_STATUS.WAITING) \
-            .order_by('created')
+        waiting = attendees.filter(
+            event=self.object, status=REGISTRATION_STATUS.WAITING
+        ).order_by("created")
 
         context.update({"attendees": confirmed, "waiting_list": waiting})
         return context
@@ -481,7 +482,9 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
 
     def get(self, request, pk, *args, **kwargs):
         if self.object.can_signup:
-            registration_form = self.registration_form(**self.get_form_kwargs())
+            registration_form = self.registration_form(
+                **self.get_form_kwargs()
+            )
         else:
             registration_form = None
         context = {
@@ -493,7 +496,9 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
 
     def post(self, request, pk):
         self.object = get_object_or_404(self.model, pk=pk)
-        registration_form = self.registration_form(request.POST, **self.get_form_kwargs())
+        registration_form = self.registration_form(
+            request.POST, **self.get_form_kwargs()
+        )
         event = self.object
         self.pk = pk
         if registration_form.is_valid():
@@ -505,9 +510,9 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             self.set_status_message(request, status, instance, event)
             return redirect(self.get_success_url())
         context = {
-            'registration_form': registration_form,
-            'event': self.object,
-            "allowed_grade": self.object.allowed_grade(request.user)
+            "registration_form": registration_form,
+            "event": self.object,
+            "allowed_grade": self.object.allowed_grade(request.user),
         }
         return render(request, self.template_name, context)
 
@@ -637,6 +642,7 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
                     self.request, event, pk=pk
                 )
 
+
 class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     template_name = "events/admin_list.html"
     model = Social
@@ -646,6 +652,7 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
+            context["event"] = self.object
             context["attendees"] = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED, event=self.object
             ).select_related("user__profile__membership")
@@ -660,12 +667,15 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 payment_status=False,
             ).count()
             try:
-                context['percentage_paid'] = round((paid // (not_paid + paid))*100)
+                context["percentage_paid"] = round(
+                    (paid // (not_paid + paid)) * 100
+                )
             except ZeroDivisionError:
-                context['percentage_paid'] = 0
-            context['total_paid'] = paid
-            context['total_not_paid'] = not_paid
+                context["percentage_paid"] = 0
+            context["total_paid"] = paid
+            context["total_not_paid"] = not_paid
             context["is_bedpres"] = False
+            context["social_has_checkin"] = self.object.check_in
         return context
 
 
@@ -687,37 +697,50 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
 
 @login_required
 @permission_required("events.change_socialeventregistration")
-def change_payment_status(request, registration_id):
+def change_payment_status(request):
     if request.method == "POST":
+        registration_id = request.POST["registration_id"]
         registration = SocialEventRegistration.objects.get(pk=registration_id)
         registration.payment_status = not registration.payment_status
         registration.save()
         return JsonResponse({"payment_status": registration.payment_status})
     else:
-        return redirect(reverse('home:home'))
+        return redirect(reverse("home:home"))
 
 
 @login_required
-@permission_required("events.change_bedpresregistration")
-def change_arrival_status(request, registration_id):
-    registration = BedpresRegistration.objects.get(pk=registration_id)
-    status = registration.arrival_status
-    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
-        registration.arrival_status = ARRIVAL_STATUS.PRESENT
-        registration.save()
-        return JsonResponse({"arrival_status": 1})
+@permission_required(
+    "events.change_bedpresregistration"
+    or "events.change_socialeventregistration"
+)
+def change_arrival_status(request):
+    if request.method == "POST":
+        registration_id = request.POST["registration_id"]
+        if "bedpres" in request.path:
+            registration = BedpresRegistration.objects.get(pk=registration_id)
+        else:
+            registration = SocialEventRegistration.objects.get(
+                pk=registration_id
+            )
+        status = registration.arrival_status
+        if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
+            registration.arrival_status = ARRIVAL_STATUS.PRESENT
+            registration.save()
+            return JsonResponse({"arrival_status": 1})
+        else:
+            # status is neither 'not set' nor 'not met' => status is 'met'
+            registration.arrival_status = ARRIVAL_STATUS.TRUANT
+            registration.save()
+            return JsonResponse({"arrival_status": 0})
     else:
-        # status is neither 'not set' nor 'not met' => status is 'met'
-        registration.arrival_status = ARRIVAL_STATUS.TRUANT
-        registration.save()
-        return JsonResponse({"arrival_status": 0})
+        return redirect(reverse("home:home"))
 
 
 @transaction.atomic
 def set_user_event_status(event, registration):
     if event.allowed_grade(registration.user):
         slots = event.sluts - event.registered_users()
-        has_spare_slots = (slots > 0)
+        has_spare_slots = slots > 0
         if has_spare_slots:
             registration.confirm()
             registration.save()
@@ -729,44 +752,121 @@ def set_user_event_status(event, registration):
         return REGISTRATION_STATUS.INTERESTED
 
 
-@permission_required('events.change_bedpresregistration')
+@permission_required("events.change_bedpresregistration")
 @login_required
 def checkin_to_bedpres(request, pk):
     form = GetRFIDForm(request.POST or None)
     bedpres = Bedpres.objects.get(pk=pk)
-    if request.method == 'POST':
+    if request.method == "POST":
         if form.is_valid():
-            rfid = form.cleaned_data.get('rfid')
+            rfid = form.cleaned_data.get("rfid")
             em_code = ProfileManager.rfid_to_em(rfid)
             try:
                 user = Profile.objects.get(access_card=em_code).user
             except:
-                messages.add_message(request, messages.WARNING, 'Studentkortnummeret er ikke registrert enda.')
-                return redirect(f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}")
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Studentkortnummeret er ikke registrert enda.",
+                )
+                return redirect(
+                    f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}"
+                )
             try:
-                registration = BedpresRegistration.objects.get(user=user, event=bedpres)
+                registration = BedpresRegistration.objects.get(
+                    user=user, event=bedpres
+                )
             except:
-                messages.add_message(request, messages.WARNING, '{} er ikke påmeldt {}'.format(user.get_full_name(), bedpres.title))
-                return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "{} er ikke påmeldt {}".format(
+                        user.get_full_name(), bedpres.title
+                    ),
+                )
+                return redirect(
+                    reverse("events:checkin_bedpres", kwargs={"pk": pk})
+                )
             if registration.status == REGISTRATION_STATUS.CONFIRMED:
                 registration.arrival_status = ARRIVAL_STATUS.PRESENT
                 registration.save()
                 messages.add_message(
                     request,
                     messages.SUCCESS,
-                    '{} har sjekket inn på {}'.format(
-                        user.get_full_name(),
-                        registration.event.title,
-                    )
+                    "{} har sjekket inn på {}".format(
+                        user.get_full_name(), registration.event.title
+                    ),
                 )
             else:
                 messages.add_message(
                     request,
                     messages.WARNING,
-                    '{} står enda på venteliste. Sjekk inn manuelt.'.format(
-                        user.get_full_name(),
-                    )
+                    "{} står enda på venteliste. Sjekk inn manuelt.".format(
+                        user.get_full_name()
+                    ),
                 )
-            return redirect(reverse('events:checkin_bedpres', kwargs={'pk': pk}))
-    context = {'form': form, 'bedpres': bedpres}
-    return render(request, 'events/bedpres/check_in.html', context)
+            return redirect(
+                reverse("events:checkin_bedpres", kwargs={"pk": pk})
+            )
+    context = {"form": form, "bedpres": bedpres}
+    return render(request, "events/bedpres/check_in.html", context)
+
+
+@permission_required("events.change_socialeventregistration")
+@login_required
+def check_in_to_social(request, pk):
+    form = GetRFIDForm(request.POST or None)
+    social = Social.objects.get(id=pk)
+    if request.method == "POST":
+        if form.is_valid():
+            rfid = form.cleaned_data.get("rfid")
+            em_code = ProfileManager.rfid_to_em(rfid)
+            try:
+                user = Profile.objects.get(access_card=em_code).user
+            except:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Studentkortnummeret er ikke registrert enda.",
+                )
+                return redirect(
+                    f"{reverse('profile:add_rfid')}?cardnr={rfid}&redirect={request.get_full_path()}"
+                )
+            try:
+                registration = SocialEventRegistration.objects.get(
+                    user=user, event=social
+                )
+            except:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "{} er ikke påmeldt {}".format(
+                        user.get_full_name(), social.title
+                    ),
+                )
+                return redirect(
+                    reverse("events:checkin_social", kwargs={"pk": pk})
+                )
+            if registration.status == REGISTRATION_STATUS.CONFIRMED:
+                registration.arrival_status = ARRIVAL_STATUS.PRESENT
+                registration.save()
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "{} har sjekket inn på {}".format(
+                        user.get_full_name(), registration.event.title
+                    ),
+                )
+            else:
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "{} står enda på venteliste. Sjekk inn manuelt.".format(
+                        user.get_full_name()
+                    ),
+                )
+            return redirect(
+                reverse("events:checkin_social", kwargs={"pk": pk})
+            )
+    context = {"form": form, "social": social}
+    return render(request, "events/social/check_in.html", context)

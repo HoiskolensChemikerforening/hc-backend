@@ -22,9 +22,16 @@ from .forms import (
     EditItemForm,
     GetUserRefillForm,
     GetUserReceiptsForm,
-    SearchItemForm
+    SearchItemForm,
 )
-from .models import Item, ShoppingCart, Category, Order, HappyHour, RefillReceipt
+from .models import (
+    Item,
+    ShoppingCart,
+    Category,
+    Order,
+    HappyHour,
+    RefillReceipt,
+)
 from .statistics import get_plot_item
 
 
@@ -54,9 +61,12 @@ def get_last_year_receipts():
     all_receipts = Order.objects.all()
     now = timezone.now()
     # Get 11 months back
-    first_date = timezone.datetime(
-        year=now.year - 1, month=now.month + 1, day=1
-    )
+    if now.month == 12:
+        first_date = timezone.datetime(year=now.year, month=1, day=1)
+    else:
+        first_date = timezone.datetime(
+            year=now.year - 1, month=now.month + 1, day=1
+        )
     receipts = all_receipts.filter(created__gte=first_date, created__lte=now)
     months, m, i = 12, 0, 0
     year, month = now.year, now.month
@@ -91,10 +101,16 @@ def get_last_year_receipts():
                     monthTotal[i] += order_item.total_price
 
         if len(item_quantity[i]) > 0:
-            sorted_item_quantity = sorted(item_quantity[i].items(), key=operator.itemgetter(1), reverse=True)
+            sorted_item_quantity = sorted(
+                item_quantity[i].items(),
+                key=operator.itemgetter(1),
+                reverse=True,
+            )
             item_quantity[i] = dict(sorted_item_quantity)
         if len(item_price[i]) > 0:
-            sorted_item_price = sorted(item_price[i].items(), key=operator.itemgetter(1), reverse=True)
+            sorted_item_price = sorted(
+                item_price[i].items(), key=operator.itemgetter(1), reverse=True
+            )
             item_price[i] = dict(sorted_item_price)
         m += 1
         i += 1
@@ -222,7 +238,7 @@ def index_tabletshop(request):
                             request,
                             messages.SUCCESS,
                             (
-                                f"{request.user.get_full_name()} sin konto er trukket {total_price} HC-coins."
+                                f"{profile.user.get_full_name()} sin konto er trukket {total_price} HC-coins."
                                 f"Ny saldo på konto er: {new_balance} HC-coins."
                             ),
                             extra_tags="Kjøp godkjent",
@@ -254,8 +270,12 @@ def view_my_receipts(request):
 
 @login_required
 def view_my_refills(request):
-    refill_receipts = RefillReceipt.objects.filter(receiver=request.user).order_by("-created")
-    return render(request, "shop/user_refills.html", {"refill_receipts": refill_receipts})
+    refill_receipts = RefillReceipt.objects.filter(
+        receiver=request.user
+    ).order_by("-created")
+    return render(
+        request, "shop/user_refills.html", {"refill_receipts": refill_receipts}
+    )
 
 
 class ItemAutocomplete(autocomplete.Select2QuerySetView):
@@ -264,12 +284,10 @@ class ItemAutocomplete(autocomplete.Select2QuerySetView):
         if not self.request.user.is_authenticated:
             return Item.objects.none()
 
-        qs = Item.objects.all().order_by('name')
+        qs = Item.objects.all().order_by("name")
 
         if self.q:
-            qs = (
-                qs.filter(name__icontains=self.q)
-            )
+            qs = qs.filter(name__icontains=self.q)
 
         return qs
 
@@ -287,15 +305,23 @@ def view_statistics(request):
     )
     bought_items = request.user.profile.get_bought_items()
     search_form = SearchItemForm(request.POST or None)
-    context = {'items': items, 'orders': orders, 'bought_items': bought_items, 'search_form': search_form}
-    if request.method == 'POST':
+    context = {
+        "items": items,
+        "orders": orders,
+        "bought_items": bought_items,
+        "search_form": search_form,
+    }
+    if request.method == "POST":
         if search_form.is_valid():
-            plot_item_id = search_form.data['name']
-            plot_item, plot_time, plot_quantity = get_plot_item(request.user, plot_item_id)
-            context['plot_time'] = plot_time
-            context['plot_quantity'] = plot_quantity
-            context['plot_item'] = plot_item
-            context['seatch_form'] = SearchItemForm(None)
+            plot_item_id = search_form.data["name"]
+            plot_item, plot_time, plot_quantity = get_plot_item(
+                request.user, plot_item_id
+            )
+            context["plot_time"] = plot_time
+            context["plot_quantity"] = plot_quantity
+            context["plot_item"] = plot_item
+            context["seatch_form"] = SearchItemForm(None)
+            context["item_name"] = plot_item.name
     return render(request, "shop/user_statistics.html", context)
 
 
@@ -310,7 +336,7 @@ def admin(request):
             "monthTotal": monthTotal,
             "order_items": order_items,
             "order_price": order_price,
-            "items": items
+            "items": items,
         },
     )
 
@@ -471,7 +497,7 @@ def create_happyhour(request, form):
                 extra_tags=f"Aktivert i {instance.duration} time(r)",
             )
             subscriptions = Subscription.objects.filter(subscription_type=3)
-            subscribers = [sub.owner for sub in subscriptions] 
+            subscribers = [sub.owner for sub in subscriptions]
             instance.send_push(subscribers)
             return redirect(reverse("shop:admin"))
     context = {"form": form}
@@ -481,11 +507,9 @@ def create_happyhour(request, form):
 @permission_required("customprofile.refill_balance")
 def view_all_receipts(request):
     form = GetUserReceiptsForm(request.POST or None)
-    context = {
-        "form": form
-    }
+    context = {"form": form}
     try:
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.is_valid():
                 user = form.cleaned_data.get("buyer")
                 orders = (
@@ -493,11 +517,11 @@ def view_all_receipts(request):
                     .order_by("-created")
                     .prefetch_related("items")
                 )
-                context['orders'] = orders
-                context['buyer'] = user
+                context["orders"] = orders
+                context["buyer"] = user
         else:
-            orders = Order.objects.order_by('-created')[:100]
-            context['orders'] = orders
+            orders = Order.objects.order_by("-created")[:100]
+            context["orders"] = orders
     except ObjectDoesNotExist:
         pass
 
@@ -507,21 +531,21 @@ def view_all_receipts(request):
 @permission_required("customprofile.refill_balance")
 def view_all_refills(request):
     form = GetUserRefillForm(request.POST or None)
-    context = {
-        "form": form
-    }
+    context = {"form": form}
     try:
-        if request.method == 'POST':
+        if request.method == "POST":
             if form.is_valid():
                 receiver = form.cleaned_data.get("receiver")
-                refill_receipts = RefillReceipt.objects.order_by("-created")[:100]
-                context['refill_receipts'] = refill_receipts
-                context['receiver'] = receiver
+                refill_receipts = RefillReceipt.objects.order_by("-created")[
+                    :100
+                ]
+                context["refill_receipts"] = refill_receipts
+                context["receiver"] = receiver
         else:
-            refill_receipts = RefillReceipt.objects.all().order_by('-created')
-            context['refill_receipts'] = refill_receipts
+            refill_receipts = RefillReceipt.objects.all().order_by("-created")
+            context["refill_receipts"] = refill_receipts
     except ObjectDoesNotExist:
         pass
     refill_sum = Profile.get_all_refill_sum()
-    context['refill_sum'] = refill_sum
+    context["refill_sum"] = refill_sum
     return render(request, "shop/all_refills.html", context)

@@ -16,21 +16,23 @@ from .forms import (
 from .models import Locker, LockerUser, Ownership, LockerToken
 
 
-def view_lockers(request, page=1):
+def view_lockers(request):
     free_locker_list = Locker.objects.filter(
         owner__isnull=True
     ).prefetch_related("owner")
     free_lockers = Locker.objects.filter(owner__isnull=True).count()
+
     paginator = Paginator(free_locker_list, 40)
+    page_number = request.GET.get("page", 1)
 
     try:
-        lockers = paginator.page(page)
+        locker_page = paginator.page(page_number)
     except PageNotAnInteger:
-        lockers = paginator.page(1)
+        locker_page = paginator.page(1)
     except EmptyPage:
-        lockers = paginator.page(paginator.num_pages)
+        locker_page = paginator.page(paginator.num_pages)
 
-    context = {"lockers": lockers, "free_lockers": free_lockers}
+    context = {"locker_page": locker_page, "free_lockers": free_lockers}
     return render(request, "lockers/list.html", context)
 
 
@@ -68,9 +70,19 @@ def my_lockers(request):
 def register_locker(request, number):
     # Fetch requested locker
     locker = Locker.objects.get(number=number)
+
     if not locker.is_free():
         # Locker was already taken
-        raise Http404
+        messages.add_message(
+            request,
+            messages.ERROR,
+            "Skapet du prøver å registrere er allerede opptatt. "
+            "Vennligst velg et annet skap",
+            extra_tags="Bokskap opptatt",
+        )
+
+        return redirect(reverse("lockers:index"))
+
     else:
         form_data = RegisterExternalLockerUserForm(request.POST or None)
         if form_data.is_valid():
@@ -84,7 +96,15 @@ def register_locker(request, number):
             # Create a new ownership for the user
             new_ownership = Ownership(locker=locker, user=user)
             if new_ownership.reached_limit():
-                raise Http404
+                messages.add_message(
+                    request,
+                    messages.ERROR,
+                    "Du har allerede to registrerte bokskap. "
+                    "For å kunne reservere et nytt må du fjerne et av de gamle.",
+                    extra_tags="For mange skap",
+                )
+
+                return redirect(reverse("lockers:index"))
 
             new_ownership.save()
 

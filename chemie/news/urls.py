@@ -1,24 +1,20 @@
-from django.conf.urls import url
+from django.urls import path
 
 from . import views
 
 app_name = "news"
 
 urlpatterns = [
-    url(r"^$", views.list_all, name="index"),
-    url(
-        r"^detail/(?P<article_id>[0-9]+)/(?P<slug>[\w0-9/]+)",
-        views.news_details,
-        name="detail",
-    ),
-    url(r"^create", views.create_post, name="create"),
-    url(
-        r"^delete/(?P<article_id>[0-9]+)/(?P<slug>[\w0-9/]+)",
+    path("", views.list_all, name="index"),
+    path("<int:article_id>/<slug:slug>/", views.news_details, name="detail"),
+    path("opprett/", views.create_post, name="create"),
+    path(
+        "slett/<int:article_id>/<slug:slug>/",
         views.delete_article,
         name="delete_article",
     ),
-    url(
-        r"^edit/(?P<article_id>[0-9]+)/(?P<slug>[\w0-9/]+)",
+    path(
+        "rediger/<int:article_id>/<slug:slug>/",
         views.edit_article,
         name="edit_article",
     ),

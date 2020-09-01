@@ -7,7 +7,8 @@ from chemie.shop.tests.test_payments import try_to_buy_item
 
 @pytest.mark.django_db
 def test_order_is_created_when_one_item_bought(
-        client, create_user_no_perms, create_item):
+    client, create_user_no_perms, create_item
+):
     user = create_user_no_perms
     client.login(username=user.username, password="defaultpassword")
     client.get(reverse("shop:index"))
@@ -18,7 +19,7 @@ def test_order_is_created_when_one_item_bought(
     user.refresh_from_db()
     # Try to buy item
     try_to_buy_item(client, item)
-    order = Order.objects.latest('id')
+    order = Order.objects.latest("id")
     order_items = order.items.all()
     order_item = order_items[0]
     # How many items are in the order
@@ -35,7 +36,8 @@ def test_order_is_created_when_one_item_bought(
 
 @pytest.mark.django_db
 def test_order_is_created_when_several_items_bought(
-        client, create_user_no_perms, create_multiple_items):
+    client, create_user_no_perms, create_multiple_items
+):
     user = create_user_no_perms
     client.login(username=user.username, password="defaultpassword")
     client.get(reverse("shop:index"))
@@ -49,7 +51,7 @@ def test_order_is_created_when_several_items_bought(
     user.refresh_from_db()
     # Try to buy item
     try_to_buy_item(client, items)
-    order = Order.objects.latest('id')
+    order = Order.objects.latest("id")
     order_items = order.items.all()
     # How many items on the order?
     assert order_items.count() == len(items)
@@ -60,7 +62,8 @@ def test_order_is_created_when_several_items_bought(
 
 @pytest.mark.django_db
 def test_refill_equates_to_spent_plus_balance(
-        client, create_user_refill_perms, create_multiple_items):
+    client, create_user_refill_perms, create_multiple_items
+):
     user = create_user_refill_perms
     client.login(username=user.username, password="defaultpassword")
     client.get(reverse("shop:index"))
@@ -70,39 +73,32 @@ def test_refill_equates_to_spent_plus_balance(
     for item in items:
         amount += item.price
     client.post(
-        reverse("shop:refill"),
-        data={
-            "receiver": user.id,
-            "amount": amount
-        }
+        reverse("shop:refill"), data={"receiver": user.id, "amount": amount}
     )
     user.refresh_from_db()
     # Try to buy item
     try_to_buy_item(client, items)
     # Get the order
-    order = Order.objects.latest('id')
+    order = Order.objects.latest("id")
     spent_money = order.get_total_price()
     # Get the refill receipt
-    receipt = RefillReceipt.objects.latest('id')
+    receipt = RefillReceipt.objects.latest("id")
     assert receipt.amount == spent_money + user.profile.balance
 
 
 @pytest.mark.django_db
 def test_refill_amount_receiver_and_provider_ok(
-        client, create_user_refill_perms):
+    client, create_user_refill_perms
+):
     user = create_user_refill_perms
     client.login(username=user.username, password="defaultpassword")
     client.get(reverse("shop:index"))
     amount = 10
     client.post(
-        reverse("shop:refill"),
-        data={
-            "receiver": user.id,
-            "amount": amount
-        }
+        reverse("shop:refill"), data={"receiver": user.id, "amount": amount}
     )
     user.refresh_from_db()
-    receipt = RefillReceipt.objects.latest('id')
+    receipt = RefillReceipt.objects.latest("id")
     assert receipt.provider == user
     assert receipt.receiver == user
     assert receipt.amount == amount

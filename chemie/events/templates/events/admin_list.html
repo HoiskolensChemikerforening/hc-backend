@@ -131,7 +131,7 @@
               <th>Overnatting</th>
             {% endif %}
             <th>Epost</th>
-          {% if is_bedpres %}
+          {% if is_bedpres or social_has_checkin %}
             <th>Oppmøtestatus</th>
           {% endif %}
         </tr>
@@ -166,9 +166,9 @@
               {% endif %}</td>
             {% endif %}
 
-            {% if event.registration.companion %}
+            {% if event.companion%}
               <td>{% if attendee.companion %}
-                {{ attendee.companion }}
+                <p>{{ attendee.companion }}<p/>
               {% endif %}</td>
             {% endif %}
 
@@ -180,7 +180,7 @@
 
             <td>{{ attendee.user.email }} </td>
 
-            {% if is_bedpres %}
+            {% if is_bedpres or social_has_checkin %}
             <td><center>
             {% if attendee.arrival_status == 2 %} <!-- This means present -->
               <a class="arrival btn-floating btn-tiny waves-effect waves-light green"
@@ -237,21 +237,22 @@
             var myID = $(this).attr("id").split('-')[1];
             var csrftoken = getCookie('csrftoken');
 
-            var changePayment = true
+            var changePayment = true;
             if (paymentList[myID][1]){
               changePayment = confirm("Endre betalingsstatus for " +  paymentList[myID][0] + " fra betalt til ikke betalt?")
             }
             if (changePayment){
-              paymentList[myID][1] = !paymentList[myID][1]
+              paymentList[myID][1] = !paymentList[myID][1];
               $.ajax({
                 type: "POST",
-                url: "/events/social/adminlist/paymentstatus/" + myID,
+                url: '{% url 'events:payment_status_social' %}',
                 datatype: "json",
+                data: {"registration_id": myID},
 
                 success: function (json) {
-                    totalPaid += (paymentList[myID][1]) ? 1 : -1
-                    totalNotPaid += (paymentList[myID][1]) ? -1: 1
-                    icon_changer("#payment-" + myID, json.payment_status)
+                    totalPaid += (paymentList[myID][1]) ? 1 : -1;
+                    totalNotPaid += (paymentList[myID][1]) ? -1: 1;
+                    icon_changer("#payment-" + myID, json.payment_status);
                     document.getElementById("paidcounter").innerHTML = totalPaid.toString() + " har betalt • " + totalNotPaid.toString() + " har ikke betalt"
                 },
 
@@ -260,18 +261,25 @@
                 },
             });
             }
-        })
+        });
 
 
           $('.arrival').on('click', function (event) {
               event.preventDefault();
               var myID = $(this).attr("id").split('-')[1];
               var csrftoken = getCookie('csrftoken');
+              var bedpres = '{{is_bedpres}}';
+              var social_has_checkin = '{{social_has_checkin}}';
+              if (bedpres){
+                var url = '{% url 'events:arrival_status_bedpres' %}';
+              } if (social_has_checkin) {
+                var url = '{% url 'events:arrival_status_social' %}';
+              }
               $.ajax({
-                  type: "GET",
-                  url: "/events/bedpres/adminlist/arrivalstatus/" + myID,
+                  type: "POST",
+                  url: url,
                   datatype: "json",
-
+                  data: {"registration_id": myID},
                   success: function (json) {
                       icon_changer("#arrival-" + myID, json.arrival_status)
                   },

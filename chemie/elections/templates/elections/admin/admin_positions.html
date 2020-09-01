@@ -5,8 +5,8 @@
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
     <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
-    <button class="btn btn-secondary" style="margin-left:auto; margin-top:-0.8rem" id="checkInDirect">Check
-      in brukere
+    <button class="btn btn-secondary" style="margin-left:auto; margin-top:-0.8rem" id="checkInDirect">Sjekk
+      inn brukere
     </button>
     <button class="btn btn-danger" style="margin-left: 1rem; margin-top:-0.8rem" id="closeElectionButton">Steng valget
     </button>
@@ -15,17 +15,23 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
+
+<div class="d-flex flex-row" style="margin:1rem">
+  <div class="p-2" style="width:20%; border-style:solid; border-radius: 1rem; border-color:#343a40">
+  <h5 style="margin:0.7rem">Antall innsjekket: {{ checkin_count }}</h5>
+  </div>
+</div>
+
 <div class="div-container">
   <div class="justify-content-center d-flex">
     <div>
-      <h3>Legg til Verv</h3>
+      <h3>Legg til verv</h3>
       <form method="POST" href="">{% csrf_token %}
         {{ form.as_p }}
         <button type="submit" class="btn btn-secondary">Legg til verv</button>
       </form>
     </div>
   </div>
-
 
   <div class="d-flex flex-row" style="margin:1rem">
     <div class="p-2" style="width:50%; border-style:solid; border-radius: 1rem 0rem 0rem 1rem; border-color:#343a40">
@@ -37,13 +43,13 @@
           <div class="p-2">
             <div class="d-flex">
               <div class="p-2">
-                <h5>{{ position.position_name }}: <b>{{ position.spots }}</b>
+                <h3>{{ position.position_name }}: <b>{{ position.spots }}</b>
                   {% if position.spots == 1 %}
-                  plass
-                  {%else%}
-                  plasser
-                  {%endif%}
-                  </h3>
+                    plass
+                  {% else %}
+                    plasser
+                  {% endif %}
+                </h3>
               </div>
               <div class="ml-auto p-2">
                 <form onsubmit="return submitDelete(this)" method="POST"

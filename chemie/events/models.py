@@ -17,7 +17,9 @@ REGISTRATION_STATUS = Choices(
 )
 
 ARRIVAL_STATUS = Choices(
-    ("NONE", 1, "Ikke satt"), ("PRESENT", 2, "Møtt"), ("TRUANT", 3, "Ikke møtt")
+    ("NONE", 1, "Ikke satt"),
+    ("PRESENT", 2, "Møtt"),
+    ("TRUANT", 3, "Ikke møtt"),
 )
 
 
@@ -171,6 +173,7 @@ class Social(BaseEvent):
     companion = models.BooleanField(default=False, verbose_name="Følge")
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
+    check_in = models.BooleanField(default=False, verbose_name="Innsjekking")
 
     attendees = models.ManyToManyField(User, through="SocialEventRegistration")
 
@@ -190,9 +193,14 @@ class Social(BaseEvent):
         attendees_with_companion = attendees.filter(companion__gt="")
         return attendees_with_companion.count() + attendees.count()
 
+    def get_model_type(self):
+        return "social"
+
 
 class Bedpres(BaseEvent):
-    author = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        User, related_name="+", on_delete=models.CASCADE
+    )
     attendees = models.ManyToManyField(User, through="BedpresRegistration")
 
     def get_absolute_url(self):
@@ -203,6 +211,9 @@ class Bedpres(BaseEvent):
 
     def get_absolute_delete_url(self):
         return reverse("events:delete_bedpres", kwargs={"pk": self.pk})
+
+    def get_model_type(self):
+        return "bedpres"
 
 
 class RegistrationManager(models.Manager):
@@ -229,7 +240,7 @@ class BaseRegistration(models.Model):
     arrival_status = models.IntegerField(
         choices=ARRIVAL_STATUS,
         default=ARRIVAL_STATUS.NONE,
-        verbose_name="Oppmøtestatus"
+        verbose_name="Oppmøtestatus",
     )
 
     objects = RegistrationManager()
@@ -279,7 +290,9 @@ class BedpresRegistration(BaseRegistration):
 class RegistrationMessage(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     message = models.TextField()
-    author = models.ForeignKey(User, related_name="+", on_delete=models.CASCADE)
+    author = models.ForeignKey(
+        User, related_name="+", on_delete=models.CASCADE
+    )
 
     # TODO: legge til author
     def __str__(self):
@@ -299,4 +312,3 @@ class BedpresEventMessage(RegistrationMessage):
     event = models.ForeignKey(
         Bedpres, related_name="custom_message", on_delete=models.CASCADE
     )
-

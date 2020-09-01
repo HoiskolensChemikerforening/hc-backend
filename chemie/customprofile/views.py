@@ -5,9 +5,7 @@ from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.forms import PasswordChangeForm
 from django.contrib.auth.models import User
-from django.contrib.auth.views import (
-    LoginView as OldLoginView,
-)
+from django.contrib.auth.views import LoginView as OldLoginView
 from django.core.exceptions import ObjectDoesNotExist
 from django.core.validators import ValidationError
 from django.db.models import Q
@@ -44,9 +42,9 @@ def register_user(request):
     )
     approved_terms_form = ApprovedTermsForm(request.POST or None)
     if (
-            user_core_form.is_valid()
-            and user_profile_form.is_valid()
-            and approved_terms_form.is_valid()
+        user_core_form.is_valid()
+        and user_profile_form.is_valid()
+        and approved_terms_form.is_valid()
     ):
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
@@ -74,7 +72,9 @@ def register_user(request):
 @login_required
 def edit_profile(request):
     user = request.user
-    new_password_form = PasswordChangeForm(user=user, data=request.POST or None)
+    new_password_form = PasswordChangeForm(
+        user=user, data=request.POST or None
+    )
     user_form = EditUserForm(request.POST or None, instance=request.user)
     try:
         current_profile = request.user.profile
@@ -99,7 +99,7 @@ def edit_profile(request):
                 profile_form.save()
 
         if not (
-                user_form.errors or profile_form.errors or new_password_form.errors
+            user_form.errors or profile_form.errors or new_password_form.errors
         ):
             messages.add_message(
                 request, messages.SUCCESS, "Dine endringer har blitt lagret!"
@@ -111,6 +111,7 @@ def edit_profile(request):
         "change_password_form": new_password_form,
     }
     return render(request, "customprofile/editprofile.html", context)
+
 
 @login_required
 def edit_push(request):
@@ -124,15 +125,17 @@ def edit_push(request):
                 sub.save()
 
             # sets the picked subscriptions to True
-            subscription_query = form.cleaned_data['subscriptions']
+            subscription_query = form.cleaned_data["subscriptions"]
             for sub in subscription_query:
                 if sub in user_subscriptions:
-                    user_sub = user_subscriptions.get(subscription_type=sub.subscription_type)
+                    user_sub = user_subscriptions.get(
+                        subscription_type=sub.subscription_type
+                    )
                     user_sub.active = True
                     user_sub.save()
-            return redirect(reverse('customprofile:edit-push'))
+            return redirect(reverse("customprofile:edit-push"))
     context = {
-        'form': form,
+        "form": form,
     }
     return render(request, "customprofile/editpush.html", context)
 
@@ -158,7 +161,11 @@ def forgot_password(request):
                 form.add_error(
                     None,
                     ValidationError(
-                        {"email": ["Vi finner ingen bruker med denne e-posten"]}
+                        {
+                            "email": [
+                                "Vi finner ingen bruker med denne e-posten"
+                            ]
+                        }
                     ),
                 )
 
@@ -185,7 +192,9 @@ def activate_password(request, code):
             return redirect(reverse("frontpage:home"))
 
     context = {"form": password_form}
-    return render(request, "customprofile/set_forgotten_password.html", context)
+    return render(
+        request, "customprofile/set_forgotten_password.html", context
+    )
 
 
 @permission_required("customprofile.change_membership")
@@ -270,41 +279,61 @@ class LoginView(OldLoginView):
                     return super().form_valid(loginform)
                 else:
                     context = super().get_context_data()
-                    context['termsform'] = termsform
-                    context['show_popup'] = True
-                    return render(request, 'registration/login.html', context)
+                    context["termsform"] = termsform
+                    context["show_popup"] = True
+                    return render(request, "registration/login.html", context)
 
 
-@permission_required('customprofile.can_edit_access_card')
+@permission_required("customprofile.can_edit_access_card")
 @login_required
 def add_rfid(request):
-    redirect_URL = request.GET.get('redirect')
-    rfid = request.GET.get('cardnr')
+    redirect_URL = request.GET.get("redirect")
+    rfid = request.GET.get("cardnr")
     form = AddCardForm(request.POST or None, initial={"access_card": rfid})
-    context = {'form': form}
-    if request.method == 'POST':
+    context = {"form": form}
+    if request.method == "POST":
         if form.is_valid():
-            user = form.cleaned_data.get('user')
+            user = form.cleaned_data.get("user")
             try:
                 profile = Profile.objects.get(user=user)
                 card_nr = ProfileManager.rfid_to_em(rfid)
                 profile.access_card = card_nr
                 profile.save()
-                messages.add_message(request, messages.SUCCESS, 'Studentkortnr ble endret', extra_tags='Hurra')
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Studentkortnr ble endret",
+                    extra_tags="Hurra",
+                )
                 if redirect_URL:
                     return redirect(redirect_URL)
                 form = AddCardForm()
             except ObjectDoesNotExist:
                 # Hvis en bruker ikke finnes vil koden gå hit
-                messages.add_message(request, messages.WARNING,
-                                     'Finner ingen bruker ved brukernavn {}'.format(user.username),
-                                     extra_tags='Advarsel')
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Finner ingen bruker ved brukernavn {}".format(
+                        user.username
+                    ),
+                    extra_tags="Advarsel",
+                )
             except IntegrityError:
-                messages.add_message(request, messages.WARNING,
-                                     'Studentkortnummeret {} er allerede registrert på en annen bruker'.format(card_nr),
-                                     extra_tags='Advarsel')
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Studentkortnummeret {} er allerede registrert på en annen bruker".format(
+                        card_nr
+                    ),
+                    extra_tags="Advarsel",
+                )
             except Exception as e:
-                messages.add_message(request, messages.WARNING,
-                                     'Det skjedde noe galt. {}'.format(e))
-        return render(request, 'customprofile/add_card.html', context={'form': form})
-    return render(request, 'customprofile/add_card.html', context)
+                messages.add_message(
+                    request,
+                    messages.WARNING,
+                    "Det skjedde noe galt. {}".format(e),
+                )
+        return render(
+            request, "customprofile/add_card.html", context={"form": form}
+        )
+    return render(request, "customprofile/add_card.html", context)

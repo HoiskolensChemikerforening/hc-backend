@@ -3,6 +3,7 @@ from django.core.exceptions import ObjectDoesNotExist
 import factory
 from chemie.customprofile.models import Profile
 
+
 @pytest.mark.django_db
 def test_initial_election(create_election_with_positions):
     election, positions = create_election_with_positions
@@ -146,4 +147,3 @@ def test_voting_outcome(
     election.end_current_position_voting()
     assert not election.current_position.is_active
     assert election.current_position.is_done
-

@@ -112,7 +112,9 @@ def test_my_active_events(client, create_user):
     assert SocialEventRegistration.objects.filter(
         event=social, user=user
     ).exists()
-    assert BedpresRegistration.objects.filter(event=bedpres, user=user).exists()
+    assert BedpresRegistration.objects.filter(
+        event=bedpres, user=user
+    ).exists()
 
 
 # TODO: Create this test. Should check that all details related to the event is correct and that the HTML displays correctly

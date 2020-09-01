@@ -24,11 +24,9 @@ SHELL_PLUS = "ipython"
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
-
-ADMINS = [
-    ("Webkom", "webkom@hc.ntnu.no"),
-    ("Carl Johan Hambro", "carljohan.hambro@gmail.com"),
-]
+# ADMINS is a list of recipients which errors are sent to, see link below
+# https://docs.djangoproject.com/en/3.0/howto/error-reporting/
+ADMINS = [("Webkom", "webkom@hc.ntnu.no")]
 CONTACTS = [("Styret", "styret@hc.ntnu.no")]
 
 
@@ -55,7 +53,6 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.flatpages",
     "django.contrib.humanize",
-    "multiselectfield"
 ]
 THIRD_PARTY_APPS = [
     "dal",
@@ -76,9 +73,8 @@ THIRD_PARTY_APPS = [
     "smart_selects",
     "ckeditor",
     "django_extensions",
-    'push_notifications',
+    "push_notifications",
     "crispy_forms",
-    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -93,10 +89,9 @@ LOCAL_APPS = [
     "chemie.customprofile",
     "chemie.picturecarousel",
     "chemie.elections",
-    "chemie.corporate",
     "chemie.web_push",
     "chemie.shop",
-    "chemie.quiz"
+    "chemie.quiz",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -107,8 +102,6 @@ CRISPY_TEMPLATE_PACK = "bootstrap4"
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------
 MIDDLEWARE = [
-    'corsheaders.middleware.CorsMiddleware',
-    'django.middleware.common.CommonMiddleware',
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -156,7 +149,9 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator"
     },
     {"NAME": "django.contrib.auth.password_validation.MinimumLengthValidator"},
-    {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
+    {
+        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"
+    },
     {
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"
     },
@@ -256,9 +251,9 @@ REST_FRAMEWORK = {
 # ------------------------------------------------------------------------------
 
 PUSH_NOTIFICATIONS_SETTINGS = {
-        "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or '',
-        "FCM_API_KEY": os.environ.get('FIREBASE_SERVER_KEY') or '',
-        "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or ''
+    "AUTH_TOKEN": os.environ.get("WEB_PUSH_AUTH_KEY") or "",
+    "FCM_API_KEY": os.environ.get("FIREBASE_SERVER_KEY") or "",
+    "APNS_CERTIFICATE": "/path/to/your/certificate.pem" or "",
 }
 
 # HAYSTACK CONFIGURATION
@@ -384,7 +379,10 @@ CKEDITOR_CONFIGS = {
                     "Redo",
                 ],
             },
-            {"name": "editing", "items": ["Find", "Replace", "-", "SelectAll"]},
+            {
+                "name": "editing",
+                "items": ["Find", "Replace", "-", "SelectAll"],
+            },
             "/",
             {
                 "name": "basicstyles",
@@ -446,23 +444,6 @@ CKEDITOR_CONFIGS = {
     },
 }
 
-CORS_ALLOW_HEADERS = (
-    'accept',
-    'accept-encoding',
-    'authorization',
-    'content-type',
-    'dnt',
-    'origin',
-    'user-agent',
-    'x-csrftoken',
-    'x-requested-with',
-)
-
-CORS_ORIGIN_WHITELIST = [
-    'https://localhost:3000',
-    'localhost:3000'
-]
-
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
 
 
@@ -481,4 +462,3 @@ CART_SESSION_ID = "cart"
 
 # Value used for Django's built-in messages framework
 MESSAGE_TAGS = {message_constants.ERROR: "danger"}
-

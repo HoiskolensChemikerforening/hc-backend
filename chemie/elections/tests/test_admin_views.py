@@ -40,8 +40,9 @@ def test_admin_user_admin_page_no_open_election(client, create_admin_user):
     # Check that admin user can access start election
     request = client.get(reverse("elections:admin_start_election"))
     assert request.status_code == 200
-    assert "Trykk på Start for å sette igang et valg" in request.content.decode(
-        "utf-8"
+    assert (
+        "Trykk på Start for å sette igang et valg"
+        in request.content.decode("utf-8")
     )
 
     # Check that admin user is redirected to start election
@@ -94,7 +95,9 @@ def test_admin_open_election(client, create_admin_user):
 
     request = client.get(reverse("elections:admin_end_election"))
     assert request.status_code == 302
-    assert request.url == reverse("elections:previous_election", kwargs={"pk": election.pk})
+    assert request.url == reverse(
+        "elections:previous_election", kwargs={"pk": election.pk}
+    )
 
 
 @pytest.mark.django_db
@@ -170,7 +173,9 @@ def test_add_candidates(
 
 @pytest.mark.django_db
 def test_add_pre_votes_to_candidate(
-    client, create_admin_user, create_open_election_with_position_and_candidates
+    client,
+    create_admin_user,
+    create_open_election_with_position_and_candidates,
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
@@ -214,13 +219,16 @@ def test_add_pre_votes_to_candidate(
 
     # Testing that the votes of other candidates has not changed.
     assert (
-        position.candidates.filter(pre_votes=0).count() == number_of_candidates - 1
+        position.candidates.filter(pre_votes=0).count()
+        == number_of_candidates - 1
     )
 
 
 @pytest.mark.django_db
 def test_delete_candidate_from_position(
-    client, create_admin_user, create_open_election_with_position_and_candidates
+    client,
+    create_admin_user,
+    create_open_election_with_position_and_candidates,
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
@@ -244,7 +252,9 @@ def test_delete_candidate_from_position(
 
 @pytest.mark.django_db
 def test_start_voting_for_current_position(
-    create_admin_user, client, create_open_election_with_position_and_candidates
+    create_admin_user,
+    client,
+    create_open_election_with_position_and_candidates,
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
@@ -265,7 +275,9 @@ def test_start_voting_for_current_position(
 
 @pytest.mark.django_db
 def test_start_voting_for_current_position_with_pre_votes(
-    create_admin_user, client, create_open_election_with_position_and_candidates
+    create_admin_user,
+    client,
+    create_open_election_with_position_and_candidates,
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
@@ -277,9 +289,7 @@ def test_start_voting_for_current_position_with_pre_votes(
         candidate.pre_votes = 1
         candidate.save()
     client.post(
-        reverse(
-            "elections:admin_start_voting", kwargs={"pk": position.id}
-        ),
+        reverse("elections:admin_start_voting", kwargs={"pk": position.id}),
     )
     position.refresh_from_db()
     assert position.get_total_votes() == number_of_candidates
@@ -289,7 +299,9 @@ def test_start_voting_for_current_position_with_pre_votes(
 
 @pytest.mark.django_db
 def test_admin_urls_when_voting_is_active(
-    create_admin_user, client, create_open_election_with_position_and_candidates
+    create_admin_user,
+    client,
+    create_open_election_with_position_and_candidates,
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
@@ -300,7 +312,9 @@ def test_admin_urls_when_voting_is_active(
 
     # Check that user is redirected to register position
     # if position is open for voting
-    request = client.get(reverse("elections:admin_start_election"), follow=True)
+    request = client.get(
+        reverse("elections:admin_start_election"), follow=True
+    )
     assert (
         reverse("elections:admin_register_positions"),
         302,
@@ -314,7 +328,9 @@ def test_admin_urls_when_voting_is_active(
         follow=True,
     )
     assert (
-        reverse("elections:admin_register_candidates", kwargs={"pk": position.id}),
+        reverse(
+            "elections:admin_register_candidates", kwargs={"pk": position.id}
+        ),
         302,
     ) == request.redirect_chain[0]
     for pos in election.positions.all():
@@ -358,7 +374,7 @@ def test_admin_urls_when_voting_is_active(
     # and voting is already open, he is redirected
     request = client.get(
         reverse("elections:admin_start_voting", kwargs={"pk": position.id}),
-        follow=True
+        follow=True,
     )
     assert request.redirect_chain[0] == (
         reverse("elections:admin_voting_active", kwargs={"pk": position.id}),
@@ -381,19 +397,23 @@ def test_admin_urls_when_voting_is_active(
 
     request = client.get(reverse("elections:admin_end_election"))
     assert request.status_code == 302
-    assert request.url == reverse("elections:previous_election", kwargs={"pk": election.pk})
+    assert request.url == reverse(
+        "elections:previous_election", kwargs={"pk": election.pk}
+    )
 
 
 @pytest.mark.django_db
 def test_admin_view_results(
-    create_admin_user, client, create_open_election_with_position_and_candidates
+    create_admin_user,
+    client,
+    create_open_election_with_position_and_candidates,
 ):
     admin = create_admin_user
     client.login(username=admin.username, password="defaultpassword")
     election = create_open_election_with_position_and_candidates
     position = election.positions.all().first()
     candidates = position.candidates.all()
-    winners = candidates[:position.spots]
+    winners = candidates[: position.spots]
     for candidate in winners:
         position.vote([candidate], admin)
         admin.profile.voted = False

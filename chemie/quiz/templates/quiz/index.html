@@ -1,84 +1,42 @@
-{% extends 'chemie/base.html' %}
-{% load thumbnail %}
+{% extends "chemie/base.html" %}
 
 {% block nav_header %}
   Quiz
 {% endblock nav_header %}
 
-{% block nav_sub_header %}
-  Oversikt
-{% endblock nav_sub_header %}
-
 {% block content %}
-
-  <div class="card-panel">
-    {% if active_term %}
-      <a href="{% url 'quiz:term_detail' active_term.pk %}">
-        <h4 class="heading">{{ active_term }}</h4>
-      </a>
-      {% if top_scores %}
-        <table class="striped responsive-table">
-          <thead>
-          <tr>
-            <th>Plass</th>
-            <th>Navn</th>
-            <th>Poengsum</th>
-          </tr>
-          </thead>
-
-          <tbody>
-          {% for score in top_scores %}
-            <tr>
-              <td>{{ forloop.counter }}</td>
-              <td>
-                {% thumbnail score.user.profile.image_primary "200x200" crop="center" as image %}
-                  <img src="{{ image.url }}" width="50px" height="50px" alt="" class="circle">
-                {% endthumbnail %}
-                {{ score.user.profile }}
-              </td>
-              <td>{{ score }}</td>
-            </tr>
-          {% endfor %}
-          </tbody>
-        </table>
-      {% else %}
-        Ingen resultater å vise
-      {% endif %}
-    {% else %}
-      Det er ingen aktive quizer :'(
-    {% endif %}
+  <div>
+    <h4>Kjellerquiz</h4>
+      <p class="flow-text">Her kan du se poengoversiktene fra tidligere kjellerquizer!</p>
+      <a href="{% url "quiz:kjellerquiz_index" %}" class="btn">Kjellerquiz ></a>
   </div>
 
-  {% if terms %}
-    <div class="card-panel">
-      {% for term in terms %}
-        <br>
-        <a href="{% url 'quiz:term_detail' term.pk %}">
-          <h5 class="heading">{{ term }}</h5>
-        </a>
-        <hr>
-        <br>
-      {% endfor %}
+  <br><hr><br>
+
+  <div>
+    <h4>Navnequiz</h4>
+    <p class="flow-text">Her kan du øve på navnene til klassekameratene dine her!</p>
+    <div class="row">
+      <div class="col">
+        <a class="btn" href="{% url "quiz:name_quiz" 1 %}">
+          <i class="material-icons right">chevron_right</i>1. klasse</a>
+      </div>
+      <div class="col">
+        <a class="btn" href="{% url "quiz:name_quiz" 2 %}">
+          <i class="material-icons right">chevron_right</i>2. klasse</a>
+      </div>
+      <div class="col">
+        <a class="btn" href="{% url "quiz:name_quiz" 3 %}">
+          <i class="material-icons right">chevron_right</i>3. klasse</a>
+      </div>
+      <div class="col">
+        <a class="btn" href="{% url "quiz:name_quiz" 4 %}">
+          <i class="material-icons right">chevron_right</i>4. klasse</a>
+      </div>
+      <div class="col">
+        <a class="btn" href="{% url "quiz:name_quiz" 5 %}">
+          <i class="material-icons right">chevron_right</i>5. klasse</a>
+      </div>
     </div>
-  {% endif %}
-
-
-  {% if perms.quiz.add_quizterm %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a href="" class="btn-floating btn-large">
-        <i class="large material-icons">edit</i>
-      </a>
-      <ul>
-        {% if perms.quiz.add_quizterm %}
-          <li>
-            <a class="btn-floating blue" href="{% url 'quiz:create_term' %}">
-              <i class="material-icons">add</i>
-              <a class="btn-floating mobile-fab-tip" href="{% url 'quiz:create_term' %}">Opprett ny quiz</a>
-            </a>
-          </li>
-        {% endif %}
-      </ul>
-    </div>
-  {% endif %}
-
-{% endblock %}
+  </div>
+{% endblock content %}

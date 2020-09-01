@@ -19,26 +19,21 @@
   </style>
   <div class="row center">
     <ul class="pagination nav navbar-nav">
-      {% if submissions.has_previous %}
-        <li><a href="{{ submissions.previous_page_number }}">Forrige</a></li>
+      {% if submission_page.has_previous %}
+        <li><a href="?page={{ submission_page.previous_page_number }}">Forrige</a></li>
       {% else %}
         <li class="disabled"><a class="grey-text text-lighten-1">Forrige</a></li>
       {% endif %}
-      {% if page %}
-        <li><a class="grey-text text-darken-1" href="{{ submissions.paginator.first_page }}">Første</a></li>
-      {% endif %}
+
+      <li><a class="grey-text text-darken-1" href="?page={{ submission_page.paginator.first_page }}">Første</a></li>
 
       {% for page in limit_useful_page_range %}
-          {% if page %}
-            <li class="{% if submissions.number == page %}active{% endif %}"><a href="{{ page }}">{{ page }}</a></li>
-          {% endif %}
+        <li class="{% if submission_page.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
       {% endfor %}
 
-        {% if page %}
-        <li><a class="grey-text text-darken-1" href="{{ submissions.paginator.last_page }}">Siste</a></li>
-      {% endif %}
-      {% if submissions.has_next %}
-        <li><a href="{{ submissions.next_page_number }}">Neste</a></li>
+      <li><a class="grey-text text-darken-1" href="?page={{ submission_page.paginator.last_page }}">Siste</a></li>
+      {% if submission_page.has_next %}
+        <li><a href="?page={{ submission_page.next_page_number }}">Neste</a></li>
       {% else %}
         <li class="disabled"><a class="grey-text text-lighten-1">Neste</a></li>
       {% endif %}
@@ -50,23 +45,34 @@
         <table class="responsive-table bordered">
           <thead>
           <tr>
-            <th data-field="who">Innsender</th>
-            <th data-field="date">Dato</th>
-            <th data-field="gold">Gullkorn</th>
-            <th data-field="image">Bilde</th>
+            <th>Innsender</th>
+            <th>Dato</th>
+            <th>Gullkorn</th>
+            <th>Bilde</th>
+            <th>Brukt</th>
           </tr>
           </thead>
           <tbody>
-          {% for submission in submissions %}
+          {% for submission in submission_page %}
             <tr>
               <td><p>{{ submission.author.profile }}</p></td>
               <td><p>{{ submission.date|date:"j. F" }}</p></td>
-              <td><p>{{ submission.content }}</p>
-              <td>
+              <td><p>{{ submission.content }}</p></td>
               <td>
                 {% if submission.image %}
                   <img class="responsive-img materialboxed" src="{{ submission.image.url }}">
                 {% endif %}
+              </td>
+              <td>
+                <p>
+                  <label>
+                    <input type="checkbox" class="usedStatus" id="{{ submission.id }}"
+                           {% if submission.used %}
+                            checked="checked"
+                           {% endif %}/>
+                    <span></span>
+                  </label>
+                </p>
               </td>
             </tr>
           {% endfor %}
@@ -76,3 +82,28 @@
     </div>
   </div>
 {% endblock content %}
+
+{% block footer_script %}
+
+  <script>
+    $(document).ready(function(){
+      $(".usedStatus").on("click", function(event) {
+        let submissionID = $(this).attr("id");
+        $.ajax({
+          url: "{% url "shitbox:toggle-used" %}",
+          data: {"id": submissionID},
+          type: "POST"
+        })
+      })
+    });
+
+    $.ajaxSetup({
+      headers: { "X-CSRFToken": '{{csrf_token}}' }
+    });
+
+    $(document).ready(function () {
+        $('.materialboxed').materialbox();
+    });
+
+  </script>
+{% endblock footer_script %}

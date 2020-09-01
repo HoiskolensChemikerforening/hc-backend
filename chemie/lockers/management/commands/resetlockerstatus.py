@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from chemie.lockers.models import Ownership
+from chemie.lockers.models import Ownership, Locker
 from chemie.lockers.email import send_re_activation_mail
 
 
@@ -39,10 +39,11 @@ class Command(BaseCommand):
 
 
 def reset_locker_ownerships():
-    ownerships_to_reset = (
-        Ownership.objects.filter(locker__owner__isnull=False)
-        .filter(is_active=True)
-        .prefetch_related("user")
+    taken_lockers_owner_id = Locker.objects.filter(owner__isnull=False).values(
+        "owner__id"
+    )
+    ownerships_to_reset = Ownership.objects.filter(
+        id__in=taken_lockers_owner_id
     )
 
     for ownership in ownerships_to_reset:

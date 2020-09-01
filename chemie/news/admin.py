@@ -12,4 +12,3 @@ class ArticleAdmin(admin.ModelAdmin):
 
 # admin.site.register(Article)
 list_display = ("title", "published_date", "published")
-

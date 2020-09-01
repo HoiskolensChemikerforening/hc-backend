@@ -1,15 +1,18 @@
-version: '2'
+version: '3.7'
 services:
+  # Builds database container
   database:
     restart: always
+    container_name: hc_db
     image: postgres:latest
     env_file: .env
     volumes:
       - ./logs/db:/var/log/postgresql
       - dbdata:/var/lib/postgresql/data
-
+  # Builds python code container
   website:
     restart: always
+    container_name: hc_web #name to exec into
     build: .
     volumes:
       - ./chemie:/chemie
@@ -21,8 +24,9 @@ services:
     env_file: .env
     expose:
       - "8000"
-
+  # Builds nginx container
   proxy:
+    container_name: hc_nginx
     build: ./nginx
     ports:
       - "1339:80"
@@ -31,16 +35,17 @@ services:
       - media:/code/media
     links:
       - website:website
-
+  # Builds backup container
   backup:
     build: ./backupjob
+    container_name: hc_backup
     volumes:
       - media:/code/media:ro
     env_file: .env
     links:
       - database:database
 
-
+# Mounted volumes persist beyond life of containers
 volumes:
   dbdata:
   media:
