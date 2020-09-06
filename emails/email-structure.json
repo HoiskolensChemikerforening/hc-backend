@@ -60,5 +60,12 @@
 "description": "Siste påminnelse om boskap",
 "subject":"Skap #{{ ownership.locker }} klippes og tømmes snart!",
 "path":"lockers/lockers_final_warning"
+},
+
+{
+"name": "rental_contact",
+"description": "Kontakt-epost",
+"subject": "Kontaktskjema- {{ rentalobject }}",
+"path": "rentalservice/rental_contact"
 }
 ]
