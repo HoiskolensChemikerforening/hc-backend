@@ -36,7 +36,7 @@ def view_carousel(request):
 
 
 @permission_required("picturecarousel.change_contribution")
-def approve_pictures(request, page=1):
+def approve_pictures(request):
     awaiting_approval = (
         Contribution.objects.filter(approved=False)
         .prefetch_related("author")
@@ -44,9 +44,10 @@ def approve_pictures(request, page=1):
     )
 
     paginator = Paginator(awaiting_approval, 10)
+    page_number = request.GET.get("page", 1)
 
     try:
-        picture_page = paginator.page(page)
+        picture_page = paginator.page(page_number)
     except PageNotAnInteger:
         picture_page = paginator.page(1)
     except EmptyPage:
@@ -82,7 +83,7 @@ def approve_deny(request, picture_id, deny=False):
 
 
 @login_required
-def view_pictures(request, page=1):
+def view_pictures(request):
     pictures = (
         Contribution.objects.filter(approved=True)
         .prefetch_related("author")
@@ -90,9 +91,10 @@ def view_pictures(request, page=1):
     )
 
     paginator = Paginator(pictures, 10)
+    page_number = request.GET.get("page", 1)
 
     try:
-        picture_page = paginator.page(page)
+        picture_page = paginator.page(page_number)
     except PageNotAnInteger:
         picture_page = paginator.page(1)
     except EmptyPage:

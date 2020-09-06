@@ -652,10 +652,10 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         if self.object:
+            context["event"] = self.object
             context["attendees"] = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED, event=self.object
             ).select_related("user__profile__membership")
-            context["event"] = self.object
             paid = self.registration_model.objects.filter(
                 status=REGISTRATION_STATUS.CONFIRMED,
                 event=self.object,
@@ -666,7 +666,6 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
                 event=self.object,
                 payment_status=False,
             ).count()
-
             try:
                 context["percentage_paid"] = round(
                     (paid // (not_paid + paid)) * 100
@@ -698,8 +697,9 @@ class BedpresEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
 
 @login_required
 @permission_required("events.change_socialeventregistration")
-def change_payment_status(request, registration_id):
+def change_payment_status(request):
     if request.method == "POST":
+        registration_id = request.POST["registration_id"]
         registration = SocialEventRegistration.objects.get(pk=registration_id)
         registration.payment_status = not registration.payment_status
         registration.save()
@@ -709,35 +709,31 @@ def change_payment_status(request, registration_id):
 
 
 @login_required
-@permission_required("events.change_bedpresregistration")
-def change_arrival_status(request, registration_id):
-    registration = BedpresRegistration.objects.get(pk=registration_id)
-    status = registration.arrival_status
-    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
-        registration.arrival_status = ARRIVAL_STATUS.PRESENT
-        registration.save()
-        return JsonResponse({"arrival_status": 1})
+@permission_required(
+    "events.change_bedpresregistration"
+    or "events.change_socialeventregistration"
+)
+def change_arrival_status(request):
+    if request.method == "POST":
+        registration_id = request.POST["registration_id"]
+        if "bedpres" in request.path:
+            registration = BedpresRegistration.objects.get(pk=registration_id)
+        else:
+            registration = SocialEventRegistration.objects.get(
+                pk=registration_id
+            )
+        status = registration.arrival_status
+        if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
+            registration.arrival_status = ARRIVAL_STATUS.PRESENT
+            registration.save()
+            return JsonResponse({"arrival_status": 1})
+        else:
+            # status is neither 'not set' nor 'not met' => status is 'met'
+            registration.arrival_status = ARRIVAL_STATUS.TRUANT
+            registration.save()
+            return JsonResponse({"arrival_status": 0})
     else:
-        # status is neither 'not set' nor 'not met' => status is 'met'
-        registration.arrival_status = ARRIVAL_STATUS.TRUANT
-        registration.save()
-        return JsonResponse({"arrival_status": 0})
-
-
-@login_required
-@permission_required("events.change_socialeventregistration")
-def change_arrival_status_social(request, registrations_id):
-    registration = SocialEventRegistration.objects.get(pk=registrations_id)
-    status = registration.arrival_status
-    if status == ARRIVAL_STATUS.NONE or status == ARRIVAL_STATUS.TRUANT:
-        registration.arrival_status == ARRIVAL_STATUS.PRESENT
-        registration.save()
-        return JsonResponse({"arrival_status": 1})
-    else:
-        # status is neither 'not set' nor 'not met' => status is 'met'
-        registration.arrival_status = ARRIVAL_STATUS.TRUANT
-        registration.save()
-        return JsonResponse({"arrival_status": 0})
+        return redirect(reverse("home:home"))
 
 
 @transaction.atomic
