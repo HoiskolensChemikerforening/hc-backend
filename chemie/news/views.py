@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import permission_required
 from .models import Article
 from .forms import ArticleForm
 from chemie.web_push.models import Subscription
+from .serializers import ArticleSerializer
+
+from rest_framework import generics
 
 
 @permission_required("news.add_article")
@@ -71,3 +74,15 @@ def edit_article(request, article_id, slug):
     context = {"post": post}
 
     return render(request, "news/create_post.html", context)
+
+
+class ListAllArticles(generics.ListCreateAPIView):
+    queryset = Article.objects.filter(published=True).order_by(
+        "-published_date"
+    )[:5]
+    serializer_class = ArticleSerializer
+
+
+class NewsDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Article.objects.all()
+    serializer_class = ArticleSerializer
