@@ -216,9 +216,9 @@ NOCAPTCHA = True
 # ------------------------------------------------------------------------------
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = "post_office.EmailBackend"
-EMAIL_HOST = "smtp.ansatt.ntnu.no" or ""
+EMAIL_HOST = os.environ.get("EMAIL_HOST") or ""
 EMAIL_PORT = os.environ.get("EMAIL_PORT") or 587
-EMAIL_HOST_USER = "webkom@hc.ntnu.no" or ""
+EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER") or ""
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") or None
 DEFAULT_FROM_EMAIL = "<webkom@hc.ntnu.no> Webkom"
 SERVER_EMAIL = "webkom@hc.ntnu.no"
