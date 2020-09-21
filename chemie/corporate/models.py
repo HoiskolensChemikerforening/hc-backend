@@ -17,25 +17,23 @@ class Specialization(models.Model):
         return self.get_name_display()
 
 
-class Company(models.Model):
-    name = models.CharField(max_length=200, verbose_name="Navn")
-    description = models.TextField(verbose_name="Beskrivelse")
-    logo = ImageField(upload_to="corporate", verbose_name="Logo")
-    specializations = models.ManyToManyField(Specialization,
-                                             verbose_name="Aktuelle retninger",
-                                             blank=True)
-
-    def __str__(self):
-        return self.name
-
-
 class Interview(models.Model):
-    company = models.ForeignKey(Company, on_delete=models.CASCADE,
-                                verbose_name="Bedrift",
-                                blank=True)
     interview_object = models.CharField(max_length=40, verbose_name="Navn på intervjuobjektet")
     text = RichTextField(verbose_name="Intervjuet", config_name="forms")
     picture = ImageField(upload_to="corporate", verbose_name="Bilde")
     specializations = models.ManyToManyField(Specialization,
                                              verbose_name="Aktuelle retninger",
                                              blank=True)
+
+    def __str__(self):
+        return self.interview_object
+
+
+class JobAdvertisement(models.Model):
+    title = models.CharField(max_length=100, verbose_name="Stilling")
+    description = RichTextField(verbose_name="Beskrivelse", config_name="forms")
+    is_current = models.BooleanField(verbose_name="Er gjeldende", default=True)
+    published_date = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.title

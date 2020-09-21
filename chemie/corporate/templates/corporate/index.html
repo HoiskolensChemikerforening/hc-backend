@@ -2,81 +2,156 @@
 
 {% block content %}
 
-  <div class="container">
-    <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
-      <div class="col-sm-12 col-md-2">
+  <div class="row align-items-center">
+    <div class="col-1"></div>
+    <div class="col-5">
+      <div class="container" style="margin: 40px;">
+        <h2>Høiskolens Chemikerforenings bedriftskontakt</h2><br>
+        {{ indkom.description | safe }}
+        <br><br>
       </div>
-      <div class="col-sm-12 col-md-7">
-        <div class="container">
-          <br><br>
-          <h1>Bedrift</h1>
-          <p>
-            Gjennom Industrikomitéen har studenter og næringsliv en ypperlig mulighet til å holde kontakt.
+    </div>
+    <div class="col-5">
+      <div class="card shadow" style="margin: 40px;">
+        <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
+        <div class="card-body">
+          <a href="{{ indkom.get_absolute_url }}" style="color: black;">
+            <h4 class="card-title">Industrikomiteen</h4>
+          </a>
+          <p class="card-text">
+            Kontakt: <a href="mailto:styret@hc.ntnu.no black" style="color: black;">indkom@hc.ntnu.no</a>
           </p>
+        </div>
+      </div>
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-5">
+      <div class="card shadow" style="margin: 40px;">
+        <div class="card-body">
+          <h2 class="card-title">Bedriftspresentasjoner</h2>
           <p>
             Vi avholder bedriftspresentasjoner flere ganger hvert semester. En bedrift inviteres da til å komme og
             fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og
-            andre
-            emner som kan interessere studentene.
+            andre emner som kan interessere studentene.
           </p>
-          <a class="btn btn-primary" href="{% url "corporate:company_list" %}">Bedrifter</a>
-          <a class="btn btn-secondary" href="{% url "corporate:interview_list" %}">Intervjuer</a>
-          <br><br><br><br><br>
-        </div>
-      </div>
-      <div class="col-sm-12 col-md-3">
-        <div class="card">
-          <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
-          <div class="card-body">
-            <a href="{{ indkom.get_absolute_url }}"><h4 class="card-title">Industrikomiteen</h4></a>
-            <p class="card-text">
-              {{ indkom.one_liner }}
-            </p>
-          </div>
+          {% for bp in bedpres %}
+            <hr>
+            <div class="row">
+              <div class="col">
+                <a href="{{ bp.get_absolute_url }}" style="color:black">
+                  <h5>{{ bp.title }}</h5>
+                </a>
+              </div>
+              <div class="col">
+                <a type="button" class="btn btn-dark" style="float:right; color: white;"
+                   href="{% url "events:detail_bedpres" bp.id %}">Vis mer</a>
+              </div>
+            </div>
+            <p>{{ bp.date }}</p>
+          {% empty %}
+            <p>For øyeblikket er det ingen planlagte bedriftspresentasjoner</p>
+          {% endfor %}
         </div>
       </div>
     </div>
-    <div class="row" style="margin-bottom: 4rem;">
-      <div class="col-sm-12 col-md-2"></div>
-      <div class="col-sm-12 col-md-7">
-        <div class="card">
-          <div class="card-body">
-            <h2 class="card-title">Bedriftspresentasjoner</h2>
-            {% for bp in bedpres %}
-              <a href="{{ bp.get_absolute_url }}">
-                <h4>{{ bp.title }}</h4>
-              </a>
-              <p>{{ bp.date }}</p>
-            {% empty %}
-              <p>Det er ingen aktive bedpreser.</p>
-            {% endfor %}
-          </div>
+    <div class="col-5">
+      <div class="card shadow" style="margin: 40px;">
+        <div class="card-body">
+          <h2 class="card-title">Jobbutlysninger</h2>
+          <p>
+            Her vil det fortløpende legges ut informasjon om sommerjobber og relevante faste arbeidsstillinger.
+          </p>
+
+          {% for job in job_advertisements %}
+            <hr>
+            <a class="collapser" data-toggle="collapse" href="#jobCollapse{{ job.id }}" style="color:black">
+              <h5>{{ job.title }}</h5></a>
+            <div class="collapse multi-collapse" id="jobCollapse{{ job.id }}">
+              {{ job.description | safe }}
+            </div>
+          {% empty %}
+            <p>For øyeblikket er det ingen publiserte jobbutlysninger</p>
+          {% endfor %}
         </div>
       </div>
-      <div class="col-sm-12 col-md-3"></div>
+      <br>
     </div>
+    <div class="col-1"></div>
   </div>
 
   <div class="jumbotron jumbotron-fluid bg-dark">
     <div class="container">
-      <h1 class="display-4 text-light">Hovedsponsor</h1>
-      <p class="lead text-light">Dette er et eksempel på hvordan et banner for hovedsponsor kan se ut.</p>
+      <h1 class="display-4 text-light">Kaffespons</h1>
+      <p class="lead text-light">Høstsemesteret 2020 har det blitt sponset gratis kaffe til alle MTKJ-studenter</p>
     </div>
   </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-sm-12 col-md-2"></div>
-      <div class="col-sm-12 col-md-7">
-        <br>
-        <h2>Statistikk</h2>
-        <p>
-          Hvert år gjennomfører Industrikomiteen diplomundersøkelsen, der de samler inn data om tidligere studenter ved
-          industriell kjemi og bioteknologi. Dataen er presentert nedenfor.
-        </p>
+  <div class="row">
+    <div class="col-1"></div>
+    <div class="col-5">
+
+      <div class="card shadow" style="margin: 40px;">
+        <div class="card-body">
+          <h2 class="card-title">Intervjuer</h2>
+          <p>
+            Her kan du lese intervjuer med nåværende og tidligere kjemikere med relevant arbeidserfaring.
+          </p>
+
+          {% for interview in interviews %}
+            <hr>
+            <div class="row">
+              <div class="col">
+                <h5>{{ interview.interview_object }}</h5>
+              </div>
+              <div class="col">
+                <a type="button" class="btn btn-dark" style="float:right; color:white;"
+                   onclick="displayCorrectInterview({{ interview.id }})">Se mer
+                </a>
+              </div>
+            </div>
+          {% empty %}
+            <p>For øyeblikket er det ingen publiserte intervjuer.</p>
+          {% endfor %}
+        </div>
       </div>
-      <div class="col-sm-12 col-md-3"></div>
-    </div>
-  </div>
 
-{% endblock %}
+    </div>
+    <div class="col-5">
+
+      {% for interview in interviews %}
+        <div class="card shadow w-75" style="margin: 40px; display: none" id="interviewCard{{ interview.id }}">
+          <img src="{{ interview.picture.url }}" class="card-img-top" alt="..." style="height: 25rem; object-fit:cover">
+
+          <div class="card-body">
+            <h4 class="card-title">{{ interview.interview_object }}</h4>
+            {{ interview.text | safe }}
+          </div>
+
+        </div>
+      {% endfor %}
+
+    </div>
+    <div class="col-1"></div>
+  </div>
+  <br><br>
+
+{% endblock content %}
+
+{% block footer_script %}
+  <script>
+
+    function displayCorrectInterview(targetId) {
+
+      {% for interview in interviews %}
+        document.getElementById("interviewCard{{ interview.id }}").style.display = "none";
+      {% endfor %}
+
+      let targetCard = document.getElementById("interviewCard" + targetId.toString());
+      targetCard.style.display = "block";
+    }
+
+  </script>
+{% endblock footer_script %}

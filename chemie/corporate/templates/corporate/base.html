@@ -7,9 +7,10 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8">
-  <title>Bedrifter</title>
+  <title>HC- Bedrift</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -54,37 +55,98 @@
 {% endblock breadcrumbs %}
 
 <body>
-<main>
-  <div class="section no-pad-bot" id="index-banner">
-    <div class="container">
 
-      <!-- Messaging framework card -->
-      {% if messages %}
-        <div class="row">
-          {% for message in messages %}
-            <div class="col s12 m6 l6">
-              <div class="card {{ message.level_tag }}-message darken-1 message-card">
-                <div class="card-content">
-                  <span class="card-title black-text valign-wrapper" style="clear: both;">
+<div class="section no-pad-bot" id="index-banner">
+  <div class="container">
 
-                      <h5><i class="material-icons black-text"
-                             style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
-                  </span>
-                  <p class="flow-text black-text">{{ message }}</p>
-                </div>
+    <!-- Messaging framework card -->
+    {% if messages %}
+      <div class="row">
+        {% for message in messages %}
+          <div class="col s12 m6 l6">
+            <div class="card {{ message.level_tag }}-message darken-1 message-card">
+              <div class="card-content">
+                <span class="card-title black-text valign-wrapper" style="clear: both;">
+
+                    <h5><i class="material-icons black-text"
+                           style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
+                </span>
+                <p class="flow-text black-text">{{ message }}</p>
               </div>
             </div>
-          {% endfor %}
-        </div>
-      {% endif %}
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
 
-      {% block content %}
-      {% endblock content %}
-      <br><br>
-      <br><br>
-    </div>
+    <br><br>
+    <br><br>
   </div>
-</main>
+</div>
+
+{% block content %}
+{% endblock content %}
+
+<footer class="page-footer font-small bg-dark pt-4">
+  <div class="container">
+    <br>
+    <div class="row">
+
+
+      <!-- Logo -->
+      <div class="col">
+        <img src="{% static "images/logo.png" %}" width="auto" height="200" alt="">
+      </div>
+
+      <!-- About -->
+      <div class="col">
+        <h5 class="text-white">Om oss</h5>
+        <p class="text-white">
+          Linjeforeningen for Industriell Kjemi og Bioteknologi på NTNU i Trondheim.
+        </p>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+            <a href="https://github.com/HoiskolensChemikerforening/website" class="text-white">
+              <i class="fa fa-github" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank" class="text-white ">
+              <i class="fa fa-facebook" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="https://www.instagram.com/hcntnu/" target="_blank" class="text-white">
+              <i class="fa fa-instagram" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="mailto:styret@hc.ntnu.no" class="text-white">
+              <i class="fa fa-envelope" style="font-size:36px"></i>
+            </a>
+          </div>
+        </div>
+
+        <br>
+        <div class="row">
+          <div class="col">
+            <a class="text-white text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkomiteen</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Media/Social -->
+      <div class="col"></div>
+
+    </div>
+
+    <br><br>
+
+</footer>
 
 
 {% block footer_js_files %}
@@ -95,20 +157,20 @@
 
 
 <script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-            (i[r].q = i[r].q || []).push(arguments)
-        }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-            m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
 
-    ga('create', 'UA-52614731-1', 'auto');
-    ga('send', 'pageview');
+  ga('create', 'UA-52614731-1', 'auto');
+  ga('send', 'pageview');
 </script>
 
 </body>
