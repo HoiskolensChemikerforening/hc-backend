@@ -53,6 +53,7 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.flatpages",
     "django.contrib.humanize",
+
 ]
 THIRD_PARTY_APPS = [
     "dal",
