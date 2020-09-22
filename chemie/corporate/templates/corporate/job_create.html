@@ -12,21 +12,28 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
+
   <div class="container">
     <div class="row align-items-center" style="margin-top: 2rem;margin-bottom: 2rem">
-      <div class="col-sm-12 col-md-2">
-      </div>
-      <div class="col-sm-12 col-md-7 jumbotron">
-        <div class="container">
-          <h1>Legg til ny jobbutlysning</h1>
-          <br>
-          <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-            {{ form.media }}
-            {{ form.as_p }}
-            <br>
-            <button class="btn btn-success" type="submit">LEGG TIL!</button>
-            <br>
-          </form>
+      <div class="col-md-8 col-sm-12">
+        <div class="card shadow" style="margin: 40px;">
+          <div class="card-body">
+            <h2 class="card-title">Legg til ny jobbutlysning</h2>
+            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+              {{ form.media }}
+              {% for field in form %}
+                <div class="field">
+                  <label for="{{ field.id_for_label }}" class="label">
+                    <strong>{{ field.label }}:</strong>
+                  </label>
+                  <p>{{ field }}</p>
+                </div>
+              {% endfor %}
+              <br>
+              <button class="btn btn-dark" type="submit">Lagre!</button>
+              <br>
+            </form>
+          </div>
         </div>
       </div>
     </div>

@@ -17,12 +17,14 @@ def index(request):
         is_current=True
     ).order_by("published_date")
     interviews = Interview.objects.all().order_by("id")
+
     context = {
         "indkom": indkom,
         "bedpres": bedpres,
         "job_advertisements": job_advertisements,
         "interviews": interviews,
     }
+
     return render(request, "corporate/index.html", context)
 
 
@@ -42,6 +44,7 @@ def interview_create(request):
 def interview_delete(request, id):
     interview = get_object_or_404(Interview, id=id)
     interview.delete()
+
     return redirect("corporate:index")
 
 
@@ -61,20 +64,5 @@ def job_create(request):
 def job_delete(request, id):
     job = get_object_or_404(JobAdvertisement, id=id)
     job.delete()
+
     return redirect("corporate:index")
-
-
-"""
-def interview_list(request):
-    interviews = Interview.objects.order_by("id")
-    context = {
-        "interviews": interviews
-    }
-    return render(request, "corporate/interview_list.html", context)
-
-
-def interview_detail(request, interview_id):
-    this_interview = get_object_or_404(Interview, id=interview_id)
-    context = {"interview": this_interview}
-    return render(request, "corporate/interview_detail.html", context)
-"""
