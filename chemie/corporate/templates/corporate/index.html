@@ -19,7 +19,7 @@
             <h4 class="card-title">Industrikomiteen</h4>
           </a>
           <p class="card-text">
-            Kontakt: <a href="mailto:styret@hc.ntnu.no black" style="color: black;">indkom@hc.ntnu.no</a>
+            Kontakt: <a href="mailto:styret@hc.ntnu.no" style="color: black;">indkom@hc.ntnu.no</a>
           </p>
         </div>
       </div>
@@ -31,12 +31,28 @@
     <div class="col-5">
       <div class="card shadow" style="margin: 40px;">
         <div class="card-body">
-          <h2 class="card-title">Bedriftspresentasjoner</h2>
-          <p>
-            Vi avholder bedriftspresentasjoner flere ganger hvert semester. En bedrift inviteres da til å komme og
-            fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og
-            andre emner som kan interessere studentene.
-          </p>
+          <div class="row">
+            <div class="col">
+              <h2 class="card-title">Bedriftspresentasjoner</h2>
+            </div>
+            <div class="col">
+              {% if perms.events.add_bedpres %}
+                <a href="{% url "events:create_bedpres" %}" style="float:right; color:#343A40;">
+                  <i class="fa fa-plus" style="font-size:36px"></i>
+                </a>
+              {% endif %}
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <p>
+                Vi avholder bedriftspresentasjoner flere ganger hvert semester. En bedrift inviteres da til å komme og
+                fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og
+                andre emner som kan interessere studentene.
+              </p>
+            </div>
+          </div>
+
           {% for bp in bedpres %}
             <hr>
             <div class="row">
@@ -60,17 +76,40 @@
     <div class="col-5">
       <div class="card shadow" style="margin: 40px;">
         <div class="card-body">
-          <h2 class="card-title">Jobbutlysninger</h2>
+          <div class="row">
+            <div class="col">
+              <h2 class="card-title">Jobbutlysninger</h2>
+            </div>
+            <div class="col">
+              {% if perms.corporate.add_jobadvertisement %}
+                <a href="{% url "corporate:job_create" %}" style="float:right; color:#343A40;">
+                  <i class="fa fa-plus" style="font-size:36px"></i>
+                </a>
+              {% endif %}
+            </div>
+          </div>
           <p>
             Her vil det fortløpende legges ut informasjon om sommerjobber og relevante faste arbeidsstillinger.
           </p>
 
           {% for job in job_advertisements %}
             <hr>
-            <a class="collapser" data-toggle="collapse" href="#jobCollapse{{ job.id }}" style="color:black">
+            <a class="collapser" data-toggle="collapse" href="#jobCollapse{{ job.id }}" style="color:#343A40">
               <h5>{{ job.title }}</h5></a>
             <div class="collapse multi-collapse" id="jobCollapse{{ job.id }}">
-              {{ job.description | safe }}
+              <div class="row">
+                <div class="col">
+                  {{ job.description | safe }}
+                </div>
+                <div class="col">
+                  {% if perms.corporate.delete_jobadvertisement %}
+                    <a onclick="deleteJobPopup({{ job.id }})" style="float:right; color:#343A40;"
+                       id="deleteJob{{ job.id }}" data-url="{% url "corporate:job_delete" job.id %}">
+                      <p><i class="fa fa-trash"></i> Fjern</p>
+                    </a>
+                  {% endif %}
+                </div>
+              </div>
             </div>
           {% empty %}
             <p>For øyeblikket er det ingen publiserte jobbutlysninger</p>
@@ -95,7 +134,18 @@
 
       <div class="card shadow" style="margin: 40px;">
         <div class="card-body">
-          <h2 class="card-title">Intervjuer</h2>
+          <div class="row">
+            <div class="col">
+              <h2 class="card-title">Intervjuer</h2>
+            </div>
+            <div class="col">
+              {% if perms.corporate.add_interview %}
+                <a href="{% url "corporate:interview_create" %}" style="float:right; color:#343A40;">
+                  <i class="fa fa-plus" style="font-size:36px"></i>
+                </a>
+              {% endif %}
+            </div>
+          </div>
           <p>
             Her kan du lese intervjuer med nåværende og tidligere kjemikere med relevant arbeidserfaring.
           </p>
@@ -127,7 +177,18 @@
 
           <div class="card-body">
             <h4 class="card-title">{{ interview.interview_object }}</h4>
+            {% for specialization in interview.specializations.all %}
+              <span class="badge badge-pill badge-dark" style="font-weight: normal">{{ specialization }}</span>
+            {% endfor %}
+            <hr>
             {{ interview.text | safe }}
+            {% if perms.corporate.delete_interview %}
+              <a onclick="deleteInterviewPopup({{ interview.id }})" style="float:right; color:#343A40;"
+                 id="deleteInterview{{ interview.id }}" data-url="{% url "corporate:interview_delete" interview.id %}">
+                <p><i class="fa fa-trash"></i> Slett</p>
+              </a>
+              <br>
+            {% endif %}
           </div>
 
         </div>
@@ -142,7 +203,6 @@
 
 {% block footer_script %}
   <script>
-
     function displayCorrectInterview(targetId) {
 
       {% for interview in interviews %}
@@ -151,6 +211,20 @@
 
       let targetCard = document.getElementById("interviewCard" + targetId.toString());
       targetCard.style.display = "block";
+    }
+
+    function deleteInterviewPopup(id) {
+      let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
+      if (confirm("Er du sikker på at du vil slette dette intervjuet?")) {
+        window.location.href = url;
+      }
+    }
+
+    function deleteJobPopup(id) {
+      let url = document.getElementById("deleteJob" + id.toString()).getAttribute("data-url");
+      if (confirm("Er du sikker på at du vil slette denne jobbutlysningen?")) {
+        window.location.href = url;
+      }
     }
 
   </script>

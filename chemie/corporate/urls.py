@@ -6,7 +6,8 @@ app_name = "corporate"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("intervju/", views.interview_list, name="interview_list"),
-    path("intervju/lag", views.interview_create, name="interview_create"),
-    path("intervju/<int:interview_id>/", views.interview_detail, name="interview_detail"),
+    path("intervju/ny", views.interview_create, name="interview_create"),
+    path("intervju/<int:id>/slett/", views.interview_delete, name="interview_delete"),
+    path("jobb/ny", views.job_create, name="job_create"),
+    path("jobb/<int:id>/slett/", views.job_delete, name="job_delete"),
 ]

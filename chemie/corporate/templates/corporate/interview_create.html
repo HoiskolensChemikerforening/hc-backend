@@ -6,9 +6,6 @@
       <li class="breadcrumb-item ">
         <a href="{% url "corporate:index" %}" style="color:#edcd2f">Bedriftssider</a>
       </li>
-      <li class="breadcrumb-item ">
-        <a href="{% url "corporate:interview_list" %}" style="color:#edcd2f">Intervjuer</a>
-      </li>
       <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Opprett nytt intervju</li>
     </ol>
   </nav>
@@ -24,6 +21,7 @@
           <h1>Legg til nytt intervju</h1>
           <br>
           <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+            {{ form.media }}
             {{ form.as_p }}
             <br>
             <button class="btn btn-success" type="submit">LEGG TIL!</button>

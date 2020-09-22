@@ -3,13 +3,10 @@ from .models import Interview, Specialization
 
 
 class SpecializationSerializer(serializers.ModelSerializer):
-    name = serializers.CharField(source='get_name_display')
+    name = serializers.CharField(source="get_name_display")
 
     class Meta:
-        fields = (
-            'id',
-            'name',
-        )
+        fields = ("id", "name")
         model = Specialization
 
 
@@ -18,10 +15,10 @@ class InterviewSerializer(serializers.ModelSerializer):
 
     class Meta:
         fields = (
-            'id',
-            'interview_object',
-            'text',
-            'picture',
-            'specializations'
+            "id",
+            "interview_object",
+            "text",
+            "picture",
+            "specializations",
         )
         model = Interview
