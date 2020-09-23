@@ -29,11 +29,11 @@
   <div class="row">
     <div class="col-1"></div>
     <div class="col-5">
-      <div class="card shadow" style="margin: 40px;">
+      <div class="card shadow" id="bedpresBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <h2 class="card-title">Bedriftspresentasjoner</h2>
+              <h2 class="card-title">Arrangementer</h2>
             </div>
             <div class="col">
               {% if perms.events.add_bedpres %}
@@ -53,28 +53,52 @@
             </div>
           </div>
 
-          {% for bp in bedpres %}
-            <hr>
-            <div class="row">
-              <div class="col">
-                <a href="{{ bp.get_absolute_url }}" style="color:black">
-                  <h5>{{ bp.title }}</h5>
-                </a>
+          {% if no_events %}
+            <p>For øyblikket er det ikke planlagt noen arrangementer.</p>
+
+          {% else %}
+            {% for bp in bedpres %}
+
+              <hr>
+              <div class="row">
+                <div class="col">
+                  <a href="{{ bp.get_absolute_url }}" style="color:black">
+                    <h5>{{ bp.title }}</h5>
+                  </a>
+                </div>
+                <div class="col">
+                  <a type="button" class="btn btn-dark" style="float:right; color: white;"
+                     href="{% url "events:detail_bedpres" bp.id %}">Vis mer</a>
+                </div>
               </div>
-              <div class="col">
-                <a type="button" class="btn btn-dark" style="float:right; color: white;"
-                   href="{% url "events:detail_bedpres" bp.id %}">Vis mer</a>
+              <p>{{ bp.date }}</p>
+
+            {% endfor %}
+
+            {% for event in events %}
+
+              <hr>
+              <div class="row">
+                <div class="col">
+                  <a href="{{ event.get_absolute_url }}" style="color:black">
+                    <h5>{{ event.title }}</h5>
+                  </a>
+                </div>
+                <div class="col">
+                  <a type="button" class="btn btn-dark" style="float:right; color: white;"
+                     href="{% url "events:detail_social" event.id %}">Vis mer</a>
+                </div>
               </div>
-            </div>
-            <p>{{ bp.date }}</p>
-          {% empty %}
-            <p>For øyeblikket er det ingen planlagte bedriftspresentasjoner</p>
-          {% endfor %}
+              <p>{{ event.date }}</p>
+
+            {% endfor %}
+
+          {% endif %}
         </div>
       </div>
     </div>
     <div class="col-5">
-      <div class="card shadow" style="margin: 40px;">
+      <div class="card shadow" id="jobBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
@@ -103,16 +127,19 @@
                 </div>
                 <div class="col">
                   {% if perms.corporate.delete_jobadvertisement %}
-                    <a onclick="deleteJobPopup({{ job.id }})" style="float:right; color:#343A40;"
-                       id="deleteJob{{ job.id }}" data-url="{% url "corporate:job_delete" job.id %}">
-                      <p><i class="fa fa-trash"></i> Fjern</p>
+                    <a type="button" class="btn"
+                       onclick="deleteJobPopup({{ interview.id }})"
+                       style="float:right; background-color:#343A40; color: white;"
+                       id="deleteInterview{{ job.id }}"
+                       data-url="{% url "corporate:job_delete" job.id %}">
+                      <i class="fa fa-trash"> Skjul</i>
                     </a>
                   {% endif %}
                 </div>
               </div>
             </div>
           {% empty %}
-            <p>For øyeblikket er det ingen publiserte jobbutlysninger</p>
+            <p>For øyeblikket er det ingen publiserte jobbutlysninger.</p>
           {% endfor %}
         </div>
       </div>
@@ -132,7 +159,7 @@
     <div class="col-1"></div>
     <div class="col-5">
 
-      <div class="card shadow" style="margin: 40px;">
+      <div class="card shadow" id="interviewBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
@@ -178,19 +205,23 @@
           <div class="card-body">
             <h4 class="card-title">{{ interview.interview_object }}</h4>
             {% for specialization in interview.specializations.all %}
-              <span class="badge badge-pill badge-dark" style="font-weight: normal">{{ specialization }}</span>
+              <span class="badge badge-pill badge-dark" style="font-weight: normal; background-color:#343A40;">
+                {{ specialization }}
+              </span>
             {% endfor %}
             <hr>
             {{ interview.text | safe }}
             {% if perms.corporate.delete_interview %}
-              <a onclick="deleteInterviewPopup({{ interview.id }})" style="float:right; color:#343A40;"
-                 id="deleteInterview{{ interview.id }}" data-url="{% url "corporate:interview_delete" interview.id %}">
-                <p><i class="fa fa-trash"></i> Slett</p>
+              <a type="button" class="btn"
+                 onclick="deleteInterviewPopup({{ interview.id }})"
+                 style="float:right; background-color:#343A40; color: white;"
+                 id="deleteInterview{{ interview.id }}"
+                 data-url="{% url "corporate:interview_delete" interview.id %}">
+                <i class="fa fa-trash"> Skjul</i>
               </a>
-              <br>
             {% endif %}
           </div>
-
+          <br><br>
         </div>
       {% endfor %}
 
@@ -203,6 +234,7 @@
 
 {% block footer_script %}
   <script>
+
     function displayCorrectInterview(targetId) {
 
       {% for interview in interviews %}
@@ -215,14 +247,14 @@
 
     function deleteInterviewPopup(id) {
       let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
-      if (confirm("Er du sikker på at du vil slette dette intervjuet?")) {
+      if (confirm("Er du sikker på at du vil fjerne dette intervjuet?")) {
         window.location.href = url;
       }
     }
 
     function deleteJobPopup(id) {
       let url = document.getElementById("deleteJob" + id.toString()).getAttribute("data-url");
-      if (confirm("Er du sikker på at du vil slette denne jobbutlysningen?")) {
+      if (confirm("Er du sikker på at du vil fjerne denne jobbutlysningen?")) {
         window.location.href = url;
       }
     }

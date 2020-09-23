@@ -22,17 +22,16 @@ class Specialization(models.Model):
 
 
 class Interview(models.Model):
-    interview_object = models.CharField(
-        max_length=40, verbose_name="Navn på intervjuobjektet"
-    )
+    title = models.CharField(max_length=40, verbose_name="Navn på intervjuet")
     text = RichTextField(verbose_name="Intervjuet", config_name="forms")
     picture = ImageField(upload_to="corporate", verbose_name="Bilde")
     specializations = models.ManyToManyField(
         Specialization, verbose_name="Aktuelle retninger", blank=True
     )
+    is_published = models.BooleanField(verbose_name="Er synlig", default=True)
 
     def __str__(self):
-        return self.interview_object
+        return self.title
 
 
 class JobAdvertisement(models.Model):
@@ -40,7 +39,7 @@ class JobAdvertisement(models.Model):
     description = RichTextField(
         verbose_name="Beskrivelse", config_name="forms"
     )
-    is_current = models.BooleanField(verbose_name="Er gjeldende", default=True)
+    is_published = models.BooleanField(verbose_name="Er synlig", default=True)
     published_date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
