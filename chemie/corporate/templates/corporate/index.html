@@ -122,17 +122,17 @@
               <h5>{{ job.title }}</h5></a>
             <div class="collapse multi-collapse" id="jobCollapse{{ job.id }}">
               <div class="row">
-                <div class="col">
+                <div class="col-9">
                   {{ job.description | safe }}
                 </div>
-                <div class="col">
+                <div class="col-3">
                   {% if perms.corporate.delete_jobadvertisement %}
                     <a type="button" class="btn"
                        onclick="deleteJobPopup({{ interview.id }})"
                        style="float:right; background-color:#343A40; color: white;"
                        id="deleteInterview{{ job.id }}"
                        data-url="{% url "corporate:job_delete" job.id %}">
-                      <i class="fa fa-trash"> Skjul</i>
+                      <i class="fa fa-trash"> Slett</i>
                     </a>
                   {% endif %}
                 </div>
@@ -181,7 +181,7 @@
             <hr>
             <div class="row">
               <div class="col">
-                <h5>{{ interview.interview_object }}</h5>
+                <h5>{{ interview.title }}</h5>
               </div>
               <div class="col">
                 <a type="button" class="btn btn-dark" style="float:right; color:white;"
@@ -217,7 +217,7 @@
                  style="float:right; background-color:#343A40; color: white;"
                  id="deleteInterview{{ interview.id }}"
                  data-url="{% url "corporate:interview_delete" interview.id %}">
-                <i class="fa fa-trash"> Skjul</i>
+                <i class="fa fa-trash"> Slett</i>
               </a>
             {% endif %}
           </div>
