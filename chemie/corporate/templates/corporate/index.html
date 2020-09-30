@@ -1,36 +1,74 @@
 {% extends "corporate/base.html" %}
+{% load static %}
 
 {% block content %}
-
-  <div class="row align-items-center">
-    <div class="col-1"></div>
-    <div class="col-5">
-      <div class="container" style="margin: 40px;">
-        <h2>Høiskolens Chemikerforenings bedriftskontakt</h2><br>
-        <p>Denne siden administreres  av Industrikomiteen - Høiskolens Chemikerforenings kontakt med industrien.  Her finner du en full oversikt over Industrikomiteens arrangementer, samt relevante jobbutlysninger. I tillegg kan du finne intervjuer med eldre kjemikere og informasjon fra diplomundersøkelsen - en årlig undersøkelse for å kartlegge jobbmarkedet via utgåtte MTKJ studenter. Sidene enda i oppstartsfasen og Industrikomiteen er på saken med å bygge opp innhold. Vi gleder oss masse til å dele spennende informasjon med dere.</p>
-        <p>Lurer du på noe mer om hva Industrikomiteen driver med? Gå inn <a href="https://hc.ntnu.no/verv/industrikomiteen/">her</a>.</p>
-        <br><br>
-      </div>
-    </div>
-    <div class="col-5">
-      <div class="card shadow" style="margin: 40px;">
-        <img src="{{ indkom.image.url }}" class="card-img-top" alt="...">
-        <div class="card-body">
-          <a href="{{ indkom.get_absolute_url }}" style="color: black;">
-            <h4 class="card-title">Industrikomiteen</h4>
-          </a>
-          <p class="card-text">
-            Kontakt: <a href="mailto:styret@hc.ntnu.no" style="color: black;">indkom@hc.ntnu.no</a>
-          </p>
+  <div style="height: 767px; padding-top: 200px; margin-bottom: 70px; background-position: bottom; background-image: url('{% static "images/test.png" %}')">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-1 col-md-1"></div>
+        <div class="col-10 col-md-5">
+          <h2 style="font-family: 'Piazzolla', serif; font-weight:900;">
+            <strong>Høiskolens Chemikerforenings</strong>
+          </h2>
+          <h1 style="font-size: 100px; font-family: 'Piazzolla', serif; font-weight:900;">
+            <strong>Bedriftskontakt</strong></h1>
+        </div>
+        <div class="col-11 offset-1 col-md-4">
+          <img src="{{ indkom.image.url }}" alt="..." style="margin-top: 100px; max-width: 75vw;" width="100%">
         </div>
       </div>
     </div>
-    <div class="col-1"></div>
   </div>
+
+  <div class="container-fluid" style="margin-bottom: 160px;">
+    <div class="row">
+      <div class="col-1"></div>
+      <div class="col-10 col-xl-5">
+        <h3 style="font-weight: 700; font-size: 35px; margin-bottom: 25px;">Industrikomiteen</h3>
+        <p style="font-size: 18px; margin-bottom: 50px;">
+          Denne siden administreres av Industrikomiteen - Høiskolens Chemikerforenings kontakt med industrien.
+          Her finner du en full oversikt over Industrikomiteens arrangementer og relevante jobbutlysninger.
+          I tillegg kan du finne intervjuer med eldre kjemikere og informasjon fra diplomundersøkelsen -
+          en årlig undersøkelse for å kartlegge jobbmarkedet via utgåtte MTKJ-studenter.
+          Sidene enda i oppstartsfasen og Industrikomiteen er på saken med å bygge opp innhold.
+          Vi gleder oss masse til å dele spennende informasjon med dere.</p>
+      </div>
+      <div class="col-10 col-xl-4 offset-1">
+        <h4 style="text-transform: uppercase; color: #888; margin-bottom: 12px; font-weight: 500">
+          Samarbeidspartnere</h4>
+        <p style="font-size: 18px; color: #888; margin-bottom: 40px;">
+          Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter
+        </p>
+        <img src="https://images.finncdn.no/dynamic/default/2020/7/vertical-0/10/2/184/412/212_1087034308.jpg"
+             alt="Emerson" width="300px;">
+      </div>
+      <div class="col-1"></div>
+    </div>
+  </div>
+  </div>
+
+
+  <div class="jumbotron jumbotron-fluid" style="background-color:#222">
+    <div class="container">
+      <div class="row" style="margin-left: 10%;">
+        <div style="margin-right: 50px;">
+          <img src="https://www.uokpl.rs/fpng/f/300-3008394_thumb-image-emerson.png" alt="Emerson" width="210px"
+               height="100px">
+        </div>
+        <div class="col">
+          <h1 class="display-4 text-light">Samarbeidspartnere</h1>
+          <p class="lead text-light">Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+
   <div class="row">
     <div class="col-1"></div>
     <div class="col-5">
-      <div class="card shadow" id="bedpresBox" style="margin: 40px;">
+      <div class="card" id="bedpresBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
@@ -99,7 +137,7 @@
       </div>
     </div>
     <div class="col-5">
-      <div class="card shadow" id="jobBox" style="margin: 40px;">
+      <div class="card" id="jobBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
@@ -149,25 +187,11 @@
     <div class="col-1"></div>
   </div>
 
-  <div class="jumbotron jumbotron-fluid bg-dark">
-    <div class="container" >
-      <div class="row" style="margin-left: 10%;">
-        <div style="margin-right: 50px;">
-        <img src="https://www.uokpl.rs/fpng/f/300-3008394_thumb-image-emerson.png" alt="Emerson" width="210px" height="100px">
-        </div>
-        <div class="col">
-          <h1 class="display-4 text-light">Samarbeidspartnere</h1>
-          <p class="lead text-light">Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter»</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
   <div class="row">
     <div class="col-1"></div>
     <div class="col-5">
 
-      <div class="card shadow" id="interviewBox" style="margin: 40px;">
+      <div class="card" id="interviewBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
@@ -207,7 +231,7 @@
     <div class="col-5">
 
       {% for interview in interviews %}
-        <div class="card shadow w-75" style="margin: 40px; display: none" id="interviewCard{{ interview.id }}">
+        <div class="card w-75" style="margin: 40px; display: none" id="interviewCard{{ interview.id }}">
           <img src="{{ interview.picture.url }}" class="card-img-top" alt="..." style="height: 25rem; object-fit:cover">
 
           <div class="card-body">

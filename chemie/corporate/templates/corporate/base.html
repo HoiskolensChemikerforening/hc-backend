@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-
+  <link href="https://fonts.googleapis.com/css2?family=Piazzolla:wght@800&display=swap" rel="stylesheet">
 
   <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
           integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
@@ -36,7 +36,7 @@
 
   {% block header %}
   {% endblock header %}
-  <meta name="theme-color" content="#3C91E6">
+  <meta name="theme-color" content="#222222">
   <!-- Windows Phone -->
   <meta name="msapplication-navbutton-color" content="#3C91E6">
   <!-- iOS Safari -->
@@ -44,15 +44,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
 
-<nav class="navbar navbar-dark bg-dark">
+<nav class="navbar navbar-dark" style="background-color: #222; position: fixed; width: 100%; z-index: 2">
   <a class="navbar-brand" href="{% url "home:home" %}">
-    <div class="row">
-      <div class="col">
-        <img src="{% static "images/logo.png" %}" width="auto" height="80" class="d-inline-block align-top" alt="">
-      </div>
-      <div class="col">
-        <h5 style="margin-top: 25px;">Velkommen til Høiskolens Chemikerforenings bedriftssider!</h5>
-      </div>
+    <div class="row" style="display: flex; flex-direction: row; align-items: center; padding-left: 50px;">
+      <img src="{% static "images/logo.png" %}" width="auto" height="50" alt="" style="margin-right: 10px;">
+      <h5>Høiskolens Chemikerforening</h5>
     </div>
   </a>
 </nav>
@@ -62,38 +58,10 @@
 
 <body>
 
-<div class="section no-pad-bot" id="index-banner">
-  <div class="container">
-
-    <!-- Messaging framework card -->
-    {% if messages %}
-      <div class="row">
-        {% for message in messages %}
-          <div class="col s12 m6 l6">
-            <div class="card {{ message.level_tag }}-message darken-1 message-card">
-              <div class="card-content">
-                <span class="card-title black-text valign-wrapper" style="clear: both;">
-
-                    <h5><i class="material-icons black-text"
-                           style="padding-right: 10px;">priority_high</i>{{ message.extra_tags }}</h5>
-                </span>
-                <p class="flow-text black-text">{{ message }}</p>
-              </div>
-            </div>
-          </div>
-        {% endfor %}
-      </div>
-    {% endif %}
-
-    <br><br>
-    <br><br>
-  </div>
-</div>
-
 {% block content %}
 {% endblock content %}
 
-<footer class="page-footer font-small bg-dark pt-4">
+<footer class="page-footer font-small pt-4" style="background-color: #222;">
   <div class="container">
     <br>
     <div class="row">
