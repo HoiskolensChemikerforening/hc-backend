@@ -83,10 +83,11 @@ def contact(request, rentalobject_id):
             extra_tags="Mottatt!",
         )
 
-        _, mail_to = zip(*settings.CONTACTS)
+        mail_to = rental_object.owner.committee.email
 
         mail.send(
             mail_to,
+            settings.DEFAUL_FROM_EMAIL,
             template="rental_contact",
             context={
                 "rentalobject": rental_object,
@@ -95,7 +96,7 @@ def contact(request, rentalobject_id):
                 "contact_email": contact_form.cleaned_data.get(
                     "contact_email"
                 ),
-                "root_url": get_current_site(None)
+                "root_url": get_current_site(None),
             },
         )
 
