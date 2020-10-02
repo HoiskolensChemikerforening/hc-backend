@@ -87,7 +87,7 @@ def contact(request, rentalobject_id):
 
         mail.send(
             mail_to,
-            settings.DEFAUL_FROM_EMAIL,
+            settings.DEFAULT_FROM_EMAIL,
             template="rental_contact",
             context={
                 "rentalobject": rental_object,
