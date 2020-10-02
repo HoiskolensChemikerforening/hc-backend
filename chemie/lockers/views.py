@@ -14,6 +14,8 @@ from .forms import (
     ConfirmOwnershipForm,
 )
 from .models import Locker, LockerUser, Ownership, LockerToken
+from .serializers import LockerSerializer, LockerUserSerializer
+from rest_framework import generics
 
 
 def view_lockers(request):
@@ -187,3 +189,11 @@ def clear_locker(request, locker_number):
     return redirect(
         reverse("bokskap:administrate") + "#locker{}".format(locker_number)
     )
+
+class LockerListCreate(generics.ListCreateAPIView):
+    queryset = Locker.objects.all()
+    serializer_class = LockerSerializer
+
+class LockerUserListCreate(generics.ListCreateAPIView):
+    queryset = LockerUser.objects.all()
+    serializer_class = LockerUserSerializer
