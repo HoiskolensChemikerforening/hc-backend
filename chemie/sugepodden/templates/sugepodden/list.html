@@ -1,0 +1,35 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Sugepodden
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{% if perms.sugepodden %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.sugepodden.add_podcast %}
+          <li>
+            <a class="btn-floating blue" href={% url "sugepodden:create" %}>
+              <i class="material-icons">add</i>
+              <a class="btn-floating mobile-fab-tip" href={% url "sugepodden:create" %}>Legg til en ny podcast</a>
+            </a></li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+{% include "sugepodden/list_podcasts.html" %}
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
