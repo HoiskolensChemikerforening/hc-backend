@@ -19,6 +19,7 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from ..customprofile.views import LoginView
+from rest_framework.authtoken import views
 
 from chemie.home.views import index
 
@@ -46,10 +47,10 @@ urlpatterns = [
     path(
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
+    path("api-token-auth/", views.obtain_auth_token),
     path("chaining/", include("smart_selects.urls")),
     path(
-        "bilder/",
-        include("chemie.picturecarousel.urls", namespace="carousel"),
+        "bilder/", include("chemie.picturecarousel.urls", namespace="carousel")
     ),
     path("valg/", include("chemie.elections.urls", namespace="elections")),
     path("web_push/", include("chemie.web_push.urls", namespace="web_push")),

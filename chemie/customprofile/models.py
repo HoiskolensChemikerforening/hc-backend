@@ -13,6 +13,11 @@ from django.http import Http404
 from chemie.shop import statistics
 from chemie.web_push.models import Device, Subscription
 
+from django.conf import settings
+from django.db.models.signals import post_save
+from django.dispatch import receiver
+from rest_framework.authtoken.models import Token
+
 # Time the activation is valid in hourse
 VALID_TIME = 2
 
@@ -231,3 +236,9 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def create_auth_token(sender, instance=None, created=False, **kwargs):
+    if created:
+        Token.objects.create(user=instance)
