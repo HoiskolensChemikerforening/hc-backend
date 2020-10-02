@@ -4,6 +4,7 @@ from django.urls import path
 app_name = "quiz"
 
 urlpatterns = [
+
     path("", views.index, name="index"),
     path("navnequiz", views.name_quiz_index, name="name_quiz_index"),
     path("navnequiz/<int:year>", views.name_quiz, name="name_quiz"),
