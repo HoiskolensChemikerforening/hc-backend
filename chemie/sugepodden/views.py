@@ -27,23 +27,6 @@ class ListPodcastDeleteView(PermissionRequiredMixin, ListView):
         return self.model.objects.filter(published=True)
 
 
-class DeletePodcastView(PermissionRequiredMixin, DeleteView):
-    model = Podcast
-    permission_required = "sugepodden.delete_podcast"
-    success_url = reverse_lazy("sugepodden:delete_list_podcast")
-
-    def delete(self, request, *args, **kwargs):
-        object = self.get_object()
-        object.published = False
-        object.save()
-        messages.add_message(
-            request,
-            messages.WARNING,
-            "Podcasten ble slettet",
-            extra_tags="Slettet",
-        )
-        return HttpResponseRedirect(self.success_url)
-
 
 @permission_required("sugepodden.add_podcast")
 def create_podcast(request):
