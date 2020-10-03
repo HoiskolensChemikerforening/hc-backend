@@ -21,6 +21,9 @@
               <i class="material-icons">add</i>
               <a class="btn-floating mobile-fab-tip" href={% url "sugepodden:create" %}>Legg til en ny podcast</a>
             </a></li>
+              <a class="btn-floating red" href="{% url "sugepodden:delete_list_podcast" %}"><i
+                class="material-icons">delete_forever</i></a>
+              <a class="btn-floating mobile-fab-tip">Fjern podcaster</a>
         {% endif %}
       </ul>
     </div>

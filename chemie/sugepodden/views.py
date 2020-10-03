@@ -11,13 +11,12 @@ from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
     LoginRequiredMixin,
 )
-from django.views.generic.edit import (
-    DeleteView,
-)
+from django.views.generic.edit import DeleteView
 from django.core.exceptions import PermissionDenied
 from django.utils import timezone
 from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
+
 
 class ListPodcastDeleteView(PermissionRequiredMixin, ListView):
     template_name = "sugepodden/delete.html"
@@ -25,9 +24,7 @@ class ListPodcastDeleteView(PermissionRequiredMixin, ListView):
     model = Podcast
 
     def queryset(self):
-        return self.model.objects.filter(
-             published=True
-        )
+        return self.model.objects.filter(published=True)
 
 
 class DeletePodcastView(PermissionRequiredMixin, DeleteView):
@@ -62,16 +59,19 @@ def create_podcast(request):
     return render(request, "sugepodden/create_podcast.html", context)
 
 
-
 @permission_required("sugepodden.delete_podcast")
-def delete_podcast(request, Podcast_id):
-    podcast = get_object_or_404(Podcast, id=Podcast_id)
+def delete_podcast(request, pk):
+    podcast = get_object_or_404(Podcast, id=pk)
     podcast.published = False
     podcast.save()
     messages.add_message(
-        request, messages.SUCCESS, "Podcasten ble slettet", extra_tags="Slettet"
+        request,
+        messages.SUCCESS,
+        "Podcasten ble slettet",
+        extra_tags="Slettet",
     )
     return HttpResponseRedirect(reverse("sugepodden:delete_list_podcast"))
+
 
 def list_all(request):
 
@@ -80,6 +80,7 @@ def list_all(request):
     )
     context = {"posts": all_posts}
     return render(request, "sugepodden/list.html", context)
+
 
 @permission_required("news.change_article")
 def edit_podcast(request, podcast_id, slug):
