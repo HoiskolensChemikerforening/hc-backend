@@ -1,8 +1,10 @@
 from django.db import models
+
+# Create your models here.
+from django.db import models
 from sorl.thumbnail import ImageField
 from django.contrib.auth.models import User
 from django.urls import reverse
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Podcast(models.Model):
@@ -22,14 +24,3 @@ class Podcast(models.Model):
 
     def get_absolute_delete_url(self):
         return reverse("sugepodden:delete_podcast", kwargs={"pk": self.id})
-
-    @classmethod
-    def get_latest_podcast_url(cls):
-        try:
-            latest_object = cls.objects.latest("id")
-            latest_url = latest_object.url
-        except ObjectDoesNotExist:
-            latest_url = "/sugepodden"
-
-        return latest_url
-

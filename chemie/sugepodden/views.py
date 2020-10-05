@@ -1,13 +1,20 @@
+from django.shortcuts import render
 from .forms import PodcastForm
 from .models import Podcast
 from django.contrib import messages
+from chemie.web_push.models import Subscription
 from django.contrib.auth.decorators import permission_required
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
+from django.urls import reverse
 from django.shortcuts import get_object_or_404, render
 from django.contrib.auth.mixins import (
     PermissionRequiredMixin,
+    LoginRequiredMixin,
 )
-from django.urls import reverse
+from django.views.generic.edit import DeleteView
+from django.core.exceptions import PermissionDenied
+from django.utils import timezone
+from django.urls import reverse, reverse_lazy
 from django.views.generic.list import ListView
 
 
@@ -57,3 +64,22 @@ def list_all(request):
     return render(request, "sugepodden/list.html", context)
 
 
+@permission_required("news.change_article")
+def edit_podcast(request, podcast_id, slug):
+    podcast = get_object_or_404(Podcast, id=podcast_id)
+    post = PodcastForm(
+        request.POST or None, request.FILES or None, instance=podcast
+    )
+    if request.method == "POST":
+        if post.is_valid():
+            post.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Podcasten ble endret",
+                extra_tags="Endret",
+            )
+            return HttpResponseRedirect(reverse("podcast:index"))
+    context = {"post": post}
+
+    return render(request, "podcast/create_post.html", context)
