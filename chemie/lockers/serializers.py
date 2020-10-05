@@ -9,7 +9,7 @@ class LockerManagerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class OwnershipSerializer(serializers.ModelSerializer):
-
+    #user = UserSerializer()
     class Meta:
         model = Ownership
         fields = '__all__'
@@ -23,18 +23,19 @@ class LockerSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class OwnershipManagerSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = OwnershipManager
+        fields = '__all__'
+
+
 class LockerUserSerializer(serializers.ModelSerializer):
-    ownerships = LockerSerializer()
+    ownership = LockerSerializer(read_only=True, many = True)
 
     class Meta:
         model = LockerUser
         fields = '__all__'
 
-class OwnershipManagerSerializer(serializers.ModelSerializer):
-
-    class Meta:
-        model = OwnershipManager
-        fields = '__all__'
 
 class LockerConfirmationManagerSerializer(serializers.ModelSerializer):
 
