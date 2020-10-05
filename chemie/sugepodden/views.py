@@ -46,7 +46,7 @@ def create_podcast(request):
 def delete_podcast(request, pk):
     podcast = get_object_or_404(Podcast, id=pk)
     podcast.published = False
-    podcast.save()
+    podcast.delete()
     messages.add_message(
         request,
         messages.SUCCESS,
