@@ -32,7 +32,6 @@
     <div class="row align-items-center" style="margin-top: 40px; margin-bottom: 120px">
       <div class="col-12 col-md-2"></div>
       <div class="col-md-8 col-sm-12">
-        <h2 class="">Legg til ny jobbutlysning</h2>
         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
           {{ form.media }}
           {% for field in form %}

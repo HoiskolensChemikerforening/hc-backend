@@ -78,6 +78,17 @@ body {
     text-decoration: none;
 }
 
+.navigation-link {
+    color: var(--gray-400);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.navigation-link:hover {
+    color: var(--main-color-light);
+    font-weight: 600;
+    text-decoration: none;
+}
 
 /* Buttons */
 .button-fill {
