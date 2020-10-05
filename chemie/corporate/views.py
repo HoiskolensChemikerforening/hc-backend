@@ -78,7 +78,7 @@ def interview_create(request):
 
     if form.is_valid():
         form.save()
-        return redirect(reverse("corporate:index"))
+        return redirect(reverse("corporate:interview"))
 
     context = {"form": form}
     return render(request, "corporate/interview_create.html", context)
@@ -90,25 +90,25 @@ def interview_remove(request, id):
     interview.is_published = False
     interview.save()
 
-    return redirect("corporate:index")
+    return redirect("corporate:interview")
 
 
-@permission_required("corporate.add_jobadvertisement")
+@permission_required("corporate.add_job_advertisement")
 def job_create(request):
     form = CreateJobForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()
-        return redirect(reverse("corporate:index"))
+        return redirect(reverse("corporate:job_advertisement"))
 
     context = {"form": form}
     return render(request, "corporate/job_create.html", context)
 
 
-@permission_required("corporate.delete_jobadvertisement")
+@permission_required("corporate.delete_job_advertisement")
 def job_remove(request, id):
     job = get_object_or_404(JobAdvertisement, id=id)
     job.is_published = False
     job.save()
 
-    return redirect("corporate:index")
+    return redirect("corporate:job_advertisement")

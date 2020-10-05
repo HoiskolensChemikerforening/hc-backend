@@ -16,12 +16,27 @@
     --gray-100: #f5f5f5;
     --gray-50: #fafafa;
 
+    /* Yellow */
+    --yellow-900: #f57200;
+    --yellow-800: #f79e00;
+    --yellow-700: #f8b700;
+    --yellow-600: #f9cf00;
+    --yellow-500: #f8e000;
+    --yellow-400: #fae63f;
+    --yellow-300: #fceb65;
+    --yellow-200: #fdf092;
+    --yellow-100: #fef6be;
+    --yellow-50: #fffce4;
+
     /* Main colors */
     --main-color-dark: var(--gray-900);
     --main-color-light: var(--gray-50);
-    --main-color-yellow: #f9cf00;
-    --secondary-color-yellow: #f8b700;
-    --tertiary-color-yellow: #f79e00;
+    --main-color-yellow: var(--yellow-600);
+    --secondary-color-yellow: var(--yellow-700);
+    --tertiary-color-yellow: var(--yellow-800);
+
+    --main-color-warning: #d32f2f;
+    --secondary-color-warning: #c62828;
 
     /* Font size */
     --font-size-xsmall: 0.875rem;
@@ -96,6 +111,26 @@ body {
     border: 1.5px var(--secondary-color-yellow) solid;
     color: var(--secondary-color-yellow) !important;
     text-decoration: none;
+}
+
+.button-warning {
+    font-size: var(--font-size-xsmall);
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 2px var(--main-color-warning) solid;
+    background-color: var(--main-color-warning);
+    color: var(--main-color-light) !important;
+    border-radius: 50px;
+}
+
+.button-warning:hover {
+    font-size: var(--font-size-xsmall);
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 2px var(--secondary-color-warning) solid;
+    background-color: var(--secondary-color-warning);
+    color: var(--main-color-light) !important;
+    border-radius: 50px;
 }
 
 .lead {
@@ -186,4 +221,40 @@ body {
     width: 100%;
     height: 250px;
     object-fit: cover;
+}
+
+.hyphen {
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+.badge-custom-1 {
+    background-color: var(--yellow-900);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-2 {
+    background-color: var(--yellow-800);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-3 {
+    background-color: var(--yellow-600);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-4 {
+    background-color: var(--yellow-500);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-5 {
+    background-color: var(--yellow-300);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-6 {
+    background-color: var(--yellow-100);
+    color: var(--main-color-dark);
 }

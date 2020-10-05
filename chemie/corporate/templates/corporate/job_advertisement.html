@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block content %}
-
 <div class="banner background-dark" style="margin-bottom: 80px;">
   <div class="container" style="padding-top: 105px;">
     <div class="row">
@@ -20,6 +19,15 @@
 
 <div class="container" style="margin-bottom: 80px">
   <div class="row">
+
+    {% if perms.corporate.add_job_advertisement %}
+      <div class="col-12" style="margin-bottom: 50px">
+        <a class="button-fill" href="{% url "corporate:job_create" %}">
+          Ny jobbutlysning
+        </a>
+      </div>
+    {% endif %}
+
     <div class="col-12">
       <h2 class="subheading">
         Stillinger
@@ -35,6 +43,17 @@
       </a>
       <div style="margin: 20px 0;" class="collapse multi-collapse" id="jobCollapse{{ job_advertisement.id }}">
         {{ job_advertisement.description | safe }}
+
+        {% if perms.corporate.delete_job_advertisement %}
+          <div style="margin-top: 40px">
+            <a type="button" class="button-warning"
+               onclick="deleteJobPopup({{ job_advertisement.id }})"
+               id="deleteJobAdvertisement{{ job_advertisement.id }}"
+               data-url="{% url "corporate:job_delete" job_advertisement.id %}">
+              Slett
+            </a>
+          </div>
+        {% endif %}
       </div>
       <hr style="background-color: var(--main-color-dark); margin: 40px 0 10px 0;">
     </div>
@@ -51,4 +70,12 @@
 {% endblock content %}
 
 {% block footer_script %}
+  <script>
+    function deleteJobPopup(id) {
+      let url = document.getElementById("deleteJobAdvertisement" + id.toString()).getAttribute("data-url");
+      if (confirm("Er du sikker på at du vil fjerne denne jobbutlysningen?")) {
+        window.location.href = url;
+      }
+    }
+  </script>
 {% endblock footer_script %}

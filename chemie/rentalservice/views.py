@@ -95,7 +95,7 @@ def contact(request, rentalobject_id):
                 "contact_email": contact_form.cleaned_data.get(
                     "contact_email"
                 ),
-                "root_url": get_current_site(None)
+                "root_url": get_current_site(None),
             },
         )
 

@@ -11,7 +11,7 @@
               Industrikomiteen
             </h2>
             <h1 class="display-font">
-              HC sin kontakt <br> til arbeidslivet
+              HC sin kontakt <br> med industrien
             </h1>
             <h2 class="subheader-main">
               Følg med på bedriftspresentasjoner, jobbutlysninger og mer
@@ -32,15 +32,15 @@
 
       <div class="col-12 col-md-6">
         <p class="lead">
-          Denne siden administreres av Industrikomiteen - Høiskolens Chemikerforenings kontakt med industrien.
-          Her finner du en full oversikt over Industrikomiteens arrangementer og relevante jobbutlysninger.
-          I tillegg kan du finne intervjuer med eldre kjemikere og informasjon fra diplomundersøkelsen -
-          en årlig undersøkelse for å kartlegge jobbmarkedet via utgåtte MTKJ-studenter.
+          Denne siden administreres av Industrikomiteen &ndash; Høiskolens Chemikerforenings kontakt med industrien.
+          Her finner du full oversikt over Industrikomiteens arrangementer, relevante jobbutlysninger, intervjuer med
+          eldre kjemikere og informasjon fra diplomundersøkelsen.
+          <br><br>
           Sidene enda i oppstartsfasen og Industrikomiteen er på saken med å bygge opp innhold.
           Vi gleder oss masse til å dele spennende informasjon med dere.
         </p>
         <a href="{{ indkom.get_absolute_url }}" class="button-fill">
-          Les mer <!-- TODO: Fix Font Awesome icon -->
+          Les mer
         </a>
 
       </div>
@@ -140,18 +140,17 @@
   </div>
 
   <div class="container">
-
     <div class="row" style="margin-bottom: 200px">
 
       <div class="col-12">
         <h3 class="heading">Annet</h3>
       </div>
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
         <div class="card shadow-sm square">
           <p class="square-text">
             <span class="square-card-header">
-              Jobbutlysninger
+              <i class="material-icons micon">corporate_fare</i> Jobbutlysninger
             </span>
             <br style="margin-bottom: 10px">
             Finn relevant jobb
@@ -160,11 +159,11 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
         <div class="card shadow-sm square">
           <p class="square-text">
             <span class="square-card-header">
-              Intervjuer
+              <i class="material-icons micon">question_answer</i> Intervjuer
             </span>
             <br style="margin-bottom: 10px">
             Les intervjuer med tidligere studenter
@@ -173,11 +172,11 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-4">
+      <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
         <div class="card shadow-sm square">
           <p class="square-text">
             <span class="square-card-header">
-              Diplomundersøkelsen
+              <i class="material-icons micon hyphen">bar_chart</i> Diplom&shy;undersøkelsen
             </span>
             <br style="margin-bottom: 10px">
             Lurer du på hvor tidligere studenter har endt opp? Sjekk statistikken
@@ -187,164 +186,8 @@
       </div>
 
     </div>
-
   </div>
-
-  <!--
-      <div class="card" id="jobBox" style="margin: 40px;">
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-            </div>
-            <div class="col">
-              {% if perms.corporate.add_jobadvertisement %}
-                <a href="{% url "corporate:job_create" %}" style="float:right; color:#343A40;">
-                  <i class="fa fa-plus" style="font-size:36px"></i>
-                </a>
-              {% endif %}
-            </div>
-          </div>
-          <p>
-            Her vil det fortløpende legges ut informasjon om sommerjobber og relevante faste arbeidsstillinger.
-          </p>
-
-          {% for job in job_advertisements %}
-            <hr>
-            <a class="collapser" data-toggle="collapse" href="#jobCollapse{{ job.id }}" style="color:#343A40">
-              <h5>{{ job.title }}</h5></a>
-            <div class="collapse multi-collapse" id="jobCollapse{{ job.id }}">
-              <div class="row">
-                <div class="col-9">
-                  {{ job.description | safe }}
-                </div>
-                <div class="col-3">
-                  {% if perms.corporate.delete_jobadvertisement %}
-                    <a type="button" class="btn"
-                       onclick="deleteJobPopup({{ interview.id }})"
-                       style="float:right; background-color:#343A40; color: white;"
-                       id="deleteInterview{{ job.id }}"
-                       data-url="{% url "corporate:job_delete" job.id %}">
-                      <i class="fa fa-trash"> Slett</i>
-                    </a>
-                  {% endif %}
-                </div>
-              </div>
-            </div>
-          {% empty %}
-            <p>For øyeblikket er det ingen publiserte jobbutlysninger.</p>
-          {% endfor %}
-        </div>
-      </div>
-      <br>
-    </div>
-    <div class="col-1"></div>
-  </div>
-    </div>
-
-  <div class="container">
-  <div class="row">
-    <div class="col-1"></div>
-    <div class="col-5">
-
-      <div class="card" id="interviewBox" style="margin: 40px;">
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <h2 class="card-title">Intervjuer</h2>
-            </div>
-            <div class="col">
-              {% if perms.corporate.add_interview %}
-                <a href="{% url "corporate:interview_create" %}" style="float:right; color:#343A40;">
-                  <i class="fa fa-plus" style="font-size:36px"></i>
-                </a>
-              {% endif %}
-            </div>
-          </div>
-          <p>
-            Her kan du lese intervjuer med nåværende og tidligere kjemikere med relevant arbeidserfaring.
-          </p>
-
-          {% for interview in interviews %}
-            <hr>
-            <div class="row">
-              <div class="col">
-                <h5>{{ interview.title }}</h5>
-              </div>
-              <div class="col">
-                <a type="button" class="btn btn-dark" style="float:right; color:white;"
-                   onclick="displayCorrectInterview({{ interview.id }})">Se mer
-                </a>
-              </div>
-            </div>
-          {% empty %}
-            <p>For øyeblikket er det ingen publiserte intervjuer.</p>
-          {% endfor %}
-        </div>
-      </div>
-
-    </div>
-    <div class="col-5">
-
-      {% for interview in interviews %}
-        <div class="card w-75" style="margin: 40px; display: none" id="interviewCard{{ interview.id }}">
-          <img src="{{ interview.picture.url }}" class="card-img-top" alt="..." style="height: 25rem; object-fit:cover">
-
-          <div class="card-body">
-            <h4 class="card-title">{{ interview.interview_object }}</h4>
-            {% for specialization in interview.specializations.all %}
-              <span class="badge badge-pill badge-dark" style="font-weight: normal; background-color:#343A40;">
-                {{ specialization }}
-              </span>
-            {% endfor %}
-            <hr>
-            {{ interview.text | safe }}
-            {% if perms.corporate.delete_interview %}
-              <a type="button" class="btn"
-                 onclick="deleteInterviewPopup({{ interview.id }})"
-                 style="float:right; background-color:#343A40; color: white;"
-                 id="deleteInterview{{ interview.id }}"
-                 data-url="{% url "corporate:interview_delete" interview.id %}">
-                <i class="fa fa-trash"> Slett</i>
-              </a>
-            {% endif %}
-          </div>
-          <br><br>
-        </div>
-      {% endfor %}
-
-    </div>
-    <div class="col-1"></div>
-  </div>
-  </div>
-  -->
-
 {% endblock content %}
 
 {% block footer_script %}
-  <script>
-    function displayCorrectInterview(targetId) {
-
-      {% for interview in interviews %}
-        document.getElementById("interviewCard{{ interview.id }}").style.display = "none";
-      {% endfor %}
-
-      let targetCard = document.getElementById("interviewCard" + targetId.toString());
-      targetCard.style.display = "block";
-    }
-
-    function deleteInterviewPopup(id) {
-      let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
-      if (confirm("Er du sikker på at du vil fjerne dette intervjuet?")) {
-        window.location.href = url;
-      }
-    }
-
-    function deleteJobPopup(id) {
-      let url = document.getElementById("deleteJob" + id.toString()).getAttribute("data-url");
-      if (confirm("Er du sikker på at du vil fjerne denne jobbutlysningen?")) {
-        window.location.href = url;
-      }
-    }
-
-  </script>
 {% endblock footer_script %}
