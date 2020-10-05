@@ -1,0 +1,27 @@
+<mjml>
+  <mj-head>
+    <mj-include path="../style.mjml" />
+    <mj-title>{{ subject }}
+    </mj-title>
+  </mj-head>
+  <mj-body>
+    <mj-container mj-class="secondaryColor">
+      <mj-include path="../header.mjml" />
+      <mj-section mj-class="primaryColor" padding-top="20">
+        <mj-column width="98%">
+          <mj-text mj-class="readable">
+            {{ rentalobject.owner }} har blitt kontaktet angående {{ rentalobject }}
+            <br><br>
+            Hvem: {{ contact_name|default_if_none:"Ikke oppgitt" }}<br>
+            E-post: {{ contact_email|default_if_none:"Ikke oppgitt" }}<br>
+            Når: {% now "j. F - H:i" %}<br>
+            <br>
+            Melding:<br>
+            {{ message }}
+          </mj-text>
+        </mj-column>
+      </mj-section>
+      <mj-include path="../footer.mjml" />
+    </mj-container>
+  </mj-body>
+</mjml>

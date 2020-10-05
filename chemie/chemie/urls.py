@@ -53,12 +53,13 @@ urlpatterns = [
         include("chemie.picturecarousel.urls", namespace="carousel"),
     ),
     path("valg/", include("chemie.elections.urls", namespace="elections")),
-    path(
-        "push-notifikasjoner/",
-        include("chemie.web_push.urls", namespace="web_push"),
-    ),
+    path("web_push/", include("chemie.web_push.urls", namespace="web_push")),
     path("kontoret/", include("chemie.shop.urls", namespace="shop")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
+    path(
+        "utleie/",
+        include("chemie.rentalservice.urls", namespace="rentalservice"),
+    ),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
