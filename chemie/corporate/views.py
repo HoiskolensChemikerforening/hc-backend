@@ -38,6 +38,40 @@ def index(request):
     return render(request, "corporate/index.html", context)
 
 
+def job_advertisement(request):
+    job_advertisements = JobAdvertisement.objects.filter(
+        is_published=True
+    ).order_by("published_date")
+
+    context = {
+        "job_advertisements": job_advertisements,
+    }
+    return render(request, "corporate/job_advertisement.html", context)
+
+
+def interview(request):
+    interviews = Interview.objects.filter(is_published=True).order_by("-id")
+
+    context = {
+        "interviews": interviews,
+    }
+    return render(request, "corporate/interview.html", context)
+
+
+def interview_detail(request, id):
+    interview = get_object_or_404(Interview, pk=id)
+
+    context = {
+        "interview": interview,
+    }
+    return render(request, "corporate/interview_detail.html", context)
+
+
+def statistics(request):
+    context = {}
+    return render(request, "corporate/statistics.html", context)
+
+
 @permission_required("corporate.add_interview")
 def interview_create(request):
     form = CreateInterviewForm(request.POST or None, request.FILES or None)

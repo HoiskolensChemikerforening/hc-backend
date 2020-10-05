@@ -1,0 +1,39 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+
+{% block content %}
+
+<div class="banner background-dark" style="margin-bottom: 80px;">
+  <div class="container" style="padding-top: 85px;">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <a class="link" style="font-weight: 600; font-size: var(--font-size-medium-plus);"
+           href="{% url "corporate:interview" %}">
+          Intervjuer
+        </a>
+      </div>
+      <div class="col-12" style="margin-top: 20px;">
+        <h1 class="heading">{{ interview.title }}</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" style="margin-bottom: 100px">
+    <div class="col-12 col-lg-1 order-3 order-lg-1"></div>
+    <div class="col-12 col-lg-6 order-2 order-lg-2">
+      {{ interview.text | safe }}
+    </div>
+    <div class="col-12 col-lg-4 order-1 order-lg-3">
+      <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 60vw" src="{{ interview.picture.url }}">
+    </div>
+    <div class="col-12 col-lg-1 order-4 order-lg-4"></div>
+  </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+{% endblock footer_script %}

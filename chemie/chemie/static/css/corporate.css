@@ -21,6 +21,7 @@
     --main-color-light: var(--gray-50);
     --main-color-yellow: #f9cf00;
     --secondary-color-yellow: #f8b700;
+    --tertiary-color-yellow: #f79e00;
 
     /* Font size */
     --font-size-xsmall: 0.875rem;
@@ -51,6 +52,17 @@ body {
     color: var(--secondary-color-yellow);
     text-decoration: none;
 }
+
+.link-dark {
+    color: var(--tertiary-color-yellow);
+    font-weight: 600;
+}
+
+.link-dark:hover {
+    color: var(--secondary-color-yellow);
+    text-decoration: none;
+}
+
 
 /* Buttons */
 .button-fill {
@@ -114,6 +126,12 @@ body {
     margin-bottom: 100px;
 }
 
+.banner {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-bottom: 30px;
+}
+
 .heading {
     font-weight: 700;
     font-size: var(--font-size-xxlarge);
@@ -144,4 +162,28 @@ body {
     font-weight: 600;
     font-size: var(--font-size-medium);
     color: var(--main-color-light);
+}
+
+.square {
+    padding-top: 90%;
+    background: var(--gray-100);
+}
+
+.square-text {
+    position: absolute;
+    top: 35%;
+    left: 5%;
+    bottom: 0;
+    color: var(--main-color-dark);
+}
+
+.square-card-header {
+    font-weight: 600;
+    font-size: var(--font-size-large);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
 }
