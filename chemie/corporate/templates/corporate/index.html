@@ -2,146 +2,150 @@
 {% load static %}
 
 {% block content %}
-  <div style="height: 767px; padding-top: 200px; margin-bottom: 70px; background-position: bottom; background-image: url('{% static "images/test.png" %}')">
-    <div class="container-fluid">
+  <div class="top-banner background-dark">
+    <div class="container">
       <div class="row">
-        <div class="col-1 col-md-1"></div>
-        <div class="col-10 col-md-5">
-          <h2 style="font-family: 'Piazzolla', serif; font-weight:900;">
-            <strong>Høiskolens Chemikerforenings</strong>
-          </h2>
-          <h1 style="font-size: 100px; font-family: 'Piazzolla', serif; font-weight:900;">
-            <strong>Bedriftskontakt</strong></h1>
-        </div>
-        <div class="col-11 offset-1 col-md-4">
-          <img src="{{ indkom.image.url }}" alt="..." style="margin-top: 100px; max-width: 75vw;" width="100%">
+        <div class="col-10">
+          <div>
+            <h2 class="subheader-main" style="opacity: 80%">
+              Industrikomiteen
+            </h2>
+            <h1 class="display-font">
+              HC sin kontakt <br> til arbeidslivet
+            </h1>
+            <h2 class="subheader-main">
+              Følg med på bedriftspresentasjoner, jobbutlysninger og mer
+            </h2>
+          </div>
         </div>
       </div>
     </div>
   </div>
 
-  <div class="container-fluid" style="margin-bottom: 160px;">
+  <div class="container" style="margin-bottom: 160px;">
     <div class="row">
-      <div class="col-1"></div>
-      <div class="col-10 col-xl-5">
-        <h3 style="font-weight: 700; font-size: 35px; margin-bottom: 25px;">Industrikomiteen</h3>
-        <p style="font-size: 18px; margin-bottom: 50px;">
+      <div class="col-12">
+        <h3 class="heading">
+          Industrikomiteen
+        </h3>
+      </div>
+
+      <div class="col-12 col-md-6">
+        <p class="lead">
           Denne siden administreres av Industrikomiteen - Høiskolens Chemikerforenings kontakt med industrien.
           Her finner du en full oversikt over Industrikomiteens arrangementer og relevante jobbutlysninger.
           I tillegg kan du finne intervjuer med eldre kjemikere og informasjon fra diplomundersøkelsen -
           en årlig undersøkelse for å kartlegge jobbmarkedet via utgåtte MTKJ-studenter.
           Sidene enda i oppstartsfasen og Industrikomiteen er på saken med å bygge opp innhold.
-          Vi gleder oss masse til å dele spennende informasjon med dere.</p>
+          Vi gleder oss masse til å dele spennende informasjon med dere.
+        </p>
+        <a href="{{ indkom.get_absolute_url }}" class="button-fill">
+          Les mer <!-- TODO: Fix Font Awesome icon -->
+        </a>
+
       </div>
-      <div class="col-10 col-xl-4 offset-1">
-        <h4 style="text-transform: uppercase; color: #888; margin-bottom: 12px; font-weight: 500">
-          Samarbeidspartnere</h4>
-        <p style="font-size: 18px; color: #888; margin-bottom: 40px;">
+
+      <div class="col-12 col-md-6">
+        <img src="{{ indkom.image.url }}" alt="..." class="img-fluid" style="margin-bottom: 50px">
+      </div>
+
+
+      <div class="col-12 col-md-4">
+        <h4 class="subheading">
+          Samarbeidspartnere
+        </h4>
+        <img src="https://images.finncdn.no/dynamic/default/2020/7/vertical-0/10/2/184/412/212_1087034308.jpg"
+             alt="Emerson" style="width: 300px; max-width: 100%; margin-bottom: 30px">
+        <p style="font-size: var(--font-size-small)">
           Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter
         </p>
-        <img src="https://images.finncdn.no/dynamic/default/2020/7/vertical-0/10/2/184/412/212_1087034308.jpg"
-             alt="Emerson" width="300px;">
       </div>
-      <div class="col-1"></div>
     </div>
   </div>
-  </div>
 
 
-  <div class="jumbotron jumbotron-fluid" style="background-color:#222">
+  <div class="jumbotron jumbotron-fluid" style="background-color: var(--main-color-dark);
+  color: var(--main-color-light); margin-bottom: 100px;">
     <div class="container">
-      <div class="row" style="margin-left: 10%;">
-        <div style="margin-right: 50px;">
-          <img src="https://www.uokpl.rs/fpng/f/300-3008394_thumb-image-emerson.png" alt="Emerson" width="210px"
-               height="100px">
+      <div class="row" style="margin: 40px 0 80px 0;">
+        <div class="col-12 col-lg-4">
+          <h3 class="heading">
+            Utforsk arrangementer
+          </h3>
         </div>
-        <div class="col">
-          <h1 class="display-4 text-light">Samarbeidspartnere</h1>
-          <p class="lead text-light">Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter</p>
+        <div class="col-12 col-lg-8">
+          <p style="font-size: var(--font-size-small); color: var(--gray-200)">
+            Vi avholder <a class="link" style="opacity: 100%" href="{% url "events:index_bedpres" %}">bedriftspresentasjoner</a> flere ganger i semestert. En bedrift kommer og
+            fortelle om sin virksomhet, hva som venter nyutdannede sivilingeniører i bedriften og
+            andre emner som kan interessere studentene.
+          </p>
         </div>
       </div>
-    </div>
-  </div>
 
-  <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+      <hr style="background: white; margin-bottom: 40px">
 
-  <div class="row">
-    <div class="col-1"></div>
-    <div class="col-5">
-      <div class="card" id="bedpresBox" style="margin: 40px;">
-        <div class="card-body">
-          <div class="row">
-            <div class="col">
-              <h2 class="card-title">Arrangementer</h2>
-            </div>
-            <div class="col">
-              {% if perms.events.add_bedpres %}
-                <a href="{% url "events:create_bedpres" %}" style="float:right; color:#343A40;">
-                  <i class="fa fa-plus" style="font-size:36px"></i>
-                </a>
-              {% endif %}
-            </div>
-          </div>
-          <div class="row">
-            <div class="col">
-              <p>
-                Vi avholder bedriftspresentasjoner flere ganger hvert semester. En bedrift inviteres da til å komme og
-                fortelle om sin virksomhet, hvilke arbeidsoppgaver som venter en nyutdannet sivilingeniør i bedriften og
-                andre emner som kan interessere studentene.
-              </p>
-            </div>
-          </div>
-
+      <div class="row" style="margin-bottom: 50px">
+        <div class="col-12">
           {% if no_events %}
-            <p>For øyblikket er det ikke planlagt noen arrangementer.</p>
-
+          <p>For øyblikket er det ikke planlagt noen arrangementer.</p>
           {% else %}
             {% for bp in bedpres %}
-
-              <hr>
-              <div class="row">
-                <div class="col">
-                  <a href="{{ bp.get_absolute_url }}" style="color:black">
-                    <h5>{{ bp.title }}</h5>
-                  </a>
-                </div>
-                <div class="col">
-                  <a type="button" class="btn btn-dark" style="float:right; color: white;"
-                     href="{% url "events:detail_bedpres" bp.id %}">Vis mer</a>
-                </div>
+              <div class="col-12 col-md-3" style="margin-bottom: 10px">
+                <a href="{{ bp.get_absolute_url }}" class="link">
+                  <p style="font-size: var(--font-size-medium-plus); font-weight: 600; margin-bottom: 8px">
+                    {{ bp.title }}
+                  </p>
+                </a>
+                <p>{{ bp.date }}</p>
               </div>
-              <p>{{ bp.date }}</p>
-
+              <div class="col-12 col-md-9"></div>
             {% endfor %}
 
             {% for event in events %}
-
-              <hr>
-              <div class="row">
-                <div class="col">
-                  <a href="{{ event.get_absolute_url }}" style="color:black">
-                    <h5>{{ event.title }}</h5>
-                  </a>
-                </div>
-                <div class="col">
-                  <a type="button" class="btn btn-dark" style="float:right; color: white;"
-                     href="{% url "events:detail_social" event.id %}">Vis mer</a>
-                </div>
+              <div class="col-12 col-md-3" style="margin-bottom: 10px">
+                <a href="{{ event.get_absolute_url }}" class="link">
+                  <p style="font-size: var(--font-size-medium-plus); font-weight: 600;  margin-bottom: 8px">
+                    {{ event.title }}
+                  </p>
+                </a>
+                <p>{{ event.date }}</p>
               </div>
-              <p>{{ event.date }}</p>
-
+              <div class="col-12 col-md-9"></div>
             {% endfor %}
-
           {% endif %}
         </div>
       </div>
+
+      <div class="row">
+        {% if perms.events.add_bedpres %}
+        <div class="col-12">
+          <p style="font-weight: 600; font-size: var(--font-size-large); margin-bottom: 24px">Ønsker du å opprette et arrangement?</p>
+        </div>
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 30px">
+          <a class="button-nofill" href="{% url "events:create_bedpres" %}">
+          Ny bedpres
+          </a>
+        </div>
+        {% endif %}
+        {% if perms.events.add_social %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
+          <a class="button-nofill" href="{% url "events:create_social" %}">
+          Nytt sosialt arrangement
+          </a>
+        </div>
+        {% endif %}
+      </div>
     </div>
-    <div class="col-5">
+  </div>
+
+  <div class="container">
+    <div class="row">
+      <div class="col-12">
+        <h3 class="heading">Jobbutlysninger</h3>
       <div class="card" id="jobBox" style="margin: 40px;">
         <div class="card-body">
           <div class="row">
             <div class="col">
-              <h2 class="card-title">Jobbutlysninger</h2>
             </div>
             <div class="col">
               {% if perms.corporate.add_jobadvertisement %}
@@ -186,7 +190,9 @@
     </div>
     <div class="col-1"></div>
   </div>
+    </div>
 
+  <div class="container">
   <div class="row">
     <div class="col-1"></div>
     <div class="col-5">
@@ -260,7 +266,7 @@
     </div>
     <div class="col-1"></div>
   </div>
-  <br><br>
+  </div>
 
 {% endblock content %}
 
