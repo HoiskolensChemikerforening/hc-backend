@@ -33,6 +33,7 @@ from .forms import (
     RegisterBedpresForm,
     BedpresRegisterUserForm,
 )
+
 from .models import (
     Social,
     SocialEventRegistration,
@@ -41,6 +42,15 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
+)
+
+from rest_framework import generics
+
+from .serializer import (
+    SocialSerializer,
+    SocialEventRegistrationSerializer,
+    BedpresSerializer,
+    BedpresRegistrationSerializer,
 )
 
 
@@ -870,3 +880,19 @@ def check_in_to_social(request, pk):
             )
     context = {"form": form, "social": social}
     return render(request, "events/social/check_in.html", context)
+
+class SocialListCreate(generics.ListCreateAPIView):
+    queryset = Social.objects.all()
+    serializer_class = SocialSerializer
+
+class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
+    queryset = SocialEventRegistration.objects.all()
+    serializer_class = SocialEventRegistrationSerializer
+
+class BedpresListCreate(generics.ListCreateAPIView):
+    queryset = Bedpres.objects.all()
+    serializer_class = BedpresSerializer
+
+class BedpresRegistrationListCreate(generics.ListCreateAPIView):
+    queryset = BedpresRegistration.objects.all()
+    serializer_class = BedpresRegistrationSerializer
