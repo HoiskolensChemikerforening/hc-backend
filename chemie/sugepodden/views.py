@@ -27,7 +27,6 @@ class ListPodcastDeleteView(PermissionRequiredMixin, ListView):
         return self.model.objects.filter(published=True)
 
 
-
 @permission_required("sugepodden.add_podcast")
 def create_podcast(request):
     post = PodcastForm(request.POST or None, request.FILES or None)

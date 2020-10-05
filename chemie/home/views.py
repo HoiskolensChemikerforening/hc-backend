@@ -32,14 +32,16 @@ def index(request):
         "-published_date"
     )[:4]
     coffee = CoffeeSubmission.get_latest_submission()
-    all_podcasts = Podcast.objects.filter(published=True).order_by("-published_date")
+    all_podcasts = Podcast.objects.filter(published=True).order_by(
+        "-published_date"
+    )
     latest_podcast_url = all_podcasts[0].url
     context = {
         "social": all_social,
         "bedpres": all_bedpres,
         "posts": all_posts,
         "coffee": coffee,
-        "latest_podcast":latest_podcast_url,
+        "latest_podcast": latest_podcast_url,
     }
     return render(request, "chemie/index.html", context)
 
