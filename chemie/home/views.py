@@ -32,10 +32,8 @@ def index(request):
         "-published_date"
     )[:4]
     coffee = CoffeeSubmission.get_latest_submission()
-    all_podcasts = Podcast.objects.filter(published=True).order_by(
-        "-published_date"
-    )
-    latest_podcast_url = all_podcasts[0].url
+    latest_podcast_url = Podcast.get_latest_podcast_url()
+
     context = {
         "social": all_social,
         "bedpres": all_bedpres,
