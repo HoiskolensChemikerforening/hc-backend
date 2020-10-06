@@ -33,10 +33,10 @@
       <div class="col-12 col-md-6" style="margin-bottom: 40px;">
         <p class="lead">
           Denne siden administreres av Industrikomiteen &ndash; Høiskolens Chemikerforenings kontakt med industrien.
-          Her finner du full oversikt over Industrikomiteens arrangementer, relevante jobbutlysninger, intervjuer med
-          eldre kjemikere og informasjon fra diplomundersøkelsen.
+          Her finner du en full oversikt over Industrikomiteens arrangementer, relevante jobbutlysninger,
+          intervjuer med kjemikere og informasjon fra diplomundersøkelsen.
           <br><br>
-          Sidene enda i oppstartsfasen og Industrikomiteen er på saken med å bygge opp innhold.
+          Sidene er enda i oppstartsfasen og Industrikomiteen er på saken med å lage innhold.
           Vi gleder oss masse til å dele spennende informasjon med dere.
         </p>
         <a href="{{ indkom.get_absolute_url }}" class="button-fill">
@@ -57,7 +57,7 @@
         <img src="https://images.finncdn.no/dynamic/default/2020/7/vertical-0/10/2/184/412/212_1087034308.jpg"
              alt="Emerson" style="width: 300px; max-width: 100%; margin-bottom: 30px">
         <p style="font-size: var(--font-size-small)">
-          Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter
+          Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter.
         </p>
       </div>
     </div>
@@ -77,8 +77,9 @@
           <p style="font-size: var(--font-size-small); color: var(--gray-200)">
             Vi arrangerer
             <a class="link" style="opacity: 100%" href="{% url "events:index_bedpres" %}">bedriftspresentasjoner</a>
-            flere ganger i semesteret. En bedrift kommer og forteller om sin virksomhet, hva som venter nyutdannede
-            sivilingeniører i bedriften og andre emner som kan interessere studentene.
+            hvor relevante bedrifter forteller om sin virksomhet,<br>
+            og hva som venter nyutdannede sivilingeniører i bedriften.
+            I tillegg arrangerer vi motivasjonsforedrag, mastergradpresentasjoner og Ph.D. Grand Prix.
           </p>
         </div>
       </div>
@@ -87,7 +88,9 @@
 
       <div class="row" style="margin-bottom: 50px">
         {% if no_events %}
-        <p>For øyblikket er det ikke planlagt noen arrangementer.</p>
+        <div class="col-12" style="margin-bottom: 10px">
+          <p>For øyeblikket er det ikke planlagt noen arrangementer.</p>
+        </div>
         {% else %}
         {% for bp in bedpres %}
         <div class="col-12 col-md-3" style="margin-bottom: 10px">
@@ -140,10 +143,6 @@
   <div class="container">
     <div class="row" style="margin-bottom: 200px">
 
-      <div class="col-12">
-        <h3 class="heading">Annet</h3>
-      </div>
-
       <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
         <div class="card shadow-sm square">
           <p class="square-text">
@@ -177,7 +176,7 @@
               <i class="material-icons micon hyphen">bar_chart</i> Diplom&shy;undersøkelsen
             </span>
             <br style="margin-bottom: 10px">
-            Lurer du på hvor tidligere studenter har endt opp? Sjekk statistikken
+            Lurer du på hvor tidligere studenter har endt opp? Sjekk statistikken!
           </p>
           <a class="stretched-link" href="{% url "corporate:statistics" %}"> </a>
         </div>
