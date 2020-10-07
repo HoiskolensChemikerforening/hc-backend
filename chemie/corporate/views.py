@@ -93,7 +93,7 @@ def interview_remove(request, id):
     return redirect("corporate:interview")
 
 
-@permission_required("corporate.add_job_advertisement")
+@permission_required("corporate.add_jobadvertisement")
 def job_create(request):
     form = CreateJobForm(request.POST or None, request.FILES or None)
 
@@ -105,7 +105,7 @@ def job_create(request):
     return render(request, "corporate/job_create.html", context)
 
 
-@permission_required("corporate.delete_job_advertisement")
+@permission_required("corporate.delete_jobadvertisement")
 def job_remove(request, id):
     job = get_object_or_404(JobAdvertisement, id=id)
     job.is_published = False

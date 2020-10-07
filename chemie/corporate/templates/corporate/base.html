@@ -76,6 +76,13 @@
   <div class="collapse navbar-collapse" id="navbarSupportedContent">
     <div class="container">
       <ul class="navbar-nav mr-auto" style="float: right">
+        <li class="nav-item">
+          <a class="navigation-link"
+             style="float: right"
+             href="{% url "home:home" %}">
+            Til forsiden
+          </a>
+        </li>
         <li class="nav-item active">
           <a class="navigation-link"
              style="float: right"
@@ -179,16 +186,16 @@
 {% endblock footer_script %}
 
 <script>
-  $(document).ready(function() {
+  $(document).ready(function () {
     // executes when HTML-Document is loaded and DOM is ready
     console.log("document is ready");
 
-    $( ".card" ).hover(
-      function() {
-        $(this).addClass('shadow').css('cursor', 'pointer');
-      }, function() {
-      $(this).removeClass('shadow');
-    }
+    $(".card").hover(
+        function () {
+          $(this).addClass('shadow').css('cursor', 'pointer');
+        }, function () {
+          $(this).removeClass('shadow');
+        }
     );
   });
 

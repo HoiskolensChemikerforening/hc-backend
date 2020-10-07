@@ -20,7 +20,7 @@
 <div class="container" style="margin-bottom: 80px">
   <div class="row">
 
-    {% if perms.corporate.add_job_advertisement %}
+    {% if perms.corporate.add_jobadvertisement %}
       <div class="col-12" style="margin-bottom: 50px">
         <a class="button-fill" href="{% url "corporate:job_create" %}">
           Ny jobbutlysning
@@ -44,7 +44,7 @@
       <div style="margin: 20px 0;" class="collapse multi-collapse" id="jobCollapse{{ job_advertisement.id }}">
         {{ job_advertisement.description | safe }}
 
-        {% if perms.corporate.delete_job_advertisement %}
+        {% if perms.corporate.delete_jobadvertisement %}
           <div style="margin-top: 40px">
             <a type="button" class="button-warning"
                onclick="deleteJobPopup({{ job_advertisement.id }})"
