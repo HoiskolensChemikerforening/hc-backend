@@ -4,9 +4,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
 from django.shortcuts import get_object_or_404, render
-from django.contrib.auth.mixins import (
-    PermissionRequiredMixin,
-)
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.urls import reverse
 from django.views.generic.list import ListView
 
@@ -55,5 +53,3 @@ def list_all(request):
     )
     context = {"posts": all_posts}
     return render(request, "sugepodden/list.html", context)
-
-
