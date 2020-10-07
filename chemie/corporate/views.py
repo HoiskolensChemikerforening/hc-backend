@@ -43,27 +43,21 @@ def job_advertisement(request):
         is_published=True
     ).order_by("published_date")
 
-    context = {
-        "job_advertisements": job_advertisements,
-    }
+    context = {"job_advertisements": job_advertisements}
     return render(request, "corporate/job_advertisement.html", context)
 
 
 def interview(request):
     interviews = Interview.objects.filter(is_published=True).order_by("-id")
 
-    context = {
-        "interviews": interviews,
-    }
+    context = {"interviews": interviews}
     return render(request, "corporate/interview.html", context)
 
 
 def interview_detail(request, id):
     interview = get_object_or_404(Interview, pk=id)
 
-    context = {
-        "interview": interview,
-    }
+    context = {"interview": interview}
     return render(request, "corporate/interview_detail.html", context)
 
 
