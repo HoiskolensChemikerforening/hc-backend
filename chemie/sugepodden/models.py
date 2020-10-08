@@ -32,4 +32,3 @@ class Podcast(models.Model):
             latest_url = "/sugepodden"
 
         return latest_url
-
