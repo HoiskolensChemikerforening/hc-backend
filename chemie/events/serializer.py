@@ -1,12 +1,14 @@
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import (Social,
-                     Bedpres,
-                     SocialEventRegistration,
-                     BedpresRegistration
-                     )
-#from chemie.customprofile.serializers import UserSerializer
-#from chemie.committees.serializers import CommitteeSerializer
+from .models import (
+    Social,
+    Bedpres,
+    SocialEventRegistration,
+    BedpresRegistration,
+)
+
+# from chemie.customprofile.serializers import UserSerializer
+# from chemie.committees.serializers import CommitteeSerializer
 
 
 class SocialSerializer(serializers.ModelSerializer):
@@ -15,7 +17,7 @@ class SocialSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Social
-        fields = '__all__'
+        fields = "__all__"
 
 
 class SocialEventRegistrationSerializer(serializers.ModelSerializer):
@@ -23,7 +25,7 @@ class SocialEventRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = SocialEventRegistration
-        fields = '__all__'
+        fields = "__all__"
 
 
 class BedpresSerializer(serializers.ModelSerializer):
@@ -31,7 +33,7 @@ class BedpresSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Bedpres
-        fields = '__all__'
+        fields = "__all__"
 
 
 class BedpresRegistrationSerializer(serializers.ModelSerializer):
@@ -39,4 +41,4 @@ class BedpresRegistrationSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BedpresRegistration
-        fields = '__all__'
+        fields = "__all__"
