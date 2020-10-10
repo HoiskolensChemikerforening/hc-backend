@@ -190,9 +190,11 @@ def clear_locker(request, locker_number):
         reverse("bokskap:administrate") + "#locker{}".format(locker_number)
     )
 
+
 class LockerListCreate(generics.ListCreateAPIView):
     queryset = Locker.objects.all()
     serializer_class = LockerSerializer
+
 
 class LockerUserListCreate(generics.ListCreateAPIView):
     queryset = LockerUser.objects.all()

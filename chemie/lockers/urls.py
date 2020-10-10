@@ -24,6 +24,10 @@ urlpatterns = [
         name="administrate",
     ),
     path("mine-skap/", views.my_lockers, name="mineskap"),
-    path('api/lockers/', views.LockerListCreate.as_view(), name="api_lockers"),
-    path('api/lockerusers', views.LockerUserListCreate.as_view(), name="api_lockerusers"),
+    path("api/lockers/", views.LockerListCreate.as_view(), name="api_lockers"),
+    path(
+        "api/lockerusers",
+        views.LockerUserListCreate.as_view(),
+        name="api_lockerusers",
+    ),
 ]
