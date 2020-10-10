@@ -21,6 +21,7 @@ from django.contrib import admin
 from ..customprofile.views import LoginView
 
 from chemie.home.views import index
+from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -63,6 +64,7 @@ urlpatterns = [
         "utleie/",
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
+    path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
