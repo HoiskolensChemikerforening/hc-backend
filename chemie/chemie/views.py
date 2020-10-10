@@ -18,7 +18,7 @@ def page_not_found(request, exception):
         request, "404.html", context={"image": random_image}, status=404
     )
 
+
 class pictures_for_404ListCreate(generics.ListCreateAPIView):
     queryset = pictures_for_404.objects.all()
     serializer_class = pictures_for_404Serializer
-
