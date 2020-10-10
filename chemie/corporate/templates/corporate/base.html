@@ -1,0 +1,225 @@
+{% load static %}
+{% load thumbnail %}
+{% load chemie_tags %}
+{% load cache %}
+
+<!DOCTYPE html>
+<html lang="no">
+<head>
+  <meta charset="UTF-8">
+  <title>HC Bedrift</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="{% static "css/corporate.css" %}">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
+          integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"
+          crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
+          integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
+          crossorigin="anonymous"></script>
+
+  <!-- JS -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+  {% block extra_js %}
+  {% endblock %}
+
+
+  {% block header %}
+  {% endblock header %}
+  <meta name="theme-color" content="#222222">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#3C91E6">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+</head>
+
+<nav class="navbar background-dark"
+     style="background-color: #222; position: fixed; width: 100%; z-index: 2; padding: .5rem 0;">
+  <div class="container">
+    <a class="navbar-brand" href="{% url "corporate:index" %}">
+      <div class="logo">
+        <img class="logo-image" alt="HC_logo" src="{% static "images/logo.png" %}">
+        <h5 class="logo-text">HC Bedrift</h5>
+      </div>
+    </a>
+
+    <button class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            style="color: inherit"
+            data-target="#navbarSupportedContent"
+            aria-controls="navbarSupportedContent"
+            aria-expanded="false" aria-label="Toggle navigation"
+            onclick="toggleIcon()">
+      <i id="#navbar-burger"
+         class="material-icons micon hyphen"
+         style="color: inherit; font-size: var(--font-size-xxlarge)">
+        menu
+      </i>
+      <i id="#navbar-cross"
+         class="material-icons micon hyphen"
+         style="color: inherit; font-size: var(--font-size-xxlarge); display: none">
+        clear
+      </i>
+    </button>
+  </div>
+
+
+  <div class="collapse navbar-collapse" id="navbarSupportedContent">
+    <div class="container">
+      <ul class="navbar-nav mr-auto" style="float: right">
+        <li class="nav-item active">
+          <a class="navigation-link"
+             style="float: right"
+             href="{% url "corporate:job_advertisement" %}">
+            Jobbutlysninger
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="navigation-link"
+             style="float: right"
+             href="{% url "corporate:interview" %}">
+            Intervjuer
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="navigation-link"
+             style="float: right"
+             href="{% url "corporate:statistics" %}">
+            Diplomundersøkelsen
+          </a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+<body>
+
+{% block content %}
+{% endblock content %}
+
+<footer class="page-footer font-small pt-4" style="background-color: #222;">
+  <div class="container">
+    <br>
+    <div class="row">
+
+
+      <!-- Logo -->
+      <div class="col">
+        <img src="{% static "images/logo.png" %}" width="auto" height="200" alt="">
+      </div>
+
+      <!-- About -->
+      <div class="col">
+        <h5 class="text-white">Om oss</h5>
+        <p class="text-white">
+          Linjeforeningen for Industriell Kjemi og Bioteknologi på NTNU i Trondheim.
+        </p>
+
+        <br>
+
+        <div class="row">
+          <div class="col">
+            <a href="https://github.com/HoiskolensChemikerforening/website" class="text-white">
+              <i class="fa fa-github" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank" class="text-white ">
+              <i class="fa fa-facebook" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="https://www.instagram.com/hcntnu/" target="_blank" class="text-white">
+              <i class="fa fa-instagram" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="mailto:styret@hc.ntnu.no" class="text-white">
+              <i class="fa fa-envelope" style="font-size:36px"></i>
+            </a>
+          </div>
+        </div>
+
+        <br>
+        <div class="row">
+          <div class="col">
+            <a class="text-white text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkomiteen</a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Media/Social -->
+      <div class="col"></div>
+
+    </div>
+
+    <br><br>
+
+</footer>
+
+
+{% block footer_js_files %}
+{% endblock footer_js_files %}
+
+{% block footer_script %}
+{% endblock footer_script %}
+
+<script>
+  $(document).ready(function() {
+    // executes when HTML-Document is loaded and DOM is ready
+    console.log("document is ready");
+
+    $( ".card" ).hover(
+      function() {
+        $(this).addClass('shadow').css('cursor', 'pointer');
+      }, function() {
+      $(this).removeClass('shadow');
+    }
+    );
+  });
+
+  function toggleIcon() {
+    var burger = document.getElementById("#navbar-burger");
+    var cross = document.getElementById("#navbar-cross");
+
+    if (burger.style.display === "none") {
+      burger.style.display = "block";
+      cross.style.display = "none";
+    } else {
+      burger.style.display = "none";
+      cross.style.display = "block";
+    }
+  }
+
+  (function (i, s, o, g, r, a, m) {
+    i['GoogleAnalyticsObject'] = r;
+    i[r] = i[r] || function () {
+      (i[r].q = i[r].q || []).push(arguments)
+    }, i[r].l = 1 * new Date();
+    a = s.createElement(o),
+        m = s.getElementsByTagName(o)[0];
+    a.async = 1;
+    a.src = g;
+    m.parentNode.insertBefore(a, m)
+  })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+
+  ga('create', 'UA-52614731-1', 'auto');
+  ga('send', 'pageview');
+</script>
+
+</body>
+</html>
