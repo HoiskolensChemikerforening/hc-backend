@@ -14,7 +14,7 @@ from .models import (
 class SocialSerializer(serializers.ModelSerializer):
     # author = UserSerializer()
     # committee = CommitteeSerializer()
-
+    # attendees = UserSerializer(read_only= True, many = True)
     class Meta:
         model = Social
         fields = "__all__"
