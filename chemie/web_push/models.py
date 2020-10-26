@@ -10,7 +10,7 @@ import pytz
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
 SUSBSCRIPTION_CHOICES = Choices(
-    ("COFFEE", 1, "Coffee"), ("NEWS", 2, "News"), ("HAPPY", 3, "Happy"),
+    ("COFFEE", 1, "Coffee"), ("NEWS", 2, "News"), ("HAPPY", 3, "Happy")
 )
 
 
