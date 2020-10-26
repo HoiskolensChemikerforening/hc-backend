@@ -3,85 +3,97 @@
 {% load static %}
 
 {% block nav_header %}
-  Forsiden
+Forsiden
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Velkommen!
+Velkommen!
 {% endblock nav_sub_header %}
 
 {% block content %}
-  {% if perms.events or perms.news %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large">
+{% if perms.events or perms.news %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large">
         <i class="large material-icons">edit</i>
-      </a>
-      <ul>
+    </a>
+    <ul>
         {% if perms.events.add_event %}
-          <li>
-            <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
+        <li>
+            <a class="btn-floating blue" href="{% url " events:create_social" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett arrangement</a>
-          </li>
+        </li>
         {% endif %}
         {% if perms.events.add_bedpres %}
-          <li>
-            <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
+        <li>
+            <a class="btn-floating blue" href="{% url " events:create_bedpres" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
-          </li>
+        </li>
         {% endif %}
         {% if perms.news.add_article %}
-          <li>
-            <a class="btn-floating blue" href="{% url "news:create" %}"><i class="material-icons">add</i></a>
+        <li>
+            <a class="btn-floating blue" href="{% url " news:create" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett nyhet</a>
-          </li>
+        </li>
         {% endif %}
-      </ul>
-    </div>
-  {% endif %}
+    </ul>
+</div>
+{% endif %}
 
-  <!-- News -->
-  <div class="row">
+<!-- News -->
+<div class="row">
     <div class="col s12 push-m6 m6 push-l7 l5">
-    <!-- Events -->
-      <h3 class="heading">Arrangementer</h3>
-      {% if social or bedpres %}
+        <!-- Events -->
+        <h3 class="heading">Arrangementer</h3>
+        {% if social or bedpres %}
         {% include 'events/frontpage_list_events.html' with object_list=object_list %}
-      {% else %}
-        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
-      {% endif %}
+        {% else %}
+        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive
+            arrangementer.</p>
+        {% endif %}
 
-      <!-- Coffee -->
-      <div class="col coffee-box">
-          <img type="image/png" src="{% static "images/caffeine.png" %}"
-          style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
-          <p style="margin: auto">
-              Kaffeknappen sist trykket: <br>
-              {{coffee}}
+        <!-- Coffee -->
+        <div class="col coffee-box">
+            <img type="image/png" src="{% static " images/caffeine.png" %}"
+            style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
+            <p style="margin: auto">
+                Kaffeknappen sist trykket: <br>
+                {{coffee}}
             </p>
         </div>
-      <a href=  {{ latest_podcast }} class="card">
-      <!-- Latest sugepodden episode-->
-      <div class="col sugepodden-box">
-        <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
-             style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
-        <p style="margin: auto" color="card-black">
-          Klikk her for nyeste episode av sugepodden!
-        </p>
-      </div>
-      </a>
-      </div>
-    <div class="col s12 pull-m6 m6 pull-l5 l7">
-      <!-- News -->
-      {% if posts %}
-        {% cache 60 active_news %}
-          <h3 class="heading">Nyheter</h3>
-          {% include 'news/frontpage_news.html' with posts=posts %}
-        {% endcache %}
-      {% endif %}
+
+        <!-- Latest sugepodden episode-->
+        <div class="col sugepodden-box">
+            <a href={{ latest_podcast }} class="card">
+                <img type="image/png" src="{% static " images/sugepodden_logo_liten_svart_hvitkant.png" %}"
+                style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
+                <p style="margin: auto" color="card-black">
+                    Klikk her for nyeste episode av sugepodden!
+                </p>
+            </a>
+        </div>
+        <!--Links to video about office -->
+        <div class="col howToOffice">
+            <a href={{ how_to_kontoret }} class="card">
+                <img type="image/png" src="{% static " images/HC_coin.png" %}"
+                style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+                max-height:4rem; float: right; margin-top:-0.4rem; margin:0.5rem">
+                <p style="margin: auto" color="card-black">
+                    Usikker hvordan alt fungerer på kontoret? Sjekk ut "<strong>How to kontoret</strong>"!
+                </p>
+            </a>
+        </div>
+
     </div>
-  </div>
-
-
+    <div class="col s12 pull-m6 m6 pull-l5 l7">
+        <!-- News -->
+        {% if posts %}
+        {% cache 60 active_news %}
+        <h3 class="heading">Nyheter</h3>
+        {% include 'news/frontpage_news.html' with posts=posts %}
+        {% endcache %}
+        {% endif %}
+    </div>
+</div>
 
 
 {% endblock content %}
