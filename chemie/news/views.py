@@ -78,7 +78,7 @@ def edit_article(request, article_id, slug):
 
 class ListAllArticles(generics.ListCreateAPIView):
     queryset = Article.objects.filter(published=True).order_by(
-        "-published_date"
+        "-id"
     )
     serializer_class = ArticleSerializer
 
