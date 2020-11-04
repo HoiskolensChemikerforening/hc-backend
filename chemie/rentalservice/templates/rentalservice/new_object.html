@@ -1,0 +1,26 @@
+{% extends 'chemie/base.html' %}
+{% load material_form %}
+
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %}
+    {{ form.media }}
+    {{ form.as_p }}
+      <input class="btn" type='submit' value='Lagre objekt!'/>
+  </form>
+{% endblock content %}
+
+{% block footer_script %}
+  <script>
+    $(document).ready(function(){
+    $('select').formSelect();
+    });
+  </script>
+{% endblock footer_script %}

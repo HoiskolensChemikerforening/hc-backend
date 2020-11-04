@@ -30,6 +30,7 @@ urlpatterns = [
     path("sladreboks/", include("chemie.shitbox.urls", namespace="shitbox")),
     path("verv/", include("chemie.committees.urls", namespace="verv")),
     path("bokskap/", include("chemie.lockers.urls", namespace="bokskap")),
+    path("bedrift/", include("chemie.corporate.urls", namespace="corporate")),
     path("nyheter/", include("chemie.news.urls", namespace="news")),
     path("", include("chemie.customprofile.urls", namespace="profile")),
     path("login/", LoginView.as_view(), name="login"),
@@ -48,16 +49,20 @@ urlpatterns = [
     ),
     path("chaining/", include("smart_selects.urls")),
     path(
-        "bilder/",
-        include("chemie.picturecarousel.urls", namespace="carousel"),
+        "bilder/", include("chemie.picturecarousel.urls", namespace="carousel")
     ),
     path("valg/", include("chemie.elections.urls", namespace="elections")),
-    path(
-        "push-notifikasjoner/",
-        include("chemie.web_push.urls", namespace="web_push"),
-    ),
+    path("web_push/", include("chemie.web_push.urls", namespace="web_push")),
     path("kontoret/", include("chemie.shop.urls", namespace="shop")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
+    path(
+        "sugepodden/",
+        include("chemie.sugepodden.urls", namespace="sugepodden"),
+    ),
+    path(
+        "utleie/",
+        include("chemie.rentalservice.urls", namespace="rentalservice"),
+    ),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"

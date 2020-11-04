@@ -1,0 +1,45 @@
+{% extends "chemie/base.html" %}
+
+{% load staticfiles %}
+{% load material_form %}
+
+{% block nav_header %}
+  Utstyr til leie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Kontakt
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <p class="flow-text">
+        Her kan det stå litt generell info hvis vi vil ha det.</p>
+      <br>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <div class="card">
+        <div class="card-content">
+          <p class="flow-text">
+            Oppgi en gyldig epostadresse for at {{ rentalobject.owner }} kan kontakte deg tilbake.
+          </p>
+          <form method='POST'>{% csrf_token %}
+            {% form form=contact_form %}
+              {% part contact_form.contact_name prefix %}<i class="material-icons prefix">account_circle</i>
+              {% endpart %}
+              {% part contact_form.contact_email prefix %}<i class="material-icons prefix">contact_mail</i>
+              {% endpart %}
+              {% part contact_form.content prefix %}<i class="material-icons prefix">message</i>{% endpart %}
+            {% endform %}
+            <button type="submit" name="submit" class="btn">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+{% endblock content %}

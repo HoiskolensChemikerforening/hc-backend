@@ -4,6 +4,7 @@ RUN mkdir /chemie
 RUN apt update && apt install -y netcat
 
 ADD requirements /requirements/
+ADD emails /emails/
 ADD manage.py /
 # This line along with the first one caches pip
 # packages. It is experimental and might break.

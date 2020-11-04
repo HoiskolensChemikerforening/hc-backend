@@ -1,0 +1,25 @@
+{% load thumbnail %}
+<div class="row">
+  {% for post in posts %}
+    <div class="col s12 m10 l6">
+      <div class="card medium">
+        <div class="card-image">
+          <a href="{{ post.url}}">
+            {% thumbnail post.image "630x400" crop="center" as im %}
+              <img src="{{ im.url }}">
+            {% endthumbnail %}
+          </a>
+          <a class="card-title card-event-title" href="{{ post.url }}">
+            <h4>{{ post.title }}</h4>
+          </a>
+        </div>
+        <div class="card-content">
+          {{ post.description|safe }}
+        </div>
+        <div class="card-action center">
+          <a href="{{ post.url }}" class="">Til episoden</a>
+        </div>
+      </div>
+    </div>
+  {% endfor %}
+</div>

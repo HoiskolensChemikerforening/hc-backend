@@ -2,6 +2,7 @@ import json
 import os
 from os.path import join
 from subprocess import Popen, PIPE
+import os
 
 from django.conf import settings
 from django.core.management.base import BaseCommand
@@ -10,7 +11,7 @@ from django.core import serializers
 
 
 # Email template repo source directory
-EMAIL_TEMPLATE_DIR = settings.BASE_DIR - 1 + "emails"
+EMAIL_TEMPLATE_DIR = settings.BASE_DIR + "emails/"
 
 
 class Command(BaseCommand):
@@ -22,8 +23,8 @@ class Command(BaseCommand):
     def import_email_template(self, **kwargs):
         directory = kwargs.pop("path")
 
-        with open(f"{directory}.html", "r", encoding="utf-8") as html:
-            kwargs["html_content"] = html.read()
+        with open(f"{directory}.mjml", "r", encoding="utf-8") as mjml:
+            kwargs["html_content"] = mjml.read()
 
         with open(f"{directory}.txt", "r", encoding="utf-8") as txt:
             kwargs["content"] = txt.read()
@@ -64,7 +65,10 @@ class Command(BaseCommand):
             self.import_email_template(**email_data)
 
         data = serializers.serialize("json", EmailTemplate.objects.all())
-        with open("../chemie/fixtures/email-templates.json", "w") as f:
+
+        with open(
+            os.getcwd() + "/chemie/fixtures/email-templates.json", "w"
+        ) as f:
             f.write(data)
 
         self.stdout.write(

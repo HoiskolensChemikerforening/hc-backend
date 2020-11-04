@@ -1,0 +1,299 @@
+/* Imports */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/*  Color and variables */
+:root {
+    /* Color */
+    /* Grayscale */
+    --gray-900: #222222;
+    --gray-800: #434343;
+    --gray-700: #626262;
+    --gray-600: #767676;
+    --gray-500: #9f9f9f;
+    --gray-400: #bebebe;
+    --gray-300: #e1e1e1;
+    --gray-200: #efefef;
+    --gray-100: #f5f5f5;
+    --gray-50: #fafafa;
+
+    /* Yellow */
+    --yellow-900: #f57200;
+    --yellow-800: #f79e00;
+    --yellow-700: #f8b700;
+    --yellow-600: #f9cf00;
+    --yellow-500: #f8e000;
+    --yellow-400: #fae63f;
+    --yellow-300: #fceb65;
+    --yellow-200: #fdf092;
+    --yellow-100: #fef6be;
+    --yellow-50: #fffce4;
+
+    /* Main colors */
+    --main-color-dark: var(--gray-900);
+    --main-color-light: var(--gray-50);
+    --main-color-yellow: var(--yellow-600);
+    --secondary-color-yellow: var(--yellow-700);
+    --tertiary-color-yellow: var(--yellow-800);
+
+    --main-color-warning: #d32f2f;
+    --secondary-color-warning: #c62828;
+
+    /* Font size */
+    --font-size-xsmall: 0.875rem;
+    --font-size-small: 1rem;
+    --font-size-medium: 1.125rem;
+    --font-size-medium-plus: 1.25rem;
+    --font-size-large: 1.5rem;
+    --font-size-xlarge: 1.875rem;
+    --font-size-xxlarge: 2.25rem;
+    --font-size-display: 4.5rem;
+}
+
+
+/* General settings */
+body {
+    font-family: Inter, sans-serif;
+    font-size: var(--font-size-small);
+    color: var(--main-color-dark);
+}
+
+/* Links */
+.link {
+    color: var(--main-color-yellow);
+    font-weight: 600;
+}
+
+.link:hover {
+    color: var(--secondary-color-yellow);
+    text-decoration: none;
+}
+
+.link-dark {
+    color: var(--tertiary-color-yellow);
+    font-weight: 600;
+}
+
+.link-dark:hover {
+    color: var(--secondary-color-yellow);
+    text-decoration: none;
+}
+
+.navigation-link {
+    color: var(--gray-400);
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.navigation-link:hover {
+    color: var(--main-color-light);
+    font-weight: 600;
+    text-decoration: none;
+}
+
+/* Buttons */
+.button-fill {
+    font-size: var(--font-size-xsmall);
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 2px var(--main-color-yellow) solid;
+    background-color: var(--main-color-yellow);
+    color: var(--main-color-dark);
+    border-radius: 50px;
+}
+
+.button-fill:hover {
+    border: 2px var(--secondary-color-yellow) solid;
+    background-color: var(--secondary-color-yellow);
+    color: var(--main-color-dark);
+    text-decoration: none;
+}
+
+.button-nofill {
+    font-size: var(--font-size-xsmall);
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 1.5px var(--main-color-yellow) solid;
+    color: var(--main-color-yellow) !important;
+    border-radius: 50px;
+}
+
+.button-nofill:hover {
+    font-size: var(--font-size-xsmall);
+    border: 1.5px var(--secondary-color-yellow) solid;
+    color: var(--secondary-color-yellow) !important;
+    text-decoration: none;
+}
+
+.button-warning {
+    font-size: var(--font-size-xsmall);
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 2px var(--main-color-warning) solid;
+    background-color: var(--main-color-warning);
+    color: var(--main-color-light) !important;
+    border-radius: 50px;
+}
+
+.button-warning:hover {
+    font-size: var(--font-size-xsmall);
+    font-weight: 700;
+    padding: 9px 22px;
+    border: 2px var(--secondary-color-warning) solid;
+    background-color: var(--secondary-color-warning);
+    color: var(--main-color-light) !important;
+    border-radius: 50px;
+}
+
+.lead {
+    font-size: var(--font-size-medium);
+    margin-bottom: 30px;
+}
+
+.display-font {
+    font-size: 3.5rem;
+    font-weight:700;
+    margin-bottom: 35px;
+}
+
+.subheader-main {
+    font-weight: 600;
+    font-size: var(--font-size-large);
+    margin-bottom: 35px;
+}
+
+.background-dark {
+    background: var(--main-color-dark);
+    color: var(--main-color-light);
+}
+
+.top-banner {
+    padding-top: 120px;
+    padding-bottom: 80px;
+    margin-bottom: 100px;
+}
+
+.banner {
+    padding-top: 50px;
+    padding-bottom: 50px;
+    margin-bottom: 30px;
+}
+
+.heading {
+    font-weight: 700;
+    font-size: var(--font-size-xxlarge);
+    margin-bottom: 24px;
+}
+
+.subheading {
+    font-weight: 700;
+    font-size: var(--font-size-large);
+    margin-bottom: 30px;
+}
+
+.logo {
+    padding-top: 4px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.logo-image {
+    height: 35px;
+    width: auto;
+    margin-right: 12px;
+}
+
+.logo-text {
+    padding-top: 6px;
+    font-weight: 600;
+    font-size: var(--font-size-medium);
+    color: var(--main-color-light);
+}
+
+.square {
+    padding-top: 90%;
+    background: var(--gray-100);
+}
+
+.square-text {
+    position: absolute;
+    top: 35%;
+    left: 5%;
+    bottom: 0;
+    color: var(--main-color-dark);
+}
+
+.square-card-header {
+    font-weight: 600;
+    font-size: var(--font-size-large);
+}
+
+.card-img-top {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.hyphen {
+  -webkit-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
+}
+
+.badge-custom-1 {
+    background-color: var(--yellow-900);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-2 {
+    background-color: var(--yellow-800);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-3 {
+    background-color: var(--yellow-600);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-4 {
+    background-color: var(--yellow-500);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-5 {
+    background-color: var(--yellow-300);
+    color: var(--main-color-dark);
+}
+
+.badge-custom-6 {
+    background-color: var(--yellow-100);
+    color: var(--main-color-dark);
+}
+
+/* Small devices (landscape phones, 576px and up) */
+@media (min-width: 576px) {
+    .display-font {
+        font-size: 3.5rem;
+    }
+}
+
+/* Medium devices (tablets, 768px and up) */
+@media (min-width: 768px) {
+    .display-font {
+        font-size: 3.75rem;
+    }
+}
+
+/* Large devices (desktops, 992px and up) */
+@media (min-width: 992px) {
+    .display-font {
+        font-size: 4rem;
+    }
+}
+
+/* Extra large devices (large desktops, 1200px and up) */
+@media (min-width: 1200px) {
+    .display-font {
+        font-size: var(--font-size-display);
+    }
+}
