@@ -15,11 +15,28 @@
   <div class="container">
     <div class="row">
       <div class="col s12 m12 l10">
+
+      <h5>Vennligst gjør følgende når du registrer et bokskap:</h5>
+      <ol>
+        <li>Gå til
+          <a target="_blank" href="https://bit.ly/32EIusw"> U2 under Kjemivrimle</a>
+          og lokaliser et skap som står ledig</li>
+        <li>Dobbeltsjekk at dette skapet også står ledig her på nettsiden</li>
+        <li>Fyll ut alle punktene i skjemaet under</li>
+        <li>Bruk en gyldig ntnu-epostadresse. Det viktig at den er på formen brukernavn@stud.ntnu.no</li>
+        <li>Trykk på bekreftelseslenken som blir sendt til den oppgitte adressen</li>
+        <li>Alt er nå klart for at du kan bruke bokskapet!</li>
+      </ol>
+
+      <p>Merk! Det er kun mulig å eie to bokskap samtidig.
+        Dersom du ønsker å bytte bokskap, ta kontakt med webkom@hc.ntnu.no.
+        På begynnelsen av høstsemesteret hvert år vil Høiskolens Chemikerforening gå over alle bokskap og
+        tømme skap som er oppført som tomme. Derfor er det viktig at du bekrefter om du vil ta vare på skapet.
+        Dette gjør man da ved å trykke på lenken i en e-post som blir sendt ut til alle som eier et bokskap.
+      </p>
+
         <div class="card">
           <div class="card-content">
-            <p class="flow-text">Fyll ut feltene under for å reservere bokskapet. Du må klikke på linken i
-              eposten du mottar
-              for å bekrefte registrasjonen. Takk!</p>
             <form method='POST'>{% csrf_token %}
               {% form %}
                 {% part form.first_name prefix %}<i class="material-icons prefix">account_circle</i>
@@ -27,6 +44,7 @@
                 {% part form.last_name prefix %}<i class="material-icons prefix">account_circle</i>
                 {% endpart %}
                 {% part form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
+                {% part form.agree_to_terms prefix %}{% endpart %}
               {% endform %}
               <div class="row">
                 {{ form.captcha }}

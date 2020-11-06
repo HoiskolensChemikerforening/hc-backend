@@ -6,11 +6,19 @@ import material as M
 
 class RegisterExternalLockerUserForm(forms.ModelForm):
     captcha = ReCaptchaField()
-    layout = M.Layout(M.Row("first_name", "last_name"), M.Row("email"))
+    agree_to_terms = forms.BooleanField(
+        required=True,
+        label="Jeg har lest og godtar brukervilkårene for bruk av bokskap",
+    )
+    layout = M.Layout(
+        M.Row("first_name", "last_name"),
+        M.Row("email"),
+        M.Row("agree_to_terms"),
+    )
 
     class Meta:
         model = LockerUser
-        fields = ["first_name", "last_name", "email"]
+        fields = ["first_name", "last_name", "email", "agree_to_terms"]
 
 
 class MyLockersForm(forms.Form):
