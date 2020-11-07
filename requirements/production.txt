@@ -53,7 +53,7 @@ more-itertools==8.2.0     # via pytest
 olefile==0.46             # via -r base.in
 packaging==20.1           # via pytest
 passlib==1.7.2            # via django-hashers-passlib
-pillow==7.0.0             # via wiki
+pillow==7.1.0             # via wiki
 pluggy==0.13.1            # via pytest
 psycopg2==2.7.6.1         # via -r base.in
 py-vapid==1.7.0           # via pywebpush
