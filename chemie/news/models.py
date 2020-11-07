@@ -5,8 +5,6 @@ from django.db import models
 from django.db.models.signals import pre_save
 from django.utils.text import slugify
 from sorl.thumbnail import ImageField
-from chemie.web_push.models import Device
-from chemie.customprofile.models import Profile
 
 
 class Article(models.Model):
