@@ -12,6 +12,9 @@ from django.utils.html import format_html
 from .forms import EditDescription, EditPositionForm
 from .models import Committee, Position
 
+from .serializers import CommiteeSerializer, PositionSerializer
+from rest_framework import generics
+
 
 def index(request):
     # Fetch all members, who belong to a committee (Member -> Committee)
@@ -146,3 +149,23 @@ def edit_committee_memberships(request, slug):
             ] = form.instance.max_members
     context = {"formset": formset, "committee": slug}
     return render(request, "committees/edit_committee_members.html", context)
+
+
+class ListAllCommitees(generics.ListCreateAPIView):
+    queryset = Committee.objects.all().order_by("title")
+    serializer_class = CommiteeSerializer
+
+
+class CommiteeDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Committee.objects.all()
+    serializer_class = CommiteeSerializer
+
+
+class ListAllPositions(generics.ListCreateAPIView):
+    queryset = Position.objects.all().order_by("committee")
+    serializer_class = PositionSerializer
+
+
+class PositionDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Position.objects.all().order_by("committee")
+    serializer_class = PositionSerializer
