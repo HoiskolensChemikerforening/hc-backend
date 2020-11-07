@@ -23,6 +23,7 @@ class SocialSerializer(serializers.ModelSerializer):
 
 class SocialEventRegistrationSerializer(serializers.ModelSerializer):
     event = SocialSerializer()
+    user = UserSerializer()
 
     class Meta:
         model = SocialEventRegistration
@@ -40,6 +41,7 @@ class BedpresSerializer(serializers.ModelSerializer):
 
 class BedpresRegistrationSerializer(serializers.ModelSerializer):
     event = BedpresSerializer()
+    user = UserSerializer()
 
     class Meta:
         model = BedpresRegistration
