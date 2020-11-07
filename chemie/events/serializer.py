@@ -7,14 +7,14 @@ from .models import (
     BedpresRegistration,
 )
 
-# from chemie.customprofile.serializers import UserSerializer
-# from chemie.committees.serializers import CommitteeSerializer
+from chemie.customprofile.serializers import UserSerializer
+#from chemie.committees.serializers import CommitteeSerializer
 
 
 class SocialSerializer(serializers.ModelSerializer):
-    # author = UserSerializer()
-    # committee = CommitteeSerializer()
-    # attendees = UserSerializer(read_only= True, many = True)
+    author = UserSerializer()
+    #committee = CommitteeSerializer()
+    attendees = UserSerializer(read_only= True, many = True)
     class Meta:
         model = Social
         fields = "__all__"
@@ -29,7 +29,7 @@ class SocialEventRegistrationSerializer(serializers.ModelSerializer):
 
 
 class BedpresSerializer(serializers.ModelSerializer):
-    # author = UserSerializer()
+    author = UserSerializer()
 
     class Meta:
         model = Bedpres
