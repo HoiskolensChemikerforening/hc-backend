@@ -10,7 +10,11 @@ class RegisterExternalLockerUserForm(forms.ModelForm):
         required=True,
         label="Jeg har lest og godtar brukervilkårene for bruk av bokskap",
     )
-    layout = M.Layout(M.Row("first_name", "last_name"), M.Row("email"), M.Row("agree_to_terms"))
+    layout = M.Layout(
+        M.Row("first_name", "last_name"),
+        M.Row("email"),
+        M.Row("agree_to_terms"),
+    )
 
     class Meta:
         model = LockerUser

@@ -53,7 +53,6 @@ DJANGO_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.flatpages",
     "django.contrib.humanize",
-
 ]
 THIRD_PARTY_APPS = [
     "dal",
@@ -93,7 +92,9 @@ LOCAL_APPS = [
     "chemie.web_push",
     "chemie.shop",
     "chemie.quiz",
+    "chemie.corporate",
     "chemie.rentalservice",
+    "chemie.sugepodden",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS

@@ -154,7 +154,7 @@ def test_vote_for_one_user(
     # Vote for the candidate chosen
     client.login(username=user.username, password="defaultpassword")
     request = client.post(
-        reverse("elections:vote"), {"candidates": candidate.id},
+        reverse("elections:vote"), {"candidates": candidate.id}
     )
     assert request.url == reverse("elections:has_voted")
 
@@ -215,7 +215,7 @@ def test_vote_for_multiple_users(
     client.login(username=user.username, password="defaultpassword")
     client.post(
         reverse("elections:vote"),
-        {"candidates": [cand.id for cand in winner_candidates],},
+        {"candidates": [cand.id for cand in winner_candidates]},
     )
     # Close voting and assign votes to candidates by counting tickets
     election.end_current_position_voting()

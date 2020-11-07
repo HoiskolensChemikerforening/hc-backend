@@ -1,0 +1,61 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_sub_header %}
+  Slett
+{% endblock nav_sub_header %}
+
+
+
+
+
+{# Main block #}
+{% block content %}
+{% if perms.sugepodden %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.sugepodden.add_podcast %}
+          <li>
+            <a class="btn-floating blue" href={% url "sugepodden:create" %}>
+              <i class="material-icons">add</i>
+              <a class="btn-floating mobile-fab-tip" href={% url "sugepodden:create" %}>Legg til en ny podcast</a>
+            </a></li>
+              <a class="btn-floating red" href="{% url "sugepodden:delete_list_podcast" %}"><i
+                class="material-icons">delete_forever</i></a>
+              <a class="btn-floating mobile-fab-tip">Fjern podcaster</a>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+
+
+
+<div class="row">
+  {% for post in object_list %}
+    <div class="col s12 m10 l6">
+      <div class="card">
+        <div class="card-image">
+          <a href="{{ post.url }}">
+            <img src="/media/{{ post.image }}">
+          </a>
+          <span class="card-title card-event-title">
+            <h4>{{ post.title }}</h4>
+            <h5>{{ post.date|date:"j F - H:i" }}</h5>
+          </span>
+          <form method="POST" action="{{post.get_absolute_delete_url}}">{% csrf_token %}
+            <button class="btn-floating halfway-fab waves-effect waves-light red" type="submit"><i
+                class="material-icons" value="Confirm">delete</i></button>
+          </form>
+        </div>
+        <div class="card-content">
+          {{ post.description|truncatewords:20 }}
+        </div>
+
+      </div>
+    </div>
+  {% endfor %}
+</div>
+{% endblock content %}
+
