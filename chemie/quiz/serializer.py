@@ -11,6 +11,7 @@ class QuizTermSerializer(serializers.ModelSerializer):
 
 class QuizScoreSerializer(serializers.ModelSerializer):
     user = UserSerializer()
+    term = QuizTermSerializer()
 
     class Meta:
         model = QuizScore
