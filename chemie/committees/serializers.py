@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Committee, Position
+from chemie.customprofile.serializers import UserSerializer
 
 
 class CommiteeSerializer(serializers.ModelSerializer):
@@ -14,6 +15,7 @@ class CommiteeSerializer(serializers.ModelSerializer):
 
 
 class PositionSerializer(serializers.ModelSerializer):
+    users = UserSerializer(many=True)
 
     class Meta:
         model = Position
