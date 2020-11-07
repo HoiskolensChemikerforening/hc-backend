@@ -258,6 +258,7 @@ REST_FRAMEWORK = {
     ),
 }
 
+
 # FIREBASE PUSH NOTIFICATION CONFIGURATION
 # ------------------------------------------------------------------------------
 
