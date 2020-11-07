@@ -19,19 +19,19 @@ Velkommen!
     <ul>
         {% if perms.events.add_event %}
         <li>
-            <a class="btn-floating blue" href="{% url " events:create_social" %}"><i class="material-icons">add</i></a>
+            <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett arrangement</a>
         </li>
         {% endif %}
         {% if perms.events.add_bedpres %}
         <li>
-            <a class="btn-floating blue" href="{% url " events:create_bedpres" %}"><i class="material-icons">add</i></a>
+            <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
         </li>
         {% endif %}
         {% if perms.news.add_article %}
         <li>
-            <a class="btn-floating blue" href="{% url " news:create" %}"><i class="material-icons">add</i></a>
+            <a class="btn-floating blue" href="{% url "news:create" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett nyhet</a>
         </li>
         {% endif %}
@@ -53,7 +53,7 @@ Velkommen!
 
         <!-- Coffee -->
         <div class="col coffee-box">
-            <img type="image/png" src="{% static " images/caffeine.png" %}"
+            <img type="image/png" src="{% static "images/caffeine.png" %}"
             style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
             <p style="margin: auto">
                 Kaffeknappen sist trykket: <br>
@@ -64,7 +64,7 @@ Velkommen!
         <!-- Latest sugepodden episode-->
         <div class="col sugepodden-box">
             <a href={{ latest_podcast }} class="card">
-                <img type="image/png" src="{% static " images/sugepodden_logo_liten_svart_hvitkant.png" %}"
+                <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
                 style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
                 <p style="margin: auto" color="card-black">
                     Klikk her for nyeste episode av sugepodden!
@@ -74,9 +74,9 @@ Velkommen!
         <!--Links to video about office -->
         <div class="col howToOffice">
             <a href={{ how_to_kontoret }} class="card">
-                <img type="image/png" src="{% static " images/HC_coin.png" %}"
+                <img type="image/png" src="{% static "images/HC_coin.png" %}"
                 style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
-                max-height:4rem; float: right; margin-top:-0.4rem; margin:0.5rem">
+                max-height:4rem; float: left; margin-top: -0.4rem; margin:0.5rem">
                 <p style="margin: auto" color="card-black">
                     Usikker hvordan alt fungerer på kontoret? Sjekk ut "<strong>How to kontoret</strong>"!
                 </p>
