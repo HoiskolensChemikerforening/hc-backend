@@ -12,7 +12,7 @@ from django.utils.html import format_html
 from .forms import EditDescription, EditPositionForm
 from .models import Committee, Position
 
-from .serializers import CommiteeSerializer, PositionSerializer
+from .serializers import CommitteeSerializer, PositionSerializer
 from rest_framework import generics
 
 
@@ -151,14 +151,14 @@ def edit_committee_memberships(request, slug):
     return render(request, "committees/edit_committee_members.html", context)
 
 
-class ListAllCommitees(generics.ListCreateAPIView):
+class ListAllCommittees(generics.ListCreateAPIView):
     queryset = Committee.objects.all().order_by("title")
-    serializer_class = CommiteeSerializer
+    serializer_class = CommitteeSerializer
 
 
-class CommiteeDetail(generics.RetrieveUpdateDestroyAPIView):
+class CommitteeDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Committee.objects.all()
-    serializer_class = CommiteeSerializer
+    serializer_class = CommitteeSerializer
 
 
 class ListAllPositions(generics.ListCreateAPIView):

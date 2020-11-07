@@ -3,7 +3,7 @@ from .models import Committee, Position
 from chemie.customprofile.serializers import UserSerializer
 
 
-class CommiteeSerializer(serializers.ModelSerializer):
+class CommitteeSerializer(serializers.ModelSerializer):
     absolute_url = serializers.SerializerMethodField()
 
     def get_absolute_url(self, obj):

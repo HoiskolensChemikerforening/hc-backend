@@ -6,8 +6,8 @@ app_name = "committees"
 
 urlpatterns = [
     path("", views.index, name="list_all"),
-    path("api/", views.ListAllCommitees.as_view()),
-    path("api/<int:pk>", views.CommiteeDetail.as_view()),
+    path("api/", views.ListAllCommittees.as_view()),
+    path("api/<int:pk>", views.CommitteeDetail.as_view()),
     path("api/position", views.ListAllPositions.as_view()),
     path("api/position/<int:pk>", views.PositionDetail.as_view()),
     path(
