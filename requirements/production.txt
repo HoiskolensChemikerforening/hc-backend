@@ -12,7 +12,7 @@ certifi==2019.11.28       # via requests
 cffi==1.14.0              # via cryptography
 chardet==3.0.4            # via requests
 coverage==4.5.2           # via -r base.in, pytest-cov
-cryptography==2.8         # via apns2, http-ece, py-vapid, pyopenssl, pywebpush
+cryptography==3.2         # via apns2, http-ece, py-vapid, pyopenssl, pywebpush
 django-autocomplete-light==3.3.2  # via -r base.in
 django-ckeditor==5.6.1    # via -r base.in
 django-classy-tags==1.0.0  # via django-sekizai
