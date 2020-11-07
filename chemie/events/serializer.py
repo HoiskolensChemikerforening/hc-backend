@@ -8,12 +8,12 @@ from .models import (
 )
 
 from chemie.customprofile.serializers import UserSerializer
-#from chemie.committees.serializers import CommitteeSerializer
+from chemie.committees.serializers import CommitteeSerializer
 
 
 class SocialSerializer(serializers.ModelSerializer):
     author = UserSerializer()
-    #committee = CommitteeSerializer()
+    committee = CommitteeSerializer()
     attendees = UserSerializer(read_only= True, many = True)
     class Meta:
         model = Social
