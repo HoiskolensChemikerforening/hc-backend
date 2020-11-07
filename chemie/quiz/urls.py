@@ -5,10 +5,10 @@ app_name = "quiz"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("api/", views.ListAllQuizTerms.as_view()),
-    path("api/", views.ListAllScores.as_view()),
-    path("api/", views.QuizTermDetail.as_view()),
-    path("api/", views.QuizScoreDetail.as_view()),
+    path("poeng/api/", views.ListAllScores.as_view()),
+    path("periode/api/", views.ListAllQuizTerms.as_view()),
+    path("poeng-detaljer/api/<int:pk>", views.QuizTermDetail.as_view()),
+    path("periode-detaljer/api/<int:pk>", views.QuizScoreDetail.as_view()),
     path("navnequiz", views.name_quiz_index, name="name_quiz_index"),
     path("navnequiz/<int:year>", views.name_quiz, name="name_quiz"),
     path("kjellerquiz", views.kjellerquiz_index, name="kjellerquiz_index"),
