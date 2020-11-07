@@ -900,3 +900,23 @@ class BedpresListCreate(generics.ListCreateAPIView):
 class BedpresRegistrationListCreate(generics.ListCreateAPIView):
     queryset = BedpresRegistration.objects.all()
     serializer_class = BedpresRegistrationSerializer
+
+
+class SocialDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Social.objects.all()
+    serializer_class = SocialSerializer
+
+
+class SocialEventRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SocialEventRegistration.objects.all()
+    serializer_class = SocialEventRegistrationSerializer
+
+
+class BedpresDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Bedpres.objects.all()
+    serializer_class = BedpresSerializer
+
+
+class BedpresRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = BedpresRegistration.objects.all()
+    serializer_class = BedpresRegistrationSerializer

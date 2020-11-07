@@ -31,6 +31,7 @@ class SocialEventRegistrationSerializer(serializers.ModelSerializer):
 
 class BedpresSerializer(serializers.ModelSerializer):
     author = UserSerializer()
+    attendees = UserSerializer(read_only=True, many=True)
 
     class Meta:
         model = Bedpres

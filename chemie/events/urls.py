@@ -63,6 +63,11 @@ urlpatterns = [
         views.SocialEventRegistrationListCreate.as_view(),
         name="api_socialeventregistration",
     ),
+    path("api/social/<int:pk>", views.SocialDetail.as_view()),
+    path(
+        "api/socialeventregistration/<int:pk>",
+        views.SocialEventRegistrationDetail.as_view(),
+    ),
 ]
 
 # Bedpres
@@ -123,5 +128,10 @@ urlpatterns += [
         "api/bedpresregistration",
         views.BedpresRegistrationListCreate.as_view(),
         name="api_bedpresregistration",
+    ),
+    path("api/bedpres/<int:pk>", views.BedpresDetail.as_view()),
+    path(
+        "api/bedpresregistration/<int:pk>",
+        views.BedpresRegistrationDetail.as_view(),
     ),
 ]
