@@ -44,3 +44,26 @@ class JobAdvertisement(models.Model):
 
     def __str__(self):
         return self.title
+
+
+class Survey(models.Model):
+    year = models.IntegerField(verbose_name="Årstall")
+
+
+class SurveyQuestion(models.Model):
+    question = models.TextField(max_length=300, verbose_name="Spørsmål")
+
+
+class AnswerKeyValuePair(models.Model):
+    # TODO: survey = foreign key Survey
+    # TODO: question = foreign key SurveyQuestion
+    key = models.TextField(max_length=300, verbose_name="Svaralternativ")
+    value = models.IntegerField(verbose_name="Antall")
+
+
+"""
+class SurveyQuestionWithAnswers(models.Model):
+    # TODO: year = foreign key Survey
+    # TODO: question = foreign key SurveyQuestion
+    raise NotImplementedError
+"""
