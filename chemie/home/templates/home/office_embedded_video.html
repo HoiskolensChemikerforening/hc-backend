@@ -1,0 +1,36 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+How to kontoret
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <p class="flow-text">
+            Se disse videoene for å lære om hvordan du bruker kontoret!
+        </p>
+        <h6>
+            Kontoret under Corona.
+        </h6>
+        <iframe src="https://player.vimeo.com/video/369192758?muted=1&autoplay=1" width="680" height="383"
+                frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
+        </iframe>
+        <br>
+        <br>
+        <h6>
+            Kontoret til vanlig.
+        </h6>
+        <iframe src="https://player.vimeo.com/video/369192758" width="680" height="383" frameborder="0"
+                allow="autoplay; fullscreen" allowfullscreen>
+        </iframe>
+
+    </div>
+</div>
+
+{% endblock content %}
