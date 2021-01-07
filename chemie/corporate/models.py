@@ -49,9 +49,15 @@ class JobAdvertisement(models.Model):
 class Survey(models.Model):
     year = models.IntegerField(verbose_name="Årstall")
 
+    def __str__(self):
+        return "Spørreundersøkelsen fra " + str(self.year)  # epic
+
 
 class SurveyQuestion(models.Model):
     question = models.TextField(max_length=300, verbose_name="Spørsmål")
+
+    def __str__(self):
+        return self.question
 
 
 class AnswerKeyValuePair(models.Model):
@@ -59,6 +65,19 @@ class AnswerKeyValuePair(models.Model):
     # TODO: question = foreign key SurveyQuestion
     key = models.TextField(max_length=300, verbose_name="Svaralternativ")
     value = models.IntegerField(verbose_name="Antall")
+    questions = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE)
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return (
+            str(self.survey.year)
+            + " - "
+            + str(self.questions.question)
+            + ": "
+            + str(self.key)
+            + " - "
+            + str(self.value)
+        )
 
 
 """

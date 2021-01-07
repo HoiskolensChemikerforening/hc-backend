@@ -3,7 +3,7 @@ from django.shortcuts import redirect, reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import permission_required
 
-from .models import Interview, JobAdvertisement
+from .models import Interview, JobAdvertisement, Survey, SurveyQuestion
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -61,8 +61,11 @@ def interview_detail(request, id):
     return render(request, "corporate/interview_detail.html", context)
 
 
-def statistics(request):
-    context = {}
+def survey(request):
+    surveys = Survey.objects.all()
+    questions = SurveyQuestion.objects.all()
+
+    context = {"surveys": surveys, "questions": questions}
     return render(request, "corporate/statistics.html", context)
 
 

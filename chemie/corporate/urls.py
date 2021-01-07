@@ -19,5 +19,5 @@ urlpatterns = [
     path("jobb/", views.job_advertisement, name="job_advertisement"),
     path("jobb/ny/", views.job_create, name="job_create"),
     path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),
-    path("diplom/", views.statistics, name="statistics"),
+    path("diplom/", views.survey, name="statistics"),
 ]
