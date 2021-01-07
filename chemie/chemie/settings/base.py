@@ -75,6 +75,7 @@ THIRD_PARTY_APPS = [
     "django_extensions",
     "push_notifications",
     "crispy_forms",
+    "corsheaders",
 ]
 
 LOCAL_APPS = [
@@ -112,6 +113,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "corsheaders.middleware.CorsMiddleware",
 ]
 
 
@@ -249,6 +251,7 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ),
 }
+
 
 # FIREBASE PUSH NOTIFICATION CONFIGURATION
 # ------------------------------------------------------------------------------

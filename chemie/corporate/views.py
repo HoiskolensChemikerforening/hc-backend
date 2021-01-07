@@ -43,27 +43,21 @@ def job_advertisement(request):
         is_published=True
     ).order_by("published_date")
 
-    context = {
-        "job_advertisements": job_advertisements,
-    }
+    context = {"job_advertisements": job_advertisements}
     return render(request, "corporate/job_advertisement.html", context)
 
 
 def interview(request):
     interviews = Interview.objects.filter(is_published=True).order_by("-id")
 
-    context = {
-        "interviews": interviews,
-    }
+    context = {"interviews": interviews}
     return render(request, "corporate/interview.html", context)
 
 
 def interview_detail(request, id):
     interview = get_object_or_404(Interview, pk=id)
 
-    context = {
-        "interview": interview,
-    }
+    context = {"interview": interview}
     return render(request, "corporate/interview_detail.html", context)
 
 
@@ -93,7 +87,7 @@ def interview_remove(request, id):
     return redirect("corporate:interview")
 
 
-@permission_required("corporate.add_job_advertisement")
+@permission_required("corporate.add_jobadvertisement")
 def job_create(request):
     form = CreateJobForm(request.POST or None, request.FILES or None)
 
@@ -105,7 +99,7 @@ def job_create(request):
     return render(request, "corporate/job_create.html", context)
 
 
-@permission_required("corporate.delete_job_advertisement")
+@permission_required("corporate.delete_jobadvertisement")
 def job_remove(request, id):
     job = get_object_or_404(JobAdvertisement, id=id)
     job.is_published = False
