@@ -65,6 +65,9 @@ urlpatterns = [
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
+    path("api/sponsor", views.SponsorListCreate.as_view(), name="sponsor"),
+    path("api/404/<int:pk>", views.pictures_for_404Detail.as_view()),
+    path("api/sponsor/<int:pk>", views.SponsorDetail.as_view()),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
