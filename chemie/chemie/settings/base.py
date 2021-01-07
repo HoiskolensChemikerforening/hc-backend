@@ -70,7 +70,6 @@ THIRD_PARTY_APPS = [
     "mptt",
     "rest_framework",
     "rest_framework.authtoken",
-    "corsheaders",
     "smart_selects",
     "ckeditor",
     "django_extensions",
@@ -114,11 +113,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-<<<<<<< HEAD
-    'corsheaders.middleware.CorsMiddleware',
-=======
     "corsheaders.middleware.CorsMiddleware",
->>>>>>> origin/master
 ]
 
 

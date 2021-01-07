@@ -14,7 +14,12 @@ from .forms import (
     ConfirmOwnershipForm,
 )
 from .models import Locker, LockerUser, Ownership, LockerToken
-from .serializers import LockerSerializer, LockerUserSerializer
+from .serializer import (
+    LockerSerializer,
+    LockerUserSerializer,
+    OwnershipSerializer,
+    LockerTokenSerializer,
+)
 from rest_framework import generics
 
 
@@ -199,3 +204,33 @@ class LockerListCreate(generics.ListCreateAPIView):
 class LockerUserListCreate(generics.ListCreateAPIView):
     queryset = LockerUser.objects.all()
     serializer_class = LockerUserSerializer
+
+
+class OwnershipListCreate(generics.ListCreateAPIView):
+    queryset = Ownership.objects.all()
+    serializer_class = OwnershipSerializer
+
+
+class LockerTokenListCreate(generics.ListCreateAPIView):
+    queryset = LockerToken.objects.all()
+    serializer_class = LockerTokenSerializer
+
+
+class LockerDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Locker.objects.all()
+    serializer_class = LockerSerializer
+
+
+class LockerUserDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LockerUser.objects.all()
+    serializer_class = LockerUserSerializer
+
+
+class OwnershipDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Ownership.objects.all()
+    serializer_class = OwnershipSerializer
+
+
+class LockerTokenDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = LockerToken.objects.all()
+    serializer_class = LockerTokenSerializer
