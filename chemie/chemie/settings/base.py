@@ -116,6 +116,7 @@ MIDDLEWARE = [
     "corsheaders.middleware.CorsMiddleware",
 ]
 
+
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 TEMPLATES = [
