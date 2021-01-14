@@ -115,13 +115,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
-"""
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-]
-"""
-CORS_ORIGIN_ALLOW_ALL = True
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
