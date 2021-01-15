@@ -6,7 +6,6 @@ import os
 import environ
 from django.contrib.messages import constants as message_constants
 
-
 # GENERAL CONFIGURATION
 # ------------------------------------------------------------------------------
 # BASE_DIR is the path to the project folder chemie.
@@ -29,7 +28,6 @@ SHELL_PLUS = "ipython"
 ADMINS = [("Webkom", "webkom@hc.ntnu.no")]
 CONTACTS = [("Styret", "styret@hc.ntnu.no")]
 
-
 # URL CONFIGURATION
 # ------------------------------------------------------------------------------
 
@@ -38,7 +36,6 @@ LOGIN_URL = "/login/"
 LOGOUT_REDIRECT_URL = "/"
 ROOT_URLCONF = "chemie.chemie.urls"
 WSGI_APPLICATION = "chemie.chemie.wsgi.application"
-
 
 # APP CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -115,13 +112,6 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
-"""
-CORS_ALLOWED_ORIGINS = [
-    "http://127.0.0.1:3000",
-    "http://localhost:3000",
-]
-"""
-CORS_ORIGIN_ALLOW_ALL = True
 
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -151,7 +141,6 @@ TEMPLATES = [
     }
 ]
 
-
 # PASSWORD VALIDATION
 # ------------------------------------------------------------------------------
 
@@ -180,7 +169,6 @@ PASSWORD_HASHERS = (
     "hashers_passlib.phpass",
 )
 
-
 # INTERNATIONALIZATION
 # ------------------------------------------------------------------------------
 
@@ -194,7 +182,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 # STATIC FILE CONFIGURATION (CSS, JavaScript, Images)
 # ------------------------------------------------------------------------------
 STATIC_URL = "/static/"
@@ -202,7 +189,6 @@ STATIC_URL = "/static/"
 STATICFILES_DIRS = [BASE_DIR.path("chemie/chemie/static/")()]
 
 STATIC_ROOT = BASE_DIR.path("chemie/static/")()
-
 
 # MEDIA CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -212,14 +198,12 @@ MEDIA_ROOT = BASE_DIR.path("chemie/media/")()
 # Registration for new HC users
 REGISTRATION_KEY = os.environ.get("REGISTRATION_KEY") or ""
 
-
 # CAPTCHA CONFIGURATION
 # ------------------------------------------------------------------------------
 RECAPTCHA_PUBLIC_KEY = os.environ.get("RECAPTCHA_PUBLIC_KEY") or ""
 RECAPTCHA_PRIVATE_KEY = os.environ.get("RECAPTCHA_PRIVATE_KEY") or ""
 
 NOCAPTCHA = True
-
 
 # EMAIL CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -232,7 +216,6 @@ EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD") or None
 DEFAULT_FROM_EMAIL = "<webkom@hc.ntnu.no> Webkom"
 SERVER_EMAIL = "webkom@hc.ntnu.no"
 
-
 # WIKI CONFIGURATION
 # ------------------------------------------------------------------------------
 
@@ -240,7 +223,6 @@ WIKI_ACCOUNT_SIGNUP_ALLOWED = False
 WIKI_ANONYMOUS_WRITE = False
 WIKI_ANONYMOUS_CREATE = False
 WIKI_ANONYMOUS = False
-
 
 # AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -258,7 +240,6 @@ REST_FRAMEWORK = {
     ),
 }
 
-
 # FIREBASE PUSH NOTIFICATION CONFIGURATION
 # ------------------------------------------------------------------------------
 
@@ -275,14 +256,12 @@ HAYSTACK_CONNECTIONS = {
     "default": {"ENGINE": "haystack.backends.simple_backend.SimpleEngine"}
 }
 
-
 # CACHE CONFIGURATION
 # ------------------------------------------------------------------------------
 
 CACHES = {
     "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}
 }
-
 
 # CKEDITOR CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -458,7 +437,6 @@ CKEDITOR_CONFIGS = {
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
 
-
 # OTHER CONFIGURATION
 # ------------------------------------------------------------------------------
 
@@ -468,7 +446,6 @@ THUMBNAIL_PRESERVE_FORMAT = True
 THUMBNAIL_DEBUG = False
 
 SITE_ID = 1
-
 
 CART_SESSION_ID = "cart"
 
