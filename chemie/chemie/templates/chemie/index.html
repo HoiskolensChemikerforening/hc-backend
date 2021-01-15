@@ -3,70 +3,69 @@
 {% load static %}
 
 {% block nav_header %}
-Forsiden
+  Forsiden
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-Velkommen!
+  Velkommen!
 {% endblock nav_sub_header %}
 
 {% block content %}
-{% if perms.events or perms.news %}
-<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <a class="btn-floating btn-large">
+  {% if perms.events or perms.news %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
         <i class="large material-icons">edit</i>
-    </a>
-    <ul>
+      </a>
+      <ul>
         {% if perms.events.add_event %}
-        <li>
+          <li>
             <a class="btn-floating blue" href="{% url "events:create_social" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett arrangement</a>
-        </li>
+          </li>
         {% endif %}
         {% if perms.events.add_bedpres %}
-        <li>
+          <li>
             <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
-        </li>
+          </li>
         {% endif %}
         {% if perms.news.add_article %}
-        <li>
+          <li>
             <a class="btn-floating blue" href="{% url "news:create" %}"><i class="material-icons">add</i></a>
             <a class="btn-floating mobile-fab-tip">Opprett nyhet</a>
-        </li>
+          </li>
         {% endif %}
-    </ul>
-</div>
-{% endif %}
+      </ul>
+    </div>
+  {% endif %}
 
-<!-- News -->
-<div class="row">
+  <!-- News -->
+  <div class="row">
     <div class="col s12 push-m6 m6 push-l7 l5">
-        <!-- Events -->
-        <h3 class="heading">Arrangementer</h3>
-        {% if social or bedpres %}
+    <!-- Events -->
+      <h3 class="heading">Arrangementer</h3>
+      {% if social or bedpres %}
         {% include 'events/frontpage_list_events.html' with object_list=object_list %}
-        {% else %}
-        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive
-            arrangementer.</p>
-        {% endif %}
+      {% else %}
+        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
+      {% endif %}
 
-        <!-- Coffee -->
-        <div class="col coffee-box">
-            <img type="image/png" src="{% static "images/caffeine.png" %}"
-            style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
-            <p style="margin: auto">
-                Kaffeknappen sist trykket: <br>
-                {{coffee}}
+      <!-- Coffee -->
+      <div class="col coffee-box">
+          <img type="image/png" src="{% static "images/caffeine.png" %}"
+          style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
+          <p style="margin: auto">
+              Kaffeknappen sist trykket: <br>
+              {{coffee}}
             </p>
         </div>
-
-        <!-- Latest sugepodden episode-->
+      <a href=  {{ latest_podcast }} class="card">
+      <!-- Latest sugepodden episode-->
         <div class="col card sugepodden-box">
             <a href={{ latest_podcast }}>
                 <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
                 style="max-height:5rem; float: left; margin:0.5rem">
-                <p style="padding-top: 0.5rem;">
+                <p style="padding-top: 1.5rem;">
                     Klikk her for nyeste episode av sugepodden!
                 </p>
             </a>
@@ -84,18 +83,18 @@ Velkommen!
                 </div>
             </a>
         </div>
-
-    </div>
     <div class="col s12 pull-m6 m6 pull-l5 l7">
-        <!-- News -->
-        {% if posts %}
+      <!-- News -->
+      {% if posts %}
         {% cache 60 active_news %}
-        <h3 class="heading">Nyheter</h3>
-        {% include 'news/frontpage_news.html' with posts=posts %}
+          <h3 class="heading">Nyheter</h3>
+          {% include 'news/frontpage_news.html' with posts=posts %}
         {% endcache %}
-        {% endif %}
+      {% endif %}
     </div>
-</div>
+  </div>
+
+
 
 
 {% endblock content %}

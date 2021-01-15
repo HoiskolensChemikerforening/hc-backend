@@ -10,8 +10,6 @@ from chemie.customprofile.models import Profile
 
 from random import shuffle
 
-from .serializer import QuizTermSerializer, QuizScoreSerializer
-from rest_framework import generics
 
 def index(request):
     return render(request, "quiz/index.html")
@@ -139,21 +137,3 @@ def edit_scores(request, pk):
     context = {"term": term, "scores": scores, "formset": formset}
 
     return render(request, "quiz/kjellerquiz/edit_scores.html", context)
-
-# For API
-
-class ListAllScores(generics.ListCreateAPIView):
-    queryset = QuizScore.objects.all()
-    serializer_class = QuizScoreSerializer
-
-class ListAllQuizTerms(generics.ListCreateAPIView):
-    queryset = QuizTerm.objects.all()
-    serializer_class = QuizTermSerializer
-
-class QuizTermDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuizTerm.objects.all()
-    serializer_class = QuizTermSerializer
-
-class QuizScoreDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = QuizScore.objects.all()
-    serializer_class = QuizScoreSerializer
