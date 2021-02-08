@@ -24,6 +24,7 @@ GRADES = Choices(
     ("FOURTH", 4, "Fjerde"),
     ("FIFTH", 5, "Femte"),
     ("DONE", 6, "Ferdig"),
+    ("COHORT", 7, "Kohortsjef"),
 )
 
 RELATIONSHIP_STATUS = Choices(

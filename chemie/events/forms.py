@@ -85,6 +85,8 @@ class BaseRegisterEventForm(forms.ModelForm):
         try:
             grades = self.cleaned_data.get("allowed_grades")
             grades = [int(grade) for grade in grades]
+            # Next line checks whether the integers in "grades" corresponds to a choice in GRADES,
+            # if not, an exception occurs
             _ = [GRADES.values[int(grade)] for grade in grades]
             return grades
         except (ValueError, KeyError):
