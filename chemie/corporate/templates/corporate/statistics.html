@@ -1,44 +1,116 @@
 {% extends "corporate/base.html" %}
 {% load static %}
 
+{% block extra_js %}
+{% endblock extra_js %}
+
 {% block content %}
 
-<div class="banner background-dark" style="margin-bottom: 80px;">
-  <div class="container" style="padding-top: 105px;">
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 105px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Diplomundersøkelsen</h1>
+        </div>
+        <div class="col-12 col-md-6">
+          <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
+            Hvert år gjennomfører Industrikomiteen Diplomundersøkelsen.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-bottom: 80px">
     <div class="row">
       <div class="col-12">
-        <h1 class="heading">Diplomundersøkelsen</h1>
-      </div>
-      <div class="col-12 col-md-6">
-        <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
-          Hvert år gjennomfører Industrikomiteen Diplomundersøkelsen.
-        </p>
+        <select name="survey" id="survey" onchange="document.location.href=this.value">
+          <option value="{{ survey.year }}" selected disabled hidden>{{ survey.year }}</option>
+          {% for survey in all_surveys %}
+            <option value="{% url "corporate:survey_year" survey.year %}">
+              {{ survey.year }}
+            </option>
+          {% endfor %}
+        </select>
       </div>
     </div>
-  </div>
-</div>
+    {% for question, data in q_a_dict.items %}
+        <h4>{{ question }}</h4>
+        <h5>Svaralternativer</h5>
+        <ul>
+          {% for option in data.choices %}
+            <li>{{ option }}</li>
+          {% endfor %}
+        </ul>
+    {% endfor %}
 
-<div class="container" style="margin-bottom: 80px">
-  <div class="row">
-    <div class="col-12">
-      <select name="survey" id="survey">
-        {% for survey in surveys %}
-          <option value="{{ survey.year }}">
-            {{ survey.year }}
-          </option>
-        {% endfor %}
-      </select>
-    </div>
+    {% for question in q_a_dict.keys %}
+      <canvas id="{{ question }}"></canvas>
+    {% endfor %}
+
   </div>
-  {% for question in questions %}
-  <div class="row">
-    {{ question.question }}
-  </div>
-  {% endfor %}
-</div>
 
 
 {% endblock content %}
 
 {% block footer_script %}
+  <script>
+
+    function renderChart(chartId, chartType, title, chartData, labels) {
+      console.log(chartId);
+      console.log(document.getElementById(chartId));
+      let ctx = document.getElementById(chartId).getContext('2d');
+      let chart = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: labels,
+          datasets: [{
+            label: title,
+            data: chartData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.75)',
+              'rgba(54, 162, 235, 0.75)',
+              'rgba(255, 206, 86, 0.75)',
+              'rgba(75, 192, 192, 0.75)',
+              'rgba(153, 102, 255, 0.75)',
+              'rgba(255, 159, 64, 0.75)'
+            ],
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: title
+          }
+        }
+      });
+    }
+
+    $(document).ready(function () {
+      let endpoint = "/bedrift/diplom/{{ survey.id }}/data/";
+      $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (data) {
+
+          console.log(endpoint);
+
+          for (let key in data) {
+            let title = key;
+            let chartId = key;
+            console.log(chartId);
+            let chartType = data[key].chartType;
+            let chartData = data[key].values;
+            let labels = data[key].choices;
+
+            renderChart(chartId, chartType,
+            title, chartData, labels);
+          }
+        },
+        error: function (error_data) {
+          console.log(error_data)
+        }
+      });
+    });
+  </script>
 {% endblock footer_script %}

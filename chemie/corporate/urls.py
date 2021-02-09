@@ -20,4 +20,6 @@ urlpatterns = [
     path("jobb/ny/", views.job_create, name="job_create"),
     path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),
     path("diplom/", views.survey, name="statistics"),
+    path("diplom/<int:year>/", views.survey, name="survey_year"),
+    path("diplom/<int:id>/data/", views.ChartData.as_view())
 ]

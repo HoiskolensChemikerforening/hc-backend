@@ -1,9 +1,11 @@
-from django.shortcuts import render, get_object_or_404
-from django.shortcuts import redirect, reverse
+from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import permission_required
 
-from .models import Interview, JobAdvertisement, Survey, SurveyQuestion
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+from .models import Interview, JobAdvertisement, Survey
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -61,12 +63,32 @@ def interview_detail(request, id):
     return render(request, "corporate/interview_detail.html", context)
 
 
-def survey(request):
-    surveys = Survey.objects.all()
-    questions = SurveyQuestion.objects.all()
+def survey(request, year=None):
+    if year is None:
+        year = Survey.objects.latest('year').year
 
-    context = {"surveys": surveys, "questions": questions}
+    all_surveys = Survey.objects.all()
+    survey = Survey.objects.get(year=year)
+    q_a_dict = survey.get_q_a_dict()
+
+    context = {"all_surveys": all_surveys,
+               "survey": survey,
+               "q_a_dict": q_a_dict,
+               }
+
     return render(request, "corporate/statistics.html", context)
+
+
+class ChartData(APIView):
+    authentication_classes = []
+    permission_classes = []
+
+    def get(self, request, *args, **kwargs):
+        id = kwargs.get("id")
+        print(id)
+        survey = get_object_or_404(Survey, id=id)
+        data = survey.get_q_a_dict()
+        return Response(data)
 
 
 @permission_required("corporate.add_interview")
