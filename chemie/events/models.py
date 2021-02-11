@@ -64,6 +64,7 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
+    allowed_groups = models.ManyToManyField(BaseRegistrationGroup)
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
