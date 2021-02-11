@@ -10,6 +10,7 @@ from chemie.customprofile.models import GRADES
 from chemie.committees.models import Committee
 from .email import send_event_mail
 
+
 REGISTRATION_STATUS = Choices(
     ("CONFIRMED", 1, "Confirmed"),
     ("WAITING", 2, "Waiting"),
@@ -22,6 +23,11 @@ ARRIVAL_STATUS = Choices(
     ("TRUANT", 3, "Ikke møtt"),
 )
 
+class BaseRegistrationGroup(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Gruppenavn")
+    members = models.ManyToManyField(User, blank=True, verbose_name="Medlemmer")
+    def __str__(self):
+        return self.name
 
 class BaseEvent(models.Model):
     # Name of the event
@@ -318,6 +324,3 @@ class BedpresEventMessage(RegistrationMessage):
     )
 
 
-class BaseRegistrationGroup(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Gruppenavn")
-    members = models.ManyToManyField(User, blank=True, verbose_name="Medlemmer")
