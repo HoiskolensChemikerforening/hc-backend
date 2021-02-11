@@ -312,3 +312,8 @@ class BedpresEventMessage(RegistrationMessage):
     event = models.ForeignKey(
         Bedpres, related_name="custom_message", on_delete=models.CASCADE
     )
+
+
+class BaseRegistrationGroup(models.Model):
+    name = models.CharField(max_length=100, verbose_name="Gruppenavn")
+    members = models.ManyToManyField(User, blank=True, verbose_name="Medlemmer")
