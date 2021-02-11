@@ -145,7 +145,7 @@ class BaseEvent(models.Model):
         return user.profile.grade in self.allowed_grades
     
     def allowed_group(self, user):
-        pass
+        return user in allowed_groups.objects.filter(members__user=user)
 
     class Meta:
         abstract = True
