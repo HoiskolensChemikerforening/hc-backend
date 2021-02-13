@@ -24,7 +24,8 @@ class BaseRegisterEventForm(forms.ModelForm):
     allowed_groups = forms.ModelMultipleChoiceField(
         queryset=BaseRegistrationGroup.objects.all(),
         widget=forms.CheckboxSelectMultiple,
-        label="Tillatte grupper"
+        label="Tillatte grupper",
+        required=False,
     )
 
     def clean(self):
