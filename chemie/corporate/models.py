@@ -50,7 +50,9 @@ class Survey(models.Model):
     year = models.IntegerField(verbose_name="Årstall")
 
     def get_q_a_dict(self):
-        q_a_pairs = AnswerKeyValuePair.objects.filter(survey=self).prefetch_related('question')
+        q_a_pairs = AnswerKeyValuePair.objects.filter(
+            survey=self
+        ).prefetch_related("question")
         q_a_dict = {}
 
         for q_a in q_a_pairs:
@@ -63,7 +65,7 @@ class Survey(models.Model):
                 question_data = {
                     "choices": [answer],
                     "values": [number_of_answers],
-                    "chartType": chart_type
+                    "chartType": chart_type,
                 }
                 q_a_dict[q] = question_data
             else:
@@ -86,7 +88,9 @@ class SurveyQuestion(models.Model):
     ]
 
     question = models.TextField(max_length=300, verbose_name="Spørsmål")
-    chart_type = models.CharField(max_length=100, choices=PLOT_TYPE_CHOICES, default=BAR_CHART)
+    chart_type = models.CharField(
+        max_length=100, choices=PLOT_TYPE_CHOICES, default=BAR_CHART
+    )
 
     def __str__(self):
         return self.question
@@ -100,13 +104,13 @@ class AnswerKeyValuePair(models.Model):
 
     def __str__(self):
         return (
-                str(self.survey.year)
-                + " - "
-                + str(self.question.question)
-                + ": "
-                + str(self.key)
-                + " - "
-                + str(self.value)
+            str(self.survey.year)
+            + " - "
+            + str(self.question.question)
+            + ": "
+            + str(self.key)
+            + " - "
+            + str(self.value)
         )
 
 

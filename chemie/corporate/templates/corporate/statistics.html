@@ -3,6 +3,8 @@
 
 {% block content %}
 
+  <!-- TODO: Add forms for indkom to add surveys, questions and answers -->
+
   <div class="banner background-dark" style="margin-bottom: 80px;">
     <div class="container" style="padding-top: 105px;">
       <div class="row">
@@ -32,7 +34,7 @@
       </div>
     </div>
     {% for question, data in q_a_dict.items %}
-      <!-- Flexbox this shit -->
+      <!-- TODO: Flexbox this shit -->
       {% if forloop.counter|divisibleby:2 %}
         <div class="col">
           <canvas id="{{ question }}"></canvas>

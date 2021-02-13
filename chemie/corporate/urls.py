@@ -3,7 +3,6 @@ from . import views
 
 app_name = "corporate"
 
-
 urlpatterns = [
     path("", views.index, name="index"),
     path("intervju/", views.interview, name="interview"),
@@ -21,5 +20,12 @@ urlpatterns = [
     path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),
     path("diplom/", views.survey, name="statistics"),
     path("diplom/<int:year>/", views.survey, name="survey_year"),
-    path("diplom/<int:id>/data/", views.ChartData.as_view())
+    path("diplom/<int:id>/data/", views.ChartData.as_view()),
+    path("diplom/admin/", views.statistics_admin, name="statistics_admin"),
+    path("diplom/undersøkelse/ny/", views.survey_create, name="survey_create"),
+    path("diplom/spørsmål/ny/", views.question_create, name="question_create"),
+    path(
+        "diplom/undersøkelse/rediger/", views.survey_edit, name="survey_edit"
+    ),
+    path("diplom/svar/ny/", views.answer_create, name="answer_create"),
 ]
