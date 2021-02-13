@@ -85,7 +85,6 @@ class ChartData(APIView):
 
     def get(self, request, *args, **kwargs):
         id = kwargs.get("id")
-        print(id)
         survey = get_object_or_404(Survey, id=id)
         data = survey.get_q_a_dict()
         return Response(data)

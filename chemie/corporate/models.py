@@ -79,14 +79,10 @@ class Survey(models.Model):
 class SurveyQuestion(models.Model):
     BAR_CHART = "bar"
     PIE_CHART = "pie"
-    DOUGHNUT_CHART = "dougnut"
-    LINE_CHART = "line"
 
     PLOT_TYPE_CHOICES = [
         (BAR_CHART, "Bar chart"),
         (PIE_CHART, "Pie chart"),
-        (DOUGHNUT_CHART, "Doughnut chart"),
-        (LINE_CHART, "Line chart"),
     ]
 
     question = models.TextField(max_length=300, verbose_name="Spørsmål")
@@ -112,3 +108,9 @@ class AnswerKeyValuePair(models.Model):
                 + " - "
                 + str(self.value)
         )
+
+
+# TODO: Style chart page
+# TODO: Style charts
+# TODO: Create forms for adding surveys ++
+# TODO: Filtering options on questions across years?

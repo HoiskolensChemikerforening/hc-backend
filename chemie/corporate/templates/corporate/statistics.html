@@ -1,9 +1,6 @@
 {% extends "corporate/base.html" %}
 {% load static %}
 
-{% block extra_js %}
-{% endblock extra_js %}
-
 {% block content %}
 
   <div class="banner background-dark" style="margin-bottom: 80px;">
@@ -35,32 +32,33 @@
       </div>
     </div>
     {% for question, data in q_a_dict.items %}
-        <h4>{{ question }}</h4>
-        <h5>Svaralternativer</h5>
-        <ul>
-          {% for option in data.choices %}
-            <li>{{ option }}</li>
-          {% endfor %}
-        </ul>
+      <!-- Flexbox this shit -->
+      {% if forloop.counter|divisibleby:2 %}
+        <div class="col">
+          <canvas id="{{ question }}"></canvas>
+          <button onclick="toggleChartType('{{ question }}')">Bytt graftype</button>
+        </div>
+        </div>
+      {% else %}
+        <div class="row">
+        <div class="col">
+          <canvas id="{{ question }}"></canvas>
+          <button onclick="toggleChartType('{{ question }}')">Bytt graftype</button>
+        </div>
+      {% endif %}
     {% endfor %}
-
-    {% for question in q_a_dict.keys %}
-      <canvas id="{{ question }}"></canvas>
-    {% endfor %}
-
-  </div>
-
+    </div>
 
 {% endblock content %}
 
 {% block footer_script %}
   <script>
 
+    let myCharts = {}; // To be able to access charts after they're rendered
+
     function renderChart(chartId, chartType, title, chartData, labels) {
-      console.log(chartId);
-      console.log(document.getElementById(chartId));
       let ctx = document.getElementById(chartId).getContext('2d');
-      let chart = new Chart(ctx, {
+      return new Chart(ctx, {
         type: chartType,
         data: {
           labels: labels,
@@ -81,9 +79,61 @@
           title: {
             display: true,
             text: title
-          }
+          },
+          legend: {
+            display: true
+          },
         }
       });
+    }
+
+    function toggleChartType(chartId) {
+      let chart = myCharts[chartId];
+      let chartType = chart.config.type;
+      if (chartType === "bar") {
+        setPieChartOptions(chart);
+      } else if (chartType === "pie") {
+        setBarChartOptions(chart);
+      } else if (chartType === "doughnut") {
+        setBarChartOptions(chart);
+      } else {
+        console.log("WTF is this");
+      }
+      chart.update();
+    }
+
+    function setBarChartOptions(chart) {
+      chart.config.type = "bar";
+      // Make y axis start at 0.
+      chart.options.scales = {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      };
+
+      // Hide legend for bar charts
+      chart.options.legend = {
+        display: false
+      };
+      chart.update();
+    }
+
+    function setPieChartOptions(chart) {
+      chart.config.type = "pie";
+      chart.options.scales = {
+        yAxes: [{
+          display: false
+        }]
+      };
+
+      chart.options.legend = {
+        display: true
+      };
+
+      chart.update();
+      chart.update();
     }
 
     $(document).ready(function () {
@@ -93,20 +143,17 @@
         url: endpoint,
         success: function (data) {
 
-          console.log(endpoint);
-
           for (let key in data) {
             let title = key;
             let chartId = key;
-            console.log(chartId);
             let chartType = data[key].chartType;
             let chartData = data[key].values;
             let labels = data[key].choices;
 
-            renderChart(chartId, chartType,
-            title, chartData, labels);
+            myCharts[chartId] = renderChart(chartId, chartType, title, chartData, labels);
           }
         },
+
         error: function (error_data) {
           console.log(error_data)
         }
