@@ -317,6 +317,8 @@ class SocialEditRemoveUserRegistration(
                 context.update({"queue_position": queue_position})
 
         context["registration"] = registration
+        context["allowed_grade"] = self.object.allowed_grade(registration.user)
+        context["allowed_group"] = (self.object.allowed_group(registration.user) or self.object.allowed_groups_empty())
         return context
 
     def deregister_form_valid(self, form):
@@ -501,6 +503,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "registration_form": registration_form,
             "event": self.object,
             "allowed_grade": self.object.allowed_grade(request.user),
+            "allowed_group": self.object.allowed_group(request.user) or self.object.allowed_groups_empty(),
         }
         return render(request, self.template_name, context)
 
