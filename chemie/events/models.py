@@ -178,7 +178,7 @@ class BaseEvent(models.Model):
     def allowed_groups_empty(self):
         """Empty sequences are false in python, so this is apparently the pretty way."""
         return not self.allowed_groups.all()
-        #return not(self.allowed_grades.objects.all())
+
 
     class Meta:
         abstract = True

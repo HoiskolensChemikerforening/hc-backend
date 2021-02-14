@@ -42,6 +42,7 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
+    BaseRegistrationGroup,
 )
 
 from rest_framework import generics
@@ -893,6 +894,13 @@ def check_in_to_social(request, pk):
             )
     context = {"form": form, "social": social}
     return render(request, "events/social/check_in.html", context)
+
+@permission_required("events.view_base_registration_group")
+def view_base_registration_group(request, pk):
+    base_registration_group = get_object_or_404(BaseRegistrationGroup, id=pk)
+    members = base_registration_group.members.all()
+    context = {"group": base_registration_group, "members": members}
+    return render(request, "events/social/view_base_registration_group.html", context)
 
 
 class SocialListCreate(generics.ListCreateAPIView):
