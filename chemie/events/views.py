@@ -927,15 +927,9 @@ def edit_base_registration_group(request, pk):
                 extra_tags="Flott!",
             )
 
-            return reverse("events:se_påmeldingsgruppe", kwargs={"pk": pk})
-    else:
-        for form in formset:
-            # Dynamically change each max-selected-items
-            # according to the positions' max_members
-            form.fields.get("members").widget.attrs[
-                "data-maximum-selection-length"
-            ] = 2
-    context = {"formset": formset, "committee": base_registration_group}
+            return HttpResponseRedirect(reverse("events:edit_group", kwargs={"pk": pk}))
+
+    context = {"formset": formset, "committee": "Fuck"}
     return render(request, "events/social/edit_base_registration_group.html", context)
 
 

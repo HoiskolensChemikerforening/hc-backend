@@ -239,27 +239,11 @@ class DeRegisterUserForm(forms.Form):
 class EditBaseRegistrationGroupForm(forms.ModelForm):
     class Meta:
         model = BaseRegistrationGroup
-        fields = ("members", "name")
+        fields = ("members",)
         widgets = {
             "members": autocomplete.ModelSelect2Multiple(
                 url="verv:user-autocomplete",
-                attrs={"data-maximum-selection-length": 1},
             )
         }
 
-    def clean(self):
-        super(EditBaseRegistrationGroupForm, self).clean()
-        maximum = 5
-        if self.cleaned_data.get("members").count() > maximum:
-            self.add_error(
-                None,
-                ValidationError(
-                    {
-                        "members": [
-                            "Stillingen har maksimalt {} personer".format(
-                                maximum
-                            )
-                        ]
-                    }
-                ),
-            )
+

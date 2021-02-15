@@ -320,7 +320,6 @@ class SocialEventRegistration(BaseRegistration):
         blank=True,
     )
 
-
 class BedpresRegistration(BaseRegistration):
     event = models.ForeignKey(Bedpres, on_delete=models.CASCADE)
     status = models.IntegerField(
