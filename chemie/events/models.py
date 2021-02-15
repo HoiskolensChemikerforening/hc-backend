@@ -319,8 +319,6 @@ class SocialEventRegistration(BaseRegistration):
         null=True,
         blank=True,
     )
-    registration_group_members = models.ManyToManyField(User, blank=True,
-        verbose_name="Ekstra medlemmer i påmeldingsgruppe")
 
 class BedpresRegistration(BaseRegistration):
     event = models.ForeignKey(Bedpres, on_delete=models.CASCADE)
