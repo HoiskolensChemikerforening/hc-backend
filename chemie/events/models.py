@@ -39,9 +39,7 @@ class BaseRegistrationGroup(models.Model):
     def remove_all_members(self, user):
         self.members = []
 
-    """This need to be fixed"""
-    def get_absolute_url(self):
-        return reverse("event:påmeldingsgruppe", kwargs={"slug": self.slug})
+
 
 class BaseEvent(models.Model):
     # Name of the event
@@ -165,22 +163,15 @@ class BaseEvent(models.Model):
         return user.profile.grade in self.allowed_grades
     
     def allowed_group(self, user):
-        """
-        allowed = self.allowed_groups
-        for i in range(len(allowed)):
-            if user in allowed[i]:
-                return user in allowed[i]
-        return False
-        """
-        #checks = [group for groupes in self.allowed_groups.all() if user in group.members.all()]
+
         for group in self.allowed_groups.all():
             if user in group.members.all():
                 return user in group.members.all()
         return False
-        #return user in self.allowed_groups.objects.filter(members__User=user)
+
 
     def allowed_groups_empty(self):
-        """Empty sequences are false in python, so this is apparently the pretty way."""
+
         return not self.allowed_groups.all()
 
 
