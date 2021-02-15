@@ -1,5 +1,24 @@
 {% extends "events/social/social_base.html" %}
 {% load material_form %}
+{% load staticfiles %}
+{% load static %}
+
+{% block header %}
+  <style>
+    span.select2-container {
+      width: inherit !important;
+      display: block;
+    }
+
+    label {
+      display: block;
+    }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
+  </style>
+{% endblock header %}
 
 {% block nav_sub_header %}
   Påmelding
@@ -68,3 +87,6 @@
   </div>
 
 {% endblock maincontent %}
+{% block footer_script %}
+{{ formset.form.media }}
+{% endblock footer_script %}

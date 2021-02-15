@@ -493,6 +493,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "enable_sleepover": self.object.sleepover,
             "enable_night_snack": self.object.night_snack,
             "enable_companion": self.object.companion,
+            "enable_registration_group_members": not self.object.allowed_groups_empty(),
         }
 
     def get(self, request, pk, *args, **kwargs):
