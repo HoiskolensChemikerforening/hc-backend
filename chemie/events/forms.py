@@ -1,4 +1,5 @@
 import material as M
+from dal import autocomplete
 from django import forms
 from django.core.validators import ValidationError
 from extended_choices import Choices
@@ -235,3 +236,30 @@ class DeRegisterUserForm(forms.Form):
         required=True, label="Er dette ditt endelige svar?"
     )
 
+class EditBaseRegistrationGroupForm(forms.ModelForm):
+    class Meta:
+        model = BaseRegistrationGroup
+        fields = ("members", "name")
+        widgets = {
+            "members": autocomplete.ModelSelect2Multiple(
+                url="verv:user-autocomplete",
+                attrs={"data-maximum-selection-length": 1},
+            )
+        }
+
+    def clean(self):
+        super(EditBaseRegistrationGroupForm, self).clean()
+        maximum = 5
+        if self.cleaned_data.get("members").count() > maximum:
+            self.add_error(
+                None,
+                ValidationError(
+                    {
+                        "members": [
+                            "Stillingen har maksimalt {} personer".format(
+                                maximum
+                            )
+                        ]
+                    }
+                ),
+            )

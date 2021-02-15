@@ -19,6 +19,7 @@ from django.views.generic.edit import (
     DeleteView,
     UpdateView,
 )
+from django.forms import modelformset_factory
 from django.views.generic.list import ListView
 from django.db.models import Q
 
@@ -32,6 +33,7 @@ from .forms import (
     DeRegisterUserForm,
     RegisterBedpresForm,
     BedpresRegisterUserForm,
+    EditBaseRegistrationGroupForm,
 )
 
 from .models import (
@@ -901,6 +903,40 @@ def view_base_registration_group(request, pk):
     members = base_registration_group.members.all()
     context = {"group": base_registration_group, "members": members}
     return render(request, "events/social/view_base_registration_group.html", context)
+
+def edit_base_registration_group(request, pk):
+    base_registration_group = BaseRegistrationGroup.objects.filter(id=pk)
+    #members = base_registration_group.members
+
+    MemberFormSet = modelformset_factory(
+        BaseRegistrationGroup, form=EditBaseRegistrationGroupForm, extra=0
+    )
+
+    formset = MemberFormSet(
+        request.POST or None, request.FILES or None, queryset=base_registration_group
+    )
+
+
+    if request.method == "POST":
+        if formset.is_valid():
+            formset.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Endringene ble lagret.",
+                extra_tags="Flott!",
+            )
+
+            return reverse("events:se_påmeldingsgruppe", kwargs={"pk": pk})
+    else:
+        for form in formset:
+            # Dynamically change each max-selected-items
+            # according to the positions' max_members
+            form.fields.get("members").widget.attrs[
+                "data-maximum-selection-length"
+            ] = 2
+    context = {"formset": formset, "committee": base_registration_group}
+    return render(request, "events/social/edit_base_registration_group.html", context)
 
 
 class SocialListCreate(generics.ListCreateAPIView):

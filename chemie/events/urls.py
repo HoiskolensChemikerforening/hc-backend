@@ -72,7 +72,12 @@ urlpatterns = [
         "påmeldingsgruppe/<int:pk>",
         views.view_base_registration_group,
         name="se_påmeldingsgruppe",
-    )
+    ),
+    path(
+        "påmeldingsgruppe/rediger/<int:pk>",
+        views.edit_base_registration_group,
+        name="regider_påmeldingsgruppe",
+    ),
 
 ]
 

@@ -39,6 +39,10 @@ class BaseRegistrationGroup(models.Model):
     def remove_all_members(self, user):
         self.members = []
 
+    """This need to be fixed"""
+    def get_absolute_url(self):
+        return reverse("event:påmeldingsgruppe", kwargs={"slug": self.slug})
+
 class BaseEvent(models.Model):
     # Name of the event
     title = models.CharField(max_length=40, verbose_name="Tittel")
