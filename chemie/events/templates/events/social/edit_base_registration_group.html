@@ -28,10 +28,9 @@
       <div class="card">
       <!-- Edit committee members -->
         <div class="card-content">
-          <p class="flow-text">Har kan man legge til og fjerne gruppemedlemmer.
-            Kontakt Webkom for endring av epostlister.</p>
+          <p class="flow-text">Her kan du redigere medlemmene i {{group.name}} </p>
           <form class="form" method='POST'>{% csrf_token %}
-            <h1>{{group.name}}</h1>
+
             {{ formset.management_form }}
             {% for form in formset %}
               <div class="row">
