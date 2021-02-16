@@ -77,6 +77,11 @@
       <!-- Edit registration form -->
       {% if forms.edit %}
         <form class="edit" method="POST">{% csrf_token %}
+          {{ forms.edit.management_form }}
+          {% if forms.edit.registration_group_members %}
+            <p>Legg til medlemmer i kohorten din:</p>
+            {{ forms.edit.registration_group_members }}
+          {% endif %}
           {% form form=forms.edit %}{% endform %}
           <button name='action' value='edit' type="submit"
                   class="waves-effect waves-light btn btn-primary blue">Endre påmelding
