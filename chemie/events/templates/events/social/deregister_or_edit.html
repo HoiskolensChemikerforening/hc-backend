@@ -79,7 +79,9 @@
         <form class="edit" method="POST">{% csrf_token %}
           {{ forms.edit.management_form }}
           {% if forms.edit.registration_group_members %}
-            <p>Legg til medlemmer i kohorten din:</p>
+            <p >Legg inn hvilke medlemmer fra kohorten din som kommer på arrangementet: </p>
+            <p style="font-size: 12px">Dette er viktig for å vite hvor mange som deltar,
+              og for at Styret skal ha kontroll på smittesporing.</p>
             {{ forms.edit.registration_group_members }}
           {% endif %}
           {% form form=forms.edit %}{% endform %}

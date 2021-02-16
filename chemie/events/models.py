@@ -320,7 +320,7 @@ class SocialEventRegistration(BaseRegistration):
         blank=True,
     )
     registration_group_members = models.ManyToManyField(User, blank=True,
-        verbose_name="Ekstra medlemmer i påmeldingsgruppe", related_name="registration_group_members")
+        verbose_name=" ", related_name="registration_group_members")
 
 class BedpresRegistration(BaseRegistration):
     event = models.ForeignKey(Bedpres, on_delete=models.CASCADE)

@@ -204,7 +204,7 @@ class SocialRegisterUserForm(forms.ModelForm):
     class Meta:
         model = SocialEventRegistration
 
-        fields = ["sleepover", "night_snack", "companion", "registration_group_members"]
+        fields = ["companion", "sleepover", "night_snack", "registration_group_members"]
         widgets = {
             "registration_group_members": autocomplete.ModelSelect2Multiple(
                 url="verv:user-autocomplete",
