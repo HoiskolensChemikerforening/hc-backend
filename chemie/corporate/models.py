@@ -47,7 +47,7 @@ class JobAdvertisement(models.Model):
 
 
 class Survey(models.Model):
-    year = models.IntegerField(verbose_name="Årstall")
+    year = models.IntegerField(verbose_name="Årstall", unique=True)
 
     def get_q_a_dict(self):
         q_a_pairs = AnswerKeyValuePair.objects.filter(
@@ -59,23 +59,26 @@ class Survey(models.Model):
             q = q_a.question.question
             chart_type = q_a.question.chart_type
             answer = q_a.key
+            id = q_a.id
             number_of_answers = q_a.value
 
             if q not in q_a_dict.keys():
                 question_data = {
+                    "ids": [id],
                     "choices": [answer],
                     "values": [number_of_answers],
                     "chartType": chart_type,
                 }
                 q_a_dict[q] = question_data
             else:
+                q_a_dict[q]["ids"].append(id)
                 q_a_dict[q]["choices"].append(answer)
                 q_a_dict[q]["values"].append(number_of_answers)
 
         return q_a_dict
 
     def __str__(self):
-        return "Spørreundersøkelsen fra " + str(self.year)
+        return "Diplomundersøkelsen fra " + str(self.year)
 
 
 class SurveyQuestion(models.Model):
@@ -114,7 +117,7 @@ class AnswerKeyValuePair(models.Model):
         )
 
 
-# TODO: Style chart page
+# TODO: Style chart page (Flexbox)
 # TODO: Style charts
 # TODO: Create forms for adding surveys ++
 # TODO: Filtering options on questions across years?

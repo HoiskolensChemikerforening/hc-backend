@@ -13,8 +13,6 @@ from .forms import (
     CreateInterviewForm,
     CreateJobForm,
     CreateSurveyForm,
-    CreateQuestionForm,
-    CreateAnswerForm,
 )
 
 
@@ -141,38 +139,38 @@ def job_remove(request, id):
 
 @permission_required("corporate.add_survey")
 def statistics_admin(request):
-    return render(request, "corporate/statistics_admin.html")
+    surveys = Survey.objects.all().order_by("-year")
+
+    form = CreateSurveyForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect(reverse("corporate:statistics_admin"))
+
+    context = {"surveys": surveys, "form": form}
+
+    return render(request, "corporate/statistics_admin.html", context)
 
 
 @permission_required("corporate.add_survey")
-def survey_edit(request):
-    return render(request, "corporate/survey_edit.html")
+def survey_edit(request, year):
+    survey = get_object_or_404(Survey, year=year)
+    q_a_dict = survey.get_q_a_dict()
+
+    # Display dict = {question: zip(choices, values, ids)}
+    display_dict = {}
+    for q in q_a_dict.keys():
+        display_dict[q] = zip(
+            q_a_dict[q]["choices"], q_a_dict[q]["values"], q_a_dict[q]["ids"]
+        )
+
+    context = {"survey": survey, "q_a_dict": display_dict}
+    return render(request, "corporate/survey_edit.html", context)
 
 
-@permission_required("corporate.add_survey")
-def survey_create(request):
-    return render(request, "corporate/survey_create.html")
+@permission_required("corporate.delete_survey")
+def survey_delete(request, year):
+    if request.method == "POST":
+        survey = get_object_or_404(Survey, year=year)
+        survey.delete()
 
-
-# TODO: Sjekk at permission er riktig
-@permission_required("corporate.add_surveyquestion")
-def question_create(request):
-    return render(request, "corporate/question_create.html")
-
-
-# TODO: Sjekk at permission er riktig
-@permission_required("corporate.add_answerkeyvaluepair")
-def answer_create(request):
-    return render(request, "corporate/answer_create.html")
-
-
-# Template 1 = statistics_admin: "Diplomundersøkelsen > Admin" Admin page: Liste over alle surveys.
-#       - Kan ta + for å lage ny survey (altså nytt år)
-# Template 2 = survey_create.html: Lage ny survey
-# Template 3 = survey_detail.html: "Diplomundersøkelsen > Admin > 20XX" Valgt survey: List alle spørsmål
-#       - Velg å legge til nytt spørsmål til denne surveyen (selectmultiple)
-#       - Velg å lage et nytt spørsmål
-# Template 4 = question_create.html: "Diplomundersøkelsen > Admin > Nytt spørsmål" Lage nytt spørsmål
-#       - Redirect til survey?
-# Template 5 = answer_create.html: "Diplomundersøkelsen > Admin > År > Spørsmål
-#       - Legge til nye svar på gitt spørsmål
+    return redirect("corporate:statistics_admin")

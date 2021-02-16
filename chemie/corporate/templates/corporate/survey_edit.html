@@ -2,5 +2,139 @@
 {% load static %}
 
 {% block content %}
-  <h3 style="padding-top: 80px">Edit survey</h3>
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 50px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Diplomundersøkelsen</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb background-dark">
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:index" %}" style="color:#edcd2f">Forside</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics" %}" style="color:#edcd2f">Diplomundersøkelsen</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics_admin" %}" style="color:#edcd2f">Admin</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">{{ survey.year }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-bottom: 80px">
+    <h3>{{ survey }}</h3>
+    {% for question, answers in q_a_dict.items %}
+      <h5>{{ question }}</h5>
+      <table class="table table-responsive table-striped">
+        <tr>
+          <th>Svaralternativ</th>
+          <th>Antall</th>
+          <th>Valgmuligheter</th>
+        </tr>
+        {% for answer, value, id in answers %}
+          <tr>
+            <td>{{ answer }}</td>
+            <td>{{ value }}</td>
+            <td>
+              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal"
+                      data-id="{{ id }}">Rediger {{ id }}
+              </button>
+              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+                      data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett {{ id }}
+              </button>
+            </td>
+          </tr>
+        {% endfor %}
+      </table>
+      <br>
+    {% endfor %}
+
+    <br><br>
+
+    <form action="{% url "corporate:survey_delete" survey.year %}" method="post"
+          onsubmit="return confirm('Sikker på at du vill slette {{ survey }}')">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-danger" value="Slett">
+    </form>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- CONFIRM DELETE SURVEY MODAL -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Delete</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Er du sikker på at du vil slette disse svarene?</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-danger">Slett</button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT MODAL -->
+  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Rediger</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="new-answer" class="col-form-label">Svaralternativ:</label>
+              <input type="text" class="form-control" id="new-answer">
+            </div>
+            <div class="form-group">
+              <label for="new-value" class="col-form-label">Antall:</label>
+              <input type="number" class="form-control" id="new-value">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+          <button type="button" class="btn btn-primary">Lagre endringer</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
 {% endblock content %}
+
+{% block footer_script %}
+  <script>
+    $('#editModal').on('show.bs.modal', function (event) {
+      let button = $(event.relatedTarget); // Button that triggered the modal
+      let id = button.data('id');
+      let question = button.data('question');
+      let value = button.data('value'); // Extract info from data-* attributes
+      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
+      let modal = $(this);
+      modal.find('#new-answer').text(question);
+      modal.find('#new-value').val(value);
+    })
+  </script>
+{% endblock %}
