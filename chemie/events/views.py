@@ -19,6 +19,7 @@ from django.views.generic.edit import (
     DeleteView,
     UpdateView,
 )
+from django.forms import modelformset_factory
 from django.views.generic.list import ListView
 from django.db.models import Q
 
@@ -32,6 +33,7 @@ from .forms import (
     DeRegisterUserForm,
     RegisterBedpresForm,
     BedpresRegisterUserForm,
+    EditBaseRegistrationGroupForm,
 )
 
 from .models import (
@@ -42,6 +44,7 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
+    BaseRegistrationGroup,
 )
 
 from rest_framework import generics
@@ -317,6 +320,11 @@ class SocialEditRemoveUserRegistration(
                 context.update({"queue_position": queue_position})
 
         context["registration"] = registration
+        context["allowed_grade"] = self.object.allowed_grade(registration.user)
+        context["allowed_group"] = (
+            self.object.allowed_group(registration.user)
+            or self.object.allowed_groups_empty()
+        )
         return context
 
     def deregister_form_valid(self, form):
@@ -501,6 +509,8 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "registration_form": registration_form,
             "event": self.object,
             "allowed_grade": self.object.allowed_grade(request.user),
+            "allowed_group": self.object.allowed_group(request.user)
+            or self.object.allowed_groups_empty(),
         }
         return render(request, self.template_name, context)
 
@@ -554,15 +564,25 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
-            messages.add_message(
-                request,
-                messages.INFO,
-                "Det er ikke åpent for ditt klassetrinn, "
-                "men vi har notert din interesse. Du blir påmeldt "
-                "automatisk og tilsendt en e-post dersom dette endres.",
-                extra_tags="Interessert",
-            )
-
+            if not event.allowed_group(instance.user):
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Denne påmeldingen er kun åpen for kohortsjefer. "
+                    "Dersom du ønsker å bli påmeldt dette arrangementet "
+                    "eller andre arrangementer under blotet, må du be din kohortsjef "
+                    "melde på kohorten din.",
+                    extra_tags="Ikke gruppemedlem",
+                )
+            elif event.allowed_grade(instance.user):
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Det er ikke åpent for ditt klassetrinn, "
+                    "men vi har notert din interesse. Du blir påmeldt "
+                    "automatisk og tilsendt en e-post dersom dette endres.",
+                    extra_tags="Interessert",
+                )
         send_event_mail(instance, event, self.email_template)
 
 
@@ -748,7 +768,9 @@ def change_arrival_status(request):
 
 @transaction.atomic
 def set_user_event_status(event, registration):
-    if event.allowed_grade(registration.user):
+    if event.allowed_grade(registration.user) and (
+        event.allowed_group(registration.user) or event.allowed_groups_empty()
+    ):
         slots = event.sluts - event.registered_users()
         has_spare_slots = slots > 0
         if has_spare_slots:
@@ -880,6 +902,53 @@ def check_in_to_social(request, pk):
             )
     context = {"form": form, "social": social}
     return render(request, "events/social/check_in.html", context)
+
+
+@permission_required("events.view_base_registration_group")
+def view_base_registration_group(request, pk):
+    base_registration_group = get_object_or_404(BaseRegistrationGroup, id=pk)
+    members = base_registration_group.members.all()
+    context = {"group": base_registration_group, "members": members}
+    return render(
+        request, "events/social/view_base_registration_group.html", context
+    )
+
+
+@permission_required("events.change_baseregistrationgroup")
+def edit_base_registration_group(request, pk):
+    base_registration_group = BaseRegistrationGroup.objects.filter(id=pk)
+
+    MemberFormSet = modelformset_factory(
+        BaseRegistrationGroup, form=EditBaseRegistrationGroupForm, extra=0
+    )
+
+    formset = MemberFormSet(
+        request.POST or None,
+        request.FILES or None,
+        queryset=base_registration_group,
+    )
+
+    if request.method == "POST":
+        if formset.is_valid():
+            formset.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Endringene ble lagret.",
+                extra_tags="Flott!",
+            )
+
+            return HttpResponseRedirect(
+                reverse("events:edit_group", kwargs={"pk": pk})
+            )
+
+    context = {
+        "formset": formset,
+        "group": BaseRegistrationGroup.objects.get(id=pk),
+    }
+    return render(
+        request, "events/social/edit_base_registration_group.html", context
+    )
 
 
 class SocialListCreate(generics.ListCreateAPIView):

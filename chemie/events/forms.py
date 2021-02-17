@@ -1,7 +1,8 @@
 import material as M
+from dal import autocomplete
 from django import forms
 from django.core.validators import ValidationError
-
+from extended_choices import Choices
 from chemie.customprofile.models import GRADES
 from .models import (
     Social,
@@ -9,6 +10,7 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     BaseEvent,
+    BaseRegistrationGroup,
 )
 
 
@@ -17,6 +19,13 @@ class BaseRegisterEventForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         choices=GRADES,
         label="Tillatte klassetrinn",
+    )
+
+    allowed_groups = forms.ModelMultipleChoiceField(
+        queryset=BaseRegistrationGroup.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Tillatte grupper",
+        required=False,
     )
 
     def clean(self):
@@ -109,6 +118,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             "image",
             "sluts",
             "allowed_grades",
+            "allowed_groups",
             "date",
             "register_startdate",
             "register_deadline",
@@ -143,7 +153,7 @@ class RegisterEventForm(BaseRegisterEventForm):
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("price_member", "price_not_member", "price_companion"),
         M.Row("companion", "sleepover", "night_snack", "check_in"),
-        M.Row("allowed_grades"),
+        M.Row("allowed_grades", "allowed_groups"),
     )
 
     class Meta(BaseRegisterEventForm.Meta):
@@ -223,3 +233,14 @@ class DeRegisterUserForm(forms.Form):
     really_sure = forms.BooleanField(
         required=True, label="Er dette ditt endelige svar?"
     )
+
+
+class EditBaseRegistrationGroupForm(forms.ModelForm):
+    class Meta:
+        model = BaseRegistrationGroup
+        fields = ("members",)
+        widgets = {
+            "members": autocomplete.ModelSelect2Multiple(
+                url="verv:user-autocomplete"
+            )
+        }
