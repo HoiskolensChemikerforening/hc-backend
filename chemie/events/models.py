@@ -30,14 +30,14 @@ class BaseRegistrationGroup(models.Model):
         return self.name
 
     def add_member(self, user):
-        self.members+=user
+        self.members.add(user)
 
     def remove_member(self, user):
         if user in self.members:
             self.members.remove(user)
 
     def remove_all_members(self, user):
-        self.members = []
+        self.members.clear()
 
 
 
