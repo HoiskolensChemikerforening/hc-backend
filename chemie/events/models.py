@@ -23,25 +23,26 @@ ARRIVAL_STATUS = Choices(
     ("TRUANT", 3, "Ikke møtt"),
 )
 
+
 class BaseRegistrationGroup(models.Model):
     name = models.CharField(max_length=100, verbose_name="Gruppenavn")
-    members = models.ManyToManyField(User, blank=True, verbose_name="Medlemmer")
+    members = models.ManyToManyField(
+        User, blank=True, verbose_name="Medlemmer"
+    )
+
     def __str__(self):
         return self.name
 
     def add_member(self, user):
-        self.members+=user
+        self.members.add(user)
 
     def remove_member(self, user):
         if user in self.members:
             self.members.remove(user)
 
     def remove_all_members(self, user):
-        self.members = []
+        self.members.clear()
 
-    """This need to be fixed"""
-    def get_absolute_url(self):
-        return reverse("event:påmeldingsgruppe", kwargs={"slug": self.slug})
 
 class BaseEvent(models.Model):
     # Name of the event
@@ -84,7 +85,9 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
-    allowed_groups = models.ManyToManyField(BaseRegistrationGroup, blank=True, verbose_name="medlem")
+    allowed_groups = models.ManyToManyField(
+        BaseRegistrationGroup, blank=True, verbose_name="medlem"
+    )
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
@@ -163,26 +166,17 @@ class BaseEvent(models.Model):
 
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
-    
+
     def allowed_group(self, user):
-        """
-        allowed = self.allowed_groups
-        for i in range(len(allowed)):
-            if user in allowed[i]:
-                return user in allowed[i]
-        return False
-        """
-        #checks = [group for groupes in self.allowed_groups.all() if user in group.members.all()]
+
         for group in self.allowed_groups.all():
             if user in group.members.all():
                 return user in group.members.all()
         return False
-        #return user in self.allowed_groups.objects.filter(members__User=user)
 
     def allowed_groups_empty(self):
-        """Empty sequences are false in python, so this is apparently the pretty way."""
-        return not self.allowed_groups.all()
 
+        return not self.allowed_groups.all()
 
     class Meta:
         abstract = True
@@ -354,5 +348,3 @@ class BedpresEventMessage(RegistrationMessage):
     event = models.ForeignKey(
         Bedpres, related_name="custom_message", on_delete=models.CASCADE
     )
-
-

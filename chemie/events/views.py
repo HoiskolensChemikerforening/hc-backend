@@ -323,7 +323,10 @@ class SocialEditRemoveUserRegistration(
 
         context["registration"] = registration
         context["allowed_grade"] = self.object.allowed_grade(registration.user)
-        context["allowed_group"] = (self.object.allowed_group(registration.user) or self.object.allowed_groups_empty())
+        context["allowed_group"] = (
+            self.object.allowed_group(registration.user)
+            or self.object.allowed_groups_empty()
+        )
         return context
 
     def deregister_form_valid(self, form):
@@ -496,7 +499,6 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "enable_sleepover": self.object.sleepover,
             "enable_night_snack": self.object.night_snack,
             "enable_companion": self.object.companion,
-            "enable_registration_group_members": not self.object.allowed_groups_empty(),
         }
 
     def get(self, request, pk, *args, **kwargs):
@@ -510,7 +512,8 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "registration_form": registration_form,
             "event": self.object,
             "allowed_grade": self.object.allowed_grade(request.user),
-            "allowed_group": self.object.allowed_group(request.user) or self.object.allowed_groups_empty(),
+            "allowed_group": self.object.allowed_group(request.user)
+            or self.object.allowed_groups_empty(),
         }
         return render(request, self.template_name, context)
 
@@ -768,7 +771,9 @@ def change_arrival_status(request):
 
 @transaction.atomic
 def set_user_event_status(event, registration):
-    if event.allowed_grade(registration.user) and (event.allowed_group(registration.user) or event.allowed_groups_empty()):
+    if event.allowed_grade(registration.user) and (
+        event.allowed_group(registration.user) or event.allowed_groups_empty()
+    ):
         slots = event.sluts - event.registered_users()
         has_spare_slots = slots > 0
         if has_spare_slots:
@@ -901,25 +906,30 @@ def check_in_to_social(request, pk):
     context = {"form": form, "social": social}
     return render(request, "events/social/check_in.html", context)
 
+
 @permission_required("events.view_base_registration_group")
 def view_base_registration_group(request, pk):
     base_registration_group = get_object_or_404(BaseRegistrationGroup, id=pk)
     members = base_registration_group.members.all()
     context = {"group": base_registration_group, "members": members}
-    return render(request, "events/social/view_base_registration_group.html", context)
+    return render(
+        request, "events/social/view_base_registration_group.html", context
+    )
 
+
+@permission_required("events.change_baseregistrationgroup")
 def edit_base_registration_group(request, pk):
     base_registration_group = BaseRegistrationGroup.objects.filter(id=pk)
-    #members = base_registration_group.members
 
     MemberFormSet = modelformset_factory(
         BaseRegistrationGroup, form=EditBaseRegistrationGroupForm, extra=0
     )
 
     formset = MemberFormSet(
-        request.POST or None, request.FILES or None, queryset=base_registration_group
+        request.POST or None,
+        request.FILES or None,
+        queryset=base_registration_group,
     )
-
 
     if request.method == "POST":
         if formset.is_valid():
@@ -931,10 +941,17 @@ def edit_base_registration_group(request, pk):
                 extra_tags="Flott!",
             )
 
-            return HttpResponseRedirect(reverse("events:edit_group", kwargs={"pk": pk}))
+            return HttpResponseRedirect(
+                reverse("events:edit_group", kwargs={"pk": pk})
+            )
 
-    context = {"formset": formset, "committee": "Fuck"}
-    return render(request, "events/social/edit_base_registration_group.html", context)
+    context = {
+        "formset": formset,
+        "group": BaseRegistrationGroup.objects.get(id=pk),
+    }
+    return render(
+        request, "events/social/edit_base_registration_group.html", context
+    )
 
 
 class SocialListCreate(generics.ListCreateAPIView):
