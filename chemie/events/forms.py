@@ -213,6 +213,7 @@ class SocialRegisterUserForm(forms.ModelForm):
         enable_sleepover = kwargs.pop("enable_sleepover", True)
         enable_night_snack = kwargs.pop("enable_night_snack", True)
         enable_companion = kwargs.pop("enable_companion", True)
+        enable_registration_group_members = kwargs.pop("enable_registration_group_members", True)
         super(SocialRegisterUserForm, self).__init__(*args, **kwargs)
         if not enable_sleepover:
             self.fields.pop("sleepover")
@@ -220,6 +221,8 @@ class SocialRegisterUserForm(forms.ModelForm):
             self.fields.pop("night_snack")
         if not enable_companion:
             self.fields.pop("companion")
+        if not enable_registration_group_members:
+            self.fields.pop("enable_registration_group_members")
 
 
 class BedpresRegisterUserForm(forms.ModelForm):
