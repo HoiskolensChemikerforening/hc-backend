@@ -71,7 +71,7 @@ urlpatterns = [
     path(
         "påmeldingsgruppe/<int:pk>",
         views.view_base_registration_group,
-        name="se_påmeldingsgruppe",
+        name="view_group",
     ),
     path(
         "påmeldingsgruppe/rediger/<int:pk>",
