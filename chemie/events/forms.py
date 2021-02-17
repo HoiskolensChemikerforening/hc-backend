@@ -229,7 +229,7 @@ class SocialRegisterUserForm(forms.ModelForm):
         if not enable_companion:
             self.fields.pop("companion")
         if not enable_registration_group_members:
-            self.fields.pop("enable_registration_group_members")
+            self.fields.pop("registration_group_members")
 
 
 class BedpresRegisterUserForm(forms.ModelForm):
