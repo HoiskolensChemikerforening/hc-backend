@@ -573,9 +573,9 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
                 messages.add_message(
                     request,
                     messages.INFO,
-                    "Denne påmeldingen er kun åpen for kohortsjefer."
-                    "Dersom du ønsker å bli påmeldt dette arrangementet, "
-                    "eller andre arrangementer under blotet, må du be din kohortsjef"
+                    "Denne påmeldingen er kun åpen for kohortsjefer. "
+                    "Dersom du ønsker å bli påmeldt dette arrangementet "
+                    "eller andre arrangementer under blotet, må du be din kohortsjef "
                     "melde på kohorten din.",
                     extra_tags="Ikke gruppemedlem",
                 )
