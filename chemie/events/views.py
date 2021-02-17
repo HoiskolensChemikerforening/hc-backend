@@ -904,9 +904,10 @@ def view_base_registration_group(request, pk):
     context = {"group": base_registration_group, "members": members}
     return render(request, "events/social/view_base_registration_group.html", context)
 
+@permission_required("events.change_baseregistrationgroup")
 def edit_base_registration_group(request, pk):
     base_registration_group = BaseRegistrationGroup.objects.filter(id=pk)
-    #members = base_registration_group.members
+
 
     MemberFormSet = modelformset_factory(
         BaseRegistrationGroup, form=EditBaseRegistrationGroupForm, extra=0
@@ -929,7 +930,7 @@ def edit_base_registration_group(request, pk):
 
             return HttpResponseRedirect(reverse("events:edit_group", kwargs={"pk": pk}))
 
-    context = {"formset": formset, "committee": "Fuck"}
+    context = {"formset": formset, "group": BaseRegistrationGroup.objects.get(id=pk)}
     return render(request, "events/social/edit_base_registration_group.html", context)
 
 
