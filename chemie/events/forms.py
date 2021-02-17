@@ -154,8 +154,7 @@ class RegisterEventForm(BaseRegisterEventForm):
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("price_member", "price_not_member", "price_companion"),
         M.Row("companion", "sleepover", "night_snack", "check_in"),
-        M.Row("allowed_grades"),
-        M.Row("allowed_groups")
+        M.Row("allowed_grades", "allowed_groups"),
     )
 
     class Meta(BaseRegisterEventForm.Meta):
