@@ -209,7 +209,6 @@ class Social(BaseEvent):
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
     check_in = models.BooleanField(default=False, verbose_name="Innsjekking")
-    registration_group_members = models.BooleanField(default=False, verbose_name="Møtende gruppemedlemmer")
 
     attendees = models.ManyToManyField(User, through="SocialEventRegistration")
 
@@ -314,8 +313,13 @@ class SocialEventRegistration(BaseRegistration):
         null=True,
         blank=True,
     )
-    registration_group_members = models.ManyToManyField(User, blank=True,
-        verbose_name=" ", related_name="registration_group_members")
+    registration_group_members = models.ManyToManyField(
+        User,
+        blank=True,
+        verbose_name=" ",
+        related_name="registration_group_members",
+    )
+
 
 class BedpresRegistration(BaseRegistration):
     event = models.ForeignKey(Bedpres, on_delete=models.CASCADE)

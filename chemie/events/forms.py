@@ -169,6 +169,7 @@ class RegisterEventForm(BaseRegisterEventForm):
             "sleepover",
             "night_snack",
             "check_in",
+            "allowed_groups",
         ]
 
 
@@ -202,10 +203,15 @@ class SocialRegisterUserForm(forms.ModelForm):
     class Meta:
         model = SocialEventRegistration
 
-        fields = ["companion", "sleepover", "night_snack", "registration_group_members"]
+        fields = [
+            "companion",
+            "sleepover",
+            "night_snack",
+            "registration_group_members",
+        ]
         widgets = {
             "registration_group_members": autocomplete.ModelSelect2Multiple(
-                url="verv:user-autocomplete",
+                url="verv:user-autocomplete"
             )
         }
 
@@ -213,7 +219,9 @@ class SocialRegisterUserForm(forms.ModelForm):
         enable_sleepover = kwargs.pop("enable_sleepover", True)
         enable_night_snack = kwargs.pop("enable_night_snack", True)
         enable_companion = kwargs.pop("enable_companion", True)
-        enable_registration_group_members = kwargs.pop("enable_registration_group_members", True)
+        enable_registration_group_members = kwargs.pop(
+            "enable_registration_group_members", True
+        )
         super(SocialRegisterUserForm, self).__init__(*args, **kwargs)
         if not enable_sleepover:
             self.fields.pop("sleepover")
