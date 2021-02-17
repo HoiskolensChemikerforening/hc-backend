@@ -313,6 +313,12 @@ class SocialEventRegistration(BaseRegistration):
         null=True,
         blank=True,
     )
+    registration_group_members = models.ManyToManyField(
+        User,
+        blank=True,
+        verbose_name="Møtende medlemmer på arrangement",
+        related_name="registration_group_members",
+    )
 
 
 class BedpresRegistration(BaseRegistration):

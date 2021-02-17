@@ -1,5 +1,24 @@
 {% extends "events/social/social_base.html" %}
 {% load material_form %}
+{% load staticfiles %}
+{% load static %}
+
+{% block header %}
+  <style>
+    span.select2-container {
+      width: inherit !important;
+      display: block;
+    }
+
+    label {
+      display: block;
+    }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
+  </style>
+{% endblock header %}
 
 {% block nav_sub_header %}
   Påmelding
@@ -43,10 +62,12 @@
     <div class="col">
       {% if forms.deregister %}
       <form class="deregister" method="POST">{% csrf_token %}
-        {% form form=forms.deregister %}{% endform %}
-        <button name='action' value='deregister' type="submit"
-                class="waves-effect waves-light btn btn-primary red">Meld meg av
-        </button>
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;">
+          <button name='action' value='deregister' type="submit"
+                  class="waves-effect waves-light btn btn-primary red" style="margin: 0 20px 20px 0;">Meld meg av
+          </button>
+          {% form form=forms.deregister %}{% endform %}
+      </div>
       </form>
       {% else %}
         Avmeldingsfristen har passert.
@@ -58,6 +79,13 @@
       <!-- Edit registration form -->
       {% if forms.edit %}
         <form class="edit" method="POST">{% csrf_token %}
+          {{ forms.edit.management_form }}
+          {% if forms.edit.registration_group_members %}
+            <p >Legg inn hvilke medlemmer fra kohorten din som kommer på arrangementet: </p>
+            <p style="font-size: 12px">Dette er viktig for å vite hvor mange som deltar,
+              og for at Styret skal ha kontroll på smittesporing.</p>
+            {{ forms.edit.registration_group_members }}
+          {% endif %}
           {% form form=forms.edit %}{% endform %}
           <button name='action' value='edit' type="submit"
                   class="waves-effect waves-light btn btn-primary blue">Endre påmelding
@@ -68,3 +96,6 @@
   </div>
 
 {% endblock maincontent %}
+{% block footer_script %}
+{{ forms.edit.media }}
+{% endblock footer_script %}
