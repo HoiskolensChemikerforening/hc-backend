@@ -23,9 +23,13 @@ ARRIVAL_STATUS = Choices(
     ("TRUANT", 3, "Ikke møtt"),
 )
 
+
 class BaseRegistrationGroup(models.Model):
     name = models.CharField(max_length=100, verbose_name="Gruppenavn")
-    members = models.ManyToManyField(User, blank=True, verbose_name="Medlemmer")
+    members = models.ManyToManyField(
+        User, blank=True, verbose_name="Medlemmer"
+    )
+
     def __str__(self):
         return self.name
 
@@ -38,7 +42,6 @@ class BaseRegistrationGroup(models.Model):
 
     def remove_all_members(self, user):
         self.members.clear()
-
 
 
 class BaseEvent(models.Model):
@@ -82,7 +85,9 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
-    allowed_groups = models.ManyToManyField(BaseRegistrationGroup, blank=True, verbose_name="medlem")
+    allowed_groups = models.ManyToManyField(
+        BaseRegistrationGroup, blank=True, verbose_name="medlem"
+    )
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
@@ -161,7 +166,7 @@ class BaseEvent(models.Model):
 
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
-    
+
     def allowed_group(self, user):
 
         for group in self.allowed_groups.all():
@@ -169,11 +174,9 @@ class BaseEvent(models.Model):
                 return user in group.members.all()
         return False
 
-
     def allowed_groups_empty(self):
 
         return not self.allowed_groups.all()
-
 
     class Meta:
         abstract = True
@@ -311,6 +314,7 @@ class SocialEventRegistration(BaseRegistration):
         blank=True,
     )
 
+
 class BedpresRegistration(BaseRegistration):
     event = models.ForeignKey(Bedpres, on_delete=models.CASCADE)
     status = models.IntegerField(
@@ -343,5 +347,3 @@ class BedpresEventMessage(RegistrationMessage):
     event = models.ForeignKey(
         Bedpres, related_name="custom_message", on_delete=models.CASCADE
     )
-
-

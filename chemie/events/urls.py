@@ -78,7 +78,6 @@ urlpatterns = [
         views.edit_base_registration_group,
         name="edit_group",
     ),
-
 ]
 
 # Bedpres

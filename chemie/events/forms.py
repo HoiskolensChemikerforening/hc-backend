@@ -14,7 +14,6 @@ from .models import (
 )
 
 
-
 class BaseRegisterEventForm(forms.ModelForm):
     allowed_grades = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
@@ -235,14 +234,13 @@ class DeRegisterUserForm(forms.Form):
         required=True, label="Er dette ditt endelige svar?"
     )
 
+
 class EditBaseRegistrationGroupForm(forms.ModelForm):
     class Meta:
         model = BaseRegistrationGroup
         fields = ("members",)
         widgets = {
             "members": autocomplete.ModelSelect2Multiple(
-                url="verv:user-autocomplete",
+                url="verv:user-autocomplete"
             )
         }
-
-
