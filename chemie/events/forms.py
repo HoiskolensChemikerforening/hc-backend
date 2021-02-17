@@ -208,9 +208,7 @@ class SocialRegisterUserForm(forms.ModelForm):
             "night_snack",
             "registration_group_members",
         ]
-        labels = {
-            "registration_group_members": ""
-        }
+        labels = {"registration_group_members": ""}
         widgets = {
             "registration_group_members": autocomplete.ModelSelect2Multiple(
                 url="verv:user-autocomplete"
