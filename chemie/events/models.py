@@ -209,6 +209,7 @@ class Social(BaseEvent):
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
     check_in = models.BooleanField(default=False, verbose_name="Innsjekking")
+    registration_group_members = models.BooleanField(default=False, verbose_name="Møtende gruppemedlemmer")
 
     attendees = models.ManyToManyField(User, through="SocialEventRegistration")
 
