@@ -65,7 +65,7 @@
 
     function renderChart(chartId, chartType, title, chartData, labels) {
       let ctx = document.getElementById(chartId).getContext('2d');
-      return new Chart(ctx, {
+      let chart = new Chart(ctx, {
         type: chartType,
         data: {
           labels: labels,
@@ -92,6 +92,16 @@
           },
         }
       });
+
+      if (chartType === "bar") {
+        setBarChartOptions(chart);
+      } else if (chartType === "pie") {
+        setPieChartOptions(chart);
+      } else {
+        console.log("WTF is this");
+      }
+
+      return chart;
     }
 
     function toggleChartType(chartId) {
@@ -100,8 +110,6 @@
       if (chartType === "bar") {
         setPieChartOptions(chart);
       } else if (chartType === "pie") {
-        setBarChartOptions(chart);
-      } else if (chartType === "doughnut") {
         setBarChartOptions(chart);
       } else {
         console.log("WTF is this");

@@ -31,50 +31,81 @@
   </div>
 
   <div class="container" style="margin-bottom: 80px">
-    <h3>{{ survey }}</h3>
+    <h2>{{ survey }}</h2>
+    <br>
+    <button>Nytt spørsmål</button>
+
+    <br><br><br>
+
     {% for question, answers in q_a_dict.items %}
-      <h5>{{ question }}</h5>
-      <table class="table table-responsive table-striped">
-        <tr>
-          <th>Svaralternativ</th>
-          <th>Antall</th>
-          <th>Valgmuligheter</th>
-        </tr>
-        {% for answer, value, id in answers %}
+      <h3>{{ question }}</h3>
+      <button style="margin: 10px">Nytt svar</button>
+      <div class="table-responsive table-striped">
+        <table class="table">
           <tr>
-            <td>{{ answer }}</td>
-            <td>{{ value }}</td>
-            <td>
-              <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editModal"
-                      data-id="{{ id }}">Rediger {{ id }}
-              </button>
-              <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
-                      data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett {{ id }}
-              </button>
-            </td>
+            <th>Svaralternativ</th>
+            <th>Antall</th>
+            <th>Valgmuligheter</th>
           </tr>
-        {% endfor %}
-      </table>
+          {% for answer, value, id in answers %}
+            <tr>
+              <td>{{ answer }}</td>
+              <td>{{ value }}</td>
+              <td>
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAnswerModal"
+                        id="{{ id }}" onclick="populateModal({{ id }})"
+                        data-answer="{{ answer }}" data-value="{{ value }}">Rediger {{ id }}
+                </button>
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
+                        data-id="{{ id }}">Slett {{ id }}
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
       <br>
     {% endfor %}
 
     <br><br>
 
-    <form action="{% url "corporate:survey_delete" survey.year %}" method="post"
-          onsubmit="return confirm('Sikker på at du vill slette {{ survey }}')">
-      {% csrf_token %}
-      <input type="submit" class="btn btn-danger" value="Slett">
-    </form>
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="deleteSurveyModal"
+            data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett {{ id }}
+    </button>
   </div>
 
   <!-- MODALS -->
 
   <!-- CONFIRM DELETE SURVEY MODAL -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="deleteSurveyModal" aria-labelledby="deleteSurveyModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Slett</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Er du sikker på at du vil slette {{ survey }}?</p>
+        </div>
+        <div class="modal-footer">
+          <form action="{% url "corporate:survey_delete" survey.year %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="Slett">
+          </form>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM DELETE ANSWER MODAL -->
   <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title">Delete</h5>
+          <h5 class="modal-title">Slett</h5>
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -91,7 +122,7 @@
   </div>
 
   <!-- EDIT MODAL -->
-  <div class="modal fade" id="editModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+  <div class="modal fade" id="editAnswerModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
        aria-hidden="true">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
@@ -121,20 +152,24 @@
     </div>
   </div>
 
-
 {% endblock content %}
 
 {% block footer_script %}
   <script>
-    $('#editModal').on('show.bs.modal', function (event) {
-      let button = $(event.relatedTarget); // Button that triggered the modal
-      let id = button.data('id');
-      let question = button.data('question');
-      let value = button.data('value'); // Extract info from data-* attributes
-      // If necessary, you could initiate an AJAX request here (and then do the updating in a callback).
-      let modal = $(this);
-      modal.find('#new-answer').text(question);
+
+    function populateModal(id) {
+      let button = document.getElementById(id);
+
+      // Extract info from data-* attributes
+      let answer = button.getAttribute('data-answer');
+      let value = button.getAttribute('data-value');
+      let target = button.getAttribute('data-target');
+
+      // Insert data to the modal
+      let modal = $(target);
+      modal.find('#new-answer').val(answer);
       modal.find('#new-value').val(value);
-    })
+    }
+
   </script>
 {% endblock %}
