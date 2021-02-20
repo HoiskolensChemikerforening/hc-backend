@@ -10,7 +10,7 @@ Create a virtual environment with Python 3.6+.
 
 Run the following to install requirements for the project.
 ```shell
-pip install -r requirements.txt
+pip install -r requirements/development.txt
 ```
 
 #### Set up database
@@ -75,10 +75,14 @@ export COMPOSE_DOCKER_CLI_BUILD=1
 
 ## Add packages to requirements
 We use pip-tools to make our requirement files easy to understand. To 
-add a new package to the project you need to update the `requirements.in`
-file with the package and then run the line below to update the 
-`requirements.txt` that is used when setting up the project.
+add a new package to the project you need to update either of the files 
+`requirements/base.in`, `requirements/development.in` or 
+`requirements/production.in` with the package and then run the line below 
+to update the files `requirements/base.txt`, `requirements/development.txt` 
+and `requirements/production.txt` that is used when setting up the project.
 ```shell
-pip-compile requirements.in > requirements.txt
+pip-compile requirements/base.in > requirements/base.txt
+pip-compile requirements/development.in > requirements/development.txt
+pip-compile requirements/production.in > requirements/production.txt
 ```
 Likewise with any additional production requirements.
