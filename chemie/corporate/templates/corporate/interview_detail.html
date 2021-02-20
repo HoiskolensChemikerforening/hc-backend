@@ -9,7 +9,7 @@
       <div class="col-12 col-md-6">
         <a class="link" style="font-weight: 600; font-size: var(--font-size-medium-plus);"
            href="{% url "corporate:interview" %}">
-          Intervjuer
+        Intervjuer
         </a>
       </div>
       <div class="col-12" style="margin-top: 20px;">
@@ -17,8 +17,8 @@
       </div>
       <div class="col-12">
         {% for specialization in interview.specializations.all %}
-          <!-- Badges with custom colors in a yellow scale -->
-          <span class="badge badge-pill
+        <!-- Badges with custom colors in a yellow scale -->
+        <span class="badge badge-pill
             {% if specialization.id == 1 %} badge-custom-1 {% endif %}
             {% if specialization.id == 2 %} badge-custom-2 {% endif %}
             {% if specialization.id == 3 %} badge-custom-3 {% endif %}
@@ -39,31 +39,40 @@
       {{ interview.text | safe }}
     </div>
     <div class="col-12 col-lg-4 order-1 order-lg-3">
-      <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 60vw" src="{{ interview.picture.url }}">
+      <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 60vw"
+           src="{{ interview.picture.url }}">
     </div>
     <div class="col-12 col-lg-12 order-4">
       {% if perms.corporate.delete_interview %}
-        <a type="button" class="button-warning"
-           onclick="deleteInterviewPopup({{ interview.id }})"
-           id="deleteInterview{{ interview.id }}"
-           data-url="{% url "corporate:interview_delete" interview.id %}">
-           Slett intervju
-         </a>
+      <a type="button" class="button-warning"
+         onclick="deleteInterviewPopup({{ interview.id }})"
+         id="deleteInterview{{ interview.id }}"
+         data-url="{% url "corporate:interview_delete" interview.id %}">
+      Slett intervju
+      </a>
+      {% endif %}
+    </div>
+
+    <div class="col-12 col-lg-12 order-4">
+      {% if perms.corporate.edit_interview %}
+      <a type="button" class="button-fill"
+         id="editInterview{{ interview.id }}"
+         href="{% url "corporate:interview_edit" interview.id %}">
+      Endre intervju
+      </a>
       {% endif %}
     </div>
   </div>
 </div>
 
-
-{% endblock content %}
-
 {% block footer_script %}
-  <script>
-    function deleteInterviewPopup(id) {
-      let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
-      if (confirm("Er du sikker på at du vil fjerne dette intervjuet?")) {
-        window.location.href = url;
-      }
+<script>
+  function deleteInterviewPopup(id) {
+    let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
+    if (confirm("Er du sikker på at du vil fjerne dette intervjuet?")) {
+      window.location.href = url;
     }
-  </script>
+  }
+</script>
 {% endblock footer_script %}
+{% endblock content %}
