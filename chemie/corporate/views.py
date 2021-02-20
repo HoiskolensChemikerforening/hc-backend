@@ -1,13 +1,15 @@
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
+from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
+from django.http import HttpResponseRedirect
 
 from .models import Interview, JobAdvertisement
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
-from .forms import CreateInterviewForm, CreateJobForm
+from .forms import CreateInterviewForm, EditInterviewForm, CreateJobForm
 
 
 def index(request):
@@ -85,6 +87,27 @@ def interview_remove(request, id):
     interview.save()
 
     return redirect("corporate:interview")
+
+
+@permission_required("news.change_article")
+def interview_edit(request, interview_id):
+    interview = get_object_or_404(Interview, id=interview_id)
+    editInterview = EditInterviewForm(
+        request.POST or None, request.FILES or None, instance=interview
+    )
+    if request.method == "POST":
+        if interview.is_valid():
+            interview.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Intervjuet ble endret",
+                extra_tags="Endret",
+            )
+            return HttpResponseRedirect(reverse("interview:index"))
+    context = {"interview": interview}
+
+    return render(request, "news/create_post.html", context)
 
 
 @permission_required("corporate.add_jobadvertisement")
