@@ -37,3 +37,5 @@ django-crispy-forms==1.7.2
 django-cors-headers==3.5.0
 
 reportlab==3.5.59
+
+# TODO pip-compile requirements/production.in must be run, could not run on windows due to uwsgi.
