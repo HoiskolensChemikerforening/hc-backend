@@ -35,3 +35,5 @@ markdown2==2.3.6
 django-environ==0.4.5
 django-crispy-forms==1.7.2
 django-cors-headers==3.5.0
+
+reportlab==3.5.59
