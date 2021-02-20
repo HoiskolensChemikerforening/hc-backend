@@ -18,4 +18,5 @@ urlpatterns = [
         name="edit_rentalobject",
     ),
     path("<int:rentalobject_id>/kontakt/", views.contact, name="contact"),
+    path("nyFaktura/", views.new_invoice, name="new_invoice"),
 ]
