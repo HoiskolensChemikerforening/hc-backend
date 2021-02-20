@@ -9,7 +9,7 @@ from post_office import mail
 
 
 from .models import RentalObject
-from .forms import RentalObjectForm
+from .forms import RentalObjectForm, InvoiceForm
 from chemie.home.forms import ContactForm
 
 
@@ -107,3 +107,14 @@ def contact(request, rentalobject_id):
         context = {"contact_form": contact_form, "rentalobject": rental_object}
 
         return render(request, "rentalservice/contact.html", context)
+
+
+@permission_required("rentalservice.new_invoice")
+def new_invoice(request):
+    form = InvoiceForm(request.POST or None)
+    if form.is_valid():
+        form.save()
+        return redirect("rentalservice:index")
+
+    context = {"form": form}
+    return render(request, "rentalservice/new_invoice.html", context)
