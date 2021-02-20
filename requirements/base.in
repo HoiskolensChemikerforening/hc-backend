@@ -1,7 +1,7 @@
-psycopg2-binary==2.8.6
+psycopg2==2.7.6.1
 
-Django==2.2.24
-djangorestframework==3.11.2
+Django==2.2.13
+djangorestframework==3.9.4
 django-autocomplete-light==3.3.2
 django-ckeditor==5.6.1
 django-crispy-forms==1.7.2
@@ -27,13 +27,13 @@ pytest-xdist==1.31.0
 freezegun==0.3.11
 werkzeug==0.15.5
 olefile==0.46
-wiki==0.7.9
+wiki==0.5
 
 coverage==4.5.2
-markdown2==2.4.0
+markdown2==2.3.6
 
 django-environ==0.4.5
 django-crispy-forms==1.7.2
 django-cors-headers==3.5.0
 
-cryptography==3.4.8
+reportlab==3.5.59
