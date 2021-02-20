@@ -117,4 +117,4 @@ def new_invoice(request):
         return redirect("rentalservice:index")
 
     context = {"form": form}
-    return render(request, "rentalservice/new_invoice.html", context)
+    return render(request, "rentalservice/create_invoice.html", context)
