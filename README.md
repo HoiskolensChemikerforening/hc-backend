@@ -85,4 +85,3 @@ pip-compile requirements/base.in > requirements/base.txt
 pip-compile requirements/development.in > requirements/development.txt
 pip-compile requirements/production.in > requirements/production.txt
 ```
-Likewise with any additional production requirements.
