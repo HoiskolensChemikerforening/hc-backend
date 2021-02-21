@@ -203,3 +203,6 @@ def answer_delete(request, id):
         answer.delete()
 
     return redirect("corporate:survey_edit", year=survey.year)
+
+
+# TODO: Filtrer på ett spørsmål over flere år

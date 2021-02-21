@@ -1,6 +1,10 @@
 {% extends "corporate/base.html" %}
 {% load static %}
 
+
+<!-- TODO: Legge inn nytt spørsmål -->
+<!-- TODO: Legge inn nytt svar -->
+
 {% block content %}
 
   <div class="banner background-dark" style="margin-bottom: 80px;">
@@ -38,23 +42,24 @@
         </select>
       </div>
     </div>
-    {% for question, data in q_a_dict.items %}
-      <!-- TODO: Flexbox this shit -->
-      {% if forloop.counter|divisibleby:2 %}
-        <div class="col">
+    <div id="chart-grid">
+      {% for question, data in q_a_dict.items %}
+        <div class="grid-element">
           <canvas id="{{ question }}"></canvas>
           <button onclick="toggleChartType('{{ question }}')">Bytt graftype</button>
         </div>
-        </div>
-      {% else %}
-        <div class="row">
-        <div class="col">
-          <canvas id="{{ question }}"></canvas>
-          <button onclick="toggleChartType('{{ question }}')">Bytt graftype</button>
-        </div>
-      {% endif %}
-    {% endfor %}
+      {% endfor %}
     </div>
+  </div>
+
+  <style>
+    #chart-grid {
+      display: grid;
+      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 5rem 5rem;
+    }
+  </style>
 
 {% endblock content %}
 
