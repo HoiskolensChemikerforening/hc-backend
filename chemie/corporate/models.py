@@ -118,6 +118,5 @@ class AnswerKeyValuePair(models.Model):
 
 
 # TODO: Style chart page (Flexbox)
-# TODO: Style charts
 # TODO: Create forms for adding surveys ++
 # TODO: Filtering options on questions across years?

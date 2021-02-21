@@ -54,11 +54,11 @@
               <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAnswerModal"
                         id="editAnswer{{ id }}" onclick="populateEditModal({{ id }})"
-                        data-answer="{{ answer }}" data-value="{{ value }}">Rediger {{ id }}
+                        data-answer="{{ answer }}" data-value="{{ value }}">Rediger
                 </button>
                 <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAnswerModal"
                         data-url="{% url 'corporate:answer_delete' id %}"
-                        id="deleteAnswer{{ id }}" onclick="setDeleteUrl({{ id }})">Slett {{ id }}
+                        id="deleteAnswer{{ id }}" onclick="setDeleteUrl({{ id }})">Slett
                 </button>
               </td>
             </tr>
@@ -150,7 +150,9 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
-          <button type="button" class="btn btn-primary">Lagre endringer</button>
+          <button type="button" class="btn btn-primary" onclick="updateAnswer()"
+                  id="saveAnswerButton">Lagre endringer
+          </button>
         </div>
       </div>
     </div>
@@ -162,17 +164,18 @@
   <script>
 
     function populateEditModal(id) {
-      let button = document.getElementById("editAnswer" + id.toString());
+      let triggerButton = document.getElementById("editAnswer" + id.toString());
 
       // Extract info from data-* attributes
-      let answer = button.getAttribute('data-answer');
-      let value = button.getAttribute('data-value');
-      let target = button.getAttribute('data-target');
+      let answer = triggerButton.getAttribute('data-answer');
+      let value = triggerButton.getAttribute('data-value');
+      let target = triggerButton.getAttribute('data-target');
 
       // Insert data to the modal
       let modal = $(target);
       modal.find('#new-answer').val(answer);
       modal.find('#new-value').val(value);
+      document.getElementById("saveAnswerButton").setAttribute("answerId", id);
     }
 
     function setDeleteUrl(id) {
@@ -182,8 +185,25 @@
     }
 
     function updateAnswer() {
-      // Insert AJAX Request to update Answer
+      let answerId = document.getElementById("saveAnswerButton").getAttribute("answerId");
+      let newValue = document.getElementById("new-value").value;
+      let newAnswer = document.getElementById("new-answer").value;
+
+      $.ajax({
+        url: "{% url 'corporate:answer_edit' %}",
+        data: {
+          "id": parseInt(answerId),
+          "value": parseInt(newValue),
+          "answer": newAnswer
+        },
+        type: "POST",
+        success: location.reload()
+      });
     }
+
+    $.ajaxSetup({
+      headers: {"X-CSRFToken": '{{ csrf_token }}'}
+    });
 
   </script>
 {% endblock %}

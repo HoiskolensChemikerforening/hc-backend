@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
 from django.contrib.auth.decorators import permission_required
+from django.http import JsonResponse
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -174,6 +175,24 @@ def survey_delete(request, year):
         survey.delete()
 
     return redirect("corporate:statistics_admin")
+
+
+@permission_required("corporate:change_answerkeyvaluepair")
+def answer_edit(request):
+    if request.method == "POST":
+        id = request.POST["id"]
+        value = request.POST["value"]
+        answer = request.POST["answer"]
+
+        answer_value_pair = get_object_or_404(AnswerKeyValuePair, id=id)
+        answer_value_pair.value = value
+        answer_value_pair.answer = answer
+
+        answer_value_pair.save()
+
+        return JsonResponse({"success": True})
+    else:
+        return redirect("corporate:statistics")
 
 
 @permission_required("corporate.delete_answerkeyvaluepair")
