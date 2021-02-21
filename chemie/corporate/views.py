@@ -5,7 +5,7 @@ from django.contrib.auth.decorators import permission_required
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Interview, JobAdvertisement, Survey
+from .models import Interview, JobAdvertisement, Survey, AnswerKeyValuePair
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -174,3 +174,13 @@ def survey_delete(request, year):
         survey.delete()
 
     return redirect("corporate:statistics_admin")
+
+
+@permission_required("corporate.delete_answerkeyvaluepair")
+def answer_delete(request, id):
+    if request.method == "POST":
+        answer = get_object_or_404(AnswerKeyValuePair, id=id)
+        survey = answer.survey
+        answer.delete()
+
+    return redirect("corporate:survey_edit", year=survey.year)

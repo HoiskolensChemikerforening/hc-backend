@@ -53,11 +53,12 @@
               <td>{{ value }}</td>
               <td>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAnswerModal"
-                        id="{{ id }}" onclick="populateModal({{ id }})"
+                        id="editAnswer{{ id }}" onclick="populateEditModal({{ id }})"
                         data-answer="{{ answer }}" data-value="{{ value }}">Rediger {{ id }}
                 </button>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteModal"
-                        data-id="{{ id }}">Slett {{ id }}
+                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAnswerModal"
+                        data-url="{% url 'corporate:answer_delete' id %}"
+                        id="deleteAnswer{{ id }}" onclick="setDeleteUrl({{ id }})">Slett {{ id }}
                 </button>
               </td>
             </tr>
@@ -69,8 +70,8 @@
 
     <br><br>
 
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="deleteSurveyModal"
-            data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett {{ id }}
+    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteSurveyModal"
+            data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett
     </button>
   </div>
 
@@ -101,7 +102,7 @@
   </div>
 
   <!-- CONFIRM DELETE ANSWER MODAL -->
-  <div class="modal fade" tabindex="-1" role="dialog" id="deleteModal" aria-labelledby="deleteModalLabel">
+  <div class="modal fade" tabindex="-1" role="dialog" id="deleteAnswerModal" aria-labelledby="deleteAnswerModalLabel">
     <div class="modal-dialog" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -114,7 +115,10 @@
           <p>Er du sikker på at du vil slette disse svarene?</p>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-danger">Slett</button>
+          <form id="deleteAnswerForm" action="" method="post">
+            {% csrf_token %}
+            <input type="submit" class="btn btn-danger" value="Slett">
+          </form>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
         </div>
       </div>
@@ -157,8 +161,8 @@
 {% block footer_script %}
   <script>
 
-    function populateModal(id) {
-      let button = document.getElementById(id);
+    function populateEditModal(id) {
+      let button = document.getElementById("editAnswer" + id.toString());
 
       // Extract info from data-* attributes
       let answer = button.getAttribute('data-answer');
@@ -169,6 +173,16 @@
       let modal = $(target);
       modal.find('#new-answer').val(answer);
       modal.find('#new-value').val(value);
+    }
+
+    function setDeleteUrl(id) {
+      let button = document.getElementById("deleteAnswer" + id);
+      let deleteUrl = button.getAttribute("data-url");
+      document.getElementById("deleteAnswerForm").setAttribute("action", deleteUrl);
+    }
+
+    function updateAnswer() {
+      // Insert AJAX Request to update Answer
     }
 
   </script>
