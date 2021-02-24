@@ -59,17 +59,6 @@
               {{coffee}}
             </p>
         </div>
-      <a href=  {{ latest_podcast }} class="card">
-      <!-- Latest sugepodden episode-->
-        <div class="col card sugepodden-box">
-            <a href={{ latest_podcast }}>
-                <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
-                style="max-height:5rem; float: left; margin:0.5rem">
-                <p style="padding-top: 1.5rem;">
-                    Klikk her for nyeste episode av sugepodden!
-                </p>
-            </a>
-        </div>
         <!--Links to video about office -->
         <div class="col card howToOffice" style="padding-top: 1rem;">
             <a href="howToKontoret/">
@@ -83,6 +72,18 @@
                 </div>
             </a>
         </div>
+      <a href=  {{ latest_podcast }} class="card">
+      <!-- Latest sugepodden episode-->
+        <div class="col card sugepodden-box">
+            <a href={{ latest_podcast }}>
+                <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
+                style="max-height:5rem; float: left; margin:0.5rem">
+                <p style="padding-top: 1.5rem;">
+                    Klikk her for nyeste episode av sugepodden!
+                </p>
+            </a>
+        </div>
+
     <div class="col s12 pull-m6 m6 pull-l5 l7">
       <!-- News -->
       {% if posts %}
