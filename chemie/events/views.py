@@ -239,7 +239,7 @@ class ViewSocialDetailsView(DetailView):
                     event=self.object, user=registration.user
                 ).registration_group_members.all()
                 confirmed_members.append(registration.user)
-                confirmed_members.append(*list(group_attendees)) 
+                confirmed_members.append(*list(group_attendees))
             confirmed_members.sort(key=lambda x: x.profile.grade)
             confirmed = confirmed_members
 
@@ -247,10 +247,13 @@ class ViewSocialDetailsView(DetailView):
             event=self.object, status=REGISTRATION_STATUS.WAITING
         ).order_by("created")
 
-        context.update({"attendees": confirmed,
-                        "waiting_list": waiting,
-                        "has_group_members": not self.object.allowed_groups_empty()
-                        })
+        context.update(
+            {
+                "attendees": confirmed,
+                "waiting_list": waiting,
+                "has_group_members": not self.object.allowed_groups_empty(),
+            }
+        )
         return context
 
 
