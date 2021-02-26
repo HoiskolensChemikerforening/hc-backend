@@ -218,6 +218,7 @@ class DeleteBedpresView(DeleteSocialView):
 class ViewSocialDetailsView(DetailView):
     template_name = "events/social/detail.html"
     model = Social
+    registration_model = SocialEventRegistration
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -231,11 +232,25 @@ class ViewSocialDetailsView(DetailView):
             event=self.object, status=REGISTRATION_STATUS.CONFIRMED
         )
 
+        if not self.object.allowed_groups_empty():
+            confirmed_members = []
+            for registration in confirmed:
+                group_attendees = self.registration_model.objects.get(
+                    event=self.object, user=registration.user
+                ).registration_group_members.all()
+                confirmed_members.append(registration.user)
+                confirmed_members.append(*list(group_attendees)) 
+            confirmed_members.sort(key=lambda x: x.profile.grade)
+            confirmed = confirmed_members
+
         waiting = attendees.filter(
             event=self.object, status=REGISTRATION_STATUS.WAITING
         ).order_by("created")
 
-        context.update({"attendees": confirmed, "waiting_list": waiting})
+        context.update({"attendees": confirmed,
+                        "waiting_list": waiting,
+                        "has_group_members": not self.object.allowed_groups_empty()
+                        })
         return context
 
 
