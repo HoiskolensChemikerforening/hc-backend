@@ -24,7 +24,7 @@ from django.views.generic.list import ListView
 from django.db.models import Q
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, Profile, User
+from chemie.customprofile.models import ProfileManager, Profile, User, GRADES
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -88,7 +88,7 @@ class CreateSocialView(
     permission_required = "events.add_social"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": [1, 2, 3, 4, 5, 6]}
+    initial = {"allowed_grades": list(GRADES.values.keys())}
     success_message = "%(name)s was created successfully"
     message_content = (
         messages.SUCCESS,
@@ -119,7 +119,7 @@ class CreateBedpresView(
     permission_required = "events.add_bedpres"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": [1, 2, 3, 4, 5, 6]}
+    initial = {"allowed_grades": list(GRADES.values.keys())}
     message_content = messages.SUCCESS, "Bedpresen ble opprettet", "Opprettet"
 
 
