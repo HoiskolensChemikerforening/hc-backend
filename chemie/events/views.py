@@ -238,8 +238,9 @@ class ViewSocialDetailsView(DetailView):
                 group_attendees = self.registration_model.objects.get(
                     event=self.object, user=registration.user
                 ).registration_group_members.all()
+                if group_attendees:
+                    confirmed_members.append(*list(group_attendees))
                 confirmed_members.append(registration.user)
-                confirmed_members.append(*list(group_attendees))
             confirmed_members.sort(key=lambda x: x.profile.grade)
             confirmed = confirmed_members
 
