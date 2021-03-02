@@ -239,8 +239,8 @@ class ViewSocialDetailsView(DetailView):
                     event=self.object, user=registration.user
                 ).registration_group_members.all()
                 if group_attendees:
-                    confirmed_members.append(*list(group_attendees))
-                confirmed_members.append(registration.user)
+                    confirmed_members.extend(list(group_attendees))
+                # confirmed_members.append(registration.user)  ADD THIS LINE if kohortsjef is always attending
             confirmed_members.sort(key=lambda x: x.profile.grade)
             confirmed = confirmed_members
 
