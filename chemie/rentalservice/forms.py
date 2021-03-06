@@ -2,22 +2,53 @@ from django import forms
 import material as M
 from .models import RentalObject, RentalObjectType, Invoice
 
+CREATE_TYPE_CHOICES = ((False, "Bruk eksisterende type"), (True, "Legg til ny produkttype"))
+
 
 class RentalObjectForm(forms.ModelForm):
+
+    class Meta:
+        model = RentalObject
+        fields = ["name", "description", "price", "type", "quantity", "image", "owner"]
+
+
+class CreateRentalObjectForm(RentalObjectForm):
+    is_new_type = forms.ChoiceField(
+        required=True,
+        widget=forms.RadioSelect,
+        choices=CREATE_TYPE_CHOICES
+    )
+
+    new_type_name = forms.CharField(max_length=100)
+    
     layout = M.Layout(
         M.Row("name"),
         M.Row("description"),
         M.Row("price", "quantity"),
-        M.Row("type"),
+        M.Row("is_new_type"),
+        M.Row("type", "new_type_name"),
         M.Row("image"),
         M.Row("owner")
     )
 
-    class Meta:
-        model = RentalObject
-        widgets = {
-        }
-        fields = ["name", "description", "price", "type", "quantity", "image", "owner"]
+    def clean(self):
+        self.cleaned_data["is_new_type"] = bool(self.data["is_new_type"][0])
+        super(CreateRentalObjectForm, self).clean()
+        if not self.is_valid:
+            return
+        print(self.data)
+        print(self.cleaned_data)
+        if self.cleaned_data["is_new_type"]:
+            new_type = RentalObjectType(type=self.cleaned_data["new_type_name"])
+            new_type.save()
+            self.cleaned_data["type"] = new_type
+            print(type(new_type))
+
+
+
+    class Meta(RentalObjectForm.Meta):
+        fields = RentalObjectForm.Meta.fields + ['is_new_type', 'new_type_name']
+
 
 
 class InvoiceForm(forms.ModelForm):
