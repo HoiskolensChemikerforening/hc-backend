@@ -27,7 +27,7 @@ def new_object(request):
         form.save()
         return redirect("rentalservice:index")
 
-    context = {"form": form}
+    context = {"new_obj_form": form}
     return render(request, "rentalservice/new_object.html", context)
 
 
