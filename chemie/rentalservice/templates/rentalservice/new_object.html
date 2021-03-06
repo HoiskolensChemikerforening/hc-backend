@@ -11,8 +11,8 @@
 
 {% block content %}
   <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %}
-    {{ form.media }}
-    {{ form.as_p }}
+    {% form form=new_obj_form %}
+    {% endform %}
       <input class="btn" type='submit' value='Lagre objekt!'/>
   </form>
 {% endblock content %}
