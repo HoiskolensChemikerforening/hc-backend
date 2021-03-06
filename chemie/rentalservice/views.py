@@ -9,7 +9,7 @@ from post_office import mail
 
 
 from .models import RentalObject
-from .forms import RentalObjectForm, InvoiceForm
+from .forms import CreateRentalObjectForm, InvoiceForm
 from chemie.home.forms import ContactForm
 
 
@@ -22,7 +22,7 @@ def index(request):
 
 @permission_required("rentalservice.new_object")
 def new_object(request):
-    form = RentalObjectForm(request.POST or None)
+    form = CreateRentalObjectForm(request.POST or None)
     if form.is_valid():
         form.save()
         return redirect("rentalservice:index")
