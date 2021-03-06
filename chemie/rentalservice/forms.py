@@ -32,18 +32,15 @@ class CreateRentalObjectForm(RentalObjectForm):
     )
 
     def clean(self):
-        self.cleaned_data["is_new_type"] = int(self.data["is_new_type"])
+        self.cleaned_data["is_new_type"] = bool(int(self.data["is_new_type"]))
         super(CreateRentalObjectForm, self).clean()
         if not self.is_valid:
             return
-        print(self.data)
-        print(self.cleaned_data)
         
         if self.cleaned_data["is_new_type"]:
             new_type = RentalObjectType(type=self.cleaned_data["new_type_name"])
             new_type.save()
             self.cleaned_data["type"] = new_type
-            print(type(new_type))
 
 
 
