@@ -9,7 +9,7 @@ from .models import Interview, JobAdvertisement
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
-from .forms import CreateInterviewForm, EditInterviewForm, CreateJobForm
+from .forms import InterviewForm, CreateJobForm
 
 
 def index(request):
@@ -70,7 +70,7 @@ def statistics(request):
 
 @permission_required("corporate.add_interview")
 def interview_create(request):
-    form = CreateInterviewForm(request.POST or None, request.FILES or None)
+    form = InterviewForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()
@@ -89,25 +89,26 @@ def interview_remove(request, id):
     return redirect("corporate:interview")
 
 
-@permission_required("news.change_article")
-def interview_edit(request, interview_id):
-    interview = get_object_or_404(Interview, id=interview_id)
-    editInterview = EditInterviewForm(
+@permission_required("corporate.edit_article")
+def interview_edit(request, id):
+    interview = get_object_or_404(Interview, id=id)
+    form = InterviewForm(
         request.POST or None, request.FILES or None, instance=interview
     )
+
     if request.method == "POST":
-        if interview.is_valid():
-            interview.save()
+        if form.is_valid():
+            form.save()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 "Intervjuet ble endret",
                 extra_tags="Endret",
             )
-            return HttpResponseRedirect(reverse("interview:index"))
-    context = {"interview": interview}
+            return HttpResponseRedirect(reverse("corporate:interview"))
 
-    return render(request, "news/create_post.html", context)
+    context = {"form": form}
+    return render(request, "corporate/interview_create.html", context)
 
 
 @permission_required("corporate.add_jobadvertisement")
