@@ -8,10 +8,10 @@ apipkg==1.5
     # via execnet
 apns2==0.7.1
     # via django-push-notifications
-atomicwrites==1.4.0
-    # via pytest
 attrs==19.3.0
     # via pytest
+babel==2.9.0
+    # via invoicegenerator
 bleach==2.1.4
     # via wiki
 certifi==2019.11.28
@@ -20,8 +20,6 @@ cffi==1.14.0
     # via cryptography
 chardet==3.0.4
     # via requests
-colorama==0.4.4
-    # via pytest
 coverage==4.5.2
     # via
     #   -r requirements/base.in
@@ -120,10 +118,8 @@ hyperframe==3.2.0
     #   hyper
 idna==2.8
     # via requests
-importlib-metadata==2.0.0
-    # via
-    #   pluggy
-    #   pytest
+invoicegenerator==1.1.0
+    # via -r requirements/base.in
 jsonfield==3.0.0
     # via django-post-office
 markdown2==2.3.6
@@ -142,6 +138,7 @@ passlib==1.7.2
     # via django-hashers-passlib
 pillow==7.1.0
     # via
+    #   invoicegenerator
     #   reportlab
     #   wiki
 pluggy==0.13.1
@@ -178,11 +175,19 @@ pytest==5.3.5
 python-dateutil==2.8.1
     # via freezegun
 pytz==2019.3
-    # via django
+    # via
+    #   babel
+    #   django
 pywebpush==1.10.1
     # via django-push-notifications
+qrcode==6.1
+    # via qrplatba
+qrplatba==0.3.4
+    # via invoicegenerator
 reportlab==3.5.59
-    # via -r requirements/base.in
+    # via
+    #   -r requirements/base.in
+    #   invoicegenerator
 requests==2.22.0
     # via pywebpush
 six==1.14.0
@@ -198,6 +203,7 @@ six==1.14.0
     #   pyopenssl
     #   pytest-xdist
     #   python-dateutil
+    #   qrcode
 sorl-thumbnail==12.6.3
     # via wiki
 sqlparse==0.3.0
@@ -212,8 +218,6 @@ werkzeug==0.15.5
     # via -r requirements/base.in
 wiki==0.5
     # via -r requirements/base.in
-zipp==3.4.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
