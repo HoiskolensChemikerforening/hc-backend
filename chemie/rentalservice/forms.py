@@ -2,7 +2,7 @@ from django import forms
 import material as M
 from .models import RentalObject, RentalObjectType, Invoice
 
-CREATE_TYPE_CHOICES = ((False, "Bruk eksisterende type"), (True, "Legg til ny produkttype"))
+CREATE_TYPE_CHOICES = ((0, "Bruk eksisterende type"), (1, "Legg til ny produkttype"))
 
 
 class RentalObjectForm(forms.ModelForm):
@@ -19,7 +19,7 @@ class CreateRentalObjectForm(RentalObjectForm):
         choices=CREATE_TYPE_CHOICES
     )
 
-    new_type_name = forms.CharField(max_length=100)
+    new_type_name = forms.CharField(max_length=100, required=False)
     
     layout = M.Layout(
         M.Row("name"),
@@ -32,12 +32,13 @@ class CreateRentalObjectForm(RentalObjectForm):
     )
 
     def clean(self):
-        self.cleaned_data["is_new_type"] = bool(self.data["is_new_type"][0])
+        self.cleaned_data["is_new_type"] = int(self.data["is_new_type"])
         super(CreateRentalObjectForm, self).clean()
         if not self.is_valid:
             return
         print(self.data)
         print(self.cleaned_data)
+        
         if self.cleaned_data["is_new_type"]:
             new_type = RentalObjectType(type=self.cleaned_data["new_type_name"])
             new_type.save()
