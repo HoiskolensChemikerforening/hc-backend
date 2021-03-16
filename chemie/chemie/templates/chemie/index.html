@@ -59,17 +59,31 @@
               {{coffee}}
             </p>
         </div>
+        <!--Links to video about office -->
+        <div class="col card howToOffice" style="padding-top: 1rem;">
+            <a href="howToKontoret/">
+                <div class="row">
+                    <img type="image/png" src="{% static "images/HC_coin.png" %}"
+                    style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+                    max-height:4rem; float: left; margin:0.5rem; padding-right: 1rem; padding-left: 1.5rem;">
+                    <p style="margin:auto; padding-top: 0.8rem;">
+                        Usikker hvordan alt fungerer på kontoret? <strong>Klikk her!</strong>
+                    </p>
+                </div>
+            </a>
+        </div>
       <a href=  {{ latest_podcast }} class="card">
       <!-- Latest sugepodden episode-->
-      <div class="col sugepodden-box">
-        <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
-             style="max-height:5rem; float: right; margin-top:-0.4rem; margin:0.5rem">
-        <p style="margin: auto" color="card-black">
-          Klikk her for nyeste episode av sugepodden!
-        </p>
-      </div>
-      </a>
-      </div>
+        <div class="col card sugepodden-box">
+            <a href={{ latest_podcast }}>
+                <img type="image/png" src="{% static "images/sugepodden_logo_liten_svart_hvitkant.png" %}"
+                style="max-height:5rem; float: left; margin:0.5rem">
+                <p style="padding-top: 1.5rem;">
+                    Klikk her for nyeste episode av sugepodden!
+                </p>
+            </a>
+        </div>
+
     <div class="col s12 pull-m6 m6 pull-l5 l7">
       <!-- News -->
       {% if posts %}

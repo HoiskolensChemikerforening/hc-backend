@@ -1,5 +1,6 @@
 from django.urls import path, re_path
 from .views import *
+from django.views.generic import TemplateView
 
 app_name = "home"
 
@@ -14,5 +15,9 @@ urlpatterns = [
         "kontortilgang/søkere",
         OfficeAccessApplicationListView.as_view(),
         name="office_access_list",
+    ),
+    path(
+        "howToKontoret/",
+        TemplateView.as_view(template_name="home/office_embedded_video.html"),
     ),
 ]
