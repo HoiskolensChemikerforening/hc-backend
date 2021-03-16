@@ -1,7 +1,8 @@
 import material as M
+from dal import autocomplete
 from django import forms
 from django.core.validators import ValidationError
-
+from extended_choices import Choices
 from chemie.customprofile.models import GRADES
 from .models import (
     Social,
@@ -9,6 +10,7 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     BaseEvent,
+    BaseRegistrationGroup,
 )
 
 
@@ -17,6 +19,13 @@ class BaseRegisterEventForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         choices=GRADES,
         label="Tillatte klassetrinn",
+    )
+
+    allowed_groups = forms.ModelMultipleChoiceField(
+        queryset=BaseRegistrationGroup.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Tillatte grupper",
+        required=False,
     )
 
     def clean(self):
@@ -85,6 +94,8 @@ class BaseRegisterEventForm(forms.ModelForm):
         try:
             grades = self.cleaned_data.get("allowed_grades")
             grades = [int(grade) for grade in grades]
+            # Next line checks whether the integers in "grades" corresponds to a choice in GRADES,
+            # if not, an exception occurs
             _ = [GRADES.values[int(grade)] for grade in grades]
             return grades
         except (ValueError, KeyError):
@@ -109,6 +120,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             "image",
             "sluts",
             "allowed_grades",
+            "allowed_groups",
             "date",
             "register_startdate",
             "register_deadline",
@@ -143,7 +155,7 @@ class RegisterEventForm(BaseRegisterEventForm):
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("price_member", "price_not_member", "price_companion"),
         M.Row("companion", "sleepover", "night_snack", "check_in"),
-        M.Row("allowed_grades"),
+        M.Row("allowed_grades", "allowed_groups"),
     )
 
     class Meta(BaseRegisterEventForm.Meta):
@@ -192,12 +204,26 @@ class SocialRegisterUserForm(forms.ModelForm):
     class Meta:
         model = SocialEventRegistration
 
-        fields = ["sleepover", "night_snack", "companion"]
+        fields = [
+            "companion",
+            "sleepover",
+            "night_snack",
+            "registration_group_members",
+        ]
+        labels = {"registration_group_members": ""}
+        widgets = {
+            "registration_group_members": autocomplete.ModelSelect2Multiple(
+                url="verv:user-autocomplete"
+            )
+        }
 
     def __init__(self, *args, **kwargs):
         enable_sleepover = kwargs.pop("enable_sleepover", True)
         enable_night_snack = kwargs.pop("enable_night_snack", True)
         enable_companion = kwargs.pop("enable_companion", True)
+        enable_registration_group_members = kwargs.pop(
+            "enable_registration_group_members", True
+        )
         super(SocialRegisterUserForm, self).__init__(*args, **kwargs)
         if not enable_sleepover:
             self.fields.pop("sleepover")
@@ -205,6 +231,8 @@ class SocialRegisterUserForm(forms.ModelForm):
             self.fields.pop("night_snack")
         if not enable_companion:
             self.fields.pop("companion")
+        if not enable_registration_group_members:
+            self.fields.pop("registration_group_members")
 
 
 class BedpresRegisterUserForm(forms.ModelForm):
@@ -223,3 +251,14 @@ class DeRegisterUserForm(forms.Form):
     really_sure = forms.BooleanField(
         required=True, label="Er dette ditt endelige svar?"
     )
+
+
+class EditBaseRegistrationGroupForm(forms.ModelForm):
+    class Meta:
+        model = BaseRegistrationGroup
+        fields = ("members",)
+        widgets = {
+            "members": autocomplete.ModelSelect2Multiple(
+                url="verv:user-autocomplete"
+            )
+        }
