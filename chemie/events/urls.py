@@ -68,6 +68,16 @@ urlpatterns = [
         "api/socialeventregistration/<int:pk>",
         views.SocialEventRegistrationDetail.as_view(),
     ),
+    path(
+        "påmeldingsgruppe/<int:pk>",
+        views.view_base_registration_group,
+        name="view_group",
+    ),
+    path(
+        "påmeldingsgruppe/rediger/<int:pk>",
+        views.edit_base_registration_group,
+        name="edit_group",
+    ),
 ]
 
 # Bedpres

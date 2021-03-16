@@ -1,21 +1,41 @@
 {% if user.is_authenticated %}
-  {% regroup user_list by user.profile.get_grade_display as attendees_list %}
-  <ul class="collapsible collapsible-round">
-    {% for grade in attendees_list %}
-      <li>
-        <div class="collapsible-header">{{ grade.grouper }} -
-          {{ grade.list|length }} påmeldt{{ grade.list|length|pluralize:"e" }}
-        </div>
-        <div class="collapsible-body">
+  {% if has_group_members %}
+    {% regroup user_list by profile.get_grade_display as attendees_list %}
+    <ul class="collapsible collapsible-round">
+      {% for grade in attendees_list %}
+        <li>
+          <div class="collapsible-header">{{ grade.grouper }} -
+            {{ grade.list|length }} påmeldt{{ grade.list|length|pluralize:"e" }}
+          </div>
+          <div class="collapsible-body">
 
-          {% for item in grade.list %}
-            <p>{{ item.user.get_full_name }}</p>
-          {% endfor %}
+            {% for item in grade.list %}
+              <p>{{ item.get_full_name }}</p>
+            {% endfor %}
 
-        </div>
-      </li>
-    {% endfor %}
-  </ul>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  {% else %}
+    {% regroup user_list by user.profile.get_grade_display as attendees_list %}
+    <ul class="collapsible collapsible-round">
+      {% for grade in attendees_list %}
+        <li>
+          <div class="collapsible-header">{{ grade.grouper }} -
+            {{ grade.list|length }} påmeldt{{ grade.list|length|pluralize:"e" }}
+          </div>
+          <div class="collapsible-body">
+
+            {% for item in grade.list %}
+              <p>{{ item.user.get_full_name }}</p>
+            {% endfor %}
+
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+    {% endif %}
 {% else %}
   <p>Logg inn for å se påmeldte.</p>
 {% endif %}
