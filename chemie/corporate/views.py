@@ -6,7 +6,7 @@ from django.http import JsonResponse
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Interview, JobAdvertisement, Survey, AnswerKeyValuePair
+from .models import Interview, JobAdvertisement, Survey, AnswerKeyValuePair, SurveyQuestion
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -14,6 +14,7 @@ from .forms import (
     CreateInterviewForm,
     CreateJobForm,
     CreateSurveyForm,
+    CreateAnswerForm
 )
 
 
@@ -164,7 +165,9 @@ def survey_edit(request, year):
             q_a_dict[q]["choices"], q_a_dict[q]["values"], q_a_dict[q]["ids"]
         )
 
-    context = {"survey": survey, "q_a_dict": display_dict}
+    context = {"survey": survey,
+               "q_a_dict": display_dict
+               }
     return render(request, "corporate/survey_edit.html", context)
 
 
@@ -175,6 +178,33 @@ def survey_delete(request, year):
         survey.delete()
 
     return redirect("corporate:statistics_admin")
+
+
+@permission_required("corporate:add_answerkeyvaluepair")
+def answer_create(request, year, question):
+    survey = get_object_or_404(Survey, year=year)
+    question = get_object_or_404(SurveyQuestion, question=question)
+    form = CreateAnswerForm(request.POST or None)
+    # Survey and question fields are already determined and can't be changed
+    form.fields.pop("survey")
+    form.fields.pop("question")
+
+    if request.method == "POST":
+        if form.is_valid():
+            data = form.cleaned_data
+            new_answer = AnswerKeyValuePair(
+                key=data["key"],
+                value=data["value"],
+                question=question,
+                survey=survey
+            )
+            new_answer.save()
+            return redirect("corporate:survey_edit", year=survey.year)
+
+    context = {"survey": survey,
+               "question": question,
+               "form": form}
+    return render(request, "corporate/statistics_answer_create.html", context)
 
 
 @permission_required("corporate:change_answerkeyvaluepair")
@@ -203,6 +233,5 @@ def answer_delete(request, id):
         answer.delete()
 
     return redirect("corporate:survey_edit", year=survey.year)
-
 
 # TODO: Filtrer på ett spørsmål over flere år

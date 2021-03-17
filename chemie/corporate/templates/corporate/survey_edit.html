@@ -33,13 +33,16 @@
   <div class="container" style="margin-bottom: 80px">
     <h2>{{ survey }}</h2>
     <br>
-    <button>Nytt spørsmål</button>
+    <button class="button-nofill" style="background-color: var(--main-color-dark)">Legg til spørsmål</button>
 
     <br><br><br>
 
     {% for question, answers in q_a_dict.items %}
       <h3>{{ question }}</h3>
-      <button style="margin: 10px">Nytt svar</button>
+      <a type="button" class="button-nofill" href="{% url 'corporate:answer_create' survey.year question %}"
+         style="margin: 10px; background-color: var(--main-color-dark)">
+        Nytt svar
+      </a>
       <div class="table-responsive table-striped">
         <table class="table">
           <tr>
@@ -52,11 +55,11 @@
               <td>{{ answer }}</td>
               <td>{{ value }}</td>
               <td>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#editAnswerModal"
+                <button type="button" class="button-fill" data-toggle="modal" data-target="#editAnswerModal"
                         id="editAnswer{{ id }}" onclick="populateEditModal({{ id }})"
                         data-answer="{{ answer }}" data-value="{{ value }}">Rediger
                 </button>
-                <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteAnswerModal"
+                <button type="button" class="button-warning" data-toggle="modal" data-target="#deleteAnswerModal"
                         data-url="{% url 'corporate:answer_delete' id %}"
                         id="deleteAnswer{{ id }}" onclick="setDeleteUrl({{ id }})">Slett
                 </button>
@@ -70,7 +73,7 @@
 
     <br><br>
 
-    <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteSurveyModal"
+    <button type="button" class="button-warning" data-toggle="modal" data-target="#deleteSurveyModal"
             data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett
     </button>
   </div>
@@ -93,9 +96,11 @@
         <div class="modal-footer">
           <form action="{% url "corporate:survey_delete" survey.year %}" method="post">
             {% csrf_token %}
-            <input type="submit" class="btn btn-danger" value="Slett">
+            <input type="submit" class="button-warning" value="Slett">
           </form>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+          <button type="button" class="button-nofill" data-dismiss="modal"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
         </div>
       </div>
     </div>
@@ -117,15 +122,17 @@
         <div class="modal-footer">
           <form id="deleteAnswerForm" action="" method="post">
             {% csrf_token %}
-            <input type="submit" class="btn btn-danger" value="Slett">
+            <input type="submit" class="button-warning" value="Slett">
           </form>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+          <button type="button" class="button-nofill" data-dismiss="modal"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- EDIT MODAL -->
+  <!-- EDIT ANSWER MODAL -->
   <div class="modal fade" id="editAnswerModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
        aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -140,23 +147,26 @@
           <form>
             <div class="form-group">
               <label for="new-answer" class="col-form-label">Svaralternativ:</label>
-              <input type="text" class="form-control" id="new-answer">
+              <input type="text" class="form-control" id="editedAnswer">
             </div>
             <div class="form-group">
               <label for="new-value" class="col-form-label">Antall:</label>
-              <input type="number" class="form-control" id="new-value">
+              <input type="number" class="form-control" id="editedValue">
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
-          <button type="button" class="btn btn-primary" onclick="updateAnswer()"
+          <button type="button" data-dismiss="modal" class="button-nofill"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
+          <button type="button" class="button-fill" onclick="updateAnswer()"
                   id="saveAnswerButton">Lagre endringer
           </button>
         </div>
       </div>
     </div>
   </div>
+
 
 {% endblock content %}
 
@@ -184,10 +194,15 @@
       document.getElementById("deleteAnswerForm").setAttribute("action", deleteUrl);
     }
 
+    function populateNewAnswerModal(question) {
+      let newAnswerModal = document.getElementById("newAnswerModal");
+      newAnswerModal.setAttribute("data-question", question);
+    }
+
     function updateAnswer() {
       let answerId = document.getElementById("saveAnswerButton").getAttribute("answerId");
-      let newValue = document.getElementById("new-value").value;
-      let newAnswer = document.getElementById("new-answer").value;
+      let newValue = document.getElementById("editedValue").value;
+      let newAnswer = document.getElementById("editedAnswer").value;
 
       $.ajax({
         url: "{% url 'corporate:answer_edit' %}",

@@ -102,8 +102,8 @@ class SurveyQuestion(models.Model):
 class AnswerKeyValuePair(models.Model):
     key = models.TextField(max_length=300, verbose_name="Svaralternativ")
     value = models.IntegerField(verbose_name="Antall")
-    question = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE)
-    survey = models.ForeignKey(Survey, on_delete=models.CASCADE)
+    question = models.ForeignKey(SurveyQuestion, on_delete=models.CASCADE, verbose_name="Spørsmål")
+    survey = models.ForeignKey(Survey, on_delete=models.CASCADE, verbose_name="Undersøkelse")
 
     def __str__(self):
         return (

@@ -1,0 +1,68 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+{% load crispy_forms_tags %}
+
+{% block extra_css %}
+  <style>
+    .asteriskField {
+      display: none;
+    }
+  .requiredField {
+    color: red;
+    background-color: blue;
+    border: 2px solid black;
+  }
+  .h4 {
+    color: green;
+  }
+  </style>
+{% endblock extra_css %}
+
+{% block content %}
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 50px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Diplomundersøkelsen</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb background-dark">
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:index" %}" style="color:#edcd2f">Forside</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics" %}" style="color:#edcd2f">Diplomundersøkelsen</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics_admin" %}" style="color:#edcd2f">Admin</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:survey_edit" survey.year %}" style="color:#edcd2f">{{ survey.year }}</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Nytt svar</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+
+    <h4>Legg til et nytt svaralternativ for {{ survey }}</h4>
+
+    <h5>{{ question }}</h5>
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form|crispy }}
+      <button type="submit" class="button button-fill">Lagre!</button>
+    </form>
+  </div>
+
+  <br><br>
+
+{% endblock content %}

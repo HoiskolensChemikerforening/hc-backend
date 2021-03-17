@@ -32,21 +32,30 @@
     {% endif %}
     <div class="row">
       <div class="col-12">
-        <select name="survey" id="survey" onchange="document.location.href=this.value">
-          <option value="{{ survey.year }}" selected disabled hidden>{{ survey.year }}</option>
-          {% for survey in all_surveys %}
-            <option value="{% url "corporate:survey_year" survey.year %}">
-              {{ survey.year }}
-            </option>
-          {% endfor %}
-        </select>
+
+
+        <div class="dropdown">
+          <button class="button-nofill dropdown-toggle" type="button" data-toggle="dropdown"
+                  aria-haspopup="true" aria-expanded="false">
+            {{ survey.year }}
+          </button>
+          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            {% for survey in all_surveys %}
+              <a href="{% url "corporate:survey_year" survey.year %}" class="dropdown-item">
+                {{ survey.year }}
+              </a>
+            {% endfor %}
+          </div>
+        </div>
       </div>
     </div>
     <div id="chart-grid">
       {% for question, data in q_a_dict.items %}
         <div class="grid-element">
           <canvas id="{{ question }}"></canvas>
-          <button onclick="toggleChartType('{{ question }}')">Bytt graftype</button>
+          <button type="button" class="button-fill" onclick="toggleChartType('{{ question }}')"
+                  style="background-color: var(--main-color-light)">Bytt graftype
+          </button>
         </div>
       {% endfor %}
     </div>
