@@ -12,6 +12,10 @@
 {% block content %}
   <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %}
     {% form form=new_obj_form %}
+      {% part new_obj_form.type prefix %}<div class="exisiting_type">{% endpart %}
+      {% part new_obj_form.type postfix %}</div>{% endpart %}
+      {% part new_obj_form.new_type_name prefix %}<div class="new_type">{% endpart %}
+      {% part new_obj_form.type postfix %}</div>{% endpart %}
     {% endform %}
       <input class="btn" type='submit' value='Lagre objekt!'/>
   </form>
