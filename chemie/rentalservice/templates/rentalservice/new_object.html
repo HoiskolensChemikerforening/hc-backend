@@ -2,9 +2,14 @@
 {% load material_form %}
 {% block style %}
   <style>
-    .exisiting_type{
+    #exisiting_type {
       color:red;
     }
+
+    #new_type {
+      display: none;
+    }
+
   </style>
 {% endblock style %}
 {% block nav_header %}
@@ -18,8 +23,8 @@
 {% block content %}
   <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %}
     {% form form=new_obj_form %}
-      {% part new_obj_form.type prefix %}<div class="is_new_type">{% endpart %}
-      {% part new_obj_form.type postfix %}</div>{% endpart %}
+      {% part new_obj_form.is_new_type prefix %}<div id="hund" onclick="hideType()">{% endpart %}
+      {% part new_obj_form.is_new_type postfix %}</div>{% endpart %}
       {% part new_obj_form.type prefix %}<div id="exisiting_type">{% endpart %}
       {% part new_obj_form.type postfix %}</div>{% endpart %}
       {% part new_obj_form.new_type_name prefix %}<div id="new_type">{% endpart %}
@@ -34,17 +39,20 @@
     $(document).ready(function(){
     $('select').formSelect();
     });
-  </script>
 
-<script>
-  function hide_type() {
-    var useExisting = document.getElementById("id_is_new_type_0");
-    var existingTypeField = document.getElementById("exisiting_type");
-    var newTypeField = document.getElementById("new_type");
-    if (useExisting.checked){
-      existingTypeField.style.display = "block";
-      newTypeField.style.display = "none";
+    function hideType() {
+      var useExisting = document.getElementById("id_is_new_type_0");
+      var existingTypeField = document.getElementById("exisiting_type");
+      var newTypeField = document.getElementById("new_type");
+      console.log(useExisting.checked);
+      if (useExisting.checked){
+        existingTypeField.style.display = "block";
+        newTypeField.style.display = "none";
+      }
+      else {
+        existingTypeField.style.display = "none";
+        newTypeField.style.display = "block";
+      }
     }
-  }
-</script>
+  </script>
 {% endblock footer_script %}
