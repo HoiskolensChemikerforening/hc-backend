@@ -16,7 +16,8 @@ class CreateRentalObjectForm(RentalObjectForm):
     is_new_type = forms.ChoiceField(
         required=True,
         widget=forms.RadioSelect,
-        choices=CREATE_TYPE_CHOICES
+        choices=CREATE_TYPE_CHOICES,
+        initial=0
     )
 
     new_type_name = forms.CharField(max_length=100, required=False)

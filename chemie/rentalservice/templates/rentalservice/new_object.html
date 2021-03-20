@@ -1,6 +1,12 @@
 {% extends 'chemie/base.html' %}
 {% load material_form %}
-
+{% block style %}
+  <style>
+    .exisiting_type{
+      color:red;
+    }
+  </style>
+{% endblock style %}
 {% block nav_header %}
   Utleie
 {% endblock nav_header %}
@@ -12,9 +18,11 @@
 {% block content %}
   <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %}
     {% form form=new_obj_form %}
-      {% part new_obj_form.type prefix %}<div class="exisiting_type">{% endpart %}
+      {% part new_obj_form.type prefix %}<div class="is_new_type">{% endpart %}
       {% part new_obj_form.type postfix %}</div>{% endpart %}
-      {% part new_obj_form.new_type_name prefix %}<div class="new_type">{% endpart %}
+      {% part new_obj_form.type prefix %}<div id="exisiting_type">{% endpart %}
+      {% part new_obj_form.type postfix %}</div>{% endpart %}
+      {% part new_obj_form.new_type_name prefix %}<div id="new_type">{% endpart %}
       {% part new_obj_form.type postfix %}</div>{% endpart %}
     {% endform %}
       <input class="btn" type='submit' value='Lagre objekt!'/>
@@ -27,4 +35,16 @@
     $('select').formSelect();
     });
   </script>
+
+<script>
+  function hide_type() {
+    var useExisting = document.getElementById("id_is_new_type_0");
+    var existingTypeField = document.getElementById("exisiting_type");
+    var newTypeField = document.getElementById("new_type");
+    if (useExisting.checked){
+      existingTypeField.style.display = "block";
+      newTypeField.style.display = "none";
+    }
+  }
+</script>
 {% endblock footer_script %}
