@@ -51,7 +51,7 @@
       Slett intervju
       </a>
       {% endif %}
-      {% if perms.corporate.edit_interview %}
+      {% if perms.corporate.change_interview %}
       <a type="button" class="button-fill"
          id="editInterview{{ interview.id }}"
          href="{% url "corporate:interview_edit" interview.id %}">
