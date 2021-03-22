@@ -15,6 +15,11 @@ urlpatterns = [
         views.interview_remove,
         name="interview_delete",
     ),
+    path(
+        "intervju/<int:id>/rediger",  # TODO: Rename so it matches delete, create and detail urls
+        views.interview_edit,
+        name="interview_edit",
+    ),
     path("jobb/", views.job_advertisement, name="job_advertisement"),
     path("jobb/ny/", views.job_create, name="job_create"),
     path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),

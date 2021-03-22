@@ -1,7 +1,8 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
+from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponseRedirect
 
 from rest_framework.views import APIView
 from rest_framework.response import Response
@@ -10,8 +11,9 @@ from .models import Interview, JobAdvertisement, Survey, AnswerKeyValuePair, Sur
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
+
 from .forms import (
-    CreateInterviewForm,
+    InterviewForm,
     CreateJobForm,
     CreateSurveyForm,
     CreateAnswerForm
@@ -99,7 +101,7 @@ class ChartData(APIView):
 
 @permission_required("corporate.add_interview")
 def interview_create(request):
-    form = CreateInterviewForm(request.POST or None, request.FILES or None)
+    form = InterviewForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()
@@ -116,6 +118,28 @@ def interview_remove(request, id):
     interview.save()
 
     return redirect("corporate:interview")
+
+
+@permission_required("corporate.edit_article")
+def interview_edit(request, id):
+    interview = get_object_or_404(Interview, id=id)
+    form = InterviewForm(
+        request.POST or None, request.FILES or None, instance=interview
+    )
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Intervjuet ble endret",
+                extra_tags="Endret",
+            )
+            return HttpResponseRedirect(reverse("corporate:interview"))
+
+    context = {"form": form}
+    return render(request, "corporate/interview_create.html", context)
 
 
 @permission_required("corporate.add_jobadvertisement")

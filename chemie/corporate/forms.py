@@ -9,7 +9,7 @@ from .models import (
 from django import forms
 
 
-class CreateInterviewForm(forms.ModelForm):
+class InterviewForm(forms.ModelForm):
     specializations = forms.ModelMultipleChoiceField(
         queryset=Specialization.objects.all(),
         widget=forms.CheckboxSelectMultiple(),
