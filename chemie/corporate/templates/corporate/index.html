@@ -48,29 +48,17 @@
       <div class="col-12 col-md-6">
         <img src="{{ indkom.image.url }}" alt="..." class="img-fluid" style="margin-bottom: 50px">
       </div>
-
-
-      <div class="col-12 col-md-4">
-        <h4 class="subheading">
-          Samarbeidspartner
-        </h4>
-        <img src="https://images.finncdn.no/dynamic/default/2020/7/vertical-0/10/2/184/412/212_1087034308.jpg"
-             alt="Emerson" style="width: 300px; max-width: 100%; margin-bottom: 30px">
-        <p style="font-size: var(--font-size-small)">
-          Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter.
-        </p>
-      </div>
     </div>
   </div>
 
 
   <div class="jumbotron jumbotron-fluid" style="background-color: var(--main-color-dark);
-  color: var(--main-color-light); margin-bottom: 100px;">
+  color: var(--main-color-light); padding-top: 20px; padding-bottom: 10px; margin-bottom: 100px; opacity: 90%">
     <div class="container">
       <div class="row" style="margin-top: 40px; margin-bottom: 60px;">
         <div class="col-12 col-lg-4">
           <h3 class="heading">
-            Utforsk arrangementer
+            <a class="link" style="color: var(--main-color-light)" href="{% url "events:index_bedpres" %}">Utforsk arrangementer</a>
           </h3>
         </div>
         <div class="col-12 col-lg-8">
