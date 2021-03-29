@@ -7,6 +7,7 @@ from .models import (
     AnswerKeyValuePair,
 )
 from django import forms
+from django.shortcuts import get_object_or_404
 
 
 class InterviewForm(forms.ModelForm):
@@ -43,3 +44,17 @@ class CreateAnswerForm(forms.ModelForm):
     class Meta:
         model = AnswerKeyValuePair
         fields = "__all__"
+
+
+class AddQuestionToSurveyForm(forms.Form):
+    def __init__(self, choices, *args, **kwargs):
+        super(AddQuestionToSurveyForm, self).__init__(*args, **kwargs)
+        self.fields["questions"].choices = choices
+
+    questions = forms.MultipleChoiceField(
+        choices=(),
+        required=True,
+        widget=forms.CheckboxSelectMultiple(
+            attrs={"class": "custom-checkboxes"}
+        ),
+    )

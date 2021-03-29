@@ -37,7 +37,19 @@ urlpatterns = [
         views.survey_delete,
         name="survey_delete",
     ),
-    path("diplom/<int:year>/svar/ny/<str:question>/", views.answer_create, name="answer_create"),
+    path(
+        "diplom/nytt-spørsmål/", views.question_create, name="question_create"
+    ),
+    path(
+        "diplom/<int:year>/legg-til-spørsmål/",
+        views.add_question_to_survey,
+        name="question_add_to_survey",
+    ),
+    path(
+        "diplom/<int:year>/svar/ny/<str:question>/",
+        views.answer_create,
+        name="answer_create",
+    ),
     path("diplom/svar/rediger/", views.answer_edit, name="answer_edit"),
     path(
         "diplom/svar/<int:id>/slett/",

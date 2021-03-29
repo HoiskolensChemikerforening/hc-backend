@@ -33,14 +33,24 @@
   <div class="container" style="margin-bottom: 80px">
     <h2>{{ survey }}</h2>
     <br>
-    <button class="button-nofill" style="background-color: var(--main-color-dark)">Legg til spørsmål</button>
+    <a class="button-fill" href="{% url "corporate:question_add_to_survey" survey.year %}">
+      Legg til spørsmål
+    </a>
 
     <br><br><br>
 
     {% for question, answers in q_a_dict.items %}
-      <h3>{{ question }}</h3>
-      <a type="button" class="button-nofill" href="{% url 'corporate:answer_create' survey.year question %}"
-         style="margin: 10px; background-color: var(--main-color-dark)">
+      <hr class="border">
+      <div class="row">
+        <div class="col">
+          <h3>{{ question }}</h3>
+        </div>
+        <div class="col">
+          <a type="button" class="button-warning" href="#">Slett spørsmål</a>
+        </div>
+      </div>
+      <a type="button" class="button-fill" href="{% url 'corporate:answer_create' survey.year question %}"
+         style="margin: 10px;">
         Nytt svar
       </a>
       <div class="table-responsive table-striped">
@@ -60,7 +70,7 @@
                         data-answer="{{ answer }}" data-value="{{ value }}">Rediger
                 </button>
                 <button type="button" class="button-warning" data-toggle="modal" data-target="#deleteAnswerModal"
-                        data-url="{% url 'corporate:answer_delete' id %}"
+                        data-url="{% url 'corporate:answer_delete' id %}" style="margin-left: 10px;"
                         id="deleteAnswer{{ id }}" onclick="setDeleteUrl({{ id }})">Slett
                 </button>
               </td>
@@ -156,11 +166,11 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button type="button" data-dismiss="modal" class="button-nofill"
-                  style="background-color: var(--main-color-dark)">Lukk
-          </button>
           <button type="button" class="button-fill" onclick="updateAnswer()"
                   id="saveAnswerButton">Lagre endringer
+          </button>
+          <button type="button" data-dismiss="modal" class="button-nofill"
+                  style="background-color: var(--main-color-dark)">Lukk
           </button>
         </div>
       </div>
@@ -183,8 +193,8 @@
 
       // Insert data to the modal
       let modal = $(target);
-      modal.find('#new-answer').val(answer);
-      modal.find('#new-value').val(value);
+      modal.find('#editedAnswer').val(answer);
+      modal.find('#editedValue').val(value);
       document.getElementById("saveAnswerButton").setAttribute("answerId", id);
     }
 

@@ -7,7 +7,13 @@ from django.http import JsonResponse, HttpResponseRedirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
-from .models import Interview, JobAdvertisement, Survey, AnswerKeyValuePair, SurveyQuestion
+from .models import (
+    Interview,
+    JobAdvertisement,
+    Survey,
+    AnswerKeyValuePair,
+    SurveyQuestion,
+)
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -16,7 +22,7 @@ from .forms import (
     InterviewForm,
     CreateJobForm,
     CreateSurveyForm,
-    CreateAnswerForm
+    CreateAnswerForm,
 )
 
 
@@ -189,19 +195,48 @@ def survey_edit(request, year):
             q_a_dict[q]["choices"], q_a_dict[q]["values"], q_a_dict[q]["ids"]
         )
 
-    context = {"survey": survey,
-               "q_a_dict": display_dict
-               }
+    context = {"survey": survey, "q_a_dict": display_dict}
     return render(request, "corporate/survey_edit.html", context)
 
 
-@permission_required("corporate.delete_survey")
+@permission_required("corporate:delete_survey")
 def survey_delete(request, year):
     if request.method == "POST":
         survey = get_object_or_404(Survey, year=year)
         survey.delete()
 
     return redirect("corporate:statistics_admin")
+
+
+@permission_required("corporate:add_surveyquestion")
+def question_create(request):
+    if request.method == "POST":
+        print(request)
+    else:
+        return redirect("corporate:index")
+
+
+@permission_required("corporate:add_surveyquestion")
+def add_question_to_survey(request, year):
+    if request.method == "POST":
+        print("POST REQUEST <33")
+
+    survey = get_object_or_404(Survey, year=year)
+    survey_questions = survey.get_q_a_dict().keys()
+    all_questions = SurveyQuestion.objects.values_list("question", flat=True)
+
+    choices = []
+    for i in range(len(all_questions)):
+        if all_questions[i] not in survey_questions:
+            choices.append((i, all_questions[i]))
+
+    context = {
+        "survey": survey,
+        "survey_questions": survey_questions,
+        "all_questions": all_questions,
+    }
+
+    return render(request, "corporate/statistics_add_question.html", context)
 
 
 @permission_required("corporate:add_answerkeyvaluepair")
@@ -220,14 +255,12 @@ def answer_create(request, year, question):
                 key=data["key"],
                 value=data["value"],
                 question=question,
-                survey=survey
+                survey=survey,
             )
             new_answer.save()
             return redirect("corporate:survey_edit", year=survey.year)
 
-    context = {"survey": survey,
-               "question": question,
-               "form": form}
+    context = {"survey": survey, "question": question, "form": form}
     return render(request, "corporate/statistics_answer_create.html", context)
 
 
@@ -257,5 +290,6 @@ def answer_delete(request, id):
         answer.delete()
 
     return redirect("corporate:survey_edit", year=survey.year)
+
 
 # TODO: Filtrer på ett spørsmål over flere år

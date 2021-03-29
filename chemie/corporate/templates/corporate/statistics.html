@@ -24,18 +24,19 @@
 
   <div class="container" style="margin-bottom: 80px">
     {% if perms.corporate.add_survey %}
-      <div class="col-12" style="margin-bottom: 50px">
-        <a class="button-fill" href="{% url "corporate:statistics_admin" %}">
-          Administrer
-        </a>
+      <div class="row">
+        <div class="col-12" style="margin-bottom: 50px">
+          <a class="button-fill" href="{% url "corporate:statistics_admin" %}"
+          style="float:right;">
+            Administrer
+          </a>
+        </div>
       </div>
     {% endif %}
     <div class="row">
       <div class="col-12">
-
-
         <div class="dropdown">
-          <button class="button-nofill dropdown-toggle" type="button" data-toggle="dropdown"
+          <button class="button-fill dropdown-toggle" type="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
             {{ survey.year }}
           </button>

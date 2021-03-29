@@ -1,0 +1,91 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+
+{% block header %}
+  <style>
+    /* STYLE CHECKBOXES */
+    .input.custom-checkboxes .custom-control-input:checked ~ .custom-control-label::before {
+      background-color: #222222;
+    }
+
+    .input.custom-checkboxes .custom-control-input:checked ~ .custom-control-label::after {
+      background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23f8b700' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
+    }
+
+    .custom-control-input:active ~ .custom-control-label::before {
+      background-color: #f79e00;
+    }
+
+    /** focus shadow pinkish **/
+    .custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
+      box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #f8b700;
+    }
+  </style>
+{% endblock header %}
+
+{% block content %}
+
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 50px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Diplomundersøkelsen</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb background-dark">
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:index" %}" style="color:#edcd2f">Forside</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics" %}" style="color:#edcd2f">Diplomundersøkelsen</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics_admin" %}" style="color:#edcd2f">Admin</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:survey_edit" survey.year %}" style="color:#edcd2f">{{ survey.year }}</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Nytt spørsmål</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-bottom: 80px">
+
+    <h3>Legg til nye spørsmål for {{ survey }}</h3>
+
+    <br><br>
+
+    <form action="{% url "corporate:question_add_to_survey" survey.year %}" method="post">
+    {% csrf_token %}
+      <div class="form-group row">
+        <div class="col-8">
+          {% for question in all_questions %}
+            {% if question not in survey_questions %}
+              <div class="custom-controls-stacked">
+                <div class="custom-control custom-checkbox" style="margin-top: 5px;">
+                  <input name="checkbox" id="checkbox_{{ forloop.counter }}"
+                         type="checkbox" class="custom-control-input"
+                         value="{{ question }}">
+                  <label for="checkbox_{{ forloop.counter }}"
+                         class="custom-control-label"><h5>{{ question }}</h5></label>
+                </div>
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <br>
+      <div class="form-group row">
+        <button name="submit" type="submit" class="button-fill">Legg til!</button>
+      </div>
+    </form>
+  </div>
+
+{% endblock content %}
