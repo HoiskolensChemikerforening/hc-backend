@@ -218,22 +218,36 @@ def question_create(request):
 
 @permission_required("corporate:add_surveyquestion")
 def add_question_to_survey(request, year):
-    if request.method == "POST":
-        print("POST REQUEST <33")
-
     survey = get_object_or_404(Survey, year=year)
+
+    if request.method == "POST":
+        for key, value in request.POST.items():
+            if "checkbox" in key:
+                question = get_object_or_404(SurveyQuestion, question=request.POST[key])
+                # The way the database is organized now, a survey can't be
+                # linked to a surveyquestion without there being any
+                # answers. This creates a placeholder answer so it
+                # shows up on the survey admin page
+                default_answer = AnswerKeyValuePair.objects.create(
+                    key="Placeholder for svaralternativ",
+                    value=0,
+                    question=question,
+                    survey=survey
+                )
+                default_answer.save()
+        return redirect("corporate:survey_edit", year)
+
     survey_questions = survey.get_q_a_dict().keys()
     all_questions = SurveyQuestion.objects.values_list("question", flat=True)
 
-    choices = []
-    for i in range(len(all_questions)):
-        if all_questions[i] not in survey_questions:
-            choices.append((i, all_questions[i]))
+    questions = []
+    for question in all_questions:
+        if question not in survey_questions:
+            questions.append(question)
 
     context = {
         "survey": survey,
-        "survey_questions": survey_questions,
-        "all_questions": all_questions,
+        "questions": questions
     }
 
     return render(request, "corporate/statistics_add_question.html", context)
@@ -293,3 +307,5 @@ def answer_delete(request, id):
 
 
 # TODO: Filtrer på ett spørsmål over flere år
+# TODO: Create new question
+# TODO: Remove question from survey
