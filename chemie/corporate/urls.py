@@ -16,7 +16,7 @@ urlpatterns = [
         name="interview_delete",
     ),
     path(
-        "intervju/<int:id>/rediger",  # TODO: Rename so it matches delete, create and detail urls
+        "intervju/<int:id>/rediger",
         views.interview_edit,
         name="interview_edit",
     ),
@@ -31,6 +31,11 @@ urlpatterns = [
         "diplom/undersøkelse/<int:year>/rediger/",
         views.survey_edit,
         name="survey_edit",
+    ),
+    path(
+        "diplom/undersøkelse/fjern-spørsmål/",
+        views.survey_remove_question,
+        name="survey_remove_question",
     ),
     path(
         "diplom/undersøkelse/<int:year>/slett/",

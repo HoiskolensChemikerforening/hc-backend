@@ -200,6 +200,25 @@ def survey_edit(request, year):
     return render(request, "corporate/survey_edit.html", context)
 
 
+@permission_required("corporate.change_survey")
+def survey_remove_question(request):
+    if request.method == "POST":
+        survey_id = request.POST["id"]
+        question = request.POST["question"]
+        survey = get_object_or_404(Survey, id=survey_id)
+        survey_question = get_object_or_404(SurveyQuestion, question=question)
+
+        # Remove all AnswerKeyValuePairs linked to this survey and this question
+        AnswerKeyValuePair.objects.filter(survey=survey).filter(
+            question=survey_question
+        ).delete()
+
+        return JsonResponse({"success": True})
+
+    else:
+        return redirect("corporate:statistics_admin")
+
+
 @permission_required("corporate:delete_survey")
 def survey_delete(request, year):
     if request.method == "POST":
@@ -216,12 +235,6 @@ def question_create(request):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Et nytt spørsmål ble opprettet",
-                extra_tags="Hurra!",
-            )
 
             if request.POST["next"]:
                 next = request.POST["next"]
@@ -349,8 +362,3 @@ def answer_delete(request, id):
         return redirect("corporate:survey_edit", year=survey.year)
 
     return redirect("corporate:index")
-
-
-# TODO: Filtrer på ett spørsmål over flere år
-# TODO: Create new question
-# TODO: Remove question from survey

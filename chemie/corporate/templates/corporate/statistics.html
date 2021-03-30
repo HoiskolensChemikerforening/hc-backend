@@ -1,10 +1,6 @@
 {% extends "corporate/base.html" %}
 {% load static %}
 
-
-<!-- TODO: Legge inn nytt spørsmål -->
-<!-- TODO: Legge inn nytt svar -->
-
 {% block content %}
 
   <div class="banner background-dark" style="margin-bottom: 80px;">
@@ -24,17 +20,9 @@
 
   <div class="container" style="margin-bottom: 80px">
     {% if perms.corporate.add_survey %}
-      <div class="row">
-        <div class="col-12" style="margin-bottom: 50px">
-          <a class="button-fill" href="{% url "corporate:statistics_admin" %}"
-          style="float:right;">
-            Administrer
-          </a>
-        </div>
-      </div>
     {% endif %}
     <div class="row">
-      <div class="col-12">
+      <div class="col-sm-8">
         <div class="dropdown">
           <button class="button-fill dropdown-toggle" type="button" data-toggle="dropdown"
                   aria-haspopup="true" aria-expanded="false">
@@ -49,7 +37,14 @@
           </div>
         </div>
       </div>
+      <div class="col">
+        <a class="button-fill" href="{% url "corporate:statistics_admin" %}"
+           style="float:right;">
+          Administrer
+        </a>
+      </div>
     </div>
+  <br><br>
     <div id="chart-grid">
       {% for question, data in q_a_dict.items %}
         <div class="grid-element">
