@@ -14,6 +14,7 @@ from .models import (
     AnswerKeyValuePair,
     SurveyQuestion,
 )
+from .forms import CreateQuestionForm
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -210,10 +211,52 @@ def survey_delete(request, year):
 
 @permission_required("corporate:add_surveyquestion")
 def question_create(request):
+    form = CreateQuestionForm(request.POST or None)
+    questions = SurveyQuestion.objects.all().order_by("question")
     if request.method == "POST":
-        print(request)
+        if form.is_valid():
+            form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Et nytt spørsmål ble opprettet",
+                extra_tags="Hurra!",
+            )
+
+            if request.POST["next"]:
+                next = request.POST["next"]
+                return redirect(next)
+
+    context = {"questions": questions, "form": form}
+
+    return render(
+        request, "corporate/statistics_question_create.html", context
+    )
+
+
+@permission_required("corporate:change_surveyquestion")
+def question_edit(request):
+    if request.method == "POST":
+        id = request.POST["id"]
+        edited_question = request.POST["question"]
+        question = get_object_or_404(SurveyQuestion, id=id)
+        question.question = edited_question
+        question.save()
+        return JsonResponse({"success": True})
+
     else:
-        return redirect("corporate:index")
+        return redirect("corporate:statistics")
+
+
+@permission_required("corporate:delete_surveyquestion")
+def question_delete(request, id):
+    if request.method == "POST":
+        question = get_object_or_404(SurveyQuestion, id=id)
+        question.delete()
+        return redirect("corporate:question_create")
+
+    else:
+        return redirect("corporate:statistics")
 
 
 @permission_required("corporate:add_surveyquestion")
@@ -223,7 +266,9 @@ def add_question_to_survey(request, year):
     if request.method == "POST":
         for key, value in request.POST.items():
             if "checkbox" in key:
-                question = get_object_or_404(SurveyQuestion, question=request.POST[key])
+                question = get_object_or_404(
+                    SurveyQuestion, question=request.POST[key]
+                )
                 # The way the database is organized now, a survey can't be
                 # linked to a surveyquestion without there being any
                 # answers. This creates a placeholder answer so it
@@ -232,7 +277,7 @@ def add_question_to_survey(request, year):
                     key="Placeholder for svaralternativ",
                     value=0,
                     question=question,
-                    survey=survey
+                    survey=survey,
                 )
                 default_answer.save()
         return redirect("corporate:survey_edit", year)
@@ -245,10 +290,7 @@ def add_question_to_survey(request, year):
         if question not in survey_questions:
             questions.append(question)
 
-    context = {
-        "survey": survey,
-        "questions": questions
-    }
+    context = {"survey": survey, "questions": questions}
 
     return render(request, "corporate/statistics_add_question.html", context)
 
@@ -258,6 +300,7 @@ def answer_create(request, year, question):
     survey = get_object_or_404(Survey, year=year)
     question = get_object_or_404(SurveyQuestion, question=question)
     form = CreateAnswerForm(request.POST or None)
+
     # Survey and question fields are already determined and can't be changed
     form.fields.pop("survey")
     form.fields.pop("question")
@@ -303,7 +346,9 @@ def answer_delete(request, id):
         survey = answer.survey
         answer.delete()
 
-    return redirect("corporate:survey_edit", year=survey.year)
+        return redirect("corporate:survey_edit", year=survey.year)
+
+    return redirect("corporate:index")
 
 
 # TODO: Filtrer på ett spørsmål over flere år

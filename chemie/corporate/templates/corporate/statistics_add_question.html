@@ -4,11 +4,11 @@
 {% block header %}
   <style>
     /* STYLE CHECKBOXES */
-    .input.custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-label::before {
       background-color: #222222;
     }
 
-    .input.custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
+    .custom-checkbox .custom-control-input:checked ~ .custom-control-label::after {
       background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3E%3Cpath fill='%23f8b700' d='M6.564.75l-3.59 3.612-1.538-1.55L0 4.26 2.974 7.25 8 2.193z'/%3E%3C/svg%3E");
     }
 
@@ -16,7 +16,7 @@
       background-color: #f79e00;
     }
 
-    /** focus shadow pinkish **/
+    /** focus shadow **/
     .custom-checkbox .custom-control-input:focus ~ .custom-control-label::before {
       box-shadow: 0 0 0 1px #fff, 0 0 0 0.2rem #f8b700;
     }
@@ -63,7 +63,9 @@
         <h3>Legg til nye spørsmål for {{ survey }}</h3>
       </div>
       <div class="col-md-4">
-        <a class="button-fill" href="#">Legg til nytt spørsmål</a>
+        <a class="button-fill" href="{% url "corporate:question_create" %}?next={{ request.path|urlencode }}">
+          Lag et nytt spørsmål
+        </a>
       </div>
     </div>
 
@@ -80,7 +82,9 @@
                        type="checkbox" class="custom-control-input"
                        value="{{ question }}">
                 <label for="checkbox_{{ forloop.counter }}"
-                       class="custom-control-label"><h5>{{ question }}</h5></label>
+                       class="custom-control-label">
+                  <h5>{{ question }}</h5>
+                </label>
               </div>
             </div>
           {% empty %}

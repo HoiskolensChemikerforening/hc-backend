@@ -92,7 +92,10 @@ class SurveyQuestion(models.Model):
 
     question = models.TextField(max_length=300, verbose_name="Spørsmål")
     chart_type = models.CharField(
-        max_length=100, choices=PLOT_TYPE_CHOICES, default=BAR_CHART
+        max_length=100,
+        choices=PLOT_TYPE_CHOICES,
+        default=BAR_CHART,
+        verbose_name="Graftype",
     )
 
     def __str__(self):
