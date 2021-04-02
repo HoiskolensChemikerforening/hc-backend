@@ -34,10 +34,13 @@ class Interview(models.Model):
         return self.title
 
 
-class JobAdvertisement(models.Model):
+class Job(models.Model):
     title = models.CharField(max_length=100, verbose_name="Stilling")
     description = RichTextField(
         verbose_name="Beskrivelse", config_name="forms"
+    )
+    specializations = models.ManyToManyField(
+        Specialization, verbose_name="Aktuelle retninger", blank=True
     )
     is_published = models.BooleanField(verbose_name="Er synlig", default=True)
     published_date = models.DateTimeField(auto_now_add=True)

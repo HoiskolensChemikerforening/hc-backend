@@ -1,0 +1,80 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="banner background-dark" style="margin-bottom: 80px;">
+  <div class="container" style="padding-top: 105px;">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="heading">Jobbutlysninger</h1>
+      </div>
+      <div class="col-12 col-md-6">
+        <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
+          På utkikk etter relevant jobb? Kanskje du finner noe her!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" style="margin-bottom: 80px;">
+
+    {% if perms.corporate.add_job %}
+    <div class="col-12" style="margin-bottom: 50px">
+      <a class="button-fill" href="{% url "corporate:job_create" %}">
+      Ny jobb
+      </a>
+    </div>
+    {% endif %}
+
+    <div class="col-12">
+      <h2 class="subheading">
+        Stillinger
+      </h2>
+    </div>
+
+    {% for job in jobs %}
+    <div class="col-12" style="margin-bottom: 10px;">
+      <div style="padding: 0 15px 15px 0;">
+        <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 0;
+        margin-block-end: 0.5em">
+          {{ job.title }}
+        </p>
+        {% for specialization in job.specializations.all %}
+        <span class="badge badge-pill
+             {% if specialization.id == 1 %} badge-custom-1 {% endif %}
+             {% if specialization.id == 2 %} badge-custom-2 {% endif %}
+             {% if specialization.id == 3 %} badge-custom-3 {% endif %}
+             {% if specialization.id == 4 %} badge-custom-4 {% endif %}
+             {% if specialization.id == 5 %} badge-custom-5 {% endif %}
+             {% if specialization.id == 6 %} badge-custom-6 {% endif %}
+              ">{{ specialization }}</span>
+        {% endfor %}
+      </div>
+      <a class="stretched-link" href="{% url "corporate:job_detail" job.id %}"> </a>
+      <hr>
+    </div>
+
+  {% empty %}
+  <div class="col-12" style="margin-bottom: 80px;">
+    <p class="lead">Det finnes dessverre ingen jobber enda...</p>
+  </div>
+
+  {% endfor %}
+</div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  function deleteJobPopup(id) {
+    let url = document.getElementById("deletejob" + id.toString()).getAttribute("data-url");
+    if (confirm("Er du sikker på at du vil fjerne denne jobbutlysningen?")) {
+      window.location.href = url;
+    }
+  }
+</script>
+{% endblock footer_script %}

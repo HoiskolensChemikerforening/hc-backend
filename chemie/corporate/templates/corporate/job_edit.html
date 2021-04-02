@@ -1,0 +1,45 @@
+{% extends "corporate/base.html" %}
+
+
+{% block content %}
+<div class="banner background-dark" style="margin-bottom: 80px;">
+  <div class="container" style="padding-top: 54px;">
+    <div class="row">
+      <div class="col-12 col-md-6">
+        <a class="link" style="font-weight: 600; font-size: var(--font-size-medium-plus);"
+           href="{% url "corporate:job" %}">
+        Intervjuer
+        </a>
+      </div>
+      <div class="col-12" style="margin-top: 20px;">
+        <h1 class="heading">Legg til ny jobb</h1>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<div class="container">
+  <div class="row align-items-center" style="margin-top: 40px; margin-bottom: 120px">
+    <div class="col-12 col-md-2"></div>
+    <div class="col-12 col-md-8">
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.media }}
+        {% for field in form %}
+        <div class="field">
+          <label for="{{ field.id_for_label }}" class="label">
+            <strong>{{ field.label }}:</strong>
+          </label>
+          <p>{{ field }}</p>
+        </div>
+        {% endfor %}
+        <br>
+        <button class="button-fill" type="submit">Endre</button>
+        <br>
+      </form>
+    </div>
+    <div class="col-12 col-md-2"></div>
+  </div>
+</div>
+
+{% endblock content %}

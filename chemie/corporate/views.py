@@ -5,11 +5,11 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
 
-from .models import Interview, JobAdvertisement
+from .models import Interview, Job
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
-from .forms import InterviewForm, CreateJobForm
+from .forms import InterviewForm, JobForm
 
 
 def index(request):
@@ -22,7 +22,7 @@ def index(request):
 
     no_events = (not bedpres.exists()) and (not events.exists())
 
-    job_advertisements = JobAdvertisement.objects.filter(
+    jobs = Job.objects.filter(
         is_published=True
     ).order_by("published_date")
 
@@ -33,20 +33,27 @@ def index(request):
         "bedpres": bedpres,
         "events": events,
         "no_events": no_events,
-        "job_advertisements": job_advertisements,
+        "jobs": jobs,
         "interviews": interviews,
     }
 
     return render(request, "corporate/index.html", context)
 
 
-def job_advertisement(request):
-    job_advertisements = JobAdvertisement.objects.filter(
+def job(request):
+    jobs = Job.objects.filter(
         is_published=True
     ).order_by("published_date")
 
-    context = {"job_advertisements": job_advertisements}
-    return render(request, "corporate/job_advertisement.html", context)
+    context = {"jobs": jobs}
+    return render(request, "corporate/job.html", context)
+
+
+def job_detail(request, id):
+    jobs = get_object_or_404(Job, pk=id)
+
+    context = {"jobs": jobs}
+    return render(request, "corporate/job_detail.html", context)
 
 
 def interview(request):
@@ -111,22 +118,44 @@ def interview_edit(request, id):
     return render(request, "corporate/interview_create.html", context)
 
 
-@permission_required("corporate.add_jobadvertisement")
+@permission_required("corporate.add_job")
 def job_create(request):
-    form = CreateJobForm(request.POST or None, request.FILES or None)
+    form = JobForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()
-        return redirect(reverse("corporate:job_advertisement"))
+        return redirect(reverse("corporate:job"))
 
     context = {"form": form}
     return render(request, "corporate/job_create.html", context)
 
 
-@permission_required("corporate.delete_jobadvertisement")
+@permission_required("corporate.delete_job")
 def job_remove(request, id):
-    job = get_object_or_404(JobAdvertisement, id=id)
+    job = get_object_or_404(Job, id=id)
     job.is_published = False
     job.save()
 
-    return redirect("corporate:job_advertisement")
+    return redirect("corporate:job")
+
+
+@permission_required("corporate.edit_article")
+def job_edit(request, id):
+    job = get_object_or_404(Interview, id=id)
+    form = JobForm(
+        request.POST or None, request.FILES or None, instance=job
+    )
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Jobben ble endret",
+                extra_tags="Endret",
+            )
+            return HttpResponseRedirect(reverse("corporate:job"))
+
+    context = {"form": form}
+    return render(request, "corporate/job_edit.html", context)

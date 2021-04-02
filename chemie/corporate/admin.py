@@ -1,7 +1,6 @@
 from django.contrib import admin
-from .models import Specialization, Interview, JobAdvertisement
-
+from .models import Specialization, Interview, Job
 
 admin.site.register(Interview)
 admin.site.register(Specialization)
-admin.site.register(JobAdvertisement)
+admin.site.register(Job)

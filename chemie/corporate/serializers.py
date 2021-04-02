@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Interview, Specialization
+from .models import Interview, Job, Specialization
 
 
 class SpecializationSerializer(serializers.ModelSerializer):
@@ -22,3 +22,16 @@ class InterviewSerializer(serializers.ModelSerializer):
             "specializations",
         )
         model = Interview
+
+
+class JobSerializer(serializers.ModelSerializer):
+    specializations = SpecializationSerializer(read_only=True)
+
+    class Meta:
+        fields = (
+            "id",
+            "job_object",
+            "description",
+            "specializations",
+        )
+        model = Job
