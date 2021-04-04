@@ -49,7 +49,7 @@ def job_advertisement(request):
 
 
 def interview(request):
-    interviews = Interview.objects.filter(is_published=True).order_by("-id")
+    interviews = Interview.objects.all().order_by("-id")
 
     context = {"interviews": interviews}
     return render(request, "corporate/interview.html", context)
