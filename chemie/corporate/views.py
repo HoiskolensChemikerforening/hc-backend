@@ -1,7 +1,6 @@
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
-from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
 
@@ -81,11 +80,9 @@ def interview_create(request):
 
 
 @permission_required("corporate.delete_interview")
-def interview_remove(request, id):
+def interview_delete(request, id):
     interview = get_object_or_404(Interview, id=id)
-    interview.is_published = False
-    interview.save()
-
+    interview.delete()
     return redirect("corporate:interview")
 
 
@@ -99,12 +96,6 @@ def interview_edit(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Intervjuet ble endret",
-                extra_tags="Endret",
-            )
             return HttpResponseRedirect(reverse("corporate:interview"))
 
     context = {"form": form}
