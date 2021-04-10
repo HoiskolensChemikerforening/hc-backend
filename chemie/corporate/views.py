@@ -49,7 +49,6 @@ def job_advertisement(request):
 
 def interview(request):
     interviews = Interview.objects.filter(is_published=True).order_by("-id")
-
     context = {"interviews": interviews}
     return render(request, "corporate/interview.html", context)
 
@@ -59,6 +58,18 @@ def interview_detail(request, id):
 
     context = {"interview": interview}
     return render(request, "corporate/interview_detail.html", context)
+
+def events(request):
+    indkom = Committee.objects.get(title="Industrikomiteen")
+    bedpres = Bedpres.objects.filter(date__gte=timezone.now()).order_by("date")
+    events = Social.objects.filter(
+        date__gte=timezone.now(), committee=indkom
+    ).order_by("date")
+    context = {
+        "events": events,
+        "bedpres": bedpres
+    }
+    return render(request, "corporate/events.html", context)
 
 
 def statistics(request):
@@ -73,7 +84,6 @@ def interview_create(request):
     if form.is_valid():
         form.save()
         return redirect(reverse("corporate:interview"))
-
     context = {"form": form}
     return render(request, "corporate/interview_create.html", context)
 

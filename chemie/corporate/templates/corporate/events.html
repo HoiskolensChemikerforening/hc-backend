@@ -1,0 +1,80 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+
+
+{% block content %}
+<div class="banner background-dark" style="margin-bottom: 80px;">
+  <div class="container" style="padding-top: 105px;">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="heading">Utforsk arrangementer</h1>
+      </div>
+      <div class="col-12 col-md-6">
+        <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
+          Vi arrangerer bedriftspresentasjoner hvor relevante bedrifter forteller om sin virksomhet, og hva som venter nyutdannede sivilingeniører i bedriften. I tillegg arrangerer vi motivasjonsforedrag, mastergradpresentasjoner og Ph.D. Grand Prix.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container" style="margin-bottom: 80px">
+  <div class="row">
+    <div class="col-12">
+      <h2 class="subheading">
+        Kommende arrangementer
+      </h2>
+    </div>
+    <div class="row" style="margin-bottom: 50px">
+        {% if no_events %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 10px">
+          <p>For øyeblikket er det ikke planlagt noen arrangementer.</p>
+        </div>
+        {% else %}
+
+        {% for bp in bedpres %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 50px">
+          <a href="{{ bp.get_absolute_url }}" class="link">
+          <div class="card" style="background-color: var(--gray-50)">
+            <img src="{{ bp.picture.url }}" class="card-img-top" style="">
+        <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 15px;">
+          {{ bp.title }}
+        </p>
+          <a href="{{ bp.get_absolute_url }}" class="link">
+          </a>
+          <p>{{ bp.date }}</p>
+        </div>
+        <div class="col-12 col-md-9"></div>
+        {% endfor %}
+
+        {% for event in events %}
+        <div class="col-12 col-md-3" style="margin-bottom: 10px">
+          <a href="{{ event.get_absolute_url }}" class="link">
+            <p style="font-size: var(--font-size-medium-plus); font-weight: 600;  margin-bottom: 8px">
+              {{ event.title }}
+            </p>
+          </a>
+          <p>{{ event.date }}</p>
+        </div>
+        <div class="col-12 col-md-9"></div>
+        {% endfor %}
+        {% endif %}
+
+      </div>
+
+    {% if perms.corporate.add_event %}
+      <div class="col-12" style="margin-bottom: 50px">
+        <a class="button-fill" href="{% url "events:create_social" %}">
+          Nytt arrangement
+        </a>
+
+        <a class="button-fill" href="{% url "events:create_bedpres" %}">
+            Ny beddriftspresentasjon
+          </a>
+      </div>
+    {% endif %}
+  </div>
+</div>
+  </div>
+
+{% endblock content %}

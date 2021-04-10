@@ -16,6 +16,7 @@ urlpatterns = [
         views.interview_remove,
         name="interview_delete",
     ),
+    path("arrangementer/", views.events, name="events"),
     path("jobb/", views.job_advertisement, name="job_advertisement"),
     path("jobb/ny/", views.job_create, name="job_create"),
     path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),
