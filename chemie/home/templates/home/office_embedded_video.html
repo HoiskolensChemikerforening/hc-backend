@@ -1,0 +1,39 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+"How to kontoret"
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Presentert av Omsorgskomiteen.
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m12 l12">
+        <p class="flow-text">
+            Se videoene nedenfor for å lære om hvordan du bruker kontoret. <br>
+            Søk om kontortilgang <a href="../kontortilgang/søk">her!</a>
+        </p>
+        <p>
+
+        </p>
+        <h6>
+            Kontoret under Corona.
+        </h6>
+        <iframe src="https://player.vimeo.com/video/499147684?muted=0&autoplay=1" width="680" height="383"
+                frameborder="0" allow="autoplay; fullscreen" allowfullscreen>
+        </iframe>
+        <p style="height: 100px;"></p>
+        <h6>
+            Kontoret til vanlig.
+        </h6>
+        <iframe src="https://player.vimeo.com/video/499148253" width="680" height="383" frameborder="0"
+                allow="autoplay; fullscreen" allowfullscreen>
+        </iframe>
+
+    </div>
+</div>
+
+{% endblock content %}

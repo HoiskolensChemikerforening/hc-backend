@@ -24,7 +24,7 @@ from django.views.generic.list import ListView
 from django.db.models import Q
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, Profile, User
+from chemie.customprofile.models import ProfileManager, Profile, User, GRADES
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -88,7 +88,7 @@ class CreateSocialView(
     permission_required = "events.add_social"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": [1, 2, 3, 4, 5, 6]}
+    initial = {"allowed_grades": list(GRADES.values.keys())}
     success_message = "%(name)s was created successfully"
     message_content = (
         messages.SUCCESS,
@@ -119,7 +119,7 @@ class CreateBedpresView(
     permission_required = "events.add_bedpres"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": [1, 2, 3, 4, 5, 6]}
+    initial = {"allowed_grades": list(GRADES.values.keys())}
     message_content = messages.SUCCESS, "Bedpresen ble opprettet", "Opprettet"
 
 
@@ -218,6 +218,7 @@ class DeleteBedpresView(DeleteSocialView):
 class ViewSocialDetailsView(DetailView):
     template_name = "events/social/detail.html"
     model = Social
+    registration_model = SocialEventRegistration
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -231,11 +232,29 @@ class ViewSocialDetailsView(DetailView):
             event=self.object, status=REGISTRATION_STATUS.CONFIRMED
         )
 
+        if not self.object.allowed_groups_empty():
+            confirmed_members = []
+            for registration in confirmed:
+                group_attendees = self.registration_model.objects.get(
+                    event=self.object, user=registration.user
+                ).registration_group_members.all()
+                if group_attendees:
+                    confirmed_members.extend(list(group_attendees))
+                # confirmed_members.append(registration.user)  ADD THIS LINE if kohortsjef is always attending
+            confirmed_members.sort(key=lambda x: x.profile.grade)
+            confirmed = confirmed_members
+
         waiting = attendees.filter(
             event=self.object, status=REGISTRATION_STATUS.WAITING
         ).order_by("created")
 
-        context.update({"attendees": confirmed, "waiting_list": waiting})
+        context.update(
+            {
+                "attendees": confirmed,
+                "waiting_list": waiting,
+                "has_group_members": not self.object.allowed_groups_empty(),
+            }
+        )
         return context
 
 

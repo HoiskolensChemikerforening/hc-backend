@@ -3,7 +3,6 @@ from . import views
 
 app_name = "corporate"
 
-
 urlpatterns = [
     path("", views.index, name="index"),
     path("intervju/", views.interview, name="interview"),
@@ -17,6 +16,11 @@ urlpatterns = [
         name="interview_delete",
     ),
     path("arrangementer/", views.events, name="events"),
+    path(
+        "intervju/<int:id>/rediger",  # TODO: Rename so it matches delete, create and detail urls
+        views.interview_edit,
+        name="interview_edit",
+    ),
     path("jobb/", views.job_advertisement, name="job_advertisement"),
     path("jobb/ny/", views.job_create, name="job_create"),
     path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),
