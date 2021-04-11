@@ -25,7 +25,7 @@ def index(request):
         "indkom": indkom,
         "bedpres": bedpres,
         "events": events,
-        "no_events": no_events
+        "no_events": no_events,
     }
 
     return render(request, "corporate/index.html", context)
@@ -49,7 +49,9 @@ def interview(request):
         if request.GET.get("minyear"):
             try:
                 min_filter_year = int(request.GET.get("minyear"))
-                interviews = interviews.filter(graduation_year__gte=min_filter_year)
+                interviews = interviews.filter(
+                    graduation_year__gte=min_filter_year
+                )
             except ValueError:
                 min_filter_year = min_year
         else:
@@ -58,7 +60,9 @@ def interview(request):
         if request.GET.get("maxyear"):
             try:
                 max_filter_year = int(request.GET.get("maxyear"))
-                interviews = interviews.filter(graduation_year__lte=max_filter_year)
+                interviews = interviews.filter(
+                    graduation_year__lte=max_filter_year
+                )
             except ValueError:
                 max_filter_year = max_year
         else:
@@ -66,8 +70,12 @@ def interview(request):
 
         if request.GET.getlist("specialization"):
             try:
-                specializations = [int(x) for x in request.GET.getlist("specialization")]
-                interviews = interviews.filter(specializations__name__in=specializations).distinct()
+                specializations = [
+                    int(x) for x in request.GET.getlist("specialization")
+                ]
+                interviews = interviews.filter(
+                    specializations__name__in=specializations
+                ).distinct()
             except ValueError:
                 pass
     else:
@@ -76,13 +84,14 @@ def interview(request):
 
     specializations = Specialization.objects.all().order_by("id")
 
-    context = {"interviews": interviews,
-               "min_year": min_year,
-               "max_year": max_year,
-               "min_filter_year": min_filter_year,
-               "max_filter_year": max_filter_year,
-               "specializations": specializations,
-               }
+    context = {
+        "interviews": interviews,
+        "min_year": min_year,
+        "max_year": max_year,
+        "min_filter_year": min_filter_year,
+        "max_filter_year": max_filter_year,
+        "specializations": specializations,
+    }
     return render(request, "corporate/interview.html", context)
 
 
