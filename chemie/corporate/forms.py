@@ -11,7 +11,14 @@ class InterviewForm(forms.ModelForm):
 
     class Meta:
         model = Interview
-        fields = ["title", "graduation_year", "text", "picture", "company_picture", "specializations"]
+        fields = [
+            "title",
+            "graduation_year",
+            "text",
+            "picture",
+            "company_picture",
+            "specializations",
+        ]
 
 
 class CreateJobForm(forms.ModelForm):
