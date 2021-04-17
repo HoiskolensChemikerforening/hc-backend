@@ -60,8 +60,10 @@
       <div class="col-12 col-lg-4 order-1 order-lg-3">
         <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
              src="{{ interview.picture.url }}">
-        <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
-             src="{{ interview.company_picture.url }}">
+        {% if interview.company_picture %}
+          <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
+               src="{{ interview.company_picture.url }}">
+        {% endif %}
       </div>
       <div class="col-12 col-lg-12 order-4">
 
