@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
 
-from .models import Interview, Job
+from .models import Interview, Job, Specialization
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -22,30 +22,37 @@ def index(request):
 
     no_events = (not bedpres.exists()) and (not events.exists())
 
-    jobs = Job.objects.filter(
-        is_published=True
-    ).order_by("published_date")
-
-    interviews = Interview.objects.filter(is_published=True).order_by("id")
-
     context = {
         "indkom": indkom,
         "bedpres": bedpres,
         "events": events,
         "no_events": no_events,
-        "jobs": jobs,
-        "interviews": interviews,
     }
 
     return render(request, "corporate/index.html", context)
 
 
 def job(request):
-    jobs = Job.objects.filter(
-        is_published=True
-    ).order_by("published_date")
+    jobs = Job.objects.all().order_by("-id")
 
-    context = {"jobs": jobs}
+    if request.method == "GET":
+        if request.GET.getlist("specialization"):
+            try:
+                specializations = [
+                    int(x) for x in request.GET.getlist("specialization")
+                ]
+                jobs = jobs.filter(
+                    specializations__name__in=specializations
+                ).distinct()
+            except ValueError:
+                pass
+
+    specializations = Specialization.objects.all().order_by("id")
+
+    context = {
+        "interviews": jobs,
+        "specializations": specializations,
+    }
     return render(request, "corporate/job.html", context)
 
 
@@ -131,10 +138,9 @@ def job_create(request):
 
 
 @permission_required("corporate.delete_job")
-def job_remove(request, id):
+def job_delete(request, id):
     job = get_object_or_404(Job, id=id)
-    job.is_published = False
-    job.save()
+    job.delete()
 
     return redirect("corporate:job")
 
@@ -149,12 +155,6 @@ def job_edit(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Jobben ble endret",
-                extra_tags="Endret",
-            )
             return HttpResponseRedirect(reverse("corporate:job"))
 
     context = {"form": form}

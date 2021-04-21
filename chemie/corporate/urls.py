@@ -25,9 +25,9 @@ urlpatterns = [
     path(
         "jobb/<int:id>/", views.job_detail, name="job_detail"
     ),
-    path("jobb/<int:id>/fjern/", views.job_remove, name="job_delete"),
+    path("jobb/<int:id>/fjern/", views.job_delete, name="job_delete"),
     path(
-        "jobb/<int:id>/rediger",  # TODO: Rename so it matches delete, create and detail urls
+        "jobb/<int:id>/rediger/",
         views.job_edit,
         name="job_edit",
     ),
