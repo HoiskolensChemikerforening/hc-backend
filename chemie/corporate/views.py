@@ -50,16 +50,16 @@ def job(request):
     specializations = Specialization.objects.all().order_by("id")
 
     context = {
-        "interviews": jobs,
+        "jobs": jobs,
         "specializations": specializations,
     }
     return render(request, "corporate/job.html", context)
 
 
 def job_detail(request, id):
-    jobs = get_object_or_404(Job, pk=id)
+    job = get_object_or_404(Job, pk=id)
 
-    context = {"jobs": jobs}
+    context = {"job": job}
     return render(request, "corporate/job_detail.html", context)
 
 
@@ -147,7 +147,7 @@ def job_delete(request, id):
 
 @permission_required("corporate.edit_article")
 def job_edit(request, id):
-    job = get_object_or_404(Interview, id=id)
+    job = get_object_or_404(Job, id=id)
     form = JobForm(
         request.POST or None, request.FILES or None, instance=job
     )
