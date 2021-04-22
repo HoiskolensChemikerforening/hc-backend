@@ -22,6 +22,35 @@
 
 {% block content %}
   <div class="row">
+    <div class="klassetrinn">
+      <div class="col s6 m6 l4 s12">
+        <a class='dropdown-trigger btn-large' href='' data-target='dropdown2'
+           >Klassetrinn</a>
+        <ul id='dropdown2' class='dropdown-content'>
+          {% for year_number, year_text in grades %}
+            <li><a href="{% url "profile:memberships-grade" year=year_number %}">{{ year_text }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col s6 m6 l8">
+        <nav>
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <div class="input-field">
+                <input id="{{ search_form.search_field.id_for_label }}"
+                       type="search" required name="{{ search_form.search_field.html_name }}"
+                       value="{{ search_form.search_field.value|default:"" }}">
+                <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
+                  <i class="material-icons" style="line-height: 42px;">search</i></label>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col s12 m12 l12">
       <h5 class="heading">Klikk på et rødt ikon for å tildele 5 års medlemsskap fra dagens dato</h5>
     </div>
@@ -115,6 +144,8 @@
                   },
               });
           })
+        $('.dropdown-trigger').dropdown();
+        $('.modal').modal();
       });
   </script>
 {% endblock %}
