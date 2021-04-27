@@ -351,7 +351,7 @@ def answer_edit(request):
 
         answer_value_pair = get_object_or_404(AnswerKeyValuePair, id=id)
         answer_value_pair.value = value
-        answer_value_pair.answer = answer
+        answer_value_pair.key = answer
 
         answer_value_pair.save()
 
