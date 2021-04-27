@@ -52,7 +52,7 @@
 
   <div class="row">
     <div class="col s12 m12 l12">
-      <h5 class="heading">Klikk på et rødt ikon for å tildele 5 års medlemsskap fra dagens dato</h5>
+      <h5 class="heading">Klikk på et rødt ikon for å tildele x antall år medlemsskap fra dagens dato</h5>
     </div>
   </div>
   <div class="row">
@@ -77,8 +77,16 @@
             <a class="member btn-floating btn-tiny waves-effect waves-light green"
                id="member-{{ profile.id }}"><i class="material-icons">done</i></a>
           {% else %}
-            <a class="member btn-floating btn-tiny waves-effect waves-light red"
-               id="member-{{ profile.id }}"><i class="material-icons">error</i></a>
+            <a class="dropdown-trigger member btn-floating btn-tiny waves-effect waves-light red"
+                data-target="dropdown3" id="member-{{ profile.id }}"><i class="material-icons">error</i></a>
+            <ul id='dropdown3' class='dropdown-content'>
+              <li> <a href="">5 år</a></li>
+              <li> <a href="">4 år</a></li>
+              <li> <a href="">3 år</a></li>
+              <li> <a href="">2 år</a></li>
+              <li> <a href="">1 år</a></li>
+              <li> <a href="">Livsvarig</a></li>
+            </ul>
           {% endif %}</td>
         </tr>
       {% endfor %}
