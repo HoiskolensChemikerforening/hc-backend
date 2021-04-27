@@ -27,7 +27,8 @@
                 Kommende arrangementer
             </h2>
         </div>
-        <div class="row" style="margin-bottom: 50px">
+    </div>
+       <div class="row" style="margin-bottom: 50px">
             {% if no_events %}
             <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 10px">
                 <p>For øyeblikket er det ikke planlagt noen arrangementer.</p>
@@ -47,21 +48,21 @@
                 </a>
             </div>
             {% endfor %}
+       </div>
 
-            {% for event in events %}
-            <div class="col-12 col-md-6 col-lg-4 col-xl-4" style="margin-bottom: 50px">
-                <a href="{{ event.get_absolute_url }}" class="link">
-                    <div class="card" style="background-color: var(--gray-50)">
-                        <img src="{{ event.picture.url }}" class="card-img-top"/>
-                        <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 15px;">
-                            {{ event.title }}}
-                        </p>
-                        <p> {{ event.date }}</p>
-                    </div>
-                </a>
-            </div>
-
+        {% for event in events %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-4" style="margin-bottom: 50px">
+            <a href="{{ event.get_absolute_url }}" class="link">
+                <div class="card" style="background-color: var(--gray-50)">
+                    <img src="{{ event.picture.url }}" class="card-img-top"/>
+                    <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 15px;">
+                        {{ event.title }}}
+                    </p>
+                    <p> {{ event.date }}</p>
+                </div>
+            </a>
         </div>
+
         {% endfor %}
         {% endif %}
 
@@ -76,7 +77,13 @@
             </a>
         </div>
         {% endif %}
-    </div>
+
 </div>
 
+
 {% endblock content %}
+
+
+{% block footer_script %}
+{% endblock footer_script %}
+
