@@ -1,5 +1,6 @@
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 from django.utils import timezone
+from django.core.exceptions import ObjectDoesNotExist
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import JsonResponse, HttpResponseRedirect
@@ -80,11 +81,18 @@ def interview_detail(request, id):
 
 def survey(request, year=None):
     if year is None:
-        year = Survey.objects.latest("year").year
+        try:
+            year = Survey.objects.latest("year").year
+            survey = Survey.objects.get(year=year)
+            q_a_dict = survey.get_q_a_dict()
+        except:
+            survey = None
+            q_a_dict = None
+    else:
+        survey = get_object_or_404(Survey, year=year)
+        q_a_dict = survey.get_q_a_dict()
 
     all_surveys = Survey.objects.all()
-    survey = Survey.objects.get(year=year)
-    q_a_dict = survey.get_q_a_dict()
 
     context = {
         "all_surveys": all_surveys,

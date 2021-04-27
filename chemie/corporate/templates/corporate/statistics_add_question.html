@@ -88,17 +88,22 @@
               </div>
             </div>
           {% empty %}
-            <p>{{ survey }} inneholder allerede alle spørsmål.
-              Trykk på 'Legg til nytt spørsmål' for å lage flere!</p>
+            {% if questions %}
+              <p>{{ survey }} inneholder allerede alle spørsmål.
+                Trykk på 'Legg til nytt spørsmål' for å lage flere!</p>
+            {% else %}
+              <p>Det finnes ingen spørsmål å velge mellom! :O
+                Trykk på 'Lag et nytt spørsmål' for å legge til noen.</p>
+            {% endif %}
           {% endfor %}
         </div>
       </div>
       <br>
-    {% if questions %}
-      <div class="form-group row">
-        <button name="submit" type="submit" class="button-fill">Legg til!</button>
-      </div>
-    {% endif %}
+      {% if questions %}
+        <div class="form-group row">
+          <button name="submit" type="submit" class="button-fill">Legg til!</button>
+        </div>
+      {% endif %}
     </form>
   </div>
 

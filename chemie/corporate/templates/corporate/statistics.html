@@ -23,19 +23,23 @@
     {% endif %}
     <div class="row">
       <div class="col-sm-8">
-        <div class="dropdown">
-          <button class="button-fill dropdown-toggle" type="button" data-toggle="dropdown"
-                  aria-haspopup="true" aria-expanded="false">
-            {{ survey.year }}
-          </button>
-          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-            {% for survey in all_surveys %}
-              <a href="{% url "corporate:survey_year" survey.year %}" class="dropdown-item">
-                {{ survey.year }}
-              </a>
-            {% endfor %}
+        {% if survey %}
+          <div class="dropdown">
+            <button class="button-fill dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+              {{ survey.year }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              {% for survey in all_surveys %}
+                <a href="{% url "corporate:survey_year" survey.year %}" class="dropdown-item">
+                  {{ survey.year }}
+                </a>
+              {% endfor %}
+            </div>
           </div>
-        </div>
+        {% else %}
+          <p>Det eksisterer ingen undersøkelser enda. Få Industrikomiteen til å legge til en da vel!</p>
+        {% endif %}
       </div>
       <div class="col">
         <a class="button-fill" href="{% url "corporate:statistics_admin" %}"
@@ -44,7 +48,7 @@
         </a>
       </div>
     </div>
-  <br><br>
+    <br><br>
     <div id="chart-grid">
       {% for question, data in q_a_dict.items %}
         <div class="grid-element">
@@ -53,6 +57,10 @@
                   style="background-color: var(--main-color-light)">Bytt graftype
           </button>
         </div>
+      {% empty %}
+        {% if survey %}
+          <p>Diplomundersøkelsen fra {{ survey.year }} har ingen data enda. Følg med og se hva som skjer!</p>
+        {% endif %}
       {% endfor %}
     </div>
   </div>

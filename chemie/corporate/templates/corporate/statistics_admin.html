@@ -30,7 +30,11 @@
     <div class="row">
       <div class="col">
         <h4>Diplomundersøkelser</h4>
-        <p>Velg en tidligere undersøkelse for å redigere, eller legg til en ny.</p>
+        {% if surveys %}
+          <p>Velg en tidligere undersøkelse for å redigere, eller legg til en ny.</p>
+        {% else %}
+          <p>Det finnes ingen undersøkelser enda. Legg til en da vel!</p>
+        {% endif %}
       </div>
       <div class="col">
         <h5>Opprett ny undersøkelse</h5>
