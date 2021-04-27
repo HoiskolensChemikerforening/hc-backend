@@ -215,6 +215,12 @@ body {
     background: var(--gray-100);
 }
 
+.corp{
+    padding-right: 6px;
+    padding-left: 0px;
+    margin-bottom: 40px;
+}
+
 .square-text {
     position: absolute;
     top: 35%;
