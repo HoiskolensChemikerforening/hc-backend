@@ -25,10 +25,18 @@ class Interview(models.Model):
     title = models.CharField(max_length=40, verbose_name="Navn på intervjuet")
     text = RichTextField(verbose_name="Intervjuet", config_name="forms")
     picture = ImageField(upload_to="corporate", verbose_name="Bilde")
+    company_picture = ImageField(
+        upload_to="corporate",
+        verbose_name="Logo til bedriften",
+        blank=True,
+        null=True,
+    )
     specializations = models.ManyToManyField(
         Specialization, verbose_name="Aktuelle retninger", blank=True
     )
-    is_published = models.BooleanField(verbose_name="Er synlig", default=True)
+    graduation_year = models.PositiveSmallIntegerField(
+        default=2000, verbose_name="Uteksamineringsår"
+    )
 
     def __str__(self):
         return self.title
