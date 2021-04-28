@@ -4,7 +4,6 @@
 #
 #    pip-compile requirements/development.in
 #
-
 apipkg==1.5
     # via execnet
 apns2==0.7.1
