@@ -3,22 +3,24 @@
 
 {% block content %}
 
-<div class="banner background-dark" style="margin-bottom: 80px;">
-  <div class="container" style="padding-top: 54px;">
-    <div class="row">
-      <div class="col-12 col-md-6">
-        <a class="link" style="font-weight: 600; font-size: var(--font-size-medium-plus);"
-           href="{% url "corporate:interview" %}">
-        Intervjuer
-        </a>
-      </div>
-      <div class="col-12" style="margin-top: 20px;">
-        <h1 class="heading">{{ interview.title }}</h1>
-      </div>
-      <div class="col-12">
-        {% for specialization in interview.specializations.all %}
-        <!-- Badges with custom colors in a yellow scale -->
-        <span class="badge badge-pill
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 54px;">
+      <div class="row">
+        <div class="col-12 col-md-6">
+          <a class="link" style="font-weight: 600; font-size: var(--font-size-medium-plus);"
+             href="{% url "corporate:interview" %}">
+            Intervjuer
+          </a>
+        </div>
+        <div class="col-12" style="margin-top: 20px;">
+          <h1 class="heading">{{ interview.title }}</h1>
+          <h5>Uteksaminert i {{ interview.graduation_year }}</h5>
+          <br>
+        </div>
+        <div class="col-12">
+          {% for specialization in interview.specializations.all %}
+            <!-- Badges with custom colors in a yellow scale -->
+            <span class="badge badge-pill
             {% if specialization.id == 1 %} badge-custom-1 {% endif %}
             {% if specialization.id == 2 %} badge-custom-2 {% endif %}
             {% if specialization.id == 3 %} badge-custom-3 {% endif %}
@@ -26,50 +28,57 @@
             {% if specialization.id == 5 %} badge-custom-5 {% endif %}
             {% if specialization.id == 6 %} badge-custom-6 {% endif %}
              ">{{ specialization }}</span>
-        {% endfor %}
+          {% endfor %}
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="container">
-  <div class="row" style="margin-bottom: 100px">
-    <div class="col-12 col-lg-1 order-3 order-lg-1"></div>
-    <div class="col-12 col-lg-6 order-2 order-lg-2">
-      {{ interview.text | safe }}
-    </div>
-    <div class="col-12 col-lg-4 order-1 order-lg-3">
-      <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 60vw"
-           src="{{ interview.picture.url }}">
-    </div>
-    <div class="col-12 col-lg-12 order-4">
-      {% if perms.corporate.delete_interview %}
-      <a type="button" class="button-warning"
-         onclick="deleteInterviewPopup({{ interview.id }})"
-         id="deleteInterview{{ interview.id }}"
-         data-url="{% url "corporate:interview_delete" interview.id %}">
-      Slett intervju
-      </a>
-      {% endif %}
-      {% if perms.corporate.edit_interview %}
-      <a type="button" class="button-fill"
-         id="editInterview{{ interview.id }}"
-         href="{% url "corporate:interview_edit" interview.id %}">
-      Endre intervju
-      </a>
-      {% endif %}
+  <div class="container">
+    <div class="row" style="margin-bottom: 100px">
+      <div class="col-12 col-lg-1 order-3 order-lg-1"></div>
+      <div class="col-12 col-lg-6 order-2 order-lg-2">
+        {{ interview.text | safe }}
+        <br>
+        {% if perms.corporate.edit_interview %}
+          <a type="button" class="button-fill"
+             id="editInterview{{ interview.id }}"
+             href="{% url "corporate:interview_edit" interview.id %}">
+            Endre intervju
+          </a>
+        {% endif %}
+        {% if perms.corporate.delete_interview %}
+          <a type="button" class="button-warning"
+             onclick="deleteInterviewPopup({{ interview.id }})"
+             id="deleteInterview{{ interview.id }}"
+             style="float:right"
+             data-url="{% url "corporate:interview_delete" interview.id %}">
+            Slett intervju
+          </a>
+        {% endif %}
+      </div>
+      <div class="col-12 col-lg-4 order-1 order-lg-3">
+        <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
+             src="{{ interview.picture.url }}">
+        {% if interview.company_picture %}
+          <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
+               src="{{ interview.company_picture.url }}">
+        {% endif %}
+      </div>
+      <div class="col-12 col-lg-12 order-4">
+
+      </div>
     </div>
   </div>
-</div>
 
-{% block footer_script %}
-<script>
-  function deleteInterviewPopup(id) {
-    let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
-    if (confirm("Er du sikker på at du vil fjerne dette intervjuet?")) {
-      window.location.href = url;
-    }
-  }
-</script>
-{% endblock footer_script %}
+  {% block footer_script %}
+    <script>
+      function deleteInterviewPopup(id) {
+        let url = document.getElementById("deleteInterview" + id.toString()).getAttribute("data-url");
+        if (confirm("Er du sikker på at du vil slette dette intervjuet?")) {
+          window.location.href = url;
+        }
+      }
+    </script>
+  {% endblock footer_script %}
 {% endblock content %}

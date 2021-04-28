@@ -12,12 +12,12 @@ urlpatterns = [
     ),
     path(
         "intervju/<int:id>/fjern/",
-        views.interview_remove,
+        views.interview_delete,
         name="interview_delete",
     ),
     path("arrangementer/", views.events, name="events"),
     path(
-        "intervju/<int:id>/rediger",  # TODO: Rename so it matches delete, create and detail urls
+        "intervju/<int:id>/rediger/",
         views.interview_edit,
         name="interview_edit",
     ),

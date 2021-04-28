@@ -3,42 +3,88 @@
 
 {% block content %}
 
-<div class="banner background-dark" style="margin-bottom: 80px;">
-  <div class="container" style="padding-top: 105px;">
-    <div class="row">
-      <div class="col-12">
-        <h1 class="heading">Intervjuer</h1>
-      </div>
-      <div class="col-12 col-md-6">
-        <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
-          Nysgjerrig på hvor Chemikere ender opp? Her kan du lese intervjuer med tidligere og nåværende studenter
-        </p>
+  <style>
+    .ui-slider .ui-slider-handle {
+      z-index: 1;
+    }
+  </style>
+
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 105px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Intervjuer</h1>
+        </div>
+        <div class="col-12 col-md-6">
+          <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
+            Nysgjerrig på hvor Chemikere ender opp? Her kan du lese intervjuer med tidligere studenter.
+          </p>
+        </div>
       </div>
     </div>
   </div>
-</div>
 
-<div class="container">
-  <div class="row" style="margin-bottom: 80px;">
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <button class="button-fill" type="button" data-toggle="collapse" data-target="#filterCollapse"
+                aria-expanded="false" aria-controls="filterCollapse" id="openFilterButton">
+          Filtreringsmuligheter
+        </button>
+      </div>
+      <div class="col-6">
+        {% if perms.corporate.add_interview %}
+          <a class="button-fill" href="{% url "corporate:interview_create" %}">
+            Nytt intervju
+          </a>
+        {% endif %}
+      </div>
+    </div>
 
-    {% if perms.corporate.add_interview %}
-      <div class="col-12" style="margin-bottom: 50px">
-        <a class="button-fill" href="{% url "corporate:interview_create" %}">
-          Nytt intervju
+    <br>
+
+    <div class="collapse {% if "?" in request.get_full_path %}show{% endif %}" id="filterCollapse">
+      <div class="card card-body shadow-none">
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <p>Spesialisering:</p>
+            {% for specialization in specializations %}
+              <div>
+                <input type="checkbox" id="specialization-{{ specialization.id }}"
+                       name="{{ specialization.id }}" class="specialization-checkbox" checked>
+                <label for="specialization-{{ specialization.id }}">{{ specialization }}</label>
+              </div>
+            {% endfor %}
+          </div>
+          <div class="col-md-6 col-12">
+            <p>
+              <label for="amount">Uteksamineringsår:</label>
+              <input type="text" id="amount" readonly style="border:0; color:#f6931f; font-weight:bold;">
+            </p>
+            <div id="slider-range"></div>
+          </div>
+        </div>
+        <br>
+        <a class="button-fill" href="#" onclick="filterReload()" style="width: min-content"
+           data-url="{% url "corporate:interview" %}" id="filterButton">
+          Filtrer!
         </a>
       </div>
-    {% endif %}
+    </div>
 
-    {% for interview in interviews %}
-    <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 50px;">
-      <div class="card" style="background-color: var(--gray-50)">
-        <img src="{{ interview.picture.url }}" class="card-img-top" style="">
-        <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 15px;">
-          {{ interview.title }}
-        </p>
-        <div style="padding: 0 15px 15px 15px;">
-          {% for specialization in interview.specializations.all %}
-            <span class="badge badge-pill
+    <br><br>
+
+    <div class="row" style="margin-bottom: 80px;">
+      {% for interview in interviews %}
+        <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 50px;">
+          <div class="card" style="bacground-color: var(--gray-50)">
+            <img src="{{ interview.picture.url }}" class="card-img-top" style="">
+            <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 15px;">
+              {{ interview.title }}
+            </p>
+            <div style="padding: 0 15px 15px 15px;">
+              {% for specialization in interview.specializations.all %}
+                <span class="badge badge-pill
              {% if specialization.id == 1 %} badge-custom-1 {% endif %}
              {% if specialization.id == 2 %} badge-custom-2 {% endif %}
              {% if specialization.id == 3 %} badge-custom-3 {% endif %}
@@ -46,22 +92,79 @@
              {% if specialization.id == 5 %} badge-custom-5 {% endif %}
              {% if specialization.id == 6 %} badge-custom-6 {% endif %}
               ">{{ specialization }}</span>
-          {% endfor %}
+              {% endfor %}
+            </div>
+            <a class="stretched-link" href="{% url "corporate:interview_detail" interview.id %}"> </a>
+          </div>
         </div>
-        <a class="stretched-link" href="{% url "corporate:interview_detail" interview.id %}"> </a>
-      </div>
-    </div>
 
-    {% empty %}
-    <div class="col-12" style="margin-bottom: 80px;">
-      <p class="lead">Det finnes dessverre ingen intervjuer enda...</p>
+      {% empty %}
+        <div class="col-12" style="margin-bottom: 80px;">
+          <p class="lead">Det finnes dessverre ingen intervjuer som passer søket ditt...</p>
+        </div>
+
+      {% endfor %}
     </div>
-    {% endfor %}
   </div>
-</div>
 
 
 {% endblock content %}
 
 {% block footer_script %}
+  <script>
+
+    if (window.location.href.includes("?")) {
+      // We have GET parameters. Populate filter box
+      let qd = {};
+      location.search.substr(1).split("&").forEach(function (item) {
+        (item.split("=")[0] in qd) ? qd[item.split("=")[0]].push(item.split("=")[1]) :
+            qd[item.split("=")[0]] = [item.split("=")[1]]
+      });
+
+      if ("specialization" in qd) {
+        let checkBoxes = document.getElementsByClassName("specialization-checkbox");
+
+        for (let i = 0; i < checkBoxes.length; i++) {
+          if (qd["specialization"].includes(checkBoxes[i].getAttribute("name"))) {
+            checkBoxes[i].checked = true;
+          } else {
+            checkBoxes[i].checked = false;
+          }
+        }
+      }
+    }
+
+    function filterReload() {
+      let minYear = $("#slider-range").slider("values", 0);
+      let maxYear = $("#slider-range").slider("values", 1);
+      let checkBoxes = document.getElementsByClassName("specialization-checkbox");
+      let url = document.getElementById("filterButton").getAttribute("data-url");
+
+      url += "?" + "minyear=" + minYear;
+      url += "&" + "maxyear=" + maxYear;
+
+      for (let i = 0; i < checkBoxes.length; i++) {
+        if (checkBoxes[i].checked) {
+          let id = checkBoxes[i].getAttribute('name');
+          url += "&specialization=" + id;
+        }
+      }
+
+      window.location.assign(url);
+    }
+
+    $(function () {
+      $("#slider-range").slider({
+        range: true,
+        min: parseInt("{{ min_year }}"),
+        max: parseInt("{{ max_year }}"),
+        values: [parseInt("{{ min_filter_year }}"), parseInt("{{ max_filter_year }}")],
+        slide: function (event, ui) {
+          $("#amount").val(ui.values[0] + " - " + ui.values[1]);
+        }
+      });
+      $("#amount").val($("#slider-range").slider("values", 0) +
+          " - " + $("#slider-range").slider("values", 1));
+    });
+  </script>
 {% endblock footer_script %}

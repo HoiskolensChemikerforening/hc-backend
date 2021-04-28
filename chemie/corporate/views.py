@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404
 from django.shortcuts import redirect, reverse
 from django.utils import timezone
-from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
 
-from .models import Interview, JobAdvertisement
+from .models import Interview, JobAdvertisement, Specialization
 
 from chemie.committees.models import Committee
 from chemie.events.models import Bedpres, Social
@@ -22,19 +21,11 @@ def index(request):
 
     no_events = (not bedpres.exists()) and (not events.exists())
 
-    job_advertisements = JobAdvertisement.objects.filter(
-        is_published=True
-    ).order_by("published_date")
-
-    interviews = Interview.objects.filter(is_published=True).order_by("id")
-
     context = {
         "indkom": indkom,
         "bedpres": bedpres,
         "events": events,
         "no_events": no_events,
-        "job_advertisements": job_advertisements,
-        "interviews": interviews,
     }
 
     return render(request, "corporate/index.html", context)
@@ -50,8 +41,56 @@ def job_advertisement(request):
 
 
 def interview(request):
-    interviews = Interview.objects.filter(is_published=True).order_by("-id")
-    context = {"interviews": interviews}
+    interviews = Interview.objects.all().order_by("-id")
+    min_year = interviews.order_by("graduation_year").first().graduation_year
+    max_year = interviews.order_by("graduation_year").last().graduation_year
+
+    if request.method == "GET":
+        if request.GET.get("minyear"):
+            try:
+                min_filter_year = int(request.GET.get("minyear"))
+                interviews = interviews.filter(
+                    graduation_year__gte=min_filter_year
+                )
+            except ValueError:
+                min_filter_year = min_year
+        else:
+            min_filter_year = min_year
+
+        if request.GET.get("maxyear"):
+            try:
+                max_filter_year = int(request.GET.get("maxyear"))
+                interviews = interviews.filter(
+                    graduation_year__lte=max_filter_year
+                )
+            except ValueError:
+                max_filter_year = max_year
+        else:
+            max_filter_year = max_year
+
+        if request.GET.getlist("specialization"):
+            try:
+                specializations = [
+                    int(x) for x in request.GET.getlist("specialization")
+                ]
+                interviews = interviews.filter(
+                    specializations__name__in=specializations
+                ).distinct()
+            except ValueError:
+                pass
+    else:
+        min_filter_year = min_year
+        max_filter_year = max_year
+
+    specializations = Specialization.objects.all().order_by("id")
+
+    context = {
+        "interviews": interviews,
+        "min_year": min_year,
+        "max_year": max_year,
+        "min_filter_year": min_filter_year,
+        "max_filter_year": max_filter_year,
+        "specializations": specializations,
     return render(request, "corporate/interview.html", context)
 
 
@@ -89,11 +128,9 @@ def interview_create(request):
 
 
 @permission_required("corporate.delete_interview")
-def interview_remove(request, id):
+def interview_delete(request, id):
     interview = get_object_or_404(Interview, id=id)
-    interview.is_published = False
-    interview.save()
-
+    interview.delete()
     return redirect("corporate:interview")
 
 
@@ -107,12 +144,6 @@ def interview_edit(request, id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Intervjuet ble endret",
-                extra_tags="Endret",
-            )
             return HttpResponseRedirect(reverse("corporate:interview"))
 
     context = {"form": form}
