@@ -1,0 +1,138 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+
+{% block content %}
+<div class="banner background-dark" style="margin-bottom: 50px;">
+  <div class="container" style="padding-top: 105px;">
+    <div class="row">
+      <div class="col-12">
+        <h1 class="heading">Jobbutlysninger</h1>
+      </div>
+      <div class="col-12 col-md-6">
+        <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
+          På utkikk etter relevant jobb? Kanskje du finner noe her!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container">
+  <div class="row" style="margin-bottom: 20px;">
+    <div class="col-12" style="margin-bottom: 20px;">
+      <button class="button-fill" type="button" data-toggle="collapse" data-target="#filterCollapse"
+              aria-expanded="false" aria-controls="filterCollapse" id="openFilterButton">Filtreringsmuligheter
+      </button>
+    </div>
+    {% if perms.corporate.add_job %}
+    <div class="col-12" style="margin-bottom: 50px">
+      <a class="button-fill" href="{% url "corporate:job_create" %}">
+      Ny jobb
+      </a>
+    </div>
+    {% endif %}
+
+    <br>
+
+    <div class="collapse {% if "?" in request.get_full_path %}show{% endif %}" id="filterCollapse">
+      <div class="card card-body shadow-none">
+        <div class="row">
+          <div class="col-md-12 col-12">
+            <p>Spesialisering:</p>
+            {% for specialization in specializations %}
+              <div>
+                <input type="checkbox" id="specialization-{{ specialization.id }}"
+                       name="{{ specialization.id }}" class="specialization-checkbox" checked>
+                <label for="specialization-{{ specialization.id }}">{{ specialization }}</label>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <br>
+        <a class="button-fill" href="#" onclick="filterReload()" style="width: min-content"
+           data-url="{% url "corporate:job" %}" id="filterButton">
+          Filtrer!
+        </a>
+      </div>
+    </div>
+
+    <br><br>
+
+    <div class="col-12">
+      <h2 class="subheading">
+        Stillinger
+      </h2>
+    </div>
+
+    {% for job in jobs %}
+    <div class="col-12" style="margin-bottom: 40px;">
+      <div style="padding: 0 15px 15px 0;">
+        <p style="font-size: var(--font-size-medium-plus); font-weight: 600; padding: 15px 15px 0 0;
+        margin-block-end: 0.5em">
+          {{ job.title }}
+        </p>
+        {% for specialization in job.specializations.all %}
+        <span class="badge badge-pill
+             {% if specialization.id == 1 %} badge-custom-1 {% endif %}
+             {% if specialization.id == 2 %} badge-custom-2 {% endif %}
+             {% if specialization.id == 3 %} badge-custom-3 {% endif %}
+             {% if specialization.id == 4 %} badge-custom-4 {% endif %}
+             {% if specialization.id == 5 %} badge-custom-5 {% endif %}
+             {% if specialization.id == 6 %} badge-custom-6 {% endif %}
+              ">{{ specialization }}</span>
+        {% endfor %}
+      </div>
+      <a class="stretched-link" href="{% url "corporate:job_detail" job.id %}"> </a>
+      <hr>
+    </div>
+
+    {% empty %}
+    <div class="col-12" style="margin-bottom: 80px;">
+      <p class="lead">Det finnes dessverre ingen jobber enda...</p>
+    </div>
+
+    {% endfor %}
+  </div>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  if (window.location.href.includes("?")) {
+    // We have GET parameters. Populate filter box
+    let qd = {};
+    location.search.substr(1).split("&").forEach(function (item) {
+      (item.split("=")[0] in qd) ? qd[item.split("=")[0]].push(item.split("=")[1]) :
+          qd[item.split("=")[0]] = [item.split("=")[1]]
+    });
+
+    if ("specialization" in qd) {
+      let checkBoxes = document.getElementsByClassName("specialization-checkbox");
+
+      for (let i = 0; i < checkBoxes.length; i++) {
+        if (qd["specialization"].includes(checkBoxes[i].getAttribute("name"))) {
+          checkBoxes[i].checked = true;
+        } else {
+          checkBoxes[i].checked = false;
+        }
+      }
+    }
+  }
+
+  function filterReload() {
+    let checkBoxes = document.getElementsByClassName("specialization-checkbox");
+    let url = document.getElementById("filterButton").getAttribute("data-url");
+
+    url += "?";
+    for (let i = 0; i < checkBoxes.length; i++) {
+      if (checkBoxes[i].checked) {
+        let id = checkBoxes[i].getAttribute('name');
+        url += "&specialization=" + id;
+      }
+    }
+    window.location.assign(url);
+  }
+</script>
+{% endblock footer_script %}

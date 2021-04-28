@@ -9,7 +9,7 @@
       <div class="col-12 col-md-6">
         <a class="link" style="font-weight: 600; font-size: var(--font-size-medium-plus);"
            href="{% url "corporate:job" %}">
-          Jobber
+        Intervjuer
         </a>
       </div>
       <div class="col-12" style="margin-top: 20px;">
@@ -21,14 +21,19 @@
 
 
 <div class="container">
-  <form method="POST" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ form.media }}
-    {{ form|crispy }}
-    <br>
-    <button class="button-fill" type="submit">Lagre</button>
-    <br><br>
-  </form>
+  <div class="row align-items-center" style="margin-top: 40px; margin-bottom: 120px">
+    <div class="col-12 col-md-2"></div>
+    <div class="col-12 col-md-8">
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        {{ form.media }}
+        {{ form|crispy }}
+        <br>
+        <button class="button-fill" type="submit">Endre</button>
+        <br>
+      </form>
+    </div>
+    <div class="col-12 col-md-2"></div>
+  </div>
 </div>
 
 {% endblock content %}

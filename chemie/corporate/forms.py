@@ -1,11 +1,12 @@
 from .models import (
     Interview,
-    JobAdvertisement,
+    Job,
     Specialization,
     SurveyQuestion,
     Survey,
     AnswerKeyValuePair,
 )
+
 from django import forms
 
 
@@ -28,10 +29,16 @@ class InterviewForm(forms.ModelForm):
         ]
 
 
-class CreateJobForm(forms.ModelForm):
+class JobForm(forms.ModelForm):
+    specializations = forms.ModelMultipleChoiceField(
+        queryset=Specialization.objects.all(),
+        widget=forms.CheckboxSelectMultiple(),
+        label="Aktuelle retninger",
+    )
+
     class Meta:
-        model = JobAdvertisement
-        fields = ["title", "description"]
+        model = Job
+        fields = ["title", "description", "specializations"]
 
 
 class CreateSurveyForm(forms.ModelForm):

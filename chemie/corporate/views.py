@@ -6,24 +6,24 @@ from django.http import JsonResponse, HttpResponseRedirect
 from rest_framework.views import APIView
 from rest_framework.response import Response
 
+from chemie.committees.models import Committee
+from chemie.events.models import Bedpres, Social
+
 from .models import (
     Interview,
-    JobAdvertisement,
+    Job,
     Specialization,
     Survey,
     AnswerKeyValuePair,
     SurveyQuestion,
 )
-from .forms import CreateQuestionForm
-
-from chemie.committees.models import Committee
-from chemie.events.models import Bedpres, Social
 
 from .forms import (
     InterviewForm,
-    CreateJobForm,
+    JobForm,
     CreateSurveyForm,
     CreateAnswerForm,
+    CreateQuestionForm,
 )
 
 
@@ -47,13 +47,35 @@ def index(request):
     return render(request, "corporate/index.html", context)
 
 
-def job_advertisement(request):
-    job_advertisements = JobAdvertisement.objects.filter(
-        is_published=True
-    ).order_by("published_date")
+def job(request):
+    jobs = Job.objects.all().order_by("-id")
 
-    context = {"job_advertisements": job_advertisements}
-    return render(request, "corporate/job_advertisement.html", context)
+    if request.method == "GET":
+        if request.GET.getlist("specialization"):
+            try:
+                specializations = [
+                    int(x) for x in request.GET.getlist("specialization")
+                ]
+                jobs = jobs.filter(
+                    specializations__name__in=specializations
+                ).distinct()
+            except ValueError:
+                pass
+
+    specializations = Specialization.objects.all().order_by("id")
+
+    context = {
+        "jobs": jobs,
+        "specializations": specializations,
+    }
+    return render(request, "corporate/job.html", context)
+
+
+def job_detail(request, id):
+    job = get_object_or_404(Job, pk=id)
+
+    context = {"job": job}
+    return render(request, "corporate/job_detail.html", context)
 
 
 def interview(request):
@@ -188,25 +210,38 @@ def interview_edit(request, id):
     return render(request, "corporate/interview_create.html", context)
 
 
-@permission_required("corporate.add_jobadvertisement")
+@permission_required("corporate.add_job")
 def job_create(request):
-    form = CreateJobForm(request.POST or None, request.FILES or None)
+    form = JobForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()
-        return redirect(reverse("corporate:job_advertisement"))
+        return redirect(reverse("corporate:job"))
 
     context = {"form": form}
     return render(request, "corporate/job_create.html", context)
 
 
-@permission_required("corporate.delete_jobadvertisement")
-def job_remove(request, id):
-    job = get_object_or_404(JobAdvertisement, id=id)
-    job.is_published = False
-    job.save()
+@permission_required("corporate.delete_job")
+def job_delete(request, id):
+    job = get_object_or_404(Job, id=id)
+    job.delete()
 
-    return redirect("corporate:job_advertisement")
+    return redirect("corporate:job")
+
+
+@permission_required("corporate.edit_article")
+def job_edit(request, id):
+    job = get_object_or_404(Job, id=id)
+    form = JobForm(request.POST or None, request.FILES or None, instance=job)
+
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse("corporate:job"))
+
+    context = {"form": form}
+    return render(request, "corporate/job_edit.html", context)
 
 
 @permission_required("corporate.add_survey")
