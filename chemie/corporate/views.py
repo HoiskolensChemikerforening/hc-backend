@@ -27,7 +27,6 @@ from .forms import (
 )
 
 
-
 def index(request):
     indkom = Committee.objects.get(title="Industrikomiteen")
 
@@ -65,10 +64,7 @@ def job(request):
 
     specializations = Specialization.objects.all().order_by("id")
 
-    context = {
-        "jobs": jobs,
-        "specializations": specializations,
-    }
+    context = {"jobs": jobs, "specializations": specializations}
     return render(request, "corporate/job.html", context)
 
 
@@ -77,6 +73,7 @@ def job_detail(request, id):
 
     context = {"job": job}
     return render(request, "corporate/job_detail.html", context)
+
 
 def interview(request):
     interviews = Interview.objects.all().order_by("-id")
@@ -151,12 +148,9 @@ def events(request):
 
     no_events = (not bedpres.exists()) and (not events.exists())
 
-    context = {
-        "events": events,
-        "bedpres": bedpres,
-        "no_events": no_events
-    }
+    context = {"events": events, "bedpres": bedpres, "no_events": no_events}
     return render(request, "corporate/events.html", context)
+
 
 def survey(request, year=None):
     if year is None:
