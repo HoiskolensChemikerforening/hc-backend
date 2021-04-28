@@ -588,7 +588,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
-            if not event.allowed_group(instance.user):
+            if not (event.allowed_group(instance.user)) and not event.allowed_groups_empty():
                 messages.add_message(
                     request,
                     messages.INFO,
@@ -598,7 +598,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
                     "melde på kohorten din.",
                     extra_tags="Ikke gruppemedlem",
                 )
-            elif event.allowed_grade(instance.user):
+            elif not event.allowed_grade(instance.user):
                 messages.add_message(
                     request,
                     messages.INFO,
