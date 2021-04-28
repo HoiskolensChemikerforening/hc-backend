@@ -40,13 +40,7 @@
       <div class="col-12 col-lg-6 order-2 order-lg-2">
         {{ interview.text | safe }}
         <br>
-        {% if perms.corporate.edit_interview %}
-          <a type="button" class="button-fill"
-             id="editInterview{{ interview.id }}"
-             href="{% url "corporate:interview_edit" interview.id %}">
-            Endre intervju
-          </a>
-        {% endif %}
+
         {% if perms.corporate.delete_interview %}
           <a type="button" class="button-warning"
              onclick="deleteInterviewPopup({{ interview.id }})"
@@ -56,17 +50,21 @@
             Slett intervju
           </a>
         {% endif %}
+        {% if perms.corporate.change_interview %}
+          <a type="button" class="button-fill"
+             id="editInterview{{ interview.id }}"
+             href="{% url "corporate:interview_edit" interview.id %}">
+            Endre intervju
+          </a>
+        {% endif %}
       </div>
       <div class="col-12 col-lg-4 order-1 order-lg-3">
         <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
-             src="{{ interview.picture.url }}">
+             src="{{ interview.picture.url }}" alt="...">
         {% if interview.company_picture %}
           <img class="img-fluid" style="margin-bottom: 30px; width: 100%; max-width: 30vw"
-               src="{{ interview.company_picture.url }}">
+               src="{{ interview.company_picture.url }}" alt="...">
         {% endif %}
-      </div>
-      <div class="col-12 col-lg-12 order-4">
-
       </div>
     </div>
   </div>
