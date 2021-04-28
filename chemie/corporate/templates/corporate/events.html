@@ -30,8 +30,8 @@
     </div>
        <div class="row" style="margin-bottom: 50px">
             {% if no_events %}
-            <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 10px">
-                <p>For øyeblikket er det ikke planlagt noen arrangementer.</p>
+            <div class="col-12" style="margin-bottom: 10px; padding-right: 30px">
+                <p>For øyeblikket er det ikke planlagt noen arrangementer <br/> kom tilbake senere!</p>
             </div>
             {% else %}
 
@@ -63,6 +63,7 @@
             </a>
         </div>
 
+
         {% endfor %}
         {% endif %}
        </div>
@@ -74,7 +75,7 @@
             </a>
 
             <a class="button-fill" href="{% url "events:create_bedpres" %}">
-            Ny beddriftspresentasjon
+            Ny bedriftspresentasjon
             </a>
         </div>
         {% endif %}

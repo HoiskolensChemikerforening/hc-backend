@@ -142,11 +142,20 @@ def interview_detail(request, id):
 
 def events(request):
     indkom = Committee.objects.get(title="Industrikomiteen")
-    bedpres = Bedpres.objects.filter(date__gte=timezone.now()).order_by("date")
-    events = Social.objects.filter(
-        date__gte=timezone.now(), committee=indkom
+    bedpres = Bedpres.objects.filter(
+        date__gte=timezone.now(), published=True
     ).order_by("date")
-    context = {"events": events, "bedpres": bedpres}
+    events = Social.objects.filter(
+        date__gte=timezone.now(), committee=indkom, published=True
+    ).order_by("date")
+
+    no_events = (not bedpres.exists()) and (not events.exists())
+
+    context = {
+        "events": events,
+        "bedpres": bedpres,
+        "no_events": no_events
+    }
     return render(request, "corporate/events.html", context)
 
 def survey(request, year=None):
