@@ -15,6 +15,7 @@ urlpatterns = [
         views.interview_delete,
         name="interview_delete",
     ),
+    path("arrangementer/", views.events, name="events"),
     path(
         "intervju/<int:id>/rediger/",
         views.interview_edit,

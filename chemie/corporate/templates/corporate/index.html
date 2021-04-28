@@ -7,14 +7,11 @@
       <div class="row">
         <div class="col-12">
           <div>
-            <h2 class="subheader-main" style="opacity: 80%">
-              Industrikomiteen
-            </h2>
             <h1 class="display-font">
-              HC sin kontakt <br> med industrien
+              Industrikomiteen
             </h1>
             <h2 class="subheader-main">
-              Følg med på bedriftspresentasjoner, jobbutlysninger og mer
+              HC sin kontakt med industrien.
             </h2>
           </div>
         </div>
@@ -23,6 +20,7 @@
   </div>
 
   <div class="container" style="margin-bottom: 160px;">
+
     <div class="row">
       <div class="col-12">
         <h3 class="heading">
@@ -48,103 +46,14 @@
       <div class="col-12 col-md-6">
         <img src="{{ indkom.image.url }}" alt="..." class="img-fluid" style="margin-bottom: 50px">
       </div>
-
-
-      <div class="col-12 col-md-4">
-        <h4 class="subheading">
-          Samarbeidspartner
-        </h4>
-        <img src="https://images.finncdn.no/dynamic/default/2020/7/vertical-0/10/2/184/412/212_1087034308.jpg"
-             alt="Emerson" style="width: 300px; max-width: 100%; margin-bottom: 30px">
-        <p style="font-size: var(--font-size-small)">
-          Høstsemesteret 2020 har Emerson sponset kaffen til alle MTKJ-studenter.
-        </p>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="jumbotron jumbotron-fluid" style="background-color: var(--main-color-dark);
-  color: var(--main-color-light); margin-bottom: 100px;">
-    <div class="container">
-      <div class="row" style="margin-top: 40px; margin-bottom: 60px;">
-        <div class="col-12 col-lg-4">
-          <h3 class="heading">
-            Utforsk arrangementer
-          </h3>
-        </div>
-        <div class="col-12 col-lg-8">
-          <p style="font-size: var(--font-size-small); color: var(--gray-200)">
-            Vi arrangerer
-            <a class="link" style="opacity: 100%" href="{% url "events:index_bedpres" %}">bedriftspresentasjoner</a>
-            hvor relevante bedrifter forteller om sin virksomhet,<br>
-            og hva som venter nyutdannede sivilingeniører i bedriften.
-            I tillegg arrangerer vi motivasjonsforedrag, mastergradpresentasjoner og Ph.D. Grand Prix.
-          </p>
-        </div>
-      </div>
-
-      <hr style="background: white; margin-bottom: 40px">
-
-      <div class="row" style="margin-bottom: 50px">
-        {% if no_events %}
-        <div class="col-12" style="margin-bottom: 10px">
-          <p>For øyeblikket er det ikke planlagt noen arrangementer.</p>
-        </div>
-        {% else %}
-        {% for bp in bedpres %}
-        <div class="col-12 col-md-3" style="margin-bottom: 10px">
-          <a href="{{ bp.get_absolute_url }}" class="link">
-            <p style="font-size: var(--font-size-medium-plus); font-weight: 600; margin-bottom: 8px">
-              {{ bp.title }}
-            </p>
-          </a>
-          <p>{{ bp.date }}</p>
-        </div>
-        <div class="col-12 col-md-9"></div>
-        {% endfor %}
-
-        {% for event in events %}
-        <div class="col-12 col-md-3" style="margin-bottom: 10px">
-          <a href="{{ event.get_absolute_url }}" class="link">
-            <p style="font-size: var(--font-size-medium-plus); font-weight: 600;  margin-bottom: 8px">
-              {{ event.title }}
-            </p>
-          </a>
-          <p>{{ event.date }}</p>
-        </div>
-        <div class="col-12 col-md-9"></div>
-        {% endfor %}
-        {% endif %}
-      </div>
-
-      <div class="row">
-        {% if perms.events.add_bedpres %}
-        <div class="col-12">
-          <p style="font-weight: 600; font-size: var(--font-size-large); margin-bottom: 24px">Ønsker du å opprette et arrangement?</p>
-        </div>
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3" style="margin-bottom: 30px">
-          <a class="button-nofill" href="{% url "events:create_bedpres" %}">
-          Ny bedpres
-          </a>
-        </div>
-        {% endif %}
-        {% if perms.events.add_social %}
-        <div class="col-12 col-md-6 col-lg-4 col-xl-3">
-          <a class="button-nofill" href="{% url "events:create_social" %}">
-          Nytt sosialt arrangement
-          </a>
-        </div>
-        {% endif %}
-      </div>
     </div>
   </div>
 
   <div class="container">
     <div class="row" style="margin-bottom: 200px">
 
-      <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
-        <div class="card shadow-sm square">
+      <div class="col-12 col-md-6 col-lg-3 corp">
+        <div class="card shadow-sm square corp">
           <p class="square-text">
             <span class="square-card-header">
               <i class="material-icons micon">corporate_fare</i> Jobbutlysninger
@@ -156,7 +65,20 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
+      <div class="col-12 col-md-6 col-lg-3 corp" >
+        <div class="card shadow-sm square">
+          <p class="square-text">
+            <span class="square-card-header">
+              <i class="material-icons micon">insert_invitation</i> Arrangementer
+            </span>
+            <br style="margin-bottom: 10px">
+            Få oversikt over kommende arrangementer og bedriftspresentasjoner
+          </p>
+          <a class="stretched-link" href="{% url "corporate:events" %}"> </a>
+        </div>
+      </div>
+
+      <div class="col-12 col-md-6 col-lg-3 corp">
         <div class="card shadow-sm square">
           <p class="square-text">
             <span class="square-card-header">
@@ -169,11 +91,11 @@
         </div>
       </div>
 
-      <div class="col-12 col-md-6 col-lg-4" style="margin-bottom: 40px">
+      <div class="col-12 col-md-6 col-lg-3 corp">
         <div class="card shadow-sm square">
           <p class="square-text">
             <span class="square-card-header">
-              <i class="material-icons micon hyphen">bar_chart</i> Diplom&shy;undersøkelsen
+              <i class="material-icons micon hyphen">bar_chart</i> Diplom
             </span>
             <br style="margin-bottom: 10px">
             Lurer du på hvor tidligere studenter har endt opp? Sjekk statistikken!

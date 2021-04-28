@@ -64,10 +64,7 @@ def job(request):
 
     specializations = Specialization.objects.all().order_by("id")
 
-    context = {
-        "jobs": jobs,
-        "specializations": specializations,
-    }
+    context = {"jobs": jobs, "specializations": specializations}
     return render(request, "corporate/job.html", context)
 
 
@@ -140,6 +137,21 @@ def interview_detail(request, id):
     return render(request, "corporate/interview_detail.html", context)
 
 
+def events(request):
+    indkom = Committee.objects.get(title="Industrikomiteen")
+    bedpres = Bedpres.objects.filter(
+        date__gte=timezone.now(), published=True
+    ).order_by("date")
+    events = Social.objects.filter(
+        date__gte=timezone.now(), committee=indkom, published=True
+    ).order_by("date")
+
+    no_events = (not bedpres.exists()) and (not events.exists())
+
+    context = {"events": events, "bedpres": bedpres, "no_events": no_events}
+    return render(request, "corporate/events.html", context)
+
+
 def survey(request, year=None):
     if year is None:
         try:
@@ -182,7 +194,6 @@ def interview_create(request):
     if form.is_valid():
         form.save()
         return redirect(reverse("corporate:interview"))
-
     context = {"form": form}
     return render(request, "corporate/interview_create.html", context)
 
