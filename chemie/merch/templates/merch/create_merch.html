@@ -1,0 +1,20 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+  Merch
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Opprett
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <form enctype="multipart/form-data" method='POST'>
+        {% csrf_token %}
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn" type='submit' value='Legg til merch!'/>
+    </form>
+
+{% endblock content %}

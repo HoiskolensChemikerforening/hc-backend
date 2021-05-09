@@ -1,0 +1,18 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+  Merch
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Opprett
+{% endblock nav_sub_header %}
+
+{% block content %}
+    {% for merch in merchs %}
+      {{merch.name}}
+      {{merch.price}}
+      <img src="{{ merch.image.url }}" alt="img", width="500px">
+    {% endfor %}
+{% endblock content %}
