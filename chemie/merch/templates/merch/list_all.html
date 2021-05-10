@@ -1,18 +1,45 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
+{% load static %}
 
 {% block nav_header %}
   Merch
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Opprett
+  Selges av styret under kontortid!
 {% endblock nav_sub_header %}
 
 {% block content %}
-    {% for merch in merchs %}
-      {{merch.name}}
-      {{merch.price}}
-      <img src="{{ merch.image.url }}" alt="img", width="500px">
-    {% endfor %}
+    <div class="row">
+      {% for merch in merchs %}
+        <div class="col">
+
+            <a class="card" href={%url "merch:detail" pk=merch.id %} >
+
+                <img src="{{merch.image.url}}" alt="img" style="height:180px;" href={%url "merch:index" %}>
+                <div class="card" style="color:#222222; background-color:#F9CF00;" href={%url "merch:detail" pk=merch.id %}>{{merch.name}} - {{merch.price}}.- </div>
+
+            <a/>
+        </div>
+        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
+      {% endfor %}
+    </div>
+
+    {% if perms.merch%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">edit</i>
+          </a>
+          <ul>
+            {% if perms.merch.add_merch %}
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
+                </a></li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
 {% endblock content %}

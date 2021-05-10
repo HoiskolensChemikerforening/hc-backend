@@ -17,4 +17,21 @@
         <input class="btn" type='submit' value='Legg til merch!'/>
     </form>
 
+    {% if perms.merch%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons blue">edit</i>
+          </a>
+          <ul>
+            {% if perms.merch.add_merch %}
+              <li>
+                <a class="btn-floating green" href={% url "merch:index" %}>
+                  <i class="material-icons">check</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:index" %}>Ferdig med å lage merch?</a>
+                </a></li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+
 {% endblock content %}
