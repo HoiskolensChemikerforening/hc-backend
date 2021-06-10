@@ -75,7 +75,7 @@ django-sekizai==1.1.0
     # via wiki
 django-smart-selects==1.5.4
     # via -r base.in
-django==2.2.13
+django==2.2.24
     # via
     #   -r base.in
     #   django-classy-tags
