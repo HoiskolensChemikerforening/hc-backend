@@ -1,12 +1,13 @@
 from django.shortcuts import render
-from .forms import MerchForm
+from .forms import MerchForm, MerchCategoryForm
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from django.shortcuts import get_object_or_404
-from .models import Merch
+from .models import Merch, MerchCategory
 from django.contrib import messages
-
+from dal import autocomplete
+from django.utils.html import format_html
 
 # Create your views here.
 @permission_required("merch.add_merch")
@@ -22,6 +23,20 @@ def create_merch(request):
     context = {"form": form}
 
     return render(request, "merch/create_merch.html", context)
+
+@permission_required("merch.add_merch")
+def create_category(request):
+    form = MerchCategoryForm(request.POST or None, request.FILES or None)
+
+    if request.POST:
+        if form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return HttpResponseRedirect(reverse("merch:index"))
+
+    context = {"form": form}
+
+    return render(request, "merch/create_category.html", context)
 
 
 @login_required
@@ -48,3 +63,26 @@ def delete(request, pk):
         request, messages.SUCCESS, "Merchen ble slettet", extra_tags="Slettet"
     )
     return HttpResponseRedirect(reverse("merch:index"))
+
+
+class UserAutocomplete(autocomplete.Select2QuerySetView):
+    def get_queryset(self):
+        # Don't forget to filter out results depending on the visitor !
+        if not self.request.user.is_authenticated:
+            return MerchCategory.objects.none()
+
+        qs = MerchCategory.objects.all()
+
+        """
+        if self.q:
+            qs = (
+                qs.filter(username__icontains=self.q)
+                | qs.filter(first_name__icontains=self.q)
+                | qs.filter(last_name__icontains=self.q)
+            )
+        """
+
+        return qs
+
+    def get_result_label(self, category):
+        return format_html("{}", category.name)
