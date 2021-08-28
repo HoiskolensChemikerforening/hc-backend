@@ -33,6 +33,10 @@ def create_category(request):
     form = MerchCategoryForm(request.POST or None, request.FILES or None)
 
     if request.POST:
+        if "another" in request.POST and form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return HttpResponseRedirect(reverse("merch:create_category"))
 
         if form.is_valid():
             instance = form.save(commit=False)
