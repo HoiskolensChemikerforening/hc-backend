@@ -97,7 +97,7 @@ class SocialFormView(FormView):
                 self.request,
                 messages.WARNING,
                 "Det opprettede arrangementet har påmelding samtidig som et annet arrangement.",
-                extra_tags="Advarsel!"
+                extra_tags="Advarsel!",
             )
         return super().form_valid(form)
 
@@ -612,7 +612,10 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
-            if not (event.allowed_group(instance.user)) and not event.allowed_groups_empty():
+            if (
+                not (event.allowed_group(instance.user))
+                and not event.allowed_groups_empty()
+            ):
                 messages.add_message(
                     request,
                     messages.INFO,
