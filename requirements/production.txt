@@ -118,7 +118,7 @@ idna==2.8
     # via requests
 jsonfield==3.0.0
     # via django-post-office
-markdown2==2.3.6
+markdown2==2.4.0
     # via
     #   -r base.in
     #   django-markdown2
