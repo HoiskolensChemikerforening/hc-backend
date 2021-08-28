@@ -15,6 +15,10 @@ def create_merch(request):
     form = MerchForm(request.POST or None, request.FILES or None)
 
     if request.POST:
+        if "another" in request.POST and form.is_valid():
+            instance = form.save(commit=False)
+            instance.save()
+            return HttpResponseRedirect(reverse("merch:create"))
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
@@ -29,10 +33,13 @@ def create_category(request):
     form = MerchCategoryForm(request.POST or None, request.FILES or None)
 
     if request.POST:
+
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
             return HttpResponseRedirect(reverse("merch:index"))
+
+
 
     context = {"form": form}
 
@@ -65,7 +72,7 @@ def delete(request, pk):
     return HttpResponseRedirect(reverse("merch:index"))
 
 
-class UserAutocomplete(autocomplete.Select2QuerySetView):
+class CategoryAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
         # Don't forget to filter out results depending on the visitor !
         if not self.request.user.is_authenticated:
@@ -73,6 +80,9 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
 
         qs = MerchCategory.objects.all()
 
+
+        if self.q:
+            qs = qs.filter(name__icontains=self.q)
         """
         if self.q:
             qs = (

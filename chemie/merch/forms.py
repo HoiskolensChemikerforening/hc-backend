@@ -6,17 +6,28 @@ from dal import autocomplete
 
 
 class MerchForm(forms.ModelForm):
-    layout = M.Layout(M.Row("name"), M.Row("price"), M.Row("image"), M.Row("info"), M.Row("category"))
+    def __init__(self, *args, **kwargs):
+        super(MerchForm, self).__init__(*args, **kwargs)  # Call to ModelForm constructor
+        self.fields['category'].widget.attrs['style'] = 'width:100%;'
 
+    category = forms.ModelChoiceField(
+        queryset=MerchCategory.objects.all(),
+        widget=autocomplete.ModelSelect2(url='merch:category-autocomplete',),
+    )
+
+    layout = M.Layout(M.Row("name"), M.Row("price"), M.Row("image"), M.Row("info"), M.Row("category"))
     class Meta:
         model = Merch
-        fields = ["name", "price", "image", "info", "category"]
+        fields = ("__all__")
+        """
         widgets = {
-            "category": autocomplete.ModelSelect2Multiple(
-                url="merch:user-autocomplete",
+            "category": autocomplete.ModelSelect2(
+                url="merch:category-autocomplete",
                 attrs={"data-maximum-selection-length": 1},
             )
         }
+        """
+
 
 class MerchCategoryForm(forms.ModelForm):
     layout = M.Layout(M.Row("name"))
