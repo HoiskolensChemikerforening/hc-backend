@@ -22,7 +22,7 @@ def index(request):
 
 @permission_required("rentalservice.new_object")
 def new_object(request):
-    form = RentalObjectForm(request.POST or None)
+    form = RentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
         return redirect("rentalservice:index")

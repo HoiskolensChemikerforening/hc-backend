@@ -15,7 +15,7 @@ class Landlord(models.Model):  # Utleier aka promokom/ac
 
 class RentalObject(models.Model):
     name = models.CharField(max_length=100)
-    description = RichTextField(verbose_name="Beskrivelse", config_name="news")
+    description = RichTextField(verbose_name="Beskrivelse", config_name="forms")
     image = ImageField(upload_to="rentalservice", verbose_name="Bilde")
     owner = models.ForeignKey(
         Landlord, null=True, blank=True, on_delete=models.CASCADE
