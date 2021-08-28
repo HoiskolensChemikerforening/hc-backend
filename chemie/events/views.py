@@ -24,7 +24,7 @@ from django.views.generic.list import ListView
 from django.db.models import Q
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, Profile, User, GRADES
+from chemie.customprofile.models import ProfileManager, Profile, GRADES
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -40,7 +40,6 @@ from .models import (
     Social,
     SocialEventRegistration,
     REGISTRATION_STATUS,
-    RegistrationMessage,
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
@@ -75,6 +74,31 @@ class SocialFormView(FormView):
 
     def form_valid(self, form):
         form.instance.author = self.request.user
+
+        # Check if there exists another event with registration at the same time
+        registration_start = form.instance.register_startdate
+        # Exclude this one of course!
+        events = Social.objects.filter(date__gt=timezone.now())
+        bedpres = Bedpres.objects.filter(date__gt=timezone.now())
+        registration_collide = False
+
+        for event in events.all():
+            if registration_start == event.register_startdate:
+                registration_collide = True
+                break
+
+        for bp in bedpres.all():
+            if registration_start == bp.register_startdate:
+                registration_collide = True
+                break
+
+        if registration_collide:
+            messages.add_message(
+                self.request,
+                messages.WARNING,
+                "Det opprettede arrangementet har påmelding samtidig som et annet arrangement.",
+                extra_tags="Advarsel!"
+            )
         return super().form_valid(form)
 
     class Meta:
