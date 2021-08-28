@@ -14,7 +14,8 @@
         {% csrf_token %}
         {{ form.media }}
         {{ form.as_p }}
-        <input class="btn" type='submit' value='Legg til merch!'/>
+        <input class="btn" type='submit' value='Lagre kategori!'/>
+        <input class="btn" type='submit' name= 'another' value='Lagre kategori og legg til en til!'/>
     </form>
 
     {% if perms.merch%}
@@ -29,6 +30,12 @@
                   <i class="material-icons">check</i>
                   <a class="btn-floating mobile-fab-tip" href={% url "merch:index" %}>Ferdig med å lage merch?</a>
                 </a></li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
+                </a>
+                </li>
             {% endif %}
           </ul>
         </div>

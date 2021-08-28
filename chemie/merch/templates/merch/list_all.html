@@ -37,7 +37,14 @@
                 <a class="btn-floating blue" href={% url "merch:create" %}>
                   <i class="material-icons">add</i>
                   <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
-                </a></li>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create_category" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create_category" %}>Legg til en ny kategori!</a>
+                </a>
+              </li>
             {% endif %}
           </ul>
         </div>

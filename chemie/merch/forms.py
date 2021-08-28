@@ -19,14 +19,6 @@ class MerchForm(forms.ModelForm):
     class Meta:
         model = Merch
         fields = ("__all__")
-        """
-        widgets = {
-            "category": autocomplete.ModelSelect2(
-                url="merch:category-autocomplete",
-                attrs={"data-maximum-selection-length": 1},
-            )
-        }
-        """
 
 
 class MerchCategoryForm(forms.ModelForm):
