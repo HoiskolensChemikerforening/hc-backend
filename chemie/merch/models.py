@@ -11,4 +11,5 @@ class Merch(models.Model):
         return self.name
 
 
+"Hei"
 
