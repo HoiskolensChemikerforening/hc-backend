@@ -139,7 +139,7 @@ pluggy==0.13.1
     # via pytest
 psycopg2==2.7.6.1
     # via -r base.in
-py==1.8.1
+py==1.10.0
     # via pytest
 py-vapid==1.7.0
     # via pywebpush
