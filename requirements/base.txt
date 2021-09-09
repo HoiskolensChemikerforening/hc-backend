@@ -22,7 +22,7 @@ coverage==4.5.2
     # via
     #   -r base.in
     #   pytest-cov
-cryptography==3.2
+cryptography==3.3.2
     # via
     #   apns2
     #   http-ece
