@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .forms import MerchForm, MerchCategoryForm
+from .forms import MerchForm, MerchCategoryForm, SortingForm
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -53,8 +53,14 @@ def create_category(request):
 @login_required
 def all_merch(request):
     merch_objects = Merch.objects.all()
-
-    context = {"merchs": merch_objects}
+    form = SortingForm()
+    if request.method == 'POST':
+        form = SortingForm(request.POST)
+        if form.is_valid():
+            #obj = form.save(commit=False)
+            merch_objects = Merch.objects.filter(category=form.cleaned_data['category'])
+    context = {"merchs": merch_objects,
+               "form": form}
     return (render(request, "merch/list_all.html", context))
 
 

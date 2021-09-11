@@ -27,3 +27,17 @@ class MerchCategoryForm(forms.ModelForm):
     class Meta:
         model = MerchCategory
         fields = ["name"]
+
+
+class SortingForm(forms.Form):
+    def __init__(self, *args, **kwargs):
+        super(SortingForm, self).__init__(*args, **kwargs)
+        #self.fields["category"].queryset = MerchCategory.objects.all()
+        self.fields['category'].widget.attrs['style'] = 'width:100%;'
+    layout = M.Layout(M.Row("category"))
+    category = forms.ModelChoiceField(
+        queryset=MerchCategory.objects.all(),
+        widget=autocomplete.ModelSelect2(url='merch:category-autocomplete',),
+    )
+
+

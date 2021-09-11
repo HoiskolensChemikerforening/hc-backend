@@ -11,6 +11,19 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+    <div>
+        <p>Her starter formet</p>
+        <form enctype="multipart/form-data" method='POST'>
+        {% csrf_token %}
+        <div class="card-content">
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn" type='submit' value='Sorter!'/>
+        </div>
+    </form>
+            <p>Her slutter formet</p>
+    </form>
+    </div>
     <div class="row">
       {% for merch in merchs %}
         <div class="col">
