@@ -11,20 +11,9 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <ul class="pagination nav navbar-nav">
-    {% if merchs.has_previous %}
-      <li><a href="?page={{ merchs.previous_page_number }}">Forrige</a></li>
-    {% endif %}
-    {% for page in merchs.paginator.page_range %}
-      <li class="{% if merchs.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
-    {% endfor %}
 
-    {% if merchs.has_next %}
-      <li><a href="?page={{ merchs.next_page_number }}">Neste</a></li>
-    {% endif %}
-  </ul>
     <div>
-        <p>Filtrering:</p>
+        <h3>Velg en kategori:</h3>
         <form enctype="multipart/form-data" method='POST'>
         {% csrf_token %}
         <div class="card-content">
@@ -34,7 +23,18 @@
         <input class="btn" type='submit' name='submit' value='Nullstill'/>
         </div>
     </form>
-            <p>Her slutter formet</p>
+        <ul class="pagination nav navbar-nav">
+        {% if merchs.has_previous %}
+         <li><a href="?page={{ merchs.previous_page_number }}">Forrige</a></li>
+        {% endif %}
+        {% for page in merchs.paginator.page_range %}
+        <li class="{% if merchs.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if merchs.has_next %}
+          <li><a href="?page={{ merchs.next_page_number }}">Neste</a></li>
+        {% endif %}
+        </ul>
     </div>
     <div class="row">
       {% for merch in merchs %}
