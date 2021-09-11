@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from .forms import MerchForm, MerchCategoryForm, SortingForm
+from django.core.paginator import Paginator
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
@@ -57,9 +58,14 @@ def all_merch(request):
     if request.method == 'POST':
         form = SortingForm(request.POST)
         if form.is_valid():
-            #obj = form.save(commit=False)
-            merch_objects = Merch.objects.filter(category=form.cleaned_data['category'])
-    context = {"merchs": merch_objects,
+            if request.POST['submit']!='Nullstill':
+                merch_objects = Merch.objects.filter(category=form.cleaned_data['category'])
+    paginator = Paginator(merch_objects, 12)  # Show 25 contacts per page.
+
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    context = {"merchs": page_obj,
                "form": form}
     return (render(request, "merch/list_all.html", context))
 

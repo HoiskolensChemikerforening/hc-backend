@@ -11,18 +11,30 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+    <ul class="pagination nav navbar-nav">
+    {% if merchs.has_previous %}
+      <li><a href="?page={{ merchs.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in merchs.paginator.page_range %}
+      <li class="{% if merchs.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if merchs.has_next %}
+      <li><a href="?page={{ merchs.next_page_number }}">Neste</a></li>
+    {% endif %}
+  </ul>
     <div>
-        <p>Her starter formet</p>
+        <p>Filtrering:</p>
         <form enctype="multipart/form-data" method='POST'>
         {% csrf_token %}
         <div class="card-content">
         {{ form.media }}
         {{ form.as_p }}
-        <input class="btn" type='submit' value='Sorter!'/>
+        <input class="btn" type='submit' name='submit' value='Sorter!'/>
+        <input class="btn" type='submit' name='submit' value='Nullstill'/>
         </div>
     </form>
             <p>Her slutter formet</p>
-    </form>
     </div>
     <div class="row">
       {% for merch in merchs %}
@@ -38,6 +50,19 @@
         {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
       {% endfor %}
     </div>
+
+    <ul class="pagination nav navbar-nav">
+    {% if merchs.has_previous %}
+      <li><a href="?page={{ merchs.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in merchs.paginator.page_range %}
+      <li class="{% if merchs.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if merchs.has_next %}
+      <li><a href="?page={{ merchs.next_page_number }}">Neste</a></li>
+    {% endif %}
+  </ul>
 
     {% if perms.merch%}
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -63,3 +88,20 @@
         </div>
     {% endif %}
 {% endblock content %}
+
+{% block footer_script %}'
+<script>
+$(function(){
+        $("#refresh").click(function(event){
+            $.ajax({
+             type: "POST",
+             url: 'refresh/',
+              success:function(response) {
+              location.reload(true);
+
+              //do something with 'response'
+             }
+            });
+    });
+</script>
+{% endblock footer_script %}
