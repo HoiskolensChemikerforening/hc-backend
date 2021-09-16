@@ -12,7 +12,7 @@ attrs==21.2.0
     # via
     #   black
     #   pytest
-black==18.9b0
+black==21.9b0
     # via -r development.in
 bleach==2.1.4
     # via wiki
