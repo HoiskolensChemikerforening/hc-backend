@@ -17,7 +17,7 @@ class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
 
 @login_required
 def save_device(request):
-    """ Creates a device and gcm/apns device for user that allowes for notification """
+    """Creates a device and gcm/apns device for user that allowes for notification"""
     if request.method == "POST":
         browser = request.POST["browser"]
         token = request.POST["token"]
@@ -40,7 +40,7 @@ def save_device(request):
 
 @csrf_exempt
 def send_notification(request):
-    """ Send notification to all users from notification/send url """
+    """Send notification to all users from notification/send url"""
     if request.method == "POST":
         payload_bytes = request.body
         payload_bytes_decoded = payload_bytes.decode("utf8")

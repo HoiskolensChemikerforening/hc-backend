@@ -15,13 +15,13 @@ SUSBSCRIPTION_CHOICES = Choices(
 
 
 class CoffeeSubmission(models.Model):
-    """ Submission that's created each time a notification is send """
+    """Submission that's created each time a notification is send"""
 
     date = models.DateTimeField(default=datetime.datetime.now)
 
     @classmethod
     def fifteen_minutes_has_passed(cls):
-        """ Make sure that the send_notification is not activated too frequently """
+        """Make sure that the send_notification is not activated too frequently"""
         if cls.objects.count() == 0:
             return True
 
@@ -91,7 +91,7 @@ class CoffeeSubmission(models.Model):
 
 
 class Device(models.Model):
-    """ Overall model which saves gcm/apns device and the users subsciption settings """
+    """Overall model which saves gcm/apns device and the users subsciption settings"""
 
     owner = models.ForeignKey(
         User, verbose_name="eier", on_delete=models.CASCADE
@@ -121,7 +121,7 @@ class Device(models.Model):
     date_created = models.DateTimeField(auto_now_add=True)
 
     def send_notification(self, title, message):
-        """" Send notification to gcm_device """
+        """ " Send notification to gcm_device"""
         if self.gcm_device is not None:
             self.gcm_device.send_message(
                 message, extra={"title": title, "icon": HC_ICON}
@@ -218,7 +218,7 @@ class Device(models.Model):
 
 
 def delete_device_signal(sender, instance, **kwargs):
-    """ Deletes gcm_device when deleting Device """
+    """Deletes gcm_device when deleting Device"""
     if instance.gcm_device is not None:
         instance.gcm_device.delete()
     """
