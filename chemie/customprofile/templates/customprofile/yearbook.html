@@ -13,11 +13,11 @@
 {% endblock nav_sub_header %}
 
 {% block extra_css %}
-  <link href="{% static "css/detailview.css" %}" type="text/css" rel="stylesheet" media="screen,projection"/>
+  <link href='{% static "css/detailview.css" %}' type="text/css" rel="stylesheet" media="screen,projection"/>
 {% endblock %}
 
 {% block extra_js %}
-  <script src="{% static "js/hammer.min.js" %}" defer></script>
+  <script src='{% static "js/hammer.min.js" %}' defer></script>
 {% endblock %}
 
 {% block content %}
@@ -28,7 +28,7 @@
       </a>
       <ul>
         <li>
-          <a class="btn-floating blue" href="{% url "profile:memberships" %}"><i
+          <a class="btn-floating blue" href='{% url "profile:memberships" %}'><i
               class="material-icons">edit</i></a>
           <a class="btn-floating mobile-fab-tip">Se medlemsoversikt</a>
         </li>
@@ -43,7 +43,7 @@
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
           {% for year_number, year_text in grades %}
-            <li><a href="{% url "profile:yearbook-grade" year=year_number %}">{{ year_text }}</a></li>
+            <li><a href='{% url "profile:yearbook-grade" year=year_number %}'>{{ year_text }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -54,7 +54,7 @@
               <div class="input-field">
                 <input id="{{ search_form.search_field.id_for_label }}"
                        type="search" required name="{{ search_form.search_field.html_name }}"
-                       value="{{ search_form.search_field.value|default:"" }}">
+                       value="{{ search_form.search_field.value|default:'' }}">
                 <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
                   <i class="material-icons" style="line-height: 42px;">search</i></label>
               </div>
@@ -79,7 +79,7 @@
                    data-alt-src="{{ secondary.url }}"
                   {% endthumbnail %}>
             {% empty %}
-              <img src="{% static "images/blank_avatar.png" %}">
+              <img src="{% static 'images/blank_avatar.png' %}">
             {% endthumbnail %}
           </div>
 
@@ -122,7 +122,13 @@
                 <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
                 <p>Mobilnummer: {{ profile.phone_number }}</p>
                 <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
-                <p>Digidaljer: {{profile.medals}}</p>
+                <p>Digidaljer:</p>
+                <div class="row">
+                  {% for medal in profile.medals.all %}
+                    <img src="{{ medal.image.url }}" alt="{{ medal.title }}"
+                         title="{{ medal.title }}" style="height:50px;width:auto;">
+                  {% endfor %}
+                </div>
               </div>
             </div>
           </div>
