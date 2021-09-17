@@ -154,31 +154,31 @@
             <div class="collapsible-body">
               <ul>
                 <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
-                <li><a href="{% url "elections:index" %}" class="waves-effect">Valg</a></li>
+                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
                 <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
+                <li><a href="{% url "quiz:index" %}" class="waves-effect waves-teal">Quiz</a></li>
+                <li><a href="{% url "sugepodden:index" %}" class="waves-effect waves-teal">Sugepodden</a></li>
                 <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
                 <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
                 <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bilder</a></li>
-                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
-                <li><a href="{% url "quiz:index" %}" class="waves-effect waves-teal">Quiz</a></li>
-                <li><a href="{% url "sugepodden:index" %}" class="waves-effect waves-teal">Sugepodden</a></li>
+                <li><a href="{% url "elections:index" %}" class="waves-effect">Valg</a></li>
               </ul>
             </div>
           </li>
         </ul>
       </li>
-      <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
-            class="material-icons micon">inbox</i>Bokskap</a>
-      </li>
       <li class="bold"><a href="{% url "corporate:index" %}" class="waves-effect"><i class="material-icons micon">business</i>
           Bedriftsider</a></li>
-      <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
-            class="material-icons micon">contact_mail</i>Kontakt</a>
-      </li>
       <li class="bold"><a href="{% url "shop:index" %}" class="waves-effect"><i
             class="material-icons micon">home</i>Kontoret</a></li>
       <li class="bold"><a href="{% url "frontpage:calendar" %}"><i
             class="material-icons micon">date_range</i>Kalender</a></li>
+      <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
+            class="material-icons micon">inbox</i>Bokskap</a>
+      </li>
+      <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
+            class="material-icons micon">contact_mail</i>Kontakt</a>
+      </li>
     </ul>
   </header>
 
