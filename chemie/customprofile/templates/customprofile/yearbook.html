@@ -122,7 +122,6 @@
                 <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
                 <p>Mobilnummer: {{ profile.phone_number }}</p>
                 <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
-                <p>Digidaljer:</p>
                 <div class="row">
                   {% for medal in profile.medals.all %}
                     <img src="{{ medal.image.url }}" alt="{{ medal.title }}"
