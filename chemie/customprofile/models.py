@@ -84,6 +84,14 @@ class ProfileManager(models.Manager):
         return int(reversed, 2)
 
 
+class Medal(models.Model):
+    image = ImageField(upload_to="avatars")
+    title = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Profile(models.Model):
     user = models.OneToOneField(
         User,
@@ -152,6 +160,10 @@ class Profile(models.Model):
     )
 
     objects = ProfileManager()
+
+    medals = models.ManyToManyField(
+        Medal, blank=True, verbose_name="Digidaljer"
+    )
 
     class Meta:
         permissions = (
