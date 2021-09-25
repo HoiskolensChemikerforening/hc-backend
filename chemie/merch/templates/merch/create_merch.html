@@ -1,0 +1,48 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+  Merch
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Opprett
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+
+    <form enctype="multipart/form-data" method='POST'>
+        {% csrf_token %}
+        <div class="card-content">
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn" type='submit' value='Lagre!'/>
+        <input class="btn" type="submit" name="another" value='Lagre og legg til en til'/>
+        </div>
+    </form>
+
+
+    {% if perms.merch%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons blue">edit</i>
+          </a>
+          <ul>
+            {% if perms.merch.add_merch %}
+              <li>
+                <a class="btn-floating green" href={% url "merch:index" %}>
+                  <i class="material-icons">check</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:index" %}>Ferdig med å lage merch?</a>
+                </a></li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create_category" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create_category" %}>Legg til kategori!</a>
+                </a></li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+
+{% endblock content %}

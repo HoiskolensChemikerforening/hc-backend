@@ -1,0 +1,107 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load static %}
+
+{% block nav_header %}
+  Merch
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Selges av styret under kontortid!
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+    <div>
+        <h3>Velg en kategori:</h3>
+        <form enctype="multipart/form-data" method='POST'>
+        {% csrf_token %}
+        <div class="card-content">
+        {{ form.media }}
+        {{ form.as_p }}
+        <input class="btn" type='submit' name='submit' value='Sorter!'/>
+        <input class="btn" type='submit' name='submit' value='Nullstill'/>
+        </div>
+    </form>
+        <ul class="pagination nav navbar-nav">
+        {% if merchs.has_previous %}
+         <li><a href="?page={{ merchs.previous_page_number }}">Forrige</a></li>
+        {% endif %}
+        {% for page in merchs.paginator.page_range %}
+        <li class="{% if merchs.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        {% if merchs.has_next %}
+          <li><a href="?page={{ merchs.next_page_number }}">Neste</a></li>
+        {% endif %}
+        </ul>
+    </div>
+    <div class="row">
+      {% for merch in merchs %}
+        <div class="col">
+
+            <a class="card" href={%url "merch:detail" pk=merch.id %} >
+
+                <img src="{{merch.image.url}}" alt="img" style="height:180px;" href={%url "merch:index" %}>
+                <div class="card" style="color:#222222; background-color:#F9CF00;" href={%url "merch:detail" pk=merch.id %}>{{merch.name}} - {{merch.price}} kr </div>
+
+            <a/>
+        </div>
+        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
+      {% endfor %}
+    </div>
+
+    <ul class="pagination nav navbar-nav">
+    {% if merchs.has_previous %}
+      <li><a href="?page={{ merchs.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in merchs.paginator.page_range %}
+      <li class="{% if merchs.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if merchs.has_next %}
+      <li><a href="?page={{ merchs.next_page_number }}">Neste</a></li>
+    {% endif %}
+  </ul>
+
+    {% if perms.merch%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">edit</i>
+          </a>
+          <ul>
+            {% if perms.merch.add_merch %}
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create_category" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create_category" %}>Legg til en ny kategori!</a>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+{% endblock content %}
+
+{% block footer_script %}'
+<script>
+$(function(){
+        $("#refresh").click(function(event){
+            $.ajax({
+             type: "POST",
+             url: 'refresh/',
+              success:function(response) {
+              location.reload(true);
+
+              //do something with 'response'
+             }
+            });
+    });
+</script>
+{% endblock footer_script %}
