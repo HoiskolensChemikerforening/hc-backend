@@ -63,10 +63,6 @@ urlpatterns = [
         "utleie/",
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
-    path(
-        "merch/",
-        include("chemie.merch.urls", namespace="merch")
-    )
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
