@@ -30,6 +30,14 @@ RELATIONSHIP_STATUS = Choices(
     ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!")
 )
 
+MEMBERSHIP_DURATIONS = [
+    {"duration_id": 0, "description": "Livsvarig"},
+    {"duration_id": 1, "description": "Ettårig"},
+    {"duration_id": 2, "description": "Toårig"},
+    {"duration_id": 3, "description": "Treårig"},
+    {"duration_id": 4, "description": "Fireårig"},
+    {"duration_id": 5, "description": "Femårig"},
+]
 
 COMMENCE_YEAR = 1980
 CURRENT_YEAR = timezone.now().year

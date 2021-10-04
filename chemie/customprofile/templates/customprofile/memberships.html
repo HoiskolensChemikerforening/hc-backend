@@ -52,7 +52,7 @@
 
   <div class="row">
     <div class="col s12 m12 l12">
-      <h5 class="heading">Klikk på et rødt ikon for å tildele x antall år medlemsskap fra dagens dato</h5>
+      <h5 class="heading">Klikk på et rødt ikon for å tildele x antall år medlemskap fra dagens dato</h5>
     </div>
   </div>
   <div class="row">
@@ -62,7 +62,7 @@
         <th>Navn</th>
         <th>Brukernavn</th>
         <th>Klassetrinn</th>
-        <th>HC-medlemsskap</th>
+        <th>HC-medlemskap</th>
       </tr>
       </thead>
 
@@ -74,18 +74,18 @@
           <td>{{ profile.grade }}</td>
 
           <td>{% if profile.membership.is_active %}
-            <a class="member btn-floating btn-tiny waves-effect waves-light green"
-               id="member-{{ profile.id }}"><i class="material-icons">done</i></a>
+            <a class="btn-floating btn-tiny waves-effect waves-light green" id="membership-status"></a>
+              <i class="material-icons">done</i>
+            </a>
           {% else %}
-            <a class="dropdown-trigger member btn-floating btn-tiny waves-effect waves-light red"
-                data-target="dropdown3" id="member-{{ profile.id }}"><i class="material-icons">error</i></a>
+            <a class="dropdown-trigger btn-floating btn-tiny waves-effect waves-light red"
+                data-target="dropdown3" id="membership-status"><i class="material-icons">error</i></a>
             <ul id='dropdown3' class='dropdown-content'>
-              <li> <a href="">5 år</a></li>
-              <li> <a href="">4 år</a></li>
-              <li> <a href="">3 år</a></li>
-              <li> <a href="">2 år</a></li>
-              <li> <a href="">1 år</a></li>
-              <li> <a href="">Livsvarig</a></li>
+              {% for membership_duration in membership_durations %}
+                <li class="member" id="member-{{ profile.id }}-duration-{{ membership_duration.duration_id }}">
+                  <a> {{ membership_duration.description }}</a>
+                </li>
+              {% endfor %}
             </ul>
           {% endif %}</td>
         </tr>
@@ -99,17 +99,22 @@
   <script>
       $(document).ready(function () {
           $('.member').on('click', function (event) {
-              //$('.payment').live('click', function(event){
+
               event.preventDefault();
-              var myID = $(this).attr("id").split('-')[1];
+              let profileId = $(this).attr("id").split("-")[1];
+              let membershipDuration = $(this).attr("id").split("-").pop();
+
               // using jQuery
               function getCookie(name) {
-                  var cookieValue = null;
+                  let cookieValue = null;
+
                   if (document.cookie && document.cookie !== '') {
-                      var cookies = document.cookie.split(';');
-                      for (var i = 0; i < cookies.length; i++) {
-                          var cookie = jQuery.trim(cookies[i]);
+                      let cookies = document.cookie.split(';');
+
+                      for (let i = 0; i < cookies.length; i++) {
+                          let cookie = jQuery.trim(cookies[i]);
                           // Does this cookie string begin with the name we want?
+
                           if (cookie.substring(0, name.length + 1) === (name + '=')) {
                               cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                               break;
@@ -133,18 +138,14 @@
                   }
               }
 
-              var csrftoken = getCookie('csrftoken');
+              let csrftoken = getCookie('csrftoken');
               $.ajax({
                   type: "GET",
-                  url: "endre/" + myID,
+                  url: "endre/" + profileId + "/" + membershipDuration,
                   datatype: "json",
-                  //data: {
-                  //    myID: myID,
-                  //    csrfmiddlewaretoken: csrftoken,
-                  //},
 
                   success: function (json) {
-                      icon_changer("#member-" + myID, json.membership_status)
+                      icon_changer("#membership-status" + profileId, json.membership_status)
                   },
 
                   error: function (xhr, errmsg, err) {

@@ -30,9 +30,8 @@ from .forms import (
     AddCardForm,
     EditPushForm,
 )
-from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
-from .models import UserToken, Profile, Membership, GRADES, ProfileManager
+from .models import UserToken, Profile, Membership, GRADES, ProfileManager, MEMBERSHIP_DURATIONS
 
 
 def register_user(request):
@@ -207,32 +206,40 @@ def view_memberships(request, year=1):
         else:
             year = 1
     form = NameSearchForm(request.POST or None)
+
     if request.method == "POST":
         if form.is_valid():
             search_field = form.cleaned_data.get("search_field")
             users = find_user_by_name(search_field)
             profiles = Profile.objects.filter(user__in=users)
+
     else:
         profiles = Profile.objects.filter(
             grade=year, user__is_active=True
         ).order_by("user__last_name")
-    context = {"profiles": profiles, "grades": GRADES, "search_form": form}
+
+    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "membership_durations": MEMBERSHIP_DURATIONS}
     return render(request, "customprofile/memberships.html", context)
 
 
 @permission_required("customprofile.change_membership")
-def change_membership_status(request, profile_id):
+def change_membership_status(request, profile_id, duration):
     person = Profile.objects.get(pk=profile_id)
+    if duration == 0:
+        # Corresponds to lifelong membership
+        duration = 100  # 100 years should be sufficient
+
     if person.membership is None:
         membership = Membership(
             start_date=timezone.now(),
-            end_date=timezone.now() + timedelta(365 * 5),
+            end_date=timezone.now() + timedelta(years=duration),
             endorser=request.user,
         )
         membership.save()
         person.membership = membership
         person.save()
     membership_status = person.membership.is_active()
+
     return JsonResponse({"membership_status": membership_status})
 
 

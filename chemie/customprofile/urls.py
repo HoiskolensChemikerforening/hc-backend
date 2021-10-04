@@ -17,7 +17,7 @@ urlpatterns = [
         name="activate",
     ),
     path(
-        "profil/medlemmer/endre/<int:profile_id>/",
+        "profil/medlemmer/endre/<int:profile_id>/<int:duration>/",
         views.change_membership_status,
         name="membership",
     ),
