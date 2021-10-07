@@ -47,14 +47,14 @@
       Du er påmeldt.
     {% elif registration.status == 2 %}
       Du er på ventelisten og er nr. {{ queue_position }} i køen
-    {% elif not allowed_grade %}
+    {% elif registration.status == 3 %}
       Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse.<br>
       Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.
     {% endif %}
-    {% if not allowed_group %}
+    <!-- {% if not allowed_group %}
       Du er ikke kohortsjef. Hvis du ønsker å delta på dette arrangementet,
       må du be kohortsjefen din melde deg på.
-    {% endif %}
+    {% endif %} -->
   </h5>
 
   <!-- Deregister form -->
@@ -74,10 +74,10 @@
       {% endif %}
     </div>
   </div>
-  <div class="row">
-    <div class="col">
+  <!-- <div class="row">
+    <div class="col">-->
       <!-- Edit registration form -->
-      {% if forms.edit %}
+      <!--{% if forms.edit %}
         <form class="edit" method="POST">{% csrf_token %}
           {{ forms.edit.management_form }}
           {% if forms.edit.registration_group_members %}
@@ -93,7 +93,7 @@
         </form>
       {% endif %}
     </div>
-  </div>
+  </div> -->
 
 {% endblock maincontent %}
 {% block footer_script %}

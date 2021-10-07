@@ -130,9 +130,9 @@
             {% if event.sleepover %}
               <th>Overnatting</th>
             {% endif %}
-            {% if has_registration_group_members %}
+            <!-- {% if has_registration_group_members %}
               <th>Møtende medlemmer</th>
-            {% endif %}
+            {% endif %} -->
             <th>Epost</th>
           {% if is_bedpres or social_has_checkin %}
             <th>Oppmøtestatus</th>
@@ -181,13 +181,13 @@
               {% endif %}</td>
             {% endif %}
 
-            {% if has_registration_group_members %}
+            <!--{% if has_registration_group_members %}
               <td>{% if attendee.registration_group_members %}
                 {% for participant in attendee.registration_group_members.all %}
                   <p>{{participant.profile}}</p>
                 {% endfor %}
               {% endif %}</td>
-            {% endif %}
+            {% endif %}-->
 
             <td>{{ attendee.user.email }} </td>
 

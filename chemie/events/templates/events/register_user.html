@@ -32,13 +32,14 @@
         Du kan fortsatt melde din interesse dersom det åpnes plasser.
       </p>
     {% endif %}
+<!---
     {% if not allowed_group %}
       <p class="flow-text">
         Du er ikke kohortsjef. Hvis du ønsker å delta på dette arrangementet,
         må du be kohortsjefen din melde deg på.
       </p>
     {% endif %}
-
+--->
     <form method='POST' id="registration">{% csrf_token %}
 
       {% form form=registration_form %}

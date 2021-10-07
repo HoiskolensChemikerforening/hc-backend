@@ -5,7 +5,7 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
-    BaseRegistrationGroup,
+    #BaseRegistrationGroup,
 )
 from django.contrib.admin.filters import (
     AllValuesFieldListFilter,
@@ -107,4 +107,4 @@ class EventAdmin(admin.ModelAdmin):
 
 
 # admin.site.register(RegistrationMessage)
-admin.site.register(BaseRegistrationGroup)
+#admin.site.register(BaseRegistrationGroup)
