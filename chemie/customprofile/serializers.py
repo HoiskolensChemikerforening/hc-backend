@@ -2,6 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import Medal
 
+from .models import Profile
 
 class UserSerializer(serializers.ModelSerializer):
 
@@ -16,3 +17,8 @@ class MedalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medal
         fields = "__all__"
+
+class ProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Profile
+        fields = 

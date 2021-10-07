@@ -5,6 +5,7 @@ from crispy_forms.layout import Layout
 from dal import autocomplete
 from django import forms
 from django.contrib.auth.models import User
+from django.contrib.auth.forms import UserChangeForm, UserCreationForm
 from django.core.validators import ValidationError
 
 from chemie.chemie.settings import REGISTRATION_KEY

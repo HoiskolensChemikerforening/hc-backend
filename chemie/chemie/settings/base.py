@@ -76,6 +76,11 @@ THIRD_PARTY_APPS = [
     "push_notifications",
     "crispy_forms",
     "corsheaders",
+    "rest_auth",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "rest_auth.registration",
 ]
 
 LOCAL_APPS = [
@@ -251,6 +256,8 @@ REST_FRAMEWORK = {
         "rest_framework.authentication.TokenAuthentication",
     ),
 }
+
+AUTH_USER_MODEL = "customprofile.Profile"
 
 # FIREBASE PUSH NOTIFICATION CONFIGURATION
 # ------------------------------------------------------------------------------
