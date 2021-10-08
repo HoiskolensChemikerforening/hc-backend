@@ -19,7 +19,8 @@ from django.views.generic.edit import (
     DeleteView,
     UpdateView,
 )
-#from django.forms import modelformset_factory
+
+# from django.forms import modelformset_factory
 from django.views.generic.list import ListView
 from django.db.models import Q
 
@@ -32,8 +33,8 @@ from .forms import (
     SocialRegisterUserForm,
     DeRegisterUserForm,
     RegisterBedpresForm,
-    BedpresRegisterUserForm,)
-    #EditBaseRegistrationGroupForm,)
+    BedpresRegisterUserForm,
+)
 
 from .models import (
     Social,
@@ -43,7 +44,6 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
-    #BaseRegistrationGroup,
 )
 
 from rest_framework import generics
@@ -231,29 +231,11 @@ class ViewSocialDetailsView(DetailView):
             event=self.object, status=REGISTRATION_STATUS.CONFIRMED
         )
 
-        """if not self.object.allowed_groups_empty():
-            confirmed_members = []
-            for registration in confirmed:
-                group_attendees = self.registration_model.objects.get(
-                    event=self.object, user=registration.user
-                ).registration_group_members.all()
-                if group_attendees:
-                    confirmed_members.extend(list(group_attendees))
-                # confirmed_members.append(registration.user)  ADD THIS LINE if kohortsjef is always attending
-            confirmed_members.sort(key=lambda x: x.profile.grade)
-            confirmed = confirmed_members"""
-
         waiting = attendees.filter(
             event=self.object, status=REGISTRATION_STATUS.WAITING
         ).order_by("created")
 
-        context.update(
-            {
-                "attendees": confirmed,
-                "waiting_list": waiting,
-                #"has_group_members": not self.object.allowed_groups_empty(),
-            }
-        )
+        context.update({"attendees": confirmed, "waiting_list": waiting})
         return context
 
 
@@ -285,7 +267,6 @@ class SocialEditRemoveUserRegistration(
             "enable_sleepover": self.object.sleepover,
             "enable_night_snack": self.object.night_snack,
             "enable_companion": self.object.companion,
-            #"enable_registration_group_members": not self.object.allowed_groups_empty(),
             "instance": self.registration,
         }
 
@@ -319,7 +300,6 @@ class SocialEditRemoveUserRegistration(
             self.object.companion
             or self.object.sleepover
             or self.object.night_snack
-            #or (not self.object.allowed_groups_empty())
         )
         # Remove edit if no fields and editform is in context
         if not (edit_form_boolean) and context["forms"].get("edit"):
@@ -339,12 +319,6 @@ class SocialEditRemoveUserRegistration(
                 )
                 context.update({"queue_position": queue_position})
         context["registration"] = registration
-        """
-        context["allowed_grade"] = self.object.allowed_grade(registration.user)
-        context["allowed_group"] = (
-            self.object.allowed_group(registration.user)
-            or self.object.allowed_groups_empty()
-        )"""
         return context
 
     def deregister_form_valid(self, form):
@@ -375,9 +349,6 @@ class SocialEditRemoveUserRegistration(
         registration.night_snack = form.cleaned_data.get("night_snack") or 0
         registration.sleepover = form.cleaned_data.get("sleepover") or 0
         registration.companion = form.cleaned_data.get("companion")
-        registration.registration_group_members.set(
-            form.cleaned_data.get("registration_group_members")
-        )
         registration.save()
         messages.add_message(
             self.request,
@@ -532,8 +503,6 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "registration_form": registration_form,
             "event": self.object,
             "allowed_grade": self.object.allowed_grade(request.user),
-            #"allowed_group": self.object.allowed_group(request.user)
-            #or self.object.allowed_groups_empty(),
         }
         return render(request, self.template_name, context)
 
@@ -587,21 +556,6 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
-            """
-            if (
-                not (event.allowed_group(instance.user))
-                and not event.allowed_groups_empty()
-            ):
-                messages.add_message(
-                    request,
-                    messages.INFO,
-                    "Denne påmeldingen er kun åpen for kohortsjefer. "
-                    "Dersom du ønsker å bli påmeldt dette arrangementet "
-                    "eller andre arrangementer under blotet, må du be din kohortsjef "
-                    "melde på kohorten din.",
-                    extra_tags="Ikke gruppemedlem",
-                )
-            elif not event.allowed_grade(instance.user):"""
             messages.add_message(
                 request,
                 messages.INFO,
@@ -733,9 +687,6 @@ class SocialEnlistedUsersView(PermissionRequiredMixin, DetailView, View):
             context["total_not_paid"] = not_paid
             context["is_bedpres"] = False
             context["social_has_checkin"] = self.object.check_in
-            """context[
-                "has_registration_group_members"
-            ] = not self.object.allowed_groups_empty()"""
         return context
 
 
@@ -799,9 +750,6 @@ def change_arrival_status(request):
 @transaction.atomic
 def set_user_event_status(event, registration):
     if event.allowed_grade(registration.user):
-        """ and (
-        event.allowed_group(registration.user) or event.allowed_groups_empty()
-    ):"""
         slots = event.sluts - event.registered_users()
         has_spare_slots = slots > 0
         if has_spare_slots:
@@ -934,55 +882,6 @@ def check_in_to_social(request, pk):
     context = {"form": form, "social": social}
     return render(request, "events/social/check_in.html", context)
 
-
-"""
-@permission_required("events.view_base_registration_group")
-def view_base_registration_group(request, pk):
-    base_registration_group = get_object_or_404(BaseRegistrationGroup, id=pk)
-    members = base_registration_group.members.all()
-    context = {"group": base_registration_group, "members": members}
-    return render(
-        request, "events/social/view_base_registration_group.html", context
-    )
-
-
-@permission_required("events.change_baseregistrationgroup")
-def edit_base_registration_group(request, pk):
-    base_registration_group = BaseRegistrationGroup.objects.filter(id=pk)
-
-    MemberFormSet = modelformset_factory(
-        BaseRegistrationGroup, form=EditBaseRegistrationGroupForm, extra=0
-    )
-
-    formset = MemberFormSet(
-        request.POST or None,
-        request.FILES or None,
-        queryset=base_registration_group,
-    )
-
-    if request.method == "POST":
-        if formset.is_valid():
-            formset.save()
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Endringene ble lagret.",
-                extra_tags="Flott!",
-            )
-
-            return HttpResponseRedirect(
-                reverse("events:edit_group", kwargs={"pk": pk})
-            )
-
-    context = {
-        "formset": formset,
-        "group": BaseRegistrationGroup.objects.get(id=pk),
-    }
-    return render(
-        request, "events/social/edit_base_registration_group.html", context
-    )
-
-"""
 
 class SocialListCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all()
