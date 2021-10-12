@@ -21,4 +21,4 @@ class MedalSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Profile
-        fields = 
+        fields = "__all__"
