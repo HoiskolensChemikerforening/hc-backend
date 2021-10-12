@@ -225,19 +225,30 @@ def view_memberships(request, year=1):
 @permission_required("customprofile.change_membership")
 def change_membership_status(request, profile_id, duration):
     person = Profile.objects.get(pk=profile_id)
-    if duration == 0:
-        # Corresponds to lifelong membership
-        duration = 100  # 100 years should be sufficient
+
+    start_date = timezone.now()
+    end_date = start_date + timedelta(minutes=duration) # TODO: Change this back to days=duration * 365
+    endorser = request.user
 
     if person.membership is None:
+        # Create a new membership
         membership = Membership(
-            start_date=timezone.now(),
-            end_date=timezone.now() + timedelta(years=duration),
-            endorser=request.user,
+            start_date=start_date,
+            end_date=end_date,
+            endorser=endorser,
         )
         membership.save()
         person.membership = membership
         person.save()
+    
+    else:
+        # Make existing membership valid again
+        membership = person.membership
+        membership.start_date = start_date
+        membership.end_date = end_date
+        membership.endorser = endorser
+        membership.save()
+
     membership_status = person.membership.is_active()
 
     return JsonResponse({"membership_status": membership_status})

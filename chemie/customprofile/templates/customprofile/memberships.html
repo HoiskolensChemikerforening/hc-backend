@@ -24,8 +24,7 @@
   <div class="row">
     <div class="klassetrinn">
       <div class="col s6 m6 l4 s12">
-        <a class='dropdown-trigger btn-large' href='' data-target='dropdown2'
-           >Klassetrinn</a>
+        <a class='dropdown-trigger btn-large' href='' data-target='dropdown2'>Klassetrinn</a>
         <ul id='dropdown2' class='dropdown-content'>
           {% for year_number, year_text in grades %}
             <li><a href="{% url "profile:memberships-grade" year=year_number %}">{{ year_text }}</a></li>
@@ -52,7 +51,7 @@
 
   <div class="row">
     <div class="col s12 m12 l12">
-      <h5 class="heading">Klikk på et rødt ikon for å tildele x antall år medlemskap fra dagens dato</h5>
+      <h5 class="heading">Klikk på et rødt ikon for å tildele x år medlemskap fra dagens dato</h5>
     </div>
   </div>
   <div class="row">
@@ -73,21 +72,25 @@
           <td>{{ profile.user.username }} </td>
           <td>{{ profile.grade }}</td>
 
-          <td>{% if profile.membership.is_active %}
-            <a class="btn-floating btn-tiny waves-effect waves-light green" id="membership-status"></a>
-              <i class="material-icons">done</i>
-            </a>
-          {% else %}
-            <a class="dropdown-trigger btn-floating btn-tiny waves-effect waves-light red"
-                data-target="dropdown3" id="membership-status"><i class="material-icons">error</i></a>
-            <ul id='dropdown3' class='dropdown-content'>
-              {% for membership_duration in membership_durations %}
-                <li class="member" id="member-{{ profile.id }}-duration-{{ membership_duration.duration_id }}">
-                  <a> {{ membership_duration.description }}</a>
-                </li>
-              {% endfor %}
-            </ul>
-          {% endif %}</td>
+          <td>
+            {% if profile.membership.is_active %}
+              <a class="btn-floating btn-tiny waves-effect waves-light green" id="membership-status-{{ profile.id }}">
+                <i class="material-icons">done</i>
+              </a>
+            {% else %}
+              <a class="dropdown-trigger btn-floating btn-tiny waves-effect waves-light red"
+                  data-target="dropdown3-{{ profile.id }}" id="membership-status-{{ profile.id }}">
+                  <i class="material-icons">error</i>
+              </a>
+              <ul id='dropdown3-{{ profile.id }}' class='dropdown-content'>
+                {% for membership_duration in membership_durations %}
+                  <li class="member" id="member-{{ profile.id }}-duration-{{ membership_duration.duration_id }}">
+                   <a> {{ membership_duration.description }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
       </tbody>
@@ -100,9 +103,10 @@
       $(document).ready(function () {
           $('.member').on('click', function (event) {
 
+              // Get selected profile and membership duration
               event.preventDefault();
               let profileId = $(this).attr("id").split("-")[1];
-              let membershipDuration = $(this).attr("id").split("-").pop();
+              let membershipDuration = $(this).attr("id").split("-")[3];
 
               // using jQuery
               function getCookie(name) {
@@ -124,8 +128,9 @@
                   return cookieValue;
               }
 
-              function icon_changer(divID, payment_status) {
-                  if (payment_status) {
+              // Change icon from 
+              function icon_changer(divID, membershipIsActive) {
+                  if (membershipIsActive) {
                       $(divID).find('i').text('done');
                       $(divID).removeClass('red');
                       $(divID).addClass('green');
@@ -145,7 +150,7 @@
                   datatype: "json",
 
                   success: function (json) {
-                      icon_changer("#membership-status" + profileId, json.membership_status)
+                      icon_changer("#membership-status-" + profileId, json.membership_status)
                   },
 
                   error: function (xhr, errmsg, err) {

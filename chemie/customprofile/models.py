@@ -31,12 +31,12 @@ RELATIONSHIP_STATUS = Choices(
 )
 
 MEMBERSHIP_DURATIONS = [
-    {"duration_id": 0, "description": "Livsvarig"},
     {"duration_id": 1, "description": "Ettårig"},
     {"duration_id": 2, "description": "Toårig"},
     {"duration_id": 3, "description": "Treårig"},
     {"duration_id": 4, "description": "Fireårig"},
     {"duration_id": 5, "description": "Femårig"},
+    {"duration_id": 100, "description": "Livsvarig"},
 ]
 
 COMMENCE_YEAR = 1980
