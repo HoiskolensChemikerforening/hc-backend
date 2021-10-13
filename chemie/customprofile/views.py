@@ -206,22 +206,26 @@ def activate_password(request, code):
 
 @permission_required("customprofile.change_membership")
 def view_memberships(request, year=1):
-    profiles = Profile.objects.all().select_related("user", "membership")
-    # context = {"profiles": profiles}
-    year = int(year)
+
     # If url arg year is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:
             year = GRADES.FIFTH.value
         else:
             year = 1
+
     form = NameSearchForm(request.POST or None)
 
     if request.method == "POST":
+        # Find users from search form
         if form.is_valid():
             search_field = form.cleaned_data.get("search_field")
             users = find_user_by_name(search_field)
             profiles = Profile.objects.filter(user__in=users)
+        else:
+            profiles = Profile.objects.filter(
+                grade=year, user__is_active=True
+            ).order_by("user__last_name")
 
     else:
         profiles = Profile.objects.filter(
@@ -242,9 +246,7 @@ def change_membership_status(request, profile_id, duration):
     person = Profile.objects.get(pk=profile_id)
 
     start_date = timezone.now()
-    end_date = start_date + timedelta(
-        minutes=duration
-    )  # TODO: Change this back to days=duration * 365
+    end_date = start_date + timedelta(days=duration * 365)
     endorser = request.user
 
     if person.membership is None:
