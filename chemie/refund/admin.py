@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import Refund, RefundForm
 
-# Register your models here.
+admin.site.register(Refund)
+admin.site.register(RefundForm)

@@ -14,6 +14,12 @@ class Refund(models.Model):
 
 
 class RefundForm(models.Model):
+    STATUS = (
+        (1, "Waiting"),
+        (2, "Approved"),
+        (3, "Denied"),
+    )
+
     refunds = models.ForeignKey(
         Refund, related_name="refusjon", on_delete=models.CASCADE
     )
@@ -21,6 +27,9 @@ class RefundForm(models.Model):
     name = models.CharField(max_length=50, verbose_name="Navn")
     receipt = ImageField(upload_to="refund", verbose_name="Kvittering")
     account = models.IntegerField(verbose_name="Kontonummer")
+    status = models.PositiveSmallIntegerField(
+        choices=STATUS, unique=True
+    )
 
     def __str__(self):
         return str(self.date)+str(self.name)

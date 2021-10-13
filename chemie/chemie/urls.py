@@ -63,6 +63,9 @@ urlpatterns = [
         "utleie/",
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
+    path(
+      "refusjon/",include("chemie.refund.urls", namespace="refund"),
+    ),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
