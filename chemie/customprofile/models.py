@@ -221,6 +221,13 @@ class Membership(models.Model):
     def is_active(self):
         return self.start_date < timezone.now() < self.end_date
 
+    def __str__(self):
+        return (
+            str(self.start_date.strftime("%d.%m.%Y"))
+            + " - "
+            + str(self.end_date.strftime("%d.%m.%Y"))
+        )
+
 
 class UserTokenManager(models.Manager):
     def prune_expired(self):
