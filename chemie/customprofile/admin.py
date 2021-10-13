@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Profile
+from .models import Profile, Medal
 
 
 def export_csv(modeladmin, request, queryset):
@@ -99,3 +99,4 @@ class UserAdmin(BuiltinUserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Medal)

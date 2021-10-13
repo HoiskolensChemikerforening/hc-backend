@@ -3,33 +3,194 @@
 
 {% block content %}
 
-<div class="banner background-dark" style="margin-bottom: 80px;">
-  <div class="container" style="padding-top: 105px;">
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 105px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Diplomundersøkelsen</h1>
+        </div>
+        <div class="col-12 col-md-6">
+          <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
+            Hvert år gjennomfører Industrikomiteen Diplomundersøkelsen.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-bottom: 80px">
+    {% if perms.corporate.add_survey %}
+    {% endif %}
     <div class="row">
-      <div class="col-12">
-        <h1 class="heading">Diplomundersøkelsen</h1>
+      <div class="col-sm-8">
+        {% if survey %}
+          <div class="dropdown">
+            <button class="button-fill dropdown-toggle" type="button" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="false">
+              {{ survey.year }}
+            </button>
+            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+              {% for survey in all_surveys %}
+                <a href="{% url "corporate:survey_year" survey.year %}" class="dropdown-item">
+                  {{ survey.year }}
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        {% else %}
+          <p>Det eksisterer ingen undersøkelser enda. Få Industrikomiteen til å legge til en da vel!</p>
+        {% endif %}
       </div>
-      <div class="col-12 col-md-6">
-        <p style="font-weight: 600; font-size: var(--font-size-medium-plus); opacity: 80%">
-          Hvert år gjennomfører Industrikomiteen Diplomundersøkelsen.
-        </p>
+      <div class="col">
+        <a class="button-fill" href="{% url "corporate:statistics_admin" %}"
+           style="float:right;">
+          Administrer
+        </a>
       </div>
     </div>
-  </div>
-</div>
-
-<div class="container" style="margin-bottom: 80px">
-  <div class="row">
-    <div class="col-12">
-      <p class="lead">
-        Siden er under konstruksjon <i class="material-icons micon">construction</i>
-      </p>
+    <br><br>
+    <div id="chart-grid">
+      {% for question, data in q_a_dict.items %}
+        <div class="grid-element">
+          <canvas id="{{ question }}"></canvas>
+          <button type="button" class="button-fill" onclick="toggleChartType('{{ question }}')"
+                  style="background-color: var(--main-color-light)">Bytt graftype
+          </button>
+        </div>
+      {% empty %}
+        {% if survey %}
+          <p>Diplomundersøkelsen fra {{ survey.year }} har ingen data enda. Følg med og se hva som skjer!</p>
+        {% endif %}
+      {% endfor %}
     </div>
   </div>
-</div>
 
+  <style>
+    #chart-grid {
+      display: grid;
+      align-items: center;
+      grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+      gap: 5rem 5rem;
+    }
+  </style>
 
 {% endblock content %}
 
 {% block footer_script %}
+  <script>
+
+    let myCharts = {}; // To be able to access charts after they're rendered
+
+    function renderChart(chartId, chartType, title, chartData, labels) {
+      let ctx = document.getElementById(chartId).getContext('2d');
+      let chart = new Chart(ctx, {
+        type: chartType,
+        data: {
+          labels: labels,
+          datasets: [{
+            label: title,
+            data: chartData,
+            backgroundColor: [
+              'rgba(255, 99, 132, 0.75)',
+              'rgba(54, 162, 235, 0.75)',
+              'rgba(255, 206, 86, 0.75)',
+              'rgba(75, 192, 192, 0.75)',
+              'rgba(153, 102, 255, 0.75)',
+              'rgba(255, 159, 64, 0.75)'
+            ],
+          }]
+        },
+        options: {
+          title: {
+            display: true,
+            text: title
+          },
+          legend: {
+            display: true
+          },
+        }
+      });
+
+      if (chartType === "bar") {
+        setBarChartOptions(chart);
+      } else if (chartType === "pie") {
+        setPieChartOptions(chart);
+      } else {
+        console.log("WTF is this");
+      }
+
+      return chart;
+    }
+
+    function toggleChartType(chartId) {
+      let chart = myCharts[chartId];
+      let chartType = chart.config.type;
+      if (chartType === "bar") {
+        setPieChartOptions(chart);
+      } else if (chartType === "pie") {
+        setBarChartOptions(chart);
+      } else {
+        console.log("WTF is this");
+      }
+      chart.update();
+    }
+
+    function setBarChartOptions(chart) {
+      chart.config.type = "bar";
+      // Make y axis start at 0.
+      chart.options.scales = {
+        yAxes: [{
+          ticks: {
+            beginAtZero: true
+          }
+        }]
+      };
+
+      // Hide legend for bar charts
+      chart.options.legend = {
+        display: false
+      };
+      chart.update();
+    }
+
+    function setPieChartOptions(chart) {
+      chart.config.type = "pie";
+      chart.options.scales = {
+        yAxes: [{
+          display: false
+        }]
+      };
+
+      chart.options.legend = {
+        display: true
+      };
+
+      chart.update();
+      chart.update();
+    }
+
+    $(document).ready(function () {
+      let endpoint = "/bedrift/diplom/{{ survey.id }}/data/";
+      $.ajax({
+        method: "GET",
+        url: endpoint,
+        success: function (data) {
+
+          for (let key in data) {
+            let title = key;
+            let chartId = key;
+            let chartType = data[key].chartType;
+            let chartData = data[key].values;
+            let labels = data[key].choices;
+
+            myCharts[chartId] = renderChart(chartId, chartType, title, chartData, labels);
+          }
+        },
+
+        error: function (error_data) {
+          console.log(error_data)
+        }
+      });
+    });
+  </script>
 {% endblock footer_script %}

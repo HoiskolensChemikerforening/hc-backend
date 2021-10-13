@@ -1,0 +1,280 @@
+{% extends "corporate/base.html" %}
+{% load static %}
+
+{% block content %}
+  <div class="banner background-dark" style="margin-bottom: 80px;">
+    <div class="container" style="padding-top: 50px;">
+      <div class="row">
+        <div class="col-12">
+          <h1 class="heading">Diplomundersøkelsen</h1>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-12">
+          <nav aria-label="breadcrumb">
+            <ol class="breadcrumb background-dark">
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:index" %}" style="color:#edcd2f">Forside</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics" %}" style="color:#edcd2f">Diplomundersøkelsen</a>
+              </li>
+              <li class="breadcrumb-item">
+                <a href="{% url "corporate:statistics_admin" %}" style="color:#edcd2f">Admin</a>
+              </li>
+              <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">{{ survey.year }}</li>
+            </ol>
+          </nav>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container" style="margin-bottom: 80px">
+    <h2>{{ survey }}</h2>
+    <br>
+    <a class="button-fill" href="{% url "corporate:question_add_to_survey" survey.year %}">
+      Legg til spørsmål
+    </a>
+
+    <br><br><br>
+
+    {% for question, answers in q_a_dict.items %}
+      <hr class="border">
+      <div class="row">
+        <div class="col">
+          <h3>{{ question }}</h3>
+        </div>
+        <div class="col">
+          <button type="button" class="button-warning"
+                  data-toggle="modal" data-target="#removeQuestionModal"
+                  onclick="setRemoveQuestionData('{{ question }}')">Fjern spørsmål
+          </button>
+        </div>
+      </div>
+      <a type="button" class="button-fill" href="{% url 'corporate:answer_create' survey.year question %}"
+         style="margin: 10px;">
+        Nytt svar
+      </a>
+      <div class="table-responsive table-striped">
+        <table class="table">
+          <tr>
+            <th>Svaralternativ</th>
+            <th>Antall</th>
+            <th>Valgmuligheter</th>
+          </tr>
+          {% for answer, value, id in answers %}
+            <tr>
+              <td>{{ answer }}</td>
+              <td>{{ value }}</td>
+              <td>
+                <button type="button" class="button-fill" data-toggle="modal" data-target="#editAnswerModal"
+                        id="editAnswer{{ id }}" onclick="populateEditModal({{ id }})"
+                        data-answer="{{ answer }}" data-value="{{ value }}">Rediger
+                </button>
+                <button type="button" class="button-warning" data-toggle="modal" data-target="#deleteAnswerModal"
+                        data-url="{% url 'corporate:answer_delete' id %}" style="margin-left: 10px;"
+                        id="deleteAnswer{{ id }}" onclick="setDeleteUrl({{ id }})">Slett
+                </button>
+              </td>
+            </tr>
+          {% endfor %}
+        </table>
+      </div>
+      <br>
+    {% empty %}
+      <p>Denne undersøkelsen har ingen spørsmål lagt til enda. Gjør det da vel!</p>
+    {% endfor %}
+
+    <br><br>
+
+    <button type="button" class="button-warning" data-toggle="modal" data-target="#deleteSurveyModal"
+            data-id="{{ id }}" data-question="{{ question }}" data-value="{{ value }}">Slett undersøkelsen
+    </button>
+  </div>
+
+  <!-- MODALS -->
+
+  <!-- CONFIRM DELETE SURVEY MODAL -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="deleteSurveyModal" aria-labelledby="deleteSurveyModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Slett</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Er du sikker på at du vil slette {{ survey }}?</p>
+        </div>
+        <div class="modal-footer">
+          <form action="{% url "corporate:survey_delete" survey.year %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="button-warning" value="Slett">
+          </form>
+          <button type="button" class="button-nofill" data-dismiss="modal"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM DELETE ANSWER MODAL -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="deleteAnswerModal" aria-labelledby="deleteAnswerModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Slett</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Er du sikker på at du vil slette disse svarene?</p>
+        </div>
+        <div class="modal-footer">
+          <form id="deleteAnswerForm" action="" method="post">
+            {% csrf_token %}
+            <input type="submit" class="button-warning" value="Slett">
+          </form>
+          <button type="button" class="button-nofill" data-dismiss="modal"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONFIRM REMOVE QUESTION MODAL -->
+  <div class="modal fade" tabindex="-1" role="dialog" id="removeQuestionModal"
+       aria-labelledby="removeQuestionModalLabel">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Fjern</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <p>Er du sikker på at du vil fjerne dette spørsmålet fra undersøkelsen?
+            Dette vil også fjerne alle innlagte svar for dette spørsmålet.</p>
+        </div>
+        <div class="modal-footer">
+          <button class="button-warning" onclick="removeQuestion()"
+                  data-question="" id="removeQuestionButton">
+            Fjern
+          </button>
+          <button type="button" class="button-nofill" data-dismiss="modal"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EDIT ANSWER MODAL -->
+  <div class="modal fade" id="editAnswerModal" tabindex="-1" role="dialog" aria-labelledby="editModalLabel"
+       aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Rediger</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="new-answer" class="col-form-label">Svaralternativ:</label>
+              <input type="text" class="form-control" id="editedAnswer">
+            </div>
+            <div class="form-group">
+              <label for="new-value" class="col-form-label">Antall:</label>
+              <input type="number" class="form-control" id="editedValue">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="button-fill" onclick="updateAnswer()"
+                  id="saveAnswerButton">Lagre endringer
+          </button>
+          <button type="button" data-dismiss="modal" class="button-nofill"
+                  style="background-color: var(--main-color-dark)">Lukk
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+  <script>
+
+    function populateEditModal(id) {
+      let triggerButton = document.getElementById("editAnswer" + id.toString());
+
+      // Extract info from data-* attributes
+      let answer = triggerButton.getAttribute('data-answer');
+      let value = triggerButton.getAttribute('data-value');
+      let target = triggerButton.getAttribute('data-target');
+
+      // Insert data to the modal
+      let modal = $(target);
+      modal.find('#editedAnswer').val(answer);
+      modal.find('#editedValue').val(value);
+      document.getElementById("saveAnswerButton").setAttribute("answerId", id);
+    }
+
+    function setRemoveQuestionData(question) {
+      document.getElementById("removeQuestionButton").setAttribute("data-question", question);
+    }
+
+    function removeQuestion() {
+      let question = document.getElementById("removeQuestionButton").getAttribute("data-question");
+
+      $.ajax({
+        url: "{% url 'corporate:survey_remove_question' %}",
+        data: {
+          "id": {{ survey.id }},
+          "question": question,
+        },
+        type: "POST",
+        success: location.reload()
+      });
+    }
+
+    function setDeleteUrl(id) {
+      let button = document.getElementById("deleteAnswer" + id);
+      let deleteUrl = button.getAttribute("data-url");
+      document.getElementById("deleteAnswerForm").setAttribute("action", deleteUrl);
+    }
+
+    function updateAnswer() {
+      let answerId = document.getElementById("saveAnswerButton").getAttribute("answerId");
+      let newValue = document.getElementById("editedValue").value;
+      let newAnswer = document.getElementById("editedAnswer").value;
+
+      $.ajax({
+        url: "{% url 'corporate:answer_edit' %}",
+        data: {
+          "id": parseInt(answerId),
+          "value": parseInt(newValue),
+          "answer": newAnswer
+        },
+        type: "POST",
+        success: location.reload()
+      });
+    }
+
+    $.ajaxSetup({
+      headers: {"X-CSRFToken": '{{ csrf_token }}'}
+    });
+
+  </script>
+{% endblock %}

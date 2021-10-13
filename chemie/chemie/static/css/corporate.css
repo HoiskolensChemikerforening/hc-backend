@@ -167,9 +167,9 @@ body {
 }
 
 .top-banner {
-    padding-top: 120px;
-    padding-bottom: 80px;
-    margin-bottom: 100px;
+    padding-top: 80px;
+    padding-bottom: 10px;
+    margin-bottom: 50px;
 }
 
 .banner {
@@ -213,6 +213,12 @@ body {
 .square {
     padding-top: 90%;
     background: var(--gray-100);
+}
+
+.corp{
+    padding-right: 6px;
+    padding-left: 0px;
+    margin-bottom: 40px;
 }
 
 .square-text {
