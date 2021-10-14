@@ -25,6 +25,6 @@ urlpatterns = [
     path("profil/studentkort/", views.add_rfid, name="add_rfid"),
     path("katalog/<int:year>/", views.yearbook, name="yearbook-grade"),
     path("katalog/", views.yearbook, name="yearbook-index"),
-    path('auth/', include('rest_auth.urls')),
-    path('auth/register/', include('rest_auth.registration.urls')),
+    path("auth/", include("rest_auth.urls")),
+    path("auth/register/", include("rest_auth.registration.urls")),
 ]
