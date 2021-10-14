@@ -47,13 +47,9 @@
       Du er påmeldt.
     {% elif registration.status == 2 %}
       Du er på ventelisten og er nr. {{ queue_position }} i køen
-    {% elif not allowed_grade %}
+    {% elif registration.status == 3 %}
       Det er ikke åpent for ditt klassetrinn, men vi har notert din interesse.<br>
       Du blir påmeldt automatisk og tilsendt en e-post dersom dette endres.
-    {% endif %}
-    {% if not allowed_group %}
-      Du er ikke kohortsjef. Hvis du ønsker å delta på dette arrangementet,
-      må du be kohortsjefen din melde deg på.
     {% endif %}
   </h5>
 
@@ -74,26 +70,7 @@
       {% endif %}
     </div>
   </div>
-  <div class="row">
-    <div class="col">
-      <!-- Edit registration form -->
-      {% if forms.edit %}
-        <form class="edit" method="POST">{% csrf_token %}
-          {{ forms.edit.management_form }}
-          {% if forms.edit.registration_group_members %}
-            <p >Legg inn hvem fra kohorten din (inkludert deg selv hvis du deltar) som kommer på arrangementet: </p>
-            <p style="font-size: 12px">Dette er viktig for å vite hvor mange som deltar,
-              og for at Styret skal ha kontroll på smittesporing.</p>
-            {{ forms.edit.registration_group_members }}
-          {% endif %}
-          {% form form=forms.edit %}{% endform %}
-          <button name='action' value='edit' type="submit"
-                  class="waves-effect waves-light btn btn-primary blue">Endre påmelding
-          </button>
-        </form>
-      {% endif %}
-    </div>
-  </div>
+
 
 {% endblock maincontent %}
 {% block footer_script %}
