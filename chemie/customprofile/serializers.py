@@ -4,6 +4,7 @@ from .models import Medal
 
 from .models import Profile
 
+
 class UserSerializer(serializers.ModelSerializer):
 
     full_name = serializers.CharField(source="get_full_name")
@@ -17,6 +18,7 @@ class MedalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medal
         fields = "__all__"
+
 
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
