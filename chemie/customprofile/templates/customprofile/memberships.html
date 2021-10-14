@@ -22,8 +22,36 @@
 
 {% block content %}
   <div class="row">
+    <div class="klassetrinn">
+      <div class="col s6 m6 l4 s12">
+        <a class='dropdown-trigger btn-large' href='' data-target='dropdown2'>Klassetrinn</a>
+        <ul id='dropdown2' class='dropdown-content'>
+          {% for year_number, year_text in grades %}
+            <li><a href="{% url "profile:memberships-grade" year=year_number %}">{{ year_text }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+      <div class="col s6 m6 l8">
+        <nav>
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <div class="input-field">
+                <input id="{{ search_form.search_field.id_for_label }}"
+                       type="search" required name="{{ search_form.search_field.html_name }}"
+                       value="{{ search_form.search_field.value|default:"" }}">
+                <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
+                  <i class="material-icons" style="line-height: 42px;">search</i></label>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
     <div class="col s12 m12 l12">
-      <h5 class="heading">Klikk på et rødt ikon for å tildele 5 års medlemsskap fra dagens dato</h5>
+      <h5 class="heading">Klikk på et rødt ikon for å tildele x år medlemskap fra dagens dato</h5>
     </div>
   </div>
   <div class="row">
@@ -33,7 +61,7 @@
         <th>Navn</th>
         <th>Brukernavn</th>
         <th>Klassetrinn</th>
-        <th>HC-medlemsskap</th>
+        <th>HC-medlemskap</th>
       </tr>
       </thead>
 
@@ -44,13 +72,25 @@
           <td>{{ profile.user.username }} </td>
           <td>{{ profile.grade }}</td>
 
-          <td>{% if profile.membership.is_active %}
-            <a class="member btn-floating btn-tiny waves-effect waves-light green"
-               id="member-{{ profile.id }}"><i class="material-icons">done</i></a>
-          {% else %}
-            <a class="member btn-floating btn-tiny waves-effect waves-light red"
-               id="member-{{ profile.id }}"><i class="material-icons">error</i></a>
-          {% endif %}</td>
+          <td>
+            {% if profile.membership.is_active %}
+              <a class="btn-floating btn-tiny waves-effect waves-light green" id="membership-status-{{ profile.id }}">
+                <i class="material-icons">done</i>
+              </a>
+            {% else %}
+              <a class="dropdown-trigger btn-floating btn-tiny waves-effect waves-light red"
+                  data-target="dropdown3-{{ profile.id }}" id="membership-status-{{ profile.id }}">
+                  <i class="material-icons">error</i>
+              </a>
+              <ul id='dropdown3-{{ profile.id }}' class='dropdown-content'>
+                {% for membership_duration in membership_durations %}
+                  <li class="member" id="member-{{ profile.id }}-duration-{{ membership_duration.duration_id }}">
+                   <a> {{ membership_duration.description }}</a>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </td>
         </tr>
       {% endfor %}
       </tbody>
@@ -62,17 +102,23 @@
   <script>
       $(document).ready(function () {
           $('.member').on('click', function (event) {
-              //$('.payment').live('click', function(event){
+
+              // Get selected profile and membership duration
               event.preventDefault();
-              var myID = $(this).attr("id").split('-')[1];
+              let profileId = $(this).attr("id").split("-")[1];
+              let membershipDuration = $(this).attr("id").split("-")[3];
+
               // using jQuery
               function getCookie(name) {
-                  var cookieValue = null;
+                  let cookieValue = null;
+
                   if (document.cookie && document.cookie !== '') {
-                      var cookies = document.cookie.split(';');
-                      for (var i = 0; i < cookies.length; i++) {
-                          var cookie = jQuery.trim(cookies[i]);
+                      let cookies = document.cookie.split(';');
+
+                      for (let i = 0; i < cookies.length; i++) {
+                          let cookie = jQuery.trim(cookies[i]);
                           // Does this cookie string begin with the name we want?
+
                           if (cookie.substring(0, name.length + 1) === (name + '=')) {
                               cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
                               break;
@@ -82,8 +128,9 @@
                   return cookieValue;
               }
 
-              function icon_changer(divID, payment_status) {
-                  if (payment_status) {
+              // Change icon from 
+              function icon_changer(divID, membershipIsActive) {
+                  if (membershipIsActive) {
                       $(divID).find('i').text('done');
                       $(divID).removeClass('red');
                       $(divID).addClass('green');
@@ -96,18 +143,14 @@
                   }
               }
 
-              var csrftoken = getCookie('csrftoken');
+              let csrftoken = getCookie('csrftoken');
               $.ajax({
                   type: "GET",
-                  url: "endre/" + myID,
+                  url: "endre/" + profileId + "/" + membershipDuration,
                   datatype: "json",
-                  //data: {
-                  //    myID: myID,
-                  //    csrfmiddlewaretoken: csrftoken,
-                  //},
 
                   success: function (json) {
-                      icon_changer("#member-" + myID, json.membership_status)
+                      icon_changer("#membership-status-" + profileId, json.membership_status)
                   },
 
                   error: function (xhr, errmsg, err) {
@@ -115,6 +158,8 @@
                   },
               });
           })
+        $('.dropdown-trigger').dropdown();
+        $('.modal').modal();
       });
   </script>
 {% endblock %}
