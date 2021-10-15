@@ -82,7 +82,7 @@ class ProfileManager(models.Manager):
 
         # Split into 8-bit groups
         chunked = [
-            padded[(i * 8) : (i + 1) * 8] for i in range(0, len(padded) // 8)
+            padded[(i * 8): (i + 1) * 8] for i in range(0, len(padded) // 8)
         ]
 
         # Reverse all elements in each group, join groups together
@@ -189,7 +189,7 @@ class Profile(models.Model):
         return self.get_relationship_status_display()
 
     def save(self, *args, **kwargs):
-        if self.access_card is "":
+        if self.access_card == "":
             self.access_card = f"{self.pk} - INVALID"
 
         return super().save(*args, **kwargs)
