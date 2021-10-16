@@ -72,7 +72,7 @@
         <!-- When card is pressed, a detail view pops up. -->
         <div class="card">
           <!-- Showing the pictures. -->
-          <div class="card-image">
+          <div class="card-image" style="cursor: pointer;">
             {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
               <img src="{{ primary.url }}" data-field-id="#modal-{{ profile.pk }}"
                   {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
