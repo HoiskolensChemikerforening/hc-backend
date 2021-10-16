@@ -1,8 +1,10 @@
 from django.contrib import admin
 
-from .models import FundsApplication, OfficeApplication
+from .models import FundsApplication, OfficeApplication, RefundApplication, RefundItem
 
 admin.site.register(FundsApplication)
+admin.site.register(RefundApplication)
+admin.site.register(RefundItem)
 
 
 @admin.register(OfficeApplication)

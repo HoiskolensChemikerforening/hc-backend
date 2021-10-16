@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.shortcuts import get_current_site
+from django.http.response import HttpResponse
 from django.urls import reverse
 from django.http import Http404
 from django.shortcuts import redirect
@@ -111,6 +112,10 @@ def request_funds(request):
     context = {"funds_form": funds_form}
 
     return render(request, "home/post_funds_form.html", context)
+
+
+def request_refund(request):
+    return HttpResponse("<h1>Søk refusjon!</h1>")
 
 
 @login_required()

@@ -9,6 +9,7 @@ urlpatterns = [
     path("kontakt/", contact, name="kontakt"),
     path("kalender/", calendar, name="calendar"),
     path("midler/", request_funds, name="fundsapplication"),
+    path("refusjon/", request_refund, name="refund"),
     path("kontortilgang/søk", request_office, name="officeaccess"),
     re_path(r"^flatpage/(?P<url>.*)$", edit_flatpage, name="edit_flatpage"),
     path(
