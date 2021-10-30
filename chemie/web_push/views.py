@@ -7,6 +7,7 @@ import json
 from rest_framework import viewsets
 from .serializers import CoffeeSubmissionSerializer
 from django.http import HttpResponse, JsonResponse
+from rest_framework import generics
 import datetime
 
 
@@ -72,3 +73,11 @@ def send_notification(request):
         return JsonResponse(serializer.errors, status=401)
     else:
         return redirect(reverse("frontpage:home"))
+
+
+class CoffeeLatestSubmission(generics.ListCreateAPIView):
+    queryset = []
+    if (CoffeeSubmission.objects.all().exists()):
+        queryset.append(CoffeeSubmission.objects.latest('id'))
+
+    serializer_class = CoffeeSubmissionSerializer
