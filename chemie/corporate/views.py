@@ -205,7 +205,7 @@ def interview_delete(request, id):
     return redirect("corporate:interview")
 
 
-@permission_required("corporate.edit_article")
+@permission_required("corporate.change_interview")
 def interview_edit(request, id):
     interview = get_object_or_404(Interview, id=id)
     form = InterviewForm(
@@ -304,7 +304,7 @@ def survey_remove_question(request):
         return redirect("corporate:statistics_admin")
 
 
-@permission_required("corporate:delete_survey")
+@permission_required("corporate.delete_survey")
 def survey_delete(request, year):
     if request.method == "POST":
         survey = get_object_or_404(Survey, year=year)
@@ -313,7 +313,7 @@ def survey_delete(request, year):
     return redirect("corporate:statistics_admin")
 
 
-@permission_required("corporate:add_surveyquestion")
+@permission_required("corporate.add_surveyquestion")
 def question_create(request):
     form = CreateQuestionForm(request.POST or None)
     questions = SurveyQuestion.objects.all().order_by("question")
@@ -332,7 +332,7 @@ def question_create(request):
     )
 
 
-@permission_required("corporate:change_surveyquestion")
+@permission_required("corporate.change_surveyquestion")
 def question_edit(request):
     if request.method == "POST":
         id = request.POST["id"]
@@ -346,7 +346,7 @@ def question_edit(request):
         return redirect("corporate:statistics")
 
 
-@permission_required("corporate:delete_surveyquestion")
+@permission_required("corporate.delete_surveyquestion")
 def question_delete(request, id):
     if request.method == "POST":
         question = get_object_or_404(SurveyQuestion, id=id)
@@ -357,7 +357,7 @@ def question_delete(request, id):
         return redirect("corporate:statistics")
 
 
-@permission_required("corporate:add_surveyquestion")
+@permission_required("corporate.add_surveyquestion")
 def add_question_to_survey(request, year):
     survey = get_object_or_404(Survey, year=year)
 
@@ -393,7 +393,7 @@ def add_question_to_survey(request, year):
     return render(request, "corporate/statistics_add_question.html", context)
 
 
-@permission_required("corporate:add_answerkeyvaluepair")
+@permission_required("corporate.add_answerkeyvaluepair")
 def answer_create(request, year, question):
     survey = get_object_or_404(Survey, year=year)
     question = get_object_or_404(SurveyQuestion, question=question)
@@ -419,7 +419,7 @@ def answer_create(request, year, question):
     return render(request, "corporate/statistics_answer_create.html", context)
 
 
-@permission_required("corporate:change_answerkeyvaluepair")
+@permission_required("corporate.change_answerkeyvaluepair")
 def answer_edit(request):
     if request.method == "POST":
         id = request.POST["id"]
