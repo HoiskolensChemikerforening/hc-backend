@@ -1,9 +1,11 @@
+import re
+from django.forms.models import modelformset_factory
 import material as M
 from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.flatpages.models import FlatPage
 from ckeditor.widgets import CKEditorWidget
-from .models import FundsApplication
+from .models import FundsApplication, RefundItem, RefundApplication
 from .models import OfficeApplication
 
 
@@ -53,6 +55,18 @@ class PostFundsForm(forms.ModelForm):
             "purpose",
             "description",
         ]
+
+
+class RefundForm(forms.ModelForm):
+    class Meta:
+        model = RefundApplication
+        exclude = ("status",)
+
+
+class RefundItemForm(forms.ModelForm):
+    class Meta:
+        model = RefundItem
+        exclude = ("application",)
 
 
 class PostOfficeForms(forms.ModelForm):

@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.shortcuts import get_current_site
+from django.forms.models import modelformset_factory
 from django.http.response import HttpResponse
 from django.urls import reverse
 from django.http import Http404
@@ -18,8 +19,14 @@ from chemie.web_push.models import CoffeeSubmission
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
 from chemie.sugepodden.models import Podcast
-from .forms import ContactForm, PostFundsForm, PostOfficeForms
-from .models import OfficeApplication
+from .forms import (
+    ContactForm,
+    PostFundsForm,
+    PostOfficeForms,
+    RefundForm,
+    RefundItemForm,
+)
+from .models import OfficeApplication, RefundApplication, RefundItem
 
 
 def index(request):
@@ -115,7 +122,55 @@ def request_funds(request):
 
 
 def request_refund(request):
-    return HttpResponse("<h1>Søk refusjon!</h1>")
+    form = RefundForm()
+    RefundItemFormset = modelformset_factory(
+        model=RefundItem, extra=1, can_delete=True, form=RefundItemForm
+    )
+    formset = RefundItemFormset(queryset=RefundItem.objects.none())
+
+    if request.method == "POST":
+        refund_form = RefundForm(request.POST, request.FILES)
+
+        if refund_form.is_valid():
+            refund_application = refund_form.save(commit=False)
+            formset = RefundItemFormset(request.POST)
+
+            if formset.is_valid():
+                refund_application.save()
+                items = formset.save(commit=False)
+
+                for refund_item in items:
+                    refund_item.application = refund_application
+                    refund_item.save()
+
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Lykke til med å penger a kis xD",
+                    extra_tags="$$$",
+                )
+
+                return redirect(reverse("frontpage:home"))
+
+            else:
+                print("Formset is not valid")
+                for form in formset:
+                    for field in form:
+                        if field.errors:
+                            print(field)
+                            for error in field.errors:
+                                print(error)
+
+        else:
+            print("Application form is not valid")
+            for field in refund_form:
+                if field.errors:
+                    print(field)
+                    for error in field.errors:
+                        print(error)
+
+    context = {"form": form, "formset": formset}
+    return render(request, "home/refund_application.html", context)
 
 
 @login_required()
