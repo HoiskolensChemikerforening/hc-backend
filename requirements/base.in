@@ -1,6 +1,6 @@
 psycopg2-binary==2.8.6
 
-Django==2.2.24
+Django==2.2.26
 djangorestframework==3.11.2
 django-autocomplete-light==3.3.2
 django-ckeditor==5.6.1

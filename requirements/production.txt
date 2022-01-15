@@ -28,7 +28,7 @@ cryptography==3.4.8
     #   py-vapid
     #   pyopenssl
     #   pywebpush
-django==2.2.24
+django==2.2.26
     # via
     #   -r base.in
     #   django-classy-tags
