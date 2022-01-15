@@ -1,5 +1,5 @@
 # syntax = docker/dockerfile:experimental
-FROM python:3.6.4
+FROM python:3.7
 RUN mkdir /chemie
 RUN apt update && apt install -y netcat
 
