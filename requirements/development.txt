@@ -12,7 +12,7 @@ attrs==21.2.0
     # via
     #   black
     #   pytest
-black==21.9b0
+black==18.9b0
     # via -r development.in
 bleach==2.1.4
     # via wiki
@@ -147,7 +147,7 @@ packaging==21.0
     # via pytest
 passlib==1.7.4
     # via django-hashers-passlib
-pillow==8.3.2
+pillow==9.0.0
     # via wiki
 pluggy==0.13.1
     # via pytest
