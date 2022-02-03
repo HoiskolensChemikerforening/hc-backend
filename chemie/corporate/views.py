@@ -241,7 +241,7 @@ def job_delete(request, id):
     return redirect("corporate:job")
 
 
-@permission_required("corporate.edit_article")
+@permission_required("corporate.change_job")
 def job_edit(request, id):
     job = get_object_or_404(Job, id=id)
     form = JobForm(request.POST or None, request.FILES or None, instance=job)
