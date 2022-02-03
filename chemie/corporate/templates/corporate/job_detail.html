@@ -39,7 +39,7 @@
     <div class="col-12 col-lg-6 order-2 order-lg-2">
       {{ job.description | safe }}
       <br>
-      {% if perms.corporate.edit_job %}
+      {% if perms.corporate.change_job %}
         <a type="button" class="button-fill"
            id="editJob{{ job.id }}"
            href="{% url "corporate:job_edit" job.id %}">
