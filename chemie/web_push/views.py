@@ -12,8 +12,9 @@ import datetime
 
 
 class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
-    queryset = CoffeeSubmission.objects.order_by("date")
+    queryset = CoffeeSubmission.objects.all()
     serializer_class = CoffeeSubmissionSerializer
+    ordering = ['-date']
 
 
 @login_required
