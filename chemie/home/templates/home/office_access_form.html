@@ -1,49 +1,72 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
- {% block nav_header %}
-  Kontortilgang
+{% block nav_header %}
+Kontortilgang
 {% endblock nav_header %}
- {% block nav_sub_header %}
-  Send søknad
+{% block nav_sub_header %}
+Send søknad
 {% endblock nav_sub_header %}
- {% block content %}
-  {% if perms.home %}
-    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-      <a class="btn-floating btn-large">
+{% block content %}
+{% if perms.home %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large">
         <i class="large material-icons">edit</i>
-      </a>
-      <ul>
+    </a>
+    <ul>
         {% include "home/permissions.html" %}
         {% block permissions %}
         {% endblock %}
-      </ul>
-    </div>
-  {% endif %}
-  <div class="row">
+    </ul>
+</div>
+{% endif %}
+
+
+<div class="row">
     <div class="card">
-     <div class="card-content">
-      <p class="flow-text">
-        Her kan du søke om tilgang på kontoret med studentkortet ditt.
-      </p>
-      <p>
-        For at tilgang skal kunne bli innvilget er det
-        viktig at studentbrukernavnet du oppgir samsvarer med ditt faktiske studentbrukernavn fra NTNU.
-      </p>
-     {% if not already_applied %}
-        <br>
-         <p class="flow-text">
-             <br>
-             <b>Studentbrukernavn fra NTNU:</b>
-         </p>
-         <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-            {% form form=office_form %}
-            {% endform %}
-            <a><input class="btn waves-light white-text" type='submit' value='Send søknad'/></a>
-          </form>
+        <div class="card-content">
+            <p class="flow-text">
+                Her kan du søke om tilgang på kontoret med studentkortet ditt.
+            </p>
+            <p>
+                For at tilgang skal kunne bli innvilget er det
+                viktig at studentbrukernavnet du oppgir samsvarer med ditt faktiske studentbrukernavn fra NTNU.
+            </p>
+            {% if not already_applied %}
+            <br>
+            <p class="flow-text">
+                <br>
+                <b>Studentbrukernavn fra NTNU:</b>
+            </p>
+            <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+                <div class="card-content">
+                    {% form form=office_form %}
+                    {% endform %}
+                </div>
+                <div class="card-content">
+                    <div style="float: left; clear:none; margin-right: 3px">
+                        {% form form=approved_terms_form %}
+                        {% endform %}
+                    </div>
+                    {% include "home/office_terms_modal.html" %}
+                    <div style="font-size: 15px; padding-top: 1.2px">
+                        <a class="modal-trigger" href="#office_terms_modal"> Vilkår og Betingelsene</a>
+                    </div>
+                    <br>
+                </div>
+                <a><input class="btn waves-light white-text" type='submit' value='Send søknad'/></a>
+            </form>
         </div>
-      {% endif %}
-     </div>
+        {% endif %}
     </div>
-  </div>
-  </div>
+</div>
+</div>
+</div>
 {% endblock content %}
+
+{% block footer_js_files %}
+  <script>
+    $(document).ready(function () {
+      $('.modal').modal();
+    });
+  </script>
+{% endblock footer_js_files %}
