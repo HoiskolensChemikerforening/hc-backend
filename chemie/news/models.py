@@ -9,7 +9,7 @@ from sorl.thumbnail import ImageField
 
 class Article(models.Model):
     title = models.CharField(max_length=100)
-    slug = models.SlugField()
+    slug = models.SlugField(max_length=100)
     content = RichTextField(verbose_name="Beskrivelse", config_name="news")
     published_date = models.DateTimeField(auto_now_add=True)
     image = ImageField(upload_to="news", verbose_name="Bilde")
