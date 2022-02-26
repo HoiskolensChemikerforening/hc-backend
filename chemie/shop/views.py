@@ -327,10 +327,7 @@ def view_statistics(request):
 
 @permission_required("customprofile.refill_balance")
 def admin(request):
-    return render(
-        request,
-        "shop/admin.html"
-    )
+    return render(request, "shop/admin.html")
 
 
 @permission_required("customprofile.refill_balance")
@@ -542,6 +539,7 @@ def view_all_refills(request):
     context["refill_sum"] = refill_sum
     return render(request, "shop/all_refills.html", context)
 
+
 @permission_required("customprofile.refill_balance")
 def view_monthly_statistics(request):
     order_items, order_price, monthTotal = get_last_year_receipts()
@@ -556,4 +554,3 @@ def view_monthly_statistics(request):
             "items": items,
         },
     )
-
