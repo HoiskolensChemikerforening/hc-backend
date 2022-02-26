@@ -46,7 +46,8 @@ from .models import (
     ARRIVAL_STATUS,
 )
 
-from rest_framework import generics
+from rest_framework import generics, filters
+from django_filters.rest_framework import DjangoFilterBackend
 
 from .serializer import (
     SocialSerializer,
@@ -884,9 +885,15 @@ def check_in_to_social(request, pk):
 
 
 class SocialListCreate(generics.ListCreateAPIView):
-    queryset = Social.objects.all()
+    queryset = Social.objects.all() # Social.objects.filter(date__gte=timezone.now(), published=True)
     serializer_class = SocialSerializer
-
+    #filterset_fields = ["date", "asc"]
+    filter_backends = [DjangoFilterBackend, filters.OrderingFilter]
+    #filterset_fields = {
+    #    "date":['gte', 'lte', 'exact', 'gt', 'lt'],
+    # }
+    ordering_fields = ['date']
+    ordering = ['date']
 
 class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
     queryset = SocialEventRegistration.objects.all()
@@ -896,6 +903,10 @@ class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
 class BedpresListCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all()
     serializer_class = BedpresSerializer
+
+    filter_backends = [filters.OrderingFilter]
+    ordering_fields = ['date']
+    ordering = ['date']
 
 
 class BedpresRegistrationListCreate(generics.ListCreateAPIView):

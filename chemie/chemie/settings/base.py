@@ -70,6 +70,7 @@ THIRD_PARTY_APPS = [
     "mptt",
     "rest_framework",
     "rest_framework.authtoken",
+    "django_filters",
     "smart_selects",
     "ckeditor",
     "django_extensions",
