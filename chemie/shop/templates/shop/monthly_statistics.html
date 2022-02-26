@@ -6,6 +6,46 @@
   <meta charset="UTF-8">
   <title>Statistikk</title>
 </head>
+
+{% block style %}
+<style>
+  .item-list {
+    padding: 0.4rem;
+    height: 3rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 0.4rem;
+  }
+
+  .btn-secondary {
+    cursor: pointer
+  }
+</style>
+
+{% endblock style %}
+
+{% block breadcrumbs %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
+    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Forside</a>
+    </li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
+    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Statistikk</li>
+  </ol>
+</nav>
+{% endblock breadcrumbs %}
+
+
+{% block content %}
+
+<!-- See JS footer-script for element creating -->
+<div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">
+</div>
+
+{% endblock content %}
+
 {% block footer_script %}
 <script type="text/javascript">
   // this piece of shit JSshould be moved backend for better implementation
