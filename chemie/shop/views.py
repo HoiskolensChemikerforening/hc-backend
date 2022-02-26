@@ -549,3 +549,19 @@ def view_all_refills(request):
     refill_sum = Profile.get_all_refill_sum()
     context["refill_sum"] = refill_sum
     return render(request, "shop/all_refills.html", context)
+
+@permission_required("customprofile.refill_balance")
+def view_monthly_statistics(request):
+    order_items, order_price, monthTotal = get_last_year_receipts()
+    items = Item.objects.all()
+    return render(
+        request,
+        "shop/monthly_statistics.html",
+        {
+            "monthTotal": monthTotal,
+            "order_items": order_items,
+            "order_price": order_price,
+            "items": items,
+        },
+    )
+

@@ -35,6 +35,7 @@ admin_shop_urlpatterns = [
         "admin/alle-kvitteringer", views.view_all_receipts, name="all_receipts"
     ),
     path("admin/alle-paafyll", views.view_all_refills, name="all_refills"),
+    path("admin/monthly_statistics", views.view_monthly_statistics, name="monthly_statistics")
 ]
 
 urlpatterns = shop_url_patterns + admin_shop_urlpatterns
