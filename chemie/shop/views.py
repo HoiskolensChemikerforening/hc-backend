@@ -327,17 +327,9 @@ def view_statistics(request):
 
 @permission_required("customprofile.refill_balance")
 def admin(request):
-    order_items, order_price, monthTotal = get_last_year_receipts()
-    items = Item.objects.all()
     return render(
         request,
-        "shop/admin.html",
-        {
-            "monthTotal": monthTotal,
-            "order_items": order_items,
-            "order_price": order_price,
-            "items": items,
-        },
+        "shop/admin.html"
     )
 
 
