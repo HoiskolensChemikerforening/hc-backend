@@ -7,9 +7,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from post_office import mail
 
-
 from .models import RentalObject
-from .forms import CreateRentalObjectForm, InvoiceForm
+from .forms import CreateRentalObjectForm, InvoiceForm, RentalObjectForm
 from chemie.home.forms import ContactForm
 
 
@@ -32,7 +31,7 @@ def new_object(request):
 
 
 def detail(request, rentalobject_id):
-    rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
+    rental_object = get_object_or_404(RentalObject, pk=rentalobject_id)
     context = {"rental_object": rental_object}
     return render(request, "rentalservice/detail.html", context)
 
@@ -59,6 +58,7 @@ def edit_rentalobject(request, rentalobject_id):
     if request.method == "POST":
         if form.is_valid():
             form.save()
+
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -69,6 +69,7 @@ def edit_rentalobject(request, rentalobject_id):
     context = {"form": form}
 
     return render(request, "rentalservice/new_object.html", context)
+
 
 
 def contact(request, rentalobject_id):
@@ -118,3 +119,15 @@ def new_invoice(request):
 
     context = {"form": form}
     return render(request, "rentalservice/create_invoice.html", context)
+
+def rental_list(request):
+    object_list = RentalObject.objects.all()
+    current_rental_products = []
+
+def contact_page(request):
+    return render(request, "rentalservice/contact_page.html")
+
+
+
+
+

@@ -63,15 +63,17 @@
 
 
         <div class="col s5 m5 l5">
-          <div class="card">
-            <div class="card-content">
-                <style>
-                    blockquote {border-left: 5px solid #FFD342;}
-                </style>
-              <h5> Kontakt:</h5>
-                <p class="flow-text"> Vi vil gjerne svare på det du lurer på, så ta kontakt med oss! </p>
-                <a href="{% url "rentalservice:contact" rental_object.id %}"> <blockquote class="flow-text"> <span class="black-text">{{ rental_object.owner }} </span> </blockquote> </a>
-            </div>
+          <div class="col card contactForm" style="padding-top: 1rem; width: 100%;">
+            <a href="/utleie/kontaktinfo">
+                <div class="row">
+                    <p style="margin:auto; padding-top: 0.8rem;">
+                      <img type="image/png" src="{% static "images/handlekurv.png" %}"
+          style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+                        max-height:4rem; float: left; margin:0.5rem; padding-right: 1rem; padding-left: 1.5rem;">
+                        Ønsker du å leie noe av utstyret? <strong>Klikk her!</strong> </img>
+                    </p>
+                </div>
+            </a>
           </div>
         </div>
     </div>

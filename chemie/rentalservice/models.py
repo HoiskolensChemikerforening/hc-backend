@@ -53,28 +53,30 @@ class RentalObject(models.Model):
     )
 
     def __str__(self):
-        return self.name + str(self.id)
+        return self.name
 
 
-class RentedObjects(models.Model):
-    rentalObject = models.ForeignKey(
-        RentalObject, null=True, blank=True, on_delete=models.CASCADE
-    )
-    quantity = models.IntegerField(
-        validators=[MinValueValidator(0)],
-        null=True,
-        blank=True,
-        verbose_name="Antall",
-    )
-    rent_start = models.DateTimeField(verbose_name="Utleiestart")
-    rent_end = models.DateTimeField(verbose_name="Utleieslutt")
-    invoice = models.ForeignKey(
-        Invoice,
-        null=True,
-        blank=True,
-        verbose_name="Kontrakt",
-        on_delete=models.CASCADE,
-    )
+#class RentedObjects(models.Model):
+    #rentalObject = models.ForeignKey(
+        #RentalObject, null=True, blank=True, on_delete=models.CASCADE
+    #)
+    #quantity = models.IntegerField(
+       # validators=[MinValueValidator(0)],
+        #null=True,
+        #blank=True,
+        #verbose_name="Antall",
+    #)
+    #rent_start = models.DateTimeField(verbose_name="Utleiestart")
+    #rent_end = models.DateTimeField(verbose_name="Utleieslutt")
+    #invoice = models.ForeignKey(
+        #Invoice,
+        #null=True,
+        #blank=True,
+        #verbose_name="Kontrakt",
+        #on_delete=models.CASCADE,
+    #)
 
-    def __str__(self):
-        return str(self.quantity) + "x " + self.rentalObject.name
+    #def __str__(self):
+       # return str(self.quantity) + "x " + self.rentalObject.name
+
+#class Shoppingcart
