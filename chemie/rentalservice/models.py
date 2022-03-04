@@ -21,7 +21,6 @@ class RentalObjectType(models.Model):
 
 
 class Invoice(models.Model):
-    # rentedObjects = models.ForeignKey(rentedObjects, on_delete=models.CASCADE)
     client = models.CharField(max_length=100, verbose_name="Kunde")
     client_mail = models.EmailField(max_length=254, verbose_name="E-post")
     client_nr = models.CharField(max_length=15, verbose_name="Telefon nr.")
@@ -56,27 +55,25 @@ class RentalObject(models.Model):
         return self.name
 
 
-#class RentedObjects(models.Model):
-    #rentalObject = models.ForeignKey(
-        #RentalObject, null=True, blank=True, on_delete=models.CASCADE
-    #)
-    #quantity = models.IntegerField(
-       # validators=[MinValueValidator(0)],
-        #null=True,
-        #blank=True,
-        #verbose_name="Antall",
-    #)
-    #rent_start = models.DateTimeField(verbose_name="Utleiestart")
-    #rent_end = models.DateTimeField(verbose_name="Utleieslutt")
-    #invoice = models.ForeignKey(
-        #Invoice,
-        #null=True,
-        #blank=True,
-        #verbose_name="Kontrakt",
-        #on_delete=models.CASCADE,
-    #)
+class RentedObjects(models.Model):
+    rentalObject = models.ForeignKey(
+        RentalObject, null=True, blank=True, on_delete=models.CASCADE
+    )
+    quantity = models.IntegerField(
+        validators=[MinValueValidator(0)],
+        null=True,
+        blank=True,
+        verbose_name="Antall",
+    )
+    rent_start = models.DateTimeField(verbose_name="Utleiestart")
+    rent_end = models.DateTimeField(verbose_name="Utleieslutt")
+    invoice = models.ForeignKey(
+        Invoice,
+        null=True,
+        blank=True,
+        verbose_name="Kontrakt",
+        on_delete=models.CASCADE,
+    )
 
-    #def __str__(self):
-       # return str(self.quantity) + "x " + self.rentalObject.name
-
-#class Shoppingcart
+    def __str__(self):
+        return str(self.quantity) + "x " + self.rentalObject.name
