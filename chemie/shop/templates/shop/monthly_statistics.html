@@ -43,17 +43,31 @@
 
 <!-- See JS footer-script for element creating -->
 <div id="admin-list-parent" style="margin-top: 1rem; margin-left: -0.1rem">
-</div>
-
-
 {% for o in orderlst %}
-      <h1>{{o.1}}</h1>
-      {% for n, v in o.0.items %}
-      <h2>{{n}}</h2>
-      <p>totalt: {{v.1}}</p>
-      <p>antall solgt: {{v.0}}</p>
-{% endfor %}
+<h4>
+  {{o.1}}: {{o.2}}<img
+        type="image/png" src="/static/images/HC_coin.png" style="width:1.8rem; margin-left:1rem; margin-top:-0.5rem">
+</h4>
+<div style="display: flex; margin:1rem; flex-wrap:wrap; margin-top:2rem; justify-content:center;
+ box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
+  {% for n, v in o.0.items %}
+  <div class="border item-list d-flex" style="height:8rem; margin:1rem; width:13rem">
+  <h6 style="text-align:center">
+    {{n}}
+  </h6>
+  <p style="margin:auto;  width:100%">
+    Totalt: <b>{{v.1}}</b>
+  </p>
+  <img type="image/png" src="/static/images/HC_coin.png" style="margin-top:-2.5rem; margin-left:8rem; width:1.8rem; padding-bottom:0.2rem;">
+  <p style="margin:auto; width:100%;">
+    Antall solgt: <b>{{v.0}}</b>
+  </p>
+  </div>
   {% endfor %}
+</div>
+  {% endfor %}
+
+  </div>
 {% endblock content %}
 
 

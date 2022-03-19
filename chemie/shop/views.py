@@ -565,14 +565,14 @@ def orderListByCurrentMonth(lst):
 
 def get_ordered_statistics(request):
     """
-
+    To create a list countaining dictionaries and integers. Relevant for the statistics page.
     :param request:
-    :return:
+    :return: list with 12 lists. Each of these lists contains [itemdict, monthname, totalsum]
     """
     monthNames = ['Desember', 'November', 'Oktober', 'September', 'August', 'Juli', 'Juni', 'Mai', 'April', 'Mars',
                   'Februar', 'Januar']
     monthNames.reverse()
-    monthDictLst = [[{}, i] for i in monthNames]
+    monthDictLst = [[{}, i, 0] for i in monthNames]
     orders = Order.objects.filter(created__gte=timezone.now()- timezone.timedelta(days=365))
     for order in orders:
         allItemOrders = order.items.all()
@@ -580,8 +580,10 @@ def get_ordered_statistics(request):
             if itemOrder.item.name in monthDictLst[order.created.month-1][0].keys():
                 monthDictLst[order.created.month - 1][0][itemOrder.item.name][0] += itemOrder.quantity
                 monthDictLst[order.created.month - 1][0][itemOrder.item.name][1] += itemOrder.total_price
+                monthDictLst[order.created.month - 1][2] += itemOrder.total_price
             else:
                 monthDictLst[order.created.month - 1][0][itemOrder.item.name] = [itemOrder.quantity,itemOrder.total_price]
+                monthDictLst[order.created.month - 1][2] += itemOrder.total_price
     monthDictLst = orderListByCurrentMonth(monthDictLst)
     return monthDictLst
 
