@@ -152,6 +152,9 @@ class Order(models.Model):
             totalprice += item.total_price
         return totalprice
 
+    def __lt__(self):
+        pass
+
 
 class HappyHour(models.Model):
     provider = models.ForeignKey(User, on_delete=models.DO_NOTHING)

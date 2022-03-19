@@ -1,3 +1,4 @@
+import datetime
 from decimal import InvalidOperation
 
 from dal import autocomplete
@@ -31,6 +32,7 @@ from .models import (
     Order,
     HappyHour,
     RefillReceipt,
+    OrderItem,
 )
 from .statistics import get_plot_item
 
@@ -542,15 +544,44 @@ def view_all_refills(request):
 
 @permission_required("customprofile.refill_balance")
 def view_monthly_statistics(request):
-    order_items, order_price, monthTotal = get_last_year_receipts()
-    items = Item.objects.all()
+    monthlyDict = get_ordered_statistics(request)
+
     return render(
         request,
         "shop/monthly_statistics.html",
         {
-            "monthTotal": monthTotal,
-            "order_items": order_items,
-            "order_price": order_price,
-            "items": items,
+            "orderlst": monthlyDict,
         },
     )
+
+def orderListByCurrentMonth(lst):
+    """
+    :return:
+    """
+    monthNumber = 12 - int(timezone.datetime.now().strftime("%m"))
+    lst.reverse()
+    return lst[monthNumber:] + lst[:monthNumber]
+
+
+def get_ordered_statistics(request):
+    """
+
+    :param request:
+    :return:
+    """
+    monthNames = ['Desember', 'November', 'Oktober', 'September', 'August', 'Juli', 'Juni', 'Mai', 'April', 'Mars',
+                  'Februar', 'Januar']
+    monthNames.reverse()
+    monthDictLst = [[{}, i] for i in monthNames]
+    orders = Order.objects.filter(created__gte=timezone.now()- timezone.timedelta(days=365))
+    for order in orders:
+        allItemOrders = order.items.all()
+        for itemOrder in allItemOrders:
+            if itemOrder.item.name in monthDictLst[order.created.month-1][0].keys():
+                monthDictLst[order.created.month - 1][0][itemOrder.item.name][0] += itemOrder.quantity
+                monthDictLst[order.created.month - 1][0][itemOrder.item.name][1] += itemOrder.total_price
+            else:
+                monthDictLst[order.created.month - 1][0][itemOrder.item.name] = [itemOrder.quantity,itemOrder.total_price]
+    monthDictLst = orderListByCurrentMonth(monthDictLst)
+    return monthDictLst
+
