@@ -76,7 +76,12 @@ user_urlpatterns = [
         name="checkin_manually",
     ),
 ]
-urlpatterns = admin_urlpatterns + user_urlpatterns
+
+api_urlpatterns = [
+    path("cgp/api/", views.CandidateListView.as_view()),
+]
+
+urlpatterns = admin_urlpatterns + user_urlpatterns + api_urlpatterns
 
 
 """

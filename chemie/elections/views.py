@@ -2,9 +2,13 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
+from django.http import Http404
+
+from rest_framework import generics
 
 from .forms import CastVoteForm
-from .models import Election
+from .models import Election, Candidate, Position
+from .serializers import CGPSerializer
 
 
 @login_required
@@ -121,3 +125,10 @@ def view_previous_election(request, pk):
         return render(
             request, "elections/election/previous_election.html", context
         )
+
+
+class CandidateListView(generics.ListAPIView):
+    serializer_class = CGPSerializer
+
+    position = Position.objects.filter(position_name="CGP").latest('id')
+    queryset = position.candidates.all()
