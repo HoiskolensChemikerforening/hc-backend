@@ -1,13 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, get_object_or_404
+from django.shortcuts import redirect, get_object_or_404, get_list_or_404
 from django.shortcuts import render
 from django.http import Http404
 
 from rest_framework import generics
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
 from .forms import CastVoteForm
-from .models import Election, Candidate, Position
+from .models import Election, Position
 from .serializers import CGPSerializer
 
 
@@ -127,8 +130,31 @@ def view_previous_election(request, pk):
         )
 
 
-class CandidateListView(generics.ListAPIView):
-    serializer_class = CGPSerializer
+class CGPListViewTemplate(APIView):
+    def get_queryset(self, position_name):
+        positions = Position.objects.filter(position_name=position_name)
 
-    position = Position.objects.filter(position_name="CGP").latest('id')
-    queryset = position.candidates.all()
+        if not positions:
+            raise Http404(f"Det er ingen gyldig data for {position_name}.")
+        else:
+            return positions.latest('id').candidates.all()
+    
+    def get(self, request):
+        candidates = self.get_queryset()
+        serializer = CGPSerializer(candidates, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+
+class CGPCandidateListView(CGPListViewTemplate):
+    def get_queryset(self):
+        return super().get_queryset("CGP")
+
+
+class CGPShowCandidateListView(CGPListViewTemplate):
+    def get_queryset(self):
+        return super().get_queryset("CGP Show")
+
+
+class CGPFiaskoCandidateListView(CGPListViewTemplate):
+    def get_queryset(self):
+        return super().get_queryset("CGP Fiasko")

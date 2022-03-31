@@ -78,7 +78,9 @@ user_urlpatterns = [
 ]
 
 api_urlpatterns = [
-    path("cgp/api/", views.CandidateListView.as_view()),
+    path("cgp/api/", views.CGPCandidateListView.as_view()),
+    path("cgp/api/show/", views.CGPShowCandidateListView.as_view()),
+    path("cgp/api/fiasko/", views.CGPFiaskoCandidateListView.as_view())
 ]
 
 urlpatterns = admin_urlpatterns + user_urlpatterns + api_urlpatterns
