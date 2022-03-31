@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import ObjectDoesNotExist
-from django.shortcuts import redirect, get_object_or_404, get_list_or_404
+from django.shortcuts import redirect, get_object_or_404
 from django.shortcuts import render
 from django.http import Http404
 
@@ -137,8 +137,8 @@ class CGPListViewTemplate(APIView):
         if not positions:
             raise Http404(f"Det er ingen gyldig data for {position_name}.")
         else:
-            return positions.latest('id').candidates.all()
-    
+            return positions.latest("id").candidates.all()
+
     def get(self, request):
         candidates = self.get_queryset()
         serializer = CGPSerializer(candidates, many=True)

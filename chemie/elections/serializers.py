@@ -3,9 +3,7 @@ from .models import Candidate
 
 
 class CGPSerializer(serializers.ModelSerializer):
-    user = serializers.CharField(
-        source='user.first_name'
-    )
+    user = serializers.CharField(source="user.first_name")
 
     class Meta:
         model = Candidate
