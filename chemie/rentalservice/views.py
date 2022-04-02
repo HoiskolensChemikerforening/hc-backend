@@ -19,7 +19,7 @@ def index(request):
     return render(request, "rentalservice/index.html", context)
 
 
-@permission_required("rentalservice.new_object")
+@permission_required("rentalservice..add_rentalobject")
 def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -52,7 +52,7 @@ def delete_rentalobject(request, rentalobject_id):
 @permission_required("rentalservice.change_rentalobject")
 def edit_rentalobject(request, rentalobject_id):
     rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
-    form = RentalObjectForm(
+    form = CreateRentalObjectForm(
         request.POST or None, request.FILES or None, instance=rental_object
     )
     if request.method == "POST":
@@ -66,10 +66,9 @@ def edit_rentalobject(request, rentalobject_id):
                 extra_tags="Endret",
             )
             return HttpResponseRedirect(reverse("rentalservice:index"))
-    context = {"form": form}
+    context = {"new_obj_form": form}
 
     return render(request, "rentalservice/new_object.html", context)
-
 
 
 def contact(request, rentalobject_id):
@@ -110,7 +109,7 @@ def contact(request, rentalobject_id):
         return render(request, "rentalservice/contact.html", context)
 
 
-@permission_required("rentalservice.new_invoice")
+@permission_required("rentalservice.add_rentalobject")
 def new_invoice(request):
     form = InvoiceForm(request.POST or None)
     if form.is_valid():
@@ -120,14 +119,11 @@ def new_invoice(request):
     context = {"form": form}
     return render(request, "rentalservice/create_invoice.html", context)
 
+
 def rental_list(request):
     object_list = RentalObject.objects.all()
     current_rental_products = []
 
+
 def contact_page(request):
     return render(request, "rentalservice/contact_page.html")
-
-
-
-
-

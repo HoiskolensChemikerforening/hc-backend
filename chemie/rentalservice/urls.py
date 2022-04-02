@@ -18,5 +18,5 @@ urlpatterns = [
         name="edit_rentalobject",
     ),
     path("nyFaktura/", views.new_invoice, name="new_invoice"),
-    path("kontaktinfo", views.contact_page, name ="contact_info"),
+    path("kontaktinfo", views.contact_page, name="contact_info"),
 ]
