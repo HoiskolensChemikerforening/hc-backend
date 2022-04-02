@@ -39,8 +39,8 @@
             <a class="breadcrumb">{{ rental_object.name }}</a>
     </div>
     <div class="row">
-        <div class="col l12 m12">  <!--makes image responsive to screen size%-->
-          {% thumbnail rental_object.image "1600" crop="center" as im %}
+        <div class="col s12 l12 m12">  <!--makes image responsive to screen size%-->
+          {% thumbnail rental_object.image "500" crop="center" as im %}
             <img class="responsive-img materialboxed" src="{{ im.url }}">
           {% endthumbnail %}
         </div>
@@ -63,13 +63,13 @@
 
 
         <div class="col s5 m5 l5">
-          <div class="col card contactForm" style="padding-top: 1rem; width: 100%;">
+          <div class="col card contactForm" style="padding-top: 0.25rem; width: 100%; height: 8rem;">
             <a href="/utleie/kontaktinfo">
                 <div class="row">
-                    <p style="margin:auto; padding-top: 0.8rem;">
+                    <p style="margin:auto; padding-top: 0rem;">
                       <img type="image/png" src="{% static "images/handlekurv.png" %}"
           style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
-                        max-height:4rem; float: left; margin:0.5rem; padding-right: 1rem; padding-left: 1.5rem;">
+                        max-height:4rem; float: left; margin:-0.5rem; padding-right: 0.5rem; padding-left: 0.5rem;">
                         Ønsker du å leie noe av utstyret? <strong>Klikk her!</strong> </img>
                     </p>
                 </div>
