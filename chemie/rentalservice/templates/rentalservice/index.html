@@ -73,7 +73,7 @@ Oversikt
                 <div class="col s12 m4">
                 <div class="card small">
                     <div class="card-image">
-                        <a href="{{ object.get_absolute_url }}">
+                        <a href="{% url 'rentalservice:detail' object.id %}">
                             {% thumbnail object.image "630x400" crop="center" as im %} <!--- standard image crop for HC--->
                                 <img src="{{ im.url }}"> <!--- locates image url--->
                             {% endthumbnail %}
