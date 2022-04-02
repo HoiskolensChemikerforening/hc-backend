@@ -29,6 +29,7 @@ def create_merch(request):
 
     return render(request, "merch/create_merch.html", context)
 
+
 @permission_required("merch.add_merch")
 def create_category(request):
     form = MerchCategoryForm(request.POST or None, request.FILES or None)
@@ -44,8 +45,6 @@ def create_category(request):
             instance.save()
             return HttpResponseRedirect(reverse("merch:index"))
 
-
-
     context = {"form": form}
 
     return render(request, "merch/create_category.html", context)
@@ -55,19 +54,20 @@ def create_category(request):
 def all_merch(request):
     merch_objects = Merch.objects.all()
     form = SortingForm()
-    if request.method == 'POST':
+    if request.method == "POST":
         form = SortingForm(request.POST)
         if form.is_valid():
-            if request.POST['submit']!='Nullstill':
-                merch_objects = Merch.objects.filter(category=form.cleaned_data['category'])
+            if request.POST["submit"] != "Nullstill":
+                merch_objects = Merch.objects.filter(
+                    category=form.cleaned_data["category"]
+                )
     paginator = Paginator(merch_objects, 12)  # Show 25 contacts per page.
 
-    page_number = request.GET.get('page')
+    page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {"merchs": page_obj,
-               "form": form}
-    return (render(request, "merch/list_all.html", context))
+    context = {"merchs": page_obj, "form": form}
+    return render(request, "merch/list_all.html", context)
 
 
 @login_required
@@ -76,6 +76,7 @@ def detail(request, pk):
 
     context = {"merch": merch_object}
     return render(request, "merch/detail.html", context)
+
 
 @permission_required("merch.delete_merch")
 def delete(request, pk):
@@ -95,7 +96,6 @@ class CategoryAutocomplete(autocomplete.Select2QuerySetView):
             return MerchCategory.objects.none()
 
         qs = MerchCategory.objects.all()
-
 
         if self.q:
             qs = qs.filter(name__icontains=self.q)
