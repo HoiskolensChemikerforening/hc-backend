@@ -14,7 +14,7 @@ class Landlord(models.Model):  # Utleier aka promokom/ac
 
 
 class RentalObjectType(models.Model):
-    type = models.CharField(max_length=100)
+    type = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
         return self.type
@@ -23,18 +23,17 @@ class RentalObjectType(models.Model):
 class Invoice(models.Model):
     client = models.CharField(max_length=100, verbose_name="Kunde")
     client_mail = models.EmailField(max_length=254, verbose_name="E-post")
-    client_nr = models.CharField(max_length=15, verbose_name="Telefon nr.")
+    client_phone_nr = models.CharField(max_length=15, verbose_name="Telefon nr.")
     paid = models.BooleanField(default=False, verbose_name="Betalt?")
     event = models.CharField(max_length=100, verbose_name="Arrangement")
 
 
 class RentalObject(models.Model):
-    name = models.CharField(max_length=100)
+    name = models.CharField(max_length=100,unique=True,verbose_name="Utleieobjekt")
     description = RichTextField(verbose_name="Beskrivelse", config_name="news")
     image = ImageField(upload_to="rentalservice", verbose_name="Bilde")
     owner = models.ForeignKey(
-        Landlord, null=True, blank=True, on_delete=models.CASCADE
-    )
+        Landlord, null=True, blank=True, on_delete=models.CASCADE, verbose_name="Komite")
     price = models.FloatField(
         validators=[MinValueValidator(0.0)],
         null=True,
@@ -42,8 +41,7 @@ class RentalObject(models.Model):
         verbose_name="Pris",
     )  # Trenger min og maks verdi
     type = models.ForeignKey(
-        RentalObjectType, null=True, blank=True, on_delete=models.CASCADE
-    )
+        RentalObjectType, null=True, blank=True, on_delete=models.CASCADE,verbose_name="Produkttype")
     quantity = models.IntegerField(
         validators=[MinValueValidator(0)],
         null=True,

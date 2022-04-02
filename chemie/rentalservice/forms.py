@@ -1,8 +1,9 @@
 from django import forms
 import material as M
 from .models import RentalObject, RentalObjectType, Invoice
+from django.core.exceptions import ValidationError
 
-CREATE_TYPE_CHOICES = ((0, "Bruk eksisterende type"), (1, "Legg til ny produkttype"))
+CREATE_TYPE_CHOICES = ((0, "Bruk eksisterende produkttype"), (1, "Legg til ny produkttype"))
 
 
 class RentalObjectForm(forms.ModelForm):
@@ -17,10 +18,11 @@ class CreateRentalObjectForm(RentalObjectForm):
         required=True,
         widget=forms.RadioSelect,
         choices=CREATE_TYPE_CHOICES,
-        initial=0
+        initial=0,
+        label=""
     )
 
-    new_type_name = forms.CharField(max_length=100, required=False)
+    new_type_name = forms.CharField(max_length=100, required=False, label="Ny produkttype")
     
     layout = M.Layout(
         M.Row("name"),
@@ -39,6 +41,8 @@ class CreateRentalObjectForm(RentalObjectForm):
             return
         
         if self.cleaned_data["is_new_type"]:
+            if RentalObjectType.objects.filter(type=self.cleaned_data["new_type_name"]):
+                raise ValidationError("Produkttypen finnes allerede")
             new_type = RentalObjectType(type=self.cleaned_data["new_type_name"])
             new_type.save()
             self.cleaned_data["type"] = new_type
@@ -50,14 +54,16 @@ class CreateRentalObjectForm(RentalObjectForm):
 
 
 
+
+
 class InvoiceForm(forms.ModelForm):
     layout = M.Layout(
-        M.Row("event"), M.Row("client"), M.Row("client_mail"), M.Row("client_nr"), M.Row("paid")
+        M.Row("event"), M.Row("client"), M.Row("client_mail"), M.Row("client_phone_nr")
     )
 
     class Meta:
         model = Invoice
-        fields = ["event", "client", "client_mail", "client_nr", "paid"]
+        fields = ["event", "client", "client_mail", "client_phone_nr"]
 
 
 class TypeForm(forms.ModelForm):
