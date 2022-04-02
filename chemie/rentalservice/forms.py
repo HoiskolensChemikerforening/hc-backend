@@ -9,6 +9,20 @@ CREATE_TYPE_CHOICES = (
 )
 
 
+class RentalObjectForm(forms.ModelForm):
+    class Meta:
+        model = RentalObject
+        fields = [
+            "name",
+            "description",
+            "price",
+            "type",
+            "quantity",
+            "image",
+            "owner",
+        ]
+
+
 class CreateRentalObjectForm(RentalObjectForm):
     is_new_type = forms.ChoiceField(
         required=True,
