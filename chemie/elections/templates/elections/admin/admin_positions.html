@@ -8,6 +8,10 @@
     <button class="btn btn-secondary" style="margin-left:auto; margin-top:-0.8rem" id="checkInDirect">Sjekk
       inn brukere
     </button>
+    <a type="submit" class="btn btn-primary" style="margin-left: 1rem; margin-top:-0.8rem" 
+            id="openElectionForEveryone" href="{% url 'elections:open_election_for_everyone' %}">
+    Åpne valg for alle
+    </a>
     <button class="btn btn-danger" style="margin-left: 1rem; margin-top:-0.8rem" id="closeElectionButton">Steng valget
     </button>
   </ol>
