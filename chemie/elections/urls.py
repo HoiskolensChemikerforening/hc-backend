@@ -64,6 +64,11 @@ admin_urlpatterns = [
         UserAutocomplete.as_view(),
         name="user_autocomplete",
     ),
+    path(
+        "open-election-for-everyone/",
+        views_admin.open_election_for_everyone,
+        name="open_election_for_everyone",
+    ),
 ]
 user_urlpatterns = [
     path("", views.index, name="index"),
