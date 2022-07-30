@@ -33,6 +33,24 @@ cryptography==3.2
     #   py-vapid
     #   pyopenssl
     #   pywebpush
+django==2.2.28
+    # via
+    #   -r base.in
+    #   django-classy-tags
+    #   django-cors-headers
+    #   django-crontab
+    #   django-hashers-passlib
+    #   django-model-utils
+    #   django-mptt
+    #   django-multiselectfield
+    #   django-nyt
+    #   django-post-office
+    #   django-push-notifications
+    #   django-recaptcha
+    #   django-sekizai
+    #   djangorestframework
+    #   jsonfield
+    #   wiki
 django-autocomplete-light==3.3.2
     # via -r requirements/base.in
 django-ckeditor==5.6.1
@@ -140,10 +158,8 @@ packaging==20.1
     # via pytest
 passlib==1.7.2
     # via django-hashers-passlib
-pillow==7.1.0
-    # via
-    #   reportlab
-    #   wiki
+pillow==9.0.1
+    # via wiki
 pluggy==0.13.1
     # via pytest
 psycopg2==2.7.6.1

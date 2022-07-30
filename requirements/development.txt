@@ -36,7 +36,7 @@ cryptography==3.4.8
     #   py-vapid
     #   pyopenssl
     #   pywebpush
-django==2.2.24
+django==2.2.28
     # via
     #   -r base.in
     #   django-classy-tags
@@ -147,7 +147,7 @@ packaging==21.0
     #   pytest
 passlib==1.7.4
     # via django-hashers-passlib
-pillow==9.0.0
+pillow==9.0.1
     # via wiki
 pluggy==0.13.1
     # via pytest

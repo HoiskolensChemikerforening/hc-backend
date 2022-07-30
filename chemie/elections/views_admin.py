@@ -277,6 +277,22 @@ def admin_end_election(request):
 
 
 @permission_required("elections.add_election")
+def open_election_for_everyone(request):
+    for profile in Profile.objects.all():
+        profile.eligible_for_voting = True
+        profile.save()
+
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Alle brukere har nå mulighet til å stemme.",
+        extra_tags="Vellykket!",
+    )
+
+    return redirect("elections:admin_register_positions")
+
+
+@permission_required("elections.add_election")
 @login_required
 def change_rfid_status(request):
     form = GetRFIDForm(request.POST or None)
