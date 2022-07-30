@@ -31,7 +31,7 @@ wiki==0.5
 InvoiceGenerator==1.1.0
 
 coverage==4.5.2
-markdown2==2.3.6
+markdown2==2.4.0
 
 django-environ==0.4.5
 django-crispy-forms==1.7.2
