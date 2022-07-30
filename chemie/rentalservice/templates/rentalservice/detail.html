@@ -46,6 +46,8 @@
         </div>
     </div>
 
+    <h5>Hallo</h5>
+
     <!-- Desription info -->
 
     <div class="row">
@@ -78,3 +80,11 @@
         </div>
     </div>
 {% endblock content %}
+
+{% block footer_script %}
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+  </script>
+{% endblock footer_script %}
