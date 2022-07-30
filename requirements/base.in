@@ -27,7 +27,7 @@ pytest-xdist==1.31.0
 freezegun==0.3.11
 werkzeug==0.15.5
 olefile==0.46
-wiki==0.5
+wiki==0.7.9
 InvoiceGenerator==1.1.0
 
 coverage==4.5.2
