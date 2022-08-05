@@ -6,50 +6,88 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Våre grenseflater
+  Våre grenseflater og SCHYGGEsiden
 {% endblock nav_sub_header %}
 {% load material_form %}
 
 {% block content %}
-  {% load staticfiles %}
+{% load staticfiles %}
+<br/>
+<br/>
   <div class="row">
-    <div class="col s12 m12 l10">
-      <p class="flow-text">
-        Har du noen tilbakemeldinger; kritikk, ros, eller forslag til forbedringer angående hva som helst
-        som
-        bedrives i Høiskolens Chemikerforening?<br>
-      </p>
-      <p class="flow-text">
-        Kontakt Styret på <a href="mailto:styret@hc.ntnu.no">styret@hc.ntnu.no</a>, eller send dem en melding med
-        kontaktskjemaet nedenfor. Her kan du skrive hva DU mener.<br>
-      </p>
-      <p class="flow-text">
-        Her kan du også melde ifra om andre forhold, slik som varslingssaker og brudd på reglement på
-        arrangementer. Ønsker du å forbli <b>anonym</b>, så la feltene med navn og e-post stå blanke. Innsendinger vil kun leses
-        av Styret.<br>
-      </p>
+    <div class="col s12 m12 l12">
+      <h3 class="heading">SCHYGGEsiden</h3>
+      <p>Skjema for Chemikere til henvendelser om ytringer, gremmelser, gladsaker og andre episoder</p>
     </div>
   </div>
   <div class="row">
     <div class="col s12 m12 l10">
-      <div class="card">
-        <div class="card-content">
-          <p class="flow-text">
-            Oppgi gyldig epostadresse dersom du ønsker videre kommunikasjon med Styret, ellers forblir innslaget
-            anonymt.
-          </p>
-          <form method='POST'>{% csrf_token %}
-            {% form %}
-              {% part form.contact_name prefix %}<i class="material-icons prefix">account_circle</i>
-              {% endpart %}
-              {% part form.contact_email prefix %}<i class="material-icons prefix">contact_mail</i>
-              {% endpart %}
-              {% part form.content prefix %}<i class="material-icons prefix">message</i>{% endpart %}
-            {% endform %}
-            <button type="submit" name="submit" class="btn">Submit</button>
-          </form>
-        </div>
-      </div>
+      <p class="flow-text">
+        Høiskolens Chemikerforening ønsker å være en trygg og inkluderende linjeforening. Målet er at grenseoverskridende
+        atferd ikke skal finne sted, og SCHYGGEsiden er her for å håndtere det dersom noe skulle skje.
+      </p>
+      <p class="flow-text">
+        Det finnes to skjemaer: <br/>
+        <a href="https://forms.gle/EkXWu7Y6MvS8sVyH9">innmeldingskjema</a> - meld fra om varsler, brudd på reglement på arrangementer,
+        psykiske utfordringer eller andre avvik <br/>
+        <a href="https://forms.gle/dSjTQtdGnhiRscsg8">Tilbakemeldinger til Styret</a> - kom med kritikk, ros eller forslag til
+        forbedringer angående hva som helst som bedrives i Høiskolens Chemikerforening
+      </p>
+      <p class="flow-text">
+        Det er veldig viktig at du sier ifra dersom du eller andre opplever noe som ikke er greit. Da får vi muligheten
+        til å gjøre noe med det som har skjedd og forhindre at det skjer igjen. Ingen sak er for
+        liten eller stor; si ifra!
+      </p>
+      <p class="flow-text">
+        For mer informasjon om varsler og saksgang kan du lese <a href="https://drive.google.com/file/d/19OR4T7-eI5RMYbVe6Rh77Gz4usKw1bYr/view?usp=sharing">her</a> eller på Wikien.<br/>
+        Dersom du ikke ønsker eller ikke er komfortabel med å melde fra til Styret, men trenger hjelp, kan du finne lenker
+        til eksterne kontaktpunkter nederst på siden
+      </p>
+      <p class="flow-text">
+        <b>Kontakt Styret</b> <br/>
+        E-post: <a href="mailto:styret@hc.ntnu.no">styret@hc.ntnu.no</a><br/>
+        pHorquinde: Johanne Nordheim Tveter, <br/>
+        <a href="mailto:leder@hc.ntnu.no">leder@hc.ntnu.no</a>, tlf: 94832324 <br/>
+        VicepHorquinde: Hannah Espelin-Rolfsen, <br/>
+        <a href="mailto:nestleder@hc.ntnu.no">nestleder@hc.ntnu.no</a>, tlf: 91658858 <br/>
+        Secreteuse: Erling Løklingholm Leivestad, <br/>
+        <a href="mailto:sekretar@hc.ntnu.no">sekretar@hc.ntnu.no</a>, tlf: 90580318 <br/>
+        Kasserer: Jørgen Kvernes Gården, <br/>
+        <a href="mailto:kasserer@hc.ntnu.no">kasserer@hc.ntnu.no</a>, tlf: 90140465 <br/>
+        IndustrisjaepH: Anja Lillehammer, <br/>
+        <a href="mailto:industrisjef@hc.ntnu.no">industrisjef@hc.ntnu.no</a>, tlf: 47257402<br/>
+        KjellersjaepH: Dina Westrheim, <br/>
+        <a href="mailto:kjellersjef@hc.ntnu.no">kjellersjef@hc.ntnu.no</a>, tlf: 47633739 <br/>
+        pHaestsjaepH: Andrea Rygg Aagaard, <br/>
+        <a href="mailto:festsjef@hc.ntnu.no">festsjef@hc.ntnu.no</a>, tlf: 95331903 <br/>
+        WebsjaepH: Eline Lillebø Karlsen, <br/>
+        <a href="mailto:kasserer@hc.ntnu.no">websjef@hc.ntnu.no</a>, tlf: 97427018 <br/>
+      </p>
+      <p class="flow-text">
+        <b>Sosiale medier</b> <br/>
+        Instagram: <a href="https://www.instagram.com/hcntnu/">hcntnu</a> <br/>
+        Facebook: <a href="https://www.facebook.com/HoiskolensChemikerforening">Høiskolens Chemikerforening</a>, <a href="https://www.facebook.com/groups/1505975139619109">Høiskolens Chemikerforening medlemsgruppe</a> <br/>
+      </p>
+      <p class="flow-text">
+        <b>Komiteer</b> <br/>
+        Du finner kontaktinformasjonen til alle våre komiteer på siden <a href="/verv">undergrupper.</a>
+      </p>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l12">
+      <h3 class="heading">Andre hjelpetjenester</h3>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col s12 m12 l10">
+      <p class="flow-text">
+        <a href="https://hc.ntnu.no/verv/tillitsvalgte/">Tillitsvalgte ved industriell kjemi og bioteknologi</a> <br/>
+        <a href="https://i.ntnu.no/wiki/-/wiki/Norsk/Seksuell+trakassering">Her</a>, kan du melde inn trakasseringssaker til NTNU. <br/>
+        Døgnåpen hjelpetelefon for Psykisk Helse: 116 123 <br/>
+        <a href="https://docs.google.com/document/d/1VQxbBocU8dMoTC3Qt84gj4g0-blQv59UIVLrQT88obw//export?format=pdf">Ressursbanken:</a> inneholder oversikt over
+        forskjellige kontaktpunkter som kan bidra i ulike saker.
+      </p>
     </div>
   </div>
   <div class="row">
