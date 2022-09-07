@@ -119,10 +119,10 @@ def get_last_year_receipts():
 
 @login_required
 def index(request):
-#    if request.user.username == "tabletshop":
-    context = index_tabletshop(request)
-#    else:
-#        context = index_user(request)
+    if request.user.username == "tabletshop":
+        context = index_tabletshop(request)
+    else:
+        context = index_user(request)
     context["is_happy"] = is_happy_hour()[0]
     return render(request, "shop/shop.html", context)
 
