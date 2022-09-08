@@ -16,7 +16,7 @@ babel==2.10.3
     # via invoicegenerator
 black==18.9b0
     # via -r development.in
-bleach==2.1.4
+bleach==3.3.1
     # via wiki
 certifi==2021.5.30
     # via requests
@@ -88,11 +88,11 @@ django-material==1.4.1
     # via -r base.in
 django-model-utils==3.1.2
     # via -r base.in
-django-mptt==0.9.1
+django-mptt==0.11.0
     # via wiki
 django-multiselectfield==0.1.8
     # via -r base.in
-django-nyt==1.1.6
+django-nyt==1.2.2
     # via wiki
 django-post-office==3.1.0
     # via -r base.in
@@ -120,8 +120,6 @@ h2==2.6.2
     # via hyper
 hpack==3.0.0
     # via h2
-html5lib==1.1
-    # via bleach
 http-ece==1.1.0
     # via pywebpush
 hyper==0.7.0
@@ -147,7 +145,9 @@ more-itertools==8.9.0
 olefile==0.46
     # via -r base.in
 packaging==21.0
-    # via pytest
+    # via
+    #   bleach
+    #   pytest
 passlib==1.7.4
     # via django-hashers-passlib
 pillow==9.0.1
@@ -213,7 +213,6 @@ six==1.16.0
     #   bleach
     #   django-extensions
     #   freezegun
-    #   html5lib
     #   pyopenssl
     #   pytest-xdist
     #   python-dateutil
@@ -233,10 +232,10 @@ urllib3==1.26.6
 wcwidth==0.2.5
     # via pytest
 webencodings==0.5.1
-    # via html5lib
+    # via bleach
 werkzeug==0.15.5
     # via -r base.in
-wiki==0.5
+wiki==0.7.9
     # via -r base.in
 
 # The following packages are considered to be unsafe in a requirements file:
