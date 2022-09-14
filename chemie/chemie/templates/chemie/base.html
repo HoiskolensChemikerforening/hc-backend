@@ -39,16 +39,6 @@
   {% block extra_js %}
   {% endblock %}
 
-  <style>
-    {
-      % block style %
-    }
-
-      {
-      % endblock style %
-    }
-  </style>
-
   {% block header %}
   {% endblock header %}
   <meta name="theme-color" content="#3C91E6">
@@ -61,38 +51,6 @@
 </head>
 
 <body>
-  <div class="snowflakes" aria-hidden="true">
-    <div class="snowflake">
-    ❅
-    </div>
-    <div class="snowflake">
-    ❅
-    </div>
-    <div class="snowflake">
-    ❆
-    </div>
-    <div class="snowflake">
-    ❄
-    </div>
-    <div class="snowflake">
-    ❅
-    </div>
-    <div class="snowflake">
-    ❆
-    </div>
-    <div class="snowflake">
-    ❄
-    </div>
-    <div class="snowflake">
-    ❅
-    </div>
-    <div class="snowflake">
-    ❆
-    </div>
-    <div class="snowflake">
-    ❄
-    </div>
-  </div>
 
   <header>
     <nav class="top-nav">
@@ -209,6 +167,8 @@
             class="material-icons micon">inbox</i>Bokskap</a></li>
       <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
             class="material-icons micon">contact_mail</i>Kontakt</a></li>
+      <li class="bold"><a href="{% url "rentalservice:index" %}" class="waves-effect"><i
+            class="material-icons micon">shopping_cart</i>Utleie</a></li>
     </ul>
   </header>
 

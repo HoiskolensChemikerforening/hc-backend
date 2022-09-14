@@ -135,7 +135,7 @@ class Profile(models.Model):
         blank=True,
         null=True,
         unique=True,
-        verbose_name="Studentkortnummer",
+        verbose_name="EM nummer (ikke ta med 0 dersom det er første siffer)",
     )
 
     image_primary = ImageField(upload_to="avatars", null=True, blank=True)
@@ -191,7 +191,6 @@ class Profile(models.Model):
     def save(self, *args, **kwargs):
         if self.access_card is "":
             self.access_card = f"{self.pk} - INVALID"
-
         return super().save(*args, **kwargs)
 
     """Functions used in shop statics"""

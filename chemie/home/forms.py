@@ -67,3 +67,11 @@ class FlatpageEditForm(forms.ModelForm):
     class Meta:
         model = FlatPage
         fields = ("content",)
+
+
+class ApprovedTermsForm(forms.Form):
+    approval = forms.BooleanField(
+        required=True,
+        label="Jeg godkjenner ",
+        validators=[lambda x: x == True],
+    )
