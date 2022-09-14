@@ -81,7 +81,7 @@ django-mptt==0.11.0
     # via wiki
 django-multiselectfield==0.1.8
     # via -r base.in
-django-nyt==1.2
+django-nyt==1.2.2
     # via wiki
 django-post-office==3.1.0
     # via -r base.in

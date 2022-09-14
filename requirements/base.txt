@@ -123,7 +123,7 @@ jsonfield==3.0.0
     # via django-post-office
 markdown==3.1.1
     # via wiki
-markdown2==2.3.6
+markdown2==2.4.0
     # via
     #   -r base.in
     #   django-markdown2
