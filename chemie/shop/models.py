@@ -117,11 +117,12 @@ class Item(models.Model):
         latestOrders = Order.objects.all().order_by("-id")[:latestCount]
         itemDict = {}
         for order in latestOrders:
+            print(order.items.all())
             for orderItem in order.items.all():
                 if orderItem.item.name in itemDict.keys():
-                    itemDict[orderItem.item.name] += 1
+                    itemDict[orderItem.item.name] += orderItem.quantity
                 else:
-                    itemDict[orderItem.item.name] = 1
+                    itemDict[orderItem.item.name] = orderItem.quantity
         itemLst = [pair[0] for pair in sorted(itemDict.items(), key=lambda x: (x[1]))]
         itemLst.reverse()
         return itemLst
