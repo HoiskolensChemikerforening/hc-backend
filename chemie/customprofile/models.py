@@ -189,7 +189,7 @@ class Profile(models.Model):
         return self.get_relationship_status_display()
 
     def save(self, *args, **kwargs):
-        if self.access_card is "":
+        if self.access_card == "":
             self.access_card = f"{self.pk} - INVALID"
         return super().save(*args, **kwargs)
 
