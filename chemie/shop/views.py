@@ -198,6 +198,10 @@ def index_tabletshop(request):
     cart = ShoppingCart(request)
 
     itemLst = Item.sort_tablet_items()
+    if len(itemLst) < len(items):
+        for i in items:
+            if i.name not in itemLst:
+                itemLst.append(i.name)
     items = sorted(items, key=lambda x: itemLst.index(x.name))
 
     context = {
