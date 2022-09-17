@@ -196,6 +196,10 @@ def index_tabletshop(request):
         pass
     categories = Category.objects.all()
     cart = ShoppingCart(request)
+
+    itemLst = Item.sort_tablet_items(latestCount=1000)
+    items = sorted(items, key=lambda x: itemLst.index(x.name))
+
     context = {
         "items": items,
         "categories": categories,

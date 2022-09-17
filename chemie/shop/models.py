@@ -107,6 +107,20 @@ class Item(models.Model):
         active_items = cls.objects.filter(is_active=True)
         return active_items
 
+    @classmethod
+    def sort_tablet_items(cls, latestCount=1000):
+        latestOrders = Order.objects.all().order_by("-id")[:latestCount]
+        itemDict = {}
+        for order in latestOrders:
+            for orderItem in order.items.all():
+                if orderItem.item.name in itemDict.keys():
+                    itemDict[orderItem.item.name] += 1
+                else:
+                    itemDict[orderItem.item.name] = 1
+        itemLst = [pair[0] for pair in sorted(itemDict.items(), key=lambda x: (x[1]))]
+        itemLst.reverse()
+        return itemLst
+
     def __str__(self):
         return self.name
 
