@@ -5,6 +5,7 @@ Django settings for the chemie project.
 import os
 import environ
 from django.contrib.messages import constants as message_constants
+from datetime import timedelta # For auth
 
 
 # GENERAL CONFIGURATION
@@ -238,6 +239,12 @@ WIKI_ANONYMOUS = False
 
 # AUTHENTICATION CONFIGURATION
 # ------------------------------------------------------------------------------
+
+# SETTINGS for SIMPLE JWT
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=10),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
+}
 
 REST_FRAMEWORK = {
     # Use Django's standard `django.contrib.auth` permissions,
