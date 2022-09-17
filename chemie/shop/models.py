@@ -117,7 +117,6 @@ class Item(models.Model):
         latestOrders = Order.objects.all().order_by("-id")[:latestCount]
         itemDict = {}
         for order in latestOrders:
-            print(order.items.all())
             for orderItem in order.items.all():
                 if orderItem.item.name in itemDict.keys():
                     itemDict[orderItem.item.name] += orderItem.quantity
