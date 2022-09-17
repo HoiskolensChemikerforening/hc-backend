@@ -19,6 +19,10 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from ..customprofile.views import LoginView
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from chemie.home.views import index
 
@@ -63,6 +67,9 @@ urlpatterns = [
         "utleie/",
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
+    # For authentication
+    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
