@@ -109,6 +109,11 @@ class Item(models.Model):
 
     @classmethod
     def sort_tablet_items(cls, latestCount=1000):
+        """
+        Create an ordered list with items sortet after the amount solgt in the last 1000 orders.
+        :param latestCount: amount of orders considered.
+        :return: ordered list with item name.
+        """
         latestOrders = Order.objects.all().order_by("-id")[:latestCount]
         itemDict = {}
         for order in latestOrders:
