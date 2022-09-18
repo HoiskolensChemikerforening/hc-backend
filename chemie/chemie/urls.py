@@ -28,7 +28,7 @@ urlpatterns = [
     # Temporary url for front page during Fadderperioden
     path("forside/", index),
     path("sladreboks/", include("chemie.shitbox.urls", namespace="shitbox")),
-    path("verv/", include("chemie.committees.urls", namespace="verv")),
+    path("undergrupper/", include("chemie.committees.urls", namespace="verv")),
     path("bokskap/", include("chemie.lockers.urls", namespace="bokskap")),
     path("bedrift/", include("chemie.corporate.urls", namespace="corporate")),
     path("nyheter/", include("chemie.news.urls", namespace="news")),

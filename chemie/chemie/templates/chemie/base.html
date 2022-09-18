@@ -153,9 +153,20 @@
                 <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
                 <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bilder</a></li>
                 <li><a href="{% url "elections:index" %}" class="waves-effect">Valg</a></li>
+                <li><a href="/s/veggvegg" class="waves-effect">World Wide Wegard</a></li>
               </ul>
             </div>
           </li>
+          <li class="bold">
+            <a class="collapsible-header waves-effect"><i class="material-icons micon">contact_mail</i>Kontakt</a>
+                <div class="collapsible-body">
+                  <ul>
+                    <li><a href="/s/kontaktinfo/" class="waves-effect">Kontaktinfo</a></li>
+                    <li><a href="/s/schyggesiden/" class="waves-effect">Schyggesiden</a></li>
+                  </ul>
+                </div>
+              </li>
+            
         </ul>
       </li>
       <li class="bold"><a href="{% url "corporate:index" %}" class="waves-effect"><i class="material-icons micon">business</i>
@@ -166,8 +177,9 @@
             class="material-icons micon">date_range</i>Kalender</a></li>
       <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
             class="material-icons micon">inbox</i>Bokskap</a></li>
-      <li class="bold"><a href="{% url "frontpage:kontakt" %}" class="waves-effect"><i
-            class="material-icons micon">contact_mail</i>Kontakt</a></li>
+
+      <li class="bold"><a href="{% url "rentalservice:index" %}" class="waves-effect"><i
+            class="material-icons micon">shopping_cart</i>Utleie</a></li>
     </ul>
   </header>
 
@@ -245,7 +257,7 @@
             <p class="left-align white-text">Epost</p>
           </a>
         </div>
-        <a class="white-text" href="{% url 'frontpage:kontakt' %}">Kontakt oss!</a>
+        <a class="white-text" href="/s/kontaktinfo">Kontakt oss!</a>
       </div>
 
         <!-- Sponsors -->

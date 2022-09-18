@@ -8,6 +8,8 @@ apns2==0.7.2
     # via django-push-notifications
 attrs==21.2.0
     # via pytest
+babel==2.10.3
+    # via invoicegenerator
 bleach==3.3.1
     # via wiki
 certifi==2021.5.30
@@ -20,15 +22,14 @@ coverage==4.5.2
     # via
     #   -r base.in
     #   pytest-cov
-cryptography==3.4.8
+cryptography==3.3.2
     # via
-    #   -r base.in
     #   apns2
     #   http-ece
     #   py-vapid
     #   pyopenssl
     #   pywebpush
-django==2.2.24
+django==2.2.28
     # via
     #   -r base.in
     #   django-classy-tags
@@ -80,7 +81,7 @@ django-mptt==0.11.0
     # via wiki
 django-multiselectfield==0.1.8
     # via -r base.in
-django-nyt==1.2
+django-nyt==1.2.2
     # via wiki
 django-post-office==3.1.0
     # via -r base.in
@@ -114,6 +115,8 @@ hyperframe==3.2.0
     #   hyper
 idna==3.2
     # via requests
+invoicegenerator==1.1.0
+    # via -r base.in
 jsonfield==3.1.0
     # via django-post-office
 markdown==3.1.1
@@ -132,11 +135,14 @@ packaging==21.0
     #   pytest
 passlib==1.7.4
     # via django-hashers-passlib
-pillow==9.0.0
-    # via wiki
+pillow==9.0.1
+    # via
+    #   invoicegenerator
+    #   reportlab
+    #   wiki
 pluggy==0.13.1
     # via pytest
-psycopg2-binary==2.8.6
+psycopg2==2.7.6.1
     # via -r base.in
 py==1.10.0
     # via
@@ -170,16 +176,27 @@ pytest-xdist==1.31.0
 python-dateutil==2.8.2
     # via freezegun
 pytz==2021.1
-    # via django
+    # via
+    #   babel
+    #   django
 pywebpush==1.14.0
     # via django-push-notifications
+qrcode==7.3.1
+    # via qrplatba
+qrplatba==0.5.0
+    # via invoicegenerator
 raven==6.9.0
     # via -r production.in
+reportlab==3.5.59
+    # via
+    #   -r base.in
+    #   invoicegenerator
 requests==2.26.0
     # via pywebpush
 six==1.16.0
     # via
     #   bleach
+    #   cryptography
     #   django-extensions
     #   freezegun
     #   pyopenssl
