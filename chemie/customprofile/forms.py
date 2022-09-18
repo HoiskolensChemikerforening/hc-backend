@@ -34,10 +34,14 @@ class RegisterUserForm(forms.ModelForm):
         fields = ["first_name", "last_name", "email", "username"]
 
     def usernameLowercase(self):
+        """
+        check if username is all lowercase throws an error else.
+        :return:
+        """
         username = self.cleaned_data.get("username")
         if username != username.lower():
             self.add_error(
-                None, ValidationError({"username": ["use lowercase"]})
+                None, ValidationError({"username": ["Vennligst oppgi brukernavn med bare små bokstaver!"]})
             )
 
     def password_matches(self):
@@ -54,6 +58,8 @@ class RegisterUserForm(forms.ModelForm):
                 None,
                 ValidationError({"password_confirm": ["Feltet er påkrevd"]}),
             )
+        #username validation
+        self.usernameLowercase()
 
         if password != confirmed_password:
             message = "Password does not match"  # Redundant?
