@@ -33,22 +33,29 @@ class RegisterUserForm(forms.ModelForm):
         model = User
         fields = ["first_name", "last_name", "email", "username"]
 
+    def usernameLowercase(self):
+        username = self.cleaned_data.get("username")
+        if username != username.lower():
+            self.add_error(
+                None, ValidationError({"username": ["use lowercase"]})
+            )
+
     def password_matches(self):
         password = self.cleaned_data.get("password")
-        confrimed_password = self.cleaned_data.get("password_confirm")
+        confirmed_password = self.cleaned_data.get("password_confirm")
 
         if not password:
             self.add_error(
                 None, ValidationError({"password": ["Feltet er påkrevd"]})
             )
 
-        if not confrimed_password:
+        if not confirmed_password:
             self.add_error(
                 None,
                 ValidationError({"password_confirm": ["Feltet er påkrevd"]}),
             )
 
-        if password != confrimed_password:
+        if password != confirmed_password:
             message = "Password does not match"  # Redundant?
             self.add_error(
                 None,

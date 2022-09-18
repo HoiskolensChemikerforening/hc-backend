@@ -55,6 +55,7 @@ def register_user(request):
         and user_profile_form.is_valid()
         and approved_terms_form.is_valid()
     ):
+        user_core_form.usernameLowercase()
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
         user.save()
