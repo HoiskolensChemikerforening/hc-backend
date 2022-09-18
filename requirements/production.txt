@@ -142,7 +142,7 @@ pillow==9.0.1
     #   wiki
 pluggy==0.13.1
     # via pytest
-psycopg2==2.7.6.1
+psycopg2-binary==2.8.6
     # via -r base.in
 py==1.10.0
     # via
