@@ -10,7 +10,7 @@ from django.contrib import messages
 from dal import autocomplete
 from django.utils.html import format_html
 
-# Create your views here.
+
 @permission_required("merch.add_merch")
 def create_merch(request):
     form = MerchForm(request.POST or None, request.FILES or None)
@@ -36,13 +36,11 @@ def create_category(request):
 
     if request.POST:
         if "another" in request.POST and form.is_valid():
-            instance = form.save(commit=False)
-            instance.save()
+            form.save()
             return HttpResponseRedirect(reverse("merch:create_category"))
 
         if form.is_valid():
-            instance = form.save(commit=False)
-            instance.save()
+            form.save()
             return HttpResponseRedirect(reverse("merch:index"))
 
     context = {"form": form}
@@ -54,19 +52,29 @@ def create_category(request):
 def all_merch(request):
     merch_objects = Merch.objects.all()
     form = SortingForm()
-    if request.method == "POST":
-        form = SortingForm(request.POST)
-        if form.is_valid():
-            if request.POST["submit"] != "Nullstill":
-                merch_objects = Merch.objects.filter(
-                    category=form.cleaned_data["category"]
-                )
-    paginator = Paginator(merch_objects, 12)  # Show 25 contacts per page.
 
-    page_number = request.GET.get("page")
-    page_obj = paginator.get_page(page_number)
+    if not merch_objects.exists():
+        return render(request, "merch/empty.html")
+    else:
 
-    context = {"merchs": page_obj, "form": form}
+        if request.method == "POST":
+            form = SortingForm(request.POST)
+            if form.is_valid():
+                if request.POST["submit"] != "Nullstill":
+                    merch_objects = Merch.objects.filter(
+                        category=form.cleaned_data["category"]
+                    )
+    obj_per_page = 25  # Show 25 contacts per page.
+    if len(merch_objects) < obj_per_page:
+        context = {"merchs": merch_objects, "form": form}
+    else:
+        paginator = Paginator(merch_objects, obj_per_page)
+
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context = {"merchs": page_obj, "form": form}
+
     return render(request, "merch/list_all.html", context)
 
 
@@ -99,14 +107,6 @@ class CategoryAutocomplete(autocomplete.Select2QuerySetView):
 
         if self.q:
             qs = qs.filter(name__icontains=self.q)
-        """
-        if self.q:
-            qs = (
-                qs.filter(username__icontains=self.q)
-                | qs.filter(first_name__icontains=self.q)
-                | qs.filter(last_name__icontains=self.q)
-            )
-        """
 
         return qs
 

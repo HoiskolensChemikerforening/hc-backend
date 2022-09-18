@@ -43,7 +43,7 @@
             <a class="card" href={%url "merch:detail" pk=merch.id %} >
 
                 <img src="{{merch.image.url}}" alt="img" style="height:180px;" href={%url "merch:index" %}>
-                <div class="card" style="color:#222222; background-color:#F9CF00;" href={%url "merch:detail" pk=merch.id %}>{{merch.name}} - {{merch.price}} kr </div>
+                <div class="card" style="color:#222222; background-color:#F9CF00;" href={%url "merch:detail" pk=merch.id %}>{{merch.name}} - {{merch.price|floatformat:2}} kr </div>
 
             <a/>
         </div>
@@ -72,15 +72,15 @@
           <ul>
             {% if perms.merch.add_merch %}
               <li>
-                <a class="btn-floating blue" href={% url "merch:create" %}>
-                  <i class="material-icons">add</i>
-                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
-                </a>
-              </li>
-              <li>
                 <a class="btn-floating blue" href={% url "merch:create_category" %}>
                   <i class="material-icons">add</i>
                   <a class="btn-floating mobile-fab-tip" href={% url "merch:create_category" %}>Legg til en ny kategori!</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
                 </a>
               </li>
             {% endif %}
