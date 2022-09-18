@@ -46,6 +46,16 @@ STIPULATED_TIME = 5
 FINISH_YEAR = CURRENT_YEAR + STIPULATED_TIME + 3
 YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 
+SPECIALIZATION= Choices(
+    ("NONE",1,"Ingen"),
+    ("ANALYTICAL",2,"Analytisk kjemi"),
+    ("APPLIED",3,"Anvendt teoretisk kjemi"),
+    ("BIOTECH",4,"Bioteknologi"),
+    ("MATERIAL",5,"Materialkjemi og energiteknologi"),
+    ("ORGANICAL",6,"Organisk kjemi"),
+    ("PROCESS",7,"Kjemisk prosessteknologi"),
+)
+
 
 class ProfileManager(models.Manager):
     def search_name(self, list):
@@ -119,6 +129,11 @@ class Profile(models.Model):
         default=CURRENT_YEAR + STIPULATED_TIME,
         verbose_name="Estimert ferdig",
     )
+    specialization = models.PositiveSmallIntegerField(
+        choices=SPECIALIZATION,
+        default=SPECIALIZATION.NONE,
+        verbose_name= "Spesialisering",
+    )
 
     allergies = models.TextField(
         null=True, blank=True, verbose_name="Matallergi"
@@ -188,8 +203,11 @@ class Profile(models.Model):
     def get_nice_relationship_status(self):
         return self.get_relationship_status_display()
 
+    def get_nice_specialization(self):
+        return self.get_specialization_display()
+
     def save(self, *args, **kwargs):
-        if self.access_card is "":
+        if self.access_card == "":
             self.access_card = f"{self.pk} - INVALID"
         return super().save(*args, **kwargs)
 
