@@ -77,7 +77,7 @@ def send_notification(request):
 
 class CoffeeLatestSubmission(generics.ListCreateAPIView):
     queryset = []
-    if (CoffeeSubmission.objects.all().exists()):
-        queryset.append(CoffeeSubmission.objects.latest('id'))
+    if CoffeeSubmission.objects.all().exists():
+        queryset.append(CoffeeSubmission.objects.latest("id"))
 
     serializer_class = CoffeeSubmissionSerializer
