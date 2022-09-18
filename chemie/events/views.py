@@ -25,7 +25,7 @@ from django.views.generic.list import ListView
 from django.db.models import Q
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, Profile, User, GRADES
+from chemie.customprofile.models import ProfileManager, Profile, User, GRADES,SPECIALIZATION
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -119,6 +119,7 @@ class CreateBedpresView(
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
     initial = {"allowed_grades": list(GRADES.values.keys())}
+    initial_specializations = {"allowed_specialization": list(SPECIALIZATION.values.keys())}
     message_content = messages.SUCCESS, "Bedpresen ble opprettet", "Opprettet"
 
 
@@ -503,6 +504,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "registration_form": registration_form,
             "event": self.object,
             "allowed_grade": self.object.allowed_grade(request.user),
+            "allowed_specialization": self.object.allowed_specialization(request.user),
         }
         return render(request, self.template_name, context)
 
@@ -525,6 +527,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             "registration_form": registration_form,
             "event": self.object,
             "allowed_grade": self.object.allowed_grade(request.user),
+            "allowed_specialization": self.object.allowed_specialization(request.user),
         }
         return render(request, self.template_name, context)
 
@@ -556,14 +559,33 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
-            messages.add_message(
-                request,
-                messages.INFO,
-                "Det er ikke åpent for ditt klassetrinn, "
-                "men vi har notert din interesse. Du blir påmeldt "
-                "automatisk og tilsendt en e-post dersom dette endres.",
-                extra_tags="Interessert",
-            )
+            if not self.object.allowed_specialization(request.user)  and not self.object.allowed_grade(request.user):
+               messages.add_message(
+                   request,
+                   messages.INFO,
+                   "Det er ikke åpent for ditt klassetrinn og din spesialisering, "
+                   "men vi har notert din interesse. Du blir påmeldt "
+                   "automatisk og tilsendt en e-post dersom dette endres.",
+                   extra_tags="Interessert",
+               )
+            elif not self.object.allowed_specialization(request.user):
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Det er ikke åpent for din spesialisering, "
+                    "men vi har notert din interesse. Du blir påmeldt "
+                    "automatisk og tilsendt en e-post dersom dette endres.",
+                    extra_tags="Interessert",
+                )
+            else:
+                messages.add_message(
+                    request,
+                    messages.INFO,
+                    "Det er ikke åpent for ditt klassetrinn, "
+                    "men vi har notert din interesse. Du blir påmeldt "
+                    "automatisk og tilsendt en e-post dersom dette endres.",
+                    extra_tags="Interessert",
+                )
         send_event_mail(instance, event, self.email_template)
 
 

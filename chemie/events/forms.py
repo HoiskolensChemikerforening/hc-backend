@@ -4,6 +4,7 @@ from django import forms
 from django.core.validators import ValidationError
 from extended_choices import Choices
 from chemie.customprofile.models import GRADES
+from chemie.customprofile.models import SPECIALIZATION
 from .models import (
     Social,
     SocialEventRegistration,
@@ -18,6 +19,13 @@ class BaseRegisterEventForm(forms.ModelForm):
         widget=forms.CheckboxSelectMultiple,
         choices=GRADES,
         label="Tillatte klassetrinn",
+    )
+    allowed_specializations = forms.MultipleChoiceField(
+        widget= forms.CheckboxSelectMultiple,
+        choices= SPECIALIZATION,
+        label= " Tilatte spesialiseringer",
+
+
     )
 
     def clean(self):
@@ -102,6 +110,26 @@ class BaseRegisterEventForm(forms.ModelForm):
                 ),
             )
 
+    def clean_allowed_specializations(self):
+        try:
+            specializations = self.cleaned_data.get("allowed_specializations")
+            specializations = [int(specialization) for specialization in specializations]
+            # Next line checks whether the integers in "specializations" corresponds to a choice in SPECIALIZATIONS,
+            # if not, an exception occurs
+            _ = [SPECIALIZATION.values[int(specialization)] for specialization in specializations]
+            return specializations
+        except (ValueError, KeyError):
+            self.add_error(
+                None,
+                ValidationError(
+                    {
+                        "allowed_specializations": [
+                            "Tillatte spesialiseringer er ikke akseptert"
+                        ]
+                    }
+                ),
+            )
+
     class Meta:
         abstract = True
         model = BaseEvent
@@ -112,6 +140,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             "image",
             "sluts",
             "allowed_grades",
+            "allowed_specializations",
             "date",
             "register_startdate",
             "register_deadline",
@@ -177,7 +206,7 @@ class RegisterBedpresForm(BaseRegisterEventForm):
         M.Row("location"),
         M.Row("description"),
         M.Row(M.Column("image"), M.Column("sluts")),
-        M.Row("allowed_grades"),
+        M.Row(M.Column("allowed_grades"), M.Column("allowed_specializations"))
     )
 
     class Meta(BaseRegisterEventForm.Meta):

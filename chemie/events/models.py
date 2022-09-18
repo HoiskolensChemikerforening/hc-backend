@@ -7,6 +7,7 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 
 from chemie.customprofile.models import GRADES
+from chemie.customprofile.models import SPECIALIZATION
 from chemie.committees.models import Committee
 from .email import send_event_mail
 
@@ -65,18 +66,25 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
+    allowed_specializations = ArrayField(models.IntegerField(choices=SPECIALIZATION),null=True)
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.allowed_grades_previous = self.allowed_grades
+        self.allowed_specializations_previous = self.allowed_specializations
+
 
     def __str__(self):
         return self.title
 
     def get_allowed_grades_display(self):
         return [GRADES.for_value(x).display for x in self.allowed_grades]
+
+    def get_allowed_specializations_display(self):
+        return [SPECIALIZATION.for_value(x).display for x in self.allowed_specializations]
+
 
     def registered_users(self):
         return self.attendees.through.objects.filter(
@@ -141,8 +149,24 @@ class BaseEvent(models.Model):
                 # Bump once more in case the slot-count was increased as well
                 self.bump_waiting()
 
+        if self.allowed_specializations_previous:
+            new_specializations = set(self.allowed_specializations) - set(
+                self.allowed_specializations_previous
+            )
+            if new_specializations:
+                # Update all relevant attendees
+                self.attendees.through.objects.filter(
+                    user__profile__grade__in=new_specializations,
+                    status=REGISTRATION_STATUS.INTERESTED,
+                ).update(status=REGISTRATION_STATUS.WAITING)
+                # Bump once more in case the slot-count was increased as well
+                self.bump_waiting()
+
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
+
+    def allowed_specialization(self,user):
+        return user.profile.specialization in self.allowed_specializations
 
     class Meta:
         abstract = True
