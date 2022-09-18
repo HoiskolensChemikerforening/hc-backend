@@ -46,14 +46,14 @@ STIPULATED_TIME = 5
 FINISH_YEAR = CURRENT_YEAR + STIPULATED_TIME + 3
 YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 
-SPECIALIZATION= Choices(
-    ("NONE",1,"Ingen"),
-    ("ANALYTICAL",2,"Analytisk kjemi"),
-    ("APPLIED",3,"Anvendt teoretisk kjemi"),
-    ("BIOTECH",4,"Bioteknologi"),
-    ("MATERIAL",5,"Materialkjemi og energiteknologi"),
-    ("ORGANICAL",6,"Organisk kjemi"),
-    ("PROCESS",7,"Kjemisk prosessteknologi"),
+SPECIALIZATION = Choices(
+    ("NONE", 1, "Ingen"),
+    ("ANALYTICAL", 2, "Analytisk kjemi"),
+    ("APPLIED", 3, "Anvendt teoretisk kjemi"),
+    ("BIOTECH", 4, "Bioteknologi"),
+    ("MATERIAL", 5, "Materialkjemi og energiteknologi"),
+    ("ORGANICAL", 6, "Organisk kjemi"),
+    ("PROCESS", 7, "Kjemisk prosessteknologi"),
 )
 
 
@@ -132,7 +132,7 @@ class Profile(models.Model):
     specialization = models.PositiveSmallIntegerField(
         choices=SPECIALIZATION,
         default=SPECIALIZATION.NONE,
-        verbose_name= "Spesialisering",
+        verbose_name="Spesialisering",
     )
 
     allergies = models.TextField(
