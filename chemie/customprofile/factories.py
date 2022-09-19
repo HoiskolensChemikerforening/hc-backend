@@ -39,7 +39,7 @@ class RandomProfileFactory(factory.DjangoModelFactory):
     end_year = FINISH_YEAR
     allergies = factory.Sequence(lambda n: "Allergen_%d" % n)
     relationship_status = factory.Iterator(RELATIONSHIP_STATUS.values.keys())
-    specialization= factory.Iterator(SPECIALIZATION.values.keys())
+    specialization = factory.Iterator(SPECIALIZATION.values.keys())
     phone_number = factory.sequence(lambda p: p)
     access_card = factory.Faker("password", length=10)
 
