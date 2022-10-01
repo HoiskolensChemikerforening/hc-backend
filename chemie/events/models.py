@@ -66,7 +66,7 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
-    allowed_specializations = ArrayField(models.IntegerField(choices=SPECIALIZATION),null=True)
+    allowed_specializations = ArrayField(models.IntegerField(choices=SPECIALIZATION), null=True)
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
@@ -156,7 +156,7 @@ class BaseEvent(models.Model):
             if new_specializations:
                 # Update all relevant attendees
                 self.attendees.through.objects.filter(
-                    user__profile__grade__in=new_specializations,
+                    user__profile__specialization__in=new_specializations,
                     status=REGISTRATION_STATUS.INTERESTED,
                 ).update(status=REGISTRATION_STATUS.WAITING)
                 # Bump once more in case the slot-count was increased as well
@@ -165,7 +165,7 @@ class BaseEvent(models.Model):
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
 
-    def allowed_specialization(self,user):
+    def allowed_specialization(self, user):
         return user.profile.specialization in self.allowed_specializations
 
     class Meta:
