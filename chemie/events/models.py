@@ -140,10 +140,12 @@ class BaseEvent(models.Model):
             new_grades = set(self.allowed_grades) - set(
                 self.allowed_grades_previous
             )
+
             if new_grades:
                 # Update all relevant attendees
                 self.attendees.through.objects.filter(
                     user__profile__grade__in=new_grades,
+                    user__profile__specialization__in=self.allowed_specializations_previous,
                     status=REGISTRATION_STATUS.INTERESTED,
                 ).update(status=REGISTRATION_STATUS.WAITING)
                 # Bump once more in case the slot-count was increased as well
@@ -157,6 +159,7 @@ class BaseEvent(models.Model):
                 # Update all relevant attendees
                 self.attendees.through.objects.filter(
                     user__profile__specialization__in=new_specializations,
+                    user__profile__grade__in=self.allowed_grades_previous,
                     status=REGISTRATION_STATUS.INTERESTED,
                 ).update(status=REGISTRATION_STATUS.WAITING)
                 # Bump once more in case the slot-count was increased as well
