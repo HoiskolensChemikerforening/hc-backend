@@ -2,7 +2,7 @@
 {% load material_form %}
 
 {% block nav_header %}
-  Merch
+  Kategori
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
@@ -14,8 +14,7 @@
         {% csrf_token %}
         {{ form.media }}
         {{ form.as_p }}
-        <input class="btn" type='submit' value='Lagre kategori!'/>
-        <input class="btn" type='submit' name= 'another' value='Lagre kategori og legg til en til!'/>
+        <input class="btn" type='submit' value='Lagre kategori'/>
     </form>
 
     {% if perms.merch%}

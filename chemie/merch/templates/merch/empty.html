@@ -13,8 +13,8 @@
 {% block content %}
     <div>
         <h3>Det finnes ingen merch!</h3>
-        <p>Trykk først på redigeringsikonet nede til høyre for å først lage en kategori (Pins, patch, bøker osv)</p>
-        <p>Deretter trykk samme redigeringikonet for å legge til merch objekter!</p>
+        <p>Trykk først på redigeringsikonet nede til høyre for å først lage en kategori (pins, patch, bøker osv)</p>
+        <p>Deretter trykk samme redigeringsikonet for å legge til merch objekter!</p>
     </div>
     {% if perms.merch%}
         <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
@@ -23,6 +23,12 @@
           </a>
           <ul>
             {% if perms.merch.add_merch %}
+              <li>
+                <a class="btn-floating blue" href={% url "merch:categories" %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:categories" %}>Endre eller slette kategori</a>
+                </a>
+              </li>
               <li>
                 <a class="btn-floating blue" href={% url "merch:create_category" %}>
                   <i class="material-icons">add</i>

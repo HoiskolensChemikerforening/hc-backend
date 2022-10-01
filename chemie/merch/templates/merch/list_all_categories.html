@@ -1,0 +1,45 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load static %}
+
+{% block nav_header %}
+Kategori
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Skate fast, eat ass yeeet
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+    <table style="width:50%" id="myTable" class="tablesorter">
+        <thead>
+        <tr>
+            <th>Kategori</th>
+            <th>Rediger</th>
+            <th>Slett</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for category in categories %}
+        <tr>
+            <td>{{ category }}</td>
+            <td>
+                {% if perms.merch.edit_category %}
+                <a class="btn-floating blue" href="{% url "merch:edit_category" category.id%}">
+                <i class="material-icons">edit</i>
+                </a>
+                {% endif %}
+            </td>
+            <td>
+                {% if perms.merch.delete_category %}
+                <a class="btn-floating red" href="{% url "merch:delete_category" category.id%}">
+                <i class="material-icons">delete</i>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% endblock content %}
+

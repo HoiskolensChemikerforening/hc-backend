@@ -81,9 +81,15 @@ def all_merch(request):
 @login_required
 def detail(request, pk):
     merch_object = get_object_or_404(Merch, id=pk)
-
     context = {"merch": merch_object}
     return render(request, "merch/detail.html", context)
+
+
+@login_required
+def detail_category(request):
+    categories = MerchCategory.objects.all()
+    context = {"categories": categories}
+    return render(request, "merch/list_all_categories.html", context)
 
 
 @permission_required("merch.delete_merch")
@@ -96,6 +102,54 @@ def delete(request, pk):
     )
     return HttpResponseRedirect(reverse("merch:index"))
 
+@permission_required("merch.delete_categories")
+def delete_categories(request, merchcategory_id):
+    category_object = get_object_or_404(MerchCategory, id=merchcategory_id)
+
+    category_object.delete()
+    messages.add_message(
+        request, messages.SUCCESS, "Kategorien ble slettet", extra_tags="Slettet"
+    )
+    return HttpResponseRedirect(reverse("merch:categories"))
+
+@permission_required("merch.edit_categories")
+def edit_category(request, merchcategory_id):
+    category = get_object_or_404(MerchCategory, id=merchcategory_id)
+    form = MerchCategoryForm(
+        request.POST or None, instance=category
+    )
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Kategorien ble endret",
+                extra_tags= "Endret"
+            )
+            return HttpResponseRedirect(reverse("merch:categories"))
+    context = {"form":form}
+    return render(request, "merch/create_category.html", context)
+
+
+@permission_required("merch.edit_merch")
+def edit_merch(request, merch_id):
+    merch_object = get_object_or_404(MerchCategory, id=merch_id)
+    form = MerchCategoryForm(
+        request.POST or None, request.FILES or None, instance=merch_object
+    )
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Merchen ble endret",
+                extra_tags= "Endret"
+            )
+            return HttpResponseRedirect(reverse("merch:index"))
 
 class CategoryAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):
