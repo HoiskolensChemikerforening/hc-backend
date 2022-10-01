@@ -12,6 +12,10 @@
 
 
 {% block content %}
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "merch:index" %}" class="breadcrumb">Merch</a>
+    <a class="breadcrumb">{{merch}}</a>
+</div>
     <card>
         <h1>{{merch.name}}</h1>
         <img src="{{merch.image.url}}" style="height:400px"/>
