@@ -134,9 +134,9 @@ def edit_category(request, merchcategory_id):
 
 
 @permission_required("merch.edit_merch")
-def edit_merch(request, merch_id):
-    merch_object = get_object_or_404(MerchCategory, id=merch_id)
-    form = MerchCategoryForm(
+def edit_merch(request, pk):
+    merch_object = get_object_or_404(Merch, id=pk)
+    form = MerchForm(
         request.POST or None, request.FILES or None, instance=merch_object
     )
     if request.method == "POST":
@@ -150,6 +150,8 @@ def edit_merch(request, merch_id):
                 extra_tags= "Endret"
             )
             return HttpResponseRedirect(reverse("merch:index"))
+    context = {"form": form}
+    return render(request, "merch/create_merch.html", context)
 
 class CategoryAutocomplete(autocomplete.Select2QuerySetView):
     def get_queryset(self):

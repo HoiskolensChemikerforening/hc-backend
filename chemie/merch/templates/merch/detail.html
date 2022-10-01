@@ -6,6 +6,9 @@
   Merch
 {% endblock nav_header %}
 
+{% block nav_sub_header %}
+  Selges av styret under kontortid!
+{% endblock nav_sub_header %}
 
 
 {% block content %}
@@ -17,22 +20,25 @@
 
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
           <a class="btn-floating btn-large">
-            <i class="large material-icons">edit</i>
+            <i class="large material-icons">dehaze</i>
           </a>
           <ul>
 
             {% if perms.merch.delete_merch %}
               <li>
                 <a class="btn-floating red" href={% url "merch:delete" pk=merch.id %}>
-                  <i class="material-icons">clear</i>
-                  <a class="btn-floating mobile-fab-tip" href={% url "merch:delete" pk=merch.id %}>Fjern denne merchen.</a>
+                  <i class="material-icons">delete</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:delete" pk=merch.id %}>Slett</a>
                 </a></li>
             {% endif %}
-              <li>
-                  <a class="btn-floating blue" href={% url "merch:index" %}>
-                  <i class="material-icons">arrow_back</i>
-                  <a class="btn-floating mobile-fab-tip" href={% url "merch:index" %}>Til resten av merchen!</a>
-              </li>
+
+            {% if perms.merch.edit_merch %}
+                <li>
+                <a class="btn-floating blue" href={% url "merch:edit_merch" pk=merch.id %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:edit_merch" pk=merch.id %}>Rediger</a>
+                </a></li>
+            {% endif %}
           </ul>
         </div>
 
