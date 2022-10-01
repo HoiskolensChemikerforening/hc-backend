@@ -26,9 +26,19 @@
   {% if registration_form %}
     <p class="flow-text">Okei folkens! Gløym at dykk ikkje fekk væra me på soleis store slåttemda festen sist
       gang. Det er no det gjeld!</p>
-    {% if not allowed_grade %}
+    {% if not allowed_grade and not allowed_specialization %}
       <p class="flow-text">
+        Ditt klassetrinn og din spesialisering er ikke invitert til dette arrangementet.
+        Du kan fortsatt melde din interesse dersom det åpnes plasser.
+      </p>
+    {% elif not allowed_grade %}
+        <p class="flow-text">
         Ditt klassetrinn er ikke invitert til dette arrangementet.
+        Du kan fortsatt melde din interesse dersom det åpnes plasser.
+      </p>
+    {% else %}
+        <p class="flow-text">
+        Din spesialisering er ikke invitert til dette arrangementet.
         Du kan fortsatt melde din interesse dersom det åpnes plasser.
       </p>
     {% endif %}
