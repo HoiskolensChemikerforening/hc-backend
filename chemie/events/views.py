@@ -559,7 +559,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
-            if not self.object.allowed_specialization(request.user)  and not self.object.allowed_grade(request.user):
+            if not self.object.allowed_specialization(request.user) and not self.object.allowed_grade(request.user):
                messages.add_message(
                    request,
                    messages.INFO,

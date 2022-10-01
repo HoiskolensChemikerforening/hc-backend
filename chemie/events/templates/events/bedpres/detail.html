@@ -45,12 +45,30 @@
             <div>
               <p class="left valign"><b>Klasse:</b></p>
               <p class="right valign">
-                {% for grade in bedpres.get_allowed_grades_display %}
-                  {{ grade }},
-                {% endfor %}</p>
+                {% if bedpres.get_allowed_grades_display|length  == 6 %}
+                  {{ 'Alle' }}
+                {% else %}
+                  {% for grade in bedpres.get_allowed_grades_display %}
+                    {{ grade }},
+                  {% endfor %}
+                {% endif %}
+              </p>
+            </div>
+            <br>
+             <div>
+              <p class="left valign"><b>Spesialisering:</b></p>
+              <p class="right valign">
+                {% if bedpres.get_allowed_specializations_display|length  == 7 %}
+                  {{ 'Alle' }}
+                {% else %}
+                  {% for specialization in bedpres.get_allowed_specializations_display %}
+                    {{ specialization }},
+                  {% endfor %}
+                {% endif %}
+              </p>
             </div>
           </div>
-          <br>
+          <br style="clear: both" />
           <div class="divider"></div>
 
           <div class="section">

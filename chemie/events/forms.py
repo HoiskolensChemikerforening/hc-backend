@@ -21,9 +21,9 @@ class BaseRegisterEventForm(forms.ModelForm):
         label="Tillatte klassetrinn",
     )
     allowed_specializations = forms.MultipleChoiceField(
-        widget= forms.CheckboxSelectMultiple,
-        choices= SPECIALIZATION,
-        label= " Tilatte spesialiseringer",
+        widget=forms.CheckboxSelectMultiple,
+        choices=SPECIALIZATION,
+        label="Tilatte spesialiseringer",
 
 
     )
