@@ -19,10 +19,16 @@ def create_merch(request):
         if "another" in request.POST and form.is_valid():
             instance = form.save(commit=False)
             instance.save()
+            messages.add_message(
+                request, messages.SUCCESS, "Merchen ble opprettet", extra_tags="Opprettet"
+            )
             return HttpResponseRedirect(reverse("merch:create"))
         if form.is_valid():
             instance = form.save(commit=False)
             instance.save()
+            messages.add_message(
+                request, messages.SUCCESS, "Merchen ble opprettet", extra_tags="Opprettet"
+            )
             return HttpResponseRedirect(reverse("merch:index"))
 
     context = {"form": form}
@@ -37,10 +43,16 @@ def create_category(request):
     if request.POST:
         if "another" in request.POST and form.is_valid():
             form.save()
+            messages.add_message(
+                request, messages.SUCCESS, "Kategorien ble opprettet", extra_tags="Opprettet"
+            )
             return HttpResponseRedirect(reverse("merch:create_category"))
 
         if form.is_valid():
             form.save()
+            messages.add_message(
+                request, messages.SUCCESS, "Kategorien ble opprettet", extra_tags="Opprettet"
+            )
             return HttpResponseRedirect(reverse("merch:index"))
 
     context = {"form": form}
