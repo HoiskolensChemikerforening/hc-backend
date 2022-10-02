@@ -12,8 +12,16 @@ urlpatterns = [
     path("<int:pk>", views.detail, name="detail"),
     path("<int:pk>/delete", views.delete, name="delete"),
     path("<int:pk>/rediger", views.edit_merch, name="edit_merch"),
-    path("kategori/slett/<int:merchcategory_id>", views.delete_categories, name="delete_category"),
-    path("kategori/rediger/<int:merchcategory_id>", views.edit_category, name="edit_category"),
+    path(
+        "kategori/slett/<int:merchcategory_id>",
+        views.delete_categories,
+        name="delete_category",
+    ),
+    path(
+        "kategori/rediger/<int:merchcategory_id>",
+        views.edit_category,
+        name="edit_category",
+    ),
     path(
         "category-autocomplete/",
         views.CategoryAutocomplete.as_view(),
