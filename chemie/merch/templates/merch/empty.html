@@ -1,0 +1,48 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load static %}
+
+{% block nav_header %}
+  Merch
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Selges av styret under kontortid!
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div>
+        <h3>Det finnes ingen merch!</h3>
+        <p>Trykk først på redigeringsikonet nede til høyre for å først lage en kategori (pins, patch, bøker osv)</p>
+        <p>Deretter trykk samme redigeringsikonet for å legge til merch objekter!</p>
+    </div>
+    {% if perms.merch%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">edit</i>
+          </a>
+          <ul>
+            {% if perms.merch.add_merch %}
+              <li>
+                <a class="btn-floating blue" href={% url "merch:categories" %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:categories" %}>Endre eller slette kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create_category" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create_category" %}>Legg til en ny kategori!</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "merch:create" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:create" %}>Legg til mer merch!</a>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+{% endblock content %}

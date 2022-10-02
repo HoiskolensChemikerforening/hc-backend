@@ -1,0 +1,51 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load static %}
+
+{% block nav_header %}
+  Merch
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Selges av styret under kontortid!
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "merch:index" %}" class="breadcrumb">Merch</a>
+    <a class="breadcrumb">{{merch}}</a>
+</div>
+    <card>
+        <h1>{{merch.name}}</h1>
+        <img src="{{merch.image.url}}" style="height:400px"/>
+        <h4>Pris: {{merch.price|floatformat:2}}kr</h4>
+        <h4>{{merch.info}}<h4/>
+    </card>
+
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">dehaze</i>
+          </a>
+          <ul>
+
+            {% if perms.merch.delete_merch %}
+              <li>
+                <a class="btn-floating red" href={% url "merch:delete" pk=merch.id %}>
+                  <i class="material-icons">delete</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:delete" pk=merch.id %}>Slett</a>
+                </a></li>
+            {% endif %}
+
+            {% if perms.merch.edit_merch %}
+                <li>
+                <a class="btn-floating blue" href={% url "merch:edit_merch" pk=merch.id %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "merch:edit_merch" pk=merch.id %}>Rediger</a>
+                </a></li>
+            {% endif %}
+          </ul>
+        </div>
+
+    </div>
+{% endblock content %}
