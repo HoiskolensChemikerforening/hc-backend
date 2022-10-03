@@ -30,14 +30,14 @@ Endre eller slett kategorier
         <tr>
             <td>{{ category }}</td>
             <td>
-                {% if perms.merch.edit_category %}
+                {% if perms.merch.change_merchcategory %}
                 <a class="btn-floating blue" href="{% url "merch:edit_category" category.id%}">
                 <i class="material-icons">edit</i>
                 </a>
                 {% endif %}
             </td>
             <td>
-                {% if perms.merch.delete_category %}
+                {% if perms.merch.delete_merchcategory %}
                 <a class="btn-floating red" href="{% url "merch:delete_category" category.id%}">
                 <i class="material-icons">delete</i>
                 {% endif %}

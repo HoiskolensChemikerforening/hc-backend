@@ -127,7 +127,7 @@ def delete(request, pk):
     return HttpResponseRedirect(reverse("merch:index"))
 
 
-@permission_required("merch.delete_categories")
+@permission_required("merch.delete_merchcategories")
 def delete_categories(request, merchcategory_id):
     category_object = get_object_or_404(MerchCategory, id=merchcategory_id)
 
@@ -141,7 +141,7 @@ def delete_categories(request, merchcategory_id):
     return HttpResponseRedirect(reverse("merch:categories"))
 
 
-@permission_required("merch.edit_categories")
+@permission_required("merch.change_merchcategories")
 def edit_category(request, merchcategory_id):
     category = get_object_or_404(MerchCategory, id=merchcategory_id)
     form = MerchCategoryForm(request.POST or None, instance=category)
@@ -160,7 +160,7 @@ def edit_category(request, merchcategory_id):
     return render(request, "merch/create_category.html", context)
 
 
-@permission_required("merch.edit_merch")
+@permission_required("merch.change_merch")
 def edit_merch(request, pk):
     merch_object = get_object_or_404(Merch, id=pk)
     form = MerchForm(
