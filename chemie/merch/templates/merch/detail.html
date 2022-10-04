@@ -37,7 +37,7 @@
                 </a></li>
             {% endif %}
 
-            {% if perms.merch.edit_merch %}
+            {% if perms.merch.change_merch %}
                 <li>
                 <a class="btn-floating blue" href={% url "merch:edit_merch" pk=merch.id %}>
                   <i class="material-icons">edit</i>
