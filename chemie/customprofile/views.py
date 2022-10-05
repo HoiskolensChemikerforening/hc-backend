@@ -57,6 +57,7 @@ def register_user(request):
     ):
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
+        user.username = user.username.lower()
         user.save()
 
         profile = user_profile_form.save(commit=False)
