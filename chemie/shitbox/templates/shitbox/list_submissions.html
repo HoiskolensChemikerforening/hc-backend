@@ -81,6 +81,28 @@
       </div>
     </div>
   </div>
+  <div class="row center">
+      <ul class="pagination nav navbar-nav">
+        {% if submission_page.has_previous %}
+          <li><a href="?page={{ submission_page.previous_page_number }}">Forrige</a></li>
+        {% else %}
+          <li class="disabled"><a class="grey-text text-lighten-1">Forrige</a></li>
+        {% endif %}
+
+        <li><a class="grey-text text-darken-1" href="?page={{ submission_page.paginator.first_page }}">Første</a></li>
+
+        {% for page in limit_useful_page_range %}
+          <li class="{% if submission_page.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        <li><a class="grey-text text-darken-1" href="?page={{ submission_page.paginator.last_page }}">Siste</a></li>
+        {% if submission_page.has_next %}
+          <li><a href="?page={{ submission_page.next_page_number }}">Neste</a></li>
+        {% else %}
+          <li class="disabled"><a class="grey-text text-lighten-1">Neste</a></li>
+        {% endif %}
+      </ul>
+    </div>
 {% endblock content %}
 
 {% block footer_script %}
