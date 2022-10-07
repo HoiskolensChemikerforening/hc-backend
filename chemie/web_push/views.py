@@ -79,7 +79,7 @@ class CoffeeLatestSubmission(generics.ListCreateAPIView):
     serializer_class = CoffeeSubmissionSerializer
 
     def get_queryset(self):
-        queryset = CoffeeSubmission.objects.order_by('-id')
+        queryset = CoffeeSubmission.objects.order_by("-id")
         if queryset.exists():
             return queryset[:1]
         else:

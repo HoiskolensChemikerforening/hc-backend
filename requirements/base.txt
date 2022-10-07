@@ -24,7 +24,7 @@ coverage==4.5.2
     # via
     #   -r base.in
     #   pytest-cov
-cryptography==3.2
+cryptography==3.3.2
     # via
     #   apns2
     #   http-ece
@@ -144,7 +144,7 @@ pillow==9.0.1
     #   wiki
 pluggy==0.13.1
     # via pytest
-psycopg2==2.7.6.1
+psycopg2-binary==2.8.6
     # via -r base.in
 py==1.8.1
     # via pytest

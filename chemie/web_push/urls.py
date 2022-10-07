@@ -7,5 +7,5 @@ app_name = "notifications"
 urlpatterns = [
     path("send/", send_notification, name="send"),
     path("save/", save_device, name="save"),
-    path("api/", CoffeeLatestSubmission.as_view(), name="api")
+    path("api/", CoffeeLatestSubmission.as_view(), name="api"),
 ]
