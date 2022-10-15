@@ -252,9 +252,7 @@ def change_membership_status(request, profile_id, duration):
     if person.membership is None:
         # Create a new membership
         membership = Membership(
-            start_date=start_date,
-            end_date=end_date,
-            endorser=endorser,
+            start_date=start_date, end_date=end_date, endorser=endorser
         )
         membership.save()
         person.membership = membership
@@ -289,8 +287,10 @@ def yearbook(request, year=1):
         if form.is_valid():
             search_field = form.cleaned_data.get("search_field")
             users = find_user_by_name(search_field)
-            profiles = Profile.objects.filter(user__in=users).prefetch_related(
-                "medals"
+            profiles = (
+                Profile.objects.filter(user__in=users)
+                .prefetch_related("medals")
+                .order_by("grade")
             )
     else:
         profiles = (
