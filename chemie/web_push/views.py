@@ -7,6 +7,7 @@ import json
 from rest_framework import viewsets
 from .serializers import CoffeeSubmissionSerializer
 from django.http import HttpResponse, JsonResponse
+from rest_framework import generics
 import datetime
 
 
@@ -17,7 +18,7 @@ class CoffeeSubmissionViewSet(viewsets.ModelViewSet):
 
 @login_required
 def save_device(request):
-    """ Creates a device and gcm/apns device for user that allowes for notification """
+    """Creates a device and gcm/apns device for user that allowes for notification"""
     if request.method == "POST":
         browser = request.POST["browser"]
         token = request.POST["token"]
@@ -40,7 +41,7 @@ def save_device(request):
 
 @csrf_exempt
 def send_notification(request):
-    """ Send notification to all users from notification/send url """
+    """Send notification to all users from notification/send url"""
     if request.method == "POST":
         payload_bytes = request.body
         payload_bytes_decoded = payload_bytes.decode("utf8")
@@ -72,3 +73,14 @@ def send_notification(request):
         return JsonResponse(serializer.errors, status=401)
     else:
         return redirect(reverse("frontpage:home"))
+
+
+class CoffeeLatestSubmission(generics.ListCreateAPIView):
+    serializer_class = CoffeeSubmissionSerializer
+
+    def get_queryset(self):
+        queryset = CoffeeSubmission.objects.order_by("-id")
+        if queryset.exists():
+            return queryset[:1]
+        else:
+            return queryset

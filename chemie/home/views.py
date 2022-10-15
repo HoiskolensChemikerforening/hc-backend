@@ -17,7 +17,12 @@ from chemie.web_push.models import CoffeeSubmission
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
 from chemie.sugepodden.models import Podcast
-from .forms import ContactForm, PostFundsForm, PostOfficeForms
+from .forms import (
+    ContactForm,
+    PostFundsForm,
+    PostOfficeForms,
+    ApprovedTermsForm,
+)
 from .models import OfficeApplication
 
 
@@ -118,6 +123,7 @@ def request_office(request):
     office_form = PostOfficeForms(
         request.POST or None, initial={"student_username": ""}
     )
+    approved_terms_form = ApprovedTermsForm(request.POST or None)
     author = request.user  # hente student username fra form
     already_applied = OfficeApplication.objects.filter(
         author=author,
@@ -130,7 +136,7 @@ def request_office(request):
             "Du har allerede søkt om tilgang den siste måneden",
             extra_tags="Feil",
         )
-    if office_form.is_valid():
+    if office_form.is_valid() and approved_terms_form.is_valid():
         if already_applied:
             return redirect(reverse("frontpage:home"))
         instance = office_form.save(commit=False)
@@ -147,7 +153,11 @@ def request_office(request):
         )
         return redirect(reverse("frontpage:home"))
 
-    context = {"office_form": office_form, "already_applied": already_applied}
+    context = {
+        "office_form": office_form,
+        "already_applied": already_applied,
+        "approved_terms_form": approved_terms_form,
+    }
     return render(request, "home/office_access_form.html", context)
 
 

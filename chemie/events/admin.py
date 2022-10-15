@@ -5,7 +5,6 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
-    BaseRegistrationGroup,
 )
 from django.contrib.admin.filters import (
     AllValuesFieldListFilter,
@@ -24,16 +23,16 @@ def export_csv(modeladmin, request, queryset):
     response["Content-Disposition"] = "attachment; filename=registrations.csv"
     writer = csv.writer(response, csv.excel)
     response.write(
-        u"\ufeff".encode("utf8")
+        "\ufeff".encode("utf8")
     )  # BOM (optional...Excel needs it to open UTF-8 file properly)
     writer.writerow(
         [
-            smart_str(u"ID"),
-            smart_str(u"Event"),
-            smart_str(u"User"),
-            smart_str(u"Created"),
-            smart_str(u"Status"),
-            smart_str(u"Payment Status"),
+            smart_str("ID"),
+            smart_str("Event"),
+            smart_str("User"),
+            smart_str("Created"),
+            smart_str("Status"),
+            smart_str("Payment Status"),
         ]
     )
     for obj in queryset:
@@ -49,7 +48,7 @@ def export_csv(modeladmin, request, queryset):
     return response
 
 
-export_csv.short_description = u"Export CSV"
+export_csv.short_description = "Export CSV"
 
 
 class DropdownFilter(RelatedFieldListFilter):
@@ -107,4 +106,3 @@ class EventAdmin(admin.ModelAdmin):
 
 
 # admin.site.register(RegistrationMessage)
-admin.site.register(BaseRegistrationGroup)

@@ -25,8 +25,9 @@
         {% endif %}
         {% if perms.rentalservice.edit_rentalobject %}
           <li>
-            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}"><i
-              class="material-icons">edit</i></a>
+            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">
+              <i class="material-icons">edit</i>
+              </a>
             <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">Endre</a>
           </li>
         {% endif %}
@@ -39,12 +40,14 @@
             <a class="breadcrumb">{{ rental_object.name }}</a>
     </div>
     <div class="row">
-        <div class="col l12 m12">  <!--makes image responsive to screen size%-->
-          {% thumbnail rental_object.image "1600" crop="center" as im %}
+        <div class="col s12 l12 m12">  <!--makes image responsive to screen size%-->
+          {% thumbnail rental_object.image "500" crop="center" as im %}
             <img class="responsive-img materialboxed" src="{{ im.url }}">
           {% endthumbnail %}
         </div>
     </div>
+
+    <h5>Hallo</h5>
 
     <!-- Desription info -->
 
@@ -62,17 +65,27 @@
     <!-- Rental info -->
 
 
-        <div class="col s5 m5 l5">
-          <div class="card">
-            <div class="card-content">
-                <style>
-                    blockquote {border-left: 5px solid #FFD342;}
-                </style>
-              <h5> Kontakt:</h5>
-                <p class="flow-text"> Vi vil gjerne svare på det du lurer på, så ta kontakt med oss! </p>
-                <a href="{% url "rentalservice:contact" rental_object.id %}"> <blockquote class="flow-text"> <span class="black-text">{{ rental_object.owner }} </span> </blockquote> </a>
-            </div>
+        <div class="col s12 m5">
+          <div class="col card contactForm" style="padding-top: 0.25rem; width: 100%; height: 6rem;">
+            <a href="/utleie/kontaktinfo">
+                <div class="row">
+                    <p style="margin:auto; padding-top: 1.5rem;">
+                      <img type="image/png" src="{% static "images/handlekurv.png" %}"
+          style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+                        max-height:3rem; float: left; margin:-0.5rem; padding-right: 0.5rem; padding-left: 0.5rem;">
+                        Ønsker du å leie noe av utstyret? <strong>Klikk her!</strong> </img>
+                    </p>
+                </div>
+            </a>
           </div>
         </div>
     </div>
 {% endblock content %}
+
+{% block footer_script %}
+  <script>
+      $(document).ready(function () {
+          $('.materialboxed').materialbox();
+      });
+  </script>
+{% endblock footer_script %}

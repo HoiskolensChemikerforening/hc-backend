@@ -7,7 +7,7 @@
 <html lang="no">
 <head>
   <meta charset="UTF-8">
-  <title>HC Bedrift</title>
+  <title>HC Bedriftsider</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -26,6 +26,9 @@
 
   <!-- JS -->
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.9.4/dist/Chart.min.js"></script>
+  <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/themes/smoothness/jquery-ui.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
   {% block extra_js %}
   {% endblock %}
@@ -47,7 +50,7 @@
     <a class="navbar-brand" href="{% url "corporate:index" %}">
       <div class="logo">
         <img class="logo-image" alt="HC_logo" src="{% static "images/logo.png" %}">
-        <h5 class="logo-text">HC Bedrift</h5>
+        <h5 class="logo-text">HC Bedriftsider</h5>
       </div>
     </a>
 
@@ -86,7 +89,7 @@
         <li class="nav-item active">
           <a class="navigation-link"
              style="float: right"
-             href="{% url "corporate:job_advertisement" %}">
+             href="{% url "corporate:job" %}">
             Jobbutlysninger
           </a>
         </li>
@@ -136,7 +139,7 @@
         </p>
 
         <br>
-
+        <!-- Media/Social -->
         <div class="row">
           <div class="col">
             <a href="https://github.com/HoiskolensChemikerforening/website" class="text-white">
@@ -144,18 +147,23 @@
             </a>
           </div>
           <div class="col">
-            <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank" class="text-white ">
+            <a href="https://www.facebook.com/hcindkom" target="_blank" class="text-white ">
               <i class="fa fa-facebook" style="font-size:36px"></i>
             </a>
           </div>
           <div class="col">
-            <a href="https://www.instagram.com/hcntnu/" target="_blank" class="text-white">
+            <a href="https://www.instagram.com/industrikomiteen/" target="_blank" class="text-white">
               <i class="fa fa-instagram" style="font-size:36px"></i>
             </a>
           </div>
           <div class="col">
-            <a href="mailto:styret@hc.ntnu.no" class="text-white">
+            <a href="mailto:indkom@hc.ntnu.no" class="text-white">
               <i class="fa fa-envelope" style="font-size:36px"></i>
+            </a>
+          </div>
+          <div class="col">
+            <a href="https://www.linkedin.com/company/industrikomiteen/" class="text-white">
+              <i class="fa fa-linkedin-square" style="font-size:36px"></i>
             </a>
           </div>
         </div>
@@ -169,12 +177,23 @@
 
       </div>
 
-      <!-- Media/Social -->
-      <div class="col"></div>
+      <!-- Sponsor
+      <div class="col" style="padding-left: 50px; ">
+        <h5 class="text-white">
+          Samarbeidspartner
+        </h5>
+        <img src="{% static "images/EmersonElectricLogo.svg.png" %}"
+             alt="Emerson" style="width: 250px; max-width: 100%; margin-bottom: 10px; margin-top: 5px">
+        <p class="text-white">
+          I <script>document.write(new Date().getFullYear())</script>
+          har Emerson sponset kaffen til alle MTKJ-studenter.
+        </p>
+      </div> -->
 
     </div>
+  </div>
 
-    <br><br>
+  <br><br>
 
 </footer>
 

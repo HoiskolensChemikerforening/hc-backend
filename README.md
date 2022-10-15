@@ -49,6 +49,8 @@ before use. This is done by running:
 python manage.py import_emails
  ```
 This requires  [MJML](https://mjml.io) to be installed.
+Warning: There is an issue with the import_emails program which leads to all of the templates being deleted without any new ones being created to replace them.
+Make sure to fix this and test it locally before attempting to use this program.
  
 ### DevOps
 #### Export models to json

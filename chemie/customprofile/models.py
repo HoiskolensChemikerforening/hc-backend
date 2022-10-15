@@ -30,6 +30,14 @@ RELATIONSHIP_STATUS = Choices(
     ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!")
 )
 
+MEMBERSHIP_DURATIONS = [
+    {"duration_id": 1, "description": "Ettårig"},
+    {"duration_id": 2, "description": "Toårig"},
+    {"duration_id": 3, "description": "Treårig"},
+    {"duration_id": 4, "description": "Fireårig"},
+    {"duration_id": 5, "description": "Femårig"},
+    {"duration_id": 100, "description": "Livsvarig"},
+]
 
 COMMENCE_YEAR = 1980
 CURRENT_YEAR = timezone.now().year
@@ -37,6 +45,16 @@ STIPULATED_TIME = 5
 # The last, valid year you can select. 3 years behind the current stipulated year seems reasonable
 FINISH_YEAR = CURRENT_YEAR + STIPULATED_TIME + 3
 YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
+
+SPECIALIZATION = Choices(
+    ("NONE", 1, "Ingen"),
+    ("ANALYTICAL", 2, "Analytisk kjemi"),
+    ("APPLIED", 3, "Anvendt teoretisk kjemi"),
+    ("BIOTECH", 4, "Bioteknologi"),
+    ("MATERIAL", 5, "Materialkjemi og energiteknologi"),
+    ("ORGANICAL", 6, "Organisk kjemi"),
+    ("PROCESS", 7, "Kjemisk prosessteknologi"),
+)
 
 
 class ProfileManager(models.Manager):
@@ -84,6 +102,14 @@ class ProfileManager(models.Manager):
         return int(reversed, 2)
 
 
+class Medal(models.Model):
+    image = ImageField(upload_to="avatars")
+    title = models.CharField(max_length=100, unique=True)
+
+    def __str__(self):
+        return self.title
+
+
 class Profile(models.Model):
     user = models.OneToOneField(
         User,
@@ -103,6 +129,11 @@ class Profile(models.Model):
         default=CURRENT_YEAR + STIPULATED_TIME,
         verbose_name="Estimert ferdig",
     )
+    specialization = models.PositiveSmallIntegerField(
+        choices=SPECIALIZATION,
+        default=SPECIALIZATION.NONE,
+        verbose_name="Spesialisering",
+    )
 
     allergies = models.TextField(
         null=True, blank=True, verbose_name="Matallergi"
@@ -119,7 +150,7 @@ class Profile(models.Model):
         blank=True,
         null=True,
         unique=True,
-        verbose_name="Studentkortnummer",
+        verbose_name="EM nummer (ikke ta med 0 dersom det er første siffer)",
     )
 
     image_primary = ImageField(upload_to="avatars", null=True, blank=True)
@@ -153,6 +184,10 @@ class Profile(models.Model):
 
     objects = ProfileManager()
 
+    medals = models.ManyToManyField(
+        Medal, blank=True, verbose_name="Digidaljer"
+    )
+
     class Meta:
         permissions = (
             ("can_edit_access_card", "Can change access card of profiles"),
@@ -168,10 +203,12 @@ class Profile(models.Model):
     def get_nice_relationship_status(self):
         return self.get_relationship_status_display()
 
-    def save(self, *args, **kwargs):
-        if self.access_card is "":
-            self.access_card = f"{self.pk} - INVALID"
+    def get_nice_specialization(self):
+        return self.get_specialization_display()
 
+    def save(self, *args, **kwargs):
+        if self.access_card == "":
+            self.access_card = f"{self.pk} - INVALID"
         return super().save(*args, **kwargs)
 
     """Functions used in shop statics"""
@@ -200,6 +237,13 @@ class Membership(models.Model):
 
     def is_active(self):
         return self.start_date < timezone.now() < self.end_date
+
+    def __str__(self):
+        return (
+            str(self.start_date.strftime("%d.%m.%Y"))
+            + " - "
+            + str(self.end_date.strftime("%d.%m.%Y"))
+        )
 
 
 class UserTokenManager(models.Manager):

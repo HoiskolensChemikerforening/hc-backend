@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Profile
+from .models import Profile, Medal
 
 
 def export_csv(modeladmin, request, queryset):
@@ -19,15 +19,15 @@ def export_csv(modeladmin, request, queryset):
     response["Content-Disposition"] = "attachment; filename=users.csv"
     writer = csv.writer(response, csv.excel)
     response.write(
-        u"\ufeff".encode("utf8")
+        "\ufeff".encode("utf8")
     )  # BOM (optional...Excel needs it to open UTF-8 file properly)
     writer.writerow(
         [
-            smart_str(u"First name"),
-            smart_str(u"Last name"),
-            smart_str(u"Email"),
-            smart_str(u"Grade"),
-            smart_str(u"Username"),
+            smart_str("First name"),
+            smart_str("Last name"),
+            smart_str("Email"),
+            smart_str("Grade"),
+            smart_str("Username"),
         ]
     )
     for obj in queryset:
@@ -90,6 +90,7 @@ class UserAdmin(BuiltinUserAdmin):
         ("profile__start_year", DropdownFilter),
         ("profile__end_year", DropdownFilter),
         "profile__relationship_status",
+        "profile__specialization",
         "profile__devices",
         "profile__subscriptions",
     )
@@ -99,3 +100,4 @@ class UserAdmin(BuiltinUserAdmin):
 
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
+admin.site.register(Medal)

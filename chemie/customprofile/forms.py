@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.core.validators import ValidationError
 
 from chemie.chemie.settings import REGISTRATION_KEY
-from .models import Profile
+from .models import Profile, Medal
 from chemie.web_push.models import Subscription
 
 
@@ -69,6 +69,7 @@ class RegisterProfileForm(forms.ModelForm):
     layout = M.Layout(
         M.Row("grade"),
         M.Row("start_year", "end_year"),
+        M.Row("specialization"),
         M.Row("address"),
         M.Row("access_card"),
         M.Row("phone_number"),
@@ -84,6 +85,7 @@ class RegisterProfileForm(forms.ModelForm):
             "grade",
             "start_year",
             "end_year",
+            "specialization",
             "access_card",
             "phone_number",
             "allergies",
@@ -121,9 +123,11 @@ class EditProfileForm(forms.ModelForm):
     layout = M.Layout(
         M.Row("start_year", "end_year"),
         M.Row("address"),
+        M.Row("specialization"),
         M.Row("access_card"),
         M.Row("phone_number"),
         M.Row("allergies", "relationship_status"),
+        M.Row("medals"),
     )
 
     class Meta:
@@ -131,11 +135,13 @@ class EditProfileForm(forms.ModelForm):
         fields = [
             "start_year",
             "end_year",
+            "specialization",
             "access_card",
             "phone_number",
             "allergies",
             "address",
             "relationship_status",
+            "medals",
         ]
 
 

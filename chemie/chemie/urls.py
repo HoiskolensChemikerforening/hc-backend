@@ -29,7 +29,7 @@ urlpatterns = [
     # Temporary url for front page during Fadderperioden
     path("forside/", index),
     path("sladreboks/", include("chemie.shitbox.urls", namespace="shitbox")),
-    path("verv/", include("chemie.committees.urls", namespace="verv")),
+    path("undergrupper/", include("chemie.committees.urls", namespace="verv")),
     path("bokskap/", include("chemie.lockers.urls", namespace="bokskap")),
     path("bedrift/", include("chemie.corporate.urls", namespace="corporate")),
     path("nyheter/", include("chemie.news.urls", namespace="news")),
@@ -68,6 +68,7 @@ urlpatterns = [
     path("chemie/api/sponsor", views.SponsorListCreate.as_view(), name="sponsor"),
     path("chemie/api/404/<int:pk>", views.pictures_for_404Detail.as_view()),
     path("chemie/api/sponsor/<int:pk>", views.SponsorDetail.as_view()),
+    path("merch/", include("chemie.merch.urls", namespace="merch")),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"

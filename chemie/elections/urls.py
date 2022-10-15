@@ -64,6 +64,11 @@ admin_urlpatterns = [
         UserAutocomplete.as_view(),
         name="user_autocomplete",
     ),
+    path(
+        "open-election-for-everyone/",
+        views_admin.open_election_for_everyone,
+        name="open_election_for_everyone",
+    ),
 ]
 user_urlpatterns = [
     path("", views.index, name="index"),
@@ -76,7 +81,14 @@ user_urlpatterns = [
         name="checkin_manually",
     ),
 ]
-urlpatterns = admin_urlpatterns + user_urlpatterns
+
+api_urlpatterns = [
+    path("cgp/api/", views.CGPCandidateListView.as_view()),
+    path("cgp/api/show/", views.CGPShowCandidateListView.as_view()),
+    path("cgp/api/fiasko/", views.CGPFiaskoCandidateListView.as_view()),
+]
+
+urlpatterns = admin_urlpatterns + user_urlpatterns + api_urlpatterns
 
 
 """

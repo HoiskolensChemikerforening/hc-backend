@@ -16,6 +16,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from rest_framework import generics
 
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
@@ -30,9 +31,17 @@ from .forms import (
     AddCardForm,
     EditPushForm,
 )
-from django.contrib.auth.forms import AuthenticationForm
 from .forms import ApprovedTermsForm
-from .models import UserToken, Profile, Membership, GRADES, ProfileManager
+from .models import (
+    UserToken,
+    Profile,
+    Membership,
+    GRADES,
+    ProfileManager,
+    Medal,
+    MEMBERSHIP_DURATIONS,
+)
+from .serializers import MedalSerializer
 
 
 def register_user(request):
@@ -134,9 +143,7 @@ def edit_push(request):
                     user_sub.active = True
                     user_sub.save()
             return redirect(reverse("customprofile:edit-push"))
-    context = {
-        "form": form,
-    }
+    context = {"form": form}
     return render(request, "customprofile/editpush.html", context)
 
 
@@ -198,25 +205,71 @@ def activate_password(request, code):
 
 
 @permission_required("customprofile.change_membership")
-def view_memberships(request):
-    profiles = Profile.objects.all().select_related("user", "membership")
-    context = {"profiles": profiles}
+def view_memberships(request, year=1):
+
+    # If url arg year is invalid, make it valid.
+    if year not in GRADES:
+        if year > GRADES.FIFTH.value:
+            year = GRADES.FIFTH.value
+        else:
+            year = 1
+
+    form = NameSearchForm(request.POST or None)
+
+    if request.method == "POST":
+        # Find users from search form
+        if form.is_valid():
+            search_field = form.cleaned_data.get("search_field")
+            users = find_user_by_name(search_field)
+            profiles = Profile.objects.filter(user__in=users)
+        else:
+            profiles = Profile.objects.filter(
+                grade=year, user__is_active=True
+            ).order_by("user__last_name")
+
+    else:
+        profiles = Profile.objects.filter(
+            grade=year, user__is_active=True
+        ).order_by("user__last_name")
+
+    context = {
+        "profiles": profiles,
+        "grades": GRADES,
+        "search_form": form,
+        "membership_durations": MEMBERSHIP_DURATIONS,
+    }
     return render(request, "customprofile/memberships.html", context)
 
 
 @permission_required("customprofile.change_membership")
-def change_membership_status(request, profile_id):
+def change_membership_status(request, profile_id, duration):
     person = Profile.objects.get(pk=profile_id)
+
+    start_date = timezone.now()
+    end_date = start_date + timedelta(days=duration * 365)
+    endorser = request.user
+
     if person.membership is None:
+        # Create a new membership
         membership = Membership(
-            start_date=timezone.now(),
-            end_date=timezone.now() + timedelta(365 * 5),
-            endorser=request.user,
+            start_date=start_date,
+            end_date=end_date,
+            endorser=endorser,
         )
         membership.save()
         person.membership = membership
         person.save()
+
+    else:
+        # Make existing membership valid again
+        membership = person.membership
+        membership.start_date = start_date
+        membership.end_date = end_date
+        membership.endorser = endorser
+        membership.save()
+
     membership_status = person.membership.is_active()
+
     return JsonResponse({"membership_status": membership_status})
 
 
@@ -231,15 +284,21 @@ def yearbook(request, year=1):
             year = 1
     form = NameSearchForm(request.POST or None)
     profiles = Profile.objects.none()
+
     if request.method == "POST":
         if form.is_valid():
             search_field = form.cleaned_data.get("search_field")
             users = find_user_by_name(search_field)
-            profiles = Profile.objects.filter(user__in=users)
+            profiles = Profile.objects.filter(user__in=users).prefetch_related(
+                "medals"
+            )
     else:
-        profiles = Profile.objects.filter(
-            grade=year, user__is_active=True
-        ).order_by("user__last_name")
+        profiles = (
+            Profile.objects.filter(grade=year, user__is_active=True)
+            .order_by("user__last_name")
+            .prefetch_related("medals")
+        )
+
     context = {"profiles": profiles, "grades": GRADES, "search_form": form}
     return render(request, "customprofile/yearbook.html", context)
 
@@ -337,3 +396,13 @@ def add_rfid(request):
             request, "customprofile/add_card.html", context={"form": form}
         )
     return render(request, "customprofile/add_card.html", context)
+
+
+class MedalListCreate(generics.ListCreateAPIView):
+    queryset = Medal.objects.all()
+    serializer_class = MedalSerializer
+
+
+class MedalDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Medal.objects.all()
+    serializer_class = MedalSerializer

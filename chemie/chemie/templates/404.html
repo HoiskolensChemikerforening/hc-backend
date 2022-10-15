@@ -15,15 +15,15 @@
       <div class="card">
         <div class="card-image">
           <img src="{% if image %}{{ image.picture.url }}{% else %}{% static "images/404.png" %}{% endif %}">
-          <span class="card-title" style="top:0;font-size: 15vmin;padding-top:0;color: #fcfcff;text-shadow: rgba(177, 177, 177, 0.55) 1px 1px 0;">Beklager!</span>
+
         </div>
         <div class="card-content">
           <p class="flow-text">
-            Vi finner ikke siden du lette etter.
+            Beklager, vi finner ikke siden du lette etter...
           </p>
         </div>
         <div class="card-action">
-          <a href="{% url "frontpage:kontakt" %}">Kontakt oss</a>
+          <a href="/s/kontaktinfo/">Kontakt oss</a>
         </div>
       </div>
     </div>

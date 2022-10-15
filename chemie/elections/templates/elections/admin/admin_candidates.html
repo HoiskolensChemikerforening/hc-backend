@@ -87,7 +87,7 @@
         </div>
 
         <form class="mt-auto p-2" method="post" action="slett/" ; style="float:bottom;">{% csrf_token %}
-          <button class="btn btn-danger" type="submit" name="Delete" value="{{ candidate.user.username }}">Slett
+          <button class="btn btn-danger" type="submit" name="Delete" value="{{ candidate.user.get_username }}">Slett
           </button>
         </form>
       </div>
