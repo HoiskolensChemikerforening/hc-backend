@@ -38,7 +38,7 @@
 
   <div class="row">
     <div class="klassetrinn">
-      <div class="col s6 m6 l4 s12">
+      <div class="col s2 m2 l2 s12">
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
@@ -47,7 +47,28 @@
           {% endfor %}
         </ul>
       </div>
-      <div class="col s6 m6 l8">
+
+      {% if year == grades.DONE %}
+      <div class="col s1 m1 l1">
+        <nav>
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <div class="input-field">
+                <input id="{{ endYearForm.integer_field.id_for_label }}" type="number" min={{ year_range.0 }}
+                       max={{ year_range.1 }} required name="{{ endYearForm.integer_field.html_name }}"
+                       value="{{ endYearForm.integer_field.value }}">
+                <label for="{{ endYearForm.integer_field.id_for_label }}">Klasse</label>
+              </div>
+            </form>
+          </div>
+        </nav>
+      </div>
+
+      <div class="col s1 m1 l1">
+      </div>
+      {% endif %}
+
+      <div class="col s8 m8 l8">
         <nav>
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}

@@ -278,6 +278,9 @@ class SetNewPassword(forms.ModelForm):
 class NameSearchForm(forms.Form):
     search_field = forms.CharField(max_length=120)
 
+class EndYearForm(forms.Form):
+    integer_field = forms.IntegerField()
+
 
 class ApprovedTermsForm(forms.Form):
     approval = forms.BooleanField(

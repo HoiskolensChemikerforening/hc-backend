@@ -30,6 +30,7 @@ from .forms import (
     NameSearchForm,
     AddCardForm,
     EditPushForm,
+    EndYearForm,
 )
 from .forms import ApprovedTermsForm
 from .models import (
@@ -285,6 +286,17 @@ def yearbook(request, year=1):
     form = NameSearchForm(request.POST or None)
     profiles = Profile.objects.none()
 
+    endYearForm = EndYearForm(request.POST or None)
+    p = Profile.objects.all()
+    p_ordered = p.order_by("end_year")
+    p_filtered = p.filter(grade=GRADES.FIFTH)
+    year_range = [2021,2022]
+    if len(p_ordered) > 0:
+        year_range[0] = p_ordered[0].end_year
+    if len(p_filtered) > 0:
+        year_range[1] = p_filtered[0].end_year - 1
+    end_year = year_range[1]
+
     if request.method == "POST":
         if form.is_valid():
             search_field = form.cleaned_data.get("search_field")
@@ -292,14 +304,29 @@ def yearbook(request, year=1):
             profiles = Profile.objects.filter(user__in=users).prefetch_related(
                 "medals"
             )
+        if endYearForm.is_valid():
+            integer_field = endYearForm.cleaned_data.get("integer_field")
+            end_year = integer_field
+            profiles = (
+                Profile.objects.filter(end_year=end_year, user__is_active=True)
+                    .order_by("user__last_name")
+                    .prefetch_related("medals")
+            )
     else:
-        profiles = (
-            Profile.objects.filter(grade=year, user__is_active=True)
-            .order_by("user__last_name")
-            .prefetch_related("medals")
-        )
+        if year != GRADES.DONE:
+            profiles = (
+                Profile.objects.filter(grade=year, user__is_active=True)
+                .order_by("user__last_name")
+                .prefetch_related("medals")
+            )
+        else:
+            profiles = (
+                Profile.objects.filter(end_year=end_year, user__is_active=True)
+                    .order_by("user__last_name")
+                    .prefetch_related("medals")
+            )
 
-    context = {"profiles": profiles, "grades": GRADES, "search_form": form}
+    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "year":year, "year_range": year_range, "endYearForm": endYearForm }
     return render(request, "customprofile/yearbook.html", context)
 
 
