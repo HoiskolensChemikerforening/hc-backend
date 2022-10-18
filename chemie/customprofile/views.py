@@ -16,7 +16,11 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+
 from rest_framework import generics
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from rest_framework.permissions import IsAuthenticated
 
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
@@ -41,7 +45,7 @@ from .models import (
     Medal,
     MEMBERSHIP_DURATIONS,
 )
-from .serializers import MedalSerializer
+from .serializers import MedalSerializer, ProfileSerializer
 
 
 def register_user(request):
@@ -396,6 +400,14 @@ def add_rfid(request):
             request, "customprofile/add_card.html", context={"form": form}
         )
     return render(request, "customprofile/add_card.html", context)
+
+
+class LoggedInUserAPI(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        profile = request.user.profile
+        return Response(ProfileSerializer(profile).data)
 
 
 class MedalListCreate(generics.ListCreateAPIView):
