@@ -18,13 +18,15 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
-from ..customprofile.views import LoginView
+
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
 )
 
+from ..customprofile.views import LoginView
 from chemie.home.views import index
+from chemie.home.views import UserPermissionView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -44,6 +46,7 @@ urlpatterns = [
         {"next_page": "/"},
         name="logout",
     ),
+    path("api/permissions/", UserPermissionView.as_view(), name="permissions"),
     path("arrangementer/", include("chemie.events.urls", namespace="events")),
     path("notifications/", include("django_nyt.urls")),
     path("wiki/_accounts/sign-up/", LoginView.as_view()),
@@ -68,8 +71,12 @@ urlpatterns = [
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
     # For authentication
-    path('api/token/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path(
+        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+    ),
+    path(
+        "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+    ),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"

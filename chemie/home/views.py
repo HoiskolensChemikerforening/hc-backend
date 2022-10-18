@@ -10,6 +10,10 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from post_office import mail
 
 from chemie.events.models import Social, Bedpres
@@ -201,3 +205,16 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     template_name = "home/office_access_list.html"
     queryset = OfficeApplication.objects.order_by("-created")
     permission_required = "home.change_officeapplication"
+
+
+class UserPermissionView(APIView):
+    def post(self, request):
+
+        if request.user:
+            has_permission = request.user.has_perm(request.data["permission"])
+        else:
+            has_permission = False
+
+        print(has_permission)
+
+        return Response({"hasPermission": has_permission})
