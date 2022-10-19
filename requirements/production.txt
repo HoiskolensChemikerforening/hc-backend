@@ -144,7 +144,7 @@ pluggy==0.13.1
     # via pytest
 psycopg2-binary==2.8.6
     # via -r base.in
-py==1.10.0
+py==1.11.0
     # via
     #   pytest
     #   pytest-forked
