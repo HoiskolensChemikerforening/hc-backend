@@ -38,7 +38,7 @@
 
   <div class="row">
     <div class="klassetrinn">
-      <div class="col s2 m2 l2 s12">
+      <div class="col s3 m3 l3 s12">
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
@@ -49,6 +49,7 @@
       </div>
 
       {% if year == grades.DONE %}
+      <!--
       <div class="col s1 m1 l1">
         <nav>
           <div class="nav-wrapper">
@@ -63,12 +64,36 @@
           </div>
         </nav>
       </div>
+      -->
+
+
+      <!-- TODO: Work with col s m l to make things look pretty. Take else into account-->
+      <div class="col s1 m1 l1">
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
+           >Sluttår</a>
+              <ul class="dropdown-content" id="dropdown2">
+                {% for end_year in end_years %}
+                <li>
+                  <!-- TODO:div tag to center the input tag. Can be removed have to work with styling (scale input to parent?) -->
+                  <div>
+                   <input style="background:none; border:none; cursor:pointer;"
+                          id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
+                          value="{{ end_year}}">
+                    </div>
+                </li>
+                  {% endfor %}
+              </ul>
+            </form>
+          </div>
+      </div>
 
       <div class="col s1 m1 l1">
       </div>
       {% endif %}
 
-      <div class="col s8 m8 l8">
+      <div class="col s7 m7 l7">
         <nav>
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}

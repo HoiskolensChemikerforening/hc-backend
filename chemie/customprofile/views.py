@@ -288,14 +288,10 @@ def yearbook(request, year=1):
 
     endYearForm = EndYearForm(request.POST or None)
     p = Profile.objects.all()
-    p_ordered = p.order_by("end_year")
-    p_filtered = p.filter(grade=GRADES.FIFTH)
-    year_range = [2021,2022]
-    if len(p_ordered) > 0:
-        year_range[0] = p_ordered[0].end_year
-    if len(p_filtered) > 0:
-        year_range[1] = p_filtered[0].end_year - 1
-    end_year = year_range[1]
+    p_ordered = p.order_by("-end_year")
+    end_years = p_ordered.values_list('end_year', flat=True).distinct()#get all years list husk ubrukte variabler TODO:remove the ferdig 2029
+    end_year = 2025 #TODO: get latest end year
+
 
     if request.method == "POST":
         if form.is_valid():
@@ -326,7 +322,7 @@ def yearbook(request, year=1):
                     .prefetch_related("medals")
             )
 
-    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "year":year, "year_range": year_range, "endYearForm": endYearForm }
+    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "year":year, "endYearForm": endYearForm, "end_years": end_years }
     return render(request, "customprofile/yearbook.html", context)
 
 
