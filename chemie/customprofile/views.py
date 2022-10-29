@@ -253,9 +253,7 @@ def change_membership_status(request, profile_id, duration):
     if person.membership is None:
         # Create a new membership
         membership = Membership(
-            start_date=start_date,
-            end_date=end_date,
-            endorser=endorser,
+            start_date=start_date, end_date=end_date, endorser=endorser
         )
         membership.save()
         person.membership = membership
@@ -275,7 +273,7 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request,year=1):
+def yearbook(request, year=1):
     year = int(year)
     # If url arg grade is invalid, make it valid.
     if year not in GRADES:
@@ -291,12 +289,14 @@ def yearbook(request,year=1):
     if len(qProfilesFifth) > 0:
         end_year = qProfilesFifth[0].end_year - 1
     else:
-        end_year = 2030 #To handle the case of 0 profiles in 5th grade
-    end_years = Profile.objects\
-        .filter(grade=GRADES.DONE).filter(end_year__lte=end_year)\
-        .order_by("-end_year").values_list('end_year', flat=True)\
+        end_year = 2030  # To handle the case of 0 profiles in 5th grade
+    end_years = (
+        Profile.objects.filter(grade=GRADES.DONE)
+        .filter(end_year__lte=end_year)
+        .order_by("-end_year")
+        .values_list("end_year", flat=True)
         .distinct()
-
+    )
 
     if request.method == "POST":
         if form.is_valid():
@@ -310,8 +310,8 @@ def yearbook(request,year=1):
             end_year = integer_field
             profiles = (
                 Profile.objects.filter(end_year=end_year, user__is_active=True)
-                    .order_by("user__last_name")
-                    .prefetch_related("medals")
+                .order_by("user__last_name")
+                .prefetch_related("medals")
             )
     else:
         if year != GRADES.DONE:
@@ -323,11 +323,18 @@ def yearbook(request,year=1):
         else:
             profiles = (
                 Profile.objects.filter(end_year=end_year, user__is_active=True)
-                    .order_by("user__last_name")
-                    .prefetch_related("medals")
+                .order_by("user__last_name")
+                .prefetch_related("medals")
             )
 
-    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "grade":year, "endYearForm": endYearForm, "end_years": end_years }
+    context = {
+        "profiles": profiles,
+        "grades": GRADES,
+        "search_form": form,
+        "grade": year,
+        "endYearForm": endYearForm,
+        "end_years": end_years,
+    }
     return render(request, "customprofile/yearbook.html", context)
 
 
