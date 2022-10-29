@@ -36,9 +36,14 @@
     </div>
   {% endif %}
 
+
+
   <div class="row">
-    <div class="klassetrinn">
-      <div class="col s3 m3 l3 s12">
+      {% if grade == grades.DONE %}
+      <div class="col s4 m4 l4 s12">
+      {% else %}
+      <div class="col s6 m6 l4 s12">
+      {% endif %}
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
@@ -48,34 +53,19 @@
         </ul>
       </div>
 
-      {% if grade == grades.DONE %}
-      <!--
-      <div class="col s1 m1 l1">
-        <nav>
-          <div class="nav-wrapper">
-            <form method='post' class="newPost">{% csrf_token %}
-              <div class="input-field">
-                <input id="{{ endYearForm.integer_field.id_for_label }}" type="number" min={{ year_range.0 }}
-                       max={{ year_range.1 }} required name="{{ endYearForm.integer_field.html_name }}"
-                       value="{{ endYearForm.integer_field.value }}">
-                <label for="{{ endYearForm.integer_field.id_for_label }}">Klasse</label>
-              </div>
-            </form>
-          </div>
-        </nav>
-      </div>
-      -->
 
 
-      <!-- TODO: Work with col s m l to make things look pretty. Take else into account-->
-      <div class="col s1 m1 l1">
+{% if grade == grades.DONE %}
+
+
+
+      <div class="col s4 m4 l4 s12">
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}
               <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
            >Sluttår</a>
               <ul class="dropdown-content" id="dropdown2">
                 {% for end_year in end_years %}
-                  <!-- TODO:div tag to center the input tag. Can be removed have to work with styling (scale input to parent?) style="padding: 15px 37px; background:none; border:none; cursor:pointer;" -->
                   <li>
                   <button class="newbtn" id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
                           href="" value="{{ end_year}}">{{end_year}}</button>
@@ -87,11 +77,14 @@
           </div>
       </div>
 
-      <div class="col s1 m1 l1">
-      </div>
-      {% endif %}
 
-      <div class="col s7 m7 l7">
+{% endif %}
+
+      {% if grade == grades.DONE %}
+      <div class="col s4 m4 l4 s12">
+      {% else %}
+      <div class="col s6 m6 l8 s12">
+      {% endif %}
         <nav>
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}
@@ -106,8 +99,10 @@
           </div>
         </nav>
       </div>
-    </div>
   </div>
+
+
+
 
   <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
   <div class="row">
