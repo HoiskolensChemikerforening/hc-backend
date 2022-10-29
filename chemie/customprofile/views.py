@@ -275,9 +275,9 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, year=1):
+def yearbook(request,year=1):
     year = int(year)
-    # If url arg year is invalid, make it valid.
+    # If url arg grade is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:
             year = GRADES.FIFTH.value
@@ -327,7 +327,7 @@ def yearbook(request, year=1):
                     .prefetch_related("medals")
             )
 
-    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "year":year, "endYearForm": endYearForm, "end_years": end_years }
+    context = {"profiles": profiles, "grades": GRADES, "search_form": form, "grade":year, "endYearForm": endYearForm, "end_years": end_years }
     return render(request, "customprofile/yearbook.html", context)
 
 

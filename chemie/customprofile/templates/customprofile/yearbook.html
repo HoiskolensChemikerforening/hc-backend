@@ -48,7 +48,7 @@
         </ul>
       </div>
 
-      {% if year == grades.DONE %}
+      {% if grade == grades.DONE %}
       <!--
       <div class="col s1 m1 l1">
         <nav>
@@ -75,12 +75,12 @@
            >Sluttår</a>
               <ul class="dropdown-content" id="dropdown2">
                 {% for end_year in end_years %}
-                <li>
-                  <!-- TODO:div tag to center the input tag. Can be removed have to work with styling (scale input to parent?) -->
-                   <input style="padding: 15px 37px; background:none; border:none; cursor:pointer;"
-                          id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
-                          value="{{ end_year}}">
-                </li>
+                  <!-- TODO:div tag to center the input tag. Can be removed have to work with styling (scale input to parent?) style="padding: 15px 37px; background:none; border:none; cursor:pointer;" -->
+                  <li>
+                  <button class="newbtn" id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
+                          href="" value="{{ end_year}}">{{end_year}}</button>
+                  </li>
+
                   {% endfor %}
               </ul>
             </form>
