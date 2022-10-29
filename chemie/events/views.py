@@ -118,8 +118,9 @@ class CreateBedpresView(
     permission_required = "events.add_bedpres"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": list(GRADES.values.keys())}
-    initial_specializations = {"allowed_specialization": list(SPECIALIZATION.values.keys())}
+    initial = {"allowed_grades": list(GRADES.values.keys()),
+               "allowed_specialization": list(SPECIALIZATION.values.keys())}
+
     message_content = messages.SUCCESS, "Bedpresen ble opprettet", "Opprettet"
 
 
