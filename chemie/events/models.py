@@ -24,6 +24,9 @@ ARRIVAL_STATUS = Choices(
 )
 
 
+def get_default_specialization_for_event():
+    return [SPECIALIZATION.NONE]
+
 class BaseEvent(models.Model):
     # Name of the event
     title = models.CharField(max_length=40, verbose_name="Tittel")
@@ -66,7 +69,8 @@ class BaseEvent(models.Model):
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
     allowed_specializations = ArrayField(
-        models.IntegerField(choices=SPECIALIZATION)
+        models.IntegerField(choices=SPECIALIZATION),
+        default=get_default_specialization_for_event
     )
 
     published = models.BooleanField(default=True, verbose_name="publisert")
