@@ -215,6 +215,4 @@ class UserPermissionView(APIView):
         else:
             has_permission = False
 
-        print(has_permission)
-
         return Response({"hasPermission": has_permission})

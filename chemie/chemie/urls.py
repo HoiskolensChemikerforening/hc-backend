@@ -28,6 +28,8 @@ from ..customprofile.views import LoginView
 from chemie.home.views import index
 from chemie.home.views import UserPermissionView
 
+from chemie.customprofile.views import MyTokenObtainPairView
+
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("chemie.home.urls", namespace="frontpage")),
@@ -72,7 +74,7 @@ urlpatterns = [
     ),
     # For authentication
     path(
-        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+        "api/token/", MyTokenObtainPairView.as_view(), name="token_obtain_pair"
     ),
     path(
         "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
