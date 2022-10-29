@@ -64,7 +64,7 @@
             <form method='post' class="newPost">{% csrf_token %}
               <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
            >Sluttår</a>
-              <ul class="dropdown-content" id="dropdown2">
+              <ul class="dropdown-content" id="dropdown2" style="max-height: 250px">
                 {% for end_year in end_years %}
                   <li>
                   <button class="newbtn" id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
