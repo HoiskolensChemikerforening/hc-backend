@@ -287,10 +287,15 @@ def yearbook(request, year=1):
     profiles = Profile.objects.none()
 
     endYearForm = EndYearForm(request.POST or None)
-    p = Profile.objects.all()
-    p_ordered = p.order_by("-end_year")
-    end_years = p_ordered.values_list('end_year', flat=True).distinct()#get all years list husk ubrukte variabler TODO:remove the ferdig 2029
-    end_year = 2025 #TODO: get latest end year
+    qProfilesFifth = Profile.objects.filter(grade=GRADES.FIFTH)
+    if len(qProfilesFifth) > 0:
+        end_year = qProfilesFifth[0].end_year - 1
+    else:
+        end_year = 2030 #To handle the case of 0 profiles in 5th grade
+    end_years = Profile.objects\
+        .filter(grade=GRADES.DONE).filter(end_year__lte=end_year)\
+        .order_by("-end_year").values_list('end_year', flat=True)\
+        .distinct()
 
 
     if request.method == "POST":
