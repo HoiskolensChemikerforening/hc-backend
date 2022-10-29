@@ -749,7 +749,9 @@ def change_arrival_status(request):
 
 @transaction.atomic
 def set_user_event_status(event, registration):
-    if event.allowed_grade(registration.user) and event.allowed_specialization(registration.user):
+    if event.allowed_grade(registration.user) and event.allowed_specialization(
+        registration.user
+    ):
         slots = event.sluts - event.registered_users()
         has_spare_slots = slots > 0
         if has_spare_slots:
