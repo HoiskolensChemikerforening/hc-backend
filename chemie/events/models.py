@@ -6,7 +6,7 @@ from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
 
-from chemie.customprofile.models import GRADES
+from chemie.customprofile.models import GRADES, SPECIALIZATION
 from chemie.committees.models import Committee
 from .email import send_event_mail
 
@@ -65,6 +65,7 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
+    allowed_specializations = ArrayField(models.IntegerField(choices=SPECIALIZATION))
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
@@ -143,6 +144,9 @@ class BaseEvent(models.Model):
 
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
+
+    def allowed_specialization(self, user):
+        return user.profile.specialization in self.allowed_specializations
 
     class Meta:
         abstract = True
