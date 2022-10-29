@@ -77,11 +77,9 @@
                 {% for end_year in end_years %}
                 <li>
                   <!-- TODO:div tag to center the input tag. Can be removed have to work with styling (scale input to parent?) -->
-                  <div>
-                   <input style="background:none; border:none; cursor:pointer;"
+                   <input style="padding: 15px 37px; background:none; border:none; cursor:pointer;"
                           id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
                           value="{{ end_year}}">
-                    </div>
                 </li>
                   {% endfor %}
               </ul>
