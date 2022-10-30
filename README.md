@@ -6,12 +6,17 @@ hc.ntnu.no
 #### Install requirements
 Install PostgreSQL for your OS.
 
-Create a virtual environment with Python 3.6+.
+Create a virtual environment with Python 3.6+. Note that the project is incompatible with Python 3.10+.
 
 Run the following to install requirements for the project.
 ```shell
 pip install -r requirements/development.txt
 ```
+On newer Mac architectures, you might have to run the following in your terminal before installing the project dependencies: 
+```shell
+export LDFLAGS="-L/opt/homebrew/opt/openssl@1.1/lib $LDFLAGS"
+```
+Note that the path to `openssl/lib` might vary depending on how it's been installed.
 
 #### Set up database
 Create a local database with default settings. Update settings
