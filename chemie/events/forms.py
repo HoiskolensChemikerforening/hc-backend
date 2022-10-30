@@ -183,8 +183,10 @@ class RegisterBedpresForm(BaseRegisterEventForm):
         M.Row("location"),
         M.Row("description"),
         M.Row(M.Column("image"), M.Column("sluts")),
-        M.Row("allowed_grades"),
-        M.Row("allowed_specializations"),
+        M.Row(
+            M.Column("allowed_grades"),
+            M.Column("allowed_specializations"),
+        ),
     )
 
     def clean_allowed_specializations(self):
@@ -205,7 +207,7 @@ class RegisterBedpresForm(BaseRegisterEventForm):
                 None,
                 ValidationError(
                     {
-                        "allowed_grades": [
+                        "allowed_specializations": [
                             "Tillatte spesialiseringer er ikke akseptert"
                         ]
                     }
