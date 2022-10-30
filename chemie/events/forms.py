@@ -190,10 +190,15 @@ class RegisterBedpresForm(BaseRegisterEventForm):
     def clean_allowed_specializations(self):
         try:
             specializations = self.cleaned_data.get("allowed_specializations")
-            specializations = [int(specialization) for specialization in specializations]
+            specializations = [
+                int(specialization) for specialization in specializations
+            ]
             # Next line checks whether the integers in "grades" corresponds to a choice in GRADES,
             # if not, an exception occurs
-            _ = [SPECIALIZATION.values[int(specialization)] for specialization in specializations]
+            _ = [
+                SPECIALIZATION.values[int(specialization)]
+                for specialization in specializations
+            ]
             return specializations
         except (ValueError, KeyError):
             self.add_error(

@@ -148,7 +148,6 @@ class BaseEvent(models.Model):
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
 
-
     class Meta:
         abstract = True
 
