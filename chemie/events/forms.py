@@ -3,7 +3,7 @@ from dal import autocomplete
 from django import forms
 from django.core.validators import ValidationError
 from extended_choices import Choices
-from chemie.customprofile.models import GRADES
+from chemie.customprofile.models import GRADES, SPECIALIZATION
 from .models import (
     Social,
     SocialEventRegistration,
@@ -166,6 +166,12 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 
 class RegisterBedpresForm(BaseRegisterEventForm):
+    allowed_specializations = forms.MultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple,
+        choices=SPECIALIZATION,
+        label="Tillatte spesialiseringer",
+    )
+
     layout = M.Layout(
         M.Row("published", "title"),
         M.Row(
@@ -178,11 +184,33 @@ class RegisterBedpresForm(BaseRegisterEventForm):
         M.Row("description"),
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("allowed_grades"),
+        M.Row("allowed_specializations"),
     )
+
+    def clean_allowed_specializations(self):
+        try:
+            specializations = self.cleaned_data.get("allowed_specializations")
+            specializations = [int(specialization) for specialization in specializations]
+            # Next line checks whether the integers in "grades" corresponds to a choice in GRADES,
+            # if not, an exception occurs
+            _ = [SPECIALIZATION.values[int(specialization)] for specialization in specializations]
+            return specializations
+        except (ValueError, KeyError):
+            self.add_error(
+                None,
+                ValidationError(
+                    {
+                        "allowed_grades": [
+                            "Tillatte spesialiseringer er ikke akseptert"
+                        ]
+                    }
+                ),
+            )
 
     class Meta(BaseRegisterEventForm.Meta):
         model = Bedpres
         fields = BaseRegisterEventForm.Meta.fields.copy()
+        fields += ["allowed_specializations"]
 
 
 class SocialRegisterUserForm(forms.ModelForm):

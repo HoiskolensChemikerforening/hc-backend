@@ -472,6 +472,22 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     pk = None
     object = None
 
+    @staticmethod
+    @transaction.atomic
+    def set_user_event_status(event, registration):
+        if event.allowed_grade(registration.user):
+            slots = event.sluts - event.registered_users()
+            has_spare_slots = slots > 0
+            if has_spare_slots:
+                registration.confirm()
+                registration.save()
+                return REGISTRATION_STATUS.CONFIRMED
+            else:
+                registration.waiting()
+                return REGISTRATION_STATUS.WAITING
+        else:
+            return REGISTRATION_STATUS.INTERESTED
+
     def get_success_url(self):
         return reverse("events:register_social", kwargs={"pk": self.pk})
 
@@ -518,7 +534,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             instance.event = self.object
             instance.user = request.user
             instance.save()
-            status = set_user_event_status(event, instance)
+            status = self.set_user_event_status(event, instance)
             self.set_status_message(request, status, instance, event)
             return redirect(self.get_success_url())
         context = {
@@ -556,6 +572,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
             )
 
         elif status == REGISTRATION_STATUS.INTERESTED:
+            # TODO: Fix the klassetrinn message. Could be error due to specialization
             messages.add_message(
                 request,
                 messages.INFO,
@@ -573,6 +590,22 @@ class BedpresRegisterUserView(SocialRegisterUserView):
     email_template = "bedpres"
 
     registration_form = BedpresRegisterUserForm
+
+    @staticmethod
+    @transaction.atomic
+    def set_user_event_status(event, registration):
+        if event.allowed_grade(registration.user) and event.allowed_specialization(registration.user):
+            slots = event.sluts - event.registered_users()
+            has_spare_slots = slots > 0
+            if has_spare_slots:
+                registration.confirm()
+                registration.save()
+                return REGISTRATION_STATUS.CONFIRMED
+            else:
+                registration.waiting()
+                return REGISTRATION_STATUS.WAITING
+        else:
+            return REGISTRATION_STATUS.INTERESTED
 
     def get_success_url(self):
         return reverse("events:register_bedpres", kwargs={"pk": self.pk})
@@ -745,24 +778,6 @@ def change_arrival_status(request):
             return JsonResponse({"arrival_status": 0})
     else:
         return redirect(reverse("home:home"))
-
-
-@transaction.atomic
-def set_user_event_status(event, registration):
-    if event.allowed_grade(registration.user) and event.allowed_specialization(
-        registration.user
-    ):
-        slots = event.sluts - event.registered_users()
-        has_spare_slots = slots > 0
-        if has_spare_slots:
-            registration.confirm()
-            registration.save()
-            return REGISTRATION_STATUS.CONFIRMED
-        else:
-            registration.waiting()
-            return REGISTRATION_STATUS.WAITING
-    else:
-        return REGISTRATION_STATUS.INTERESTED
 
 
 @permission_required("events.change_bedpresregistration")

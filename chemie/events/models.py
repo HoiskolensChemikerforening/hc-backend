@@ -69,10 +69,6 @@ class BaseEvent(models.Model):
     attendees = models.ManyToManyField(User, through="BaseRegistration")
 
     allowed_grades = ArrayField(models.IntegerField(choices=GRADES))
-    allowed_specializations = ArrayField(
-        models.IntegerField(choices=SPECIALIZATION),
-        default=get_default_specialization_for_event,
-    )
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
@@ -152,8 +148,6 @@ class BaseEvent(models.Model):
     def allowed_grade(self, user):
         return user.profile.grade in self.allowed_grades
 
-    def allowed_specialization(self, user):
-        return user.profile.specialization in self.allowed_specializations
 
     class Meta:
         abstract = True
@@ -213,6 +207,11 @@ class Bedpres(BaseEvent):
     author = models.ForeignKey(
         User, related_name="+", on_delete=models.CASCADE
     )
+    allowed_specializations = ArrayField(
+        models.IntegerField(choices=SPECIALIZATION),
+        default=get_default_specialization_for_event,
+    )
+
     attendees = models.ManyToManyField(User, through="BedpresRegistration")
 
     def get_absolute_url(self):
@@ -226,6 +225,9 @@ class Bedpres(BaseEvent):
 
     def get_model_type(self):
         return "bedpres"
+
+    def allowed_specialization(self, user):
+        return user.profile.specialization in self.allowed_specializations
 
 
 class RegistrationManager(models.Manager):
