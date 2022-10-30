@@ -6,7 +6,7 @@ hc.ntnu.no
 #### Install requirements
 Install PostgreSQL for your OS.
 
-Create a virtual environment with Python 3.6+. Note that the project is incompatible with Python 3.10+.
+Create a virtual environment with Python 3.6+. Note that the project is incompatible with Python versions above 3.10 and the tests are run in Python 3.7.
 
 Run the following to install requirements for the project.
 ```shell
@@ -29,7 +29,7 @@ python manage_migrations.py
 Flatpages and email templates are stored in the fixtures folder. 
 Load these:
 ```shell
-python manage.py loaddata fixtures/*.json
+python manage.py loaddata chemie/fixtures/*.json
 ```
 
 #### Send mail (optional)
