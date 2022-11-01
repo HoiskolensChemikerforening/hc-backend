@@ -40,7 +40,7 @@
 
   <div class="row">
       {% if grade == grades.DONE %}
-      <div class="col s4 m4 l4 s12">
+      <div class="col s4 m4 l4 s6">
       {% else %}
       <div class="col s6 m6 l4 s12">
       {% endif %}
@@ -59,7 +59,7 @@
 
 
 
-      <div class="col s4 m4 l4 s12">
+      <div class="col s4 m4 l4 s6">
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}
               <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
