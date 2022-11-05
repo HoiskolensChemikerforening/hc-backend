@@ -36,9 +36,14 @@
     </div>
   {% endif %}
 
+
+
   <div class="row">
-    <div class="klassetrinn">
+      {% if grade == grades.DONE %}
+      <div class="col s4 m4 l4 s6">
+      {% else %}
       <div class="col s6 m6 l4 s12">
+      {% endif %}
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
@@ -47,7 +52,39 @@
           {% endfor %}
         </ul>
       </div>
-      <div class="col s6 m6 l8">
+
+
+
+{% if grade == grades.DONE %}
+
+
+
+      <div class="col s4 m4 l4 s6">
+          <div class="nav-wrapper">
+            <form method='post' class="newPost">{% csrf_token %}
+              <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
+           >Sluttår</a>
+              <ul class="dropdown-content" id="dropdown2" style="max-height: 250px">
+                {% for end_year in end_years %}
+                  <li>
+                  <button class="newbtn" id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
+                          href="" value="{{ end_year}}">{{end_year}}</button>
+                  </li>
+
+                  {% endfor %}
+              </ul>
+            </form>
+          </div>
+      </div>
+
+
+{% endif %}
+
+      {% if grade == grades.DONE %}
+      <div class="col s4 m4 l4 s12">
+      {% else %}
+      <div class="col s6 m6 l8 s12">
+      {% endif %}
         <nav>
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}
@@ -62,8 +99,10 @@
           </div>
         </nav>
       </div>
-    </div>
   </div>
+
+
+
 
   <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
   <div class="row">

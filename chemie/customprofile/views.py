@@ -30,6 +30,7 @@ from .forms import (
     NameSearchForm,
     AddCardForm,
     EditPushForm,
+    EndYearForm,
 )
 from .forms import ApprovedTermsForm
 from .models import (
@@ -274,7 +275,7 @@ def change_membership_status(request, profile_id, duration):
 @login_required
 def yearbook(request, year=1):
     year = int(year)
-    # If url arg year is invalid, make it valid.
+    # If url arg grade is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:
             year = GRADES.FIFTH.value
@@ -282,6 +283,20 @@ def yearbook(request, year=1):
             year = 1
     form = NameSearchForm(request.POST or None)
     profiles = Profile.objects.none()
+
+    endYearForm = EndYearForm(request.POST or None)
+    qProfilesFifth = Profile.objects.filter(grade=GRADES.FIFTH)
+    if len(qProfilesFifth) > 0:
+        end_year = qProfilesFifth[0].end_year - 1
+    else:
+        end_year = 2030  # To handle the case of 0 profiles in 5th grade
+    end_years = (
+        Profile.objects.filter(grade=GRADES.DONE)
+        .filter(end_year__lte=end_year)
+        .order_by("-end_year")
+        .values_list("end_year", flat=True)
+        .distinct()
+    )
 
     if request.method == "POST":
         if form.is_valid():
@@ -292,14 +307,36 @@ def yearbook(request, year=1):
                 .prefetch_related("medals")
                 .order_by("grade")
             )
+        if endYearForm.is_valid():
+            integer_field = endYearForm.cleaned_data.get("integer_field")
+            end_year = integer_field
+            profiles = (
+                Profile.objects.filter(end_year=end_year, user__is_active=True)
+                .order_by("user__last_name")
+                .prefetch_related("medals")
+            )
     else:
-        profiles = (
-            Profile.objects.filter(grade=year, user__is_active=True)
-            .order_by("user__last_name")
-            .prefetch_related("medals")
-        )
+        if year != GRADES.DONE:
+            profiles = (
+                Profile.objects.filter(grade=year, user__is_active=True)
+                .order_by("user__last_name")
+                .prefetch_related("medals")
+            )
+        else:
+            profiles = (
+                Profile.objects.filter(end_year=end_year, user__is_active=True)
+                .order_by("user__last_name")
+                .prefetch_related("medals")
+            )
 
-    context = {"profiles": profiles, "grades": GRADES, "search_form": form}
+    context = {
+        "profiles": profiles,
+        "grades": GRADES,
+        "search_form": form,
+        "grade": year,
+        "endYearForm": endYearForm,
+        "end_years": end_years,
+    }
     return render(request, "customprofile/yearbook.html", context)
 
 
