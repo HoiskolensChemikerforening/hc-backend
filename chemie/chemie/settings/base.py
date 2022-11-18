@@ -94,7 +94,6 @@ LOCAL_APPS = [
     "chemie.shop",
     "chemie.quiz",
     "chemie.corporate",
-    "chemie.rentalservice",
     "chemie.sugepodden",
     "chemie.merch",
 ]
