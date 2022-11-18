@@ -82,7 +82,6 @@ LOCAL_APPS = [
     "chemie.chemie",
     "chemie.home",
     "chemie.news",
-    "chemie.shitbox",
     "chemie.committees",
     "chemie.events",
     "chemie.yearbook",
