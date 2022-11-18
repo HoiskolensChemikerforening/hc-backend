@@ -95,7 +95,6 @@ LOCAL_APPS = [
     "chemie.quiz",
     "chemie.corporate",
     "chemie.sugepodden",
-    "chemie.merch",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
