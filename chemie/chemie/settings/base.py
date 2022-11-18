@@ -88,7 +88,6 @@ LOCAL_APPS = [
     "chemie.yearbook",
     "chemie.customprofile",
     "chemie.picturecarousel",
-    "chemie.elections",
     "chemie.web_push",
     "chemie.quiz",
 ]

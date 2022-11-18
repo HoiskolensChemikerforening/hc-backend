@@ -50,7 +50,6 @@ urlpatterns = [
     path(
         "bilder/", include("chemie.picturecarousel.urls", namespace="carousel")
     ),
-    path("valg/", include("chemie.elections.urls", namespace="elections")),
     path("web_push/", include("chemie.web_push.urls", namespace="web_push")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
