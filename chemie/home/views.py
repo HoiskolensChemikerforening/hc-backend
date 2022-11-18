@@ -16,7 +16,6 @@ from chemie.events.models import Social, Bedpres
 from chemie.web_push.models import CoffeeSubmission
 from chemie.home.forms import FlatpageEditForm
 from chemie.news.models import Article
-from chemie.sugepodden.models import Podcast
 from .forms import (
     ContactForm,
     PostFundsForm,
@@ -37,14 +36,12 @@ def index(request):
         "-published_date"
     )[:4]
     coffee = CoffeeSubmission.get_latest_submission()
-    latest_podcast_url = Podcast.get_latest_podcast_url()
 
     context = {
         "social": all_social,
         "bedpres": all_bedpres,
         "posts": all_posts,
         "coffee": coffee,
-        "latest_podcast": latest_podcast_url,
     }
     return render(request, "chemie/index.html", context)
 

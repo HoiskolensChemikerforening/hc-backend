@@ -53,10 +53,6 @@ urlpatterns = [
     path("valg/", include("chemie.elections.urls", namespace="elections")),
     path("web_push/", include("chemie.web_push.urls", namespace="web_push")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
-    path(
-        "sugepodden/",
-        include("chemie.sugepodden.urls", namespace="sugepodden"),
-    ),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
     path("api/sponsor/", views.SponsorListCreate.as_view(), name="sponsor"),
     path("api/404/<int:pk>/", views.pictures_for_404Detail.as_view()),
