@@ -90,7 +90,6 @@ LOCAL_APPS = [
     "chemie.picturecarousel",
     "chemie.elections",
     "chemie.web_push",
-    "chemie.shop",
     "chemie.quiz",
     "chemie.corporate",
     "chemie.sugepodden",

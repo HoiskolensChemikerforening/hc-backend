@@ -10,7 +10,6 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
-from chemie.shop import statistics
 from chemie.web_push.models import Device, Subscription
 
 # Time the activation is valid in hourse
@@ -213,17 +212,7 @@ class Profile(models.Model):
 
     """Functions used in shop statics"""
 
-    def get_bought_items(self):
-        return statistics.get_bought_items(self.user)
 
-    def get_most_bought_item(self):
-        return statistics.get_most_bought_item(self.user)
-
-    def get_second_most_bought_item(self):
-        return statistics.get_second_most_bought_item(self.user)
-
-    def get_third_most_bought_item(self):
-        return statistics.get_third_most_bought_item(self.user)
 
     @classmethod
     def get_all_refill_sum(cls):
