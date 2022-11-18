@@ -85,7 +85,6 @@ LOCAL_APPS = [
     "chemie.shitbox",
     "chemie.committees",
     "chemie.events",
-    "chemie.lockers",
     "chemie.yearbook",
     "chemie.customprofile",
     "chemie.picturecarousel",
