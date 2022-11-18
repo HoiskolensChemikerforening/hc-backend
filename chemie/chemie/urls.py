@@ -46,9 +46,6 @@ urlpatterns = [
         "api-auth/", include("rest_framework.urls", namespace="rest_framework")
     ),
     path("chaining/", include("smart_selects.urls")),
-    path(
-        "bilder/", include("chemie.picturecarousel.urls", namespace="carousel")
-    ),
     path("web_push/", include("chemie.web_push.urls", namespace="web_push")),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
     path("api/sponsor/", views.SponsorListCreate.as_view(), name="sponsor"),

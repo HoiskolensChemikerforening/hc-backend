@@ -86,7 +86,6 @@ LOCAL_APPS = [
     "chemie.events",
     "chemie.yearbook",
     "chemie.customprofile",
-    "chemie.picturecarousel",
     "chemie.web_push",
 ]
 
