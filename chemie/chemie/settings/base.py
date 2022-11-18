@@ -91,7 +91,6 @@ LOCAL_APPS = [
     "chemie.elections",
     "chemie.web_push",
     "chemie.quiz",
-    "chemie.corporate",
     "chemie.sugepodden",
 ]
 
