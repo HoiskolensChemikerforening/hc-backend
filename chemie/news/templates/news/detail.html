@@ -24,7 +24,7 @@
             <a class="btn-floating mobile-fab-tip" href="{{ article.get_absolute_delete_url }}">Slett</a>
           </li>
         {% endif %}
-        {% if perms.news.edit_article %}
+        {% if perms.news.change_article %}
           <li>
             <a class="btn-floating blue" href="{{ article.get_absolute_edit_url }}"><i
               class="material-icons">edit</i></a>
