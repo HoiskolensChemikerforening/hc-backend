@@ -47,8 +47,7 @@ def list_all(request):
 @permission_required("news.delete_article")
 def delete_article(request, article_id, slug):
     article = get_object_or_404(Article, id=article_id)
-    article.published = False
-    article.save()
+    article.delete()
     messages.add_message(
         request, messages.SUCCESS, "Nyheten ble slettet", extra_tags="Slettet"
     )
