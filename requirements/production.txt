@@ -135,7 +135,7 @@ packaging==21.0
     #   pytest
 passlib==1.7.4
     # via django-hashers-passlib
-pillow==9.0.1
+pillow==9.3.0
     # via
     #   invoicegenerator
     #   reportlab
