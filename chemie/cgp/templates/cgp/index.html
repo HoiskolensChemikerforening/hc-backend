@@ -1,0 +1,44 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+<img class="cgplogo" type="image/png" src="{% static 'images/cgp_logo.png' %}">
+
+
+<div class="dropdown">
+  <button class="dropbtn">Stem for</button>
+  <div class="dropdown-content">
+    <a href="#">Link 1</a>
+    <a href="#">Link 2</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 3</a>
+    <a href="#">Link 6</a>
+  </div>
+</div>
+
+<!-- Floating admin button -->
+{% if perms.elections.add_election %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-group-sm" id="mini-fab" style="position:fixed !important; right: 29px; bottom:29px">
+        <a href="{% url 'cgp:admin_start_cgp' %}" class="btn btn-info btn-fab" id="admin">
+          <i class="material-icons">
+            build
+          </i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+{% endblock %}
