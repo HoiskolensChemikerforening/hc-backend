@@ -96,6 +96,7 @@ LOCAL_APPS = [
     "chemie.corporate",
     "chemie.rentalservice",
     "chemie.sugepodden",
+    "chemie.cgp",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
