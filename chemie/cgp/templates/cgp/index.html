@@ -12,16 +12,9 @@
 <div class="dropdown">
   <button class="dropbtn">Stem for</button>
   <div class="dropdown-content">
-    <a href="#">Link 1</a>
-    <a href="#">Link 2</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 3</a>
-    <a href="#">Link 6</a>
+    {% for country in countries %}
+    <a href="#"> {{country.country_name}} </a>
+    {%endfor%}
   </div>
 </div>
 

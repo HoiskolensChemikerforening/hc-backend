@@ -12,6 +12,9 @@ class Country(models.Model):
     users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
 
+    def __str__(self):
+        return self.country_name
+
 
 
 
