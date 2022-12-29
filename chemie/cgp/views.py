@@ -8,7 +8,5 @@ def index(request):
     cgp = CGP.objects.all()[0]
     countries = cgp.countries.all()
     context = {"countries": countries}
-    for c in countries:
-        print(c.country_name)
 
     return render(request, "cgp/index.html", context)
