@@ -13,7 +13,7 @@
   <button class="dropbtn">Stem for</button>
   <div class="dropdown-content">
     {% for country in countries %}
-    <a href="#"> {{country.country_name}} </a>
+    <a href="{{country.get_absolute_url}}"> {{country.country_name}} </a>
     {%endfor%}
   </div>
 </div>

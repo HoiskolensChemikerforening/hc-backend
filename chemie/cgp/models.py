@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from sorl.thumbnail import ImageField
+from django.urls import reverse
 
 class Country(models.Model):
     """
@@ -11,9 +12,13 @@ class Country(models.Model):
     image = ImageField(upload_to="cgp", null=True, blank=True)
     users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
+    slug = models.SlugField(null=True, blank=True)
 
     def __str__(self):
         return self.country_name
+
+    def get_absolute_url(self):
+        return reverse("cgp:vote_index", kwargs={"slug": self.slug})
 
 
 
