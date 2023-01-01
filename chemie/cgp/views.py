@@ -1,6 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, reverse
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
 from .models import CGP, Country
+import json
 
 # Create your views here.
 @login_required
@@ -17,24 +19,16 @@ def vote_index(request, slug):
     cgp = CGP.objects.all()[0]
     countries = cgp.countries.all()
     points = [12,10,8,7,6,5,4,3,2,1]
-    pointsCountries = []
-    for i in range(max(len(countries),len(points))):
-        if i < len(points):
-            p = points[i]
-        else:
-            p = 0
-            points.append(0)
-        if i < len(countries):
-            c = countries[i]
-        else:
-            c = None
-        pointsCountries.append((p,c))
-
+    if request.method == "POST":
+        countryNames = request.POST.getlist("countryNames[]")
+        country.vote = json.dumps(countryNames)
+        country.save()
+        return JsonResponse({"url": reverse("cgp:index")},status=200)
 
     context = {
         "country": country,
-        "pointsCountries": pointsCountries,
         "countries": ",".join([i.country_name for i in countries]),
-        "points": ",".join([str(i) for i in points])
+        "points": ",".join([str(i) for i in points]),
+        "url": f"/{slug}/"
                }
     return render(request, "cgp/vote_index.html", context)

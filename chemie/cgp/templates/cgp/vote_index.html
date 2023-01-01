@@ -8,18 +8,9 @@
 
 <p>{{country.country_name}}</p>
 
-<ul class="draggable-list" id="draggable-list">
-<!---{% for p, c in pointsCountries %}
-<li data-index={{forloop.counter0}}">
-    <span class="points">{{p}}</span>
-    <div class="draggable" draggable="true" id="p1">
-          <p class="country">{{c.country_name}}</p>
-          <i class="fas fa-grip-lines"></i>
-    </div>
-</li>
-{%endfor%}---></ul>
+<ul class="draggable-list" id="draggable-list"></ul>
 
-<button id="submit-vote">Stem</button>
+<button type="submit" id="submit-vote">Stem</button>
 
 
 {% endblock %}
@@ -27,7 +18,8 @@
 {% block footer_script%}
 <script>
 const draggable_list = document.getElementById('draggable-list');
-const check = document.getElementById('check');
+const check = document.getElementById('submit-vote');
+console.log(check);
 var countries = "{{countries}}";
 countries = countries.split(',');
 while (countries.length < 10) {
@@ -113,18 +105,30 @@ function swapItems(fromIndex, toIndex) {
   listItems[toIndex].appendChild(itemOne);
 }
 
-// Check the order of list items
-function checkOrder() {
+// Submits the votes
+function submitVote() {
+    var countryNames=[];
   listItems.forEach((listItem, index) => {
     const countryName = listItem.querySelector('.draggable').innerText.trim();
+    countryNames.push(countryName);
+    console.log(countryName);
 
-    if (countryName !== countries[index]) {
-      listItem.classList.add('wrong');
-    } else {
-      listItem.classList.remove('wrong');
-      listItem.classList.add('right');
-    }
   });
+  $.post({
+              type: 'POST',
+              url: "{{slug}}",
+              data: {
+                  'countryNames[]': countryNames,
+                  'csrfmiddlewaretoken': '{{ csrf_token }}',
+                },
+              success: function (response){
+                  window.alert("Takk for din stemme!");
+                  location.href = response.url;
+              },
+              error: function (response){
+                  window.alert("ERROR!");
+              }
+            });
 }
 
 function addEventListeners() {
@@ -143,6 +147,6 @@ function addEventListeners() {
   });
 }
 
-check.addEventListener('click', checkOrder);
+check.addEventListener('click', submitVote);
 </script>
 {%endblock%}

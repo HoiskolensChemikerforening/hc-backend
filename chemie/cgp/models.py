@@ -13,6 +13,7 @@ class Country(models.Model):
     image = ImageField(upload_to="cgp", null=True, blank=True)
     users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
+    vote = models.TextField(blank=True)
     slug = models.SlugField(null=True, blank=True,editable=False)
 
     def __str__(self):
