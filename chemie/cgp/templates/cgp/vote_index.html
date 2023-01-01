@@ -8,7 +8,141 @@
 
 <p>{{country.country_name}}</p>
 
+<ul class="draggable-list" id="draggable-list">
+<!---{% for p, c in pointsCountries %}
+<li data-index={{forloop.counter0}}">
+    <span class="points">{{p}}</span>
+    <div class="draggable" draggable="true" id="p1">
+          <p class="country">{{c.country_name}}</p>
+          <i class="fas fa-grip-lines"></i>
+    </div>
+</li>
+{%endfor%}---></ul>
 
+<button id="submit-vote">Stem</button>
 
 
 {% endblock %}
+
+{% block footer_script%}
+<script>
+const draggable_list = document.getElementById('draggable-list');
+const check = document.getElementById('check');
+var countries = "{{countries}}";
+countries = countries.split(',');
+while (countries.length < 10) {
+    countries.push("");
+};
+var points = "{{points}}";
+while (points.length < countries.length) {
+    points.push("0");
+};
+points = points.split(',');
+//console.log(countries);
+//console.log(points);
+
+
+// Store listitems
+const listItems = [];
+
+let dragStartIndex;
+
+createList();
+
+// Insert list items into DOM
+function createList() {
+  [...countries]
+    .map(a => ({ value: a, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(a => a.value)
+    .forEach((country, index) => {
+      const listItem = document.createElement('li');
+
+      listItem.setAttribute('data-index', index);
+
+      listItem.innerHTML = `
+        <span class="points">${points[index]}</span>
+        <div class="draggable" draggable="true">
+          <p class="country-name">${country}</p>
+          <i class="fas fa-grip-lines"></i>
+        </div>
+      `;
+
+      listItems.push(listItem);
+
+      draggable_list.appendChild(listItem);
+    });
+
+  addEventListeners();
+}
+
+function dragStart() {
+  // console.log('Event: ', 'dragstart');
+  dragStartIndex = +this.closest('li').getAttribute('data-index');
+}
+
+function dragEnter() {
+  // console.log('Event: ', 'dragenter');
+  this.classList.add('over');
+}
+
+function dragLeave() {
+  // console.log('Event: ', 'dragleave');
+  this.classList.remove('over');
+}
+
+function dragOver(e) {
+  // console.log('Event: ', 'dragover');
+  e.preventDefault();
+}
+
+function dragDrop() {
+  // console.log('Event: ', 'drop');
+  const dragEndIndex = +this.getAttribute('data-index');
+  swapItems(dragStartIndex, dragEndIndex);
+
+  this.classList.remove('over');
+}
+
+// Swap list items that are drag and drop
+function swapItems(fromIndex, toIndex) {
+  const itemOne = listItems[fromIndex].querySelector('.draggable');
+  const itemTwo = listItems[toIndex].querySelector('.draggable');
+
+  listItems[fromIndex].appendChild(itemTwo);
+  listItems[toIndex].appendChild(itemOne);
+}
+
+// Check the order of list items
+function checkOrder() {
+  listItems.forEach((listItem, index) => {
+    const countryName = listItem.querySelector('.draggable').innerText.trim();
+
+    if (countryName !== countries[index]) {
+      listItem.classList.add('wrong');
+    } else {
+      listItem.classList.remove('wrong');
+      listItem.classList.add('right');
+    }
+  });
+}
+
+function addEventListeners() {
+  const draggables = document.querySelectorAll('.draggable');
+  const dragListItems = document.querySelectorAll('.draggable-list li');
+
+  draggables.forEach(draggable => {
+    draggable.addEventListener('dragstart', dragStart);
+  });
+
+  dragListItems.forEach(item => {
+    item.addEventListener('dragover', dragOver);
+    item.addEventListener('drop', dragDrop);
+    item.addEventListener('dragenter', dragEnter);
+    item.addEventListener('dragleave', dragLeave);
+  });
+}
+
+check.addEventListener('click', checkOrder);
+</script>
+{%endblock%}
