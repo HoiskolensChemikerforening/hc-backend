@@ -96,6 +96,13 @@
 .dropdown:hover .dropbtn {background-color: #00486d;}
 
 
+.mainflag {
+  width: 80%;
+  display: block;
+  margin: auto;
+  margin-top: 10%;/* 100%-80%/2 */
+}
+
 
 
 
