@@ -26,10 +26,10 @@ while (countries.length < 10) {
     countries.push("");
 };
 var points = "{{points}}";
+points = points.split(',');
 while (points.length < countries.length) {
     points.push("0");
 };
-points = points.split(',');
 //console.log(countries);
 //console.log(points);
 
