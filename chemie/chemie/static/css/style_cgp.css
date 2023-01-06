@@ -8,7 +8,7 @@
   padding: 20px;
   margin: auto;
   max-width: 650px;
-  height: 92vh;
+  min-height: 92vh;
 }
 
 .cgplogo{
