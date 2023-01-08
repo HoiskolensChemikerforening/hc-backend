@@ -105,9 +105,10 @@ function handleTouchMove(event){
     if (event.targetTouches.length === 1) {
         var touch = event.targetTouches[0];
         // Place element where the finger is touching
-        this.style.position = 'absolute';
-        this.style.left = touch.pageX + 'px';
-        this.style.top = touch.pageY + 'px';
+        //this.style.position = 'absolute';
+        this.classList.add("moving")
+        this.style.left = parseInt( touch.pageX - Math.floor(this.offsetWidth/2)) + 'px';
+        this.style.top = parseInt(touch.pageY- Math.floor(this.offsetHeight/2)) + 'px';
 
         //check if it is on top of a valid drop target iterates over all valid drop areas and checks for overlap
         divs = document.querySelectorAll('ul div');
@@ -140,7 +141,8 @@ function handleTouchEnd(event) {
     //Touch
     //console.log("end");
     //update from absolute to relative. Resets the element in the case of no overlapping.
-    this.style.position ='relative';
+    //this.style.position ='relative';
+    this.classList.remove("moving")
     this.style.left = 0;
     this.style.top = 0;
     for (div of overlapping) {

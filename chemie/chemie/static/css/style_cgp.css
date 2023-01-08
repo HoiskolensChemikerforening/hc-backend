@@ -168,6 +168,13 @@
   flex:1;
 }
 
+.moving {
+  position: absolute;
+  z-index: 100;
+  max-width: 527px;
+  width: 50vw;
+}
+
 .draggable-primary {
   background-color: var(--light-background);
 }
