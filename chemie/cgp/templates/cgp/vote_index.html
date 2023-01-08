@@ -192,12 +192,14 @@ function swapItems(fromIndex, toIndex) {
 // Submits the votes
 function submitVote() {
     var countryNames=[];
+    var countrynameAlertString = "";
   listItems.forEach((listItem, index) => {
-    const countryName = listItem.querySelector('.draggable').innerText.trim();
+    const countryName = listItem.querySelector('.country-name').innerText.trim();
     countryNames.push(countryName);
     //console.log(countryName);
-
-  });
+      });
+  for ([index,point] of points.entries()) {
+        countrynameAlertString = countrynameAlertString + "\n" + point + ". " + countryNames[index]}
   $.post({
               type: 'POST',
               url: "{{slug}}",
@@ -206,7 +208,7 @@ function submitVote() {
                   'csrfmiddlewaretoken': '{{ csrf_token }}',
                 },
               success: function (response){
-                  window.alert("Takk for din stemme!");
+                  window.alert(`Takk for din stemme! ${countrynameAlertString}`);
                   location.href = response.url;
               },
               error: function (response){
