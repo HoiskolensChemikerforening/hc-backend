@@ -5,9 +5,13 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<!--<img class="mainflag" alt="{{ country.country_name }}" src="{{ country.image.url }}">-->
-<p>{{country.country_name}}</p>
+<img class="mainflag" alt="{{ country.country_name }}" src="{{ country.image.url }}">
+<h1 class="countryname">{{country.country_name}}</h1>
 
+<div class="legend">
+    <p id="legendpoints">Poeng</p>
+    <p>Land</p>
+</div>
 <ul class="draggable-list" id="draggable-list"></ul>
 
 <button type="submit" id="submit-vote">Stem</button>
@@ -56,9 +60,10 @@ function createList() {
 
       listItem.innerHTML = `
         <span class="points">${points[index]}</span>
-        <div class="draggable" draggable="true" style="background-color: white">
+        <div class="draggable" draggable="true">
           <p class="country-name">${country}</p>
-          <i class="fas fa-grip-lines"></i>
+            <span class="material-symbols-outlined">menu</span>
+<!--<i class="fas fa-grip-lines"></i>-->
         </div>
       `;
 
@@ -104,11 +109,11 @@ function handleTouchMove(event){
             if (overlap) {
                 if (overlapping.length<1 && div !== this){
                     overlapping.push(div);
-                    div.style.backgroundColor ='green';
+                    //div.style.backgroundColor ='green';
                 }
 
             } else {
-                div.style.backgroundColor ='white';
+                //div.style.backgroundColor ='white';
             }
         }
   }
