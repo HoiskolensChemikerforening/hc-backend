@@ -3,6 +3,8 @@
   --dark-background: #310033;
   --light-background: #4b004f;
   --flash-drag-and-drop: #910a97;
+  --old-btn-color: #1f265f;
+  --old-text-color: #d2d000;
 }
 
 .bodybackground{
@@ -27,19 +29,28 @@
   margin-left: auto;
   margin-right: auto;
   height: 45%;
-  padding-top: 100px;
   object-fit: contain;
   max-width: 100%;
 }
 
+.image-frame {
+  margin-top: 100px;
+  padding: 20px;
+  background-color: var(--dark-background);
+  border-radius: 5px;
+  border: 2px solid var(--text-color);
+}
+
 /* Dropdown Button */
 .dropbtn {
-  background-color: #1f265f;
-  color: #d2d000;
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
   padding: 16px;
   width: 200px;
-  font-size: 16px;
-  border: none;
+  font-size: 20px;
+  font-weight: bold;
+  /*border: none;*/
 }
 
 
@@ -60,12 +71,13 @@
   position: absolute;
   left: 50%;
   transform: translateX(-50%);
-  background-color: #1f265f;
+  background-color: var(--dark-background);
   width: 200px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 1;
   height: 200px;
   overflow: auto;
+  border: 1px solid var(--text-color)
 }
 
 .dropdown-content::-webkit-scrollbar {
@@ -80,8 +92,8 @@
 
 /* Handle */
 .dropdown-content::-webkit-scrollbar-thumb {
-  background: #242a2b;
-  border-radius: 2;
+  background: var(--text-color);
+  border-radius: 2px;
 }
 
 /* Handle on hover */
@@ -91,20 +103,20 @@
 
 /* Links inside the dropdown */
 .dropdown-content a {
-  color: #d2d000;
+  color: var(--text-color);
   padding: 12px 16px;
   text-decoration: none;
   display: block;
 }
 
 /* Change color of dropdown links on hover */
-.dropdown-content a:hover {background-color: #00486d;}
+.dropdown-content a:hover {background-color: var(--flash-drag-and-drop);}
 
 /* Show the dropdown menu on hover */
 .dropdown:hover .dropdown-content {display: block;}
 
 /* Change the background color of the dropdown button when the dropdown content is shown */
-.dropdown:hover .dropbtn {background-color: #00486d;}
+.dropdown:hover .dropbtn {background-color: var(--flash-drag-and-drop);}
 
 
 .mainflag {

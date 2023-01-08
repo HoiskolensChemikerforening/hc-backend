@@ -5,12 +5,12 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-
+<div class="image-frame">
 <img class="cgplogo" type="image/png" src="{% static 'images/cgp_logo.png' %}">
-
+</div>
 
 <div class="dropdown">
-  <button class="dropbtn">Stem for</button>
+  <button class="dropbtn">Stem!</button>
   <div class="dropdown-content">
     {% for country in countries %}
     <a href="{{country.get_absolute_url}}"> {{country.country_name}} </a>
