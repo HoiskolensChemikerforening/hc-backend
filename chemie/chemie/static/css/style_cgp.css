@@ -2,6 +2,7 @@
   --text-color: white;
   --dark-background: #310033;
   --light-background: #4b004f;
+  --flash-drag-and-drop: #910a97;
 }
 
 .bodybackground{
@@ -155,13 +156,19 @@
 }
 
 .draggable {
-  background-color: var(--light-background);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: space-between;
   padding: 15px;
   flex:1;
+}
+
+.draggable-primary {
+  background-color: var(--light-background);
+}
+.draggable-over {
+  background-color: var(--flash-drag-and-drop);
 }
 
 .countryname {
@@ -185,6 +192,10 @@
 }
 .legend p[id] {
   background-color: var(--dark-background);
+}
+
+.submit-btn {
+
 }
 
 

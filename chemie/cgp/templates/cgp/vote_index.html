@@ -60,7 +60,7 @@ function createList() {
 
       listItem.innerHTML = `
         <span class="points">${points[index]}</span>
-        <div class="draggable" draggable="true">
+        <div class="draggable draggable-primary" draggable="true">
           <p class="country-name">${country}</p>
             <span class="material-symbols-outlined">menu</span>
 <!--<i class="fas fa-grip-lines"></i>-->
@@ -109,10 +109,14 @@ function handleTouchMove(event){
             if (overlap) {
                 if (overlapping.length<1 && div !== this){
                     overlapping.push(div);
+                    div.classList.add("draggable-over")
                     //div.style.backgroundColor ='green';
                 }
 
             } else {
+                if (div.classList.contains("draggable-over")){
+                    div.classList.remove("draggable-over")
+                }
                 //div.style.backgroundColor ='white';
             }
         }
@@ -126,11 +130,17 @@ function handleTouchEnd(event) {
     this.style.position ='relative';
     this.style.left = 0;
     this.style.top = 0;
+    for (div of overlapping) {
+        if (div.classList.contains("draggable-over")){
+                    div.classList.remove("draggable-over")
+                }
+    }
     //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
     if (overlapping.length>=1){
         const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
         swapItems(dragStartIndex, dragEndIndex);
     }
+
 }
 
 function dragStart() {
@@ -144,14 +154,15 @@ function dragEnter() {
     //Mouse
     //updates the element to know that it is hovering on top of a droppable area
   //console.log('Event: ', 'dragenter');
-  this.classList.add('over');
+  this.getElementsByTagName('div')[0].classList.add('draggable-over');
+  //console.log(this);
 }
 
 function dragLeave() {
     //Mouse
     //updates the element to know that it is NOT hovering on top of a droppable area
   //console.log('Event: ', 'dragleave');
-  this.classList.remove('over');
+  this.getElementsByTagName('div')[0].classList.remove('draggable-over');
 }
 
 function dragOver(e) {
@@ -164,9 +175,8 @@ function dragDrop() {
     //gets the index of the <li> item the item is hovering over to call the switch function
   // console.log('Event: ', 'drop');
   const dragEndIndex = +this.getAttribute('data-index');
+  this.getElementsByTagName('div')[0].classList.remove('draggable-over');
   swapItems(dragStartIndex, dragEndIndex);
-
-  this.classList.remove('over');
 }
 
 // Swap list items that are drag and drop
@@ -174,7 +184,7 @@ function swapItems(fromIndex, toIndex) {
     //swaps 2 <li> elements by index in listItems
   const itemOne = listItems[fromIndex].querySelector('.draggable');
   const itemTwo = listItems[toIndex].querySelector('.draggable');
-    console.log(fromIndex,toIndex)
+    //console.log(fromIndex,toIndex)
   listItems[fromIndex].appendChild(itemTwo);
   listItems[toIndex].appendChild(itemOne);
 }
