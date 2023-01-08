@@ -13,8 +13,10 @@
     <p>Land</p>
 </div>
 <ul class="draggable-list" id="draggable-list"></ul>
-
-<button type="submit" id="submit-vote">Stem</button>
+<div class="container-btn">
+<button class="submit-btn" type="submit" id="submit-vote">Stem</button>
+<button class="submit-btn" type="" id="help">Help</button>
+</div>
 
 
 {% endblock %}
@@ -53,6 +55,11 @@ const listItems = [];
 let dragStartIndex;
 
 var overlapping;
+
+//timer
+var timeout;
+var waiting = true;
+const time = 1000;//ms
 
 createList();
 
@@ -94,11 +101,21 @@ function handleTouchStart(event) {
     //Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
     event.preventDefault();
     console.log('touchstart');
+
+    timeout = setTimeout(function (element){
+        waiting=false;
+        element.classList.add("selected");
+        element.classList.remove("draggable-primary")
+        console.log(element.classList);
+        }, time, this);
     dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
 
 function handleTouchMove(event){
+    console.log(waiting);
+    clearTimeout(timeout);
+    if (!waiting){
     //Touch
     event.preventDefault();
     //console.log('touchmove');
@@ -125,7 +142,9 @@ function handleTouchMove(event){
                     overlapping.push(div);
                     div.classList.add("draggable-over")
                     //div.style.backgroundColor ='green';
-                }
+                } else {if (div.classList.contains("draggable-over")){
+                    div.classList.remove("draggable-over")
+                }}
 
             } else {
                 if (div.classList.contains("draggable-over")){
@@ -135,27 +154,32 @@ function handleTouchMove(event){
             }
         }
   }
-}
+}}
 
 function handleTouchEnd(event) {
-    //Touch
-    //console.log("end");
-    //update from absolute to relative. Resets the element in the case of no overlapping.
-    //this.style.position ='relative';
-    this.classList.remove("moving")
-    this.style.left = 0;
-    this.style.top = 0;
-    for (div of overlapping) {
-        if (div.classList.contains("draggable-over")){
-                    div.classList.remove("draggable-over")
-                }
+    clearTimeout(timeout);
+    if (!waiting) {
+        waiting =true;
+        this.classList.remove("selected");
+        this.classList.add("draggable-primary")
+        //Touch
+        //console.log("end");
+        //update from absolute to relative. Resets the element in the case of no overlapping.
+        //this.style.position ='relative';
+        this.classList.remove("moving")
+        this.style.left = 0;
+        this.style.top = 0;
+        for (div of overlapping) {
+            if (div.classList.contains("draggable-over")) {
+                div.classList.remove("draggable-over")
+            }
+        }
+        //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
+        if (overlapping.length >= 1) {
+            const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
+            swapItems(dragStartIndex, dragEndIndex);
+        }
     }
-    //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
-    if (overlapping.length>=1){
-        const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
-        swapItems(dragStartIndex, dragEndIndex);
-    }
-
 }
 
 function dragStart() {

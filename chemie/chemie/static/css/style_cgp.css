@@ -175,12 +175,18 @@
   width: 50vw;
 }
 
+.selected {
+  background-color: var(--flash-drag-and-drop);
+}
+
 .draggable-primary {
   background-color: var(--light-background);
 }
 .draggable-over {
   background-color: var(--flash-drag-and-drop);
 }
+
+
 
 .countryname {
   color: var(--text-color);
@@ -206,7 +212,16 @@
 }
 
 .submit-btn {
-
+  border: 1px solid var(--text-color);
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  margin: auto;
+}
+.container-btn {
+  width:100%;
+  height: 30px;
+  display: flex;
+  flex:1;
 }
 
 
