@@ -65,19 +65,15 @@ function createList() {
       listItems.push(listItem);
 
       draggable_list.appendChild(listItem);
-      //console.log(listItems);
-      //console.log(draggable_list);
     });
 
   addEventListeners();
 }
 
-function dragStart() {
-  // console.log('Event: ', 'dragstart');
-  dragStartIndex = +this.closest('li').getAttribute('data-index');
-}
 
 function handleTouchStart(event) {
+    //touch
+    //Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
     event.preventDefault();
     console.log('touchstart');
     dragStartIndex = +this.closest('li').getAttribute('data-index');
@@ -85,19 +81,18 @@ function handleTouchStart(event) {
 
 
 function handleTouchMove(event){
+    //Touch
     event.preventDefault();
     //console.log('touchmove');
-    if (event.targetTouches.length == 1) {
+    if (event.targetTouches.length === 1) {
         var touch = event.targetTouches[0];
-        // Place element where the finger is
+        // Place element where the finger is touching
         this.style.position = 'absolute';
         this.style.left = touch.pageX + 'px';
         this.style.top = touch.pageY + 'px';
-        //console.log(document.elementFromPoint(touch.pageX, touch.pageY));
-        divs = document.querySelectorAll('ul div');
-        //console.log(div.getBoundingClientRect().bottom > this.getBoundingClientRect().bottom);
 
-        //Check if box overlaps updates overlapping
+        //check if it is on top of a valid drop target iterates over all valid drop areas and checks for overlap
+        divs = document.querySelectorAll('ul div');
         overlapping = [];
         for (div of [...divs]) {
             rect1 = this.getBoundingClientRect();
@@ -116,38 +111,41 @@ function handleTouchMove(event){
                 div.style.backgroundColor ='white';
             }
         }
-        //console.log(overlapping);
-
-        //.filter(div => div.getBoundingClientRect().bottom > this.getBoundingClientRect().bottom));
   }
 }
 
 function handleTouchEnd(event) {
-    console.log("end");
-    // get current position
-    var x = parseInt(this.style.left);
-    var y = parseInt(this.style.top);
-    //check if it is on top of a valid drop target
+    //Touch
+    //console.log("end");
+    //update from absolute to relative. Resets the element in the case of no overlapping.
     this.style.position ='relative';
     this.style.left = 0;
     this.style.top = 0;
+    //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
     if (overlapping.length>=1){
         const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
         swapItems(dragStartIndex, dragEndIndex);
     }
 }
 
-function handleTouchEnter(event) {
-    console.log("enter");
+function dragStart() {
+    //Mouse
+    // Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
+  // console.log('Event: ', 'dragstart');
+  dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
 function dragEnter() {
-  console.log('Event: ', 'dragenter');
+    //Mouse
+    //updates the element to know that it is hovering on top of a droppable area
+  //console.log('Event: ', 'dragenter');
   this.classList.add('over');
 }
 
 function dragLeave() {
-  console.log('Event: ', 'dragleave');
+    //Mouse
+    //updates the element to know that it is NOT hovering on top of a droppable area
+  //console.log('Event: ', 'dragleave');
   this.classList.remove('over');
 }
 
@@ -157,6 +155,8 @@ function dragOver(e) {
 }
 
 function dragDrop() {
+    //Mouse
+    //gets the index of the <li> item the item is hovering over to call the switch function
   // console.log('Event: ', 'drop');
   const dragEndIndex = +this.getAttribute('data-index');
   swapItems(dragStartIndex, dragEndIndex);
@@ -166,6 +166,7 @@ function dragDrop() {
 
 // Swap list items that are drag and drop
 function swapItems(fromIndex, toIndex) {
+    //swaps 2 <li> elements by index in listItems
   const itemOne = listItems[fromIndex].querySelector('.draggable');
   const itemTwo = listItems[toIndex].querySelector('.draggable');
     console.log(fromIndex,toIndex)
@@ -200,6 +201,7 @@ function submitVote() {
 }
 
 function addEventListeners() {
+    //Adds event listeners
   const draggables = document.querySelectorAll('.draggable');
   const dragListItems = document.querySelectorAll('.draggable-list li');
 
@@ -210,7 +212,6 @@ function addEventListeners() {
     draggable.addEventListener('touchstart', handleTouchStart);
     draggable.addEventListener("touchmove", handleTouchMove);
     draggable.addEventListener('touchend', handleTouchEnd);
-    //draggable.addEventListener('touchenter',handleTouchEnter);
 
   });
 
@@ -219,9 +220,6 @@ function addEventListeners() {
     item.addEventListener('drop', dragDrop);
     item.addEventListener('dragenter', dragEnter);
     item.addEventListener('dragleave', dragLeave);
-
-    item.addEventListener('touchenter',handleTouchEnter);
-    item.addEventListener('touchleave', dragLeave);
   });
 }
 
