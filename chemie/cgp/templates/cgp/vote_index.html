@@ -5,7 +5,7 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<img class="mainflag" alt="{{ country.country_name }}" src="{{ country.image.url }}">
+<!--<img class="mainflag" alt="{{ country.country_name }}" src="{{ country.image.url }}">-->
 <p>{{country.country_name}}</p>
 
 <ul class="draggable-list" id="draggable-list"></ul>
@@ -19,7 +19,7 @@
 <script>
 const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('submit-vote');
-console.log(check);
+//console.log(check);
 var countries = "{{countries}}";
 countries = countries.split(',');
 while (countries.length < 10) {
@@ -39,6 +39,8 @@ const listItems = [];
 
 let dragStartIndex;
 
+var overlapping;
+
 createList();
 
 // Insert list items into DOM
@@ -54,7 +56,7 @@ function createList() {
 
       listItem.innerHTML = `
         <span class="points">${points[index]}</span>
-        <div class="draggable" draggable="true">
+        <div class="draggable" draggable="true" style="background-color: white">
           <p class="country-name">${country}</p>
           <i class="fas fa-grip-lines"></i>
         </div>
@@ -63,6 +65,8 @@ function createList() {
       listItems.push(listItem);
 
       draggable_list.appendChild(listItem);
+      //console.log(listItems);
+      //console.log(draggable_list);
     });
 
   addEventListeners();
@@ -73,13 +77,77 @@ function dragStart() {
   dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
+function handleTouchStart(event) {
+    event.preventDefault();
+    console.log('touchstart');
+    dragStartIndex = +this.closest('li').getAttribute('data-index');
+}
+
+
+function handleTouchMove(event){
+    event.preventDefault();
+    //console.log('touchmove');
+    if (event.targetTouches.length == 1) {
+        var touch = event.targetTouches[0];
+        // Place element where the finger is
+        this.style.position = 'absolute';
+        this.style.left = touch.pageX + 'px';
+        this.style.top = touch.pageY + 'px';
+        //console.log(document.elementFromPoint(touch.pageX, touch.pageY));
+        divs = document.querySelectorAll('ul div');
+        //console.log(div.getBoundingClientRect().bottom > this.getBoundingClientRect().bottom);
+
+        //Check if box overlaps updates overlapping
+        overlapping = [];
+        for (div of [...divs]) {
+            rect1 = this.getBoundingClientRect();
+            rect2 = div.getBoundingClientRect();
+            var overlap = !(rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom);
+            if (overlap) {
+                if (overlapping.length<1 && div !== this){
+                    overlapping.push(div);
+                    div.style.backgroundColor ='green';
+                }
+
+            } else {
+                div.style.backgroundColor ='white';
+            }
+        }
+        //console.log(overlapping);
+
+        //.filter(div => div.getBoundingClientRect().bottom > this.getBoundingClientRect().bottom));
+  }
+}
+
+function handleTouchEnd(event) {
+    console.log("end");
+    // get current position
+    var x = parseInt(this.style.left);
+    var y = parseInt(this.style.top);
+    //check if it is on top of a valid drop target
+    this.style.position ='relative';
+    this.style.left = 0;
+    this.style.top = 0;
+    if (overlapping.length>=1){
+        const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
+        swapItems(dragStartIndex, dragEndIndex);
+    }
+}
+
+function handleTouchEnter(event) {
+    console.log("enter");
+}
+
 function dragEnter() {
-  // console.log('Event: ', 'dragenter');
+  console.log('Event: ', 'dragenter');
   this.classList.add('over');
 }
 
 function dragLeave() {
-  // console.log('Event: ', 'dragleave');
+  console.log('Event: ', 'dragleave');
   this.classList.remove('over');
 }
 
@@ -100,7 +168,7 @@ function dragDrop() {
 function swapItems(fromIndex, toIndex) {
   const itemOne = listItems[fromIndex].querySelector('.draggable');
   const itemTwo = listItems[toIndex].querySelector('.draggable');
-
+    console.log(fromIndex,toIndex)
   listItems[fromIndex].appendChild(itemTwo);
   listItems[toIndex].appendChild(itemOne);
 }
@@ -111,7 +179,7 @@ function submitVote() {
   listItems.forEach((listItem, index) => {
     const countryName = listItem.querySelector('.draggable').innerText.trim();
     countryNames.push(countryName);
-    console.log(countryName);
+    //console.log(countryName);
 
   });
   $.post({
@@ -136,7 +204,14 @@ function addEventListeners() {
   const dragListItems = document.querySelectorAll('.draggable-list li');
 
   draggables.forEach(draggable => {
+    //mouse
     draggable.addEventListener('dragstart', dragStart);
+    // touch
+    draggable.addEventListener('touchstart', handleTouchStart);
+    draggable.addEventListener("touchmove", handleTouchMove);
+    draggable.addEventListener('touchend', handleTouchEnd);
+    //draggable.addEventListener('touchenter',handleTouchEnter);
+
   });
 
   dragListItems.forEach(item => {
@@ -144,6 +219,9 @@ function addEventListeners() {
     item.addEventListener('drop', dragDrop);
     item.addEventListener('dragenter', dragEnter);
     item.addEventListener('dragleave', dragLeave);
+
+    item.addEventListener('touchenter',handleTouchEnter);
+    item.addEventListener('touchleave', dragLeave);
   });
 }
 
