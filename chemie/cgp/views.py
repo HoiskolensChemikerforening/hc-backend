@@ -28,6 +28,8 @@ def vote_index(request, slug):
     context = {
         "country": country,
         "countries": ",".join([i.country_name for i in countries]),
+        "realnames": ",".join([i.real_name for i in countries]),
+        "songtiteles": ",".join(["placeholder" for i in countries]),
         "points": ",".join([str(i) for i in points]),
         "url": f"/{slug}/"
                }

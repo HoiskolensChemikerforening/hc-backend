@@ -24,16 +24,25 @@
 const draggable_list = document.getElementById('draggable-list');
 const check = document.getElementById('submit-vote');
 //console.log(check);
-var countries = "{{countries}}";
-countries = countries.split(',');
-while (countries.length < 10) {
-    countries.push("");
-};
+
+function dataToArray(dataString) {
+    dataString = dataString.split(',');
+    while (dataString.length < 10) {
+        dataString.push("");
+    }
+    return dataString
+}
+var countries = dataToArray("{{countries}}");
+var realnames = dataToArray("{{ realnames }}");
+var songtiteles = dataToArray("{{ songtiteles }}");
+console.log(songtiteles,realnames);
 var points = "{{points}}";
 points = points.split(',');
 while (points.length < countries.length) {
     points.push("0");
 };
+
+
 //console.log(countries);
 //console.log(points);
 
@@ -61,7 +70,11 @@ function createList() {
       listItem.innerHTML = `
         <span class="points">${points[index]}</span>
         <div class="draggable draggable-primary" draggable="true">
-          <p class="country-name">${country}</p>
+          <span><p class="country-name">${country}</p>
+
+            <p class="country-info">${realnames[index]} </p>
+            <p class="country-info">${songtiteles[index]} </p>
+            </span>
             <span class="material-symbols-outlined">menu</span>
 <!--<i class="fas fa-grip-lines"></i>-->
         </div>

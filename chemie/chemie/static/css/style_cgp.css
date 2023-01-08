@@ -146,13 +146,17 @@
   align-items: center;
   justify-content: center;
   font-size: 28px;
-  width: 60px;
-  height:60px;
+  width: 80px;
+  height:80px;
 }
 
-.draggable-list .countryname {
+.draggable-list .country-name {
   margin: 0 20px 0 0;
 
+}
+.draggable-list .country-info {
+  font-size: 8px;
+  margin-bottom: 0;
 }
 
 .draggable {
@@ -186,7 +190,7 @@
 .legend p {
   font-weight: bold;
   text-align: center;
-  width: 60px;
+  width: 80px;
   margin-bottom: 0;
   height:30px;
 }
