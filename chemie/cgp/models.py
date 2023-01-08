@@ -22,6 +22,9 @@ class Country(models.Model):
     def get_absolute_url(self):
         return reverse("cgp:vote_index", kwargs={"slug": self.slug})
 
+    def get_group_members(self):
+        return self.users
+
     def save(self):
         if not self.slug:
             self.slug = slugify(self.country_name)

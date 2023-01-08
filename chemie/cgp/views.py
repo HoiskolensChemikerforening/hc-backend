@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, reverse
+from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import CGP, Country
@@ -8,14 +8,17 @@ import json
 @login_required
 def index(request):
     cgp = CGP.objects.all()[0]
-    countries = cgp.countries.all()
+    countries = cgp.countries.filter(users=request.user)
     context = {"countries": countries}
 
     return render(request, "cgp/index.html", context)
 
-@login_required
+
+
 def vote_index(request, slug):
     country = get_object_or_404(Country, slug=slug)
+    if request.user not in list(country.users.all()):
+        return redirect('/cgp')
     cgp = CGP.objects.all()[0]
     countries = cgp.countries.all()
     points = [12,10,8,7,6,5,4,3,2,1]
