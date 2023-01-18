@@ -25,8 +25,9 @@
         {% endif %}
         {% if perms.rentalservice.edit_rentalobject %}
           <li>
-            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}"><i
-              class="material-icons">edit</i></a>
+            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">
+              <i class="material-icons">edit</i>
+              </a>
             <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">Endre</a>
           </li>
         {% endif %}
