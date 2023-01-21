@@ -243,10 +243,6 @@ class Bedpres(BaseEvent):
 
     def updateWaitingList(self):
         self.bump_waiting()
-        print("agp:", self.allowed_grades_previous)
-        print("asp: ", self.allowed_specializations_previous)
-        print("ag: ", self.allowed_grades)
-        print("as: ", self.allowed_specializations)
         if self.allowed_grades_previous and self.allowed_specializations_previous:
             new_grades = set(self.allowed_grades) - set(
                 self.allowed_grades_previous
