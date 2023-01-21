@@ -76,6 +76,7 @@ class BaseEvent(models.Model):
         super().__init__(*args, **kwargs)
         self.allowed_grades_previous = self.allowed_grades
 
+
     def __str__(self):
         return self.title
 
@@ -131,6 +132,9 @@ class BaseEvent(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        self.updateWaitingList()
+
+    def updateWaitingList(self):
         self.bump_waiting()
         if self.allowed_grades_previous:
             new_grades = set(self.allowed_grades) - set(
@@ -202,7 +206,16 @@ class Social(BaseEvent):
         return "social"
 
 
+
+
+
+
 class Bedpres(BaseEvent):
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg, **kwargs)
+        self.allowed_specializations_previous = self.allowed_specializations
+
+
     author = models.ForeignKey(
         User, related_name="+", on_delete=models.CASCADE
     )
@@ -227,6 +240,29 @@ class Bedpres(BaseEvent):
 
     def allowed_specialization(self, user):
         return user.profile.specialization in self.allowed_specializations
+
+    def updateWaitingList(self):
+        self.bump_waiting()
+        print("agp:", self.allowed_grades_previous)
+        print("asp: ", self.allowed_specializations_previous)
+        print("ag: ", self.allowed_grades)
+        print("as: ", self.allowed_specializations)
+        if self.allowed_grades_previous and self.allowed_specializations_previous:
+            new_grades = set(self.allowed_grades) - set(
+                self.allowed_grades_previous
+            )
+            new_specializations = set(self.allowed_specializations)-set(self.allowed_specializations_previous)
+
+            if new_grades or new_specializations:
+                # Update all relevant attendees
+                self.attendees.through.objects.filter(
+                    user__profile__grade__in=self.allowed_grades,
+                    user__profile__specialization__in=self.allowed_specializations,
+                    status=REGISTRATION_STATUS.INTERESTED,
+                ).update(status=REGISTRATION_STATUS.WAITING)
+                # Bump once more in case the slot-count was increased as well
+                self.bump_waiting()
+
 
 
 class RegistrationManager(models.Manager):
