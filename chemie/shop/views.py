@@ -393,7 +393,7 @@ def add_item(request):
             )
             form.save()
             form = AddItemForm(None, None)
-    items = Item.objects.all()
+    items = Item.objects.order_by("-is_active")
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
 
