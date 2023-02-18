@@ -11,6 +11,7 @@ from chemie.web_push.models import Subscription
 from .serializers import ArticleSerializer
 
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 @permission_required("news.add_article")
@@ -77,6 +78,7 @@ def edit_article(request, article_id, slug):
 
 
 class ListAllArticles(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Article.objects.filter(published=True).order_by("-id")
     serializer_class = ArticleSerializer
 

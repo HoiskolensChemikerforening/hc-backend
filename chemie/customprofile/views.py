@@ -18,11 +18,6 @@ from django.urls import reverse
 from django.utils import timezone
 
 from rest_framework import generics
-from rest_framework.response import Response
-from rest_framework.views import APIView
-from rest_framework.permissions import IsAuthenticated
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
@@ -402,33 +397,6 @@ def add_rfid(request):
             request, "customprofile/add_card.html", context={"form": form}
         )
     return render(request, "customprofile/add_card.html", context)
-
-
-class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-    @classmethod
-    def get_token(cls, user):
-        token = super().get_token(user)
-
-        # Add custom claims
-        token['username'] = user.username
-        token['full_name'] = user.get_full_name()
-        token['profile_image'] = "http://127.0.0.1:8000" + user.profile.image_primary.url
-        # ...
-
-        return token
-
-
-class MyTokenObtainPairView(TokenObtainPairView):
-    serializer_class = MyTokenObtainPairSerializer
-
-
-
-class LoggedInUserAPI(APIView):
-    permission_classes = [IsAuthenticated]
-
-    def get(self, request):
-        profile = request.user.profile
-        return Response(ProfileSerializer(profile).data)
 
 
 class ProfileListCreate(generics.ListCreateAPIView):

@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.shortcuts import get_current_site
@@ -209,10 +210,8 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
 
 class UserPermissionView(APIView):
     def post(self, request):
-
-        if request.user:
-            has_permission = request.user.has_perm(request.data["permission"])
-        else:
-            has_permission = False
-
+        user_id = request.data["user_id"]
+        has_permission = User.objects.get(id=user_id).has_perm(
+            request.data["permission"]
+        )
         return Response({"hasPermission": has_permission})
