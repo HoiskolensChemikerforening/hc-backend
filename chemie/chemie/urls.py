@@ -24,6 +24,7 @@ from rest_framework_simplejwt.views import (
     TokenObtainPairView,
 )
 
+from . import views
 from ..customprofile.views import LoginView
 from chemie.home.views import index, UserPermissionView
 
@@ -76,6 +77,11 @@ urlpatterns = [
         "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
     ),
     path("api/permissions/", UserPermissionView.as_view(), name="permissions"),
+    path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
+    path("api/sponsor/", views.SponsorListCreate.as_view(), name="sponsor"),
+    path("api/404/<int:pk>/", views.pictures_for_404Detail.as_view()),
+    path("api/sponsor/<int:pk>/", views.SponsorDetail.as_view()),
+    path("merch/", include("chemie.merch.urls", namespace="merch")),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"

@@ -212,7 +212,24 @@ ul.sidenav-fixed a {
 .dropdown-content li > a,
 .dropdown-content li > span {
   color: var(--side-bar-text);
+  height: 100%;
 }
+
+.newbtn {
+    border: none;
+    color: var(--side-bar-text);
+    background: none;
+    cursor:pointer;
+    height: 100%;
+    width: 100%;
+    font-size: 16px;
+    display: block;
+    line-height: 22px;
+    padding: 14px 16px;
+}
+
+
+
 
 input:not([type]):focus:not([readonly]),
 input[type="text"]:focus:not([readonly]),
