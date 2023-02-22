@@ -76,7 +76,7 @@ def my_lockers(request):
 
 def register_locker(request, number):
     # Fetch requested locker
-    locker = Locker.objects.get(number=number)
+    locker = get_object_or_404(Locker, number=number)
 
     if not locker.is_free():
         # Locker was already taken
