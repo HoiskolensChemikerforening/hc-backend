@@ -211,7 +211,10 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
 class UserPermissionView(APIView):
     def post(self, request):
         user_id = request.data["user_id"]
-        has_permission = User.objects.get(id=user_id).has_perm(
-            request.data["permission"]
-        )
+        if user_id:
+            has_permission = User.objects.get(id=user_id).has_perm(
+                request.data["permission"]
+            )
+        else:
+            has_permission = False
         return Response({"hasPermission": has_permission})
