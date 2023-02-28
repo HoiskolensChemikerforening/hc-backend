@@ -19,13 +19,12 @@ from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
 
-from rest_framework_simplejwt.views import (
-    TokenRefreshView,
-    TokenObtainPairView,
-)
-
 from . import views
-from ..customprofile.views import LoginView
+from ..customprofile.views import (
+    LoginView,
+    CustomTokenObtainPairView,
+    CustomTokenRefreshView,
+)
 from chemie.home.views import index, UserPermissionView
 
 urlpatterns = [
@@ -71,10 +70,14 @@ urlpatterns = [
     ),
     # For authentication
     path(
-        "api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"
+        "api/token/",
+        CustomTokenObtainPairView.as_view(),
+        name="token_obtain_pair",
     ),
     path(
-        "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+        "api/token/refresh/",
+        CustomTokenRefreshView.as_view(),
+        name="token_refresh",
     ),
     path("api/permissions/", UserPermissionView.as_view(), name="permissions"),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
