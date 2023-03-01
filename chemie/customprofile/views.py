@@ -216,7 +216,6 @@ def activate_password(request, code):
 
 @permission_required("customprofile.change_membership")
 def view_memberships(request, year=1):
-
     # If url arg year is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:

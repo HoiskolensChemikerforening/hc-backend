@@ -1,7 +1,9 @@
-from rest_framework import serializers
-from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
+
+from rest_framework import serializers
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 from .models import Profile, Medal
 
 
@@ -22,7 +24,6 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-
     full_name = serializers.CharField(source="get_full_name")
 
     class Meta:

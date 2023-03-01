@@ -7,7 +7,6 @@ from django.contrib.auth.decorators import permission_required
 
 from .models import Article
 from .forms import ArticleForm
-from chemie.web_push.models import Subscription
 from .serializers import ArticleSerializer
 
 from rest_framework import generics
@@ -19,7 +18,6 @@ def create_post(request):
     post = ArticleForm(request.POST or None, request.FILES or None)
 
     if request.POST:
-
         if post.is_valid():
             instance = post.save(commit=False)
             instance.author = request.user
