@@ -97,6 +97,7 @@ LOCAL_APPS = [
     "chemie.rentalservice",
     "chemie.sugepodden",
     "chemie.cgp",
+    "chemie.merch",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -468,3 +469,5 @@ CART_SESSION_ID = "cart"
 
 # Value used for Django's built-in messages framework
 MESSAGE_TAGS = {message_constants.ERROR: "danger"}
+
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

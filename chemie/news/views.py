@@ -16,17 +16,23 @@ from rest_framework import generics
 @permission_required("news.add_article")
 def create_post(request):
     post = ArticleForm(request.POST or None, request.FILES or None)
+
     if request.POST:
+
         if post.is_valid():
             instance = post.save(commit=False)
             instance.author = request.user
             instance.save()
 
-            subscriptions = Subscription.objects.filter(subscription_type=2)
-            subscribers = [sub.owner for sub in subscriptions]
-            instance.send_push(subscribers)
+            # Check if removing this fixes the bug when posting a new article
+
+            # subscriptions = Subscription.objects.filter(subscription_type=2)
+            # subscribers = [sub.owner for sub in subscriptions]
+            # instance.send_push(subscribers)
             return HttpResponseRedirect(reverse("news:index"))
+
     context = {"post": post}
+
     return render(request, "news/create_post.html", context)
 
 
@@ -47,8 +53,7 @@ def list_all(request):
 @permission_required("news.delete_article")
 def delete_article(request, article_id, slug):
     article = get_object_or_404(Article, id=article_id)
-    article.published = False
-    article.save()
+    article.delete()
     messages.add_message(
         request, messages.SUCCESS, "Nyheten ble slettet", extra_tags="Slettet"
     )

@@ -6,7 +6,6 @@ app_name = "home"
 
 urlpatterns = [
     path("", index, name="home"),
-    path("kontakt/", contact, name="kontakt"),
     path("kalender/", calendar, name="calendar"),
     path("midler/", request_funds, name="fundsapplication"),
     path("kontortilgang/søk", request_office, name="officeaccess"),

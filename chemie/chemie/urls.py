@@ -21,6 +21,7 @@ from django.contrib import admin
 from ..customprofile.views import LoginView
 
 from chemie.home.views import index
+from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -28,7 +29,7 @@ urlpatterns = [
     # Temporary url for front page during Fadderperioden
     path("forside/", index),
     path("sladreboks/", include("chemie.shitbox.urls", namespace="shitbox")),
-    path("verv/", include("chemie.committees.urls", namespace="verv")),
+    path("undergrupper/", include("chemie.committees.urls", namespace="verv")),
     path("bokskap/", include("chemie.lockers.urls", namespace="bokskap")),
     path("bedrift/", include("chemie.corporate.urls", namespace="corporate")),
     path("nyheter/", include("chemie.news.urls", namespace="news")),
@@ -67,6 +68,11 @@ urlpatterns = [
         "cgp/",
          include("chemie.cgp.urls", namespace="cgp")
     ),
+    path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
+    path("api/sponsor/", views.SponsorListCreate.as_view(), name="sponsor"),
+    path("api/404/<int:pk>/", views.pictures_for_404Detail.as_view()),
+    path("api/sponsor/<int:pk>/", views.SponsorDetail.as_view()),
+    path("merch/", include("chemie.merch.urls", namespace="merch")),
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"

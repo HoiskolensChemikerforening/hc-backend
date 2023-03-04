@@ -69,6 +69,7 @@ class RegisterProfileForm(forms.ModelForm):
     layout = M.Layout(
         M.Row("grade"),
         M.Row("start_year", "end_year"),
+        M.Row("specialization"),
         M.Row("address"),
         M.Row("access_card"),
         M.Row("phone_number"),
@@ -84,6 +85,7 @@ class RegisterProfileForm(forms.ModelForm):
             "grade",
             "start_year",
             "end_year",
+            "specialization",
             "access_card",
             "phone_number",
             "allergies",
@@ -121,6 +123,7 @@ class EditProfileForm(forms.ModelForm):
     layout = M.Layout(
         M.Row("start_year", "end_year"),
         M.Row("address"),
+        M.Row("specialization"),
         M.Row("access_card"),
         M.Row("phone_number"),
         M.Row("allergies", "relationship_status"),
@@ -132,6 +135,7 @@ class EditProfileForm(forms.ModelForm):
         fields = [
             "start_year",
             "end_year",
+            "specialization",
             "access_card",
             "phone_number",
             "allergies",
@@ -273,6 +277,10 @@ class SetNewPassword(forms.ModelForm):
 
 class NameSearchForm(forms.Form):
     search_field = forms.CharField(max_length=120)
+
+
+class EndYearForm(forms.Form):
+    integer_field = forms.IntegerField()
 
 
 class ApprovedTermsForm(forms.Form):

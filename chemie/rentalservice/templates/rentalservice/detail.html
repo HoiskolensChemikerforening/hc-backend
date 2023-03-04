@@ -25,8 +25,9 @@
         {% endif %}
         {% if perms.rentalservice.edit_rentalobject %}
           <li>
-            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}"><i
-              class="material-icons">edit</i></a>
+            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">
+              <i class="material-icons">edit</i>
+              </a>
             <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">Endre</a>
           </li>
         {% endif %}
@@ -64,14 +65,14 @@
     <!-- Rental info -->
 
 
-        <div class="col s5 m5 l5">
-          <div class="col card contactForm" style="padding-top: 0.25rem; width: 100%; height: 8rem;">
+        <div class="col s12 m5">
+          <div class="col card contactForm" style="padding-top: 0.25rem; width: 100%; height: 6rem;">
             <a href="/utleie/kontaktinfo">
                 <div class="row">
-                    <p style="margin:auto; padding-top: 0rem;">
+                    <p style="margin:auto; padding-top: 1.5rem;">
                       <img type="image/png" src="{% static "images/handlekurv.png" %}"
           style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
-                        max-height:4rem; float: left; margin:-0.5rem; padding-right: 0.5rem; padding-left: 0.5rem;">
+                        max-height:3rem; float: left; margin:-0.5rem; padding-right: 0.5rem; padding-left: 0.5rem;">
                         Ønsker du å leie noe av utstyret? <strong>Klikk her!</strong> </img>
                     </p>
                 </div>
