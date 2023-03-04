@@ -81,6 +81,8 @@ class BaseEvent(models.Model):
         else:
             return [GRADES.for_value(x).display for x in self.allowed_grades]
 
+        #Makes nicer view on detalis page.
+
     def registered_users(self):
         return self.attendees.through.objects.filter(
             status=REGISTRATION_STATUS.CONFIRMED, event=self
