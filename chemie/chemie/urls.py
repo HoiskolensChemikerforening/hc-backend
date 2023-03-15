@@ -35,6 +35,7 @@ urlpatterns = [
     path("nyheter/", include("chemie.news.urls", namespace="news")),
     path("", include("chemie.customprofile.urls", namespace="profile")),
     path("login/", LoginView.as_view(), name="login"),
+    path("stock/", include("chemie.stock.urls", namespace="mainstockpage")),
     path(
         "logout/",
         auth_views.LogoutView.as_view(),
