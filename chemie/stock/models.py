@@ -9,9 +9,9 @@ class Stock(models.Model):
 class History(models.Model):
     date = models.DateTimeField(auto_now=False, auto_now_add=False)
     value = models.DecimalField(max_digits=None, decimal_places=2)
-    stock = models.OneToOneField(Stock)
+    stock = models.OneToOneField(Stock, on_delete=models.CASCADE)
 
-class Porofolio(models.Model):
+class Portfolio(models.Model):
     user = models.OneToOneField(User)
     stock = models.OneToOneField(Stock)
     volume = models.IntegerField(null=True)
