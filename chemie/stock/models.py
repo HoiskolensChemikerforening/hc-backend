@@ -13,7 +13,7 @@ class History(models.Model):
 
 class Portfolio(models.Model):
     user = models.OneToOneField(User)
-    stock = models.OneToOneField(Stock)
+    stock = models.ManyToManyField(Stock)
     volume = models.IntegerField(null=True)
     balance = models.DecimalField(max_digits=None, decimal_places=2)
 
