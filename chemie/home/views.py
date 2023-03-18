@@ -1,6 +1,7 @@
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.models import User
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.flatpages.models import FlatPage
 from django.contrib.sites.shortcuts import get_current_site
@@ -10,6 +11,10 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView
+
+from rest_framework.response import Response
+from rest_framework.views import APIView
+
 from post_office import mail
 
 from chemie.events.models import Social, Bedpres
@@ -201,3 +206,15 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     template_name = "home/office_access_list.html"
     queryset = OfficeApplication.objects.order_by("-created")
     permission_required = "home.change_officeapplication"
+
+
+class UserPermissionView(APIView):
+    def post(self, request):
+        user_id = request.data["user_id"]
+        if user_id:
+            has_permission = User.objects.get(id=user_id).has_perm(
+                request.data["permission"]
+            )
+        else:
+            has_permission = False
+        return Response({"hasPermission": has_permission})

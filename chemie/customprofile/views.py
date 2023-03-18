@@ -16,7 +16,12 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+
 from rest_framework import generics
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
@@ -42,7 +47,11 @@ from .models import (
     Medal,
     MEMBERSHIP_DURATIONS,
 )
-from .serializers import MedalSerializer
+from .serializers import (
+    MedalSerializer,
+    ProfileSerializer,
+    CustomTokenObtainPairSerializer,
+)
 
 
 def register_user(request):
@@ -207,7 +216,6 @@ def activate_password(request, code):
 
 @permission_required("customprofile.change_membership")
 def view_memberships(request, year=1):
-
     # If url arg year is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:
@@ -433,6 +441,20 @@ def add_rfid(request):
             request, "customprofile/add_card.html", context={"form": form}
         )
     return render(request, "customprofile/add_card.html", context)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+class ProfileListCreate(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class ProfileDetail(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 class MedalListCreate(generics.ListCreateAPIView):
