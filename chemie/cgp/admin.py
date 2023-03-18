@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import CGP, Country, CountryPosition
+from .models import CGP, Country, CgpPosition, Group, Vote
 
 admin.site.site_title = "CGP"
 
@@ -13,7 +13,15 @@ class ElectionAdmin(admin.ModelAdmin):
 class ElectionAdmin(admin.ModelAdmin):
     list_display = ["country_name"]
 
-@admin.register(CountryPosition)
+@admin.register(CgpPosition)
 class ElectionAdmin(admin.ModelAdmin):
-    list_display = ["country"]
+    list_display = ["group"]
+
+@admin.register(Group)
+class ElectionAdmin(admin.ModelAdmin):
+    list_display = ["real_name"]
+
+@admin.register(Vote)
+class ElectionAdmin(admin.ModelAdmin):
+    list_display = ["group"]
 
