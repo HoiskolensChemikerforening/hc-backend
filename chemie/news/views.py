@@ -87,5 +87,6 @@ class ListAllArticles(generics.ListCreateAPIView):
 
 
 class NewsDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer

@@ -447,10 +447,6 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
 
-class CustomTokenRefreshView(TokenRefreshView):
-    serializer_class = CustomTokenObtainPairSerializer
-
-
 class ProfileListCreate(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
