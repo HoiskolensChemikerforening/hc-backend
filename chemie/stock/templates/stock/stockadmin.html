@@ -16,6 +16,12 @@
 <a href="{{stocktype.id}}"><p>{{stocktype.name}}</p></a>
 {% endfor %}
 
-
+<div>
+  <form method = "post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit</button>
+  </form>
+</div>
 
 {% endblock content %}
