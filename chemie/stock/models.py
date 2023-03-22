@@ -25,7 +25,7 @@ class Portfolio(models.Model):
     balance = models.DecimalField(max_digits=12, decimal_places=2)
 
 class Stock(models.Model):
-    portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True)
+    portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True, blank = True)
     stocktype = models.ForeignKey(Stocktype, on_delete=models.CASCADE)
     def __str__(self):
         return f"{self.stocktype} Id:{self.id}"
@@ -33,7 +33,7 @@ class Stock(models.Model):
 class History(models.Model):
     date = models.DateTimeField(auto_now=False, auto_now_add=False)
     value = models.DecimalField(max_digits=12, decimal_places=2)
-    Stock = models.OneToOneField(Stock, on_delete=models.CASCADE)
+    stocktype = models.OneToOneField(Stocktype, on_delete=models.CASCADE)
 
 
 
