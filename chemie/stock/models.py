@@ -2,9 +2,6 @@ from django.db import models
 from django.contrib.auth.models import User
 # Create your models here.
 
-
-
-
 class Stocktype(models.Model):
     name  = models.CharField(max_length=30)
     desc  = models.TextField()
@@ -21,6 +18,12 @@ class Stocktype(models.Model):
 
 class Portfolio(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    #def get_markedvalue(self):
+        #mystocks     = self.stock_set.all()
+        #presentvalue = RELATERE DENNE TIL HISTORY (FAKE EN VALUE)
+
+
     volume = models.IntegerField(null=True)
     balance = models.DecimalField(max_digits=12, decimal_places=2)
 
