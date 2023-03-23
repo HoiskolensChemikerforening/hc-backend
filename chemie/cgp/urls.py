@@ -13,4 +13,5 @@ urlpatterns = [
     path(
         "<slug:slug>/", views.vote_index, name="vote_index"
     ),
+    path("api", views.CGPListViewTemplate.as_view(), name="cgpapi")
     ]

@@ -229,6 +229,7 @@
   background-color: var(--dark-background);
   color: var(--text-color);
   margin: auto;
+  width: 100px;
 }
 .container-btn {
   width:100%;

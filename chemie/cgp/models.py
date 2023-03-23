@@ -5,8 +5,6 @@ from django.contrib.auth.models import User, Group
 from sorl.thumbnail import ImageField
 from django.urls import reverse
 from django.template.defaultfilters import slugify
-from django.utils import timezone
-from django.core.exceptions import ValidationError
 
 
 class CGP(models.Model):
@@ -74,6 +72,7 @@ class Vote(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vote = models.TextField(blank=True)
+
 
 
 

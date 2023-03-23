@@ -14,8 +14,9 @@
 </div>
 <ul class="draggable-list" id="draggable-list"></ul>
 <div class="container-btn">
-<button class="submit-btn" type="submit" id="submit-vote">Stem</button>
-<button class="submit-btn" type="" id="help">Help</button>
+    <!--<button class="submit-btn" type="submit" id="submit-suggestion">Foreslå</button>-->
+    <button class="submit-btn" type="submit" id="submit-vote">Stem</button>
+<!--<button class="submit-btn" type="" id="help">Help</button>-->
 </div>
 
 
@@ -59,7 +60,7 @@ var overlapping;
 //timer
 var timeout;
 var waiting = true;
-const time = 1000;//ms
+const time = 200;//ms
 
 createList();
 
@@ -124,7 +125,7 @@ function handleTouchMove(event){
         // Place element where the finger is touching
         //this.style.position = 'absolute';
         this.classList.add("moving")
-        this.style.left = parseInt( touch.pageX - Math.floor(this.offsetWidth/2)) + 'px';
+        this.style.left = parseInt( touch.pageX - 2*Math.floor(this.offsetWidth/2)) + 'px'; //2* ny justering
         this.style.top = parseInt(touch.pageY- Math.floor(this.offsetHeight/2)) + 'px';
 
         //check if it is on top of a valid drop target iterates over all valid drop areas and checks for overlap
@@ -243,7 +244,7 @@ function submitVote() {
               type: 'POST',
               url: "{{slug}}",
               data: {
-                  'countryNames[]': countryNames,
+                  'countryNames[]': countryNames.toString(),
                   'csrfmiddlewaretoken': '{{ csrf_token }}',
                 },
               success: function (response){
