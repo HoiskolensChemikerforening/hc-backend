@@ -19,13 +19,16 @@ class Stocktype(models.Model):
 class Portfolio(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
-    #def get_markedvalue(self):
-        #mystocks     = self.stock_set.all()
-        #presentvalue = RELATERE DENNE TIL HISTORY (FAKE EN VALUE)
+    def get_markedvalue(self):
 
+        markedvalue = 0
 
-    volume = models.IntegerField(null=True)
-    balance = models.DecimalField(max_digits=12, decimal_places=2)
+        for stocktype in Stocktype.objects.all():
+            stock_amount = len(self.stock_set.filter(stocktype=stocktype))
+            value        = stocktype.history_set.order_by("date").first()
+            markedvalue += stock_amount*value
+
+        return markedvalue
 
 class Stock(models.Model):
     portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True, blank = True)
@@ -36,7 +39,7 @@ class Stock(models.Model):
 class History(models.Model):
     date = models.DateTimeField(auto_now=False, auto_now_add=False)
     value = models.DecimalField(max_digits=12, decimal_places=2)
-    stocktype = models.OneToOneField(Stocktype, on_delete=models.CASCADE)
+    stocktype = models.ForeignKey(Stocktype, on_delete=models.CASCADE)
 
 
 
