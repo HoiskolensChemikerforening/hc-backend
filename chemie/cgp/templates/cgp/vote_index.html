@@ -13,6 +13,15 @@
     <p>Land</p>
 </div>
 <ul class="draggable-list" id="draggable-list"></ul>
+
+    {% for form in forms %}
+    <div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+    </div>
+    {% endfor %}
 <div class="container-btn">
     <!--<button class="submit-btn" type="submit" id="submit-suggestion">Foreslå</button>-->
     <button class="submit-btn" type="submit" id="submit-vote">Stem</button>
@@ -38,7 +47,7 @@ function dataToArray(dataString) {
 var countries = dataToArray("{{countries}}");
 var realnames = dataToArray("{{ realnames }}");
 var songtiteles = dataToArray("{{ songtiteles }}");
-console.log(songtiteles,realnames);
+console.log(songtiteles,realnames,countries);
 var points = "{{points}}";
 points = points.split(',');
 while (points.length < countries.length) {
@@ -67,9 +76,6 @@ createList();
 // Insert list items into DOM
 function createList() {
   [...countries]
-    .map(a => ({ value: a, sort: Math.random() }))
-    .sort((a, b) => a.sort - b.sort)
-    .map(a => a.value)
     .forEach((country, index) => {
       const listItem = document.createElement('li');
 

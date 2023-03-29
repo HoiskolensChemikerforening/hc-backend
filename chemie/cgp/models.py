@@ -5,6 +5,15 @@ from django.contrib.auth.models import User, Group
 from sorl.thumbnail import ImageField
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from extended_choices import Choices
+
+
+POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1]
+AUDIENCE_USERNAME = "publikum"
+EXTRAVOTE = Choices(
+    ("SHOWPRIZE", 1, "showpris"),
+    ("FAILUREPRIZE", 2, "fiaskopris")
+)
 
 
 class CGP(models.Model):
@@ -18,8 +27,37 @@ class CGP(models.Model):
     def get_latest_active(cls):
         return CGP.objects.filter(is_open=True).order_by("-year")[0]
 
-    def __str__(self):
-        return f"{self.year}"
+    def toggle(self, user):
+        if self.is_open and len(Group.objects.filter(cgp=self).filter(group_username=AUDIENCE_USERNAME)) > 0:
+            all_audience_votes = Vote.objects\
+                .filter(group__cgp=self)\
+                .filter(group__group_username=AUDIENCE_USERNAME)
+            audience_votes = all_audience_votes.filter(final_vote=False)
+            audience_final_votes = all_audience_votes.filter(final_vote=True)
+            vote_dict = {}
+            for vote in audience_votes:
+                for count, country in enumerate(vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")):
+                    if count >= len(POINTS):
+                        break
+                    if country in vote_dict.keys():
+                        vote_dict[country] += POINTS[count]
+                    else:
+                        vote_dict[country] = POINTS[count]
+            if len(audience_final_votes) > 0:
+                audience_final_vote = audience_final_votes[0]
+            else:
+                audience_final_vote = Vote()
+                audience_final_vote.final_vote = True
+                audience_final_vote.group = Group.objects.filter(cgp=self).get(group_username=AUDIENCE_USERNAME)
+            audience_final_vote.user = user
+            audience_final_vote.vote = ",".join([i[0] for i in sorted(vote_dict.items(), key=lambda item: item[1], reverse=True)])
+            audience_final_vote.save()
+        self.is_open = not self.is_open
+        return
+
+
+def __str__(self):
+    return f"{self.year}"
 
 class Country(models.Model):
     """
@@ -72,6 +110,20 @@ class Vote(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vote = models.TextField(blank=True)
+
+class ExtraVote(models.Model):
+    """
+    Burde fikse felles klasse og bruke inheritance, men gidder ikke :)
+    """
+    final_vote = models.BooleanField(default=False)
+    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="extravote_group")
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    vote = models.ManyToManyField(Group,blank=True, related_name="extravote_vote")
+    vote_type = models.PositiveSmallIntegerField(
+        choices=EXTRAVOTE, default=EXTRAVOTE.SHOWPRIZE, verbose_name="Pris"
+    )
+
+
 
 
 
