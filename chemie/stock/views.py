@@ -54,7 +54,7 @@ def individualadmin(request, id, individual_id):
         if form.is_valid():
             portfolio = form.cleaned_data['portfolio']
             stock.portfolio = portfolio
-            portfolio.save()
+            stock.save()
 
             form = StockOwnerName()
 
