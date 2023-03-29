@@ -14,7 +14,7 @@
 
 <h> Stocktype: {{stocktypeobject.name}}</h>
 {% for stock in stocks %}
-<a href="#"><p> Id: {{stock.id}} Owner: {% if stock.portofolio == None %} No Owner {% else %} {{stock.portofolio.user}} {% endif %}</p></a>
+<a href="{{ stocktypeobject.id }}/{{stock.id}}"><p> Id: {{stock.id}} Owner: {% if stock.portfolio == None %} No Owner {% else %} {{stock.portfolio.user}} {% endif %}</p></a>
 {% endfor %}
 
 

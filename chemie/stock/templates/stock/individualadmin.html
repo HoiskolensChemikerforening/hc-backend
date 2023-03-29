@@ -11,7 +11,11 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-
+<style>
+form > select {
+    display: inline-block;
+}
+</style>
 <div>
   <form method = "post">
     {% csrf_token %}
