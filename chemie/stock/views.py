@@ -1,6 +1,8 @@
 from django.shortcuts import HttpResponse, render, get_object_or_404
-from .models import Stocktype
-from .forms import StocktypeForm
+from .models import Stocktype, Stock
+from .forms import StocktypeForm, StockOwnerName, Portfolio
+from django.contrib.auth.models import User
+
 # Create your views here.
 
 def index(request):
@@ -29,9 +31,10 @@ def stockadmin(request):
         form = StocktypeForm()
 
     context = {"stocktypes": stocktypes,
-               "form" : form
+               "form": form
     }
     return render(request, "stock/stockadmin.html", context)
+
 
 def individual(request,id):
     stocktypeobject = get_object_or_404(Stocktype, id=id)
@@ -40,4 +43,28 @@ def individual(request,id):
                "stocks":stocks}
 
     return render(request, "stock/individual.html", context)
+
+
+def individualadmin(request, id, individual_id):
+    stock = get_object_or_404(Stock, id=individual_id)
+
+    if request.method == 'POST':
+        form = StockOwnerName(request.POST)
+
+        if form.is_valid():
+            portfolio = form.cleaned_data['portfolio']
+            stock.portfolio = portfolio
+            portfolio.save()
+
+            form = StockOwnerName()
+
+    else:
+        form = StockOwnerName()
+
+
+    form = StockOwnerName()
+    context = {"form": form}
+
+    return render(request,"stock/individualadmin.html", context)
+
 

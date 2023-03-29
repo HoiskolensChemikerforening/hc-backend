@@ -1,0 +1,23 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block nav_header %}
+  Stonks
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+<div>
+  <form method = "post">
+    {% csrf_token %}
+    {{ form }}
+    <button type="submit">Submit</button>
+  </form>
+</div>
+
+{% endblock content %}

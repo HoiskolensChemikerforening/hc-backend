@@ -1,7 +1,7 @@
 TODO:
 
-1. Make getmarkedvalue function in portfolio model
-2. Make getstockvalue function in stock model
+1. Make getmarkedvalue function in portfolio model X
+2. Make getstockvalue function in stock model      X
 3. Permissions
 4. Post/get
 5. Mainpage
