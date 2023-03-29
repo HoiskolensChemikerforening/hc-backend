@@ -25,10 +25,13 @@ class Portfolio(models.Model):
 
         for stocktype in Stocktype.objects.all():
             stock_amount = len(self.stock_set.filter(stocktype=stocktype))
-            value        = stocktype.history_set.order_by("date").first()
+            value        = stocktype.history_set.order_by("date").first().value
             markedvalue += stock_amount*value
 
         return markedvalue
+
+    def __str__(self):
+        return f"{self.user.username}"
 
 class Stock(models.Model):
     portfolio = models.ForeignKey(Portfolio, on_delete=models.SET_NULL, null=True, blank = True)
@@ -40,6 +43,10 @@ class History(models.Model):
     date = models.DateTimeField(auto_now=False, auto_now_add=False)
     value = models.DecimalField(max_digits=12, decimal_places=2)
     stocktype = models.ForeignKey(Stocktype, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return f"{self.stocktype} {self.date.strftime('%d.%m.%Y')}"
+
 
 
 
