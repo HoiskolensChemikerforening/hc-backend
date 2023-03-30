@@ -1,9 +1,8 @@
 from django import forms
-from .models import CGP, ExtraVote
+from .models import CGP
 
 
-class ExtraPrize(forms.ModelForm):
-    vote = forms.ModelChoiceField(queryset=CGP.get_latest_active().group_set.all())
+class CGPForm(forms.ModelForm):
     class Meta:
-        model = ExtraVote
-        fields = ["vote"]
+        model = CGP
+        fields = ()

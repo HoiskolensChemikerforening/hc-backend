@@ -2,17 +2,22 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
 from django.shortcuts import render
 from .models import CGP
-
+from .forms import CGPForm
 @permission_required("elections.add_election")
 @login_required
-def admin_start_cgp(request):
+def cgp_admin(request):
+    cgps = CGP.objects.all()
+
     if request.method == "POST":  # brukeren trykker på knappen
-        CGP.create_new_election()
-        return redirect("")
+        CGP.create_new_cgp()
 
-    return render(request, "index.html")
+
+    context = {
+        "cgps": cgps,
+    }
+    return render(request, "cgp/admin/admin.html", context)
 
 @permission_required("elections.add_election")
 @login_required
-def create_country(request):
+def cgp_edit(request, id):
     return render(request, "index.html")

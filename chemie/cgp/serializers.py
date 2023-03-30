@@ -8,6 +8,8 @@ class CGPSerializer(serializers.ModelSerializer):
     groupname = SerializerMethodField()
     songname = SerializerMethodField()
     vote = SerializerMethodField()
+    failureprize_vote = SerializerMethodField()
+    showprize_vote = SerializerMethodField()
 
     def get_countryname(self,vote):
         return vote.group.country.country_name
@@ -20,11 +22,13 @@ class CGPSerializer(serializers.ModelSerializer):
 
     def get_vote(self,vote):
         return vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")
-
-
+    def get_failureprize_vote(self,vote):
+        return vote.failureprize_vote.country.country_name
+    def get_showprize_vote(self,vote):
+        return vote.showprize_vote.country.country_name
     class Meta:
         model = Vote
-        fields = ("countryname","groupname","songname","vote")
+        fields = ("countryname","groupname","songname","vote", "failureprize_vote", "showprize_vote")
 
 
 

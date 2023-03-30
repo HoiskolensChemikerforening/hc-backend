@@ -15,13 +15,26 @@ EXTRAVOTE = Choices(
     ("FAILUREPRIZE", 2, "fiaskopris")
 )
 
+def reverse_sort_dict_keys(dictionary):
+    return [i[0] for i in sorted(dictionary.items(), key=lambda item: item[1], reverse=True)]
+
+def add_to_dict(dictionary,key, value):
+    if key in dictionary.keys():
+        dictionary[key] += value
+    else:
+        dictionary[key] = value
+    return dictionary
+
 
 class CGP(models.Model):
+    """
+    year er egentlig data unique slik at man bare kan lage en cgp per år men akkurat nå er det per dag. Vet ikke om det breaker logikken et setd
+    """
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
     year = models.DateField(auto_now_add=True, unique=True)
     @classmethod
-    def create_new_election(cls):
-        CGP.objects.create(is_open=True)
+    def create_new_cgp(cls):
+        CGP.objects.create(is_open=False)
 
     @classmethod
     def get_latest_active(cls):
@@ -34,24 +47,29 @@ class CGP(models.Model):
                 .filter(group__group_username=AUDIENCE_USERNAME)
             audience_votes = all_audience_votes.filter(final_vote=False)
             audience_final_votes = all_audience_votes.filter(final_vote=True)
-            vote_dict = {}
-            for vote in audience_votes:
-                for count, country in enumerate(vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")):
-                    if count >= len(POINTS):
-                        break
-                    if country in vote_dict.keys():
-                        vote_dict[country] += POINTS[count]
-                    else:
-                        vote_dict[country] = POINTS[count]
-            if len(audience_final_votes) > 0:
-                audience_final_vote = audience_final_votes[0]
-            else:
-                audience_final_vote = Vote()
-                audience_final_vote.final_vote = True
-                audience_final_vote.group = Group.objects.filter(cgp=self).get(group_username=AUDIENCE_USERNAME)
-            audience_final_vote.user = user
-            audience_final_vote.vote = ",".join([i[0] for i in sorted(vote_dict.items(), key=lambda item: item[1], reverse=True)])
-            audience_final_vote.save()
+            if len(audience_votes)> 0:
+                vote_dict = {}
+                show_vote_dict = {}
+                failure_vote_dict = {}
+                for vote in audience_votes:
+                    for count, country in enumerate(vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")):
+                        if count >= len(POINTS):
+                            break
+                        vote_dict = add_to_dict(vote_dict, country, POINTS[count])
+                    show_vote_dict = add_to_dict(show_vote_dict, vote.showprize_vote, 1)
+                    failure_vote_dict = add_to_dict(failure_vote_dict, vote.failureprize_vote, 1)
+
+                if len(audience_final_votes) > 0:
+                    audience_final_vote = audience_final_votes[0]
+                else:
+                    audience_final_vote = Vote()
+                    audience_final_vote.final_vote = True
+                    audience_final_vote.group = Group.objects.filter(cgp=self).get(group_username=AUDIENCE_USERNAME)
+                audience_final_vote.user = user
+                audience_final_vote.vote = ",".join(reverse_sort_dict_keys(vote_dict))
+                audience_final_vote.showprize_vote =reverse_sort_dict_keys(show_vote_dict)[0]
+                audience_final_vote.failureprize_vote =reverse_sort_dict_keys(failure_vote_dict)[0]
+                audience_final_vote.save()
         self.is_open = not self.is_open
         return
 
@@ -110,18 +128,9 @@ class Vote(models.Model):
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vote = models.TextField(blank=True)
+    failureprize_vote = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="failurevote")
+    showprize_vote = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="showvote")
 
-class ExtraVote(models.Model):
-    """
-    Burde fikse felles klasse og bruke inheritance, men gidder ikke :)
-    """
-    final_vote = models.BooleanField(default=False)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="extravote_group")
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    vote = models.ManyToManyField(Group,blank=True, related_name="extravote_vote")
-    vote_type = models.PositiveSmallIntegerField(
-        choices=EXTRAVOTE, default=EXTRAVOTE.SHOWPRIZE, verbose_name="Pris"
-    )
 
 
 

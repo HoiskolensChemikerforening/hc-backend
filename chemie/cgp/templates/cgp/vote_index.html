@@ -14,14 +14,49 @@
 </div>
 <ul class="draggable-list" id="draggable-list"></ul>
 
-    {% for form in forms %}
     <div>
     <form method="post">
-        {% csrf_token %}
-        {{ form }}
+    {% csrf_token %}
+    <label for="showpris"> Showpris </label>
+        <select name="Showpris" id="showpris">
+        <option value selected><span>
+                        <p></p>
+                        <p>----------</p>
+                        <p></p>
+                        </span></option>
+            {%  for group in groups %}
+                <option value={{ group.id }}>
+                    <span>
+                        <p>{{ group.country.country_name }}</p>
+                        <p>{{ group.real_name }}</p>
+                        <p>{{ group.song_name }}</p>
+                        </span>
+                </option>
+            {% endfor %}
+        </select>
+    <label for="fiaskopris"> Fiaskopris </label>
+        <select name="Fiaskopris" id="fiaskopris">
+        <option value selected><span>
+                        <p></p>
+                        <p>----------</p>
+                        <p></p>
+                        </span></option>
+            {%  for group in groups %}
+                <option value={{ group.id }}>
+                    <span>
+                        <p>{{ group.country.country_name }}</p>
+                        <p>{{ group.real_name }}</p>
+                        <p>{{ group.song_name }}</p>
+                        </span>
+                </option>
+            {% endfor %}
+        </select>
+
     </form>
+
+
     </div>
-    {% endfor %}
+
 <div class="container-btn">
     <!--<button class="submit-btn" type="submit" id="submit-suggestion">Foreslå</button>-->
     <button class="submit-btn" type="submit" id="submit-vote">Stem</button>
@@ -237,6 +272,8 @@ function swapItems(fromIndex, toIndex) {
 
 // Submits the votes
 function submitVote() {
+    var showprize = document.getElementById("showpris");
+    var failureprise = document.getElementById("fiaskopris");
     var countryNames=[];
     var countrynameAlertString = "";
   listItems.forEach((listItem, index) => {
@@ -252,13 +289,17 @@ function submitVote() {
               data: {
                   'countryNames[]': countryNames.toString(),
                   'csrfmiddlewaretoken': '{{ csrf_token }}',
+                  'showprize': showprize.value,
+                  'failureprise': failureprise.value,
                 },
               success: function (response){
-                  window.alert(`Takk for din stemme! ${countrynameAlertString}`);
+                  window.alert(`Takk for din stemme! ${countrynameAlertString} \n Showpris:
+                  ${showprize.options[showprize.selectedIndex].text}\n Fiaskopris:
+                  ${failureprise.options[failureprise.selectedIndex].text}`);
                   location.href = response.url;
               },
               error: function (response){
-                  window.alert("ERROR!");
+                  window.alert("Ugyldig stemme.");
               }
             });
 }

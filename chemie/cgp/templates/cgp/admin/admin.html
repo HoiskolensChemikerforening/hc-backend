@@ -1,0 +1,18 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+    {% for cgp in cgps %}
+        <p>{{ cgp.year }}</p>
+    {% endfor %}
+
+    <form method="post">
+        {% csrf_token %}
+        <button type="submit">Opprett ny CGP</button>
+    </form>
+
+{% endblock content %}
