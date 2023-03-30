@@ -83,7 +83,7 @@ class Country(models.Model):
     """
     country_name = models.CharField(max_length=50, unique=True)
     image = ImageField(upload_to="cgp", null=True, blank=True)
-    slug = models.SlugField(null=True, blank=True,editable=False)
+    slug = models.SlugField(null=True, blank=True, editable=False)
 
     def __str__(self):
         return self.country_name
@@ -100,6 +100,9 @@ class Country(models.Model):
 
 
 class Group(models.Model):
+    """
+    username unique publikum vote for different years :(
+    """
     group_username = models.CharField(max_length=50, unique=True)
     real_name = models.CharField(max_length=50)
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)

@@ -1,0 +1,15 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form }}
+        <button type="submit"> Lagre </button>
+    </form>
+
+{% endblock content %}

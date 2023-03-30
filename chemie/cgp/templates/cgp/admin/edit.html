@@ -1,0 +1,30 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+
+    <h1>Chemie Grand Prix {{ cgp.year.year }}</h1>
+
+    <button type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
+
+    <h2> Grupper </h2>
+    <div class="dropdown">
+        <button class="dropbtn"> Rediger Gruppe </button>
+        <div class="dropdown-content">
+            {% for group in groups %}
+                <a hfref="#">
+                    <div>{{ group.real_name }} {{ group.country.country_name }} {{ group.song_name }}</div>
+                    <img alt="{{ group.country.country_name }}" src="{{ group.country.image.url }}" style="display: inline-block; width: 40px">
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <form method="post">
+        {% csrf_token %}
+        {{ form }}
+    </form>
+
+{% endblock content %}

@@ -7,7 +7,9 @@
 {% block content %}
 
     {% for cgp in cgps %}
-        <p>{{ cgp.year }}</p>
+        <p>
+            <a href="#">{{ cgp.year.year }}</a>
+        </p>
     {% endfor %}
 
     <form method="post">
