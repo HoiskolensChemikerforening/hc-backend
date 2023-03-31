@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
-from .models import CGP, Country, CgpPosition, Group, Vote, POINTS,AUDIENCE_USERNAME
+from .models import CGP, Country, Group, Vote, POINTS,AUDIENCE_USERNAME
 import json
 from .serializers import CGPSerializer
 from rest_framework import generics
@@ -17,11 +17,11 @@ def index(request):
     cgp = CGP.get_latest_active()
     cgp.toggle(request.user)
     cgp.toggle(request.user)
-    positions = CgpPosition.objects.filter(users=request.user).filter(group__cgp=cgp)
-    audience = list(Group.objects.filter(group_username="publikum", cgp=cgp))
+    groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)
+    audience = list(Group.objects.filter(group_username=AUDIENCE_USERNAME, cgp=cgp))
     if len(audience) > 0:
         audience = [audience[0].country]
-    countries = set([p.group.country for p in positions]+audience)
+    countries = set([group.country for group in groups]+audience)
     context = {"countries": countries,
                "audience": audience,
                "cgp": cgp}
@@ -30,15 +30,12 @@ def index(request):
 
 
 def check_group_access(request, group, manage=False):
-    permittedUsersLst = []
-    if group.group_username == "publikum":
+    if group.group_username == AUDIENCE_USERNAME:
         return True
     if manage:
-        for p in group.cgpposition_set.filter(can_manage_country=True):
-            permittedUsersLst = permittedUsersLst + list(p.users.all())
+        permittedUsersLst = group.group_leaders.all()
     else:
-        for p in group.cgpposition_set.all():
-            permittedUsersLst = permittedUsersLst + list(p.users.all())
+        permittedUsersLst = group.group_members.all()
     if request.user not in permittedUsersLst:
         return False
     return True
@@ -66,7 +63,7 @@ def vote_index(request, slug):
         #else:
             #if vote for group and person exists
             #else
-        if group.group_username == "publikum":
+        if group.group_username == AUDIENCE_USERNAME:
             if len(group.vote_set.filter(user=request.user).filter(final_vote=False)) > 0:
                 vote = group.vote_set.filter(user=request.user)[0]
             else:

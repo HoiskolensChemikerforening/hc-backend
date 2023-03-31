@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from .models import CGP,Group, Country
-from .forms import CGPForm, GroupForm, CountryForm, GroupMemberForm
+from .forms import CGPForm, GroupForm, CountryForm
 from django.views import View
 @permission_required("elections.add_election")
 @login_required
@@ -53,7 +53,6 @@ def group_edit(request, cgp_id, group_id):
 def group_add(request, cgp_id):
     cgp = get_object_or_404(CGP, id=cgp_id)
     form = GroupForm(cgp, request.POST or None)
-    formmembers = GroupMemberForm(request.POST or None)
     if form.is_valid():
         group = form.save(commit=False)
         group.cgp = cgp
@@ -62,11 +61,9 @@ def group_add(request, cgp_id):
 
     else:
         form = GroupForm(cgp)
-        formmembers = GroupMemberForm()
     context = {
         "cgp": cgp,
         "form": form,
-        "formmembers": formmembers
     }
     return render(request, "cgp/admin/forms.html", context)
 

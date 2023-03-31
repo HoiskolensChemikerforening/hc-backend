@@ -2,10 +2,12 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import User, Group
+from chemie.customprofile.models import Profile
 from sorl.thumbnail import ImageField
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from extended_choices import Choices
+
 
 
 POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1]
@@ -109,23 +111,12 @@ class Group(models.Model):
     cgp = models.ForeignKey(CGP, on_delete=models.CASCADE)
     song_name = models.CharField(max_length=100, blank=True)
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
-    #group_leaders = models.ManyToManyField(Profile, verbose_name="group_leaders")
-    #group_members = models.ManyToManyField(Profile, verose_name="group_members")
+    group_leaders = models.ManyToManyField(User, related_name="group_leaders", blank=True)
+    group_members = models.ManyToManyField(User, related_name="group_members", blank=True)
 
     def __str__(self):
         return f"{self.real_name}"
 
-
-class CgpPosition(models.Model):
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
-    max_members = models.PositiveSmallIntegerField(
-        default=1, verbose_name="Antall medlemmer"
-    )
-    can_manage_country = models.BooleanField(default=False)
-    users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
-
-    def __str__(self):
-        return f"Position for {str(self.group.country.country_name)}"
 
 
 class Vote(models.Model):

@@ -1,5 +1,5 @@
 from django import forms
-from .models import CGP, Group, Country, CgpPosition
+from .models import CGP, Group, Country
 
 
 class CGPForm(forms.ModelForm):
@@ -28,8 +28,3 @@ class CountryForm(forms.ModelForm):
         fields = ("__all__")
         exclude = ("slug", )
 
-class GroupMemberForm(forms.ModelForm):
-    class Meta:
-        model = CgpPosition
-        fields = ("__all__")
-        exclude = ("group",)
