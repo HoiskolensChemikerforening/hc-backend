@@ -13,7 +13,7 @@
     {% for cgp in cgps %}
         <a href="{% url 'cgp:cgp_edit' cgp.id  %}">
         <hr>
-            <div>{{ cgp.year.year }}</div>
+            <div>{{ cgp.year }}</div>
         <hr>
         </a>
     {% endfor %}

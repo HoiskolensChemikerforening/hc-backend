@@ -9,9 +9,11 @@
     <a href="{% url 'cgp:cgp_admin' %}"><button>All CGPs</button></a>
         <div style="text-align: center">
     <hr style="border-top: 1px solid white; border-radius: 2px ">
-    <h1>Chemie Grand Prix {{ cgp.year.year }}</h1>
-
-    <button style="background: #911a00; border-radius: 5px; border-color: #911a00; color:white; margin-top:30px; margin-bottom:30px;padding: 10px" type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
+    <h1>Chemie Grand Prix {{ cgp.year }}</h1>
+    <form method="post">
+    {% csrf_token %}
+    <button style="background: {% if cgp.is_open %}#911a00 {% else %} #248a00 {% endif %}; border-radius: 5px; border-color: black; color:white; margin-top:30px; margin-bottom:30px;padding: 10px" type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
+    </form>
     <hr style="border-top: 1px solid white; border-radius: 2px ">
     </div>
     <h2> Grupper </h2>

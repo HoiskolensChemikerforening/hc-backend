@@ -15,6 +15,9 @@ from rest_framework import generics
 @login_required
 def index(request):
     cgp = CGP.get_latest_active()
+    if not cgp:
+        context = {"cgp": CGP.get_latest_or_create(),"countries":None}
+        return render(request, "cgp/index.html", context)
     cgp.toggle(request.user)
     cgp.toggle(request.user)
     groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)

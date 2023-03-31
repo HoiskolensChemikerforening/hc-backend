@@ -32,6 +32,9 @@ def cgp_edit(request, cgp_id):
     cgp = get_object_or_404(CGP, id=cgp_id)
     groups = cgp.group_set.all()
     countries = Country.objects.all()
+    if request.method == "POST":
+        cgp.toggle(request.user)
+        return redirect(reverse("cgp:cgp_edit", kwargs={"cgp_id": cgp_id}))
     context = {
         "cgp": cgp,
         "groups": groups,

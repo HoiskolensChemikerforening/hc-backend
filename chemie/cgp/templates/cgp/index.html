@@ -13,7 +13,7 @@
     <!--<div><a href="{{ audience.0.get_absolute_url }}">
 <button class="dropbtn">Stem!</button></a>
     </div> -->
-
+{%  if countries %}
 <div class="dropdown">
 
   <button class="dropbtn">Stem!</button>
@@ -23,6 +23,8 @@
     {%endfor%}
   </div>
 </div>
+
+    {% endif %}
 
 <!-- Floating admin button -->
 {% if perms.elections.add_election %}

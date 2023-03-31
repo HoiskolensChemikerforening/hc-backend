@@ -4,6 +4,7 @@ from django.db import models
 from django.contrib.auth.models import User#, Group
 from chemie.customprofile.models import Profile
 from sorl.thumbnail import ImageField
+from django.utils import timezone
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from extended_choices import Choices
@@ -29,14 +30,28 @@ class CGP(models.Model):
     year er egentlig data unique slik at man bare kan lage en cgp per år men akkurat nå er det per dag. Vet ikke om det breaker logikken et setd
     """
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
-    year = models.DateField(auto_now_add=True, unique=True)
+    year = models.IntegerField(unique=True, verbose_name="År")
+
     @classmethod
     def create_new_cgp(cls):
-        return CGP.objects.create(is_open=False)
+        return CGP.objects.create(is_open=False, year=int(timezone.now().year))
 
     @classmethod
     def get_latest_active(cls):
-        return CGP.objects.filter(is_open=True).order_by("-year")[0]
+        """
+        returns the latest open CGP object.
+        returns None if no CGP is open.
+        """
+        cgps = CGP.objects.filter(is_open=True).order_by("-year")
+        if not cgps:
+            return None
+        return cgps[0]
+
+
+    @classmethod
+    def get_amount_open(cls):
+        return len(CGP.objects.filter(is_open=True))
+
 
     @classmethod
     def get_latest_or_create(cls):
@@ -76,6 +91,7 @@ class CGP(models.Model):
                 audience_final_vote.failureprize_vote =reverse_sort_dict_keys(failure_vote_dict)[0]
                 audience_final_vote.save()
         self.is_open = not self.is_open
+        self.save()
         return
 
 
