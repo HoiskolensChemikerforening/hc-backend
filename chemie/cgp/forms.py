@@ -1,5 +1,5 @@
 from django import forms
-from .models import CGP, Group, Country
+from .models import CGP, Group, Country, CgpPosition
 
 
 class CGPForm(forms.ModelForm):
@@ -10,8 +10,13 @@ class CGPForm(forms.ModelForm):
 
 class GroupForm(forms.ModelForm):
     """
-    Todo only show only availible countries
     """
+    country = forms.ModelChoiceField(queryset=None)
+    def __init__(self, cgp, *args, **kwargs):
+        super(GroupForm, self).__init__(*args, **kwargs)
+        groups = cgp.group_set.all()
+        self.fields['country'].queryset = Country.objects.exclude(group__in=groups)
+
     class Meta:
         model = Group
         fields = ("__all__")
@@ -20,4 +25,11 @@ class GroupForm(forms.ModelForm):
 class CountryForm(forms.ModelForm):
     class Meta:
         model = Country
-        fields = ("country_name", "image")
+        fields = ("__all__")
+        exclude = ("slug", )
+
+class GroupMemberForm(forms.ModelForm):
+    class Meta:
+        model = CgpPosition
+        fields = ("__all__")
+        exclude = ("group",)

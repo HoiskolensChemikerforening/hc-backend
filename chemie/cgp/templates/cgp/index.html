@@ -9,9 +9,8 @@
 <img class="cgplogo" type="image/png" src="{% static 'images/cgp_logo.png' %}">
 </div>
 
-    <div>
 
-    <!--<a href="{{ audience.0.get_absolute_url }}">
+    <!--<div><a href="{{ audience.0.get_absolute_url }}">
 <button class="dropbtn">Stem!</button></a>
     </div> -->
 
@@ -31,7 +30,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="btn-group-sm" id="mini-fab" style="position:fixed !important; right: 29px; bottom:29px">
-        <a href="{% url 'cgp:admin_start_cgp' %}" class="btn btn-info btn-fab" id="admin">
+        <a href="{% url 'cgp:cgp_edit' cgp.id %}" class="btn btn-info btn-fab" id="admin">
           <i class="material-icons">
             build
           </i>
@@ -41,4 +40,5 @@
   </div>
 </div>
 {% endif %}
+
 {% endblock %}

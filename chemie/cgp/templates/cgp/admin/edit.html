@@ -5,26 +5,30 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-
+    <div style="align-items: center">
     <h1>Chemie Grand Prix {{ cgp.year.year }}</h1>
 
     <button type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
-
+    <hr>
     <h2> Grupper </h2>
     <div class="dropdown">
         <button class="dropbtn"> Rediger Gruppe </button>
         <div class="dropdown-content">
             {% for group in groups %}
-                <a hfref="#">
+                <a href="#">
                     <div>{{ group.real_name }} {{ group.country.country_name }} {{ group.song_name }}</div>
+                    {% if group.country.image %}
                     <img alt="{{ group.country.country_name }}" src="{{ group.country.image.url }}" style="display: inline-block; width: 40px">
+                    {% endif %}
                 </a>
             {% endfor %}
         </div>
     </div>
     <form method="post">
         {% csrf_token %}
-        {{ form }}
     </form>
+    </div>
+    <a href="../"><button>All CGPs</button></a>
+    <a href="#"><button>Opprett Land </button></a>
 
 {% endblock content %}

@@ -23,7 +23,8 @@ def index(request):
         audience = [audience[0].country]
     countries = set([p.group.country for p in positions]+audience)
     context = {"countries": countries,
-               "audience": audience}
+               "audience": audience,
+               "cgp": cgp}
 
     return render(request, "cgp/index.html", context)
 

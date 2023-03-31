@@ -9,7 +9,10 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form }}
+        {{ formmembers }}
         <button type="submit"> Lagre </button>
     </form>
+    <a href="delete"><button>slett</button></a>
+
 
 {% endblock content %}

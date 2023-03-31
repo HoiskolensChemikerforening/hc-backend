@@ -109,6 +109,8 @@ class Group(models.Model):
     cgp = models.ForeignKey(CGP, on_delete=models.CASCADE)
     song_name = models.CharField(max_length=100, blank=True)
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
+    #group_leaders = models.ManyToManyField(Profile, verbose_name="group_leaders")
+    #group_members = models.ManyToManyField(Profile, verose_name="group_members")
 
     def __str__(self):
         return f"{self.real_name}"
