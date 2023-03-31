@@ -5,30 +5,42 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-    <div style="align-items: center">
+    <div style="color: white">
+    <a href="{% url 'cgp:cgp_admin' %}"><button>All CGPs</button></a>
+        <div style="text-align: center">
+    <hr style="border-top: 1px solid white; border-radius: 2px ">
     <h1>Chemie Grand Prix {{ cgp.year.year }}</h1>
 
-    <button type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
-    <hr>
+    <button style="background: #911a00; border-radius: 5px; border-color: #911a00; color:white; margin-top:30px; margin-bottom:30px;padding: 10px" type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
+    <hr style="border-top: 1px solid white; border-radius: 2px ">
+    </div>
     <h2> Grupper </h2>
-    <div class="dropdown">
-        <button class="dropbtn"> Rediger Gruppe </button>
-        <div class="dropdown-content">
-            {% for group in groups %}
-                <a href="#">
-                    <div>{{ group.real_name }} {{ group.country.country_name }} {{ group.song_name }}</div>
-                    {% if group.country.image %}
-                    <img alt="{{ group.country.country_name }}" src="{{ group.country.image.url }}" style="display: inline-block; width: 40px">
-                    {% endif %}
-                </a>
-            {% endfor %}
-        </div>
+    {% for group in groups %}
+        <a href="{% url 'cgp:group_edit' cgp.id group.id %}">
+        <hr>
+            <div>{{ group.real_name }}</div> <div>{{ group.country.country_name }}</div> <div>{{ group.song_name }}</div>
+            {% if group.country.image %}
+            <img alt="{{ group.country.country_name }}" src="{{ group.country.image.url }}" style="display: inline-block; width: 40px">
+            {% endif %}
+        <hr>
+        </a>
+
+    {% endfor %}
+    <a href="{% url 'cgp:group_add' cgp.id %}">
+        <hr>
+            <div>Legg til Gruppe</div> <div></div> <div></div>
+        <hr>
+        </a>
+
+
+
     </div>
-    <form method="post">
-        {% csrf_token %}
-    </form>
+    <hr style="border-top: 1px solid white; border-radius: 2px ">
+
+
     </div>
-    <a href="../"><button>All CGPs</button></a>
-    <a href="#"><button>Opprett Land </button></a>
+
+
+
 
 {% endblock content %}

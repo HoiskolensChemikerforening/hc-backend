@@ -5,16 +5,42 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
+    <h1>Admin</h1>
+    <hr style="border-top: 1px solid white; border-radius: 2px ">
 
+    <h2>Chemie Grand Prix</h2>
+    <hr>
     {% for cgp in cgps %}
-        <p>
-            <a href="#">{{ cgp.year.year }}</a>
-        </p>
+        <a href="{% url 'cgp:cgp_edit' cgp.id  %}">
+        <hr>
+            <div>{{ cgp.year.year }}</div>
+        <hr>
+        </a>
     {% endfor %}
 
     <form method="post">
         {% csrf_token %}
         <button type="submit">Opprett ny CGP</button>
     </form>
+
+    <hr style="border-top: 1px solid white; border-radius: 2px ">
+    <h2> Land </h2>
+    {% for country in countries %}
+        <a href="{% url 'cgp:country_edit' country.id %}">
+        <hr>
+            <div>{{ country.country_name }}</div>
+            {% if country.image %}
+            <img alt="{{ country.country_name }}" src="{{ country.image.url }}" style="display: inline-block; width: 40px">
+            {% endif %}
+        <hr>
+        </a>
+    {% endfor %}
+    <a href="{% url 'cgp:country_add'  %}">
+        <hr>
+            <div>Legg til Land</div> <div></div> <div></div>
+        <hr>
+        </a>
+
+    </div>
 
 {% endblock content %}

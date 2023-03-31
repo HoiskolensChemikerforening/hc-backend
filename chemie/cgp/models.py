@@ -81,7 +81,7 @@ class Country(models.Model):
     """
     country_name = models.CharField(max_length=50, unique=True)
     image = ImageField(upload_to="cgp", null=True, blank=True)
-    slug = models.SlugField(null=True, blank=True, editable=False, unique=True)
+    slug = models.SlugField(unique=True)
 
     def __str__(self):
         return self.country_name
@@ -89,12 +89,6 @@ class Country(models.Model):
     def get_absolute_url(self):
         return reverse("cgp:vote_index", kwargs={"slug": self.slug})
 
-
-    def save(self):
-        if not self.slug:
-            self.slug = slugify(self.country_name)
-
-        super(Country, self).save()
 
 
 class Group(models.Model):
