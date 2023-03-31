@@ -1,22 +1,26 @@
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
-from .models import CGP,Group, Country
-from .forms import CGPForm, GroupForm, CountryForm
-from django.core.exceptions import ValidationError
+from .models import CGP, Group, Country
+from .forms import GroupForm, CountryForm
 from django.views import View
 from django.template.defaultfilters import slugify
 from django.contrib import messages
-
-from django.urls import path, reverse
+from django.urls import reverse
 @permission_required("elections.add_election")
 @login_required
 def cgp_admin(request):
-    cgps = CGP.objects.all()
+    cgps = CGP.objects.order_by("-year")
     countries = Country.objects.all()
     if request.method == "POST":  # brukeren trykker på knappen
-        CGP.create_new_cgp()
-
+        if not CGP.create_new_cgp():
+            messages.add_message(
+                request, messages.ERROR, f"Årets CGP finnes allerede!", extra_tags="Error"
+            )
+        else:
+            messages.add_message(
+                request, messages.SUCCESS, f"Årets CGP har blitt opprettet!", extra_tags="Opprettet"
+            )
 
     context = {
         "cgps": cgps,
@@ -60,8 +64,9 @@ def group_edit(request, cgp_id, group_id):
             return redirect(reverse("cgp:cgp_edit", kwargs={"cgp_id": cgp_id}))
     context = {
         "cgp": cgp,
-        "group": group,
-        "form": form
+        "object": group,
+        "form": form,
+        "type": "Gruppe"
     }
     return render(request, "cgp/admin/forms.html", context)
 
@@ -82,6 +87,7 @@ def group_add(request, cgp_id):
     context = {
         "cgp": cgp,
         "form": form,
+        "type": "Gruppe"
     }
     return render(request, "cgp/admin/forms.html", context)
 
@@ -99,8 +105,9 @@ def country_edit(request, country_id):
             )
             return redirect(reverse("cgp:cgp_admin"))
     context = {
-        "country": country,
-        "form": form
+        "object": country,
+        "form": form,
+        "type": "Land"
     }
     return render(request, "cgp/admin/forms.html", context)
 
@@ -121,7 +128,8 @@ def country_add(request):
         )
         return redirect(reverse("cgp:cgp_admin"))
     context = {
-        "form": form
+        "form": form,
+        "type": "Land"
     }
     return render(request, "cgp/admin/forms.html", context)
 
@@ -139,20 +147,6 @@ class DeleteView(View):
         )
         kwargs.pop(self.key)
         return redirect(reverse(f"cgp:{self.redirect_url}", kwargs=kwargs))
-def delete_objects(request, *args, **kwargs):
-    object = None
-    print(args, kwargs)
-    if "country_id" in kwargs.keys():
-        object = Country.objects.get(id=kwargs.get("country_id"))
-    if request.method == "POST" and object:
-        #object.delete()
-        #return
-        print(1)
 
-
-    context = {
-        "object": object
-    }
-    return render(request, "cgp/admin/delete.html", context)
 
 

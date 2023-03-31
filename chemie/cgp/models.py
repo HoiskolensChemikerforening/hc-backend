@@ -34,6 +34,9 @@ class CGP(models.Model):
 
     @classmethod
     def create_new_cgp(cls):
+        current_year = int(timezone.now().year)
+        if CGP.objects.filter(year=current_year):
+            return None
         return CGP.objects.create(is_open=False, year=int(timezone.now().year))
 
     @classmethod
@@ -102,8 +105,8 @@ class Country(models.Model):
     """
     A CGP country containing user objects elegible to vote for this country
     """
-    country_name = models.CharField(max_length=50, unique=True)
-    image = ImageField(upload_to="cgp", null=True, blank=True)
+    country_name = models.CharField(max_length=50, unique=True, verbose_name="Navn")
+    image = ImageField(upload_to="cgp", null=True, blank=True, verbose_name="Bilde")
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -119,14 +122,14 @@ class Group(models.Model):
     username unique publikum vote for different years :(
     """
     #group_username = models.CharField(max_length=50, unique=True)
-    real_name = models.CharField(max_length=50)
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
+    real_name = models.CharField(max_length=50, verbose_name="Gruppenavn")
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, verbose_name="Land")
     cgp = models.ForeignKey(CGP, on_delete=models.CASCADE)
-    song_name = models.CharField(max_length=100, blank=True)
+    song_name = models.CharField(max_length=100, blank=True, verbose_name="Sangtittel")
     audience = models.BooleanField(verbose_name="Publikum", default=False)
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
-    group_leaders = models.ManyToManyField(User, related_name="group_leaders", blank=True)
-    group_members = models.ManyToManyField(User, related_name="group_members", blank=True)
+    group_leaders = models.ManyToManyField(User, related_name="group_leaders", blank=True, verbose_name="Ledere")
+    group_members = models.ManyToManyField(User, related_name="group_members", blank=True, verbose_name="Medlemmer")
 
     def __str__(self):
         return f"{self.real_name}"

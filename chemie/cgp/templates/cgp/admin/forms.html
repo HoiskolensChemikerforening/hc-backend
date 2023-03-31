@@ -5,14 +5,28 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
+    <div class="outerdiv">
+        <div style="text-align: center">
+        <h1> {{ type }} </h1>
+        </div>
+        <hr class="whiteline">
 
-    <form method="post" enctype="multipart/form-data">
+    <form class="submitform" method="post" enctype="multipart/form-data">
+        <div class=formdiv>
         {% csrf_token %}
         {{ form }}
         {{ formmembers }}
-        <button type="submit"> Lagre </button>
-    </form>
-    <a href="delete"><button>slett</button></a>
+            </div>
 
+        <div class="formbtndiv">
+
+         {% if object %}
+        <a href="delete"><button class="formbtn" type="button">Slett</button></a>
+            {% endif %}
+        <button class="formbtn" type="submit"> Lagre </button>
+            </div>
+    </form>
+    <hr class="whiteline">
+    </div>
 
 {% endblock content %}

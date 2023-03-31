@@ -5,42 +5,64 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-    <h1>Admin</h1>
-    <hr style="border-top: 1px solid white; border-radius: 2px ">
+    <div class="outerdiv">
+        <div style="text-align: center">
+            <h1>Admin</h1>
+        </div>
+        <hr class="whiteline">
 
-    <h2>Chemie Grand Prix</h2>
-    <hr>
-    {% for cgp in cgps %}
+        <h2>Chemie Grand Prix</h2>
+
+        {% for cgp in cgps %}
         <a href="{% url 'cgp:cgp_edit' cgp.id  %}">
-        <hr>
-            <div>{{ cgp.year }}</div>
-        <hr>
+            <div class="draggable draggable-list">
+                <div>
+                    <p class="country-name">{{ cgp.year }}</p>
+                </div>
+            </div>
         </a>
-    {% endfor %}
+        {% endfor %}
 
-    <form method="post">
-        {% csrf_token %}
-        <button type="submit">Opprett ny CGP</button>
-    </form>
+        <a href="#">
+            <div class="draggable draggable-list">
+                <div>
+                    <form method="post">
+                    {% csrf_token %}
+                        <button class="invisible-btn" type="submit">Opprett ny CGP</button>
+                    </form>
+                </div>
+                <div class="country-name"> + </div>
+            </div>
+        </a>
 
-    <hr style="border-top: 1px solid white; border-radius: 2px ">
-    <h2> Land </h2>
-    {% for country in countries %}
+
+
+        <hr class="whiteline">
+        <h2> Land </h2>
+        {% for country in countries %}
         <a href="{% url 'cgp:country_edit' country.id %}">
-        <hr>
-            <div>{{ country.country_name }}</div>
-            {% if country.image %}
-            <img alt="{{ country.country_name }}" src="{{ country.image.url }}" style="display: inline-block; width: 40px">
-            {% endif %}
-        <hr>
+            <div class="draggable draggable-list">
+                <div >
+                    <p class="country-name">{{ country.country_name }}</p>
+                </div>
+                {% if country.image %}
+                <img alt="{{ country.country_name }}" src="{{ country.image.url }}" style="display: inline-block; width: 40px">
+                {% endif %}
+            </div>
         </a>
-    {% endfor %}
-    <a href="{% url 'cgp:country_add'  %}">
-        <hr>
-            <div>Legg til Land</div> <div></div> <div></div>
-        <hr>
-        </a>
+        {% endfor %}
 
+        <a href="{% url 'cgp:country_add'  %}">
+            <div class="draggable draggable-list">
+                <div >
+                    <div class="country-name">Legg til Land</div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="country-name">+</div>
+            </div>
+        </a>
+        <hr class="whiteline">
     </div>
 
 {% endblock content %}

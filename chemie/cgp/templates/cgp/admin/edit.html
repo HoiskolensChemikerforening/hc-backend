@@ -5,39 +5,46 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-    <div style="color: white">
-    <a href="{% url 'cgp:cgp_admin' %}"><button>All CGPs</button></a>
+    <div class="outerdiv">
         <div style="text-align: center">
-    <hr style="border-top: 1px solid white; border-radius: 2px ">
+    <hr class="whiteline">
     <h1>Chemie Grand Prix {{ cgp.year }}</h1>
     <form method="post">
     {% csrf_token %}
-    <button style="background: {% if cgp.is_open %}#911a00 {% else %} #248a00 {% endif %}; border-radius: 5px; border-color: black; color:white; margin-top:30px; margin-bottom:30px;padding: 10px" type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
+    <button style="background: {% if cgp.is_open %}#911a00 {% else %} #248a00 {% endif %}; border-radius: 10px; border-color: black; color:white; margin-top:30px; margin-bottom:30px;padding: 10px" type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
     </form>
-    <hr style="border-top: 1px solid white; border-radius: 2px ">
+    <hr class="whiteline">
     </div>
     <h2> Grupper </h2>
     {% for group in groups %}
         <a href="{% url 'cgp:group_edit' cgp.id group.id %}">
-        <hr>
-            <div>{{ group.real_name }}</div> <div>{{ group.country.country_name }}</div> <div>{{ group.song_name }}</div>
+
+        <div class="draggable draggable-list">
+            <div >
+            <p class="country-name">{{ group.real_name }}</p>
+                <p class="country-info">{{ group.country.country_name }}</p>
+                <p class="country-info">{{ group.song_name }}</p></div>
             {% if group.country.image %}
             <img alt="{{ group.country.country_name }}" src="{{ group.country.image.url }}" style="display: inline-block; width: 40px">
             {% endif %}
-        <hr>
+        </div>
+
         </a>
 
     {% endfor %}
     <a href="{% url 'cgp:group_add' cgp.id %}">
-        <hr>
-            <div>Legg til Gruppe</div> <div></div> <div></div>
-        <hr>
+        <div class="draggable draggable-list">
+            <div >
+            <div class="country-name">Legg til Gruppe</div> <div></div> <div></div></div>
+            <div class="country-name">+</div>
+        </div>
         </a>
 
 
+    <hr class="whiteline">
 
+    <a  href="{% url 'cgp:cgp_admin' %}"><button class="returnbtn" type="button"> Tilbake </button></a>
     </div>
-    <hr style="border-top: 1px solid white; border-radius: 2px ">
 
 
     </div>

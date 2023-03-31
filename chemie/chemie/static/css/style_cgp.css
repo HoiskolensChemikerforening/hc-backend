@@ -239,6 +239,66 @@
 }
 
 
+.formdiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px;
+}
+
+.whiteline {
+  border-top: 1px solid var(--text-color);
+  border-radius: 2px
+}
+
+.submitform {
+  display: grid;
+}
+
+.outerdiv {
+  color: var(--text-color);
+}
+
+.outerdiv > a {
+  color: var(--text-color);
+}
+.outerdiv > a > div {
+  border:none;
+}
+
+.countrydiv {
+  color: var(--text-color);
+}
+
+.formbtn {
+  width: 100px;
+  border-radius: 10px;
+}
+
+.formbtndiv {
+  margin: auto;
+}
+
+.returnbtn {
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  border-radius: 10px;
+  margin: auto;
+}
+.invisible-btn {
+  background: transparent;
+  border: 0px solid transparent;
+  padding: 0px;
+  margin: 0px;
+  color: var(--text-color)
+}
+
+.invisible-btn:hover {
+  text-underline: var(--text-color);
+}
+
+
+
 
 
 

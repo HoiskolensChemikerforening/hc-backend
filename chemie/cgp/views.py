@@ -1,10 +1,11 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
-from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import CGP, Country, Group, Vote, POINTS
 import json
 from .serializers import CGPSerializer
 from rest_framework import generics
+from django.contrib import messages
 
 
 
@@ -18,8 +19,6 @@ def index(request):
     if not cgp:
         context = {"cgp": CGP.get_latest_or_create(),"countries":None}
         return render(request, "cgp/index.html", context)
-    cgp.toggle(request.user)
-    cgp.toggle(request.user)
     groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)
     audience = list(Group.objects.filter(audience=True, cgp=cgp))
     if len(audience) > 0:
@@ -85,6 +84,9 @@ def vote_index(request, slug):
         vote.failureprize_vote = failureprize
         vote.user = request.user
         vote.save()
+        messages.add_message(
+            request, messages.SUCCESS, f"Takk for at du bruker stemmen din!", extra_tags="Stemme registrert"
+        )
         return JsonResponse({"url": reverse("cgp:index")}, status=200)
         #return redirect(reverse("cgp:vote_show_index", args=[slug]))
 

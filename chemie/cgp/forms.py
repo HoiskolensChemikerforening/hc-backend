@@ -1,17 +1,11 @@
 from django import forms
-from .models import CGP, Group, Country
-
-
-class CGPForm(forms.ModelForm):
-    class Meta:
-        model = CGP
-        fields = ()
+from .models import Group, Country
 
 
 class GroupForm(forms.ModelForm):
     """
     """
-    country = forms.ModelChoiceField(queryset=None)
+    country = forms.ModelChoiceField(queryset=None, label='Land')
     def __init__(self, cgp, group=None, *args, **kwargs):
         super(GroupForm, self).__init__(*args, **kwargs)
         groups = cgp.group_set.all()
