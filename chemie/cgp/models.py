@@ -32,11 +32,18 @@ class CGP(models.Model):
     year = models.DateField(auto_now_add=True, unique=True)
     @classmethod
     def create_new_cgp(cls):
-        CGP.objects.create(is_open=False)
+        return CGP.objects.create(is_open=False)
 
     @classmethod
     def get_latest_active(cls):
         return CGP.objects.filter(is_open=True).order_by("-year")[0]
+
+    @classmethod
+    def get_latest_or_create(cls):
+        cgps = CGP.objects.order_by("-year")
+        if not cgps:
+            return cls.create_new_cgp()
+        return cgps[0]
 
     def toggle(self, user):
         if self.is_open and len(Group.objects.filter(cgp=self).filter(audience=True)) > 0:
