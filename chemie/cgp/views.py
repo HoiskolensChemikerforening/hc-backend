@@ -1,7 +1,7 @@
 from django.shortcuts import render, get_object_or_404, reverse, redirect
 from django.contrib.auth.decorators import login_required, permission_required
 from django.http import JsonResponse
-from .models import CGP, Country, Group, Vote, POINTS,AUDIENCE_USERNAME
+from .models import CGP, Country, Group, Vote, POINTS
 import json
 from .serializers import CGPSerializer
 from rest_framework import generics
@@ -18,7 +18,7 @@ def index(request):
     cgp.toggle(request.user)
     cgp.toggle(request.user)
     groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)
-    audience = list(Group.objects.filter(group_username=AUDIENCE_USERNAME, cgp=cgp))
+    audience = list(Group.objects.filter(audience=True, cgp=cgp))
     if len(audience) > 0:
         audience = [audience[0].country]
     countries = set([group.country for group in groups]+audience)
@@ -30,7 +30,7 @@ def index(request):
 
 
 def check_group_access(request, group, manage=False):
-    if group.group_username == AUDIENCE_USERNAME:
+    if group.audience:
         return True
     if manage:
         permittedUsersLst = group.group_leaders.all()
@@ -49,7 +49,7 @@ def vote_index(request, slug):
     if not check_group_access(request, group, manage=True):
         return redirect('/cgp')
     cgp = CGP.get_latest_active()
-    groups = cgp.group_set.exclude(group_username=group.group_username).exclude(group_username=AUDIENCE_USERNAME)
+    groups = cgp.group_set.exclude(id=group.id).exclude(audience=True)
     points = POINTS
     if request.method == "POST":
         if not request.POST.get("showprize") or not request.POST.get("failureprise"):
@@ -63,7 +63,7 @@ def vote_index(request, slug):
         #else:
             #if vote for group and person exists
             #else
-        if group.group_username == AUDIENCE_USERNAME:
+        if group.audience:
             if len(group.vote_set.filter(user=request.user).filter(final_vote=False)) > 0:
                 vote = group.vote_set.filter(user=request.user)[0]
             else:

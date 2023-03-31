@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User#, Group
 from chemie.customprofile.models import Profile
 from sorl.thumbnail import ImageField
 from django.urls import reverse
@@ -11,11 +11,6 @@ from extended_choices import Choices
 
 
 POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1]
-AUDIENCE_USERNAME = "publikum"
-EXTRAVOTE = Choices(
-    ("SHOWPRIZE", 1, "showpris"),
-    ("FAILUREPRIZE", 2, "fiaskopris")
-)
 
 def reverse_sort_dict_keys(dictionary):
     return [i[0] for i in sorted(dictionary.items(), key=lambda item: item[1], reverse=True)]
@@ -30,6 +25,7 @@ def add_to_dict(dictionary,key, value):
 
 class CGP(models.Model):
     """
+    Todo test 2 publikum countries
     year er egentlig data unique slik at man bare kan lage en cgp per år men akkurat nå er det per dag. Vet ikke om det breaker logikken et setd
     """
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
@@ -43,10 +39,10 @@ class CGP(models.Model):
         return CGP.objects.filter(is_open=True).order_by("-year")[0]
 
     def toggle(self, user):
-        if self.is_open and len(Group.objects.filter(cgp=self).filter(group_username=AUDIENCE_USERNAME)) > 0:
+        if self.is_open and len(Group.objects.filter(cgp=self).filter(audience=True)) > 0:
             all_audience_votes = Vote.objects\
                 .filter(group__cgp=self)\
-                .filter(group__group_username=AUDIENCE_USERNAME)
+                .filter(group__audience=True)
             audience_votes = all_audience_votes.filter(final_vote=False)
             audience_final_votes = all_audience_votes.filter(final_vote=True)
             if len(audience_votes)> 0:
@@ -66,7 +62,7 @@ class CGP(models.Model):
                 else:
                     audience_final_vote = Vote()
                     audience_final_vote.final_vote = True
-                    audience_final_vote.group = Group.objects.filter(cgp=self).get(group_username=AUDIENCE_USERNAME)
+                    audience_final_vote.group = Group.objects.filter(cgp=self).get(audience=True)
                 audience_final_vote.user = user
                 audience_final_vote.vote = ",".join(reverse_sort_dict_keys(vote_dict))
                 audience_final_vote.showprize_vote =reverse_sort_dict_keys(show_vote_dict)[0]
@@ -85,7 +81,7 @@ class Country(models.Model):
     """
     country_name = models.CharField(max_length=50, unique=True)
     image = ImageField(upload_to="cgp", null=True, blank=True)
-    slug = models.SlugField(null=True, blank=True, editable=False)
+    slug = models.SlugField(null=True, blank=True, editable=False, unique=True)
 
     def __str__(self):
         return self.country_name
@@ -105,11 +101,12 @@ class Group(models.Model):
     """
     username unique publikum vote for different years :(
     """
-    group_username = models.CharField(max_length=50, unique=True)
+    #group_username = models.CharField(max_length=50, unique=True)
     real_name = models.CharField(max_length=50)
     country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True)
     cgp = models.ForeignKey(CGP, on_delete=models.CASCADE)
     song_name = models.CharField(max_length=100, blank=True)
+    audience = models.BooleanField(verbose_name="Publikum", default=False)
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
     group_leaders = models.ManyToManyField(User, related_name="group_leaders", blank=True)
     group_members = models.ManyToManyField(User, related_name="group_members", blank=True)
