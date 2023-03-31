@@ -17,15 +17,17 @@ from django.contrib import messages
 def index(request):
     cgp = CGP.get_latest_active()
     if not cgp:
-        context = {"cgp": CGP.get_latest_or_create(),"countries":None}
+        context = {"cgp": CGP.get_latest_or_create(),"open":False}
         return render(request, "cgp/index.html", context)
     groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)
     audience = list(Group.objects.filter(audience=True, cgp=cgp))
     if len(audience) > 0:
         audience = [audience[0].country]
-    countries = set([group.country for group in groups]+audience)
+    countries = set([group.country for group in groups])#+audience)
     context = {"countries": countries,
                "audience": audience,
+               "groups": groups,
+               "open":True,
                "cgp": cgp}
 
     return render(request, "cgp/index.html", context)

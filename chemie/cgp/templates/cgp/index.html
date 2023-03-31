@@ -5,27 +5,47 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
-<div class="image-frame">
+<!--<div class="image-frame">
 <img class="cgplogo" type="image/png" src="{% static 'images/cgp_logo.png' %}">
-</div>
+</div>-->
 
 
     <!--<div><a href="{{ audience.0.get_absolute_url }}">
 <button class="dropbtn">Stem!</button></a>
     </div> -->
-{%  if countries %}
-<div class="dropdown">
+<div class="outerdiv">
+    {%  if open %}
+    <div style="text-align: center">
+        <hr class="whiteline">
+        <h1>Chemie Grand Prix {{ cgp.year }}</h1>
+        <hr class="whiteline">
+    </div>
 
-  <button class="dropbtn">Stem!</button>
-  <div class="dropdown-content">
-    {% for country in countries %}
-    <a href="{{country.get_absolute_url}}"> {{country.country_name}} </a>
-    {%endfor%}
-  </div>
-</div>
+     <a href="{{audience.0.get_absolute_url}}">
+        <div class="dropdown">
+            <button class="dropbtn">Stem!</button>
+        </div>
+    </a>
 
+    {% if countries %}
+    <div class="dropdown">
+        <button class="dropbtn">Stem på vegene av ...</button>
+        <div class="dropdown-content">
+        {% for group in groups %}
+            <a href="{{group.country.get_absolute_url}}"> {{group.real_name}} </a>
+        {% endfor %}
+        </div>
+    </div>
     {% endif %}
 
+    {% else %}
+    <div style="text-align: center">
+        <hr class="whiteline">
+        <h1>Stem på Klasse 25</h1>
+        <hr class="whiteline">
+    </div>
+    {% endif %}
+</div>
 <!-- Floating admin button -->
 {% if perms.elections.add_election %}
 <div class="container-fluid">

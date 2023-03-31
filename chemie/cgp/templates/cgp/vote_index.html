@@ -5,8 +5,12 @@
 {% endblock breadcrumbs %}
 
 {% block content %}
+    <hr class="whiteline">
 <img class="mainflag" alt="{{ country.country_name }}" src="{{ country.image.url }}">
+    <hr class="whiteline">
 <h1 class="countryname">{{country.country_name}}</h1>
+
+    <hr class="whiteline">
 
 <div class="legend">
     <p id="legendpoints">Poeng</p>
@@ -14,8 +18,9 @@
 </div>
 <ul class="draggable-list" id="draggable-list"></ul>
 
+    <hr class="whiteline">
     <div>
-    <form method="post">
+    <form class="showfiaskoform" method="post">
     {% csrf_token %}
     <label for="showpris"> Showpris </label>
         <select name="Showpris" id="showpris">
@@ -26,14 +31,17 @@
                         </span></option>
             {%  for group in groups %}
                 <option value={{ group.id }}>
+                 <div class="draggable draggable-primary">
                     <span>
-                        <p>{{ group.country.country_name }}</p>
-                        <p>{{ group.real_name }}</p>
-                        <p>{{ group.song_name }}</p>
+                        <p class="country-name">{{ group.country.country_name }}  |</p>
+                        <p class="country-info">  {{ group.real_name }}  </p>
+                        <p class="country-info">|  {{ group.song_name }}</p>
                         </span>
+                     </div>
                 </option>
             {% endfor %}
         </select>
+
     <label for="fiaskopris"> Fiaskopris </label>
         <select name="Fiaskopris" id="fiaskopris">
         <option value selected><span>
@@ -43,17 +51,19 @@
                         </span></option>
             {%  for group in groups %}
                 <option value={{ group.id }}>
-                    <span>
-                        <p>{{ group.country.country_name }}</p>
-                        <p>{{ group.real_name }}</p>
-                        <p>{{ group.song_name }}</p>
+                    <div class="draggable draggable-primary">
+                        <span>
+                        <p class="country-name">{{ group.country.country_name }}  |</p>
+                        <p class="country-info">  {{ group.real_name }}  </p>
+                        <p class="country-info">|  {{ group.song_name }}</p>
                         </span>
+                    </div>
                 </option>
             {% endfor %}
         </select>
 
     </form>
-
+    <hr class="whiteline">
 
     </div>
 
