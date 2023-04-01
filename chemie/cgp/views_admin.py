@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from .models import CGP, Group, Country
@@ -9,7 +10,7 @@ from django.contrib import messages
 from django.urls import reverse
 
 
-@permission_required("elections.add_election")
+@permission_required("cgp.add_cgp")
 @login_required
 def cgp_admin(request):
     """
@@ -40,7 +41,7 @@ def cgp_admin(request):
 
 
 
-@permission_required("elections.add_election")
+@permission_required("cgp.change_cgp")
 @login_required
 def cgp_edit(request, cgp_id):
     """
@@ -51,21 +52,20 @@ def cgp_edit(request, cgp_id):
     Context:
         cgp: CGP object (CGP object with id cgp_id)
         groups: Queryset (all Group objects related to cgp)
-        countries: (all Country objects)
     """
     cgp = get_object_or_404(CGP, id=cgp_id)
     groups = cgp.group_set.all()
-    countries = Country.objects.all()
     if request.method == "POST":
         cgp.toggle(request.user)
         return redirect(reverse("cgp:cgp_edit", kwargs={"cgp_id": cgp_id}))
     context = {
         "cgp": cgp,
         "groups": groups,
-        "countries": countries
     }
     return render(request, "cgp/admin/edit.html", context)
 
+@permission_required("cgp.change_group")
+@login_required
 def group_edit(request, cgp_id, group_id):
     """
     Renders the forms page for the Group object and populates it with data from a group.
@@ -86,6 +86,8 @@ def group_edit(request, cgp_id, group_id):
     if request.method == "POST":
         form = GroupForm(cgp, group, request.POST, instance=group)#, initial={"country": group.country})
         if form.is_valid():
+
+            print(form.data)
             group = form.save(commit=False)
             group.cgp = cgp
             group.has_voted = False
@@ -95,13 +97,14 @@ def group_edit(request, cgp_id, group_id):
             )
             return redirect(reverse("cgp:cgp_edit", kwargs={"cgp_id": cgp_id}))
     context = {
-        "cgp": cgp,
         "object": group,
         "form": form,
         "type": "Gruppe"
     }
     return render(request, "cgp/admin/forms.html", context)
 
+@permission_required("cgp.add_group")
+@login_required
 def group_add(request, cgp_id):
     """
     Renders the forms page for the Group object empty.
@@ -127,12 +130,13 @@ def group_add(request, cgp_id):
 
 
     context = {
-        "cgp": cgp,
         "form": form,
         "type": "Gruppe"
     }
     return render(request, "cgp/admin/forms.html", context)
 
+@permission_required("cgp.change_country")
+@login_required
 def country_edit(request, country_id):
     """
     Renders the forms page for the Country object and populates it with data from a country.
@@ -163,6 +167,8 @@ def country_edit(request, country_id):
     }
     return render(request, "cgp/admin/forms.html", context)
 
+@permission_required("cgp.add_country")
+@login_required
 def country_add(request):
     """
     Renders the forms page for the Country object empty. And generates the slug attribute.
@@ -173,20 +179,20 @@ def country_add(request):
         type: str (Land)
     """
     form = CountryForm(request.POST or None, request.FILES or None)
-    #field = form.fields["slug"]
-    #field. = slugify(country.country_name)
-    #field.widget = field.hidden_widget()
     if form.is_valid():
         country = form.save(commit=False)
         country.slug = slugify(country.country_name)
-        #print(form.is_valid())
-        #if len(Country.objects.filter(slug=country.slug))> 0:
-         #   raise ValidationError("Ugyldig navn")
-        form.save()
+        if not country.slug in Country.objects.values_list('slug', flat=True):
+            form.save()
+            messages.add_message(
+                request, messages.SUCCESS, f"{str(country)} har blitt opprettet", extra_tags="Opprettet"
+            )
+            return redirect(reverse("cgp:cgp_admin"))
         messages.add_message(
-            request, messages.SUCCESS, f"{str(country)} har blitt opprettet", extra_tags="Opprettet"
+            request, messages.ERROR,
+            f"{str(country)} likner for mye på {Country.objects.get(slug=country.slug)}",
+            extra_tags="Error"
         )
-        return redirect(reverse("cgp:cgp_admin"))
     context = {
         "form": form,
         "type": "Land"
@@ -194,7 +200,7 @@ def country_add(request):
     return render(request, "cgp/admin/forms.html", context)
 
 
-class DeleteView(View):
+class DeleteView(PermissionRequiredMixin, View):
     """
     Class based view to delete an object.
     Args:
@@ -205,6 +211,7 @@ class DeleteView(View):
     key = None
     objecttype = None
     redirect_url = ""
+    permission_required = ('cgp.delete_country', 'cgp.delete_group')
     def get(self, request, *args, **kwargs):
         """
         Deletes an object and redirect to page.

@@ -6,7 +6,7 @@
 
 {% block content %}
     <hr class="whiteline">
-<img class="mainflag" alt="{{ country.country_name }}" src="{{ country.image.url }}">
+<img class="mainflag" alt="{{ country.country_name }}" src="{% if country.image %}{{ country.image.url }} {% endif %}">
     <hr class="whiteline">
 <h1 class="countryname">{{country.country_name}}</h1>
 
@@ -295,7 +295,7 @@ function submitVote() {
         countrynameAlertString = countrynameAlertString + "\n" + point + ". " + countryNames[index]}
   $.post({
               type: 'POST',
-              url: "{{slug}}",
+              url: '',
               data: {
                   'countryNames[]': countryNames.toString(),
                   'csrfmiddlewaretoken': '{{ csrf_token }}',
@@ -303,7 +303,7 @@ function submitVote() {
                   'failureprise': failureprise.value,
                 },
               success: function (response){
-                  window.alert(`Takk for din stemme! ${countrynameAlertString} \n Showpris:
+                  window.alert(`Takk for din stemme {{ country.country_name }} {{ slug }}! ${countrynameAlertString} \n Showpris:
                   ${showprize.options[showprize.selectedIndex].text}\n Fiaskopris:
                   ${failureprise.options[failureprise.selectedIndex].text}`);
                   location.href = response.url;

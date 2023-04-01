@@ -64,10 +64,7 @@ urlpatterns = [
         "utleie/",
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
-    path(
-        "cgp/",
-         include("chemie.cgp.urls", namespace="cgp")
-    ),
+    path("cgp/",include("chemie.cgp.urls", namespace="cgp")),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
     path("api/sponsor/", views.SponsorListCreate.as_view(), name="sponsor"),
     path("api/404/<int:pk>/", views.pictures_for_404Detail.as_view()),

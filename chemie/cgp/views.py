@@ -6,6 +6,7 @@ import json
 from .serializers import CGPSerializer
 from rest_framework import generics
 from django.contrib import messages
+from django.db.models.query import QuerySet
 
 @login_required
 def index(request):
@@ -57,6 +58,8 @@ def check_group_access(request, group, manage=False):
         return False
     return True
 
+
+@login_required
 def vote_index(request, slug):
     """
     Renders the voting page for a country.
@@ -65,19 +68,14 @@ def vote_index(request, slug):
         slug: str (slugified countryname)
     Context:
         country: Country (current Country object)
-        group: Group (current Group object)
         groups: Queryset (containing all Group objects that can be voted for by the current Group object)
         countries: str (containing all country names that can be voted for by the current Group object seperated by ",")
         realnames: str (containing all group names that can be voted for by the current Group object seperated by ",")
         songtiteles: str (containing all songtitles that can be voted for by the current Group object seperated by ",")
         points: str (containing all points that can be assigned to Group objects seperated by ",")
-        url: str (containing the current url (relative))
     """
     country = get_object_or_404(Country, slug=slug)
-    group = country.group_set.filter(cgp=CGP.get_latest_active())
-    if len(group)>1:
-        print("2 groups are part of the same country")
-    group = group[0]
+    group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
     if not check_group_access(request, group, manage=True):
         return redirect('/cgp')
     cgp = CGP.get_latest_active()
@@ -115,13 +113,11 @@ def vote_index(request, slug):
 
     context = {
         "country": country,
-        "group": group,
         "groups": groups,
         "countries": ",".join([i.country.country_name for i in groups]),
         "realnames": ",".join([i.real_name for i in groups]),
         "songtiteles": ",".join([i.song_name for i in groups]),
         "points": ",".join([str(i) for i in points]),
-        "url": f"/{slug}/"
                }
     return render(request, "cgp/vote_index.html", context)
 
@@ -135,6 +131,16 @@ class CGPListViewTemplate(generics.ListCreateAPIView):
     Data:
          queryset: Queryset (All final votes related to the latest active CGP object)
     """
-    cgp = CGP.get_latest_active()
-    queryset = Vote.objects.filter(group__cgp=cgp).exclude(final_vote=False)
+
+    queryset = Vote.objects.none()
     serializer_class = CGPSerializer
+    def get_queryset(self):
+        """
+        overrides the original get_queryset method to exclude votes not related to the latest CGP
+        """
+        queryset = super().get_queryset()
+        if isinstance(queryset, QuerySet):
+            cgp = CGP.get_latest_or_create()
+            queryset = Vote.objects.filter(group__cgp=cgp).exclude(final_vote=False)
+        return queryset
+
