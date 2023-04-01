@@ -7,33 +7,46 @@ from .serializers import CGPSerializer
 from rest_framework import generics
 from django.contrib import messages
 
-
-
-#bugs
-#Hva skjer når CGP ikke finnes
-
-
 @login_required
 def index(request):
+    """
+    Renders the CGP index page. Generates links to the voting pages related to the user if there is an open CGP object.
+    Hides those links if not.
+    Args:
+        request: HttpRequest
+    Context:
+        countries: set (all countries the request.user can vote for apart from the audience vote)
+        audience: Country object or list (the audience country or an empty list if there is none)
+        groups: Queryset (all groups the request.user can vote for apart from the audience vote)
+        open: boolean (is True if there is an open CGP)
+        cgp: cgp (latest active CGP object, latest closed active CGP object if all CGP objects are closed)
+    """
     cgp = CGP.get_latest_active()
     if not cgp:
-        context = {"cgp": CGP.get_latest_or_create(),"open":False}
+        context = {"cgp": CGP.get_latest_or_create(), "open": False}
         return render(request, "cgp/index.html", context)
     groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)
     audience = list(Group.objects.filter(audience=True, cgp=cgp))
     if len(audience) > 0:
         audience = [audience[0].country]
-    countries = set([group.country for group in groups])#+audience)
+    countries = set([group.country for group in groups])
     context = {"countries": countries,
                "audience": audience,
                "groups": groups,
-               "open":True,
+               "open": True,
                "cgp": cgp}
 
     return render(request, "cgp/index.html", context)
 
 
 def check_group_access(request, group, manage=False):
+    """
+    Checks if a person has permissions to submit votes for this group.
+    Args:
+        request: HttpRequest
+        group: Group
+        manage: boolean (switch between group members and leaders)
+    """
     if group.audience:
         return True
     if manage:
@@ -45,6 +58,21 @@ def check_group_access(request, group, manage=False):
     return True
 
 def vote_index(request, slug):
+    """
+    Renders the voting page for a country.
+    Args:
+        request: HttpRequest
+        slug: str (slugified countryname)
+    Context:
+        country: Country (current Country object)
+        group: Group (current Group object)
+        groups: Queryset (containing all Group objects that can be voted for by the current Group object)
+        countries: str (containing all country names that can be voted for by the current Group object seperated by ",")
+        realnames: str (containing all group names that can be voted for by the current Group object seperated by ",")
+        songtiteles: str (containing all songtitles that can be voted for by the current Group object seperated by ",")
+        points: str (containing all points that can be assigned to Group objects seperated by ",")
+        url: str (containing the current url (relative))
+    """
     country = get_object_or_404(Country, slug=slug)
     group = country.group_set.filter(cgp=CGP.get_latest_active())
     if len(group)>1:
@@ -61,12 +89,6 @@ def vote_index(request, slug):
         countryNames = request.POST.getlist("countryNames[]")
         showprize = Group.objects.get(id=request.POST.get("showprize"))
         failureprize = Group.objects.get(id=request.POST.get("failureprise"))
-        #if finalvote
-            #if finalvote for group exists
-            #else
-        #else:
-            #if vote for group and person exists
-            #else
         if group.audience:
             if len(group.vote_set.filter(user=request.user).filter(final_vote=False)) > 0:
                 vote = group.vote_set.filter(user=request.user)[0]
@@ -90,9 +112,7 @@ def vote_index(request, slug):
             request, messages.SUCCESS, f"Takk for at du bruker stemmen din!", extra_tags="Stemme registrert"
         )
         return JsonResponse({"url": reverse("cgp:index")}, status=200)
-        #return redirect(reverse("cgp:vote_show_index", args=[slug]))
 
-    #sort groups after current vote or random
     context = {
         "country": country,
         "group": group,
@@ -108,9 +128,13 @@ def vote_index(request, slug):
 
 
 
-
 #API views
 class CGPListViewTemplate(generics.ListCreateAPIView):
+    """
+    Renders the CGP API page. Populates it with all final votes.
+    Data:
+         queryset: Queryset (All final votes related to the latest active CGP object)
+    """
     cgp = CGP.get_latest_active()
     queryset = Vote.objects.filter(group__cgp=cgp).exclude(final_vote=False)
     serializer_class = CGPSerializer

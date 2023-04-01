@@ -111,17 +111,31 @@ class CGP(models.Model):
     def toggle(self, user):
         """
         Toggles the boolean variable self.is_open (Equivalent to open or closing the possibility to vote).
-        Calculates the audience votes by analyzing the audience votes related to this CGP instance, if the voting closes
-        and there are votes in the database. Creates a final vote for the audience based on this data.
+        Generates the audience vote on close.
         Args:
             self: CGP object
             user: User object (should be the current user)
         Returns:
             None
         """
-        if self.is_open and len(Group.objects.filter(cgp=self).filter(audience=True)) > 0:
-            all_audience_votes = Vote.objects\
-                .filter(group__cgp=self)\
+        if self.is_open:
+            self.generate_audience_vote(user)
+        self.is_open = not self.is_open
+        self.save()
+        return
+
+    def generate_audience_vote(self, user):
+        """
+        Calculates the audience vote by analyzing the related audience votes if there are audience votes.
+        Args:
+            self: CGP object
+            user: User object (should be the current user)
+        Returns:
+            None
+        """
+        if len(Group.objects.filter(cgp=self).filter(audience=True)) > 0:
+            all_audience_votes = Vote.objects \
+                .filter(group__cgp=self) \
                 .filter(group__audience=True)
             audience_votes = all_audience_votes.filter(final_vote=False)
             audience_final_votes = all_audience_votes.filter(final_vote=True)
@@ -130,7 +144,8 @@ class CGP(models.Model):
                 show_vote_dict = {}
                 failure_vote_dict = {}
                 for vote in audience_votes:
-                    for count, country in enumerate(vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")):
+                    for count, country in enumerate(
+                            vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")):
                         if count >= len(POINTS):
                             break
                         vote_dict = add_to_dict(vote_dict, country, POINTS[count])
@@ -148,10 +163,7 @@ class CGP(models.Model):
                 audience_final_vote.showprize_vote = reverse_sort_dict_keys(show_vote_dict)[0]
                 audience_final_vote.failureprize_vote = reverse_sort_dict_keys(failure_vote_dict)[0]
                 audience_final_vote.save()
-        self.is_open = not self.is_open
-        self.save()
         return
-
 def __str__(self):
     return f"{self.year}"
 
