@@ -73,13 +73,24 @@ def vote_index(request, slug):
         realnames: str (containing all group names that can be voted for by the current Group object seperated by ",")
         songtiteles: str (containing all songtitles that can be voted for by the current Group object seperated by ",")
         points: str (containing all points that can be assigned to Group objects seperated by ",")
+        failure_group: Group (Group object from a previous vote)
+        show_group: Group (Group object from a previous vote)
     """
     country = get_object_or_404(Country, slug=slug)
     group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
     if not check_group_access(request, group, manage=True):
         return redirect('/cgp')
     cgp = CGP.get_latest_active()
-    groups = cgp.group_set.exclude(id=group.id).exclude(audience=True)
+
+    #sort group by previous votes or random
+    vote_set = group.vote_set.filter(final_vote=True)
+    failure_group, show_group= None, None
+    if len(vote_set) >= 1:
+        groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
+    else:
+        groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
+
+
     points = POINTS
     if request.method == "POST":
         if not request.POST.get("showprize") or not request.POST.get("failureprise"):
@@ -107,7 +118,7 @@ def vote_index(request, slug):
         vote.user = request.user
         vote.save()
         messages.add_message(
-            request, messages.SUCCESS, f"Takk for at du bruker stemmen din!", extra_tags="Stemme registrert"
+            request, messages.SUCCESS, f"Takk for at du bruker stemmen din! Dersom du ønsker å redigere stemmen din kan du stemme på nytt så lenge valget er åpent.", extra_tags="Stemme registrert"
         )
         return JsonResponse({"url": reverse("cgp:index")}, status=200)
 
@@ -118,6 +129,8 @@ def vote_index(request, slug):
         "realnames": ",".join([i.real_name for i in groups]),
         "songtiteles": ",".join([i.song_name for i in groups]),
         "points": ",".join([str(i) for i in points]),
+        "failure_group": failure_group,
+        "show_group": show_group,
                }
     return render(request, "cgp/vote_index.html", context)
 

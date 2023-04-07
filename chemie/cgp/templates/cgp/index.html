@@ -29,7 +29,7 @@
 
     {% if countries %}
     <div class="dropdown">
-        <button class="dropbtn">Stem på vegene av ...</button>
+        <button class="dropbtn">Stem på vegne av ...</button>
         <div class="dropdown-content">
         {% for group in groups %}
             <a href="{{group.country.get_absolute_url}}"> {{group.real_name}} </a>

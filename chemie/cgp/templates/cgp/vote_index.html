@@ -24,13 +24,13 @@
     {% csrf_token %}
     <label for="showpris"> Showpris </label>
         <select name="Showpris" id="showpris">
-        <option value selected><span>
+        <option value {% if not show_group %}selected {% endif %}><span>
                         <p></p>
                         <p>----------</p>
                         <p></p>
                         </span></option>
             {%  for group in groups %}
-                <option value={{ group.id }}>
+                <option value={{ group.id }} {% if show_group.id == group.id %} selected {% endif %}>
                  <div class="draggable draggable-primary">
                     <span>
                         <p class="country-name">{{ group.country.country_name }}  |</p>
@@ -43,14 +43,14 @@
         </select>
 
     <label for="fiaskopris"> Fiaskopris </label>
-        <select name="Fiaskopris" id="fiaskopris">
-        <option value selected><span>
+        <select name="Fiaskopris" id="fiaskopris" >
+        <option value {% if not failure_group %}selected {% endif %}><span>
                         <p></p>
                         <p>----------</p>
                         <p></p>
                         </span></option>
             {%  for group in groups %}
-                <option value={{ group.id }}>
+                <option value={{ group.id }} {% if failure_group.id == group.id %} selected {% endif %} >
                     <div class="draggable draggable-primary">
                         <span>
                         <p class="country-name">{{ group.country.country_name }}  |</p>

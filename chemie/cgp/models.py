@@ -246,7 +246,25 @@ class Vote(models.Model):
     failureprize_vote = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="failurevote")
     showprize_vote = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="showvote")
 
-
+    def get_sorted_groups_list(self):
+        """
+        Translates the vote string into an ordered list with Group objects
+        and fetches the showprize and failureprize vote.
+        Args:
+            self: Vote object
+        Returns:
+            group_list: list (Ordered list containing Group objects)
+            self.failureprize_vote: Group (Group object which received the failureprize vote)
+            self.showprize_vote: Group  (Group object which received the showprize vote)
+        """
+        vote_list = self.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")
+        vote_dict = {vote_list[i]: i for i in range(len(vote_list))}
+        group_list = sorted(
+            list(
+                self.group.cgp.group_set.exclude(id=self.group.id).exclude(audience=True)
+                 ),
+            key=lambda group: vote_dict[group.country.country_name])
+        return group_list, self.failureprize_vote, self.showprize_vote
 
 
 
