@@ -146,7 +146,8 @@
   'FILL' 0,
   'wght' 400,
   'GRAD' 0,
-  'opsz' 48
+  'opsz' 48;
+  transform: translateY(50%);
 }
 
 .draggable-list {
@@ -364,7 +365,9 @@
     --margin-start: -100vh;
 }
 
-
+.dragbtn {
+  height: 100%;
+}
 
 
 
