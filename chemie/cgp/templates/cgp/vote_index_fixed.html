@@ -160,7 +160,7 @@ function handleTouchStart(event) {
         waiting=false;
         element.parentElement.classList.add("selected");
         element.parentElement.classList.remove("draggable-primary")
-        console.log(element.classList);
+        //console.log(element.classList);
         }, time, this);
     dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
@@ -177,7 +177,7 @@ function handleTouchMove(event){
         var touch = event.targetTouches[0];
         // Place element where the finger is touching
         //this.style.position = 'absolute';
-        this.classList.add("moving")
+        this.parentElement.classList.add("moving")
         this.parentElement.style.left = parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
         this.parentElement.style.top = parseInt(touch.pageY - Math.floor(this.parentElement.offsetHeight/2)) + 'px';
 
@@ -329,7 +329,7 @@ function submitVote() {
 
 function addEventListeners() {
     //Adds event listeners
-  const draggables = document.querySelectorAll('.draggable');
+  const draggables = document.querySelectorAll('.dragbtn');
   const dragListItems = document.querySelectorAll('.draggable-list li');
 
   draggables.forEach(draggable => {
