@@ -20,7 +20,7 @@
         <h1>Chemie Grand Prix {{ cgp.year }}</h1>
         <hr class="whiteline">
     </div>
-
+    <div style="margin-bottom: 30px; margin-top: 30px">
      <a href="{{audience.0.get_absolute_url}}">
         <div class="dropdown">
             <button class="dropbtn">Stem!</button>
@@ -29,7 +29,7 @@
 
     {% if countries %}
     <div class="dropdown">
-        <button class="dropbtn">Stem på vegne av ...</button>
+        <button class="dropbtn-small">Gruppe</button>
         <div class="dropdown-content">
         {% for group in groups %}
             <a href="{{group.country.get_absolute_url}}"> {{group.real_name}} </a>
@@ -37,11 +37,12 @@
         </div>
     </div>
     {% endif %}
-
+    </div>
+    <hr class="whiteline">
     {% else %}
-    <div style="text-align: center">
+    <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
         <hr class="whiteline">
-        <h1>Stem på Klasse 25</h1>
+        <h1>Stengt</h1>
         <hr class="whiteline">
     </div>
     {% endif %}
