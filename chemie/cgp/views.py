@@ -75,12 +75,14 @@ def get_vote_groups_or_random(request, group):
     vote_set = group.vote_set.filter(final_vote=True)
     groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
     failure_group, show_group = None, None
-    if len(vote_set) >= 1:
-        groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
-    elif group.audience:
-        user_vote_set = group.vote_set.filter(user=request.user)
+    if group.audience:
+        print("hi")
+        user_vote_set = group.vote_set.filter(user=request.user).filter(final_vote=False)
         if len(user_vote_set) >= 1:
             groups, failure_group, show_group = user_vote_set[0].get_sorted_groups_list()
+    elif len(vote_set) >= 1:
+        print(2333424)
+        groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
     return groups, failure_group, show_group
 
 @login_required

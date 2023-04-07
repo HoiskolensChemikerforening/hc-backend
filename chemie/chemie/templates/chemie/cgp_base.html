@@ -63,7 +63,7 @@
 
 
 <body class="bodybackground">
-  <div class="divbackground">
+  <div class="divbackground" id="contentbox">
   {% block breadcrumbs %}
   {% endblock breadcrumbs %}
 
@@ -93,7 +93,11 @@
   {% block footer_script %}
 
   {% endblock footer_script %}
+
+<div id="confetti-wrapper">
 </div>
+  <script src="{% static "js/cgp.js" %}"></script>
+  </div>
 </body>
 
 </html>
