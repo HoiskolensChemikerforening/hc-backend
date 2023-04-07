@@ -84,11 +84,14 @@ def vote_index(request, slug):
 
     #sort group by previous votes or random
     vote_set = group.vote_set.filter(final_vote=True)
+    groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
     failure_group, show_group= None, None
     if len(vote_set) >= 1:
         groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
-    else:
-        groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
+    elif group.audience:
+        user_vote_set = group.vote_set.filter(user=request.user)
+        if len(user_vote_set) >= 1:
+            groups, failure_group, show_group = user_vote_set[0].get_sorted_groups_list()
 
 
     points = POINTS
