@@ -150,7 +150,7 @@ def vote_index(request, slug):
         "failure_group": failure_group,
         "show_group": show_group,
                }
-    return render(request, "cgp/vote_index.html", context)
+    return render(request, "cgp/vote_index_fixed.html", context)
 
 
 
