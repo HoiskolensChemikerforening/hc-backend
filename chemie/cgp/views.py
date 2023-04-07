@@ -59,6 +59,30 @@ def check_group_access(request, group, manage=False):
     return True
 
 
+def get_vote_groups_or_random(request, group):
+    """
+    Returns the groups a Group can vote for in a random order or ordered by a previous vote in
+    addition to the showprize and failureprize groups from previous votes.
+    Args:
+         request: HttpRequest
+         group: Group (current Group)
+    Returns:
+        groups: list (Ordered list containing Group objects)
+        failure_group: Group or None (Group object which received the failureprize vote or None)
+        show_group: Group or None (Group object which received the showprize vote or None)
+    """
+    cgp = group.cgp
+    vote_set = group.vote_set.filter(final_vote=True)
+    groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
+    failure_group, show_group = None, None
+    if len(vote_set) >= 1:
+        groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
+    elif group.audience:
+        user_vote_set = group.vote_set.filter(user=request.user)
+        if len(user_vote_set) >= 1:
+            groups, failure_group, show_group = user_vote_set[0].get_sorted_groups_list()
+    return groups, failure_group, show_group
+
 @login_required
 def vote_index(request, slug):
     """
@@ -80,19 +104,8 @@ def vote_index(request, slug):
     group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
     if not check_group_access(request, group, manage=True):
         return redirect('/cgp')
-    cgp = CGP.get_latest_active()
 
-    #sort group by previous votes or random
-    vote_set = group.vote_set.filter(final_vote=True)
-    groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
-    failure_group, show_group= None, None
-    if len(vote_set) >= 1:
-        groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
-    elif group.audience:
-        user_vote_set = group.vote_set.filter(user=request.user)
-        if len(user_vote_set) >= 1:
-            groups, failure_group, show_group = user_vote_set[0].get_sorted_groups_list()
-
+    groups, failure_group, show_group = get_vote_groups_or_random(request, group)
 
     points = POINTS
     if request.method == "POST":
