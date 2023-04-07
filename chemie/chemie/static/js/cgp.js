@@ -28,7 +28,7 @@ for(i=0; i<300; i++) {
   confetti.style.left=randomWidth + 'px';
   confetti.style.backgroundColor=randomColor;
   confetti.style.transform='skew(15deg) rotate(' + randomRotation + 'deg)';
-  confetti.style.animation = `confettiRain ${height/75}s infinite`;
+  confetti.style.animation = `confettiRain ${height/50}s infinite`;
   confetti.style.animationDelay=randomAnimationDelay + 's';
   document.getElementById("confetti-wrapper").appendChild(confetti);
 }
