@@ -22,5 +22,6 @@ urlpatterns = [
         key="country_id", objecttype=Country, redirect_url="cgp_admin"), name="country_delete"
          ),
     path("<slug:slug>/", views.vote_index, name="vote_index"),
-    path("api", views.CGPListViewTemplate.as_view(), name="cgpapi"),
+    path("api/votes/", views.CGPListViewTemplate.as_view(), name="cgpapi"),
+    path("api/groups/", views.GroupsListViewTemplate.as_view(), name="cgpapigroups"),
     ]

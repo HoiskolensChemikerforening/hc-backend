@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from rest_framework.fields import SerializerMethodField
-from .models import Vote
+from .models import Vote, Country, Group, CGP
 
 
 class CGPSerializer(serializers.ModelSerializer):
@@ -97,6 +97,64 @@ class CGPSerializer(serializers.ModelSerializer):
             "failureprize_vote",
             "showprize_vote"
         )
+
+
+class GroupSerializer(serializers.ModelSerializer):
+    """
+    Generates the CGP Group API. Displays all the Groups related to the current CGP.
+    Fields:
+        countryname: str (name of the country)
+        real_name: str (name of the group)
+        song_name: str (songtitle of the group)
+        audience: boolean (is the group the audience)
+        countryimage: str (url to the corresponding country image)
+        year: int (CGP year)
+    """
+    countryname = SerializerMethodField()
+    countryimage = SerializerMethodField()
+    year = SerializerMethodField()
+
+    def get_countryname(self, group):
+        """
+        Gets the name of the group country.
+        Args:
+            self: GroupSerializer object
+            group: Group object
+        Returns:
+            countryname: str
+        """
+        return group.country.country_name
+
+    def get_countryimage(self, group):
+        """
+        Gets the url of the group country image.
+        Args:
+            self: GroupSerializer object
+            group: Group object
+        Returns:
+            countryimageurl: str
+        """
+        request = self.context.get('request')
+        return request.build_absolute_uri(group.country.image.url)
+
+    def get_year(self, group):
+        """
+        Gets the year of the CGP.
+        Args:
+            self: GroupSerializer object
+            group: Group object
+        Returns:
+            year: int
+        """
+        return group.cgp.year
+
+
+
+    class Meta:
+        model = Group
+        fields = ("countryname", "real_name", "song_name", "audience", "countryimage", "year")
+
+
 
 
 

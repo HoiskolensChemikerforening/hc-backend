@@ -226,6 +226,15 @@ class Group(models.Model):
     def __str__(self):
         return f"{self.real_name}"
 
+    def delete(self, using=None, keep_parents=False):
+        """
+        Overrides the delete method to delete all related votes.
+        """
+        for group in self.cgp.group_set.all():
+            for vote in group.vote_set.all():
+                if self.country.country_name in vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(","):
+                    vote.delete()
+        return super().delete(using=None, keep_parents=False)
 
 
 class Vote(models.Model):

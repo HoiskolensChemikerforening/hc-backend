@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
 from .models import CGP, Country, Group, Vote, POINTS
 import json
-from .serializers import CGPSerializer
+from .serializers import CGPSerializer, GroupSerializer
 from rest_framework import generics
 from django.contrib import messages
 from django.db.models.query import QuerySet
@@ -175,3 +175,22 @@ class CGPListViewTemplate(generics.ListCreateAPIView):
             queryset = Vote.objects.filter(group__cgp=cgp).exclude(final_vote=False)
         return queryset
 
+
+class GroupsListViewTemplate(generics.ListCreateAPIView):
+    """
+    Renders the CGP Group API page. Populates it with all participating groups
+    Data:
+         queryset: Queryset (All groups related to the latest active CGP object)
+    """
+
+    queryset = Group.objects.none()
+    serializer_class = GroupSerializer
+    def get_queryset(self):
+        """
+        overrides the original get_queryset method to exclude groups not related to the latest CGP
+        """
+        queryset = super().get_queryset()
+        if isinstance(queryset, QuerySet):
+            cgp = CGP.get_latest_or_create()
+            queryset = Group.objects.filter(cgp=cgp)
+        return queryset
