@@ -76,7 +76,6 @@ def get_vote_groups_or_random(request, group):
     groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
     failure_group, show_group = None, None
     if group.audience:
-        print("hi")
         user_vote_set = group.vote_set.filter(user=request.user).filter(final_vote=False)
         if len(user_vote_set) >= 1:
             groups, failure_group, show_group = user_vote_set[0].get_sorted_groups_list()
