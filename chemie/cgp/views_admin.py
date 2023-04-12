@@ -86,8 +86,6 @@ def group_edit(request, cgp_id, group_id):
     if request.method == "POST":
         form = GroupForm(cgp, group, request.POST, instance=group)#, initial={"country": group.country})
         if form.is_valid():
-
-            print(form.data)
             group = form.save(commit=False)
             group.cgp = cgp
             group.has_voted = False
