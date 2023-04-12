@@ -1,14 +1,17 @@
 from django.shortcuts import HttpResponse, render, get_object_or_404
 from .models import Stocktype, Stock
 from .forms import StocktypeForm, StockOwnerName, Portfolio
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 
 # Create your views here.
 
+@login_required
 def index(request):
     return HttpResponse("under constuction")
 
-
+@login_required
+@permission_required("stock.add_stock")
 def stockadmin(request):
     stocktypes = Stocktype.objects.all()
 
@@ -35,7 +38,8 @@ def stockadmin(request):
     }
     return render(request, "stock/stockadmin.html", context)
 
-
+@login_required
+@permission_required("stock.add_stock")
 def individual(request,id):
     stocktypeobject = get_object_or_404(Stocktype, id=id)
     stocks = stocktypeobject.stock_set.all()
@@ -44,7 +48,8 @@ def individual(request,id):
 
     return render(request, "stock/individual.html", context)
 
-
+@login_required
+@permission_required("stock.add_stock")
 def individualadmin(request, id, individual_id):
     stock = get_object_or_404(Stock, id=individual_id)
 
