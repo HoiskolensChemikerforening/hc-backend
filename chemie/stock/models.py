@@ -12,6 +12,24 @@ class Stocktype(models.Model):
             stock.stocktype = self
             stock.save()
 
+    def get_amount(self):
+        #returns amout of stocks
+        return
+
+    def sell(self, user, amount):
+        #sjekk if user has amount stock
+        #if yes remove from protfolio and update balance
+        return
+
+    def save(self, *args, **kwargs):
+        """
+        Kjører når et stocktype object lagres i databasen
+        """
+        super(Stocktype, self).save(*args, **kwargs)
+        # add code to generate History objects for self
+        # TODO
+
+
     def __str__(self):
         return self.name #returnerer navnet på stocken istendenfor dritt
 
@@ -24,7 +42,7 @@ class Portfolio(models.Model):
         markedvalue = 0
 
         for stocktype in Stocktype.objects.all():
-            stock_amount = len(self.stock_set.filter(stocktype=stocktype))
+            stock_amount = len(self.stock_set.filter(stocktype=stocktype))#stocktype.getstockamount
             value        = stocktype.history_set.order_by("date").first().value
             markedvalue += stock_amount*value
 
