@@ -242,7 +242,7 @@ function handleTouchEnd(event) {
         //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
         if (overlapping.length >= 1) {
             const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
-            swapItems(dragStartIndex, dragEndIndex);
+            bumpItems(dragStartIndex, dragEndIndex);
         }
     }
 }
@@ -280,17 +280,51 @@ function dragDrop() {
   // console.log('Event: ', 'drop');
   const dragEndIndex = +this.getAttribute('data-index');
   this.getElementsByTagName('div')[0].classList.remove('draggable-over');
-  swapItems(dragStartIndex, dragEndIndex);
+  bumpItems(dragStartIndex, dragEndIndex);
 }
 
 // Swap list items that are drag and drop
 function swapItems(fromIndex, toIndex) {
+    //NOT USED
     //swaps 2 <li> elements by index in listItems
+    //bumpItems(fromIndex, toIndex)
   const itemOne = listItems[fromIndex].querySelector('.draggable');
   const itemTwo = listItems[toIndex].querySelector('.draggable');
     //console.log(fromIndex,toIndex)
   listItems[fromIndex].appendChild(itemTwo);
   listItems[toIndex].appendChild(itemOne);
+}
+
+// Bumps list items that are drag and drop up or down
+function bumpItems(fromIndex, toIndex) {
+    //swaps 2 <li> elements by index in listItems
+    let indexDifference = Math.abs(fromIndex-toIndex);
+
+    if (fromIndex > toIndex){
+        //Item moved up
+        //other items have to be moved down
+        const draggedItem = listItems[fromIndex].querySelector('.draggable');
+        let index = toIndex;
+        let toMove = Array(indexDifference)
+            .fill()
+            .map(() => index++)
+            .map((num) => listItems[num].querySelector('.draggable'));
+        listItems[toIndex].appendChild(draggedItem);
+        for (let i = toIndex+1; i <= fromIndex; i++) {
+            listItems[i].appendChild(toMove[i-(toIndex+1)]);}
+    } else if (fromIndex < toIndex) {
+        //Item moved down
+        //other items have to be moved up
+        const draggedItem = listItems[fromIndex].querySelector('.draggable');
+        let index = fromIndex + 1;
+        let toMove = Array(indexDifference)
+            .fill()
+            .map(() => index++)
+            .map((num) => listItems[num].querySelector('.draggable'));
+        listItems[toIndex].appendChild(draggedItem);
+        for (let i = fromIndex; i < toIndex ; i++) {
+            listItems[i].appendChild(toMove[i-fromIndex]);}
+    }
 }
 
 // Submits the votes
