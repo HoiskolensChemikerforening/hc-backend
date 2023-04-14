@@ -102,7 +102,12 @@ def vote_index(request, slug):
         show_group: Group (Group object from a previous vote)
     """
     country = get_object_or_404(Country, slug=slug)
-    group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
+    #group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
+    group_set = Group.objects.filter(country=country).filter(cgp=CGP.get_latest_active())
+    if not group_set:
+        return redirect('/cgp')
+    group = group_set[0]
+
     if not check_group_access(request, group, manage=True):
         return redirect('/cgp')
 
@@ -116,8 +121,9 @@ def vote_index(request, slug):
         showprize = Group.objects.get(id=request.POST.get("showprize"))
         failureprize = Group.objects.get(id=request.POST.get("failureprise"))
         if group.audience:
-            if len(group.vote_set.filter(user=request.user).filter(final_vote=False)) > 0:
-                vote = group.vote_set.filter(user=request.user)[0]
+            audience_vote_set = group.vote_set.filter(user=request.user).filter(final_vote=False)
+            if len(audience_vote_set) > 0:
+                vote = audience_vote_set[0]
             else:
                 vote = Vote()
                 vote.final_vote = False

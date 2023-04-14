@@ -367,6 +367,8 @@
 
 .dragbtn {
   height: 100%;
+  width: 50px;
+  padding-left: 26px;
 }
 
 

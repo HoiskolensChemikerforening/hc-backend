@@ -154,7 +154,7 @@ function handleTouchStart(event) {
     //touch
     //Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
     event.preventDefault();
-    console.log('touchstart');
+    console.log('toooouchstart');
 
     timeout = setTimeout(function (element){
         waiting=false;
@@ -334,7 +334,7 @@ function addEventListeners() {
 
   draggables.forEach(draggable => {
     //mouse
-    draggable.addEventListener('dragstart', dragStart);
+    draggable.parentElement.addEventListener('dragstart', dragStart);
     // touch
     draggable.addEventListener('touchstart', handleTouchStart);
     draggable.addEventListener("touchmove", handleTouchMove);
