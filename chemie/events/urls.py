@@ -1,7 +1,8 @@
-from django.conf.urls import url
 from django.contrib.auth.decorators import login_required, permission_required
 from django.urls import path
+
 from . import views
+from .api_urls import api_urlpatterns
 
 app_name = "events"
 
@@ -56,17 +57,6 @@ urlpatterns = [
             views.ListSocialDeleteView.as_view()
         ),
         name="delete_list_social",
-    ),
-    path("api/social", views.SocialListCreate.as_view(), name="api_social"),
-    path(
-        "api/socialeventregistration",
-        views.SocialEventRegistrationListCreate.as_view(),
-        name="api_socialeventregistration",
-    ),
-    path("api/social/<int:pk>", views.SocialDetail.as_view()),
-    path(
-        "api/socialeventregistration/<int:pk>",
-        views.SocialEventRegistrationDetail.as_view(),
     ),
 ]
 
@@ -123,15 +113,6 @@ urlpatterns += [
         views.ListBedpresDeleteView.as_view(),
         name="delete_list_bedpres",
     ),
-    path("api/bedpres", views.BedpresListCreate.as_view(), name="api_bedpres"),
-    path(
-        "api/bedpresregistration",
-        views.BedpresRegistrationListCreate.as_view(),
-        name="api_bedpresregistration",
-    ),
-    path("api/bedpres/<int:pk>", views.BedpresDetail.as_view()),
-    path(
-        "api/bedpresregistration/<int:pk>",
-        views.BedpresRegistrationDetail.as_view(),
-    ),
 ]
+
+urlpatterns += api_urlpatterns

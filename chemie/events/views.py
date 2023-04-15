@@ -25,7 +25,7 @@ from django.views.generic.list import ListView
 from django.db.models import Q
 
 from chemie.customprofile.forms import GetRFIDForm
-from chemie.customprofile.models import ProfileManager, Profile, User, GRADES
+from chemie.customprofile.models import ProfileManager, Profile, GRADES
 from .email import send_event_mail
 from .extras import MultiFormsView
 from .forms import (
@@ -40,19 +40,9 @@ from .models import (
     Social,
     SocialEventRegistration,
     REGISTRATION_STATUS,
-    RegistrationMessage,
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
-)
-
-from rest_framework import generics
-
-from .serializer import (
-    SocialSerializer,
-    SocialEventRegistrationSerializer,
-    BedpresSerializer,
-    BedpresRegistrationSerializer,
 )
 
 
@@ -881,43 +871,3 @@ def check_in_to_social(request, pk):
             )
     context = {"form": form, "social": social}
     return render(request, "events/social/check_in.html", context)
-
-
-class SocialListCreate(generics.ListCreateAPIView):
-    queryset = Social.objects.all()
-    serializer_class = SocialSerializer
-
-
-class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
-    queryset = SocialEventRegistration.objects.all()
-    serializer_class = SocialEventRegistrationSerializer
-
-
-class BedpresListCreate(generics.ListCreateAPIView):
-    queryset = Bedpres.objects.all()
-    serializer_class = BedpresSerializer
-
-
-class BedpresRegistrationListCreate(generics.ListCreateAPIView):
-    queryset = BedpresRegistration.objects.all()
-    serializer_class = BedpresRegistrationSerializer
-
-
-class SocialDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Social.objects.all()
-    serializer_class = SocialSerializer
-
-
-class SocialEventRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SocialEventRegistration.objects.all()
-    serializer_class = SocialEventRegistrationSerializer
-
-
-class BedpresDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Bedpres.objects.all()
-    serializer_class = BedpresSerializer
-
-
-class BedpresRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = BedpresRegistration.objects.all()
-    serializer_class = BedpresRegistrationSerializer
