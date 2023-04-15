@@ -13,11 +13,12 @@ def index(request):
     stocktypes   = Stocktype.objects.all()
     #portofolioList = Stocktype.objects.filter() på høyre side i bildet
     #markedValue = Portfolio.get_markedvalue(User)
-    coins        = request.user.profile.balance
-    context = {"stocktypes": stocktypes,
+    #coins        = request.user.profile.balance
+    context = {"stocktypes": stocktypes
                #"portofolioList": portofolioList,
                #"markedValue": markedValue,
-               "coins": coins}
+               #"coins": coins
+    }
 
     return render(request, "stock/stock.html", context)
 

@@ -12,17 +12,19 @@
 
 {% block content %}
 
-    <div style = "text-align: center">
+    <div style = "text-align: left">
 
     {% for stocktype in stocktypes %}
-    <a href="{{stocktype.id}}"><p>{{stocktype.name}}</p></a>
-        <div style= "display: flex">
-            <button type = "button">Kjøp</button>
-            <button type = "button">Selg</button>
+        <div style="display: flex;flex-direction: column;border-color: black;border-width: 5px;border: solid;border-radius: 50%">
+            <a href="{{stocktype.id}}"><p> <b>{{stocktype.name}} </b></p></a>
+
+            <div style= "display: flex;flex-direction: row">
+                <button type = "button" style = "background-color: green">Kjøp</button>
+                <button type = "button" style = "background-color: red">Selg</button>
+            </div>
         </div>
     {% endfor %}
     </div>
 
-    <div> <p>HC-Coins: </p> <b> {{ coins }} </b></div>
-
+    <!-- <div> <p>HC-Coins: </p> <b> {{ coins }} </b></div> -->
 {% endblock content %}
