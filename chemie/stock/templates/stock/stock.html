@@ -13,9 +13,16 @@
 {% block content %}
 
     <div style = "text-align: center">
-{% for stocktype in stocktypes %}
-<a href="{{stocktype.id}}"><p>{{stocktype.name}}</p></a>
-{% endfor %}
-</div>
+
+    {% for stocktype in stocktypes %}
+    <a href="{{stocktype.id}}"><p>{{stocktype.name}}</p></a>
+        <div style= "display: flex">
+            <button type = "button">Kjøp</button>
+            <button type = "button">Selg</button>
+        </div>
+    {% endfor %}
+    </div>
+
+    <div> <p>HC-Coins: </p> <b> {{ coins }} </b></div>
 
 {% endblock content %}

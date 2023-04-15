@@ -3,16 +3,21 @@ from .models import Stocktype, Stock, Portfolio
 from .forms import StocktypeForm, StockOwnerName, Portfolio
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
+from chemie.customprofile.models import Profile
 
 # Create your views here.
 
 @login_required
 def index(request):
 
-    stocktypes  = Stocktype.objects.all()
+    stocktypes   = Stocktype.objects.all()
+    #portofolioList = Stocktype.objects.filter() på høyre side i bildet
     #markedValue = Portfolio.get_markedvalue(User)
-
-    context = {"stocktypes": stocktypes}
+    coins        = request.user.profile.balance
+    context = {"stocktypes": stocktypes,
+               #"portofolioList": portofolioList,
+               #"markedValue": markedValue,
+               "coins": coins}
 
     return render(request, "stock/stock.html", context)
 
