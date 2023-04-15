@@ -1,26 +1,40 @@
 from django.shortcuts import HttpResponse, render, get_object_or_404
 from .models import Stocktype, Stock, Portfolio
-from .forms import StocktypeForm, StockOwnerName, Portfolio
+from .forms import StocktypeForm, StockOwnerName
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
 from chemie.customprofile.models import Profile
 
-# Create your views here.
+
 
 @login_required
 def index(request):
 
     stocktypes   = Stocktype.objects.all()
-    #portofolioList = Stocktype.objects.filter() på høyre side i bildet
-    #markedValue = Portfolio.get_markedvalue(User)
-    #coins        = request.user.profile.balance
-    context = {"stocktypes": stocktypes
+    #portofolioList = Stocktype.objects.filter()  på høyre side i bildet
+    #user_portofolio = Portfolio.objects.get(user=request.user)
+    #markedValue     = user_portofolio.get_markedvalue()
+    #coins       = request.user.profile.balance
+
+    context = {"stocktypes": stocktypes,
                #"portofolioList": portofolioList,
-               #"markedValue": markedValue,
-               #"coins": coins
+               #"markedValue": markedValue
+               #"coins": coins}
     }
 
     return render(request, "stock/stock.html", context)
+
+def stock_index(request):
+
+    #name = Stocktype.name
+    #desc
+    #volume
+    #value
+
+    context = {
+    }
+
+    return render(request, "stock/individualstock.html", context)
 
 
 @login_required

@@ -15,7 +15,7 @@
     <div style = "text-align: left">
 
     {% for stocktype in stocktypes %}
-        <div style="display: flex;flex-direction: column;border-color: black;border-width: 5px;border: solid;border-radius: 50%">
+        <div style="display: flex;flex-direction: column;width: 100px;border-color: black;border-width: 5px;border: solid;border-radius: 7.5%;padding:5px">
             <a href="{{stocktype.id}}"><p> <b>{{stocktype.name}} </b></p></a>
 
             <div style= "display: flex;flex-direction: row">
@@ -26,5 +26,12 @@
     {% endfor %}
     </div>
 
-    <!-- <div> <p>HC-Coins: </p> <b> {{ coins }} </b></div> -->
+    <div>
+        <div>
+            <!--
+            <p>HC-Coins: </p> <b> {{ coins }} </b>
+            -->
+            <p>Markedvalue: {{ markedValue }}</p>
+        </div>
+    </div>
 {% endblock content %}

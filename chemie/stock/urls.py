@@ -7,5 +7,6 @@ urlpatterns = [
     path("", views.index, name = "index"),
     path("admin/", views.stockadmin, name = "admin"),
     path("admin/<int:id>", views.individual, name = "individual"),
-    path("admin/<int:id>/<int:individual_id>", views.individualadmin, name="individualadmin")
+    path("admin/<int:id>/<int:individual_id>", views.individualadmin, name="individualadmin"),
+    path("individualstock/<int:id>", views.stock_index, name = "individual stock view")
 ]

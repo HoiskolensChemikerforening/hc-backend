@@ -1,0 +1,21 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block nav_header %}
+  Stoonks
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+<h> Stocktype: {{stocktypeobject.name}}</h>
+{% for stock in stocks %}
+<a href="{{ stocktypeobject.id }}"><p>{% endif %}</p></a>
+{% endfor %}
+
+
+{% endblock content %}

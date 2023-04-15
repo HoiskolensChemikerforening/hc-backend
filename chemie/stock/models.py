@@ -42,7 +42,7 @@ class Portfolio(models.Model):
         markedvalue = 0
 
         for stocktype in Stocktype.objects.all():
-            stock_amount = len(self.stock_set.filter(stocktype=stocktype))#stocktype.getstockamount
+            stock_amount = len(self.stock_set.filter(stocktype=stocktype))       #stocktype.getstockamount
             value        = stocktype.history_set.order_by("date").first().value
             markedvalue += stock_amount*value
 
