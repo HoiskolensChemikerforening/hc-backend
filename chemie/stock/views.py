@@ -1,5 +1,5 @@
 from django.shortcuts import HttpResponse, render, get_object_or_404
-from .models import Stocktype, Stock
+from .models import Stocktype, Stock, Portfolio
 from .forms import StocktypeForm, StockOwnerName, Portfolio
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib.auth.models import User
@@ -8,7 +8,14 @@ from django.contrib.auth.models import User
 
 @login_required
 def index(request):
-    return HttpResponse("under constuction")
+
+    stocktypes  = Stocktype.objects.all()
+    #markedValue = Portfolio.get_markedvalue(User)
+
+    context = {"stocktypes": stocktypes}
+
+    return render(request, "stock/stock.html", context)
+
 
 @login_required
 @permission_required("stock.add_stock")
@@ -34,8 +41,8 @@ def stockadmin(request):
         form = StocktypeForm()
 
     context = {"stocktypes": stocktypes,
-               "form": form
-    }
+               "form": form}
+
     return render(request, "stock/stockadmin.html", context)
 
 @login_required

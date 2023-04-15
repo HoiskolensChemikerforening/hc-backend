@@ -1,0 +1,21 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block nav_header %}
+  Stonks
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+    <div style = "text-align: center">
+{% for stocktype in stocktypes %}
+<a href="{{stocktype.id}}"><p>{{stocktype.name}}</p></a>
+{% endfor %}
+</div>
+
+{% endblock content %}
