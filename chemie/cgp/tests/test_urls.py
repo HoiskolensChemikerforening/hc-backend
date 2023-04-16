@@ -1,7 +1,7 @@
 from django.test import SimpleTestCase
 
 from django.urls import reverse, resolve
-from ..views import index, vote_index, CGPListViewTemplate
+from ..views import index, vote_index, CGPListViewTemplate, GroupsListViewTemplate
 from ..views_admin import cgp_admin, DeleteView, cgp_edit, group_add, group_edit, country_add, country_edit
 
 
@@ -52,5 +52,9 @@ class TestUrls(SimpleTestCase):
     def test_cgpapi_url_is_resolved(self):
         url = reverse("cgp:cgpapi")
         self.assertEqual(resolve(url).func.view_class, CGPListViewTemplate)
+
+    def test_cgpapigroups_url_is_resolved(self):
+        url = reverse("cgp:cgpapigroups")
+        self.assertEqual(resolve(url).func.view_class, GroupsListViewTemplate)
 
 
