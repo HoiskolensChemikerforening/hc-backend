@@ -18,10 +18,11 @@ from django.conf import settings
 from django.urls import path, include
 from django.conf.urls.static import static
 from django.contrib import admin
-from ..customprofile.views import LoginView
 
-from chemie.home.views import index
 from . import views
+from ..customprofile.views import LoginView, CustomTokenObtainPairView
+from rest_framework_simplejwt.views import TokenRefreshView
+from chemie.home.views import index, UserPermissionView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
@@ -65,6 +66,16 @@ urlpatterns = [
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
     path("cgp/",include("chemie.cgp.urls", namespace="cgp")),
+    # For authentication
+    path(
+        "api/token/",
+        CustomTokenObtainPairView.as_view(),
+        name="token_obtain_pair",
+    ),
+    path(
+        "api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"
+    ),
+    path("api/permissions/", UserPermissionView.as_view(), name="permissions"),
     path("api/404/", views.pictures_for_404ListCreate.as_view(), name="404"),
     path("api/sponsor/", views.SponsorListCreate.as_view(), name="sponsor"),
     path("api/404/<int:pk>/", views.pictures_for_404Detail.as_view()),
