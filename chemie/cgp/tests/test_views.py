@@ -33,7 +33,9 @@ class TestViews(TestCase):
         self.client.force_login(self.user)
 
         response = self.client.get(self.vote_index_url)
-        self.assertRedirects(response, '/cgp', status_code=302, target_status_code=301)
+        self.assertRedirects(
+            response, "/cgp", status_code=302, target_status_code=301
+        )
         self.cgp.is_open = True
         self.cgp.save()
         response = self.client.get(self.vote_index_url)
