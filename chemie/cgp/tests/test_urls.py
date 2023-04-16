@@ -1,8 +1,8 @@
 from django.test import SimpleTestCase
 
 from django.urls import reverse, resolve
-from ..views import index
-from ..views_admin import cgp_admin, DeleteView
+from ..views import index, vote_index, CGPListViewTemplate
+from ..views_admin import cgp_admin, DeleteView, cgp_edit, group_add, group_edit, country_add, country_edit
 
 
 class TestUrls(SimpleTestCase):
@@ -21,21 +21,36 @@ class TestUrls(SimpleTestCase):
         url = reverse("cgp:country_delete", args=[1])
         self.assertEqual(resolve(url).func.view_class, DeleteView)
 
+    def test_cgp_edit_url_is_resolved(self):
+        url = reverse("cgp:cgp_edit", args=[1])
+        self.assertEqual(resolve(url).func, cgp_edit)
 
-"""
+    def test_group_add_url_is_resolved(self):
+        url = reverse("cgp:group_add", args=[1])
+        self.assertEqual(resolve(url).func, group_add)
 
-path("admin/", views_admin.cgp_admin, name="cgp_admin"),
-    path("admin/<int:cgp_id>/", views_admin.cgp_edit, name="cgp_edit"),
-    path("admin/<int:cgp_id>/group/add/", views_admin.group_add, name="group_add"),
-    path("admin/<int:cgp_id>/group/<int:group_id>/", views_admin.group_edit, name="group_edit"),
-    path("admin/<int:cgp_id>/group/<int:group_id>/delete/", views_admin.DeleteView.as_view(
-            key="group_id", objecttype=Group, redirect_url="cgp_edit"), name="group_delete"
-        ),
-    path("admin/country/add/", views_admin.country_add, name="country_add"),
-    path("admin/country/<int:country_id>/", views_admin.country_edit, name="country_edit"),
-    path("admin/country/<int:country_id>/delete/", views_admin.DeleteView.as_view(
-        key="country_id", objecttype=Country, redirect_url="cgp_admin"), name="country_delete"
-         ),
-    path("<slug:slug>/", views.vote_index, name="vote_index"),
-    path("api", views.CGPListViewTemplate.as_view(), name="cgpapi"),
-"""
+    def test_group_edit_url_is_resolved(self):
+        url = reverse("cgp:group_edit", args=[1, 1])
+        self.assertEqual(resolve(url).func, group_edit)
+
+    def test_country_add_url_is_resolved(self):
+        url = reverse("cgp:country_add")
+        self.assertEqual(resolve(url).func, country_add)
+
+    def test_country_edit_url_is_resolved(self):
+        url = reverse("cgp:country_edit", args=[1])
+        self.assertEqual(resolve(url).func, country_edit)
+
+    def test_vote_index_url_is_resolved(self):
+        url = reverse("cgp:vote_index", args=["cytosolkysten"])
+        self.assertEqual(resolve(url).func, vote_index)
+
+    def test_group_delete_url_is_resolved(self):
+        url = reverse("cgp:group_delete", args=[1, 1])
+        self.assertEqual(resolve(url).func.view_class, DeleteView)
+
+    def test_cgpapi_url_is_resolved(self):
+        url = reverse("cgp:cgpapi")
+        self.assertEqual(resolve(url).func.view_class, CGPListViewTemplate)
+
+
