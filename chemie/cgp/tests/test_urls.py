@@ -4,8 +4,8 @@ from django.urls import reverse, resolve
 from ..views import index
 from ..views_admin import cgp_admin, DeleteView
 
-class TestUrls(SimpleTestCase):
 
+class TestUrls(SimpleTestCase):
     def test_index_url_is_resolved(self):
         """
         gets viewfunction by url and compares it with the viewfunction expected

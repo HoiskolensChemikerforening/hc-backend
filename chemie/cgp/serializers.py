@@ -14,6 +14,7 @@ class CGPSerializer(serializers.ModelSerializer):
         failureprize_vote: str (name of the failureprize country)
         showprize_vote: str (name of the showprize country)
     """
+
     countryname = SerializerMethodField()
     groupname = SerializerMethodField()
     songname = SerializerMethodField()
@@ -63,7 +64,12 @@ class CGPSerializer(serializers.ModelSerializer):
         Returns:
             vote: list
         """
-        return vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")
+        return (
+            vote.vote.replace("]", "")
+            .replace("[", "")
+            .replace('"', "")
+            .split(",")
+        )
 
     def get_failureprize_vote(self, vote):
         """
@@ -95,7 +101,7 @@ class CGPSerializer(serializers.ModelSerializer):
             "songname",
             "vote",
             "failureprize_vote",
-            "showprize_vote"
+            "showprize_vote",
         )
 
 
@@ -110,6 +116,7 @@ class GroupSerializer(serializers.ModelSerializer):
         countryimage: str (url to the corresponding country image)
         year: int (CGP year)
     """
+
     countryname = SerializerMethodField()
     countryimage = SerializerMethodField()
     year = SerializerMethodField()
@@ -134,7 +141,7 @@ class GroupSerializer(serializers.ModelSerializer):
         Returns:
             countryimageurl: str
         """
-        request = self.context.get('request')
+        request = self.context.get("request")
         return request.build_absolute_uri(group.country.image.url)
 
     def get_year(self, group):
@@ -148,15 +155,13 @@ class GroupSerializer(serializers.ModelSerializer):
         """
         return group.cgp.year
 
-
-
     class Meta:
         model = Group
-        fields = ("countryname", "real_name", "song_name", "audience", "countryimage", "year")
-
-
-
-
-
-
-
+        fields = (
+            "countryname",
+            "real_name",
+            "song_name",
+            "audience",
+            "countryimage",
+            "year",
+        )

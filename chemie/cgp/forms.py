@@ -9,7 +9,8 @@ class GroupForm(forms.ModelForm):
     excluded fields (must be populated in view): cgp, has_voted
     """
 
-    country = forms.ModelChoiceField(queryset=None, label='Land')
+    country = forms.ModelChoiceField(queryset=None, label="Land")
+
     def __init__(self, cgp, group=None, *args, **kwargs):
         """
         Overwrites the init method to prevent used countries from showing up in the countries field.
@@ -30,12 +31,15 @@ class GroupForm(forms.ModelForm):
         groups = cgp.group_set.all()
         if group:
             groups = cgp.group_set.exclude(id=group.id)
-        self.fields['country'].queryset = Country.objects.exclude(group__in=groups)
+        self.fields["country"].queryset = Country.objects.exclude(
+            group__in=groups
+        )
 
     class Meta:
         model = Group
-        fields = ("__all__")
-        exclude = ("cgp", "has_voted",)
+        fields = "__all__"
+        exclude = ("cgp", "has_voted")
+
 
 class CountryForm(forms.ModelForm):
     """
@@ -43,8 +47,8 @@ class CountryForm(forms.ModelForm):
     fields: country_name, image
     excluded fields (must be populated in view): slug
     """
+
     class Meta:
         model = Country
-        fields = ("__all__")
+        fields = "__all__"
         exclude = ("slug",)
-

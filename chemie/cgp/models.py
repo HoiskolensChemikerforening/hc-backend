@@ -6,6 +6,8 @@ from django.urls import reverse
 
 # Points list: 12 points to country at index 0, ...
 POINTS = [12, 10, 8, 7, 6, 5, 4, 3, 2, 1]
+
+
 def reverse_sort_dict_keys(dictionary):
     """
     Sorts the keys of a dictionary by value in reverse order.
@@ -14,12 +16,15 @@ def reverse_sort_dict_keys(dictionary):
     Returns:
         sorted keys of the dictionary (key with the highest value first): list
     """
-    return [i[0] for i in sorted(
-        dictionary.items(),
-        key=lambda item: item[1],
-        reverse=True)]
+    return [
+        i[0]
+        for i in sorted(
+            dictionary.items(), key=lambda item: item[1], reverse=True
+        )
+    ]
 
-def add_to_dict(dictionary,key, value):
+
+def add_to_dict(dictionary, key, value):
     """
     Adds a key value pair to a dictionary or increases the value if the key already exists.
     Args:
@@ -45,6 +50,7 @@ class CGP(models.Model):
     Related:
         group_set: queryset (Group objects)
     """
+
     """
     Todo test 2 publikum countries
     year er egentlig data unique slik at man bare kan lage en cgp per år men akkurat nå er det per dag. Vet ikke om det breaker logikken et setd
@@ -81,7 +87,6 @@ class CGP(models.Model):
             return None
         return cgps[0]
 
-
     @classmethod
     def get_amount_open(cls):
         """
@@ -92,7 +97,6 @@ class CGP(models.Model):
             amount: int
         """
         return len(CGP.objects.filter(is_open=True))
-
 
     @classmethod
     def get_latest_or_create(cls):
@@ -134,9 +138,9 @@ class CGP(models.Model):
             None
         """
         if len(Group.objects.filter(cgp=self).filter(audience=True)) > 0:
-            all_audience_votes = Vote.objects \
-                .filter(group__cgp=self) \
-                .filter(group__audience=True)
+            all_audience_votes = Vote.objects.filter(group__cgp=self).filter(
+                group__audience=True
+            )
             audience_votes = all_audience_votes.filter(final_vote=False)
             audience_final_votes = all_audience_votes.filter(final_vote=True)
             if len(audience_votes) > 0:
@@ -145,27 +149,48 @@ class CGP(models.Model):
                 failure_vote_dict = {}
                 for vote in audience_votes:
                     for count, country in enumerate(
-                            vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")):
+                        vote.vote.replace("]", "")
+                        .replace("[", "")
+                        .replace('"', "")
+                        .split(",")
+                    ):
                         if count >= len(POINTS):
                             break
-                        vote_dict = add_to_dict(vote_dict, country, POINTS[count])
-                    show_vote_dict = add_to_dict(show_vote_dict, vote.showprize_vote, 1)
-                    failure_vote_dict = add_to_dict(failure_vote_dict, vote.failureprize_vote, 1)
+                        vote_dict = add_to_dict(
+                            vote_dict, country, POINTS[count]
+                        )
+                    show_vote_dict = add_to_dict(
+                        show_vote_dict, vote.showprize_vote, 1
+                    )
+                    failure_vote_dict = add_to_dict(
+                        failure_vote_dict, vote.failureprize_vote, 1
+                    )
 
                 if len(audience_final_votes) > 0:
                     audience_final_vote = audience_final_votes[0]
                 else:
                     audience_final_vote = Vote()
                     audience_final_vote.final_vote = True
-                    audience_final_vote.group = Group.objects.filter(cgp=self).get(audience=True)
+                    audience_final_vote.group = Group.objects.filter(
+                        cgp=self
+                    ).get(audience=True)
                 audience_final_vote.user = user
-                audience_final_vote.vote = ",".join(reverse_sort_dict_keys(vote_dict))
-                audience_final_vote.showprize_vote = reverse_sort_dict_keys(show_vote_dict)[0]
-                audience_final_vote.failureprize_vote = reverse_sort_dict_keys(failure_vote_dict)[0]
+                audience_final_vote.vote = ",".join(
+                    reverse_sort_dict_keys(vote_dict)
+                )
+                audience_final_vote.showprize_vote = reverse_sort_dict_keys(
+                    show_vote_dict
+                )[0]
+                audience_final_vote.failureprize_vote = reverse_sort_dict_keys(
+                    failure_vote_dict
+                )[0]
                 audience_final_vote.save()
         return
+
+
 def __str__(self):
     return f"{self.year}"
+
 
 class Country(models.Model):
     """
@@ -178,8 +203,13 @@ class Country(models.Model):
     Related:
         group_set: queryset (Group objects)
     """
-    country_name = models.CharField(max_length=50, unique=True, verbose_name="Navn")
-    image = ImageField(upload_to="cgp", null=True, blank=True, verbose_name="Bilde")
+
+    country_name = models.CharField(
+        max_length=50, unique=True, verbose_name="Navn"
+    )
+    image = ImageField(
+        upload_to="cgp", null=True, blank=True, verbose_name="Bilde"
+    )
     slug = models.SlugField(unique=True)
 
     def __str__(self):
@@ -194,7 +224,6 @@ class Country(models.Model):
             url: str
         """
         return reverse("cgp:vote_index", kwargs={"slug": self.slug})
-
 
 
 class Group(models.Model):
@@ -214,14 +243,26 @@ class Group(models.Model):
         failurevote.all(): queryset (Vote objects (created by other groups))
         showvote.all(): queryset (Vote objects (created by other groups))
     """
+
     real_name = models.CharField(max_length=50, verbose_name="Gruppenavn")
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL, null=True, verbose_name="Land")
+    country = models.ForeignKey(
+        Country, on_delete=models.SET_NULL, null=True, verbose_name="Land"
+    )
     cgp = models.ForeignKey(CGP, on_delete=models.CASCADE)
-    song_name = models.CharField(max_length=100, blank=True, verbose_name="Sangtittel")
+    song_name = models.CharField(
+        max_length=100, blank=True, verbose_name="Sangtittel"
+    )
     audience = models.BooleanField(verbose_name="Publikum", default=False)
     has_voted = models.BooleanField(verbose_name="Har stemt", default=False)
-    group_leaders = models.ManyToManyField(User, related_name="group_leaders", blank=True, verbose_name="Ledere")
-    group_members = models.ManyToManyField(User, related_name="group_members", blank=True, verbose_name="Medlemmer")
+    group_leaders = models.ManyToManyField(
+        User, related_name="group_leaders", blank=True, verbose_name="Ledere"
+    )
+    group_members = models.ManyToManyField(
+        User,
+        related_name="group_members",
+        blank=True,
+        verbose_name="Medlemmer",
+    )
 
     def __str__(self):
         return f"{self.real_name}"
@@ -232,7 +273,9 @@ class Group(models.Model):
         """
         for group in self.cgp.group_set.all():
             for vote in group.vote_set.all():
-                if self.country.country_name in vote.vote.replace("]", "").replace("[", "").replace("\"", "").split(","):
+                if self.country.country_name in vote.vote.replace(
+                    "]", ""
+                ).replace("[", "").replace('"', "").split(","):
                     vote.delete()
         return super().delete(using=None, keep_parents=False)
 
@@ -248,12 +291,17 @@ class Vote(models.Model):
         failureprize_vote: ForeignKey (Group object which received the failureprize vote)
         showprize_vote: ForeignKey (Group object which received the showprize vote)
     """
+
     final_vote = models.BooleanField(default=False)
     group = models.ForeignKey(Group, on_delete=models.CASCADE)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     vote = models.TextField(blank=True)
-    failureprize_vote = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="failurevote")
-    showprize_vote = models.ForeignKey(Group, on_delete=models.CASCADE, related_name="showvote")
+    failureprize_vote = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name="failurevote"
+    )
+    showprize_vote = models.ForeignKey(
+        Group, on_delete=models.CASCADE, related_name="showvote"
+    )
 
     def get_sorted_groups_list(self):
         """
@@ -266,17 +314,19 @@ class Vote(models.Model):
             self.failureprize_vote: Group (Group object which received the failureprize vote)
             self.showprize_vote: Group  (Group object which received the showprize vote)
         """
-        vote_list = self.vote.replace("]", "").replace("[", "").replace("\"", "").split(",")
+        vote_list = (
+            self.vote.replace("]", "")
+            .replace("[", "")
+            .replace('"', "")
+            .split(",")
+        )
         vote_dict = {vote_list[i]: i for i in range(len(vote_list))}
         group_list = sorted(
             list(
-                self.group.cgp.group_set.exclude(id=self.group.id).exclude(audience=True)
-                 ),
-            key=lambda group: vote_dict[group.country.country_name])
+                self.group.cgp.group_set.exclude(id=self.group.id).exclude(
+                    audience=True
+                )
+            ),
+            key=lambda group: vote_dict[group.country.country_name],
+        )
         return group_list, self.failureprize_vote, self.showprize_vote
-
-
-
-
-
-

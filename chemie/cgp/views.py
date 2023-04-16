@@ -8,6 +8,7 @@ from rest_framework import generics
 from django.contrib import messages
 from django.db.models.query import QuerySet
 
+
 @login_required
 def index(request):
     """
@@ -26,16 +27,20 @@ def index(request):
     if not cgp:
         context = {"cgp": CGP.get_latest_or_create(), "open": False}
         return render(request, "cgp/index.html", context)
-    groups = Group.objects.filter(group_leaders__in=[request.user]).filter(cgp=cgp)
+    groups = Group.objects.filter(group_leaders__in=[request.user]).filter(
+        cgp=cgp
+    )
     audience = list(Group.objects.filter(audience=True, cgp=cgp))
     if len(audience) > 0:
         audience = [audience[0].country]
     countries = set([group.country for group in groups])
-    context = {"countries": countries,
-               "audience": audience,
-               "groups": groups,
-               "open": True,
-               "cgp": cgp}
+    context = {
+        "countries": countries,
+        "audience": audience,
+        "groups": groups,
+        "open": True,
+        "cgp": cgp,
+    }
 
     return render(request, "cgp/index.html", context)
 
@@ -73,16 +78,25 @@ def get_vote_groups_or_random(request, group):
     """
     cgp = group.cgp
     vote_set = group.vote_set.filter(final_vote=True)
-    groups = cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by('?')
+    groups = (
+        cgp.group_set.exclude(id=group.id).exclude(audience=True).order_by("?")
+    )
     failure_group, show_group = None, None
     if group.audience:
-        user_vote_set = group.vote_set.filter(user=request.user).filter(final_vote=False)
+        user_vote_set = group.vote_set.filter(user=request.user).filter(
+            final_vote=False
+        )
         if len(user_vote_set) >= 1:
-            groups, failure_group, show_group = user_vote_set[0].get_sorted_groups_list()
+            groups, failure_group, show_group = user_vote_set[
+                0
+            ].get_sorted_groups_list()
     elif len(vote_set) >= 1:
-        print(2333424)
-        groups, failure_group, show_group = vote_set[0].get_sorted_groups_list()
+        print(2_333_424)
+        groups, failure_group, show_group = vote_set[
+            0
+        ].get_sorted_groups_list()
     return groups, failure_group, show_group
+
 
 @login_required
 def vote_index(request, slug):
@@ -102,26 +116,34 @@ def vote_index(request, slug):
         show_group: Group (Group object from a previous vote)
     """
     country = get_object_or_404(Country, slug=slug)
-    #group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
-    group_set = Group.objects.filter(country=country).filter(cgp=CGP.get_latest_active())
+    # group = get_object_or_404(Group, country=country, cgp=CGP.get_latest_active())
+    group_set = Group.objects.filter(country=country).filter(
+        cgp=CGP.get_latest_active()
+    )
     if not group_set:
-        return redirect('/cgp')
+        return redirect("/cgp")
     group = group_set[0]
 
     if not check_group_access(request, group, manage=True):
-        return redirect('/cgp')
+        return redirect("/cgp")
 
-    groups, failure_group, show_group = get_vote_groups_or_random(request, group)
+    groups, failure_group, show_group = get_vote_groups_or_random(
+        request, group
+    )
 
     points = POINTS
     if request.method == "POST":
-        if not request.POST.get("showprize") or not request.POST.get("failureprise"):
+        if not request.POST.get("showprize") or not request.POST.get(
+            "failureprise"
+        ):
             return JsonResponse({}, status=422)
         countryNames = request.POST.getlist("countryNames[]")
         showprize = Group.objects.get(id=request.POST.get("showprize"))
         failureprize = Group.objects.get(id=request.POST.get("failureprise"))
         if group.audience:
-            audience_vote_set = group.vote_set.filter(user=request.user).filter(final_vote=False)
+            audience_vote_set = group.vote_set.filter(
+                user=request.user
+            ).filter(final_vote=False)
             if len(audience_vote_set) > 0:
                 vote = audience_vote_set[0]
             else:
@@ -141,7 +163,10 @@ def vote_index(request, slug):
         vote.user = request.user
         vote.save()
         messages.add_message(
-            request, messages.SUCCESS, f"Dersom du ønsker å redigere stemmen din, kan du stemme på nytt så lenge valget er åpent.", extra_tags="Stemme registrert"
+            request,
+            messages.SUCCESS,
+            f"Dersom du ønsker å redigere stemmen din, kan du stemme på nytt så lenge valget er åpent.",
+            extra_tags="Stemme registrert",
         )
         return JsonResponse({"url": reverse("cgp:index")}, status=200)
 
@@ -154,13 +179,11 @@ def vote_index(request, slug):
         "points": ",".join([str(i) for i in points]),
         "failure_group": failure_group,
         "show_group": show_group,
-               }
+    }
     return render(request, "cgp/vote_index.html", context)
 
 
-
-
-#API views
+# API views
 class CGPListViewTemplate(generics.ListCreateAPIView):
     """
     Renders the CGP API page. Populates it with all final votes.
@@ -170,6 +193,7 @@ class CGPListViewTemplate(generics.ListCreateAPIView):
 
     queryset = Vote.objects.none()
     serializer_class = CGPSerializer
+
     def get_queryset(self):
         """
         overrides the original get_queryset method to exclude votes not related to the latest CGP
@@ -177,7 +201,9 @@ class CGPListViewTemplate(generics.ListCreateAPIView):
         queryset = super().get_queryset()
         if isinstance(queryset, QuerySet):
             cgp = CGP.get_latest_or_create()
-            queryset = Vote.objects.filter(group__cgp=cgp).exclude(final_vote=False)
+            queryset = Vote.objects.filter(group__cgp=cgp).exclude(
+                final_vote=False
+            )
         return queryset
 
 
@@ -190,6 +216,7 @@ class GroupsListViewTemplate(generics.ListCreateAPIView):
 
     queryset = Group.objects.none()
     serializer_class = GroupSerializer
+
     def get_queryset(self):
         """
         overrides the original get_queryset method to exclude groups not related to the latest CGP
