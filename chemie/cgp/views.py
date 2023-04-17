@@ -91,7 +91,6 @@ def get_vote_groups_or_random(request, group):
                 0
             ].get_sorted_groups_list()
     elif len(vote_set) >= 1:
-        print(2_333_424)
         groups, failure_group, show_group = vote_set[
             0
         ].get_sorted_groups_list()
@@ -107,6 +106,7 @@ def vote_index(request, slug):
         slug: str (slugified countryname)
     Context:
         country: Country (current Country object)
+        current_group: Group (current Group object)
         groups: Queryset (containing all Group objects that can be voted for by the current Group object)
         countries: str (containing all country names that can be voted for by the current Group object seperated by ",")
         realnames: str (containing all group names that can be voted for by the current Group object seperated by ",")
@@ -172,6 +172,7 @@ def vote_index(request, slug):
 
     context = {
         "country": country,
+        "current_group": group,
         "groups": groups,
         "countries": ",".join([i.country.country_name for i in groups]),
         "realnames": ",".join([i.real_name for i in groups]),
