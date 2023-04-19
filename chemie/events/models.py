@@ -6,7 +6,7 @@ from django.utils import timezone
 from extended_choices import Choices
 from sorl.thumbnail import ImageField
 
-from chemie.customprofile.models import GRADES
+from chemie.customprofile.models import GRADES, SPECIALIZATION
 from chemie.committees.models import Committee
 from .email import send_event_mail
 
@@ -23,6 +23,8 @@ ARRIVAL_STATUS = Choices(
     ("TRUANT", 3, "Ikke møtt"),
 )
 
+def get_default_specialization_for_event():
+    return [SPECIALIZATION.NONE]
 
 class BaseEvent(models.Model):
     # Name of the event
@@ -132,6 +134,9 @@ class BaseEvent(models.Model):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+        self.updateWaitingList()
+
+    def updateWaitingList(self):
         self.bump_waiting()
         if self.allowed_grades_previous:
             new_grades = set(self.allowed_grades) - set(
@@ -203,10 +208,20 @@ class Social(BaseEvent):
         return "social"
 
 
+
 class Bedpres(BaseEvent):
+    def __init__(self, *arg, **kwargs):
+        super().__init__(*arg, **kwargs)
+        self.allowed_specializations_previous = self.allowed_specializations
+
     author = models.ForeignKey(
         User, related_name="+", on_delete=models.CASCADE
     )
+    allowed_specializations = ArrayField(
+        models.IntegerField(choices=SPECIALIZATION),
+        default=get_default_specialization_for_event,
+    )
+
     attendees = models.ManyToManyField(User, through="BedpresRegistration")
 
     def get_absolute_url(self):
@@ -221,6 +236,26 @@ class Bedpres(BaseEvent):
     def get_model_type(self):
         return "bedpres"
 
+    def allowed_specialization(self, user):
+        return user.profile.specialization in self.allowed_specializations
+
+    def updateWaitingList(self):
+        self.bump_waiting()
+        if self.allowed_grades_previous and self.allowed_specializations_previous:
+            new_grades = set(self.allowed_grades) - set(
+                self.allowed_grades_previous
+            )
+            new_specializations = set(self.allowed_specializations) - set(self.allowed_specializations_previous)
+
+            if new_grades or new_specializations:
+                # Update all relevant attendees
+                self.attendees.through.objects.filter(
+                    user__profile__grade__in=self.allowed_grades,
+                    user__profile__specialization__in=self.allowed_specializations,
+                    status=REGISTRATION_STATUS.INTERESTED,
+                ).update(status=REGISTRATION_STATUS.WAITING)
+                # Bump once more in case the slot-count was increased as well
+                self.bump_waiting()
 
 class RegistrationManager(models.Manager):
     def de_register(self, reg_to_be_deleted):
