@@ -165,7 +165,7 @@ def vote_index(request, slug):
         messages.add_message(
             request,
             messages.SUCCESS,
-            f"Dersom du ønsker å redigere stemmen din, kan du stemme på nytt så lenge valget er åpent.",
+            f"Dersom du ønsker å redigere stemmen din kan du stemme på nytt så lenge valget er åpent.",
             extra_tags="Stemme registrert",
         )
         return JsonResponse({"url": reverse("cgp:index")}, status=200)
