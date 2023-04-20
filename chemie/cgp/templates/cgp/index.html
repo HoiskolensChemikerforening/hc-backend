@@ -75,6 +75,7 @@
         </button>
       </div>
       <div class="modal-body">
+      {%  if open %}
         <p><b>Stem:</b> Her sender du inn din individuelle stemme. Dersom du allerede har sendt inn stemmen
             din, kan du redigere den ved å trykke på knappen én gang til.
         </p>
@@ -85,7 +86,9 @@
             kan den redigeres ved å trykke på knappen én gang til.
         </p>
           {% endif %}
-
+      {% else %}
+          Gå hjem <3
+        {% endif %}
 
       </div>
       <div class="modal-footer">
