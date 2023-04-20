@@ -68,4 +68,29 @@
         <a  href="{% url 'cgp:index' %}"><button class="returnbtn" type="button"> Tilbake </button></a>
     </div>
 
+         <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>Chemie Grand Prix:</b> Trykk på et årstall for å endre på deltagene grupper.
+        </p>
+        <p>
+          <b>Land: </b> Legg til/Rediger land.
+        </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock content %}
