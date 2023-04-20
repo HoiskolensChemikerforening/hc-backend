@@ -16,6 +16,14 @@
 <div class="outerdiv">
     {%  if open %}
     <div style="text-align: center">
+        <div style="width: 100%;    margin-top: -10px; margin-bottom: -15px; display: flex; flex-direction: row-reverse;">
+        <button type="button" class="btn btn-seccondary" style="padding: 0px;margin: 0px;" data-toggle="modal" data-target="#instruksModal"
+        style="background-color: transparent">
+        <a style="color: white"><i class="material-icons">
+            help_outline
+          </i></a>
+      </button>
+            </div>
         <hr class="whiteline">
         <h1>Chemie Grand Prix {{ cgp.year }}</h1>
         <hr class="whiteline">
@@ -29,7 +37,7 @@
 
     {% if countries %}
     <div class="dropdown">
-        <button class="dropbtn-small">Gruppestemme</button>
+        <button class="dropbtn-small">Gruppeleder</button>
         <div class="dropdown-content">
         {% for group in groups %}
             <a href="{{group.country.get_absolute_url}}"> {{group.real_name}} </a>
@@ -63,5 +71,36 @@
   </div>
 </div>
 {% endif %}
+
+    <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>Stem:</b> Her sender du inn din individuell stemme. Dersom du allerede har sendt inn stemmen
+            din kan du redigere den ved å trykke på knappen en gang til.
+        </p>
+          {% if countries %}
+        <p>
+          <b>Gruppeleder: </b>   Her stemmer du på vegene av gruppen din. Denne knappen vises bare dersom du er satt
+            opp som gruppeleder. Dersom du allerede har sendt inn en stemme på vegne av din gruppe
+            kan den redigeres ved å trykke på knappen en gang til.
+        </p>
+          {% endif %}
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
 
 {% endblock %}
