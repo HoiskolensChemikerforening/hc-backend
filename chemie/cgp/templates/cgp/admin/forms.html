@@ -28,6 +28,7 @@
             </div>
     </form>
     <hr class="whiteline">
+    <a  href="{% if type == "Land" %} {% url 'cgp:cgp_admin' %}{% else %}{% url 'cgp:cgp_edit' cgp.id %}{% endif %} "><button class="returnbtn" type="button"> Tilbake </button></a>
     </div>
 
 {% endblock content %}

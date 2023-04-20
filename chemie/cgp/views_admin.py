@@ -101,7 +101,7 @@ def group_edit(request, cgp_id, group_id):
                 extra_tags="Endret",
             )
             return redirect(reverse("cgp:cgp_edit", kwargs={"cgp_id": cgp_id}))
-    context = {"object": group, "form": form, "type": "Gruppe"}
+    context = {"object": group, "form": form, "type": "Gruppe", "cgp": cgp}
     return render(request, "cgp/admin/forms.html", context)
 
 
@@ -133,7 +133,7 @@ def group_add(request, cgp_id):
         )
         return redirect(reverse("cgp:cgp_edit", kwargs={"cgp_id": cgp_id}))
 
-    context = {"form": form, "type": "Gruppe"}
+    context = {"form": form, "type": "Gruppe", "cgp":cgp}
     return render(request, "cgp/admin/forms.html", context)
 
 
