@@ -9,7 +9,7 @@ class CGPTestCase(TestCase):
         self.cgp = CGP.objects.create(year=1995)
         CGP.objects.create(year=2000)
         self.user = User.objects.create(
-            username="Kåre Oh", password="kann", email="gut@lesen.com"
+            username="Kaare Oh", password="kann", email="gut@lesen.com"
         )
 
     def test_if_get_latest_or_create_returns_latest(self):
