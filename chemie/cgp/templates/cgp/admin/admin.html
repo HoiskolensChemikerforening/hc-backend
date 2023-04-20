@@ -1,0 +1,96 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+    <div class="outerdiv">
+    <hr class="whiteline">
+        <div style="text-align: center">
+            <h1>Admin</h1>
+        </div>
+        <hr class="whiteline">
+
+        <h2>Chemie Grand Prix</h2>
+
+        {% for cgp in cgps %}
+        <a href="{% url 'cgp:cgp_edit' cgp.id  %}">
+            <div class="draggable draggable-list">
+                <div>
+                    <p class="country-name">{{ cgp.year }}</p>
+                </div>
+            </div>
+        </a>
+        {% endfor %}
+
+        <a href="#">
+            <div class="draggable draggable-list">
+                <div>
+                    <form method="post">
+                    {% csrf_token %}
+                        <button class="invisible-btn" type="submit">Opprett ny CGP</button>
+                    </form>
+                </div>
+                <div class="country-name"> + </div>
+            </div>
+        </a>
+
+
+
+        <hr class="whiteline">
+        <h2> Land </h2>
+        {% for country in countries %}
+        <a href="{% url 'cgp:country_edit' country.id %}">
+            <div class="draggable draggable-list">
+                <div >
+                    <p class="country-name">{{ country.country_name }}</p>
+                </div>
+                {% if country.image %}
+                <img alt="{{ country.country_name }}" src="{{ country.image.url }}" style="display: inline-block; width: 40px">
+                {% endif %}
+            </div>
+        </a>
+        {% endfor %}
+
+        <a href="{% url 'cgp:country_add'  %}">
+            <div class="draggable draggable-list">
+                <div >
+                    <div class="country-name">Legg til Land</div>
+                    <div></div>
+                    <div></div>
+                </div>
+                <div class="country-name">+</div>
+            </div>
+        </a>
+        <hr class="whiteline">
+
+        <a  href="{% url 'cgp:index' %}"><button class="returnbtn" type="button"> Tilbake </button></a>
+    </div>
+
+         <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>Chemie Grand Prix:</b> Trykk på et årstall for å endre på deltagene grupper.
+        </p>
+        <p>
+          <b>Land: </b> Legg til/Rediger land.
+        </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}

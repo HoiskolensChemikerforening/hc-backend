@@ -65,6 +65,7 @@ urlpatterns = [
         "utleie/",
         include("chemie.rentalservice.urls", namespace="rentalservice"),
     ),
+    path("cgp/",include("chemie.cgp.urls", namespace="cgp")),
     # For authentication
     path(
         "api/token/",

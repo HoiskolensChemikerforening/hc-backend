@@ -1,0 +1,80 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+    <div class="outerdiv">
+        <div style="text-align: center">
+    <hr class="whiteline">
+    <h1>Chemie Grand Prix {{ cgp.year }}</h1>
+    <form method="post">
+    {% csrf_token %}
+    <button style="background: {% if cgp.is_open %}#911a00 {% else %} #248a00 {% endif %}; border-radius: 10px; border-color: black; color:white; margin-top:30px; margin-bottom:30px;padding: 10px" type="submit">{% if cgp.is_open %} Steng valget {% else %} Åpne valget {% endif %} </button>
+    </form>
+    <hr class="whiteline">
+    </div>
+    <h2> Grupper </h2>
+    {% for group in groups %}
+        <a href="{% url 'cgp:group_edit' cgp.id group.id %}">
+
+        <div class="draggable draggable-list">
+            <div >
+            <p class="country-name">{{ group.real_name }}</p>
+                <p class="country-info">{{ group.country.country_name }}</p>
+                <p class="country-info">{{ group.song_name }}</p></div>
+            {% if group.country.image %}
+            <img alt="{{ group.country.country_name }}" src="{{ group.country.image.url }}" style="display: inline-block; width: 40px">
+            {% endif %}
+        </div>
+
+        </a>
+
+    {% endfor %}
+    <a href="{% url 'cgp:group_add' cgp.id %}">
+        <div class="draggable draggable-list">
+            <div >
+            <div class="country-name">Legg til Gruppe</div> <div></div> <div></div></div>
+            <div class="country-name">+</div>
+        </div>
+        </a>
+
+
+    <hr class="whiteline">
+
+    <a  href="{% url 'cgp:cgp_admin' %}"><button class="returnbtn" type="button"> Tilbake </button></a>
+    </div>
+
+
+    </div>
+
+     <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>Steng/Åpne valget:</b> Publikumsstemmen genereres når valget stenger.
+        </p>
+        <p>
+          <b>Grupper: </b> Legg til/Rediger deltagende grupper. Trykk på tilbake knappen, dersom du ønsker å legge til
+            nye land. Husk å legg til publikumet.
+        </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+{% endblock content %}

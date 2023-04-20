@@ -1,0 +1,57 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles%}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+    <div class="outerdiv">
+        <hr class="whiteline">
+        <div style="text-align: center">
+        <h1> {{ type }} </h1>
+        </div>
+        <hr class="whiteline">
+
+    <form class="submitform" method="post" enctype="multipart/form-data">
+        <div class=formdiv>
+        {% csrf_token %}
+        {{ form }}
+        {{ formmembers }}
+            </div>
+
+        <div class="formbtndiv">
+
+         {% if object %}
+        <a href="delete"><button class="formbtn" type="button">Slett</button></a>
+            {% endif %}
+        <button class="formbtn" type="submit"> Lagre </button>
+            </div>
+    </form>
+    <hr class="whiteline">
+    <a  href="{% if type == "Land" %} {% url 'cgp:cgp_admin' %}{% else %}{% url 'cgp:cgp_edit' cgp.id %}{% endif %} "><button class="returnbtn" type="button"> Tilbake </button></a>
+    </div>
+
+
+         <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>{{ type }}:</b> Legg til/rediger {{ type }}
+        </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
