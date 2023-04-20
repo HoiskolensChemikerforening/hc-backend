@@ -91,7 +91,7 @@
   max-height: 200px;
   overflow: auto;
   border: 1px solid var(--text-color);
-  width: 150px;
+  width: 200px;
 }
 
 .dropdown-content::-webkit-scrollbar {
