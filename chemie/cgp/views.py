@@ -110,7 +110,7 @@ def vote_index(request, slug):
         groups: Queryset (containing all Group objects that can be voted for by the current Group object)
         countries: str (containing all country names that can be voted for by the current Group object seperated by ",")
         realnames: str (containing all group names that can be voted for by the current Group object seperated by ",")
-        songtiteles: str (containing all songtitles that can be voted for by the current Group object seperated by ",")
+        songtitles: str (containing all songtitles that can be voted for by the current Group object seperated by ",")
         points: str (containing all points that can be assigned to Group objects seperated by ",")
         failure_group: Group (Group object from a previous vote)
         show_group: Group (Group object from a previous vote)
