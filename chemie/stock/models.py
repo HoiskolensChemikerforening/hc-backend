@@ -43,7 +43,7 @@ class Portfolio(models.Model):
 
         for stocktype in Stocktype.objects.all():
             stock_amount = len(self.stock_set.filter(stocktype=stocktype))       #stocktype.getstockamount
-            value        = stocktype.history_set.order_by("-date").first().value
+            value        = stocktype.history_set.order_by("-date").first().value #endrer rekkefølgen i Queryset med "-"
             markedvalue += stock_amount*value
 
         return markedvalue

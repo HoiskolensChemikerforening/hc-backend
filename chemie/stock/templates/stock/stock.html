@@ -12,6 +12,13 @@
 
 {% block content %}
 
+    <div>
+        <div>
+            <p>HC-Coins:  <b> {{ coins }} </b> </p>
+            <p>Markedvalue: {{ markedValue }}</p>
+        </div>
+    </div>
+
     <div style = "text-align: left">
 
     {% for stocktype in stocktypes %}
@@ -26,12 +33,5 @@
     {% endfor %}
     </div>
 
-    <div>
-        <div>
-            <!--
-            <p>HC-Coins: </p> <b> {{ coins }} </b>
-            -->
-            <p>Markedvalue: {{ markedValue }}</p>
-        </div>
-    </div>
+
 {% endblock content %}
