@@ -14,6 +14,17 @@
 
 <h><b>{{name}}</b></h>
 
-<p>Beskrivelse: {{desc}}</p>
+<div style = "display: flex; flex-direction: row; margin: 10px; padding: 20px">
 
+  <div style = "display: flex; flex-direction: column; margin: 10px; padding: 20px">
+    <p>Beskrivelse: {{desc}}</p>
+    <p>Value: {{value}}</p>
+  </div>
+
+  <div style= "display: flex;flex-direction: row; margin: 10px; padding: 20px">
+    <button type = "button" style = "background-color: green; width: 100px; height: 100px">Kjøp</button>
+    <button type = "button" style = "background-color: red;width: 100px; height: 100px">Selg</button>
+  </div>
+
+</div>
 {% endblock content %}

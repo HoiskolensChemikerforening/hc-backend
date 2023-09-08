@@ -26,17 +26,18 @@ def index(request):
 
 def stock_index(request, id):
 
-    stocktypes = Stocktype.objects.all()
-    stocktype = stocktypes.get(id = id)
+    stocktype = get_object_or_404(Stocktype, id = id)
 
     name = stocktype.name
     desc = stocktype.desc
+    value = stocktype.history_set.order_by("-date").first().value
+
     #volume
-    #value
 
     context = {
         "name":name,
-        "desc":desc
+        "desc":desc,
+        "value":value
     }
 
     return render(request, "stock/individualstock.html", context)
