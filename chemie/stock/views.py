@@ -24,14 +24,19 @@ def index(request):
 
     return render(request, "stock/stock.html", context)
 
-def stock_index(request):
+def stock_index(request, id):
 
-    #name = Stocktype.name
-    #desc
+    stocktypes = Stocktype.objects.all()
+    stocktype = stocktypes.get(id = id)
+
+    name = stocktype.name
+    desc = stocktype.desc
     #volume
     #value
 
     context = {
+        "name":name,
+        "desc":desc
     }
 
     return render(request, "stock/individualstock.html", context)

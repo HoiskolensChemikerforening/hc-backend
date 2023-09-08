@@ -12,10 +12,12 @@
 
 {% block content %}
 
-<h> Stocktype: {{stocktypeobject.name}}</h>
-{% for stock in stocks %}
-<a href="{{ stocktypeobject.id }}"><p>{% endif %}</p></a>
-{% endfor %}
+<h><b>{{name}}</b></h>
 
+<p>Beskrivelse: {{desc}}</p>
+
+{% for stock in stocks %}
+<a href="{{ stocktypeobject.id }}"></a>
+{% endfor %}
 
 {% endblock content %}
