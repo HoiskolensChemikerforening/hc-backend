@@ -2,6 +2,10 @@
 {% load cache %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/textrain.css" %}">
+  {% endblock %}
+
 {% block nav_header %}
   Forsiden
 {% endblock nav_header %}
@@ -11,6 +15,10 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+    <div id="container">
+        <div id="animate">
+        </div>
+    </div>
   {% if perms.events or perms.news %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -99,3 +107,8 @@
 
 
 {% endblock content %}
+
+
+{% block footer_js_files %}
+    <script type="text/javascript" src="{% static "js/textrain.js" %}"></script>
+  {% endblock footer_js_files %}
