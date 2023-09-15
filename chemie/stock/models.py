@@ -54,6 +54,12 @@ class Portfolio(models.Model):
         stock_amount = len(self.stock_set.filter(stocktype=stocktype))
         return stock_amount
 
+    def assign_stock_to_portofolio(self, id):
+        stocktype = get_object_or_404(Stocktype, id=id)
+        new_stock = stocktype.create_stock(1)
+        new_stock.portfolio = self
+        return new_stock
+
     def __str__(self):
         return f"{self.user.username}"
 
