@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404
+from chemie.customprofile.models import Profile
 # Create your models here.
 
 class Stocktype(models.Model):
@@ -59,6 +60,15 @@ class Portfolio(models.Model):
         new_stock = stocktype.create_stock(1)
         new_stock.portfolio = self
         return new_stock
+
+    def buy(self, user, id): #IKKE FERDIG ENDA, pass request.user
+        stocktype = get_object_or_404(Stocktype, id=id) #get stocktype
+        value = stocktype.history_set.order_by("-date").first().value  # get value of stocktype
+        coins = user.profile.balance #get HC-Coins
+
+        if(value < coins):
+            self.assign_stock_to_portofolio(id)
+        return
 
     def __str__(self):
         return f"{self.user.username}"
