@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.shortcuts import get_object_or_404
 # Create your models here.
 
 class Stocktype(models.Model):
@@ -47,6 +48,11 @@ class Portfolio(models.Model):
             markedvalue += stock_amount*value
 
         return markedvalue
+
+    def get_number_of_stocks(self, id):
+        stocktype = get_object_or_404(Stocktype, id = id)
+        stock_amount = len(self.stock_set.filter(stocktype=stocktype))
+        return stock_amount
 
     def __str__(self):
         return f"{self.user.username}"
