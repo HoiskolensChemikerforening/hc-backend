@@ -142,7 +142,7 @@ class PositionType(models.Model):
     )
 
     name = models.PositiveSmallIntegerField(
-        choices=SPECIALIZATIONS, unique=True
+        choices=PositionType, unique=True
     )
 
     def __str__(self):
