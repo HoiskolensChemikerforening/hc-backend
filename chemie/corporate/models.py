@@ -135,15 +135,8 @@ class AnswerKeyValuePair(models.Model):
         )
 
 class PositionType(models.Model):
-    TYPES = (
-        (1, "Graduatestilling"
-         2, "Sommerjobb"
-         3, "Deltidsjobb")
+    POSITIONTYPES = (
+        (1, "Graduatestilling"),
+        (2, "Sommerjobb"),
+        (3, "Deltidsjobb"),
     )
-
-    name = models.PositiveSmallIntegerField(
-        choices=PositionType, unique=True
-    )
-
-    def __str__(self):
-        return self.get_name_display()

@@ -16,7 +16,6 @@ from .models import (
     Survey,
     AnswerKeyValuePair,
     SurveyQuestion,
-    PositionType
 )
 
 from .forms import (
@@ -67,6 +66,19 @@ def job(request):
 
     context = {"jobs": jobs, "specializations": specializations}
     return render(request, "corporate/job.html", context)
+
+def job_types(request):
+    jobs = Job.objects.all().order_by(-"id")
+
+    if request.method == "GET":
+        if request.GET.getlist("job"):
+            try:
+                jobtypes= [
+                    int(x) for x in request.GET.getlist("")
+                ]
+
+                #Ønsker å filtere på samme måte som for spesialisering, men kanskje bedre å inkludere det som
+                #Specialization?
 
 
 def job_detail(request, id):
