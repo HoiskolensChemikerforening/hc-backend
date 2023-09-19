@@ -16,6 +16,7 @@ from .models import (
     Survey,
     AnswerKeyValuePair,
     SurveyQuestion,
+    PositionType
 )
 
 from .forms import (
