@@ -229,6 +229,11 @@ class Profile(models.Model):
     def get_all_refill_sum(cls):
         return cls.objects.aggregate(Sum("balance"))["balance__sum"]
 
+    @classmethod
+    def get_balance_sum_for_first_to_fifth_grades(cls):
+        return cls.objects.filter(grade__in=[1, 2, 3, 4, 5]).aggregate(Sum("balance"))["balance__sum"]
+
+
 
 class Membership(models.Model):
     start_date = models.DateTimeField(auto_now=False, auto_now_add=True)
