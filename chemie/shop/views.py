@@ -535,8 +535,10 @@ def view_all_refills(request):
             context["refill_receipts"] = refill_receipts
     except ObjectDoesNotExist:
         pass
-    refill_sum = Profile.get_balance_sum_for_first_to_fifth_grades()
-    context["refill_sum"] = refill_sum
+    refill_sum_active = Profile.get_balance_sum_for_first_to_fifth_grades()
+    context["refill_sum_active"] = refill_sum_active
+    refill_sum_total = Profile.get_all_refill_sum()
+    context["refill_sum_total"] = refill_sum_total
     return render(request, "shop/all_refills.html", context)
 
 
