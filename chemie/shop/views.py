@@ -384,16 +384,16 @@ def refill(request):
 def add_item(request):
     form = AddItemForm(None, None)
     items = Item.objects.order_by("name")
+
     if request.POST:
         print(request.POST)
-        if ("checkForm" in request.POST.keys()) and ("filterActiveItems" in request.POST.keys()):
-            itemx = Item.objects.filter(is_active=True)
-            items = itemx.order_by("name")
+        if ("checkForm" in request.POST.keys()) and ("filterActiveItems" in request.POST.keys()): #IsActive form er checked
+            items = Item.objects.filter(is_active=True).order_by("name")
 
-        elif "checkForm" in request.POST.keys():
+        elif "checkForm" in request.POST.keys(): #IsActive form unchecked
             items = Item.objects.order_by("name")
 
-        else:
+        else: #Add item form posted
             form = AddItemForm(request.POST or None, request.FILES or None)
             items = Item.objects.order_by("name")
             if form.is_valid():
