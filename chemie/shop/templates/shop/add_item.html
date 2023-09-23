@@ -130,14 +130,21 @@
 </div>
 
   <!--WILLI BUTTON INN HER -->
+<div style ="padding: 10px">
     <form method="POST" >
       {% csrf_token %}
+      <div style = "display: flex;flex-direction: row">
+        <div style ="padding: 10px">
         <label for="filterActiveItems">Filter by active:</label>
-        <input type="checkbox" id="myCheckbox" name="filterActiveItems" value="1" {% if request.POST.filterActiveItems %}checked{% endif %}>
-        <input type="hidden" id="checkForm" name="checkForm" value="69">
-        <button type = "submit">Oppdater</button>
+            <input type="checkbox" id="filterActiveItems" name="filterActiveItems" value="1" {% if request.POST.filterActiveItems %}checked{% endif %}>
+            <input type="hidden" id="checkForm" name="checkForm" value="69">
+        </div>
+        <div style ="padding: 10px">
+            <button type = "submit" class="btn btn-secondary">Oppdater</button>
+        </div>
+      </div>
     </form>
-
+</div>
 
 <!-- List of all existing items -->
 <div id="itemList">
