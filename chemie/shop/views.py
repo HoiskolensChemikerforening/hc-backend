@@ -396,7 +396,6 @@ def add_item(request):
 
         else: #Add item form posted
             form = AddItemForm(request.POST or None, request.FILES or None)
-            items = Item.objects.order_by("name")
             if form.is_valid():
                 messages.add_message(
                     request,
