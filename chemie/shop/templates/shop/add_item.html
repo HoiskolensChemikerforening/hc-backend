@@ -129,16 +129,16 @@
   </form>
 </div>
 
-  <!--WILLI BUTTON INN HER -->
-<div style ="padding: 10px">
+<div style ="margin-top: 30px">
     <form method="POST" >
       {% csrf_token %}
       <div style = "display: flex;flex-direction: row">
         <div style ="padding: 10px">
-        <label for="filterActiveItems">Filter by active:</label>
+            <label for="filterActiveItems">Filter by active: </label>
             <input type="checkbox" id="filterActiveItems" name="filterActiveItems" value="1" {% if request.POST.filterActiveItems %}checked{% endif %}>
             <input type="hidden" id="checkForm" name="checkForm" value="69">
         </div>
+
         <div style ="padding: 10px">
             <button type = "submit" class="btn btn-secondary">Oppdater</button>
         </div>
