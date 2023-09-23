@@ -386,7 +386,6 @@ def add_item(request):
     items = Item.objects.order_by("name")
 
     if request.POST:
-        print(request.POST)
         if ("checkForm" in request.POST.keys()) and ("filterActiveItems" in request.POST.keys()): #IsActive form er checked
             items = Item.objects.filter(is_active=True).order_by("name")
 
