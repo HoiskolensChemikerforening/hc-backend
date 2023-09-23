@@ -129,6 +129,16 @@
   </form>
 </div>
 
+  <!--WILLI BUTTON INN HER -->
+    <form method="POST" >
+      {% csrf_token %}
+        <label for="filterActiveItems">Filter by active:</label>
+        <input type="checkbox" id="myCheckbox" name="filterActiveItems" value="1" {% if request.POST.filterActiveItems %}checked{% endif %}>
+        <input type="hidden" id="checkForm" name="checkForm" value="69">
+        <button type = "submit">Oppdater</button>
+    </form>
+
+
 <!-- List of all existing items -->
 <div id="itemList">
   <table style="width:95%; margin: 2rem; margin-left:0rem" id="shopping-table">

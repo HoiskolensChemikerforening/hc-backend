@@ -382,19 +382,30 @@ def refill(request):
 
 @permission_required("shop.add_item")
 def add_item(request):
-    form = AddItemForm(request.POST or None, request.FILES or None)
-    if request.POST:
-        if form.is_valid():
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Varen ble opprettet",
-                extra_tags="Suksess!",
-            )
-            form.save()
-            form = AddItemForm(None, None)
-
+    form = AddItemForm(None, None)
     items = Item.objects.order_by("name")
+    if request.POST:
+        print(request.POST)
+        if ("checkForm" in request.POST.keys()) and ("filterActiveItems" in request.POST.keys()):
+            itemx = Item.objects.filter(is_active=True)
+            items = itemx.order_by("name")
+
+        elif "checkForm" in request.POST.keys():
+            items = Item.objects.order_by("name")
+
+        else:
+            form = AddItemForm(request.POST or None, request.FILES or None)
+            items = Item.objects.order_by("name")
+            if form.is_valid():
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Varen ble opprettet",
+                    extra_tags="Suksess!",
+                )
+                form.save()
+                form = AddItemForm(None, None)
+
     context = {"form": form, "items": items}
     return render(request, "shop/add_item.html", context)
 
