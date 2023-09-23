@@ -37,7 +37,7 @@
     <div class="collapse {% if "?" in request.get_full_path %}show{% endif %}" id="filterCollapse">
       <div class="card card-body shadow-none">
         <div class="row">
-          <div class="col-md-12 col-12">
+          <div class="col-md-7.5 col-7.5">
             <p>Spesialisering:</p>
             {% for specialization in specializations %}
               <div>
@@ -47,6 +47,18 @@
               </div>
             {% endfor %}
           </div>
+
+        <div class="col-md-4.5 col-4.5">
+            <p>Stillingstype:</p>
+            {% for PositionType in postypes %}
+              <div>
+                <input type="checkbox" id="PositionType-{{ PositionType.id }}"
+                       name="{{ PositionType.id }}" class="PositionType-checkbox" checked>
+                <label for="PositionType-{{ PositionType.id }}">{{ PositionType }}</label>
+              </div>
+            {% endfor %}
+          </div>
+
         </div>
         <br>
         <a class="button-fill" href="#" onclick="filterReload()" style="width: min-content"

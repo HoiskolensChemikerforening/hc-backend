@@ -16,6 +16,7 @@ from .models import (
     Survey,
     AnswerKeyValuePair,
     SurveyQuestion,
+    PositionType
 )
 
 from .forms import (
@@ -46,11 +47,11 @@ def index(request):
 
     return render(request, "corporate/index.html", context)
 
-
 def job(request):
     jobs = Job.objects.all().order_by("-id")
 
     if request.method == "GET":
+        print(request.GET)
         if request.GET.getlist("specialization"):
             try:
                 specializations = [
@@ -62,24 +63,23 @@ def job(request):
             except ValueError:
                 pass
 
-    specializations = Specialization.objects.all().order_by("id")
-
-    context = {"jobs": jobs, "specializations": specializations}
-    return render(request, "corporate/job.html", context)
-
-def job_types(request):
-    jobs = Job.objects.all().order_by(-"id")
-
-    if request.method == "GET":
-        if request.GET.getlist("job"):
+        if request.GET.getlist("postype"):
             try:
-                jobtypes= [
-                    int(x) for x in request.GET.getlist("")
+                postypes = [
+                    int(x) for x in request.GET.getlist("jobtypes")
                 ]
+                jobs = jobs.filter(
+                    postype__name__in=postypes
+                ).distinct()
+            except ValueError:
+                pass
 
-                #Ønsker å filtere på samme måte som for spesialisering, men kanskje bedre å inkludere det som
-                #Specialization?
+    specializations = Specialization.objects.all().order_by("id")
+    postypes        = PositionType.objects.all().order_by("id")
 
+    context = {"jobs": jobs, "specializations": specializations, "postypes": postypes}
+
+    return render(request, "corporate/job.html", context)
 
 def job_detail(request, id):
     job = get_object_or_404(Job, pk=id)
