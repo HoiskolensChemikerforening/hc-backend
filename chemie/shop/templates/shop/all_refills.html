@@ -53,14 +53,28 @@
         </div>
     </div>
 </div>
-<div class="d-flex justify-content-center flex-column" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24); margin:1rem; padding: 1rem">
-    <h5 style="text-align: center">Totalt antall HC-coins i omløp hos brukere</h5>
-    <div class="d-flex flex-row justify-content-center">
-        <div class="p-2">
-            <h5>{{refill_sum}}</h5>
+<div class="d-flex justify-content-center flex-column" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24); margin: 1rem; padding: 1rem;">
+    <div style="text-align: center;">
+        <h5>Totalt antall HC-coins i omløp hos brukere</h5>
+    </div>
+
+    <div class="row justify-content-center">
+        <!-- Column for refill_sum_total -->
+        <div class="col-md-6">
+            <h6 style="text-align: center;">Totalt antall HC-coins</h6>
+            <div class="d-flex align-items-center justify-content-center">
+                <h5>{{ refill_sum_total }}</h5>
+                <img src="{% static "images/HC_coin.png" %}" alt="HC Coin" style="width: 1.8rem;">
+            </div>
         </div>
-        <div class="p-2">
-            <img type="image/png" src="{% static "images/HC_coin.png" %}" style="width:1.8rem">
+
+        <!-- Column for refill_sum_active -->
+        <div class="col-md-6">
+            <h6 style="text-align: center;">Aktive HC-coins (1. til 5. klasse)</h6>
+            <div class="d-flex align-items-center justify-content-center">
+                <h5>{{ refill_sum_active }}</h5>
+                <img src="{% static "images/HC_coin.png" %}" alt="HC Coin" style="width: 1.8rem;">
+            </div>
         </div>
     </div>
 </div>
