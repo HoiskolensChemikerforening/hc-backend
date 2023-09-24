@@ -87,11 +87,58 @@ Kontoret
 <div class="d-flex flex-wrap justify-content-center" id="card-items">
   {% for item in items %}
   {% if is_happy and item.happy_hour_duplicate %}
-  <div class="p-2 item-box" id="{{item.category}}-{{item.id}}"
+  <div class="p-2 item-box" id="{{item.happy_hour_duplicate.category}}-{{item.happy_hour_duplicate.id}}"
     style="background-image: url(/static/images/fireworks_background.png);">
-    {% else %}
+      <div class="d-flex flex-column justify-content-between" style="height:100%">
+        <div class="p-2" style="max-height:70%; text-align:center">
+          {% thumbnail item.happy_hour_duplicate.image "630x400" as pic %}
+          <img class="activator" style="max-width:10rem; max-height:9rem; margin-bottom:1rem" src="{{ pic.url }}">
+          {% endthumbnail %}
+        </div>
+
+        <div class="d-flex justify-content-around" style="margin-top: auto">
+          <div style="max-width: 7rem;">
+            {{ item.happy_hour_duplicate.name }}
+          </div>
+          <div class="align-self-center">
+            {{ item.happy_hour_duplicate.price }}
+            <img type="image/png" style="width:1.8rem" src="{% static "images/HC_coin.png" %}">
+          </div>
+        </div>
+
+        <div class="p-2">
+          <script type="text/javascript">
+            item_dict["{{item.happy_hour_duplicate.name}}"] = 0; // appends item to dictionary
+          </script>
+          <div class="d-flex justify-content-between">
+            <div class="p-2">
+              <a class="2-p btn btn-danger" id="minus" onclick="minus('{{ item.happy_hour_duplicate.name }}')"><i class="material-icons">
+                  remove
+                </i></a>
+              <input style="margin:0.1rem; width: 1.4rem; text-align: center" type="text" value="0" max="99"
+                id="item_{{item.happy_hour_duplicate.name}}">
+              <a class="btn btn-success" id="plus" onclick="plus('{{ item.happy_hour_duplicate.name }}')"><i class="material-icons">
+                  add
+                </i></a>
+            </div>
+            <div class="p-2">
+              <form action="#" method="POST">
+                {% csrf_token %}
+                <button id="{{ item.happy_hour_duplicate.id }}" class="btn btn-secondary" style="background-color:white" type="submit"
+                  name="buy" value="{{ item.happy_hour_duplicate.id }}-0" style="float:right"
+                  onclick="changeQuantity(this,'{{item.happy_hour_duplicate.name}}');"><i class="material-icons"
+                    style="color:black;">add_shopping_cart</i></button>
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
     <div class="p-2 item-box" id="{{item.category}}-{{item.id}}">
-      {% endif %}
       <div class="d-flex flex-column justify-content-between" style="height:100%">
         <div class="p-2" style="max-height:70%; text-align:center">
           {% thumbnail item.image "630x400" as pic %}
@@ -139,7 +186,6 @@ Kontoret
         </div>
       </div>
     </div>
-
     {% endfor %}
   </div>
 
