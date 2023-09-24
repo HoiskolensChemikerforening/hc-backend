@@ -155,11 +155,7 @@ def index_user(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
-            is_happy, minutes_left = is_happy_hour()
-            if is_happy:
-                duplicate = item.happy_hour_duplicate
-                if duplicate:
-                    cart.add(duplicate, quantity=int(quantity))
+
         if "checkout" in request.POST:
             user = request.user
             balance = user.profile.balance
@@ -211,11 +207,7 @@ def index_tabletshop(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
-            is_happy, minutes_left = is_happy_hour()
-            if is_happy:
-                duplicate = item.happy_hour_duplicate
-                if duplicate:
-                    cart.add(duplicate, quantity=int(quantity))
+
         if "checkout" in request.POST:
             if rfid_form.is_valid():
                 rfid = rfid_form.cleaned_data["rfid"]
