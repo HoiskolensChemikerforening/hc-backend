@@ -111,13 +111,13 @@
   .btn-cart-sm .btn-fab {
     position: fixed !important;
     left: 29px;
-    margin-bottom:0.5rem;
+    bottom: 29px;
   }
 
   .btn-cart .btn-fab {
     position: fixed !important;
     right: 20px;
-    margin-bottom:0.5rem;
+    bottom: 20px;
   }
 
   .btn-group-sm .btn-fab {
