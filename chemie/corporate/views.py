@@ -57,20 +57,25 @@ def job(request):
                 specializations = [
                     int(x) for x in request.GET.getlist("specialization")
                 ]
+                print(0, specializations)
+                print(2, jobs.filter(specializations__name = 6))
                 jobs = jobs.filter(
                     specializations__name__in=specializations
                 ).distinct()
+                print(1,jobs)
             except ValueError:
                 pass
 
         if request.GET.getlist("postype"):
             try:
                 postypes = [
-                    int(x) for x in request.GET.getlist("jobtypes")
+                    int(x) for x in request.GET.getlist("postype")
                 ]
+                print(postypes)
                 jobs = jobs.filter(
                     postype__name__in=postypes
                 ).distinct()
+                print(jobs)
             except ValueError:
                 pass
 

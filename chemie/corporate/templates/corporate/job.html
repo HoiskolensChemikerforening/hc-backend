@@ -42,8 +42,8 @@
             {% for specialization in specializations %}
               <div>
                 <input type="checkbox" id="specialization-{{ specialization.id }}"
-                       name="{{ specialization.id }}" class="specialization-checkbox" checked>
-                <label for="specialization-{{ specialization.id }}">{{ specialization }}</label>
+                       name="{{ specialization.name }}" class="specialization-checkbox" checked>
+                <label for="specialization-{{ specialization.name }}">{{ specialization }}</label>
               </div>
             {% endfor %}
           </div>
@@ -53,8 +53,8 @@
             {% for PositionType in postypes %}
               <div>
                 <input type="checkbox" id="PositionType-{{ PositionType.id }}"
-                       name="{{ PositionType.id }}" class="postype-checkbox" checked>
-                <label for="PositionType-{{ PositionType.id }}">{{ PositionType }}</label>
+                       name="{{ PositionType.name }}" class="postype-checkbox" checked>
+                <label for="PositionType-{{ PositionType.name }}">{{ PositionType }}</label>
               </div>
             {% endfor %}
           </div>
@@ -85,12 +85,12 @@
         </p>
         {% for specialization in job.specializations.all %}
         <span class="badge badge-pill
-             {% if specialization.id == 1 %} badge-custom-1 {% endif %}
-             {% if specialization.id == 2 %} badge-custom-2 {% endif %}
-             {% if specialization.id == 3 %} badge-custom-3 {% endif %}
-             {% if specialization.id == 4 %} badge-custom-4 {% endif %}
-             {% if specialization.id == 5 %} badge-custom-5 {% endif %}
-             {% if specialization.id == 6 %} badge-custom-6 {% endif %}
+             {% if specialization.name == 1 %} badge-custom-1 {% endif %}
+             {% if specialization.name == 2 %} badge-custom-2 {% endif %}
+             {% if specialization.name == 3 %} badge-custom-3 {% endif %}
+             {% if specialization.name == 4 %} badge-custom-4 {% endif %}
+             {% if specialization.name == 5 %} badge-custom-5 {% endif %}
+             {% if specialization.name == 6 %} badge-custom-6 {% endif %}
               ">{{ specialization }}</span>
         {% endfor %}
       </div>
@@ -113,6 +113,20 @@
 {% block footer_script %}
 <script>
 
+function updateCheckboxes(filtertype, querydict) {
+
+    if (filtertype in querydict) {
+        let checkBoxes = document.getElementsByClassName(filtertype+"-checkbox");
+
+        for (let i = 0; i < checkBoxes.length; i++) {
+            if (querydict[filtertype].includes(checkBoxes[i].getAttribute("name"))) {
+                checkBoxes[i].checked = true;
+            } else {
+                checkBoxes[i].checked = false;
+            }
+        }
+    }
+}
 
   if (window.location.href.includes("?")) {
     // We have GET parameters. Populate filter box
@@ -122,7 +136,12 @@
           qd[item.split("=")[0]] = [item.split("=")[1]]
     });
 
+    updateCheckboxes("specialization", qd) ;
+    updateCheckboxes("postype", qd) ;
+
   }
+
+
 
   function createUrl(checkBoxes, url, filtername) {
       for (let i = 0; i < checkBoxes.length; i++) {
