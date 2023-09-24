@@ -48,12 +48,12 @@
             {% endfor %}
           </div>
 
-        <div class="col-md-4.5 col-4.5">
+            <div class="col-md-4.5 col-4.5">
             <p>Stillingstype:</p>
             {% for PositionType in postypes %}
               <div>
                 <input type="checkbox" id="PositionType-{{ PositionType.id }}"
-                       name="{{ PositionType.id }}" class="PositionType-checkbox" checked>
+                       name="{{ PositionType.id }}" class="postype-checkbox" checked>
                 <label for="PositionType-{{ PositionType.id }}">{{ PositionType }}</label>
               </div>
             {% endfor %}
@@ -112,6 +112,8 @@
 
 {% block footer_script %}
 <script>
+
+
   if (window.location.href.includes("?")) {
     // We have GET parameters. Populate filter box
     let qd = {};
@@ -120,30 +122,28 @@
           qd[item.split("=")[0]] = [item.split("=")[1]]
     });
 
-    if ("specialization" in qd) {
-      let checkBoxes = document.getElementsByClassName("specialization-checkbox");
-
-      for (let i = 0; i < checkBoxes.length; i++) {
-        if (qd["specialization"].includes(checkBoxes[i].getAttribute("name"))) {
-          checkBoxes[i].checked = true;
-        } else {
-          checkBoxes[i].checked = false;
-        }
-      }
-    }
   }
 
-  function filterReload() {
-    let checkBoxes = document.getElementsByClassName("specialization-checkbox");
-    let url = document.getElementById("filterButton").getAttribute("data-url");
-
-    url += "?";
-    for (let i = 0; i < checkBoxes.length; i++) {
-      if (checkBoxes[i].checked) {
-        let id = checkBoxes[i].getAttribute('name');
-        url += "&specialization=" + id;
+  function createUrl(checkBoxes, url, filtername) {
+      for (let i = 0; i < checkBoxes.length; i++) {
+          if (checkBoxes[i].checked) {
+              let id = checkBoxes[i].getAttribute('name');
+              url += "&"+filtername+"=" + id;
+          }
       }
-    }
+      return url
+  }
+
+
+  function filterReload() {
+    let specicheckBoxes = document.getElementsByClassName("specialization-checkbox");
+    let postypeCheckboxes = document.getElementsByClassName("postype-checkbox");
+    let url = document.getElementById("filterButton").getAttribute("data-url");
+    url += "?";
+
+    url = createUrl(specicheckBoxes, url, "specialization") ;
+    url = createUrl(postypeCheckboxes, url, "postype") ;
+
     window.location.assign(url);
   }
 </script>
