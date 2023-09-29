@@ -36,6 +36,7 @@ function Circle(x, y, c, v, range) {
   this.v = v;
   this.range = range;
   this.element = document.createElement('span');
+  this.element.style.pointerEvents = 'none';
   /*this.element.style.display = 'block';*/
   this.element.style.opacity = 0;
   this.element.style.position = 'absolute';
