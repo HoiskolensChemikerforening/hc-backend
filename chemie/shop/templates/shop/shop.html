@@ -87,7 +87,7 @@ Kontoret
 <div class="d-flex flex-wrap justify-content-center" id="card-items">
   {% for item in items %}
 
-  {% if is_happy and item.happy_hour_duplicate and item.happy_hour_duplicate.is_active %}
+  {% if is_happy and item.happy_hour_duplicate and item.happy_hour_duplicate.is_active%}
   <div class="p-2 item-box" id="{{item.happy_hour_duplicate.category}}-{{item.happy_hour_duplicate.id}}"
     style="background-image: url(/static/images/fireworks_background.png);">
       <div class="d-flex flex-column justify-content-between" style="height:100%">

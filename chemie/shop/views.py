@@ -529,13 +529,11 @@ def view_all_refills(request):
         if request.method == "POST":
             if form.is_valid():
                 receiver = form.cleaned_data.get("receiver")
-                refill_receipts = RefillReceipt.objects.order_by("-created")[
-                    :100
-                ]
+                refill_receipts = RefillReceipt.objects.order_by("-created")[:100]
                 context["refill_receipts"] = refill_receipts
                 context["receiver"] = receiver
         else:
-            refill_receipts = RefillReceipt.objects.all().order_by("-created")
+            refill_receipts = RefillReceipt.objects.all().order_by("-created")[:100]
             context["refill_receipts"] = refill_receipts
     except ObjectDoesNotExist:
         pass
