@@ -241,7 +241,7 @@ def interview_edit(request, id):
 
 @permission_required("corporate.add_job")
 def job_create(request):
-    form = JobForm(request.POST or None, request.FILES or None)
+    form         = JobForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()
