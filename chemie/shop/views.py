@@ -399,6 +399,7 @@ def add_item(request):
                 form = AddItemForm(None, None)
 
     context = {"form": form, "items": items, "initialCheckboxState": initial_checkbox_state}
+
     return render(request, "shop/add_item.html", context)
 
 
