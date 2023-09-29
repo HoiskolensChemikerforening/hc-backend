@@ -58,6 +58,7 @@ urlpatterns = [
         name="delete_list_social",
     ),
     path("api/social/", views.SocialListCreate.as_view(), name="api_social"),
+    path("api/social/kommende/", views.SocialListCreateKommende.as_view(), name="api_social_kommende"),
     path(
         "api/socialeventregistration/",
         views.SocialEventRegistrationListCreate.as_view(),

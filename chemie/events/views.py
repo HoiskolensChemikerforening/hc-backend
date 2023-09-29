@@ -887,6 +887,10 @@ class SocialListCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
 
+class SocialListCreateKommende(generics.ListCreateAPIView):
+    queryset = Social.objects.filter(date__gt=timezone.now())
+    serializer_class = SocialSerializer
+
 
 class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
     queryset = SocialEventRegistration.objects.all()
