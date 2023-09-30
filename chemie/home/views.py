@@ -11,6 +11,7 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView
+from rest_framework import generics
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -29,6 +30,7 @@ from .forms import (
     ApprovedTermsForm,
 )
 from .models import OfficeApplication
+from .serializers import OfficeAccessSerializer
 
 
 def index(request):
@@ -218,3 +220,7 @@ class UserPermissionView(APIView):
         else:
             has_permission = False
         return Response({"hasPermission": has_permission})
+
+class OfficeAccessListViewApi(generics.ListCreateAPIView):
+    queryset = OfficeApplication.objects.order_by("-created")
+    serializer_class = OfficeAccessSerializer

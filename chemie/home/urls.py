@@ -19,4 +19,6 @@ urlpatterns = [
         "howToKontoret/",
         TemplateView.as_view(template_name="home/office_embedded_video.html"),
     ),
+    #API
+    path("kontortilgang/api/søk/", OfficeAccessListViewApi.as_view(), name="office_access_api")
 ]
