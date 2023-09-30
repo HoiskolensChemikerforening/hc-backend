@@ -276,6 +276,14 @@ body {
     color: var(--main-color-dark);
 }
 
+.filterbox {
+    padding:10px;
+}
+
+.card-container-box{
+    width:50%;
+}
+
 /* Small devices (landscape phones, 576px and up) */
 @media (min-width: 576px) {
     .display-font {

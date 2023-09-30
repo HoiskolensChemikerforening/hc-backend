@@ -34,10 +34,10 @@
 
     <br>
 
-    <div class="collapse {% if "?" in request.get_full_path %}show{% endif %}" id="filterCollapse">
+    <div class="collapse {% if "?" in request.get_full_path %}show{% endif %} card-container-box" id="filterCollapse">
       <div class="card card-body shadow-none">
         <div class="row">
-          <div class="col-md-7.5 col-7.5">
+          <div class="col-md-6 col-6 filterbox">
             <p>Spesialisering:</p>
             {% for specialization in specializations %}
               <div>
@@ -48,7 +48,7 @@
             {% endfor %}
           </div>
 
-            <div class="col-md-4.5 col-4.5">
+            <div class="col-md-6 col-6 filterbox">
             <p>Stillingstype:</p>
             {% for PositionType in postypes %}
               <div>
