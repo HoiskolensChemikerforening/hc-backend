@@ -896,7 +896,7 @@ class SocialListCreateTidligere(generics.ListCreateAPIView):
     serializer_class = SocialSerializer
 
 class SocialListCreateMine(generics.ListCreateAPIView): #Mine social events
-    def get_queryset(self):
+    def get_queryset(self): # Må overstyre get metoden
         # Filter the queryset to show only 'Social' instances associated with the authenticated user.
         user = self.request.user
         return Social.objects.filter(attendees=user)
@@ -918,6 +918,14 @@ class BedpresListKommende(generics.ListCreateAPIView):
 
 class BedpresListTidligere(generics.ListCreateAPIView):
     queryset = Bedpres.objects.filter(date__lt=timezone.now())
+    serializer_class = BedpresSerializer
+
+class BedpresListCreateMine(generics.ListCreateAPIView): #Mine bedpres events
+    def get_queryset(self): #Må overstyre get metoden
+        # Filter the queryset to show only 'Social' instances associated with the authenticated user.
+        user = self.request.user
+        return Bedpres.objects.filter(attendees=user)
+
     serializer_class = BedpresSerializer
 
 class BedpresRegistrationListCreate(generics.ListCreateAPIView):

@@ -127,4 +127,5 @@ urlpatterns += [
     path("api/bedpresregistration/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
     path("api/bedpres/kommende/", views.BedpresListKommende.as_view(), name="api_bedpres_kommende"),
     path("api/bedpres/tidligere/", views.BedpresListTidligere.as_view(), name="api_bedpres_tidligere"),
+    path("api/bedpres/mine/", views.BedpresListCreateMine.as_view(), name="api_bedpres_mine")
 ]
