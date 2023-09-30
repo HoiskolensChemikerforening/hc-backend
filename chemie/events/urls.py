@@ -63,6 +63,7 @@ urlpatterns = [
     path("api/social/<int:pk>/", views.SocialDetail.as_view()),
     path("api/socialeventregistration/<int:pk>/",views.SocialEventRegistrationDetail.as_view()),
     path("api/social/mine/", views.SocialListCreateMine.as_view(), name="api_social_mine"),
+    path("api/social/tidligere/", views.SocialListCreateTidligere.as_view(), name="api_social_tidligere"),
 ]
 
 # Bedpres
