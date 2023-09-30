@@ -891,6 +891,13 @@ class SocialListCreateKommende(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__gt=timezone.now())
     serializer_class = SocialSerializer
 
+class SocialListCreateMine(generics.ListCreateAPIView): #Mine social events
+    def get_queryset(self):
+        # Filter the queryset to show only 'Social' instances associated with the authenticated user.
+        user = self.request.user
+        return Social.objects.filter(attendees=user)
+
+    serializer_class = SocialSerializer
 
 class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
     queryset = SocialEventRegistration.objects.all()
