@@ -37,7 +37,7 @@ class JobForm(forms.ModelForm):
         label="Aktuelle retninger",
     )
 
-    type = forms.ModelMultipleChoiceField(
+    postype = forms.ModelMultipleChoiceField(
         queryset=PositionType.objects.all(),
         widget=forms.CheckboxSelectMultiple(),
         label="Stillingstype",
@@ -45,7 +45,7 @@ class JobForm(forms.ModelForm):
 
     class Meta:
         model = Job
-        fields = ["title", "description", "specializations","type"]
+        fields = ["title", "description", "specializations","postype"]
 
 
 class CreateSurveyForm(forms.ModelForm):
