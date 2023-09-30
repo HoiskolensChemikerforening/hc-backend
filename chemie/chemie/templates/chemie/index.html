@@ -2,6 +2,10 @@
 {% load cache %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/textrain.css" %}">
+  {% endblock %}
+
 {% block nav_header %}
   Forsiden
 {% endblock nav_header %}
@@ -99,3 +103,8 @@
 
 
 {% endblock content %}
+
+
+{% block footer_js_files %}
+    <script type="text/javascript" src="{% static "js/textrain.js" %}"></script>
+  {% endblock footer_js_files %}

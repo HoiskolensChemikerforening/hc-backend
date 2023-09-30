@@ -130,7 +130,7 @@ def index(request):
 def index_user(request):
     is_tablet_user = False
     rfid_form = None
-    items = Item.get_active_items()
+    items = Item.get_active_items().order_by("name")
     try:
         happy_item_ids = items.filter(
             happy_hour_duplicate__isnull=False
@@ -155,11 +155,7 @@ def index_user(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
-            is_happy, minutes_left = is_happy_hour()
-            if is_happy:
-                duplicate = item.happy_hour_duplicate
-                if duplicate:
-                    cart.add(duplicate, quantity=int(quantity))
+
         if "checkout" in request.POST:
             user = request.user
             balance = user.profile.balance
@@ -186,7 +182,7 @@ def index_user(request):
 def index_tabletshop(request):
     is_tablet_user = True
     rfid_form = GetRFIDForm(request.POST or None)
-    items = Item.get_active_tablet_items()
+    items = Item.get_active_tablet_items().order_by("name")
     try:
         happy_item_ids = items.filter(
             happy_hour_duplicate__isnull=False
@@ -211,11 +207,7 @@ def index_tabletshop(request):
                 return context
             item = get_object_or_404(Item, pk=item_id)
             cart.add(item, quantity=int(quantity))
-            is_happy, minutes_left = is_happy_hour()
-            if is_happy:
-                duplicate = item.happy_hour_duplicate
-                if duplicate:
-                    cart.add(duplicate, quantity=int(quantity))
+
         if "checkout" in request.POST:
             if rfid_form.is_valid():
                 rfid = rfid_form.cleaned_data["rfid"]
@@ -382,19 +374,32 @@ def refill(request):
 
 @permission_required("shop.add_item")
 def add_item(request):
-    form = AddItemForm(request.POST or None, request.FILES or None)
+    form = AddItemForm(None, None)
+    items = Item.objects.filter(is_active=True).order_by("name")
+    initial_checkbox_state = True
+
     if request.POST:
-        if form.is_valid():
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                "Varen ble opprettet",
-                extra_tags="Suksess!",
-            )
-            form.save()
-            form = AddItemForm(None, None)
-    items = Item.objects.order_by("-is_active")
-    context = {"form": form, "items": items}
+        if ("checkForm" in request.POST.keys()) and ("filterActiveItems" in request.POST.keys()): #IsActive form er checked
+            items = Item.objects.filter(is_active=True).order_by("name")
+
+        elif "checkForm" in request.POST.keys(): #IsActive form unchecked
+            items = Item.objects.order_by("name")
+            initial_checkbox_state = False
+
+        else: #Add item form posted
+            form = AddItemForm(request.POST or None, request.FILES or None)
+            if form.is_valid():
+                messages.add_message(
+                    request,
+                    messages.SUCCESS,
+                    "Varen ble opprettet",
+                    extra_tags="Suksess!",
+                )
+                form.save()
+                form = AddItemForm(None, None)
+
+    context = {"form": form, "items": items, "initialCheckboxState": initial_checkbox_state}
+
     return render(request, "shop/add_item.html", context)
 
 
@@ -525,18 +530,18 @@ def view_all_refills(request):
         if request.method == "POST":
             if form.is_valid():
                 receiver = form.cleaned_data.get("receiver")
-                refill_receipts = RefillReceipt.objects.order_by("-created")[
-                    :100
-                ]
+                refill_receipts = RefillReceipt.objects.order_by("-created")[:100]
                 context["refill_receipts"] = refill_receipts
                 context["receiver"] = receiver
         else:
-            refill_receipts = RefillReceipt.objects.all().order_by("-created")
+            refill_receipts = RefillReceipt.objects.all().order_by("-created")[:100]
             context["refill_receipts"] = refill_receipts
     except ObjectDoesNotExist:
         pass
-    refill_sum = Profile.get_all_refill_sum()
-    context["refill_sum"] = refill_sum
+    refill_sum_active = Profile.get_balance_sum_for_first_to_fifth_grades()
+    context["refill_sum_active"] = refill_sum_active
+    refill_sum_total = Profile.get_all_refill_sum()
+    context["refill_sum_total"] = refill_sum_total
     return render(request, "shop/all_refills.html", context)
 
 
