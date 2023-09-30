@@ -50,34 +50,25 @@ def index(request):
 def job(request):
     jobs = Job.objects.all().order_by("-id")
 
-    if request.method == "GET":
-        print(request.GET)
-        if request.GET.getlist("specialization"):
-            try:
-                specializations = [
-                    int(x) for x in request.GET.getlist("specialization")
-                ]
-                print(0, specializations)
-                print(2, jobs.filter(specializations__name = 6))
-                jobs = jobs.filter(
-                    specializations__name__in=specializations
-                ).distinct()
-                print(1,jobs)
-            except ValueError:
-                pass
+    #Unpacking av tuppel for å filtrere på enten spec:spec__nam eller postyp:post...
 
-        if request.GET.getlist("postype"):
-            try:
-                postypes = [
-                    int(x) for x in request.GET.getlist("postype")
-                ]
-                print(postypes)
-                jobs = jobs.filter(
-                    postype__name__in=postypes
-                ).distinct()
-                print(jobs)
-            except ValueError:
-                pass
+    if request.method == "GET":
+        filter_parameters = {
+            "specialization": "specializations__name__in",
+            "postype": "postype__name__in",
+        }
+
+        for param, field in filter_parameters.items():
+            vals = request.GET.getlist(param)
+
+            if vals:
+                try:
+                    int_values = [int(x) for x in vals]
+                    filter_condition = {field: int_values}
+                    jobs = jobs.filter(**filter_condition).distinct()
+                except ValueError:
+                    pass
+
 
     specializations = Specialization.objects.all().order_by("id")
     postypes        = PositionType.objects.all().order_by("id")
