@@ -39,11 +39,8 @@
 
 
   <div class="row">
-      {% if grade == grades.DONE %}
-      <div class="col s4 m4 l4 s6">
-      {% else %}
-      <div class="col s6 m6 l4 s12">
-      {% endif %}
+      <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 30px">
+            <div style="margin-right: 10px">
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
            >Klassetrinn</a>
         <ul id='dropdown1' class='dropdown-content'>
@@ -51,8 +48,19 @@
             <li><a href='{% url "profile:yearbook-grade" year=year_number %}'>{{ year_text }}</a></li>
           {% endfor %}
         </ul>
-      </div>
+            </div>
 
+        {% if grade != grades.DONE %}
+            <div>
+            <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
+                >Spesialisering</a>
+            <ul id = 'dropdown3' class='dropdown-content'>
+              {% for spec_value, spec_text in spec %}
+                  <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>{{ spec_text }}</a></li>
+              {% endfor %}
+            </div>
+        {% endif %}
+      </div>
 
 
 {% if grade == grades.DONE %}
@@ -80,11 +88,11 @@
 
 {% endif %}
 
-      {% if grade == grades.DONE %}
-      <div class="col s4 m4 l4 s12">
-      {% else %}
-      <div class="col s6 m6 l8 s12">
-      {% endif %}
+        {% if grade == grades.DONE %}
+            <div class="col s4 m4 l4 s12">
+        {% else %}
+             <div class="col s6 m6 l7 s12">
+        {% endif %}
         <nav>
           <div class="nav-wrapper">
             <form method='post' class="newPost">{% csrf_token %}
