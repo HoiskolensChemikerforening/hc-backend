@@ -356,7 +356,7 @@ def yearbook(request, year=1, spec=1):
         "end_years": end_years,
         "spec": SPECIALIZATION,
     }
-    print(context)
+
     return render(request, "customprofile/yearbook.html", context)
 
 

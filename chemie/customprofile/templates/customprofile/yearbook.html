@@ -56,7 +56,11 @@
                 >Spesialisering</a>
             <ul id = 'dropdown3' class='dropdown-content'>
               {% for spec_value, spec_text in spec %}
-                  <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>{{ spec_text }}</a></li>
+                  {% if spec_value == 1 %}
+                    <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>Alle </a></li>
+                  {% else %}
+                    <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>{{ spec_text }}</a></li>
+                  {% endif %}
               {% endfor %}
             </div>
         {% endif %}
