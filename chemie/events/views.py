@@ -916,6 +916,10 @@ class BedpresListKommende(generics.ListCreateAPIView):
     queryset = Bedpres.objects.filter(date__gt=timezone.now())
     serializer_class = BedpresSerializer
 
+class BedpresListTidligere(generics.ListCreateAPIView):
+    queryset = Bedpres.objects.filter(date__lt=timezone.now())
+    serializer_class = BedpresSerializer
+
 class BedpresRegistrationListCreate(generics.ListCreateAPIView):
     queryset = BedpresRegistration.objects.all()
     serializer_class = BedpresRegistrationSerializer
