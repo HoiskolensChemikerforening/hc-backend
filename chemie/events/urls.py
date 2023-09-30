@@ -57,6 +57,7 @@ urlpatterns = [
         ),
         name="delete_list_social",
     ),
+    #API
     path("api/social/", views.SocialListCreate.as_view(), name="api_social"),
     path("api/social/kommende/", views.SocialListCreateKommende.as_view(), name="api_social_kommende"),
     path("api/socialeventregistration/", views.SocialEventRegistrationListCreate.as_view(), name="api_socialeventregistration"),
@@ -119,15 +120,11 @@ urlpatterns += [
         views.ListBedpresDeleteView.as_view(),
         name="delete_list_bedpres",
     ),
+    #API
     path("api/bedpres/", views.BedpresListCreate.as_view(), name="api_bedpres"),
-    path(
-        "api/bedpresregistration/",
-        views.BedpresRegistrationListCreate.as_view(),
-        name="api_bedpresregistration",
-    ),
+    path("api/bedpresregistration/", views.BedpresRegistrationListCreate.as_view(), name="api_bedpresregistration"),
     path("api/bedpres/<int:pk>/", views.BedpresDetail.as_view()),
-    path(
-        "api/bedpresregistration/<int:pk>/",
-        views.BedpresRegistrationDetail.as_view(),
-    ),
+    path("api/bedpresregistration/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
+    path("api/bedpres/kommende/", views.BedpresListKommende.as_view(), name="api_bedpres_kommende"),
+
 ]
