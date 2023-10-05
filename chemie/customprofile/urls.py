@@ -31,14 +31,8 @@ urlpatterns = [
     path("katalog/<int:year>/", views.yearbook, name="yearbook-grade"),
     path("katalog/<int:year>/<int:spec>/", views.yearbook, name="yearbook-spec"),
     path("katalog/", views.yearbook, name="yearbook-index"),
-    path(
-        "api/profil/",
-        views.ProfileListCreate.as_view(),
-        name="api-profile-list",
-    ),
-    path(
-        "api/profil/<int:pk>/",
-        views.ProfileDetail.as_view(),
-        name="api-profile-detail",
-    ),
+
+    #API
+    path("api/profil/", views.ProfileListCreate.as_view(), name="api-profile-list",),
+    path("api/profil/<int:pk>/", views.ProfileDetail.as_view(), name="api-profile-detail",),
 ]
