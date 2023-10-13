@@ -22,7 +22,8 @@ class ElectionQuestionForm(models.Model):
             answer = question.answer_set.filter(useranswer__user=user)
             commitee_answer = question.answer_set.filter(commiteeanswer__committee=committee)
             disagreement_sum += abs(answer[0].answer - commitee_answer[0].answer)
-        return disagreement_sum
+        max_disagreement_sum = self.get_max_disagreement_sum()
+        return (1 - (disagreement_sum/max_disagreement_sum))
 
     def get_participating_committes(self):
         committes = []
@@ -30,6 +31,11 @@ class ElectionQuestionForm(models.Model):
             if len(committe.commiteeanswer_set.filter(question__question_form=self)) > 0:
                 committes.append(committe)
         return committes
+
+    def get_max_disagreement_sum(self):
+        amount_of_questions = len(self.electionquestion_set.all())
+        max_difference = abs(VALUES[0][0] - VALUES[-1][0])
+        return amount_of_questions*max_difference
 
 
 
