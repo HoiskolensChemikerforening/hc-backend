@@ -1,0 +1,62 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Valg-o-mat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  jhsdhfks
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+<style>
+.progress-container{
+    display: inline-block;
+    width: 100%;
+    padding-top: 2px;
+}
+.progress.progressbarbackground {
+    background-color: #f1f1f1;
+    height: 20px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+    margin-top:0;
+}
+
+.committe-title {
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+
+
+
+
+.card-body.cardstyle{
+    padding: 5.8rem;
+}
+
+.card-body.cardstyle > h3{
+    margin-top: 0;
+}
+
+
+</style>
+<div>
+    <div class="card">
+        <div class="card-body cardstyle">
+            <h3>Du passer best til</h3>
+            {% for result in  results%}
+                <div class="committe-title">{{ result.0 }}</div>
+                <div class="progress-container">
+                    <div class="progress progressbarbackground">
+                       <div class="determinate" style="width: {{ result.1 }}%; background-color: {{ result.2 }}">{{ result.1 }}%</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
