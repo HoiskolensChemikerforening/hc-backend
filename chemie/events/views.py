@@ -147,7 +147,7 @@ class ListSocialView(ListView):
             authored_events = Q(author=self.request.user)
             my_events = self.model.objects.filter(
                 attending_events | authored_events
-            ).distinct()
+            ).distinct().order_by("-date")
 
         context.update({"events": future_events, "my_events": my_events})
         return context
