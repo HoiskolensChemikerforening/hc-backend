@@ -11,18 +11,25 @@ VALUES = (
 
 class ElectionQuestionForm(models.Model):
     title = models.CharField(max_length=40, verbose_name="Tittel")
+    active = models.BooleanField(default=True, verbose_name="Aktiv")
 
     def __str__(self):
         return self.title
 
     def calculate_result_commitee(self, user, committee):
         disagreement_sum = 0
-        print(1)
         for question in self.electionquestion_set.all():
-            answer = question.useranswer_set.filter(user=user)
-            commitee_answer = question.commiteeanswer_set.filter(committee=committee)
-            disagreement_sum += abs(answer[0].answer - commitee_answer)
+            answer = question.answer_set.filter(useranswer__user=user)
+            commitee_answer = question.answer_set.filter(commiteeanswer__committee=committee)
+            disagreement_sum += abs(answer[0].answer - commitee_answer[0].answer)
         return disagreement_sum
+
+    def get_participating_committes(self):
+        committes = []
+        for committe in Committee.objects.all():
+            if len(committe.commiteeanswer_set.filter(question__question_form=self)) > 0:
+                committes.append(committe)
+        return committes
 
 
 
@@ -43,8 +50,8 @@ class Answer(models.Model):
         return f"{self.question.question} Answer: {self.answer}"
 
 class CommiteeAnswer(Answer):
-    committee = models.ForeignKey(Committee,on_delete=models.CASCADE)
+    committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
 class UserAnswer(Answer):
-    user = models.ForeignKey(User,on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 

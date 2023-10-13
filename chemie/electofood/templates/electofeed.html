@@ -10,6 +10,13 @@
 
 {% load material_form %}
 {% block content %}
-<div>søk sportskom</div>
+<div>
+    <div>{{ title }}</div>
+    {% for result in  results%}
+        <div>{{ result.0 }}</div>
+        <div>{{ result.1 }}</div>
+    {% endfor %}
+    <div>{{ result }}</div>
+</div>
 
 {% endblock content %}
