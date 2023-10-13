@@ -132,7 +132,13 @@ button.next-btn {
         {% for value in values %}
                 <label class="svelte-ev4lou" for="id_answer_{{ question.id }}_{{ value.0 }}">
                     <span class="input-wrapper svelte-ev4lou">
-                        <input type="radio" name="{{ question.id }}" value="{{ value.0 }}" required id="id_answer_{{ question.id }}_{{ value.0 }}">
+                        <input
+                                type="radio"
+                                name="{{ question.id }}"
+                                value="{{ value.0 }}"
+                                required id="id_answer_{{ question.id }}_{{ value.0 }}"
+                                {% if answer_dict %}{% if answer_dict|get_item:question.id == value.0%} checked {% endif %} {% endif %}
+                        >
                     </span>
                     <span>
                         {{ value.1 }}
