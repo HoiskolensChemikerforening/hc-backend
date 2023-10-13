@@ -1,0 +1,160 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Valg-o-mat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  jhsdhfks
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+    <style>
+
+.radio-container.svelte-ev4lou.svelte-ev4lou {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+label.svelte-ev4lou.svelte-ev4lou {
+    position: relative;
+    text-transform: uppercase;
+    font-variation-settings: var(--nrk-sans-condensed);
+    font-weight: var(--nrk-sans-weight-medium);
+    font-size: .9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1;
+}
+.input-wrapper.svelte-ev4lou.svelte-ev4lou {
+    position: relative;
+    height: 40px;
+    margin-bottom: 14px;
+    width: 100%;
+}
+
+.input-wrapper.svelte-ev4lou.svelte-ev4lou > input {
+    opacity: 100%;
+    height: 100%;
+    width:100%;
+    position: relative;
+}
+
+.checkmark.svelte-ev4lou.svelte-ev4lou {
+    display: inline-block;
+    opacity: 0;
+    position: absolute;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    top: 0;
+    left: 0;
+    font-size: .8rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.question {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+
+}
+.card-body.cardstyle {
+    padding: 3rem 5.6rem;
+}
+
+.secondary-title {
+    margin-bottom: 0.5rem;
+}
+
+button.next-btn {
+    background: #fff;
+    border-radius: 48px;
+    text-align: center;
+    font-variation-settings: var(--nrk-sans-condensed);
+    color: var(--nrk-alt-blue-900);
+    padding: 0 .5rem;
+    cursor: pointer;
+    border: 2px solid #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[slot=navigation] {
+    /* position: absolute; */
+    left: 50%;
+    bottom: 0;
+    /* transform: translate(-50%,0%); */
+    /* display: grid; */
+    /* grid-template-columns: 50px 1fr 50px; */
+    /* justify-items: center; */
+    /* width: min(24rem,100%); */
+    /* margin: auto; */
+    /* padding: 0 1.25rem; */
+    display: flex;
+    /* align-content: space-between; */
+    justify-content: center;
+    margin-top: 40px;
+}
+.container-btn {
+    width: 100px;
+    margin: 10px;
+}
+
+.container-btn > button{
+    width: 100%;
+}
+@media only screen and (max-width: 600px) {
+  .card-body.cardstyle {
+    padding: 2.5rem 2.5rem;
+}
+}
+    </style>
+<div>
+    <div>haha</div>
+    <form method="post">
+    {% csrf_token %}
+    <div>
+    {% for question in questions %}
+        <div class="card">
+            <div class="card-body cardstyle">
+            <div class="secondary-title">Medlemsmøte med valg høst 2023</div>
+                <div class="question">{{ question}}</div>
+        <div class="radio-container svelte-ev4lou">
+        {% for value in values %}
+                <label class="svelte-ev4lou" for="id_answer_{{ question.id }}_{{ value.0 }}">
+                    <span class="input-wrapper svelte-ev4lou">
+                        <input type="radio" name="{{ question.id }}" value="{{ value.0 }}" required id="id_answer_{{ question.id }}_{{ value.0 }}">
+                    </span>
+                    <span>
+                        {{ value.1 }}
+                    </span>
+
+                </label>
+
+        {% endfor %}
+
+        </div>
+        <div slot="navigation">
+        <div class="container-btn"><button class="btn btn-light btn-block"><span class="container-btn">tilbake</span></button></div>
+        <div class="container-btn"><button class="btn btn-light btn-block"><span class="container-btn">neste</span></button></div>
+        </div>
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+
+    <input type="submit" value="Save">
+    </form>
+
+</div>
+
+{% endblock content %}

@@ -41,7 +41,7 @@ class ElectionQuestionForm(models.Model):
 
 class ElectionQuestion(models.Model):
     question_form = models.ForeignKey(ElectionQuestionForm, on_delete=models.CASCADE)
-    question = models.TextField(max_length=40, verbose_name="Påstand")
+    question = models.TextField(max_length=300, verbose_name="Påstand")
 
     def __str__(self):
         return self.question
