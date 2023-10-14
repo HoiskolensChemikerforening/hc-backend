@@ -122,13 +122,11 @@ def valgomat_result(request, id):
         questionlst = []
         for value in VALUES:
             committee_answer = CommiteeAnswer.objects.filter(question=question).filter(answer=value[0])
-            user_answer = UserAnswer.objects.filter(question=question).filter(answer=value[0])
+            user_answer = UserAnswer.objects.filter(question=question).filter(answer=value[0]).filter(user=request.user)
             merged_list = [user.get_name() for user in user_answer]+[committee.get_name() for committee in committee_answer]
-            print(question, value, merged_list)
             questionlst.append((value, merged_list))
         questionvalueanswerslist.append((question,questionlst))
-    #questionanswer = [(question, list(question.answer_set.filter(answer=VALUES[0]))) for question in questions]
-    print(questionvalueanswerslist)
+
     context = {
         "results": results,
         "questions": questions,

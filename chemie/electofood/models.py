@@ -58,6 +58,9 @@ class Answer(models.Model):
     def get_name(self):
         return f"No name>"
 
+    def get_election_form(self):
+        return self.question.question_form
+
 
 class CommiteeAnswer(Answer):
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
