@@ -22,7 +22,8 @@
                 <div class="card-body cardstyle">
                     <div class="secondary-title">Valgomat</div>
                     <div class="question decrease-margin">{{ electionform }}</div>
-                    <p>HCs valgomat hjelper deg å finne vervet som passer best til deg! Husk at en valgomat ikke er en fasit, men ett av flere råd. Du bestemmer!</p>
+                    <p>{{ electionform.description }}</p>
+                    <!---<p>HCs valgomat hjelper deg å finne vervet som passer best til deg! Husk at en valgomat ikke er en fasit, men ett av flere råd. Du bestemmer!</p>--->
                     <div slot="navigation">
                         <div class="container-btn"><a class="btn btn-light btn-block" href="personlig/{{ electionform.id }}/"><span class="container-btn">Start</span></a></div>
                         <!-- Dropdown Trigger -->

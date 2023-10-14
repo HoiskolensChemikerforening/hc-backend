@@ -17,7 +17,7 @@
 {% block content %}
     <div>
         <h3>
-            Opprett en ny valgomat!
+            {% if id %} Rediger valgomaten! {% else %}Opprett en ny valgomat!{% endif %}
         </h3>
         <form method="post">
             {% csrf_token %}

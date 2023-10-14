@@ -3,7 +3,7 @@ from django.shortcuts import render, get_object_or_404, redirect
 from .models import ElectionQuestionForm, CommiteeAnswer, VALUES,UserAnswer, ElectionQuestion
 from chemie.committees.models import Committee
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import AnswerForm, ElectionQuestionFormForm, ElectionQuestionCreateForm
+from .forms import ElectionQuestionFormForm, ElectionQuestionCreateForm
 from django.urls import reverse
 import random
 from django.contrib import messages
@@ -20,7 +20,7 @@ def get_item(dictionary, key):
 def index(request):
     electionforms = ElectionQuestionForm.objects.all()
     user = request.user
-    committees = Committee.objects.filter(position__users=user)
+    committees = Committee.objects.filter(position__users=user).distinct()
 
     context = {
         "electionforms": electionforms,
@@ -36,10 +36,16 @@ def get_committee_and_answer(request, electionform, committee_id):
         answers = CommiteeAnswer.objects.filter(committee__id=committee_id).filter(question__question_form=electionform)
         committee = get_object_or_404(Committee, id=committee_id)
     return answers, committee
+
+def delete_old_answers(old_answers):
+    if len(old_answers) > 0:
+        for answer in old_answers:
+            answer.delete()
+    return
+
 @login_required()
 def valgomat_form(request, id, committee_id=None):
     electionform = get_object_or_404(ElectionQuestionForm, id=id)
-    print(electionform)
     questions = electionform.electionquestion_set.all()
 
     answers, committee = get_committee_and_answer(request, electionform, committee_id)
@@ -58,9 +64,14 @@ def valgomat_form(request, id, committee_id=None):
             if not answer_dict:
                 for question in questions:
                     if not committee_id:
+                        old_answers = question.answer_set.filter(useranswer__user=request.user)
+                        delete_old_answers(old_answers)
+
                         answer = UserAnswer()
                         answer.user = request.user
                     else:
+                        old_answers = question.answer_set.filter(commiteeanswer__committee=committee)
+                        delete_old_answers(old_answers)
                         answer = CommiteeAnswer()
                         answer.committee = committee
                     answer.question = question
@@ -139,16 +150,24 @@ def valgomat_result(request, id):
 
 
 @permission_required("electofood.change_electionquestionform")
-def create_valgomat(request):
-    form = ElectionQuestionFormForm(request.POST or None)
-    print(form.is_valid(), form, request.POST, request)
-    if request.POST and form.is_valid():
-        valgomat = form.save()
-        print("hi")
-        return redirect(reverse("valgomat:valgomat_rediger", kwargs={"id": valgomat.id}))
+def create_valgomat(request, id=None):
+    if id:
+        electform = get_object_or_404(ElectionQuestionForm, id=id)
+        form = ElectionQuestionFormForm(instance=electform)
+    else:
+        form = ElectionQuestionFormForm(None)
+    if request.POST:
+        if id:
+            form = ElectionQuestionFormForm(request.POST, instance=electform)
+        else:
+            form = ElectionQuestionFormForm(request.POST)
+        if form.is_valid():
+            valgomat = form.save()
+            return redirect(reverse("valgomat:valgomat_rediger", kwargs={"id": valgomat.id}))
 
     context = {
-        "form": form
+        "form": form,
+        "id": id
     }
     return render(request, "createvalgomat.html", context)
 

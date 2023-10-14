@@ -11,6 +11,7 @@ VALUES = (
 
 class ElectionQuestionForm(models.Model):
     title = models.CharField(max_length=40, verbose_name="Tittel")
+    description = models.TextField(max_length=300, default="", verbose_name="Beskrivelse")
     active = models.BooleanField(default=True, verbose_name="Aktiv")
 
     def __str__(self):

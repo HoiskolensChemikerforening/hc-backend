@@ -20,7 +20,10 @@
                         <h3>
             {{ electionform }}
         </h3>
-                        <a class="btn red" href="slett/valgomat/{{ electionform.id }}/"> Delete Valgomat </a>
+                        <div class="button-section">
+                            <a class="btn" href="{% url "valgomat:valgomat_opprett_edit" electionform.id %}">Rediger Valgomat </a>
+                            <a class="btn red" href="slett/valgomat/{{ electionform.id }}/"> Slett Valgomat </a>
+                        </div>
                     </div>
 
 
@@ -35,7 +38,7 @@
                     <hr>
                     <div class="delete-list">
                         <div>{{ question }}</div>
-                        <a class="btn-small red" href="slett/{{ question.id }}/"> delete </a>
+                        <a class="btn-small red" href="slett/{{ question.id }}/"> slett </a>
                     </div>
                 </li>
             {% endfor %}
