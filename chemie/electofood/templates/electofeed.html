@@ -29,10 +29,10 @@
                         {% if committees %}
                         <div class="container-btn">
                               <!-- Dropdown Trigger -->
-                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown1'>Komitee</a>
+                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}huhu'>Komitee</a>
 
                               <!-- Dropdown Structure -->
-                              <ul id='dropdown1' class='dropdown-content'>
+                              <ul id='dropdown{{ electionform.id }}huhu' class='dropdown-content'>
                                   {% for committee in committees %}
                                         <li>
                                             <a href="komitee/{{ electionform.id }}/{{ committee.id }}/">{{ committee }}</a>
@@ -47,6 +47,21 @@
         {% endfor %}
     </div>
 </div>
+    {% if perms.electofood %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+    {% if perms.electofood.delete_social %}
+  <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_opprett" %}"><i class="material-icons">add</i></a>
+    <a class="btn-floating mobile-fab-tip">Ny valgomat</a>
+  </li>
+          {%  endif %}
+      </ul>
+</div>
+    {%  endif %}
 
 {% endblock content %}
 

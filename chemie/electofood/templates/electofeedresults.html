@@ -32,7 +32,7 @@
     </div>
     <div class="card">
         <div class="card-body cardstyle">
-        <h3>Likheter og ulikheter mellom deg komiteene</h3>
+        <h3>Likheter og ulikheter mellom deg og komiteene</h3>
             {% for question, valueanswerslist in questionvalueanswerslist %}
                 <hr/>
             <div class="question headline"> {{ question }} </div>
@@ -53,6 +53,25 @@
             {% endfor %}
         </div>
     </div>
+{% if perms.electofood %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+    {% if perms.electofood.delete_social %}
+          <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_rediger" electionform.id%}"><i class="material-icons">edit</i></a>
+    <a class="btn-floating mobile-fab-tip">Rediger valgomat</a>
+  </li>
+  <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_opprett" %}"><i class="material-icons">add</i></a>
+    <a class="btn-floating mobile-fab-tip">Ny valgomat</a>
+  </li>
+          {%  endif %}
+      </ul>
+</div>
+    {%  endif %}
 </div>
 
 {% endblock content %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Answer, VALUES
+from .models import Answer, VALUES, ElectionQuestionForm, ElectionQuestion
 import material as M
 
 class AnswerForm(forms.Form):
@@ -9,3 +9,18 @@ class AnswerForm(forms.Form):
             "answer",
         ]"""
     answer = forms.ChoiceField(choices=VALUES, widget=forms.RadioSelect)
+
+
+class ElectionQuestionFormForm(forms.ModelForm):
+    class Meta:
+        model = ElectionQuestionForm
+        fields = [
+            "title"
+        ]
+
+class ElectionQuestionCreateForm(forms.ModelForm):
+    class Meta:
+        model = ElectionQuestion
+        fields = [
+            "question"
+        ]

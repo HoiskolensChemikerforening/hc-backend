@@ -1,0 +1,50 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/electofood.css' %}" type="text/css" media="screen,projection">
+{% endblock %}
+
+{% block nav_header %}
+  Valgomat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+    <div>
+            <div class="delete-list">
+                        <h3>
+            {{ electionform }}
+        </h3>
+                        <a class="btn red" href="slett/valgomat/{{ electionform.id }}/"> Delete Valgomat </a>
+                    </div>
+
+
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button class="btn" type="submit" value="Submit">Lagre</button>
+        </form>
+        <ul>
+            {% for question in questions %}
+                <li>
+                    <hr>
+                    <div class="delete-list">
+                        <div>{{ question }}</div>
+                        <a class="btn-small red" href="slett/{{ question.id }}/"> delete </a>
+                    </div>
+                </li>
+            {% endfor %}
+            <hr>
+        </ul>
+    </div>
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock %}

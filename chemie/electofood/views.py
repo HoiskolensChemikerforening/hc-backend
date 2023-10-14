@@ -1,9 +1,9 @@
 from django.shortcuts import render, HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import ElectionQuestionForm, CommiteeAnswer, VALUES,UserAnswer
+from .models import ElectionQuestionForm, CommiteeAnswer, VALUES,UserAnswer, ElectionQuestion
 from chemie.committees.models import Committee
-from django.contrib.auth.decorators import login_required
-from .forms import AnswerForm
+from django.contrib.auth.decorators import login_required, permission_required
+from .forms import AnswerForm, ElectionQuestionFormForm, ElectionQuestionCreateForm
 from django.urls import reverse
 import random
 from django.contrib import messages
@@ -39,6 +39,7 @@ def get_committee_and_answer(request, electionform, committee_id):
 @login_required()
 def valgomat_form(request, id, committee_id=None):
     electionform = get_object_or_404(ElectionQuestionForm, id=id)
+    print(electionform)
     questions = electionform.electionquestion_set.all()
 
     answers, committee = get_committee_and_answer(request, electionform, committee_id)
@@ -98,7 +99,8 @@ def valgomat_form(request, id, committee_id=None):
         "questions": questions,
         "values": VALUES,
         "answer_dict": answer_dict,
-        "committee": committee
+        "committee": committee,
+        "electionform": electionform
     }
     return render(request, "electofeedform.html", context)
 
@@ -131,6 +133,67 @@ def valgomat_result(request, id):
         "results": results,
         "questions": questions,
         "values": VALUES,
-        "questionvalueanswerslist": questionvalueanswerslist
+        "questionvalueanswerslist": questionvalueanswerslist,
+        "electionform": electionform
     }
     return render(request, "electofeedresults.html", context)
+
+
+
+@permission_required("electofood.change_electionquestionform")
+def create_valgomat(request):
+    form = ElectionQuestionFormForm(request.POST or None)
+    print(form.is_valid(), form, request.POST, request)
+    if request.POST and form.is_valid():
+        valgomat = form.save()
+        print("hi")
+        return redirect(reverse("valgomat:valgomat_rediger", kwargs={"id": valgomat.id}))
+
+    context = {
+        "form": form
+    }
+    return render(request, "createvalgomat.html", context)
+
+
+@permission_required("electofood.change_electionquestionform")
+def edit_valgomat(request, id):
+    electionform = get_object_or_404(ElectionQuestionForm, id=id)
+    form = ElectionQuestionCreateForm(request.POST or None)
+
+
+
+    if request.POST and form.is_valid():
+        question = form.save(commit=False)
+        question.question_form = electionform
+        question.save()
+
+    questions = electionform.electionquestion_set.all()
+    form = ElectionQuestionCreateForm(None)
+    context = {
+        "form": form,
+        "electionform": electionform,
+        "questions":questions
+    }
+
+
+    return render(request, "editvalgomat.html", context)
+
+@permission_required("electofood.change_electionquestionform")
+def delete_question(request, id, question_id):
+    question = get_object_or_404(ElectionQuestion, id=question_id)
+    question.delete()
+
+
+    return redirect(reverse("valgomat:valgomat_rediger", kwargs={"id": id}))
+
+
+@permission_required("electofood.change_electionquestionform")
+def delete_valgomat(request, id, valgomat_id):
+    electionform = get_object_or_404(ElectionQuestionForm, id=valgomat_id)
+    electionform.delete()
+
+
+    return redirect(reverse("valgomat:index_valgomat"))
+
+
+

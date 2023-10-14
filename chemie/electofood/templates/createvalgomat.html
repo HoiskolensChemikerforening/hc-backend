@@ -1,0 +1,33 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/electofood.css' %}" type="text/css" media="screen,projection">
+{% endblock %}
+
+{% block nav_header %}
+  Valgomat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+    <div>
+        <h3>
+            Opprett en ny valgomat!
+        </h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ form }}
+            <button class="btn" type="submit" value="Submit">Lagre</button>
+        </form>
+    </div>
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock %}

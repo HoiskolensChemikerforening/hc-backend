@@ -30,6 +30,12 @@ label.svelte-ev4lou.svelte-ev4lou {
     position: relative;
 }
 
+.delete-list{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .checkmark.svelte-ev4lou.svelte-ev4lou {
     opacity: 0;
     position: absolute;
