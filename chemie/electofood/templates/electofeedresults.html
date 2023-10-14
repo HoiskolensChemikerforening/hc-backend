@@ -30,6 +30,29 @@
             {% endfor %}
         </div>
     </div>
+    <div class="card">
+        <div class="card-body cardstyle">
+        <h3>Likheter og ulikheter mellom deg komiteene</h3>
+            {% for question, valueanswerslist in questionvalueanswerslist %}
+                <hr/>
+            <div class="question headline"> {{ question }} </div>
+                <hr/>
+            <div class="row">
+
+                {% for value, answers in valueanswerslist %}
+                <div class="col  s12 m3">
+                    <div class="headline">{{ value.1 }}</div>
+                    <ul class="list-committee">
+                        {% for answer in answers %}
+                            <li>{{ answer }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 
 {% endblock content %}

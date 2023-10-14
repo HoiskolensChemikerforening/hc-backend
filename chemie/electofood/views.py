@@ -28,18 +28,20 @@ def index(request):
     }
     return render(request, "electofeed.html", context)
 
-
-@login_required()
-def valgomat_form(request, id, committee_id=None):
-    electionform = get_object_or_404(ElectionQuestionForm, id=id)
-    questions = electionform.electionquestion_set.all()
-
+def get_committee_and_answer(request, electionform, committee_id):
     if not committee_id:
         answers = UserAnswer.objects.filter(user=request.user).filter(question__question_form=electionform)
         committee = None
     else:
         answers = CommiteeAnswer.objects.filter(committee__id=committee_id).filter(question__question_form=electionform)
         committee = get_object_or_404(Committee, id=committee_id)
+    return answers, committee
+@login_required()
+def valgomat_form(request, id, committee_id=None):
+    electionform = get_object_or_404(ElectionQuestionForm, id=id)
+    questions = electionform.electionquestion_set.all()
+
+    answers, committee = get_committee_and_answer(request, electionform, committee_id)
     answer_dict = None
     if len(answers) == len(questions):
         answer_dict = {}
@@ -96,22 +98,39 @@ def valgomat_form(request, id, committee_id=None):
         "questions": questions,
         "values": VALUES,
         "answer_dict": answer_dict,
-        "committee":committee
+        "committee": committee
     }
     return render(request, "electofeedform.html", context)
-
 
 @login_required()
 def valgomat_result(request, id):
     electionform = get_object_or_404(ElectionQuestionForm, id=id)
+    questions = electionform.electionquestion_set.all()
     committees = electionform.get_participating_committes()
     results = []
     colors = COLORS
     random.shuffle(colors)
     for i, committe in enumerate(committees):
-        results.append([committe, electionform.calculate_result_commitee(request.user, committe),colors[(i%len(colors))]])
+        results.append([committe, electionform.calculate_result_commitee(request.user, committe), colors[(i%len(colors))]])
     results.sort(key=lambda x: x[1], reverse=True)
-    context={
+
+    questionvalueanswerslist = []
+
+    for question in questions:
+        questionlst = []
+        for value in VALUES:
+            committee_answer = CommiteeAnswer.objects.filter(question=question).filter(answer=value[0])
+            user_answer = UserAnswer.objects.filter(question=question).filter(answer=value[0])
+            merged_list = [user.get_name() for user in user_answer]+[committee.get_name() for committee in committee_answer]
+            print(question, value, merged_list)
+            questionlst.append((value, merged_list))
+        questionvalueanswerslist.append((question,questionlst))
+    #questionanswer = [(question, list(question.answer_set.filter(answer=VALUES[0]))) for question in questions]
+    print(questionvalueanswerslist)
+    context = {
         "results": results,
+        "questions": questions,
+        "values": VALUES,
+        "questionvalueanswerslist": questionvalueanswerslist
     }
     return render(request, "electofeedresults.html", context)

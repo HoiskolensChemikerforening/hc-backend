@@ -55,9 +55,18 @@ class Answer(models.Model):
     def __str__(self):
         return f"{self.question.question} Answer: {self.answer}"
 
+    def get_name(self):
+        return f"No name>"
+
+
 class CommiteeAnswer(Answer):
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
+    def get_name(self):
+        return self.committee.title
 
 class UserAnswer(Answer):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    def get_name(self):
+        return f"{self.user.first_name} {self.user.last_name}"
 

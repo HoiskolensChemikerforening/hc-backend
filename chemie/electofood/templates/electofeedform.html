@@ -21,7 +21,7 @@
     {% csrf_token %}
     <div>
     {% for question in questions %}
-        <div id="card-{{ forloop.counter }}" class="card" {% if  forloop.counter != 1 %} style="visibility: hidden; width: 0; height: 0" {% endif %}>
+        <div id="card-{{ forloop.counter }}" class="card" {% if  forloop.counter != 1 %} style="visibility: hidden; width: 0; height: 0; margin: 0" {% endif %}>
             <div class="card-body cardstyle">
             <div class="secondary-title">Medlemsmøte med valg høst 2023 {% if committee %}({{ committee }}){% endif %}</div>
                 <div class="question">{{ question}}</div>
@@ -54,7 +54,6 @@
     {% endfor %}
     </div>
 
-    <input type="submit" value="Save">
     </form>
 
 </div>
@@ -82,6 +81,7 @@ Array.from(navigation_tags).forEach((element)=>{
             current_container.style.visibility = "hidden";
             current_container.style.width = 0;
             current_container.style.height = 0;
+            current_container.style.margin = 0;
             console.log(current_container,`card-${stage}`);
             stage -= 1;
             current_container= document.getElementById(`card-${stage}`);
@@ -89,6 +89,7 @@ Array.from(navigation_tags).forEach((element)=>{
             current_container.style.removeProperty("visibility");
             current_container.style.removeProperty("width");
             current_container.style.removeProperty("height");
+            current_container.style.removeProperty("margin");
 
         }
 
@@ -106,11 +107,13 @@ Array.from(navigation_tags).forEach((element)=>{
             current_container.style.visibility = "hidden";
             current_container.style.width = 0;
             current_container.style.height = 0;
+            current_container.style.margin = 0;
             stage += 1;
             current_container= document.getElementById(`card-${stage}`);
             current_container.style.removeProperty("visibility");
             current_container.style.removeProperty("width");
             current_container.style.removeProperty("height");
+            current_container.style.removeProperty("margin");
             if (stage>=max_stages){
                 console.log("hih",next_btn.children[0]);
                 document.getElementById(`next-btn-span-${stage}`).textContent = "Avslutt";

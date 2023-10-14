@@ -112,8 +112,19 @@ button.next-btn {
     margin-bottom:5px;
 }
 
+.dropdown-container {
+    margin-bottom: 30px;
+}
 
-
+.headline {
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.list-committee{
+    margin-top:5px;
+    font-weight: lighter;
+    font-style: oblique;
+}
 .card-body.cardstyle > h3{
     margin-top: 0;
 }
