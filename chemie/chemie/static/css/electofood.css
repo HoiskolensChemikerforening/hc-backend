@@ -86,11 +86,6 @@ button.next-btn {
 .container-btn > button{
     width: 100%;
 }
-@media only screen and (max-width: 600px) {
-  .card-body.cardstyle {
-    padding: 2.5rem 2.5rem;
-}
-}
 
 
 
@@ -113,13 +108,19 @@ button.next-btn {
     margin-bottom: 1px;
 }
 
-
-
-
-.card-body.cardstyle{
-    padding: 5.8rem;
+.decrease-margin{
+    margin-bottom:5px;
 }
+
+
 
 .card-body.cardstyle > h3{
     margin-top: 0;
 }
+
+@media only screen and (max-width: 600px) {
+  .card-body.cardstyle {
+    padding: 2.5rem 2.5rem;
+}
+}
+

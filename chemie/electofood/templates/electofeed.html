@@ -19,21 +19,46 @@
     <div>
         {% for electionform in electionforms %}
             <div class="card">
-                <div class="card-body">
-                    {{ electionform }}
+                <div class="card-body cardstyle">
+                    <div class="secondary-title">Valgomat</div>
+                    <div class="question decrease-margin">{{ electionform }}</div>
+                    <p>HCs valgomat hjelper deg å finne vervet som passer best til deg! Husk at en valgomat ikke er en fasit, men ett av flere råd. Du bestemmer!</p>
+                    <div slot="navigation">
+                        <div class="container-btn"><a class="btn btn-light btn-block" href="personlig/{{ electionform.id }}/"><span class="container-btn">Start</span></a></div>
+                        <!-- Dropdown Trigger -->
+                        {% if committees %}
+                        <div class="container-btn">
+                              <!-- Dropdown Trigger -->
+                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown1'>Komitee</a>
+
+                              <!-- Dropdown Structure -->
+                              <ul id='dropdown1' class='dropdown-content'>
+                                  {% for committee in committees %}
+                                        <li>
+                                            <a href="komitee/{{ electionform.id }}/{{ committee.id }}/">{{ committee }}</a>
+                                        </li>
+                                  {% endfor %}
+                              </ul>
+                        </div>
+                        {% endif %}
+                    </div>
                 </div>
             </div>
         {% endfor %}
     </div>
-    <h4>Slik fungerer Valgomaten</h4>
-    <p>
-        HCs valgomat hjelper deg å finne vervet som passer best til deg!
-        Husk at en valgomat ikke er en fasit, men ett av flere råd.
-        Du bestemmer!
-    </p>
-    {% for committee in  committees%}
-        <div>{{ committee }}</div>
-    {% endfor %}
 </div>
 
 {% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    var instances = M.Dropdown.init(elems, options);
+  });
+
+  // Or with jQuery
+
+  $('.dropdown-trigger').dropdown();
+</script>
+{% endblock %}
