@@ -21,7 +21,7 @@
     {% csrf_token %}
     <div>
     {% for question in questions %}
-        <div class="card">
+        <div id="card-{{ forloop.counter }}" class="card" {% if  forloop.counter != 1 %} style="visibility: hidden; width: 0; height: 0" {% endif %}>
             <div class="card-body cardstyle">
             <div class="secondary-title">Medlemsmøte med valg høst 2023 {% if committee %}({{ committee }}){% endif %}</div>
                 <div class="question">{{ question}}</div>
@@ -42,13 +42,12 @@
                     </span>
 
                 </label>
-
         {% endfor %}
 
         </div>
-        <div slot="navigation">
-        <div class="container-btn"><button class="btn btn-light btn-block"><span class="container-btn">tilbake</span></button></div>
-        <div class="container-btn"><button class="btn btn-light btn-block"><span class="container-btn">neste</span></button></div>
+        <div slot="navigation" class="navigation">
+        <div class="container-btn"><button id="back-btn-{{ forloop.counter }}"  class="btn btn-light btn-block"><span id="back-btn-span-{{ forloop.counter }}" class="container-btn">tilbake</span></button></div>
+        <div class="container-btn"><button id="next-btn-{{ forloop.counter }}" class="btn btn-light btn-block"><span id="next-btn-span-{{ forloop.counter }}" class="container-btn">neste</span></button></div>
         </div>
         </div>
         </div>
@@ -61,3 +60,70 @@
 </div>
 
 {% endblock content %}
+
+{% block footer_script %}
+<script>
+let stage = 1;
+const max_stages = document.getElementsByClassName("card").length
+let navigation_tags = document.getElementsByClassName('navigation');
+console.log(navigation_tags);
+Array.from(navigation_tags).forEach((element)=>{
+    let divs = element.getElementsByTagName("div")
+    console.log(divs[0].children[0]);
+    let back_btn  = divs[0].children[0];
+    let next_btn =divs[1].children[0];
+    back_btn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevents the default behavior of the button
+        if (stage===1){
+            console.log("hu");
+            window.history.back();
+        } else {
+            let current_container=  document.getElementById(`card-${stage}`)
+            current_container.style.visibility = "hidden";
+            current_container.style.width = 0;
+            current_container.style.height = 0;
+            console.log(current_container,`card-${stage}`);
+            stage -= 1;
+            current_container= document.getElementById(`card-${stage}`);
+            console.log(current_container);
+            current_container.style.removeProperty("visibility");
+            current_container.style.removeProperty("width");
+            current_container.style.removeProperty("height");
+
+        }
+
+
+        // Accessing the added property
+        console.log("back");
+    });
+    if (next_btn.id !== `next-btn-${max_stages}`){
+    next_btn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevents the default behavior of the button
+        if (stage>=max_stages){
+            console.log("hu");
+        } else {
+            let current_container=  document.getElementById(`card-${stage}`)
+            current_container.style.visibility = "hidden";
+            current_container.style.width = 0;
+            current_container.style.height = 0;
+            stage += 1;
+            current_container= document.getElementById(`card-${stage}`);
+            current_container.style.removeProperty("visibility");
+            current_container.style.removeProperty("width");
+            current_container.style.removeProperty("height");
+            if (stage>=max_stages){
+                console.log("hih",next_btn.children[0]);
+                document.getElementById(`next-btn-span-${stage}`).textContent = "Avslutt";
+            }
+
+
+        }
+
+        // Accessing the added property
+        console.log("next");
+    });}
+
+})
+
+</script>
+{% endblock %}

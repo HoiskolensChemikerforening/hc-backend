@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from .forms import AnswerForm
 from django.urls import reverse
 import random
-
+from django.contrib import messages
 
 from django.template.defaulttags import register
 
@@ -63,12 +63,30 @@ def valgomat_form(request, id, committee_id=None):
                     answer.question = question
                     answer.answer = int(request.POST[str(question.id)])
                     answer.save()
-                return redirect(reverse("valgomat:valgomat_result", kwargs={"id": id}))
+                if not committee_id:
+                    return redirect(reverse("valgomat:valgomat_result", kwargs={"id": id}))
+                else:
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        f"Valgomat svaret for {committee} har blitt registrert.",
+                        extra_tags="Takk!",
+                    )
+                    return redirect(reverse("valgomat:index_valgomat"))
             else:
                 for answer in answers:
                     answer.answer = int(request.POST[str(answer.question.id)])
                     answer.save()
-                return redirect(reverse("valgomat:valgomat_result", kwargs={"id": id}))
+                if not committee_id:
+                    return redirect(reverse("valgomat:valgomat_result", kwargs={"id": id}))
+                else:
+                    messages.add_message(
+                        request,
+                        messages.SUCCESS,
+                        f"Valgomat svaret for {committee} har blitt redigert.",
+                        extra_tags="Takk!",
+                    )
+                    return redirect(reverse("valgomat:index_valgomat"))
 
 
 
