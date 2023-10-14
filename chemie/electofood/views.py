@@ -18,32 +18,28 @@ def get_item(dictionary, key):
 
 @login_required
 def index(request):
-    electionform = ElectionQuestionForm.objects.all()[0]
+    electionforms = ElectionQuestionForm.objects.all()
     user = request.user
-    committees = electionform.get_participating_committes()
-    dissagreement = electionform.get_max_disagreement_sum()
-    results = []
-    for committe in committees:
-        results.append([committe, electionform.calculate_result_commitee(user, committe)])
+    committees = Committee.objects.filter(position__users=user)
+
     context = {
-        "title": electionform.title,
-        "results": results,
-        "dissagreement": dissagreement
+        "electionforms": electionforms,
+        "committees": committees
     }
     return render(request, "electofeed.html", context)
 
 
 @login_required()
-def valgomat_form(request, id, committe_id=None):
+def valgomat_form(request, id, committee_id=None):
     electionform = get_object_or_404(ElectionQuestionForm, id=id)
     questions = electionform.electionquestion_set.all()
 
-    if not committe_id:
+    if not committee_id:
         answers = UserAnswer.objects.filter(user=request.user).filter(question__question_form=electionform)
         committee = None
     else:
-        answers = CommiteeAnswer.objects.filter(committee__id=committe_id).filter(question__question_form=electionform)
-        committee = get_object_or_404(Committee, id=committe_id)
+        answers = CommiteeAnswer.objects.filter(committee__id=committee_id).filter(question__question_form=electionform)
+        committee = get_object_or_404(Committee, id=committee_id)
     answer_dict = None
     if len(answers) == len(questions):
         answer_dict = {}
@@ -58,7 +54,7 @@ def valgomat_form(request, id, committe_id=None):
         if valid:
             if not answer_dict:
                 for question in questions:
-                    if not committe_id:
+                    if not committee_id:
                         answer = UserAnswer()
                         answer.user = request.user
                     else:
@@ -81,7 +77,8 @@ def valgomat_form(request, id, committe_id=None):
     context = {
         "questions": questions,
         "values": VALUES,
-        "answer_dict": answer_dict
+        "answer_dict": answer_dict,
+        "committee":committee
     }
     return render(request, "electofeedform.html", context)
 

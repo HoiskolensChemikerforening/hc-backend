@@ -1,22 +1,39 @@
 {% extends "chemie/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/electofood.css' %}" type="text/css" media="screen,projection">
+{% endblock %}
 
 {% block nav_header %}
-  Valg-o-mat
+  Valgomat
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  jhsdhfks
+
 {% endblock nav_sub_header %}
 
 {% load material_form %}
 {% block content %}
 <div>
-    <div>{{ title }}</div>
-    {% for result in  results%}
-        <div>{{ result.0 }}</div>
-        <div>{{ result.1 }}</div>
+    <div>
+        {% for electionform in electionforms %}
+            <div class="card">
+                <div class="card-body">
+                    {{ electionform }}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+    <h4>Slik fungerer Valgomaten</h4>
+    <p>
+        HCs valgomat hjelper deg å finne vervet som passer best til deg!
+        Husk at en valgomat ikke er en fasit, men ett av flere råd.
+        Du bestemmer!
+    </p>
+    {% for committee in  committees%}
+        <div>{{ committee }}</div>
     {% endfor %}
-    <div>{{ dissagreement }}</div>
 </div>
 
 {% endblock content %}
