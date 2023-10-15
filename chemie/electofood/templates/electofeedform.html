@@ -25,10 +25,10 @@
             <div class="card-body cardstyle">
             <div class="secondary-title">Medlemsmøte med valg høst 2023 {% if committee %}({{ committee }}){% endif %}</div>
                 <div class="question">{{ question}}</div>
-        <div class="radio-container svelte-ev4lou">
+        <div class="radio-container alternativesform">
         {% for value in values %}
-                <label class="svelte-ev4lou" for="id_answer_{{ question.id }}_{{ value.0 }}">
-                    <span class="input-wrapper svelte-ev4lou">
+                <label class="alternativesform" for="id_answer_{{ question.id }}_{{ value.0 }}">
+                    <span class="input-wrapper alternativesform">
                         <input
                                 type="radio"
                                 name="{{ question.id }}"
