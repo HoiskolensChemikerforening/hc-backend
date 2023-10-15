@@ -1,0 +1,151 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block nav_header %}
+  Valgomat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  {% if committee %}{{ committee }}{% endif %}
+{% endblock nav_sub_header %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/electofood.css' %}" type="text/css" media="screen,projection">
+{% endblock  %}
+
+{% load material_form %}
+{% block content %}
+
+<div>
+    <form method="post">
+    {% csrf_token %}
+    <div>
+    {% for question in questions %}
+        <div id="card-{{ forloop.counter }}" class="card" {% if  forloop.counter != 1 %} style="visibility: hidden; width: 0; height: 0; margin: 0" {% endif %}>
+            <div class="card-body cardstyle">
+            <div class="secondary-title">Medlemsmøte med valg høst 2023 {% if committee %}({{ committee }}){% endif %}</div>
+                <div class="question">{{ question}}</div>
+        <div class="radio-container alternativesform">
+        {% for value in values %}
+                <label class="alternativesform" for="id_answer_{{ question.id }}_{{ value.0 }}">
+                    <span class="input-wrapper alternativesform">
+                        <input
+                                type="radio"
+                                name="{{ question.id }}"
+                                value="{{ value.0 }}"
+                                required id="id_answer_{{ question.id }}_{{ value.0 }}"
+                                {% if answer_dict %}{% if answer_dict|get_item:question.id == value.0%} checked {% endif %} {% endif %}
+                        >
+                    </span>
+                    <span>
+                        {{ value.1 }}
+                    </span>
+
+                </label>
+        {% endfor %}
+
+        </div>
+        <div slot="navigation" class="navigation">
+        <div class="container-btn"><button id="back-btn-{{ forloop.counter }}"  class="btn btn-light btn-block"><span id="back-btn-span-{{ forloop.counter }}" class="container-btn">tilbake</span></button></div>
+        <div class="container-btn"><button id="next-btn-{{ forloop.counter }}" class="btn btn-light btn-block"><span id="next-btn-span-{{ forloop.counter }}" class="container-btn">neste</span></button></div>
+        </div>
+        </div>
+        </div>
+    {% endfor %}
+    </div>
+
+    </form>
+{% if perms.electofood %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+    {% if perms.electofood.delete_social %}
+          <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_rediger" electionform.id%}"><i class="material-icons">edit</i></a>
+    <a class="btn-floating mobile-fab-tip">Rediger valgomat</a>
+  </li>
+  <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_opprett" %}"><i class="material-icons">add</i></a>
+    <a class="btn-floating mobile-fab-tip">Ny valgomat</a>
+  </li>
+          {%  endif %}
+      </ul>
+</div>
+    {%  endif %}
+
+</div>
+
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+let stage = 1;
+const max_stages = document.getElementsByClassName("card").length
+let navigation_tags = document.getElementsByClassName('navigation');
+console.log(navigation_tags);
+Array.from(navigation_tags).forEach((element)=>{
+    let divs = element.getElementsByTagName("div")
+    console.log(divs[0].children[0]);
+    let back_btn  = divs[0].children[0];
+    let next_btn =divs[1].children[0];
+    back_btn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevents the default behavior of the button
+        if (stage===1){
+            console.log("hu");
+            window.history.back();
+        } else {
+            let current_container=  document.getElementById(`card-${stage}`)
+            current_container.style.visibility = "hidden";
+            current_container.style.width = 0;
+            current_container.style.height = 0;
+            current_container.style.margin = 0;
+            console.log(current_container,`card-${stage}`);
+            stage -= 1;
+            current_container= document.getElementById(`card-${stage}`);
+            console.log(current_container);
+            current_container.style.removeProperty("visibility");
+            current_container.style.removeProperty("width");
+            current_container.style.removeProperty("height");
+            current_container.style.removeProperty("margin");
+
+        }
+
+
+        // Accessing the added property
+        console.log("back");
+    });
+    if (next_btn.id !== `next-btn-${max_stages}`){
+    next_btn.addEventListener('click', function(event) {
+        event.preventDefault(); // Prevents the default behavior of the button
+        if (stage>=max_stages){
+            console.log("hu");
+        } else {
+            let current_container=  document.getElementById(`card-${stage}`)
+            current_container.style.visibility = "hidden";
+            current_container.style.width = 0;
+            current_container.style.height = 0;
+            current_container.style.margin = 0;
+            stage += 1;
+            current_container= document.getElementById(`card-${stage}`);
+            current_container.style.removeProperty("visibility");
+            current_container.style.removeProperty("width");
+            current_container.style.removeProperty("height");
+            current_container.style.removeProperty("margin");
+            if (stage>=max_stages){
+                console.log("hih",next_btn.children[0]);
+                document.getElementById(`next-btn-span-${stage}`).textContent = "Avslutt";
+            }
+
+
+        }
+
+        // Accessing the added property
+        console.log("next");
+    });}
+
+})
+
+</script>
+{% endblock %}
