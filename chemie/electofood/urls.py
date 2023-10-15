@@ -27,7 +27,7 @@ urlpatterns = [
         name="valgomat_delete_question",
     ),
     path(
-        "rediger/<int:id>/slett/valgomat/<int:valgomat_id>/",
+        "rediger/<int:id>/slett/valgomat/",
         views.delete_valgomat,
         name="valgomat_delete",
     ),

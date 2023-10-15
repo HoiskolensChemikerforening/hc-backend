@@ -22,7 +22,7 @@
         </h3>
                         <div class="button-section">
                             <a class="btn" href="{% url "valgomat:valgomat_opprett_edit" electionform.id %}">Rediger Valgomat </a>
-                            <a class="btn red" href="slett/valgomat/{{ electionform.id }}/"> Slett Valgomat </a>
+                            <a class="btn red" href="{% url "valgomat:valgomat_delete" electionform.id %}"> Slett Valgomat </a>
                         </div>
                     </div>
 
