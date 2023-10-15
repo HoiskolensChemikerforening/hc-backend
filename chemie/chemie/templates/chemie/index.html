@@ -15,10 +15,6 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    <div id="container">
-        <div id="animate">
-        </div>
-    </div>
   {% if perms.events or perms.news %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -34,7 +30,7 @@
         {% if perms.events.add_bedpres %}
           <li>
             <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
+            <a class="btn-floating mobile-fab-tip">Opprett karriere arrangement</a>
           </li>
         {% endif %}
         {% if perms.news.add_article %}

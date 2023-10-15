@@ -34,19 +34,31 @@
 
     <br>
 
-    <div class="collapse {% if "?" in request.get_full_path %}show{% endif %}" id="filterCollapse">
+    <div class="collapse {% if "?" in request.get_full_path %}show{% endif %} card-container-box" id="filterCollapse">
       <div class="card card-body shadow-none">
         <div class="row">
-          <div class="col-md-12 col-12">
+          <div class="col-md-6 col-6 filterbox">
             <p>Spesialisering:</p>
             {% for specialization in specializations %}
               <div>
                 <input type="checkbox" id="specialization-{{ specialization.id }}"
-                       name="{{ specialization.id }}" class="specialization-checkbox" checked>
-                <label for="specialization-{{ specialization.id }}">{{ specialization }}</label>
+                       name="{{ specialization.name }}" class="specialization-checkbox" checked>
+                <label for="specialization-{{ specialization.name }}">{{ specialization }}</label>
               </div>
             {% endfor %}
           </div>
+
+            <div class="col-md-6 col-6 filterbox">
+            <p>Stillingstype:</p>
+            {% for PositionType in postypes %}
+              <div>
+                <input type="checkbox" id="PositionType-{{ PositionType.id }}"
+                       name="{{ PositionType.name }}" class="postype-checkbox" checked>
+                <label for="PositionType-{{ PositionType.name }}">{{ PositionType }}</label>
+              </div>
+            {% endfor %}
+          </div>
+
         </div>
         <br>
         <a class="button-fill" href="#" onclick="filterReload()" style="width: min-content"
@@ -73,12 +85,12 @@
         </p>
         {% for specialization in job.specializations.all %}
         <span class="badge badge-pill
-             {% if specialization.id == 1 %} badge-custom-1 {% endif %}
-             {% if specialization.id == 2 %} badge-custom-2 {% endif %}
-             {% if specialization.id == 3 %} badge-custom-3 {% endif %}
-             {% if specialization.id == 4 %} badge-custom-4 {% endif %}
-             {% if specialization.id == 5 %} badge-custom-5 {% endif %}
-             {% if specialization.id == 6 %} badge-custom-6 {% endif %}
+             {% if specialization.name == 1 %} badge-custom-1 {% endif %}
+             {% if specialization.name == 2 %} badge-custom-2 {% endif %}
+             {% if specialization.name == 3 %} badge-custom-3 {% endif %}
+             {% if specialization.name == 4 %} badge-custom-4 {% endif %}
+             {% if specialization.name == 5 %} badge-custom-5 {% endif %}
+             {% if specialization.name == 6 %} badge-custom-6 {% endif %}
               ">{{ specialization }}</span>
         {% endfor %}
       </div>
@@ -100,6 +112,22 @@
 
 {% block footer_script %}
 <script>
+
+function updateCheckboxes(filtertype, querydict) {
+
+    if (filtertype in querydict) {
+        let checkBoxes = document.getElementsByClassName(filtertype+"-checkbox");
+
+        for (let i = 0; i < checkBoxes.length; i++) {
+            if (querydict[filtertype].includes(checkBoxes[i].getAttribute("name"))) {
+                checkBoxes[i].checked = true;
+            } else {
+                checkBoxes[i].checked = false;
+            }
+        }
+    }
+}
+
   if (window.location.href.includes("?")) {
     // We have GET parameters. Populate filter box
     let qd = {};
@@ -108,30 +136,33 @@
           qd[item.split("=")[0]] = [item.split("=")[1]]
     });
 
-    if ("specialization" in qd) {
-      let checkBoxes = document.getElementsByClassName("specialization-checkbox");
+    updateCheckboxes("specialization", qd) ;
+    updateCheckboxes("postype", qd) ;
 
-      for (let i = 0; i < checkBoxes.length; i++) {
-        if (qd["specialization"].includes(checkBoxes[i].getAttribute("name"))) {
-          checkBoxes[i].checked = true;
-        } else {
-          checkBoxes[i].checked = false;
-        }
-      }
-    }
   }
 
-  function filterReload() {
-    let checkBoxes = document.getElementsByClassName("specialization-checkbox");
-    let url = document.getElementById("filterButton").getAttribute("data-url");
 
-    url += "?";
-    for (let i = 0; i < checkBoxes.length; i++) {
-      if (checkBoxes[i].checked) {
-        let id = checkBoxes[i].getAttribute('name');
-        url += "&specialization=" + id;
+
+  function createUrl(checkBoxes, url, filtername) {
+      for (let i = 0; i < checkBoxes.length; i++) {
+          if (checkBoxes[i].checked) {
+              let id = checkBoxes[i].getAttribute('name');
+              url += "&"+filtername+"=" + id;
+          }
       }
-    }
+      return url
+  }
+
+
+  function filterReload() {
+    let specicheckBoxes = document.getElementsByClassName("specialization-checkbox");
+    let postypeCheckboxes = document.getElementsByClassName("postype-checkbox");
+    let url = document.getElementById("filterButton").getAttribute("data-url");
+    url += "?";
+
+    url = createUrl(specicheckBoxes, url, "specialization") ;
+    url = createUrl(postypeCheckboxes, url, "postype") ;
+
     window.location.assign(url);
   }
 </script>

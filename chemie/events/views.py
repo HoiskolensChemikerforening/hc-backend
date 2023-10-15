@@ -119,7 +119,7 @@ class CreateBedpresView(
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
     initial = {"allowed_grades": list(GRADES.values.keys())}
-    message_content = messages.SUCCESS, "Bedpresen ble opprettet", "Opprettet"
+    message_content = messages.SUCCESS, "Arrangementet ble opprettet", "Opprettet"
 
 
 class EditBedpresView(
@@ -128,7 +128,7 @@ class EditBedpresView(
     permission_required = "events.change_bedpres"
     # Can't edit past events
     queryset = Bedpres.objects.filter(date__gte=timezone.now())
-    message_content = messages.SUCCESS, "Bedpresen ble endret", "Endret"
+    message_content = messages.SUCCESS, "Arrangementet ble endret", "Endret"
 
 
 class ListSocialView(ListView):
