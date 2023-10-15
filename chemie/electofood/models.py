@@ -22,6 +22,7 @@ class ElectionQuestionForm(models.Model):
     Related:
         electionquestion_set: queryset containing all related questions.
     """
+
     title = models.CharField(max_length=40, verbose_name="Tittel")
     description = models.TextField(
         max_length=300, default="", verbose_name="Beskrivelse"
@@ -86,7 +87,7 @@ class ElectionQuestionForm(models.Model):
                 len(q.answer_set.filter(commiteeanswer__committee=committe))
                 for q in self.electionquestion_set.all()
             ]:
-                #Append committee
+                # Append committee
                 committes.append(committe)
         return committes
 
@@ -116,6 +117,7 @@ class ElectionQuestion(models.Model):
     Related:
         answer_set: queryset (Containing Answer models)
     """
+
     question_form = models.ForeignKey(
         ElectionQuestionForm, on_delete=models.CASCADE
     )
@@ -137,6 +139,7 @@ class Answer(models.Model):
         Answer: IntegerField (contains the question answer)
         question: ForeignKey (related to ElectionQuestion)
     """
+
     answer = models.IntegerField(choices=VALUES)
     question = models.ForeignKey(ElectionQuestion, on_delete=models.CASCADE)
 
@@ -174,6 +177,7 @@ class CommiteeAnswer(Answer):
         question: ForeignKey (related to ElectionQuestion)
         committee: ForeignKey (related to Committee)
     """
+
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
     def get_name(self):
@@ -193,6 +197,7 @@ class UserAnswer(Answer):
         question: ForeignKey (related to ElectionQuestion)
         user: ForeignKey (related to User)
     """
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def get_name(self):

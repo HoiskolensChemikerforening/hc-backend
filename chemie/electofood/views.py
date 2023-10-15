@@ -15,7 +15,7 @@ from django.contrib import messages
 
 from django.template.defaulttags import register
 
-#Colors to visualize the percentage bars
+# Colors to visualize the percentage bars
 COLORS = [
     "#ea5545",
     "#f46a9b",
@@ -51,16 +51,16 @@ def index(request):
     returns
         rendered html
     """
-    #Get all valgomat objects
+    # Get all valgomat objects
     electionforms = ElectionQuestionForm.objects.all()
 
-    #Get the current user
+    # Get the current user
     user = request.user
 
-    #Get all committees the user is a part of
+    # Get all committees the user is a part of
     committees = Committee.objects.filter(position__users=user).distinct()
 
-    #Render HTML
+    # Render HTML
     context = {"electionforms": electionforms, "committees": committees}
     return render(request, "electofeed.html", context)
 
@@ -77,7 +77,7 @@ def get_committee_and_answer(request, electionform, committee_id):
         committee: related committee or None
     """
 
-    #Check if we should return UserAnswer or CommiteeAnswer objects
+    # Check if we should return UserAnswer or CommiteeAnswer objects
     if not committee_id:
         # Get all related UserAnswer objects
         answers = UserAnswer.objects.filter(user=request.user).filter(
@@ -103,7 +103,7 @@ def delete_old_answers(old_answers):
     returns:
         None
     """
-    #Check if old answers exist
+    # Check if old answers exist
     if len(old_answers) > 0:
         # Iterate through old answers and delete.
         for answer in old_answers:
@@ -132,8 +132,6 @@ def valgomat_form(request, id, committee_id=None):
         request, electionform, committee_id
     )
 
-
-
     answer_dict = None
     # Check if previous answers exist
     if len(answers) == len(questions):
@@ -141,7 +139,6 @@ def valgomat_form(request, id, committee_id=None):
         answer_dict = {}
         for answer in answers:
             answer_dict[answer.question.id] = answer.answer
-
 
     if request.POST:
         # Check if the form is valid.
@@ -208,7 +205,7 @@ def valgomat_form(request, id, committee_id=None):
                     )
                     return redirect(reverse("valgomat:index_valgomat"))
 
-    #Render page
+    # Render page
     context = {
         "questions": questions,
         "values": VALUES,
@@ -239,7 +236,7 @@ def valgomat_result(request, id):
     # Fetch all committees which have submittet an answer
     committees = electionform.get_participating_committes()
 
-    #Initialize a list to contain the result
+    # Initialize a list to contain the result
     results = []
 
     # Fetch colors and reshuffle them
@@ -287,7 +284,7 @@ def valgomat_result(request, id):
                 committee.get_name() for committee in committee_answer
             ]
 
-            #Append the lists to create the questionvalueanswerslist
+            # Append the lists to create the questionvalueanswerslist
             questionlst.append((value, merged_list))
         questionvalueanswerslist.append((question, questionlst))
 

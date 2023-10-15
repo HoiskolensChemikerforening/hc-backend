@@ -14,6 +14,7 @@ admin.site.register(ElectionQuestionForm)
 class ElectionQuestionAdmin(admin.ModelAdmin):
     list_display = ["question", "question_form"]
 
+
 # Registrer CommiteeAnswer
 @admin.register(CommiteeAnswer)
 class CommiteeAnswerAdmin(admin.ModelAdmin):
