@@ -12,6 +12,7 @@ from .forms import ElectionQuestionFormForm, ElectionQuestionCreateForm
 from django.urls import reverse
 import random
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 
 from django.template.defaulttags import register
 
@@ -28,6 +29,16 @@ COLORS = [
     "#b33dc6",
 ]
 
+def check_userincommittee(user, committee):
+    """
+    Checks if a user is a member of a given committee.
+    Args:
+        user: User
+        committee: Committee
+    Returns:
+        boolean: ismember
+    """
+    return len(committee.position_set.filter(users=user)) >= 1
 
 @register.filter
 def get_item(dictionary, key):
@@ -131,6 +142,11 @@ def valgomat_form(request, id, committee_id=None):
     answers, committee = get_committee_and_answer(
         request, electionform, committee_id
     )
+
+    # Check Permission
+    if committee:
+        if not check_userincommittee(request.user, committee):
+            raise PermissionDenied
 
     answer_dict = None
     # Check if previous answers exist
@@ -420,3 +436,5 @@ def delete_valgomat(request, id):
 
     # Redirect to index
     return redirect(reverse("valgomat:index_valgomat"))
+
+
