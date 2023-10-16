@@ -135,6 +135,10 @@ button.next-btn {
     margin-top: 0;
 }
 
+.dropdownfix {
+    min-width: fit-content;
+}
+
 @media only screen and (max-width: 600px) {
   .card-body.cardstyle {
     padding: 2.5rem 2.5rem;

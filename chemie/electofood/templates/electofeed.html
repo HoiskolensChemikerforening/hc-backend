@@ -33,7 +33,7 @@
                               <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}huhu'>Komitee</a>
 
                               <!-- Dropdown Structure -->
-                              <ul id='dropdown{{ electionform.id }}huhu' class='dropdown-content'>
+                              <ul id='dropdown{{ electionform.id }}huhu' class='dropdown-content dropdownfix'>
                                   {% for committee in committees %}
                                         <li>
                                             <a href="komitee/{{ electionform.id }}/{{ committee.id }}/">{{ committee }}</a>
