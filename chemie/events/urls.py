@@ -58,13 +58,13 @@ urlpatterns = [
         name="delete_list_social",
     ),
     #API
-    path("api/social/", views.SocialListCreate.as_view(), name="api_social"),
-    path("api/social/kommende/", views.SocialListCreateKommende.as_view(), name="api_social_kommende"),
-    path("api/socialeventregistration/", views.SocialEventRegistrationListCreate.as_view(), name="api_socialeventregistration"),
-    path("api/social/<int:pk>/", views.SocialDetail.as_view()),
-    path("api/socialeventregistration/<int:pk>/",views.SocialEventRegistrationDetail.as_view()),
-    path("api/social/mine/", views.SocialListCreateMine.as_view(), name="api_social_mine"),
-    path("api/social/tidligere/", views.SocialListCreateTidligere.as_view(), name="api_social_tidligere"),
+    path("api/sosial/", views.SocialListCreate.as_view(), name="api_sosial"),
+    path("api/sosial/kommende/", views.SocialListCreateKommende.as_view(), name="api_sosial_kommende"),
+    path("api/sosialregistrering/", views.SocialEventRegistrationListCreate.as_view(), name="api_sosialregistrering"),
+    path("api/sosial/<int:pk>/", views.SocialDetail.as_view()),
+    path("api/sosialregistrering/<int:pk>/",views.SocialEventRegistrationDetail.as_view()),
+    path("api/sosial/mine/", views.SocialListCreateMine.as_view(), name="api_sosial_mine"),
+    path("api/sosial/tidligere/", views.SocialListCreateTidligere.as_view(), name="api_sosial_tidligere"),
 ]
 
 # Bedpres
@@ -106,9 +106,9 @@ urlpatterns += [
     ),
     #API
     path("api/karriere/", views.BedpresListCreate.as_view(), name="api_karriere"),
-    path("api/karriereregistration/", views.BedpresRegistrationListCreate.as_view(), name="api_karriereregistration"),
+    path("api/karriereregistrering/", views.BedpresRegistrationListCreate.as_view(), name="api_karriereregistrering"),
     path("api/karriere/<int:pk>/", views.BedpresDetail.as_view()),
-    path("api/karriereregistration/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
+    path("api/karriereregistrering/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
     path("api/karriere/kommende/", views.BedpresListKommende.as_view(), name="api_karriere_kommende"),
     path("api/karriere/tidligere/", views.BedpresListTidligere.as_view(), name="api_karriere_tidligere"),
     path("api/karriere/mine/", views.BedpresListCreateMine.as_view(), name="api_karriere_mine")
