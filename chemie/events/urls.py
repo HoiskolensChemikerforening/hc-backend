@@ -5,7 +5,7 @@ from . import views
 
 app_name = "events"
 
-# Events
+# Sosial
 urlpatterns = [
     path(
         "", login_required(views.ListSocialView.as_view()), name="index_social"
@@ -67,43 +67,20 @@ urlpatterns = [
     path("api/sosial/tidligere/", views.SocialListCreateTidligere.as_view(), name="api_sosial_tidligere"),
 ]
 
-# Bedpres
+# Karriere
 urlpatterns += [
     path("bedpres/", views.ListBedpresView.as_view(), name="index_bedpres"),
     path("bedpres/tidligere/",views.ListPastBedpresView.as_view(),name="past_bedpres"),
     path("bedpres/opprett/", views.CreateBedpresView.as_view(),name="create_bedpres"),
     path("bedpres/rediger/<int:pk>/", views.EditBedpresView.as_view(),name="edit_bedpres"),
     path("bedpres/<int:pk>/", views.ViewBedpresDetailsView.as_view(),name="detail_bedpres"),
-    path(
-        "bedpres/<int:pk>/sjekkinn/",
-        views.checkin_to_bedpres,
-        name="checkin_bedpres",
-    ),
-    path(
-        "bedpres/registrer/<int:pk>/",
-        views.BedpresBaseRegisterUserView.as_view(),
-        name="register_bedpres",
-    ),
-    path(
-        "bedpres/adminliste/<int:pk>/",
-        views.BedpresEnlistedUsersView.as_view(),
-        name="adminlist_bedpres",
-    ),
-    path(
-        "bedpres/adminliste/oppmotestatus/",
-        views.change_arrival_status,
-        name="arrival_status_bedpres",
-    ),
-    path(
-        "bedpres/slett/<int:pk>/",
-        views.DeleteBedpresView.as_view(),
-        name="delete_bedpres",
-    ),
-    path(
-        "bedpres/slett/",
-        views.ListBedpresDeleteView.as_view(),
-        name="delete_list_bedpres",
-    ),
+    path("bedpres/<int:pk>/sjekkinn/", views.checkin_to_bedpres,name="checkin_bedpres"),
+    path("bedpres/registrer/<int:pk>/", views.BedpresBaseRegisterUserView.as_view(),name="register_bedpres"),
+    path("bedpres/adminliste/<int:pk>/", views.BedpresEnlistedUsersView.as_view(), name="adminlist_bedpres"),
+    path("bedpres/adminliste/oppmotestatus/", views.change_arrival_status, name="arrival_status_bedpres"),
+    path("bedpres/slett/<int:pk>/", views.DeleteBedpresView.as_view(), name="delete_bedpres"),
+    path("bedpres/slett/", views.ListBedpresDeleteView.as_view(), name="delete_list_bedpres"),
+
     #API
     path("api/karriere/", views.BedpresListCreate.as_view(), name="api_karriere"),
     path("api/karriereregistrering/", views.BedpresRegistrationListCreate.as_view(), name="api_karriereregistrering"),
