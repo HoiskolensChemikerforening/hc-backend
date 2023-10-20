@@ -883,23 +883,24 @@ def check_in_to_social(request, pk):
     return render(request, "events/social/check_in.html", context)
 
 
+#API Views
 class SocialListCreate(generics.ListCreateAPIView):
-    queryset = Social.objects.all()
+    queryset = Social.objects.all().order_by("-date")
     serializer_class = SocialSerializer
 
 class SocialListCreateKommende(generics.ListCreateAPIView):
-    queryset = Social.objects.filter(date__gt=timezone.now())
+    queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
 
 class SocialListCreateTidligere(generics.ListCreateAPIView):
-    queryset = Social.objects.filter(date__lt=timezone.now())
+    queryset = Social.objects.filter(date__lt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
 
 class SocialListCreateMine(generics.ListCreateAPIView): #Mine social events
     def get_queryset(self): # Må overstyre get metoden
         # Filter the queryset to show only 'Social' instances associated with the authenticated user.
         user = self.request.user
-        return Social.objects.filter(attendees=user)
+        return Social.objects.filter(attendees=user).order_by("-date")
 
     serializer_class = SocialSerializer
 
@@ -909,22 +910,22 @@ class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
 
 
 class BedpresListCreate(generics.ListCreateAPIView):
-    queryset = Bedpres.objects.all()
+    queryset = Bedpres.objects.all().order_by("-date")
     serializer_class = BedpresSerializer
 
 class BedpresListKommende(generics.ListCreateAPIView):
-    queryset = Bedpres.objects.filter(date__gt=timezone.now())
+    queryset = Bedpres.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = BedpresSerializer
 
 class BedpresListTidligere(generics.ListCreateAPIView):
-    queryset = Bedpres.objects.filter(date__lt=timezone.now())
+    queryset = Bedpres.objects.filter(date__lt=timezone.now()).order_by("-date")
     serializer_class = BedpresSerializer
 
 class BedpresListCreateMine(generics.ListCreateAPIView): #Mine bedpres events
     def get_queryset(self): #Må overstyre get metoden
         # Filter the queryset to show only 'Social' instances associated with the authenticated user.
         user = self.request.user
-        return Bedpres.objects.filter(attendees=user)
+        return Bedpres.objects.filter(attendees=user).order_by("-date")
 
     serializer_class = BedpresSerializer
 
