@@ -17,7 +17,7 @@
 {% block content %}
 
 <div>
-    <form method="post">
+    <form method="post" id="input-form">
     {% csrf_token %}
     <div>
     {% for question in questions %}
@@ -87,6 +87,17 @@ let stage = 1;
 const max_stages = document.getElementsByClassName("card").length
 let navigation_tags = document.getElementsByClassName('navigation');
 console.log(navigation_tags);
+
+document.getElementById(`next-btn-${max_stages}`).addEventListener('click', ()=>{
+    let answeredLst = document.querySelectorAll('input:checked');
+    let unanswered_questions = max_stages-answeredLst.length;
+    if (unanswered_questions === 1) {
+        alert(unanswered_questions+" ubesvart påstand!");
+    } else if (unanswered_questions > 1) {
+        alert(max_stages-answeredLst.length+" ubesvarte påstander!");
+    }
+})
+
 Array.from(navigation_tags).forEach((element)=>{
     let divs = element.getElementsByTagName("div")
     console.log(divs[0].children[0]);
