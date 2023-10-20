@@ -70,26 +70,10 @@ urlpatterns = [
 # Bedpres
 urlpatterns += [
     path("bedpres/", views.ListBedpresView.as_view(), name="index_bedpres"),
-    path(
-        "bedpres/tidligere/",
-        views.ListPastBedpresView.as_view(),
-        name="past_bedpres",
-    ),
-    path(
-        "bedpres/opprett/",
-        views.CreateBedpresView.as_view(),
-        name="create_bedpres",
-    ),
-    path(
-        "bedpres/rediger/<int:pk>/",
-        views.EditBedpresView.as_view(),
-        name="edit_bedpres",
-    ),
-    path(
-        "bedpres/<int:pk>/",
-        views.ViewBedpresDetailsView.as_view(),
-        name="detail_bedpres",
-    ),
+    path("bedpres/tidligere/",views.ListPastBedpresView.as_view(),name="past_bedpres"),
+    path("bedpres/opprett/", views.CreateBedpresView.as_view(),name="create_bedpres"),
+    path("bedpres/rediger/<int:pk>/", views.EditBedpresView.as_view(),name="edit_bedpres"),
+    path("bedpres/<int:pk>/", views.ViewBedpresDetailsView.as_view(),name="detail_bedpres"),
     path(
         "bedpres/<int:pk>/sjekkinn/",
         views.checkin_to_bedpres,
@@ -121,11 +105,11 @@ urlpatterns += [
         name="delete_list_bedpres",
     ),
     #API
-    path("api/bedpres/", views.BedpresListCreate.as_view(), name="api_bedpres"),
-    path("api/bedpresregistration/", views.BedpresRegistrationListCreate.as_view(), name="api_bedpresregistration"),
-    path("api/bedpres/<int:pk>/", views.BedpresDetail.as_view()),
-    path("api/bedpresregistration/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
-    path("api/bedpres/kommende/", views.BedpresListKommende.as_view(), name="api_bedpres_kommende"),
-    path("api/bedpres/tidligere/", views.BedpresListTidligere.as_view(), name="api_bedpres_tidligere"),
-    path("api/bedpres/mine/", views.BedpresListCreateMine.as_view(), name="api_bedpres_mine")
+    path("api/karriere/", views.BedpresListCreate.as_view(), name="api_karriere"),
+    path("api/karriereregistration/", views.BedpresRegistrationListCreate.as_view(), name="api_karriereregistration"),
+    path("api/karriere/<int:pk>/", views.BedpresDetail.as_view()),
+    path("api/karriereregistration/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
+    path("api/karriere/kommende/", views.BedpresListKommende.as_view(), name="api_karriere_kommende"),
+    path("api/karriere/tidligere/", views.BedpresListTidligere.as_view(), name="api_karriere_tidligere"),
+    path("api/karriere/mine/", views.BedpresListCreateMine.as_view(), name="api_karriere_mine")
 ]
