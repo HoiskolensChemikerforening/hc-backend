@@ -49,6 +49,8 @@
         <div class="container-btn"><button id="back-btn-{{ forloop.counter }}"  class="btn btn-light btn-block"><span id="back-btn-span-{{ forloop.counter }}" class="container-btn">tilbake</span></button></div>
         <div class="container-btn"><button id="next-btn-{{ forloop.counter }}" class="btn btn-light btn-block"><span id="next-btn-span-{{ forloop.counter }}" class="container-btn">neste</span></button></div>
         </div>
+
+            <div class="question-counter">{{ forloop.counter }} av {{ questions|length }}</div>
         </div>
         </div>
     {% endfor %}

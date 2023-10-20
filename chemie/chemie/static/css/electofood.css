@@ -139,6 +139,14 @@ button.next-btn {
     min-width: fit-content;
 }
 
+.question-counter {
+    display: flex;
+    justify-content: center;
+    font-size: small;
+    color: #9e9e9e;
+    height: 0;
+}
+
 @media only screen and (max-width: 600px) {
   .card-body.cardstyle {
     padding: 2.5rem 2.5rem;
