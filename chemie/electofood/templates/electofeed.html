@@ -30,13 +30,13 @@
                         {% if committees %}
                         <div class="container-btn">
                               <!-- Dropdown Trigger -->
-                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}huhu'>Komitee</a>
+                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}huhu'>Komite</a>
 
                               <!-- Dropdown Structure -->
                               <ul id='dropdown{{ electionform.id }}huhu' class='dropdown-content dropdownfix'>
                                   {% for committee in committees %}
                                         <li>
-                                            <a href="komitee/{{ electionform.id }}/{{ committee.id }}/">{{ committee }}</a>
+                                            <a href="{% url "valgomat:committee_valgomat_form"  electionform.id committee.id %}">{{ committee }}</a>
                                         </li>
                                   {% endfor %}
                               </ul>
