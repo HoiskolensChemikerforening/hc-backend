@@ -29,6 +29,7 @@ COLORS = [
     "#b33dc6",
 ]
 
+
 def check_userincommittee(user, committee):
     """
     Checks if a user is a member of a given committee.
@@ -39,6 +40,7 @@ def check_userincommittee(user, committee):
         boolean: ismember
     """
     return len(committee.position_set.filter(users=user)) >= 1
+
 
 @register.filter
 def get_item(dictionary, key):
@@ -51,6 +53,7 @@ def get_item(dictionary, key):
         value
     """
     return dictionary.get(key)
+
 
 @register.filter
 def index(lst, index):
@@ -84,10 +87,16 @@ def index(request):
     committees = Committee.objects.filter(position__users=user).distinct()
 
     # Checks if the users already has an existing answer to the question form
-    answeredList = [electionform.userHasAnswered(user) for electionform in electionforms]
+    answeredList = [
+        electionform.userHasAnswered(user) for electionform in electionforms
+    ]
 
     # Render HTML
-    context = {"electionforms": electionforms, "committees": committees,"answeredList":answeredList }
+    context = {
+        "electionforms": electionforms,
+        "committees": committees,
+        "answeredList": answeredList,
+    }
     return render(request, "electofeed.html", context)
 
 
@@ -451,5 +460,3 @@ def delete_valgomat(request, id):
 
     # Redirect to index
     return redirect(reverse("valgomat:index_valgomat"))
-
-

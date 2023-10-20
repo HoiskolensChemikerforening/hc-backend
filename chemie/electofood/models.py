@@ -91,7 +91,6 @@ class ElectionQuestionForm(models.Model):
                 committes.append(committe)
         return committes
 
-
     def userHasAnswered(self, user):
         """
         Checks if a user has answered every question at least once.
@@ -106,13 +105,11 @@ class ElectionQuestionForm(models.Model):
 
         # Get all related answers
         answers = UserAnswer.objects.filter(
-            user=user,
-            question__question_form=self
+            user=user, question__question_form=self
         )
 
         answered_questions = ElectionQuestion.objects.filter(
-            question_form=self,
-            answer__in=answers,
+            question_form=self, answer__in=answers
         ).distinct()
 
         # Return True if there ar
