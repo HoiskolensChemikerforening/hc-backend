@@ -25,7 +25,24 @@
                     <p>{{ electionform.description }}</p>
                     <!---<p>HCs valgomat hjelper deg å finne vervet som passer best til deg! Husk at en valgomat ikke er en fasit, men ett av flere råd. Du bestemmer!</p>--->
                     <div slot="navigation">
-                        <div class="container-btn"><a class="btn btn-light btn-block" href="personlig/{{ electionform.id }}/"><span class="container-btn">Start</span></a></div>
+                        {% if answeredList|index:forloop.counter0  %}
+                        <div class="container-btn">
+                              <!-- Dropdown Trigger -->
+                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}start'>Start</a>
+
+                              <!-- Dropdown Structure -->
+                              <ul id='dropdown{{ electionform.id }}start' class='dropdown-content dropdownfix'>
+                                    <li>
+                                        <a href="{% url "valgomat:valgomat_form"  electionform.id %}">Start</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url "valgomat:valgomat_result" electionform.id %}">Resultater</a>
+                                    </li>
+                              </ul>
+                        </div>
+                        {% else %}
+                        <div class="container-btn"><a class="btn btn-light btn-block" href="{% url "valgomat:valgomat_form"  electionform.id %}"><span class="container-btn">Start</span></a></div>
+                        {% endif %}
                         <!-- Dropdown Trigger -->
                         {% if committees %}
                         <div class="container-btn">

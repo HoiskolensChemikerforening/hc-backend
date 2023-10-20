@@ -52,6 +52,18 @@ def get_item(dictionary, key):
     """
     return dictionary.get(key)
 
+@register.filter
+def index(lst, index):
+    """
+    Get an item from a list. Used in django templates as a filter.
+    Args:
+        lst: list (Python list)
+        index: index of the item contained in list
+    returns:
+        value
+    """
+    return lst[index]
+
 
 @login_required
 def index(request):
@@ -71,8 +83,11 @@ def index(request):
     # Get all committees the user is a part of
     committees = Committee.objects.filter(position__users=user).distinct()
 
+    # Checks if the users already has an existing answer to the question form
+    answeredList = [electionform.userHasAnswered(user) for electionform in electionforms]
+
     # Render HTML
-    context = {"electionforms": electionforms, "committees": committees}
+    context = {"electionforms": electionforms, "committees": committees,"answeredList":answeredList }
     return render(request, "electofeed.html", context)
 
 
