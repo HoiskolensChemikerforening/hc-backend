@@ -46,8 +46,8 @@
 
         </div>
         <div slot="navigation" class="navigation">
-        <div class="container-btn"><button id="back-btn-{{ forloop.counter }}"  class="btn btn-light btn-block"><span id="back-btn-span-{{ forloop.counter }}" class="container-btn">tilbake</span></button></div>
-        <div class="container-btn"><button id="next-btn-{{ forloop.counter }}" class="btn btn-light btn-block"><span id="next-btn-span-{{ forloop.counter }}" class="container-btn">neste</span></button></div>
+        <div class="container-btn"><button id="back-btn-{{ forloop.counter }}"  class="btn btn-light btn-block"><span id="back-btn-span-{{ forloop.counter }}" >tilbake</span></button></div>
+        <div class="container-btn"><button id="next-btn-{{ forloop.counter }}" class="btn btn-light btn-block"><span id="next-btn-span-{{ forloop.counter }}">neste</span></button></div>
         </div>
 
             <div class="question-counter">{{ forloop.counter }} av {{ questions|length }}</div>
@@ -136,8 +136,7 @@ Array.from(navigation_tags).forEach((element)=>{
             current_container.style.removeProperty("height");
             current_container.style.removeProperty("margin");
             if (stage>=max_stages){
-                console.log("hih",next_btn.children[0]);
-                document.getElementById(`next-btn-span-${stage}`).textContent = "Avslutt";
+                document.getElementById(`next-btn-span-${stage}`).textContent = "Fullfør";
             }
 
 
