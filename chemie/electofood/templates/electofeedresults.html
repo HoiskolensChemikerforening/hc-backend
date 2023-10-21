@@ -1,0 +1,80 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/electofood.css' %}" type="text/css" media="screen,projection">
+{% endblock %}
+
+{% block nav_header %}
+  Valgomat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Resultat
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+
+<div>
+    <div class="card">
+        <div class="card-body cardstyle">
+            <h3>Du passer best til</h3>
+            {% for result in  results%}
+                <div class="committe-title">{{ result.0 }}</div>
+                <div class="progress-container">
+                    <div class="progress progressbarbackground">
+                       <div class="determinate" style="width: {{ result.1 }}%; background-color: {{ result.2 }}">{{ result.1 }}%</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-body cardstyle">
+        <h3>Likheter og ulikheter mellom deg og komiteene</h3>
+            {% for question, valueanswerslist in questionvalueanswerslist %}
+                <hr/>
+            <div class="question headline"> {{ question }} </div>
+                <hr/>
+            <div class="row">
+
+                {% for value, answers in valueanswerslist %}
+                <div class="col  s12 m3">
+                    <div class="headline">{{ value.1 }}</div>
+                    <ul class="list-committee">
+                        {% for answer in answers %}
+                            <li>{{ answer }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+                {% endfor %}
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div>
+        <a class="btn" href="{% url "valgomat:index_valgomat" %}">Tilbake</a>
+    </div>
+{% if perms.electofood %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+    {% if perms.electofood.delete_social %}
+          <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_rediger" electionform.id%}"><i class="material-icons">edit</i></a>
+    <a class="btn-floating mobile-fab-tip">Rediger valgomat</a>
+  </li>
+  <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_opprett" %}"><i class="material-icons">add</i></a>
+    <a class="btn-floating mobile-fab-tip">Ny valgomat</a>
+  </li>
+          {%  endif %}
+      </ul>
+</div>
+    {%  endif %}
+</div>
+
+{% endblock content %}

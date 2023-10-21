@@ -78,21 +78,14 @@
         </button>
       </div>
       <div class="modal-body">
-        <p>Happy Hour-duplikat er varen som kunden automatisk får lagt inn i handlekurven sin
-          når det er Happy Hour.</p>
+        <p>Happy Hour-duplikat er varen som kunden får til redusert pris under Happy Hour.</p>
+
         <p>
-          <b>Eksempel:</b> For å lage en 2-for-1-Happy Hour-vare må admin først opprette en Happy Hour-vare (f.eks
-          Happy Hour-øl)
-          til 0 kr. Deretter må admin opprette hovedvaren i kiosken og gi den sin rette pris ( f.eks "Øl" til 30 kr). Da
-          legger admin
-          samtidig til varen "Happy Hour-øl" som Happy Hour-duplikat til varen "Øl".
-          Når admin velger å aktivere Happy Hour vil da Happy Hour-øl automatisk legges
-          til handlekurven til kunden
-          under Happy Hour</p>
-        <p>
-          Dette systemet kan også brukes til å lage kampanjer som "Kjøp en øl, få med en nudelpakke på slengen!", eller
-          "Kjøp en vin, få en Cava til halv pris!"
+          <b>Slik funker det:</b> Opprett det vanlige objektet <b>uten</b> å velge Happy Hour duplikat.
+          Lag Happy Hour objekt med prisen som skal være under Happy Hour. Rediger det vanlige objektet
+          og sett Happy Hour objekt som Happy Hour duplikat.
         </p>
+
       </div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
@@ -129,6 +122,23 @@
   </form>
 </div>
 
+<div style ="margin-top: 30px">
+    <form method="POST" >
+      {% csrf_token %}
+      <div style = "display: flex;flex-direction: row">
+        <div style ="padding: 10px">
+            <label for="filterActiveItems">Kun aktive varer: </label>
+            <input type="checkbox" id="filterActiveItems" name="filterActiveItems" value="1" {% if initialCheckboxState %}checked{% endif %}>
+            <input type="hidden" id="checkForm" name="checkForm" value="69">
+        </div>
+
+        <div style ="padding: 10px">
+            <button type = "submit" class="btn btn-secondary">Oppdater</button>
+        </div>
+      </div>
+    </form>
+</div>
+
 <!-- List of all existing items -->
 <div id="itemList">
   <table style="width:95%; margin: 2rem; margin-left:0rem" id="shopping-table">
@@ -137,7 +147,7 @@
       <th>Pris</th>
       <th>Kategori</th>
       <th>Aktiv</th>
-      <th>Kjøp uten tablet</th>
+      <th>Kjøp på mobil</th>
       <th></th>
     </tr>
     {% for item in items %}

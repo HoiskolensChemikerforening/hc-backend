@@ -68,6 +68,8 @@ class BaseEvent(models.Model):
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
+    tentative = models.BooleanField(default= False, verbose_name="tentativ")
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.allowed_grades_previous = self.allowed_grades
@@ -76,7 +78,12 @@ class BaseEvent(models.Model):
         return self.title
 
     def get_allowed_grades_display(self):
-        return [GRADES.for_value(x).display for x in self.allowed_grades]
+        if len(self.allowed_grades) > 4:
+            return ["Alle"]
+        else:
+            return [GRADES.for_value(x).display for x in self.allowed_grades]
+
+        #Makes nicer view on detalis page.
 
     def registered_users(self):
         return self.attendees.through.objects.filter(

@@ -2,6 +2,10 @@
 {% load cache %}
 {% load static %}
 
+{% block extra_css %}
+<link rel="stylesheet" href="{% static "css/textrain.css" %}">
+  {% endblock %}
+
 {% block nav_header %}
   Forsiden
 {% endblock nav_header %}
@@ -26,7 +30,7 @@
         {% if perms.events.add_bedpres %}
           <li>
             <a class="btn-floating blue" href="{% url "events:create_bedpres" %}"><i class="material-icons">add</i></a>
-            <a class="btn-floating mobile-fab-tip">Opprett bedpres</a>
+            <a class="btn-floating mobile-fab-tip">Opprett karriere arrangement</a>
           </li>
         {% endif %}
         {% if perms.news.add_article %}
@@ -99,3 +103,8 @@
 
 
 {% endblock content %}
+
+
+{% block footer_js_files %}
+    <script type="text/javascript" src="{% static "js/textrain.js" %}"></script>
+  {% endblock footer_js_files %}

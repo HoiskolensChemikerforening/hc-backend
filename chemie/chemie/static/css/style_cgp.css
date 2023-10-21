@@ -1,0 +1,375 @@
+:root {
+  --text-color: white;
+  --dark-background: #310033;
+  --light-background: #4b004f;
+  --flash-drag-and-drop: #910a97;
+  --old-btn-color: #1f265f;
+  --old-text-color: #d2d000;
+}
+
+.bodybackground{
+  background-color: var(--dark-background);
+  display:flex;
+  align-items: center;
+  justify-content: flex-start;
+  height:100vh;
+  padding: 25px;
+}
+.divbackground{
+  border-radius: 25px;
+  background: var(--light-background);
+  padding: 20px;
+  margin: auto;
+  max-width: 650px;
+  /*min-height: 92vh;*/
+}
+
+.cgplogo{
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  height: 45%;
+  object-fit: contain;
+  max-width: 100%;
+}
+
+.image-frame {
+  margin-top: 100px;
+  padding: 20px;
+  background-color: var(--dark-background);
+  border-radius: 5px;
+  border: 2px solid var(--text-color);
+}
+
+/* Dropdown Button */
+.dropbtn {
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
+  border-radius: 10px;
+  padding: 16px;
+  width: 200px;
+  font-size: 20px;
+  font-weight: bold;
+  /*border: none;*/
+}
+
+.dropbtn-small {
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  border: 2px solid var(--text-color);
+  border-radius: 10px;
+  font-weight: bold;
+  width: 150px;
+  font-size: 12px;
+  padding: 5px;
+}
+
+
+
+/* The container <div> - needed to position the dropdown content */
+.dropdown {
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  text-align: center;
+  width: 100%;
+}
+
+
+
+/* Dropdown Content (Hidden by Default) */
+.dropdown-content {
+  border-radius: 10px;
+  display: none;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--dark-background);
+  box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+  z-index: 1;
+  max-height: 200px;
+  overflow: auto;
+  border: 1px solid var(--text-color);
+  width: 200px;
+}
+
+.dropdown-content::-webkit-scrollbar {
+    width: 5px;
+}
+
+
+/* Track */
+.dropdown-content::-webkit-scrollbar-track {
+  background: #103f4;
+}
+
+/* Handle */
+.dropdown-content::-webkit-scrollbar-thumb {
+  background: var(--text-color);
+  border-radius: 2px;
+}
+
+/* Handle on hover */
+.dropdown-content::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+/* Links inside the dropdown */
+.dropdown-content a {
+  color: var(--text-color);
+  padding: 12px 16px;
+  text-decoration: none;
+  display: block;
+}
+
+/* Change color of dropdown links on hover */
+.dropdown-content a:hover {background-color: var(--flash-drag-and-drop);}
+
+/* Show the dropdown menu on hover */
+.dropdown:hover .dropdown-content {display: block;}
+
+/* Change the background color of the dropdown button when the dropdown content is shown */
+.dropdown:hover .dropbtn {background-color: var(--flash-drag-and-drop);}
+
+
+.mainflag {
+  width: 80%;
+  display: block;
+  margin: auto;
+  /*margin-top: 10%; 100%-80%/2 */
+}
+
+
+.material-symbols-outlined {
+  font-variation-settings:
+  'FILL' 0,
+  'wght' 400,
+  'GRAD' 0,
+  'opsz' 48;
+  transform: translateY(50%);
+}
+
+.draggable-list {
+  border: 1px solid var(--text-color);
+  color: var(--text-color);
+  padding: 0;
+  list-style-type: none;
+}
+
+.draggable-list li {
+  background-color: var(--dark-background);
+  display:flex;
+  flex: 1;
+}
+
+.draggable-list li:not(:last-of-type) {
+  border-bottom: 1px solid var(--text-color);
+}
+
+.draggable-list .points {
+  background-color: var(--dark-background);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 28px;
+  width: 80px;
+  height:80px;
+}
+
+.draggable-list .country-name {
+  margin: 0 20px 0 0;
+
+}
+
+.draggable-list .country-info {
+  font-size: 8px;
+  margin-bottom: 0;
+}
+
+.draggable {
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  flex:1;
+}
+
+.moving {
+  position: absolute;
+  z-index: 100;
+  max-width: 527px;
+  width: 50vw;
+}
+
+.selected {
+  background-color: var(--flash-drag-and-drop);
+}
+
+.draggable-primary {
+  background-color: var(--light-background);
+}
+.draggable-over {
+  background-color: var(--flash-drag-and-drop);
+}
+
+
+
+.countryname {
+  color: var(--text-color);
+  text-align: center;
+  margin: 20px;
+}
+.legend {
+  color: var(--text-color);
+  display:flex;
+  flex: 1;
+  border: 1px solid var(--text-color);
+}
+
+.legend p {
+  font-weight: bold;
+  text-align: center;
+  width: 80px;
+  margin-bottom: 0;
+  height:30px;
+}
+.legend p[id] {
+  background-color: var(--dark-background);
+}
+
+.submit-btn {
+  border: 1px solid var(--text-color);
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  margin: auto;
+  width: 100px;
+}
+.container-btn {
+  width:100%;
+  height: 30px;
+  display: flex;
+  flex:1;
+}
+
+
+.formdiv {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  padding: 15px;
+}
+
+.whiteline {
+  border-top: 3px solid var(--text-color);
+  border-radius: 2px
+}
+
+.submitform {
+  display: grid;
+}
+
+.outerdiv {
+  color: var(--text-color);
+}
+
+.outerdiv > a {
+  color: var(--text-color);
+}
+.outerdiv > a > div {
+  border:none;
+}
+
+.countrydiv {
+  color: var(--text-color);
+}
+
+.formbtn {
+  width: 100px;
+  border-radius: 10px;
+}
+
+.formbtndiv {
+  margin: auto;
+}
+
+.returnbtn {
+  background-color: var(--dark-background);
+  color: var(--text-color);
+  border-radius: 10px;
+  margin: auto;
+}
+.invisible-btn {
+  background: transparent;
+  border: 0px solid transparent;
+  padding: 0px;
+  margin: 0px;
+  color: var(--text-color)
+}
+
+.invisible-btn:hover {
+  text-underline: var(--text-color);
+}
+
+.showfiaskoform {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 50px;
+}
+
+.showfiaskoform > label {
+  color: var(--text-color);
+  font-weight: 500;
+  font-size: 2.0rem;
+  margin-top: 30px;
+}
+
+.showfiaskoform > select {
+  background-color: transparent;
+  border-radius: 5px;
+  border-color: var(--text-color);
+  color: var(--text-color);
+}
+
+.showfiaskoform > select > option {
+  background-color: var(--dark-background);
+  border-color: var(--text-color);
+  text-align: center;
+}
+
+
+
+@keyframes confettiRain {
+  0% {
+    opacity: 1;
+    margin-top: var(--margin-start);
+    /*margin-left: -200px;*/
+  }
+  100% {
+    opacity: 1;
+    margin-top: var(--margin-end);
+    /*margin-left: 200px;*/
+  }
+}
+
+
+.confetti {
+    z-index: -1;
+  opacity: 0;
+  position: absolute;
+  width: 1rem;
+  height: 1.5rem;
+    --margin-end: 0vh;
+    --margin-start: -100vh;
+}
+
+.dragbtn {
+  height: 100%;
+  width: 50px;
+  padding-left: 26px;
+}
+
+
+

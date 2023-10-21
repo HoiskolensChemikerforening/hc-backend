@@ -16,7 +16,12 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+
 from rest_framework import generics
+from rest_framework_simplejwt.views import (
+    TokenObtainPairView,
+    TokenRefreshView,
+)
 
 from .email import send_forgot_password_mail
 from .forms import ApprovedTermsForm
@@ -41,8 +46,13 @@ from .models import (
     ProfileManager,
     Medal,
     MEMBERSHIP_DURATIONS,
+    SPECIALIZATION,
 )
-from .serializers import MedalSerializer
+from .serializers import (
+    MedalSerializer,
+    ProfileSerializer,
+    CustomTokenObtainPairSerializer,
+)
 
 
 def register_user(request):
@@ -207,7 +217,6 @@ def activate_password(request, code):
 
 @permission_required("customprofile.change_membership")
 def view_memberships(request, year=1):
-
     # If url arg year is invalid, make it valid.
     if year not in GRADES:
         if year > GRADES.FIFTH.value:
@@ -273,7 +282,7 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, year=1):
+def yearbook(request, year=1, spec=1):
     year = int(year)
     # If url arg grade is invalid, make it valid.
     if year not in GRADES:
@@ -316,12 +325,21 @@ def yearbook(request, year=1):
                 .prefetch_related("medals")
             )
     else:
+        #print(year)
+        #print(int(spec))
         if year != GRADES.DONE:
-            profiles = (
-                Profile.objects.filter(grade=year, user__is_active=True)
-                .order_by("user__last_name")
-                .prefetch_related("medals")
-            )
+            if spec == SPECIALIZATION.NONE:
+                profiles = (
+                    Profile.objects.filter(grade=year, user__is_active=True)
+                    .order_by("user__last_name")
+                    .prefetch_related("medals")
+                )
+            else:
+                profiles = (
+                    Profile.objects.filter(grade=year, user__is_active=True,specialization=spec)
+                    .order_by("user__last_name")
+                    .prefetch_related("medals")
+                )
         else:
             profiles = (
                 Profile.objects.filter(end_year=end_year, user__is_active=True)
@@ -336,7 +354,9 @@ def yearbook(request, year=1):
         "grade": year,
         "endYearForm": endYearForm,
         "end_years": end_years,
+        "spec": SPECIALIZATION,
     }
+
     return render(request, "customprofile/yearbook.html", context)
 
 
@@ -433,6 +453,20 @@ def add_rfid(request):
             request, "customprofile/add_card.html", context={"form": form}
         )
     return render(request, "customprofile/add_card.html", context)
+
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
+
+
+class ProfileListCreate(generics.ListCreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
+
+
+class ProfileDetail(generics.RetrieveAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 
 class MedalListCreate(generics.ListCreateAPIView):

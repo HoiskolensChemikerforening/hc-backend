@@ -1,0 +1,101 @@
+{% extends "chemie/cgp_base.html" %}
+{% load staticfiles %}
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+<!--<div class="image-frame">
+<img class="cgplogo" type="image/png" src="{% static 'images/cgp_logo.png' %}">
+</div>-->
+
+
+    <!--<div><a href="{{ audience.0.get_absolute_url }}">
+<button class="dropbtn">Stem!</button></a>
+    </div> -->
+<div class="outerdiv">
+    {%  if open %}
+    <div style="text-align: center">
+        <hr class="whiteline">
+        <h1>Chemie Grand Prix {{ cgp.year }}</h1>
+        <hr class="whiteline">
+    </div>
+    <div style="margin-bottom: 30px; margin-top: 30px">
+     <a href="{{audience.0.get_absolute_url}}">
+        <div class="dropdown">
+            <button class="dropbtn">Stem</button>
+        </div>
+    </a>
+
+    {% if countries %}
+    <div class="dropdown">
+        <button class="dropbtn">Gruppeleder</button>
+        <div class="dropdown-content">
+        {% for group in groups %}
+            <a href="{{group.country.get_absolute_url}}"> {{group.real_name}} </a>
+        {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+    </div>
+    <hr class="whiteline">
+    {% else %}
+    <div style="text-align: center; margin-top: 10px; margin-bottom: 10px;">
+        <hr class="whiteline">
+        <h1>Stengt</h1>
+        <hr class="whiteline">
+    </div>
+    {% endif %}
+</div>
+<!-- Floating admin button -->
+{% if perms.cgp.add_cgp %}
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="btn-group-sm" id="mini-fab" style="position:fixed !important; right: 29px; bottom:29px">
+        <a href="{% url 'cgp:cgp_edit' cgp.id %}" class="btn btn-info btn-fab" id="admin">
+          <i class="material-icons">
+            build
+          </i>
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endif %}
+
+    <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+      {%  if open %}
+        <p><b>Stem:</b> Her sender du inn din individuelle stemme. Dersom du allerede har sendt inn stemmen
+            din, kan du redigere den ved å trykke på knappen én gang til.
+        </p>
+          {% if countries %}
+        <p>
+          <b>Gruppeleder: </b>  Her stemmer du på vegne av gruppen din. Denne knappen vises bare dersom du er satt
+            opp som gruppeleder. Dersom du allerede har sendt inn en stemme på vegne av din gruppe
+            kan den redigeres ved å trykke på knappen én gang til.
+        </p>
+          {% endif %}
+      {% else %}
+          Gå hjem <3
+        {% endif %}
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

@@ -6,12 +6,17 @@ hc.ntnu.no
 #### Install requirements
 Install PostgreSQL for your OS.
 
-Create a virtual environment with Python 3.6+.
+Create a virtual environment with Python 3.6+. Note that the project is incompatible with Python versions above 3.10 and the tests are run in Python 3.7.
 
 Run the following to install requirements for the project.
 ```shell
 pip install -r requirements/development.txt
 ```
+On newer Mac architectures, you might have to run the following in your terminal before installing the project dependencies: 
+```shell
+export LDFLAGS="-L/opt/homebrew/opt/openssl@1.1/lib $LDFLAGS"
+```
+Note that the path to `openssl/lib` might vary depending on how it's been installed.
 
 #### Set up database
 Create a local database with default settings. Update settings
@@ -24,7 +29,7 @@ python manage_migrations.py
 Flatpages and email templates are stored in the fixtures folder. 
 Load these:
 ```shell
-python manage.py loaddata fixtures/*.json
+python manage.py loaddata chemie/fixtures/*.json
 ```
 
 #### Send mail (optional)

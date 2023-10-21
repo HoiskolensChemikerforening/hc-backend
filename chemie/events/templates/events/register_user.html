@@ -16,7 +16,11 @@
 
 {% block content %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
+    {% if event.get_model_type == "bedpres" %}
+        <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Karriere</a>
+    {% else %}
+        <a href="{% url "events:index_social" %}" class="breadcrumb">Arrangementer</a>
+    {% endif %}
     <a href="{{ event.get_absolute_url }}" class="breadcrumb">{{ event.title }}</a>
     <a class="breadcrumb">Påmelding</a>
   </div>
@@ -59,6 +63,8 @@
     {% else %}
       Påmeldingsfristen har passert.
     {% endif %}
+    <p style="margin-top: 2px"><a href="https://hc.ntnu.no/wiki/personvernerklaering/samtykkeerklaering-arrangement/"
+      target="_blank">Samtykkeerklæring for arrangementer</a></p>
   {% endif %}
 {% endblock content %}
 

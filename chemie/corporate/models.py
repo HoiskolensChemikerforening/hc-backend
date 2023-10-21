@@ -20,6 +20,20 @@ class Specialization(models.Model):
     def __str__(self):
         return self.get_name_display()
 
+class PositionType(models.Model):
+    POSITIONTYPES = (
+        (1, "Graduatestilling"),
+        (2, "Sommerjobb"),
+        (3, "Deltidsjobb"),
+        (4, "Fulltidsjobb"),
+    )
+
+    name = models.PositiveSmallIntegerField(
+        choices=POSITIONTYPES, unique=True
+    )
+    def __str__(self):
+        return self.get_name_display()
+
 
 class Interview(models.Model):
     title = models.CharField(max_length=40, verbose_name="Navn på intervjuet")
@@ -49,6 +63,9 @@ class Job(models.Model):
     )
     specializations = models.ManyToManyField(
         Specialization, verbose_name="Aktuelle retninger", blank=True
+    )
+    postype = models.ManyToManyField(
+        PositionType, verbose_name="Type stilling", blank=True
     )
     is_published = models.BooleanField(verbose_name="Er synlig", default=True)
     published_date = models.DateTimeField(auto_now_add=True)
@@ -133,3 +150,5 @@ class AnswerKeyValuePair(models.Model):
             + " - "
             + str(self.value)
         )
+
+

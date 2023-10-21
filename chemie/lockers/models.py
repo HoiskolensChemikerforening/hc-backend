@@ -54,7 +54,7 @@ class LockerUser(models.Model):
     first_name = models.CharField(max_length=40, verbose_name="Fornavn")
     last_name = models.CharField(max_length=40, verbose_name="Etternavn")
     email = models.EmailField(
-        validators=[validate_NTNU], verbose_name="NTNU-epost"
+        validators=[validate_NTNU], verbose_name="NTNU-epost (@stud.ntnu.no)"
     )
     created = models.DateField(auto_now=False, auto_now_add=True)
     ownerships = models.ManyToManyField(Locker, through="Ownership")

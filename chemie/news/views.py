@@ -7,10 +7,10 @@ from django.contrib.auth.decorators import permission_required
 
 from .models import Article
 from .forms import ArticleForm
-from chemie.web_push.models import Subscription
 from .serializers import ArticleSerializer
 
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 
 @permission_required("news.add_article")
@@ -18,7 +18,6 @@ def create_post(request):
     post = ArticleForm(request.POST or None, request.FILES or None)
 
     if request.POST:
-
         if post.is_valid():
             instance = post.save(commit=False)
             instance.author = request.user
@@ -82,10 +81,12 @@ def edit_article(request, article_id, slug):
 
 
 class ListAllArticles(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Article.objects.filter(published=True).order_by("-id")
     serializer_class = ArticleSerializer
 
 
 class NewsDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticatedOrReadOnly]
     queryset = Article.objects.all()
     serializer_class = ArticleSerializer

@@ -1,0 +1,424 @@
+{% extends "chemie/cgp_base.html" %}
+
+
+{% block breadcrumbs %}
+{% endblock breadcrumbs %}
+
+{% block content %}
+    <hr class="whiteline">
+<img class="mainflag" alt="{{ country.country_name }}" src="{% if country.image %}{{ country.image.url }} {% endif %}">
+    <hr class="whiteline">
+<h1 class="countryname">{{current_group.real_name}}</h1>
+
+    <hr class="whiteline">
+
+<div class="legend">
+    <p id="legendpoints">Poeng</p>
+    <p>Land</p>
+</div>
+<ul class="draggable-list" id="draggable-list"></ul>
+
+    <hr class="whiteline">
+    <div>
+    <form class="showfiaskoform" method="post">
+    {% csrf_token %}
+    <label for="showpris"> Showpris </label>
+        <select name="Showpris" id="showpris">
+        <option value {% if not show_group %}selected {% endif %}><span>
+                        <p></p>
+                        <p>----------</p>
+                        <p></p>
+                        </span></option>
+            {%  for group in groups %}
+                <option value={{ group.id }} {% if show_group.id == group.id %} selected {% endif %}>
+                 <div class="draggable draggable-primary">
+                    <span>
+                        <p class="country-name">{{ group.country.country_name }}  |</p>
+                        <p class="country-info">  {{ group.real_name }}  </p>
+                        <p class="country-info">|  {{ group.song_name }}</p>
+                        </span>
+                     </div>
+                </option>
+            {% endfor %}
+        </select>
+
+    <label for="fiaskopris"> Fiaskopris </label>
+        <select name="Fiaskopris" id="fiaskopris" >
+        <option value {% if not failure_group %}selected {% endif %}><span>
+                        <p></p>
+                        <p>----------</p>
+                        <p></p>
+                        </span></option>
+            {%  for group in groups %}
+                <option value={{ group.id }} {% if failure_group.id == group.id %} selected {% endif %} >
+                    <div class="draggable draggable-primary">
+                        <span>
+                        <p class="country-name">{{ group.country.country_name }}  |</p>
+                        <p class="country-info">  {{ group.real_name }}  </p>
+                        <p class="country-info">|  {{ group.song_name }}</p>
+                        </span>
+                    </div>
+                </option>
+            {% endfor %}
+        </select>
+
+    </form>
+    <hr class="whiteline">
+
+    </div>
+
+<div class="container-btn">
+    <!--<button class="submit-btn" type="submit" id="submit-suggestion">Foreslå</button>-->
+    <button class="submit-btn" type="submit" id="submit-vote">Stem</button>
+<!--<button class="submit-btn" type="" id="help">Help</button>-->
+</div>
+
+
+        <!-- Modal for intruction -->
+    <div class="modal fade" id="instruksModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Hjelp</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p><b>Rangering:</b> Sorter gruppene etter antall poeng. Gruppen som står øverst får
+            flest poeng. Gruppene kan flyttes ved å holde inn ikonet på høyre side. Når boksen
+            lyser opp kan gruppen flyttes. Ved å flytte på en gruppe forskyves de andre gruppene, uten at
+            rekkefølgen til de andre gruppene endres.
+        </p>
+        <p>
+          <b>Showpris: </b> Velg gruppen som hadde best show.
+        </p>
+          <p>
+          <b>Fiaskopris: </b> Velg gruppen som var den største fiaskoen.
+        </p>
+          <p>
+          <b></b>Stemmen kan redigeres frem til valget stenger.
+        </p>
+
+
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Lukk</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
+
+{% block footer_script%}
+<script>
+const draggable_list = document.getElementById('draggable-list');
+const check = document.getElementById('submit-vote');
+//console.log(check);
+
+function dataToArray(dataString) {
+    dataString = dataString.split(',');
+    while (dataString.length < 10) {
+        dataString.push("");
+    }
+    return dataString
+}
+var countries = dataToArray("{{countries}}");
+var realnames = dataToArray("{{ realnames }}");
+var songtiteles = dataToArray("{{ songtiteles }}");
+console.log(songtiteles,realnames,countries);
+var points = "{{points}}";
+points = points.split(',');
+while (points.length < countries.length) {
+    points.push("0");
+};
+
+
+//console.log(countries);
+//console.log(points);
+
+
+// Store listitems
+const listItems = [];
+
+let dragStartIndex;
+
+var overlapping;
+
+//timer
+var timeout;
+var waiting = true;
+const time = 200;//ms
+
+createList();
+
+// Insert list items into DOM
+function createList() {
+  [...countries]
+    .forEach((country, index) => {
+      const listItem = document.createElement('li');
+
+      listItem.setAttribute('data-index', index);
+
+      listItem.innerHTML = `
+        <span class="points">${points[index]}</span>
+        <div class="draggable draggable-primary" draggable="true">
+          <span><p class="country-name">${country}</p>
+
+            <p class="country-info">${realnames[index]} </p>
+            <p class="country-info">${songtiteles[index]} </p>
+            </span>
+            <span class="dragbtn">
+            <span class="material-symbols-outlined">menu</span>
+            </span>
+<!--<i class="fas fa-grip-lines"></i>-->
+        </div>
+      `;
+
+      listItems.push(listItem);
+
+      draggable_list.appendChild(listItem);
+    });
+
+  addEventListeners();
+}
+
+
+function handleTouchStart(event) {
+    //touch
+    //Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
+    event.preventDefault();
+    console.log('toooouchstart');
+
+    timeout = setTimeout(function (element){
+        waiting=false;
+        element.parentElement.classList.add("selected");
+        element.parentElement.classList.remove("draggable-primary")
+        //console.log(element.classList);
+        }, time, this);
+    dragStartIndex = +this.closest('li').getAttribute('data-index');
+}
+
+
+function handleTouchMove(event){
+    console.log(waiting);
+    clearTimeout(timeout);
+    if (!waiting){
+    //Touch
+    event.preventDefault();
+    //console.log('touchmove');
+    if (event.targetTouches.length === 1) {
+        var touch = event.targetTouches[0];
+        // Place element where the finger is touching
+        //this.style.position = 'absolute';
+        this.parentElement.classList.add("moving")
+        this.parentElement.style.left = parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
+        this.parentElement.style.top = parseInt(touch.pageY - Math.floor(this.parentElement.offsetHeight/2)) + 'px';
+
+        //checks if it exits the screen
+        var scollingSpeed = 20;
+        var exittop = touch.pageY <= window.scrollY;
+        var exitbotton = touch.pageY >= window.scrollY + window.innerHeight;
+        if (exittop){
+            window.scrollBy(0, -scollingSpeed)
+        }
+        if (exitbotton){
+            window.scrollBy(0, scollingSpeed)
+        }
+
+        //check if it is on top of a valid drop target iterates over all valid drop areas and checks for overlap
+        divs = document.querySelectorAll('ul div');
+        overlapping = [];
+        for (div of [...divs]) {
+            rect1 = this.parentElement.getBoundingClientRect();
+            rect2 = div.getBoundingClientRect();
+            var overlap = !(rect1.right < rect2.left ||
+                rect1.left > rect2.right ||
+                rect1.bottom < rect2.top ||
+                rect1.top > rect2.bottom);
+            if (overlap) {
+                if (overlapping.length<1 && div !== this.parentElement){
+                    overlapping.push(div);
+                    div.classList.add("draggable-over")
+                    //div.style.backgroundColor ='green';
+                } else {if (div.classList.contains("draggable-over")){
+                    div.classList.remove("draggable-over")
+                }}
+
+            } else {
+                if (div.classList.contains("draggable-over")){
+                    div.classList.remove("draggable-over")
+                }
+                //div.style.backgroundColor ='white';
+            }
+        }
+  }
+}}
+
+function handleTouchEnd(event) {
+    clearTimeout(timeout);
+    if (!waiting) {
+        waiting =true;
+        this.parentElement.classList.remove("selected");
+        this.parentElement.classList.add("draggable-primary")
+        //Touch
+        //console.log("end");
+        //update from absolute to relative. Resets the element in the case of no overlapping.
+        //this.style.position ='relative';
+        this.parentElement.classList.remove("moving")
+        this.parentElement.style.left = 0;
+        this.parentElement.style.top = 0;
+        for (div of overlapping) {
+            if (div.classList.contains("draggable-over")) {
+                div.classList.remove("draggable-over")
+            }
+        }
+        //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
+        if (overlapping.length >= 1) {
+            const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
+            bumpItems(dragStartIndex, dragEndIndex);
+        }
+    }
+}
+
+function dragStart() {
+    //Mouse
+    // Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
+  // console.log('Event: ', 'dragstart');
+  dragStartIndex = +this.closest('li').getAttribute('data-index');
+}
+
+function dragEnter() {
+    //Mouse
+    //updates the element to know that it is hovering on top of a droppable area
+  //console.log('Event: ', 'dragenter');
+  this.getElementsByTagName('div')[0].classList.add('draggable-over');
+  //console.log(this);
+}
+
+function dragLeave() {
+    //Mouse
+    //updates the element to know that it is NOT hovering on top of a droppable area
+  //console.log('Event: ', 'dragleave');
+  this.getElementsByTagName('div')[0].classList.remove('draggable-over');
+}
+
+function dragOver(e) {
+  // console.log('Event: ', 'dragover');
+  e.preventDefault();
+}
+
+function dragDrop() {
+    //Mouse
+    //gets the index of the <li> item the item is hovering over to call the switch function
+  // console.log('Event: ', 'drop');
+  const dragEndIndex = +this.getAttribute('data-index');
+  this.getElementsByTagName('div')[0].classList.remove('draggable-over');
+  bumpItems(dragStartIndex, dragEndIndex);
+}
+
+// Swap list items that are drag and drop
+function swapItems(fromIndex, toIndex) {
+    //NOT USED
+    //swaps 2 <li> elements by index in listItems
+    //bumpItems(fromIndex, toIndex)
+  const itemOne = listItems[fromIndex].querySelector('.draggable');
+  const itemTwo = listItems[toIndex].querySelector('.draggable');
+    //console.log(fromIndex,toIndex)
+  listItems[fromIndex].appendChild(itemTwo);
+  listItems[toIndex].appendChild(itemOne);
+}
+
+// Bumps list items that are drag and drop up or down
+function bumpItems(fromIndex, toIndex) {
+    //swaps 2 <li> elements by index in listItems
+    let indexDifference = Math.abs(fromIndex-toIndex);
+
+    if (fromIndex > toIndex){
+        //Item moved up
+        //other items have to be moved down
+        const draggedItem = listItems[fromIndex].querySelector('.draggable');
+        let index = toIndex;
+        let toMove = Array(indexDifference)
+            .fill()
+            .map(() => index++)
+            .map((num) => listItems[num].querySelector('.draggable'));
+        listItems[toIndex].appendChild(draggedItem);
+        for (let i = toIndex+1; i <= fromIndex; i++) {
+            listItems[i].appendChild(toMove[i-(toIndex+1)]);}
+    } else if (fromIndex < toIndex) {
+        //Item moved down
+        //other items have to be moved up
+        const draggedItem = listItems[fromIndex].querySelector('.draggable');
+        let index = fromIndex + 1;
+        let toMove = Array(indexDifference)
+            .fill()
+            .map(() => index++)
+            .map((num) => listItems[num].querySelector('.draggable'));
+        listItems[toIndex].appendChild(draggedItem);
+        for (let i = fromIndex; i < toIndex ; i++) {
+            listItems[i].appendChild(toMove[i-fromIndex]);}
+    }
+}
+
+// Submits the votes
+function submitVote() {
+    var showprize = document.getElementById("showpris");
+    var failureprise = document.getElementById("fiaskopris");
+    var countryNames=[];
+    var countrynameAlertString = "";
+  listItems.forEach((listItem, index) => {
+    const countryName = listItem.querySelector('.country-name').innerText.trim();
+    countryNames.push(countryName);
+    //console.log(countryName);
+      });
+  for ([index,point] of points.entries()) {
+        countrynameAlertString = countrynameAlertString + "\n" + point + ". " + countryNames[index]}
+  $.post({
+              type: 'POST',
+              url: '',
+              data: {
+                  'countryNames[]': countryNames.toString(),
+                  'csrfmiddlewaretoken': '{{ csrf_token }}',
+                  'showprize': showprize.value,
+                  'failureprise': failureprise.value,
+                },
+              success: function (response){
+                  window.alert(`Takk for din stemme {{ country.country_name }} {{ slug }}! ${countrynameAlertString} \n Showpris:
+                  ${showprize.options[showprize.selectedIndex].text}\n Fiaskopris:
+                  ${failureprise.options[failureprise.selectedIndex].text}`);
+                  location.href = response.url;
+              },
+              error: function (response){
+                  window.alert("Ugyldig stemme.");
+              }
+            });
+}
+
+function addEventListeners() {
+    //Adds event listeners
+  const draggables = document.querySelectorAll('.dragbtn');
+  const dragListItems = document.querySelectorAll('.draggable-list li');
+
+  draggables.forEach(draggable => {
+    //mouse
+    draggable.parentElement.addEventListener('dragstart', dragStart);
+    // touch
+    draggable.addEventListener('touchstart', handleTouchStart);
+    draggable.addEventListener("touchmove", handleTouchMove);
+    draggable.addEventListener('touchend', handleTouchEnd);
+
+  });
+
+  dragListItems.forEach(item => {
+    item.addEventListener('dragover', dragOver);
+    item.addEventListener('drop', dragDrop);
+    item.addEventListener('dragenter', dragEnter);
+    item.addEventListener('dragleave', dragLeave);
+  });
+}
+
+check.addEventListener('click', submitVote);
+</script>
+{%endblock%}
