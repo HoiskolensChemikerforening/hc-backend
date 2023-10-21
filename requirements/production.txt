@@ -22,7 +22,7 @@ coverage==4.5.2
     # via
     #   -r base.in
     #   pytest-cov
-cryptography==3.3.2
+cryptography==39.0.1
     # via
     #   apns2
     #   http-ece
@@ -160,10 +160,8 @@ py-vapid==1.8.2
 pycparser==2.20
     # via cffi
 pyjwt==1.7.1
-    # via
-    #   apns2
-    #   djangorestframework-simplejwt
-pyopenssl==18.0.0
+    # via apns2
+pyopenssl==23.1.0
     # via -r base.in
 pyparsing==2.4.7
     # via packaging
@@ -205,7 +203,6 @@ requests==2.26.0
 six==1.16.0
     # via
     #   bleach
-    #   cryptography
     #   django-extensions
     #   freezegun
     #   pyopenssl
