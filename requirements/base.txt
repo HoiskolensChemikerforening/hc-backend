@@ -142,6 +142,8 @@ markdown2==2.4.0
     # via
     #   -r base.in
     #   django-markdown2
+markupsafe==2.1.2
+    # via werkzeug
 more-itertools==8.2.0
     # via pytest
 olefile==0.46
@@ -232,7 +234,7 @@ wcwidth==0.1.8
     # via pytest
 webencodings==0.5.1
     # via bleach
-werkzeug==0.15.5
+werkzeug==2.2.3
     # via -r base.in
 wiki==0.7.9
     # via -r base.in

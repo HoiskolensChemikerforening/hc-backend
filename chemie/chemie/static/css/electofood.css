@@ -1,0 +1,147 @@
+
+
+.radio-container.alternativesform.alternativesform {
+    display: grid;
+    grid-template-columns: repeat(4,1fr);
+}
+
+label.alternativesform.alternativesform {
+    position: relative;
+    text-transform: uppercase;
+    font-size: .9rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1;
+}
+.input-wrapper.alternativesform.alternativesform {
+    position: relative;
+    height: 40px;
+    margin-bottom: 14px;
+    width: 100%;
+}
+
+.input-wrapper.alternativesform.alternativesform > input {
+    opacity: 100%;
+    height: 100%;
+    width:100%;
+    position: relative;
+}
+
+.delete-list{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.checkmark.alternativesform.alternativesform {
+    opacity: 0;
+    position: absolute;
+    color: #fff;
+    width: 40px;
+    height: 40px;
+    padding: 2px;
+    top: 0;
+    left: 0;
+    font-size: .8rem;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+}
+
+.question {
+    font-weight: bold;
+    font-size: 1.5rem;
+    margin-bottom: 40px;
+
+}
+.card-body.cardstyle {
+    padding: 3rem 5.6rem;
+}
+
+.secondary-title {
+    margin-bottom: 0.5rem;
+}
+
+button.next-btn {
+    background: #fff;
+    border-radius: 48px;
+    text-align: center;
+    padding: 0 .5rem;
+    cursor: pointer;
+    border: 2px solid #f0f0f0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+[slot=navigation] {
+    left: 50%;
+    bottom: 0;
+    display: flex;
+    justify-content: center;
+    margin-top: 40px;
+}
+.container-btn {
+    width: 100px;
+    margin: 10px;
+}
+
+.container-btn > button{
+    width: 100%;
+}
+
+
+
+.progress-container{
+    display: inline-block;
+    width: 100%;
+    padding-top: 2px;
+}
+.progress.progressbarbackground {
+    background-color: #f1f1f1;
+    height: 20px;
+    border-radius: 3px;
+    text-align: center;
+    font-weight: bold;
+    margin-top:0;
+}
+
+.committe-title {
+    font-weight: bold;
+    margin-bottom: 1px;
+}
+
+.decrease-margin{
+    margin-bottom:5px;
+}
+
+.dropdown-container {
+    margin-bottom: 30px;
+}
+
+.headline {
+    font-weight: bold;
+    margin-bottom: 0px;
+}
+.list-committee{
+    margin-top:5px;
+    font-weight: lighter;
+    font-style: oblique;
+}
+.card-body.cardstyle > h3{
+    margin-top: 0;
+}
+
+.dropdownfix {
+    min-width: fit-content;
+}
+
+@media only screen and (max-width: 600px) {
+  .card-body.cardstyle {
+    padding: 2.5rem 2.5rem;
+}
+}
+
