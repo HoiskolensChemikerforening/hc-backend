@@ -602,6 +602,10 @@ class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
         # Fetch event object
         self.set_initial()
         event = self.object
+
+        #Prevent people from entering the page if tentative
+        if event.tentative:
+            return redirect("events:detail_social", pk=event.id)
         registration = self.registration_model.objects.filter(
             event=event, user=request.user
         ).first()
@@ -635,6 +639,9 @@ class BedpresBaseRegisterUserView(SocialBaseRegisterUserView):
         # Fetch event object
         self.set_initial()
         event = self.object
+        # Prevent people from entering the page if tentative
+        if event.tentative:
+            return redirect("events:detail_bedpres", pk=event.id)
         registration = self.registration_model.objects.filter(
             event=event, user=request.user
         ).first()

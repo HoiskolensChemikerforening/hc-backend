@@ -20,133 +20,197 @@
 {% endblock %}
 
 {% block maincontent %}
+    {% if bedpres.tentative %}
+        <div class="row">
+            <p class="col s12 m12 l12">
+            <h1 class="heading">{{ bedpres.title }}</h1>
+          </div>
 
-  <div class="row">
-    <div class="col s12 m12 l12"><h1 class="heading">{{ bedpres.title }}</h1></div>
-  </div>
-
-  <div class="row">
-    <div class="col l7 m12">
-      {% thumbnail bedpres.image "1600" crop="center" as im %}
-        <img class="responsive-img materialboxed" src="{{ im.url }}">
-      {% endthumbnail %}
-    </div>
-
-    <div class="col l5 m12 s12">
-      <div class="card card-event">
-        <div class="card-content">
-
-          <!-- General info -->
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">playlist_add_check</i>
-              <h5 class="left-align">Inviterte</h5>
+          <div class="row">
+            <div class="col l7 m12">
+              {% thumbnail bedpres.image "1600" crop="center" as im %}
+                <img class="responsive-img materialboxed" src="{{ im.url }}">
+              {% endthumbnail %}
             </div>
-            <div>
-              <p class="left valign"><b>Klasse:</b></p>
-              <p class="right valign">
-                {% for grade in bedpres.get_allowed_grades_display %}
-                  {{ grade }},
-                {% endfor %}</p>
+
+            <div class="col l5 m12 s12">
+              <div class="card card-event" style="padding-top: 5px;padding-bottom: 5px">
+                <div class="card-content" style="padding-top: 20px">
+
+                  <!-- General info -->
+                  <div class="section" style="padding-top: 0px">
+                    <div class="valign-wrapper">
+                      <i class="material-icons valign left">access_time</i>
+                      <h5 class="left-align">Når</h5>
+                    </div>
+                    <p>{{ bedpres.date|date:"j. F " }}</p>
+                  </div>
+                  <div class="divider"></div>
+
+                    <div class="section">
+                      <div class="valign-wrapper">
+                        <i class="material-icons valign left">contacts</i>
+                        <h5 class="left-align">Komité</h5>
+                      </div>
+                      <p>Industrikomiteen</p>
+                    </div>
+                    <div class="divider"></div>
+
+                  <div class="section" style="padding-bottom: 0px">
+                    <div class="valign-wrapper">
+                      <i class="material-icons valign left">edit</i>
+                      <h5 class="left-align">Forfatter</h5>
+                    </div>
+                    <p>{{ bedpres.author.get_full_name }}</p>
+                  </div>
+
+
+
+                </div>
+
+              </div>
             </div>
           </div>
-          <br>
-          <div class="divider"></div>
 
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">location_on</i>
-              <h5 class="left-align">Hvor</h5>
+          <!-- Desription info -->
+          <div class="row">
+            <div class="col s12 m12 l12">
+              <div class="card">
+                <div class="card-content">
+                  <h5>Beskrivelse:</h5>
+                  <p class="flow-text"> {{ bedpres.description|linebreaksbr }} </p>
+                </div>
+              </div>
             </div>
-            <p>{{ bedpres.location }}</p>
           </div>
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">access_time</i>
-              <h5 class="left-align">Når</h5>
-            </div>
-            <p>{{ bedpres.date|date:"j. F - H:i" }}</p>
-          </div>
-          <div class="divider"></div>
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">contacts</i>
-              <h5 class="left-align">Komité</h5>
-            </div>
-            <p>Industrikomitéen</p>
-          </div>
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">edit</i>
-              <h5 class="left-align">Forfatter</h5>
-            </div>
-            <p>{{ bedpres.author.get_full_name }}</p>
-          </div>
-          <div class="divider"></div>
 
-          <!-- Total and remaining slots bar -->
-          <div class="divider"></div>
-          <div class="section">
-            <div class="valign-wrapper">
-              <i class="material-icons valign left">people_outline</i>
-              <h5 class="left-align">Plasser</h5>
+    {% else %}
+      <div class="row">
+        <div class="col s12 m12 l12"><h1 class="heading">{{ bedpres.title }}</h1></div>
+      </div>
+
+      <div class="row">
+        <div class="col l7 m12">
+          {% thumbnail bedpres.image "1600" crop="center" as im %}
+            <img class="responsive-img materialboxed" src="{{ im.url }}">
+          {% endthumbnail %}
+        </div>
+
+        <div class="col l5 m12 s12">
+          <div class="card card-event">
+            <div class="card-content">
+
+              <!-- General info -->
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">playlist_add_check</i>
+                  <h5 class="left-align">Inviterte</h5>
+                </div>
+                <div>
+                  <p class="left valign"><b>Klasse:</b></p>
+                  <p class="right valign">
+                    {% for grade in bedpres.get_allowed_grades_display %}
+                      {{ grade }},
+                    {% endfor %}</p>
+                </div>
+              </div>
+              <br>
+              <div class="divider"></div>
+
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">location_on</i>
+                  <h5 class="left-align">Hvor</h5>
+                </div>
+                <p>{{ bedpres.location }}</p>
+              </div>
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">access_time</i>
+                  <h5 class="left-align">Når</h5>
+                </div>
+                <p>{{ bedpres.date|date:"j. F - H:i" }}</p>
+              </div>
+              <div class="divider"></div>
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">contacts</i>
+                  <h5 class="left-align">Komité</h5>
+                </div>
+                <p>Industrikomitéen</p>
+              </div>
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">edit</i>
+                  <h5 class="left-align">Forfatter</h5>
+                </div>
+                <p>{{ bedpres.author.get_full_name }}</p>
+              </div>
+              <div class="divider"></div>
+
+              <!-- Total and remaining slots bar -->
+              <div class="divider"></div>
+              <div class="section">
+                <div class="valign-wrapper">
+                  <i class="material-icons valign left">people_outline</i>
+                  <h5 class="left-align">Plasser</h5>
+                </div>
+                <div>
+                  <p class="left valign"><b>Påmeldte:</b></p>
+                  <p class="right valign">{{ bedpres.registered_users|default_if_none:0 }} av {{ bedpres.sluts }}</p>
+                </div>
+                <br>
+                <div class="progress">
+                  <div class="determinate" style="width: {{ bedpres.percentage_filled }}%"></div>
+                </div>
+              </div>
             </div>
-            <div>
-              <p class="left valign"><b>Påmeldte:</b></p>
-              <p class="right valign">{{ bedpres.registered_users|default_if_none:0 }} av {{ bedpres.sluts }}</p>
-            </div>
-            <br>
-            <div class="progress">
-              <div class="determinate" style="width: {{ bedpres.percentage_filled }}%"></div>
+            <div class="divider"></div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="row">
+          <!-- Button for signup page -->
+          <a class="waves-effect waves-light btn" href="{{ bedpres.get_absolute_registration_url }}">Til påmelding</a>
+          <!-- Button for check in page -->
+          {% if perms.events.change_bedpresregistration %}
+          <a class="waves-effect waves-light btn" href="{% url 'events:checkin_bedpres' bedpres.pk %}">Til innsjekk</a>
+          {% endif %}
+      </div>
+
+
+      <!-- Desription info -->
+      <div class="row">
+        <div class="col s12 m12 l12">
+          <div class="card">
+            <div class="card-content">
+              <h5>Beskrivelse:</h5>
+              <p class="flow-text"> {{ bedpres.description|safe|linebreaksbr }} </p>
             </div>
           </div>
         </div>
-        <div class="divider"></div>
       </div>
 
-    </div>
-  </div>
+      <div class="row">
+      <!-- List of attending users -->
+        <div class="col s12 m6 l6">
+          {% if attendees %}
+            <h2>Påmeldte</h2>
+            {% include "events/attendees.html" with user_list=attendees %}
+          {% endif %}
+        </div>
 
-  <div class="row">
-      <!-- Button for signup page -->
-      <a class="waves-effect waves-light btn" href="{{ bedpres.get_absolute_registration_url }}">Til påmelding</a>
-      <!-- Button for check in page -->
-      {% if perms.events.change_bedpresregistration %}
-      <a class="waves-effect waves-light btn" href="{% url 'events:checkin_bedpres' bedpres.pk %}">Til innsjekk</a>
-      {% endif %}
-  </div>
-
-
-  <!-- Desription info -->
-  <div class="row">
-    <div class="col s12 m12 l12">
-      <div class="card">
-        <div class="card-content">
-          <h5>Beskrivelse:</h5>
-          <p class="flow-text"> {{ bedpres.description|safe|linebreaksbr }} </p>
+        <div class="col s12 m6 l6">
+        <!-- List of users on waiting list -->
+          {% if waiting_list %}
+            <h2>Venteliste</h2>
+            {% include "events/waiting_list.html" with user_list=waiting_list %}
+          {% endif %}
         </div>
       </div>
-    </div>
-  </div>
-
-  <div class="row">
-  <!-- List of attending users -->
-    <div class="col s12 m6 l6">
-      {% if attendees %}
-        <h2>Påmeldte</h2>
-        {% include "events/attendees.html" with user_list=attendees %}
-      {% endif %}
-    </div>
-
-    <div class="col s12 m6 l6">
-    <!-- List of users on waiting list -->
-      {% if waiting_list %}
-        <h2>Venteliste</h2>
-        {% include "events/waiting_list.html" with user_list=waiting_list %}
-      {% endif %}
-    </div>
-  </div>
-
+    {% endif %}
 {% endblock maincontent %}
 
 {% block footer_js_files %}

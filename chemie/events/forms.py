@@ -117,6 +117,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             "register_deadline",
             "deregister_deadline",
             "published",
+            "tentative",
         ]
 
         # Override field type from DateTimeField to SplitDateTimeField
@@ -132,7 +133,11 @@ class BaseRegisterEventForm(forms.ModelForm):
 
 class RegisterEventForm(BaseRegisterEventForm):
     layout = M.Layout(
-        M.Row(M.Column("published", "title")),
+        M.Row(
+            M.Column("published"),
+            M.Column("tentative"),
+        ),
+        M.Row("title"),
         M.Row("committee"),
         M.Row(
             M.Column("date", span_columns=1),
@@ -167,7 +172,11 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 class RegisterBedpresForm(BaseRegisterEventForm):
     layout = M.Layout(
-        M.Row("published", "title"),
+        M.Row(
+            M.Column("published"),
+            M.Column("tentative"),
+        ),
+        M.Row("title"),
         M.Row(
             M.Column("date", span_columns=1),
             M.Column("register_startdate", span_columns=1),
