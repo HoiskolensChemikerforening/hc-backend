@@ -8,8 +8,6 @@ apipkg==1.5
     # via execnet
 apns2==0.7.1
     # via django-push-notifications
-atomicwrites==1.4.1
-    # via pytest
 attrs==19.3.0
     # via pytest
 babel==2.10.3
@@ -22,10 +20,6 @@ cffi==1.14.0
     # via cryptography
 chardet==3.0.4
     # via requests
-colorama==0.4.6
-    # via
-    #   pytest
-    #   qrcode
 coverage==4.5.2
     # via
     #   -r base.in
@@ -128,10 +122,6 @@ hyperframe==3.2.0
     #   hyper
 idna==2.8
     # via requests
-importlib-metadata==6.0.0
-    # via
-    #   pluggy
-    #   pytest
 invoicegenerator==1.1.0
     # via -r base.in
 jsonfield==3.0.0
@@ -154,7 +144,7 @@ packaging==20.1
     #   pytest
 passlib==1.7.2
     # via django-hashers-passlib
-pillow==9.3.0
+pillow==10.0.1
     # via
     #   invoicegenerator
     #   reportlab
@@ -226,8 +216,6 @@ sorl-thumbnail==12.6.3
     # via wiki
 sqlparse==0.3.0
     # via django
-typing-extensions==4.5.0
-    # via importlib-metadata
 urllib3==1.25.8
     # via requests
 wcwidth==0.1.8
@@ -238,8 +226,6 @@ werkzeug==2.2.3
     # via -r base.in
 wiki==0.7.9
     # via -r base.in
-zipp==3.15.0
-    # via importlib-metadata
 
 # The following packages are considered to be unsafe in a requirements file:
 # setuptools
