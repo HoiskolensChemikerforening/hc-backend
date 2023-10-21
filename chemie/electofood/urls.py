@@ -9,7 +9,7 @@ urlpatterns = [
     path("", views.index, name="index_valgomat"),
     path("personlig/<int:id>/", views.valgomat_form, name="valgomat_form"),
     path(
-        "komitee/<int:id>/<int:committee_id>/",
+        "komite/<int:id>/<int:committee_id>/",
         views.valgomat_form,
         name="committee_valgomat_form",
     ),
