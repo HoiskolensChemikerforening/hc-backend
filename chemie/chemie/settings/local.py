@@ -11,7 +11,7 @@ from .base import *
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "webkom",
+        "NAME": "webkom_all",
         "USER": "webkom",
         "PASSWORD": "webkom",
         "HOST": "localhost",
