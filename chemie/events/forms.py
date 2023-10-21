@@ -172,7 +172,11 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 class RegisterBedpresForm(BaseRegisterEventForm):
     layout = M.Layout(
-        M.Row("published", "title"),
+        M.Row(
+            M.Column("published"),
+            M.Column("tentative"),
+        ),
+        M.Row("title"),
         M.Row(
             M.Column("date", span_columns=1),
             M.Column("register_startdate", span_columns=1),
