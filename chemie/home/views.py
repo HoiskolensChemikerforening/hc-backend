@@ -210,6 +210,7 @@ class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     permission_required = "home.change_officeapplication"
 
 
+#API
 class UserPermissionView(APIView):
     def post(self, request):
         user_id = request.data["user_id"]
@@ -224,3 +225,5 @@ class UserPermissionView(APIView):
 class OfficeAccessListViewApi(generics.ListCreateAPIView):
     queryset = OfficeApplication.objects.order_by("-created")
     serializer_class = OfficeAccessSerializer
+
+
