@@ -20,7 +20,7 @@ black==18.9b0
     # via -r development.in
 bleach==3.3.1
     # via wiki
-certifi==2021.5.30
+certifi==2022.12.7
     # via requests
 cffi==1.14.6
     # via cryptography

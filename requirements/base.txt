@@ -16,7 +16,7 @@ babel==2.10.3
     # via invoicegenerator
 bleach==3.3.1
     # via wiki
-certifi==2019.11.28
+certifi==2022.12.7
     # via requests
 cffi==1.14.0
     # via cryptography
