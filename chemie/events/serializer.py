@@ -6,7 +6,6 @@ from .models import (
     SocialEventRegistration,
     BedpresRegistration,
 )
-from chemie.customprofile.models import Profile
 
 from chemie.customprofile.serializers import UserSerializer
 from chemie.committees.serializers import CommitteeSerializer
@@ -15,9 +14,11 @@ from chemie.committees.serializers import CommitteeSerializer
 class AttendeeSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source="get_full_name")
     grade = serializers.IntegerField(source="profile.grade")
+    #status = serializers.IntegerField(source="event.status")
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name", "full_name", "grade")
+
 
 class SocialSerializer(serializers.ModelSerializer):
     author = UserSerializer()
@@ -27,7 +28,6 @@ class SocialSerializer(serializers.ModelSerializer):
     class Meta:
         model = Social
         fields = "__all__"
-
 
 class SocialEventRegistrationSerializer(serializers.ModelSerializer):
     event = SocialSerializer()

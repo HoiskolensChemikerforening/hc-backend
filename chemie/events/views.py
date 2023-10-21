@@ -55,6 +55,8 @@ from .serializer import (
     BedpresRegistrationSerializer,
 )
 
+from rest_framework.pagination import PageNumberPagination
+
 
 class SuccessMessageMixin(object):
     message_content = "", "", ""
@@ -884,6 +886,10 @@ def check_in_to_social(request, pk):
 
 
 #API Views
+
+class CustomPagination(PageNumberPagination):
+    page_size = 20
+
 class SocialListCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all().order_by("-date")
     serializer_class = SocialSerializer
@@ -895,6 +901,8 @@ class SocialListCreateKommende(generics.ListCreateAPIView):
 class SocialListCreateTidligere(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__lt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
+
+    pagination_class = CustomPagination
 
 class SocialListCreateMine(generics.ListCreateAPIView): #Mine social events
     def get_queryset(self): # Må overstyre get metoden
