@@ -160,8 +160,10 @@ py-vapid==1.8.2
 pycparser==2.20
     # via cffi
 pyjwt==1.7.1
-    # via apns2
-pyopenssl==23.1.0
+    # via
+    #   apns2
+    #   djangorestframework-simplejwt
+pyopenssl==18.0.0
     # via -r base.in
 pyparsing==2.4.7
     # via packaging
@@ -221,7 +223,7 @@ wcwidth==0.2.5
     # via pytest
 webencodings==0.5.1
     # via bleach
-werkzeug==2.2.3
+werkzeug==3.0.1
     # via -r base.in
 wiki==0.7.9
     # via -r base.in
