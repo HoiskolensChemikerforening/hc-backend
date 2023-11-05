@@ -56,6 +56,8 @@ from .serializer import (
 )
 
 from rest_framework.pagination import PageNumberPagination
+from rest_framework.response import Response
+
 
 
 class SuccessMessageMixin(object):
@@ -886,17 +888,39 @@ def check_in_to_social(request, pk):
 
 
 #API Views
+DEFAULT_PAGE = 1
+class SetPagination(PageNumberPagination):
+
+    page_size = 2
+    page_size_query_param = 'page_size'
+
+    def get_paginated_response(self, data):
+        return Response({
+            'links': {
+                'next': self.get_next_link(),
+                'previous': self.get_previous_link()
+            },
+            'total': self.page.paginator.count,
+            'page': int(self.request.GET.get('page', DEFAULT_PAGE)), # can not set default = self.page
+            'page_size': int(self.request.GET.get('page_size', self.page_size)),
+            'results': data
+        })
+
+
 class SocialListCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all().order_by("-date")
     serializer_class = SocialSerializer
 
+
 class SocialListCreateKommende(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
+    #pagination_class = SetPagination
 
 class SocialListCreateTidligere(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__lt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
+    pagination_class = SetPagination
 
 class SocialListCreateMine(generics.ListCreateAPIView): #Mine social events
     def get_queryset(self): # Må overstyre get metoden
