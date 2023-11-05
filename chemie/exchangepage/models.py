@@ -1,5 +1,6 @@
 from django.db import models
 from chemie.customprofile.models import Profile
+
 class Travelletter(models.Model):
     user        = models.OneToOneField(Profile, on_delete=models.CASCADE)
     country     = models.CharField(max_length=30)
@@ -12,6 +13,18 @@ class Travelletter(models.Model):
     std6        = models.IntegerField(default=0, verbose_name="Score, std6")
     def __str__(self):
         return self.title
+
+class questions(models.Model):
+        question = models.CharField(max_length=200)
+    def __str__(self):
+        return self.question
+
+class experience(models.Model):
+        question = models.OneToOneField(question, on_delete=models.CASCADE)
+        answer = models.TextField()
+        travelletter = models.ForeignKey(Travelletter)
+    def __str__(self):
+        return f'Svar på spørsmål: {self.question}'
 
 
 
