@@ -14,13 +14,13 @@ class Travelletter(models.Model):
     def __str__(self):
         return self.title
 
-class questions(models.Model):
+class Questions(models.Model):
     question = models.CharField(max_length=200)
     def __str__(self):
         return self.question
 
-class experience(models.Model):
-    question = models.OneToOneField(questions, on_delete=models.CASCADE)
+class Experience(models.Model):
+    question = models.OneToOneField(Questions, on_delete=models.CASCADE)
     answer = models.TextField()
     travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE)
     def __str__(self):
