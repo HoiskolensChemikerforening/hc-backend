@@ -3,6 +3,10 @@ const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
 const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
+const mustacheNovemberImages = ["../../static/images/holiday_images/bart1.png",
+  "../../static/images/holiday_images/bart2.png", "../../static/images/holiday_images/bart3.png",
+  "../../static/images/holiday_images/bart4.png", "../../static/images/holiday_images/bart5.png",
+  "../../static/images/holiday_images/bart6.png"];
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -15,11 +19,13 @@ function selectSymbols(choose_your_holiday) {
     return halloweenSymbols
   } else if (choose_your_holiday === "pauloween") {
     return paulImages
+  } else if (choose_your_holiday === "mustache") {
+    return mustacheNovemberImages
   }
   return []; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "pauloween"; // Change this to select the holiday you want
+const chosenHoliday = "mustache"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 for(i=0; i<300; i++) {
@@ -50,7 +56,7 @@ for(i=0; i<300; i++) {
     imageElement.style.animationDelay = randomAnimationDelay + 's';
     // Adjust the image size as needed
     imageElement.style.width = '4rem';
-    imageElement.style.height = '4rem';
+    imageElement.style.height = '3rem';
     document.getElementById("makeItRain").appendChild(imageElement);
   } else {
     var element = document.createElement('div');
