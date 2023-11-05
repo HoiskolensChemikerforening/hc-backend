@@ -1,21 +1,25 @@
-const holidaySymbols = ["❄️", "❄️", "❄️", "🎄", "🎁", "🎅"]; // add in emojies after every Advent
+const christmasSymbols = ["❄️", "❄️", "❄️", "🎄", "🎁", "🎅"]; // add in emojies after every Advent
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
+const breastCancerSymbols = ["🎀", "🌸", "💗"];
+const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"]
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
-    return holidaySymbols;
+    return christmasSymbols;
   } else if (choose_your_holiday === "easter") {
     return easterSymbols;
+  } else if (choose_your_holiday === "breast cancer") {
+    return breastCancerSymbols
+  }else if (choose_your_holiday === "halloween") {
+    return halloweenSymbols
   }
   return []; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "christmas"; // Change this to select the holiday you want
+const chosenHoliday = "halloween"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 for(i=0; i<300; i++) {
-  // Random rotation
-  var randomRotation = Math.floor(Math.random() * 360);
   // Random width & height between 0 and viewport
   var randomWidth = Math.floor(Math.random() * Math.max(document.documentElement.clientWidth, window.innerWidth || 0));
   var randomHeight =  Math.floor(Math.random() * Math.max(document.documentElement.clientHeight, window.innerHeight || 0));
