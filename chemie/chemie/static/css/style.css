@@ -668,6 +668,14 @@ p {
   --margin-start: -100vh;
   pointer-events: none; /* Allows clicks to pass through */
 }
+.imageElement {
+  z-index: 1000000;
+  opacity: 0;
+  position: absolute;
+  --margin-end: 0vh;
+  --margin-start: -100vh;
+  pointer-events: none; /* Allows clicks to pass through */
+
 @keyframes swing {
   0% {
     transform: translateX(0);

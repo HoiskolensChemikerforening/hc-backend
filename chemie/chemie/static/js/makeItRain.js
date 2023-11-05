@@ -1,7 +1,8 @@
 const christmasSymbols = ["❄️", "❄️", "❄️", "🎄", "🎁", "🎅"]; // add in emojies after every Advent
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
-const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"]
+const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
+const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -10,13 +11,15 @@ function selectSymbols(choose_your_holiday) {
     return easterSymbols;
   } else if (choose_your_holiday === "breast cancer") {
     return breastCancerSymbols
-  }else if (choose_your_holiday === "halloween") {
+  } else if (choose_your_holiday === "halloween") {
     return halloweenSymbols
+  } else if (choose_your_holiday === "pauloween") {
+    return paulImages
   }
   return []; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "halloween"; // Change this to select the holiday you want
+const chosenHoliday = "pauloween"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 for(i=0; i<300; i++) {
@@ -36,14 +39,29 @@ for(i=0; i<300; i++) {
 
     // Create general rain piece
   var randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
-  var element = document.createElement('div');
-  element.style.setProperty('--margin-end', `${height}px`);
-  element.className = 'element';
-  element.style.top = randomHeight + 'px';
-  element.style.left = randomWidth + 'px';
-  element.innerHTML = randomSymbol;
-  element.style.animation = `fall ${height / 20}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
-  element.style.animationDelay = randomAnimationDelay + 's';
-  element.style.fontSize = '2rem';
-  document.getElementById("makeItRain").appendChild(element);
+  if (randomSymbol.includes(".png")) { // Check if the symbol is an image URL
+    var imageElement = document.createElement('img');
+    imageElement.src = randomSymbol;
+    imageElement.style.setProperty('--margin-end', `${height}px`);
+    imageElement.className = 'element';
+    imageElement.style.top = randomHeight + 'px';
+    imageElement.style.left = randomWidth + 'px';
+    imageElement.style.animation = `fall ${height / 20}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+    imageElement.style.animationDelay = randomAnimationDelay + 's';
+    // Adjust the image size as needed
+    imageElement.style.width = '4rem';
+    imageElement.style.height = '4rem';
+    document.getElementById("makeItRain").appendChild(imageElement);
+  } else {
+    var element = document.createElement('div');
+    element.style.setProperty('--margin-end', `${height}px`);
+    element.className = 'element';
+    element.style.top = randomHeight + 'px';
+    element.style.left = randomWidth + 'px';
+    element.innerHTML = randomSymbol;
+    element.style.animation = `fall ${height / 20}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+    element.style.animationDelay = randomAnimationDelay + 's';
+    element.style.fontSize = '2rem';
+    document.getElementById("makeItRain").appendChild(element);
+  }
 }
