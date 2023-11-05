@@ -67,7 +67,7 @@ urlpatterns = [
     ),
     path("cgp/",include("chemie.cgp.urls", namespace="cgp")),
     path("valgomat/",include("chemie.electofood.urls", namespace="valgomat")),
-    path("reisebrev/", include("chemie.exchangepage.urls", namespace="reisebrev"))
+    path("reisebrev/", include("chemie.exchangepage.urls", namespace="reisebrev")),
     # For authentication
     path(
         "api/token/",
