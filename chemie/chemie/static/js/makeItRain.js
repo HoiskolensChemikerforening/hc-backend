@@ -1,4 +1,17 @@
-const holidaySymbols = ["❄️", "❄️", "❄️", "🎄", "🎁", "🎅"];
+const holidaySymbols = ["❄️", "❄️", "❄️", "🎄", "🎁", "🎅"]; // add in emojies after every Advent
+const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
+
+function selectSymbols(choose_your_holiday) {
+  if (choose_your_holiday === "christmas") {
+    return holidaySymbols;
+  } else if (choose_your_holiday === "easter") {
+    return easterSymbols;
+  }
+  return []; // Return an empty array if the holiday is not recognized
+}
+
+const chosenHoliday = "christmas"; // Change this to select the holiday you want
+const selectedSymbols = selectSymbols(chosenHoliday);
 
 for(i=0; i<300; i++) {
   // Random rotation
@@ -58,5 +71,18 @@ for(i=0; i<300; i++) {
   holidayElement.style.animation = `christmasFall ${height / 20}s infinite, christmasSwing ${Math.random() * 4 + 2}s alternate infinite`;
   holidayElement.style.animationDelay = randomAnimationDelay + 's';
   holidayElement.style.fontSize = '2rem';
-  document.getElementById("makeItRain").appendChild(holidayElement);
+  // document.getElementById("makeItRain").appendChild(holidayElement);
+
+    // Create general piece
+  var randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
+  var element = document.createElement('div');
+  element.style.setProperty('--margin-end', `${height}px`);
+  element.className = 'element';
+  element.style.top = randomHeight + 'px';
+  element.style.left = randomWidth + 'px';
+  element.innerHTML = randomSymbol;
+  element.style.animation = `fall ${height / 20}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+  element.style.animationDelay = randomAnimationDelay + 's';
+  element.style.fontSize = '2rem';
+  document.getElementById("makeItRain").appendChild(element);
 }
