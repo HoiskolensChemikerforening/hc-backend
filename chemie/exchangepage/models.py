@@ -20,9 +20,9 @@ class questions(models.Model):
         return self.question
 
 class experience(models.Model):
-    question = models.OneToOneField(question, on_delete=models.CASCADE)
+    question = models.OneToOneField(questions, on_delete=models.CASCADE)
     answer = models.TextField()
-    travelletter = models.ForeignKey(Travelletter)
+    travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE)
     def __str__(self):
         return f'Svar på spørsmål: {self.question}'
 
