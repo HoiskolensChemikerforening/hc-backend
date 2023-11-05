@@ -12,7 +12,7 @@ class Travelletter(models.Model):
     std5        = models.IntegerField(default=0, verbose_name="Score, std5")
     std6        = models.IntegerField(default=0, verbose_name="Score, std6")
     def __str__(self):
-        return self.title
+        return self.user
 
 class Questions(models.Model):
     question = models.CharField(max_length=200)
