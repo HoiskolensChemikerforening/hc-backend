@@ -25,27 +25,38 @@ function selectSymbols(choose_your_holiday) {
   return []; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "mustache"; // Change this to select the holiday you want
+const chosenHoliday = "pauloween"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-for(i=0; i<300; i++) {
+const maxElements = 200; // Maximum number of elements
+
+// Create and animate the initial set of elements
+createAndAnimateElements(maxElements);
+
+function createAndAnimateElements(maxElements) {
+  for (let i = 0; i < maxElements; i++) {
+    createAndAnimateElement();
+  }
+}
+
+function createAndAnimateElement() {
   // Random width & height between 0 and viewport
   var randomWidth = Math.floor(Math.random() * Math.max(document.documentElement.clientWidth, window.innerWidth || 0));
-  var randomHeight =  Math.floor(Math.random() * Math.max(document.documentElement.clientHeight, window.innerHeight || 0));
+  var randomHeight = Math.floor(Math.random() * Math.max(document.documentElement.clientHeight, window.innerHeight || 0));
 
   // Random animation-delay
   var randomAnimationDelay = Math.floor(Math.random() * 150);
   console.log(randomAnimationDelay);
 
-  //edit end point rain
-  const content =  document.getElementsByTagName("body")[0];
+  // Calculate `height` here
   const windowHeight = window.innerHeight;
+  const content = document.getElementsByTagName("body")[0];
   const pageHeight = Math.max(content.offsetHeight, windowHeight);
   const height = pageHeight + 1000;
 
-    // Create general rain piece
+  // Create element
   var randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
-  if (randomSymbol.includes(".png")) { // Check if the symbol is an image URL
+  if (randomSymbol.includes(".png")) { // Create image element
     var imageElement = document.createElement('img');
     imageElement.src = randomSymbol;
     imageElement.style.setProperty('--margin-end', `${height}px`);
@@ -58,7 +69,7 @@ for(i=0; i<300; i++) {
     imageElement.style.width = '4rem';
     imageElement.style.height = '3rem';
     document.getElementById("makeItRain").appendChild(imageElement);
-  } else {
+  } else { // Create text element if emojies
     var element = document.createElement('div');
     element.style.setProperty('--margin-end', `${height}px`);
     element.className = 'element';
@@ -70,4 +81,15 @@ for(i=0; i<300; i++) {
     element.style.fontSize = '2rem';
     document.getElementById("makeItRain").appendChild(element);
   }
+
+  // Remove the oldest element when exceeding the maximum
+  const elements = document.getElementsByClassName('element');
+  if (elements.length > maxElements) {
+    document.getElementById("makeItRain").removeChild(elements[0]);
+  }
 }
+
+// Continuously create and animate new elements at a set interval
+setInterval(() => {
+  createAndAnimateElement();
+}, 1000); // Adjust the interval as needed
