@@ -15,14 +15,14 @@ class Travelletter(models.Model):
         return self.title
 
 class questions(models.Model):
-        question = models.CharField(max_length=200)
+    question = models.CharField(max_length=200)
     def __str__(self):
         return self.question
 
 class experience(models.Model):
-        question = models.OneToOneField(question, on_delete=models.CASCADE)
-        answer = models.TextField()
-        travelletter = models.ForeignKey(Travelletter)
+    question = models.OneToOneField(question, on_delete=models.CASCADE)
+    answer = models.TextField()
+    travelletter = models.ForeignKey(Travelletter)
     def __str__(self):
         return f'Svar på spørsmål: {self.question}'
 
