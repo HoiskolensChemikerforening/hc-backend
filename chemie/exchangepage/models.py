@@ -12,7 +12,7 @@ class Travelletter(models.Model):
     std5        = models.IntegerField(default=0, verbose_name="Score, std5")
     std6        = models.IntegerField(default=0, verbose_name="Score, std6")
     def __str__(self):
-        return self.user
+        return self.user.user.first_name
 
 class Questions(models.Model):
     question = models.CharField(max_length=200)
@@ -22,7 +22,7 @@ class Questions(models.Model):
 class Experience(models.Model):
     question = models.OneToOneField(Questions, on_delete=models.CASCADE)
     answer = models.TextField()
-    travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE)
+    travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name="experiences")
     def __str__(self):
         return f'Svar på spørsmål: {self.question}'
 

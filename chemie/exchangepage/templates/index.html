@@ -1,6 +1,9 @@
 {% extends "chemie/base.html" %}
 {% load static %}
 
+{% block extra_css %}
+
+{% endblock %}
 
 {% block nav_header %}
   Reisebrev
@@ -12,6 +15,25 @@
 
 {% load material_form %}
 {% block content %}
+
+
+{% for letter in travelletter %}
+<ul class="collapsible">
+  <li>
+    <div class="collapsible-header">{{letter.country}}</div>
+    <div class="collapsible-body">
+      Content for Section 1
+    </div>
+  </li>
+</ul>
+{% endfor %}
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+</script>
 
 {% endblock content %}
 
