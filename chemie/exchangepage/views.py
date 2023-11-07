@@ -8,8 +8,9 @@ def index(request):
     return render(request, "index.html", context)
 
 
-def detailViews(request):
-    return render(request, "detail.html")
+def detailViews(request, pk):
+    context = {}
+    return render(request, "detail.html", context)
 
 def createViews(request):
     return render(request, "create.html")

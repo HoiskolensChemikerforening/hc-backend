@@ -38,26 +38,25 @@
       </div>
     </div>
     <div class="collapsible-body">
-      Content for Section 1
+      Content for Section {{letter.id}}
     </div>
   </li>
 </ul>
 {% endfor %}
 
 
-<!-- Button -->
-
+<!-- Add Button -->
 <!-- {% if perms.events %} -->
-  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
-    <a class="btn-floating btn-large">
-      <i class="large material-icons">edit</i>
-    </a>
-    <ul>
-      {% include "permissions.html" %}
-      {% block permissions %}
-      {% endblock %}
-    </ul>
-  </div>
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">edit</i>
+  </a>
+  <ul>
+    {% include "permissions.html" %}
+    {% block permissions %}
+    {% endblock %}
+  </ul>
+</div>
 <!-- {% endif %} -->
 
 <script>
