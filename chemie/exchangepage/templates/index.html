@@ -14,31 +14,31 @@
 {% load material_form %}
 {% block content %}
 
-{% for letter in travelletter %}
+{% for country, data in travelletters_by_country.items %}
 <ul class="collapsible">
   <li>
     <div class="collapsible-header" style="display: flex; justify-content: space-between; align-items: center;">
       <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
         <i class="material-icons">place</i>
-        {{ letter.country }}
+        {{ country }}
       </div>
       <div style="display: flex">
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_atm</i> Std 1: {{ letter.std1 }}
+          <i class="material-icons">local_atm</i> Std 1: {{ data.avg_std1 }}
         </div>
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_dining</i> Std 2: {{ letter.std2 }}
+          <i class="material-icons">local_dining</i> Std 2: {{ data.avg_std2 }}
         </div>
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_see</i> Std 3: {{ letter.std3 }}
+          <i class="material-icons">local_see</i> Std 3: {{ data.avg_std3 }}
         </div>
         <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_library</i> Std 4: {{ letter.std4 }}
+          <i class="material-icons">local_library</i> Std 4: {{ data.avg_std4 }}
         </div>
       </div>
     </div>
     <div class="collapsible-body">
-      Content for Section {{letter.id}}
+      Content for Section
     </div>
   </li>
 </ul>
