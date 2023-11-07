@@ -2,7 +2,6 @@
 {% load static %}
 
 {% block extra_css %}
-
 {% endblock %}
 
 {% block nav_header %}
@@ -10,18 +9,16 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-
 {% endblock nav_sub_header %}
 
 {% load material_form %}
 {% block content %}
 
-
 {% for letter in travelletter %}
 <ul class="collapsible">
   <li>
     <div class="collapsible-header" style="display: flex; justify-content: space-between; align-items: center;">
-      <div>
+      <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
         <i class="material-icons">place</i>
         {{ letter.country }}
       </div>
@@ -46,6 +43,22 @@
   </li>
 </ul>
 {% endfor %}
+
+
+<!-- Button -->
+
+<!-- {% if perms.events %} -->
+  <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <a class="btn-floating btn-large">
+      <i class="large material-icons">edit</i>
+    </a>
+    <ul>
+      {% include "permissions.html" %}
+      {% block permissions %}
+      {% endblock %}
+    </ul>
+  </div>
+<!-- {% endif %} -->
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
