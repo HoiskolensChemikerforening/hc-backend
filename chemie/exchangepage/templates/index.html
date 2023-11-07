@@ -20,7 +20,26 @@
 {% for letter in travelletter %}
 <ul class="collapsible">
   <li>
-    <div class="collapsible-header">{{letter.country}}</div>
+    <div class="collapsible-header" style="display: flex; justify-content: space-between; align-items: center;">
+      <div>
+        <i class="material-icons">place</i>
+        {{ letter.country }}
+      </div>
+      <div style="display: flex">
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+          <i class="material-icons">local_atm</i> Std 1: {{ letter.std1 }}
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+          <i class="material-icons">local_dining</i> Std 2: {{ letter.std2 }}
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+          <i class="material-icons">local_see</i> Std 3: {{ letter.std3 }}
+        </div>
+        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+          <i class="material-icons">local_library</i> Std 4: {{ letter.std4 }}
+        </div>
+      </div>
+    </div>
     <div class="collapsible-body">
       Content for Section 1
     </div>
