@@ -20,7 +20,7 @@ class Questions(models.Model):
         return self.question
 
 class Experience(models.Model):
-    question = models.OneToOneField(Questions, on_delete=models.CASCADE)
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
     answer = models.TextField()
     travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name="experiences")
     def __str__(self):
