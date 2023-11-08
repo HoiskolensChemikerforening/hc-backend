@@ -5,7 +5,7 @@ from itertools import groupby
 # Create your views here.
 
 def index(request):
-    travelletters = Travelletter.objects.all()
+    travelletters = Travelletter.objects.all().order_by("country")
 
     # Group the travelletters by country
     travelletters_by_country = {}
