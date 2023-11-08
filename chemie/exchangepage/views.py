@@ -39,7 +39,45 @@ def index(request):
         data['avg_std5'] /= count
         data['avg_std6'] /= count
 
-    context = {"travelletters_by_country": travelletters_by_country}
+
+    data_by_country_city = {}
+    for letter in travelletters:
+        country = letter.country
+        city = letter.city
+
+        if country not in data_by_country_city:
+            data_by_country_city[country] = {}
+        if city not in data_by_country_city[country]:
+            data_by_country_city[country][city] = {
+                'count': 0,
+                'avg_std1': 0,
+                'avg_std2': 0,
+                'avg_std3': 0,
+                'avg_std4': 0,
+                'avg_std5': 0,
+                'avg_std6': 0,
+            }
+
+        data_by_country_city[country][city]['count'] += 1
+        data_by_country_city[country][city]['avg_std1'] += letter.std1
+        data_by_country_city[country][city]['avg_std2'] += letter.std2
+        data_by_country_city[country][city]['avg_std3'] += letter.std3
+        data_by_country_city[country][city]['avg_std4'] += letter.std4
+        data_by_country_city[country][city]['avg_std5'] += letter.std5
+        data_by_country_city[country][city]['avg_std6'] += letter.std6
+
+    # Calculate the average values for each city within each country
+    for country, cities in data_by_country_city.items():
+        for city, data in cities.items():
+            count = data['count']
+            data['avg_std1'] /= count
+            data['avg_std2'] /= count
+            data['avg_std3'] /= count
+            data['avg_std4'] /= count
+            data['avg_std5'] /= count
+            data['avg_std6'] /= count
+
+    context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}
     return render(request, "index.html", context)
 
 
