@@ -80,6 +80,9 @@ def index(request):
     context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}
     return render(request, "index.html", context)
 
+def cityPageViews(request, city_name):
+    context = {"city_name":city_name}
+    return render(request, "citypage.html", context)
 
 def detailViews(request, pk):
     context = {}
