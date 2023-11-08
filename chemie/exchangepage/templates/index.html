@@ -74,7 +74,7 @@
 
 
 <!-- Add Button -->
-<!-- {% if perms.events %} -->
+{% if perms.exchangepage %}
 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
   <a class="btn-floating btn-large">
     <i class="large material-icons">edit</i>
@@ -85,7 +85,7 @@
     {% endblock %}
   </ul>
 </div>
-<!-- {% endif %} -->
+{% endif %}
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
