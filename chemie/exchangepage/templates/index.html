@@ -43,20 +43,20 @@
         {% if land == country %}
           {% for city_name, city_data in city.items %}
             <div class="col s12 m6 l3">
-              <a class="waves-effect waves-light btn-large"><i class="material-icons left">location_city</i>
-                <div style="display: flex;flex-direction: row">
+              <a class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">location_city</i>
+                <div style="display: flex;flex-direction: row;justify-content: space-between">
                   <div style="padding-right: 10px">{{city_name}}</div>
                   <div style="display: flex">
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
                       <i class="material-icons" style="color:white">local_atm</i> {{ city_data.avg_std1 }}
                     </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
                       <i class="material-icons" style="color:white">local_dining</i> {{ city_data.avg_std2 }}
                     </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
                       <i class="material-icons" style="color:white">local_see</i> {{ city_data.avg_std3 }}
                     </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
                       <i class="material-icons" style="color:white">local_library</i> {{ city_data.avg_std4 }}
                     </div>
                   </div>
