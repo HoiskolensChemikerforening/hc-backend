@@ -38,29 +38,35 @@
       </div>
     </div>
     <div class="collapsible-body">
+      <div class="col">
       {% for land, city in data_by_city.items %}
         {% if land == country %}
           {% for city_name, city_data in city.items %}
-            <div style="display: flex;flex-direction: row">
-              <div>{{city_name}}</div>
-              <div style="display: flex">
-                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-                  <i class="material-icons">local_atm</i> Std 1: {{ city_data.avg_std1 }}
+            <div class="col s12 m6 l3">
+              <a class="waves-effect waves-light btn-large"><i class="material-icons left">location_city</i>
+                <div style="display: flex;flex-direction: row">
+                  <div style="padding-right: 10px">{{city_name}}</div>
+                  <div style="display: flex">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                      <i class="material-icons" style="color:white">local_atm</i> {{ city_data.avg_std1 }}
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                      <i class="material-icons" style="color:white">local_dining</i> {{ city_data.avg_std2 }}
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                      <i class="material-icons" style="color:white">local_see</i> {{ city_data.avg_std3 }}
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
+                      <i class="material-icons" style="color:white">local_library</i> {{ city_data.avg_std4 }}
+                    </div>
+                  </div>
                 </div>
-                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-                  <i class="material-icons">local_dining</i> Std 2: {{ city_data.avg_std2 }}
-                </div>
-                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-                  <i class="material-icons">local_see</i> Std 3: {{ city_data.avg_std3 }}
-                </div>
-                <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-                  <i class="material-icons">local_library</i> Std 4: {{ city_data.avg_std4 }}
-                </div>
-              </div>
+              </a>
             </div>
           {% endfor %}
         {% endif %}
       {% endfor %}
+    </div>
     </div>
   </li>
 </ul>
