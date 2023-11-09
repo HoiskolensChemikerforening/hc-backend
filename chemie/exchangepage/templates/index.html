@@ -42,7 +42,7 @@
       {% for land, city in data_by_city.items %}
         {% if land == country %}
           {% for city_name, city_data in city.items %}
-            <div class="col s12 m6 l3">
+            <div class="col s12 m6 l3" style="padding-bottom: 5px">
               <a href="{% url 'exchangepage:citypage' city_name %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">location_city</i>
                 <div style="display: flex;flex-direction: row;justify-content: space-between">
                   <div style="padding-right: 10px">{{city_name}}</div>
