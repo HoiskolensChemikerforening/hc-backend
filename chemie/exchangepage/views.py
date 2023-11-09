@@ -91,6 +91,8 @@ def detailViews(request, pk):
 def createViews(request):
     return render(request, "create.html")
 
+def adminViews(request):
+    return render(request, "admin.html")
 
 
 
