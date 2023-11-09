@@ -1,9 +1,10 @@
 from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
-from itertools import groupby
+from django.contrib.auth.decorators import login_required, permission_required
 
 # Create your views here.
 
+@login_required()
 def index(request):
     travelletters = Travelletter.objects.all().order_by("country")
 
@@ -80,17 +81,21 @@ def index(request):
     context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}
     return render(request, "index.html", context)
 
+@login_required()
 def cityPageViews(request, city_name):
     context = {"city_name":city_name}
     return render(request, "citypage.html", context)
 
+@login_required()
 def detailViews(request, pk):
     context = {}
     return render(request, "detail.html", context)
 
+@permission_required("exchangepage.add_travelletter")
 def createViews(request):
     return render(request, "create.html")
 
+@permission_required("exchangepage.change_travelletter")
 def adminViews(request):
     return render(request, "admin.html")
 
