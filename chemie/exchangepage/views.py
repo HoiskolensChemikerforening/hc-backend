@@ -15,30 +15,30 @@ def index(request):
         if country not in travelletters_by_country:
             travelletters_by_country[country] = {
                 'count': 0,
-                'avg_std1': 0,
-                'avg_std2': 0,
-                'avg_std3': 0,
-                'avg_std4': 0,
-                'avg_std5': 0,
-                'avg_std6': 0,
+                'avg_sun': 0,
+                'avg_livingExpences': 0,
+                'avg_availability': 0,
+                'avg_nature': 0,
+                'avg_hospitality': 0,
+                'avg_workLoad': 0,
             }
         travelletters_by_country[country]['count'] += 1
-        travelletters_by_country[country]['avg_std1'] += letter.std1
-        travelletters_by_country[country]['avg_std2'] += letter.std2
-        travelletters_by_country[country]['avg_std3'] += letter.std3
-        travelletters_by_country[country]['avg_std4'] += letter.std4
-        travelletters_by_country[country]['avg_std5'] += letter.std5
-        travelletters_by_country[country]['avg_std6'] += letter.std6
+        travelletters_by_country[country]['avg_sun'] += letter.sun
+        travelletters_by_country[country]['avg_livingExpences'] += letter.livingExpences
+        travelletters_by_country[country]['avg_availability'] += letter.availability
+        travelletters_by_country[country]['avg_nature'] += letter.nature
+        travelletters_by_country[country]['avg_hospitality'] += letter.hospitality
+        travelletters_by_country[country]['avg_workLoad'] += letter.workLoad
 
     # Calculate the average values for each country
     for country, data in travelletters_by_country.items():
         count = data['count']
-        data['avg_std1'] /= count
-        data['avg_std2'] /= count
-        data['avg_std3'] /= count
-        data['avg_std4'] /= count
-        data['avg_std5'] /= count
-        data['avg_std6'] /= count
+        data['avg_sun'] /= count
+        data['avg_livingExpences'] /= count
+        data['avg_availability'] /= count
+        data['avg_nature'] /= count
+        data['avg_hospitality'] /= count
+        data['avg_workLoad'] /= count
 
 
     data_by_country_city = {}
@@ -51,32 +51,32 @@ def index(request):
         if city not in data_by_country_city[country]:
             data_by_country_city[country][city] = {
                 'count': 0,
-                'avg_std1': 0,
-                'avg_std2': 0,
-                'avg_std3': 0,
-                'avg_std4': 0,
-                'avg_std5': 0,
-                'avg_std6': 0,
+                'avg_sun': 0,
+                'avg_livingExpences': 0,
+                'avg_availability': 0,
+                'avg_nature': 0,
+                'avg_hospitality': 0,
+                'avg_workLoad': 0,
             }
 
         data_by_country_city[country][city]['count'] += 1
-        data_by_country_city[country][city]['avg_std1'] += letter.std1
-        data_by_country_city[country][city]['avg_std2'] += letter.std2
-        data_by_country_city[country][city]['avg_std3'] += letter.std3
-        data_by_country_city[country][city]['avg_std4'] += letter.std4
-        data_by_country_city[country][city]['avg_std5'] += letter.std5
-        data_by_country_city[country][city]['avg_std6'] += letter.std6
+        data_by_country_city[country][city]['avg_sun'] += letter.sun
+        data_by_country_city[country][city]['avg_livingExpences'] += letter.livingExpences
+        data_by_country_city[country][city]['avg_availability'] += letter.availability
+        data_by_country_city[country][city]['avg_nature'] += letter.nature
+        data_by_country_city[country][city]['avg_hospitality'] += letter.hospitality
+        data_by_country_city[country][city]['avg_workLoad'] += letter.workLoad
 
     # Calculate the average values for each city within each country
     for country, cities in data_by_country_city.items():
         for city, data in cities.items():
             count = data['count']
-            data['avg_std1'] /= count
-            data['avg_std2'] /= count
-            data['avg_std3'] /= count
-            data['avg_std4'] /= count
-            data['avg_std5'] /= count
-            data['avg_std6'] /= count
+            data['avg_sun'] /= count
+            data['avg_livingExpences'] /= count
+            data['avg_availability'] /= count
+            data['avg_nature'] /= count
+            data['avg_hospitality'] /= count
+            data['avg_workLoad'] /= count
     print(travelletters_by_country)
     print(data_by_country_city)
     context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}

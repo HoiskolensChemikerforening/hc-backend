@@ -2,15 +2,15 @@ from django.db import models
 from chemie.customprofile.models import Profile
 
 class Travelletter(models.Model):
-    user        = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    country     = models.CharField(max_length=30)
-    city        = models.CharField(max_length=30)
-    std1        = models.IntegerField(default=0, verbose_name="Score, std1")
-    std2        = models.IntegerField(default=0, verbose_name="Score, std2")
-    std3        = models.IntegerField(default=0, verbose_name="Score, std3")
-    std4        = models.IntegerField(default=0, verbose_name="Score, std4")
-    std5        = models.IntegerField(default=0, verbose_name="Score, std5")
-    std6        = models.IntegerField(default=0, verbose_name="Score, std6")
+    user           = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    country        = models.CharField(max_length=30)
+    city           = models.CharField(max_length=30)
+    sun            = models.IntegerField(default=0, verbose_name="Score, std1")
+    livingExpences = models.IntegerField(default=0, verbose_name="Score, std2")
+    availability   = models.IntegerField(default=0, verbose_name="Score, std3")
+    nature         = models.IntegerField(default=0, verbose_name="Score, std4")
+    hospitality    = models.IntegerField(default=0, verbose_name="Score, std5")
+    workLoad       = models.IntegerField(default=0, verbose_name="Score, std6")
     def __str__(self):
         return self.user.user.first_name
 
