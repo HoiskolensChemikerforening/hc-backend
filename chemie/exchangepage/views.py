@@ -77,7 +77,8 @@ def index(request):
             data['avg_std4'] /= count
             data['avg_std5'] /= count
             data['avg_std6'] /= count
-
+    print(travelletters_by_country)
+    print(data_by_country_city)
     context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}
     return render(request, "index.html", context)
 

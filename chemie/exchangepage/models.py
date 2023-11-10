@@ -2,7 +2,7 @@ from django.db import models
 from chemie.customprofile.models import Profile
 
 class Travelletter(models.Model):
-    user        = models.OneToOneField(Profile, on_delete=models.CASCADE)
+    user        = models.ForeignKey(Profile, on_delete=models.CASCADE)
     country     = models.CharField(max_length=30)
     city        = models.CharField(max_length=30)
     std1        = models.IntegerField(default=0, verbose_name="Score, std1")
