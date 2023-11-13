@@ -2,17 +2,78 @@ from django.db import models
 from chemie.customprofile.models import Profile
 
 class Travelletter(models.Model):
-    user        = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    country     = models.CharField(max_length=30)
-    city        = models.CharField(max_length=30)
-    std1        = models.IntegerField(default=0, verbose_name="Score, std1")
-    std2        = models.IntegerField(default=0, verbose_name="Score, std2")
-    std3        = models.IntegerField(default=0, verbose_name="Score, std3")
-    std4        = models.IntegerField(default=0, verbose_name="Score, std4")
-    std5        = models.IntegerField(default=0, verbose_name="Score, std5")
-    std6        = models.IntegerField(default=0, verbose_name="Score, std6")
+    user           = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    country        = models.CharField(max_length=30)
+    city           = models.CharField(max_length=30)
+    sun            = models.IntegerField(default=0, verbose_name="sun")
+    livingExpences = models.IntegerField(default=0, verbose_name="livingExpences")
+    availability   = models.IntegerField(default=0, verbose_name="availability")
+    nature         = models.IntegerField(default=0, verbose_name="nature")
+    hospitality   = models.IntegerField(default=0, verbose_name="hospitality")
+    workLoad       = models.IntegerField(default=0, verbose_name="workLoad")
     def __str__(self):
         return self.user.user.first_name
+
+    @classmethod
+    def country_avg(cls, country_name):
+        travelletters_by_country = cls.objects.filter(country = country_name)
+
+        data = {
+            'avg_sun': 0,
+            'avg_livingExpences': 0,
+            'avg_availability': 0,
+            'avg_nature': 0,
+            'avg_hospitaility': 0,
+            'avg_workLoad': 0,
+        }
+
+        for letter in travelletters_by_country:
+            data['avg_sun'] += letter.sun
+            data['avg_livingExpences'] += letter.livingExpences
+            data['avg_availability'] += letter.availability
+            data['avg_nature'] += letter.nature
+            data['avg_hospitaility'] += letter.hospitality
+            data['avg_workLoad'] += letter.workLoad
+
+        data['avg_sun']            /= len(travelletters_by_country)
+        data['avg_livingExpences'] /= len(travelletters_by_country)
+        data['avg_availability']   /= len(travelletters_by_country)
+        data['avg_nature']         /= len(travelletters_by_country)
+        data['avg_hospitaility']   /= len(travelletters_by_country)
+        data['avg_workLoad']       /= len(travelletters_by_country)
+
+        return data
+
+    @classmethod
+    def city_avg(cls, city_name):
+        travelletters_by_city = cls.objects.filter(city=city_name)
+        country = travelletters_by_city[0].country
+        data = {
+            'avg_sun': 0,
+            'avg_livingExpences': 0,
+            'avg_availability': 0,
+            'avg_nature': 0,
+            'avg_hospitaility': 0,
+            'avg_workLoad': 0,
+        }
+
+        for letter in travelletters_by_city:
+            data['avg_sun'] += letter.sun
+            data['avg_livingExpences'] += letter.livingExpences
+            data['avg_availability'] += letter.availability
+            data['avg_nature'] += letter.nature
+            data['avg_hospitaility'] += letter.hospitality
+            data['avg_workLoad'] += letter.workLoad
+
+        data['avg_sun']            /= len(travelletters_by_city)
+        data['avg_livingExpences'] /= len(travelletters_by_city)
+        data['avg_availability']   /= len(travelletters_by_city)
+        data['avg_nature']         /= len(travelletters_by_city)
+        data['avg_hospitaility']   /= len(travelletters_by_city)
+        data['avg_workLoad']       /= len(travelletters_by_city)
+
+        return country, data
+
 
 class Questions(models.Model):
     question = models.CharField(max_length=200)
