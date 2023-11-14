@@ -8,6 +8,9 @@ from django.contrib.auth.decorators import login_required, permission_required
 def index(request):
     travelletters = Travelletter.objects.all().order_by("country")
 
+    sort_by = request.GET.get('sort_by', 'country')
+    sort_order = request.GET.get('sort_order', 'desc')
+
     # Group the travelletters by country
     travelletters_by_country = {}
     data_by_country_city = {}
@@ -33,11 +36,33 @@ def index(request):
         country, data = Travelletter.city_avg(city)
         data_by_country_city[country][city]= data
 
+    reverse_order = sort_order == 'desc'
+    if sort_by == 'avg_sun':
+        travelletters_by_country = dict(sorted(travelletters_by_country.items(), key=lambda x: x[1]['avg_sun'],reverse=reverse_order))
+        for country, city_data in data_by_country_city.items():
+            data_by_country_city[country] = dict(sorted(city_data.items(), key=lambda x: x[1]['avg_sun'], reverse=reverse_order))
+    elif sort_by == 'avg_livingExpences':
+        travelletters_by_country = dict(sorted(travelletters_by_country.items(), key=lambda x: x[1]['avg_livingExpences'],reverse=reverse_order))
+        for country, city_data in data_by_country_city.items():
+            data_by_country_city[country] = dict(sorted(city_data.items(), key=lambda x: x[1]['avg_livingExpences'], reverse=reverse_order))
+    elif sort_by == 'avg_availability':
+        travelletters_by_country = dict(sorted(travelletters_by_country.items(), key=lambda x: x[1]['avg_availability'],reverse=reverse_order))
+        for country, city_data in data_by_country_city.items():
+            data_by_country_city[country] = dict(sorted(city_data.items(), key=lambda x: x[1]['avg_availability'], reverse=reverse_order))
+    elif sort_by == 'avg_nature':
+        travelletters_by_country = dict(sorted(travelletters_by_country.items(), key=lambda x: x[1]['avg_nature'],reverse=reverse_order))
+        for country, city_data in data_by_country_city.items():
+            data_by_country_city[country] = dict(sorted(city_data.items(), key=lambda x: x[1]['avg_nature'], reverse=reverse_order))
 
 
     print(travelletters_by_country)
     print(data_by_country_city)
-    context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}
+
+    context = {"travelletters_by_country": travelletters_by_country,
+               "data_by_city": data_by_country_city,
+               "sort_by": sort_by,
+               "sort_order": sort_order}
+
     return render(request, "index.html", context)
 
 @login_required()
