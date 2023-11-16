@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
-
+from .forms import IndexForm
 # Create your views here.
 
 @login_required()
@@ -11,6 +11,13 @@ def index(request):
     sort_by = request.GET.get('sort_by', 'country')
     sort_order = request.GET.get('sort_order', 'desc')
 
+    if request.method == 'POST':
+        form = IndexForm(request.POST)
+        if form.is_valid():
+            test = form.cleaned_data['Indexfiltering']
+            print("Test", test)
+    else:
+        form = IndexForm()
     # Group the travelletters by country
     travelletters_by_country = {}
     data_by_country_city = {}
@@ -61,7 +68,8 @@ def index(request):
     context = {"travelletters_by_country": travelletters_by_country,
                "data_by_city": data_by_country_city,
                "sort_by": sort_by,
-               "sort_order": sort_order}
+               "sort_order": sort_order,
+               "form": form}
 
     return render(request, "index.html", context)
 
