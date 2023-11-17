@@ -17,20 +17,24 @@
 <a class='dropdown-trigger btn' style="width:150px" href='#' data-target='dropdown1'>Endre filtre!</a>
 
 <ul id='dropdown1' class='dropdown-content'>
-  {% for field in form.visible_fields %}
-      <div style="padding: 5px">
-       {% for std in field %}
-          <li>
-            <div style="justify-items: center; align-items: center;padding: 10px">
-              <label>
-                <input type="checkbox" class="filled-in" checked="checked" />
-                <span>{{ std }}</span>
-              </label>
-            </div>
-          </li>
-       {% endfor %}
-      </div>
-  {% endfor %}
+  <form method="post">
+    {% csrf_token %}
+      {% for field in form.visible_fields %}
+          <div style="padding: 5px">
+           {% for std in field %}
+              <li>
+                <div style="justify-items: center; align-items: center;padding: 10px">
+                  <label>
+                    <input type="checkbox" class="filled-in" checked="checked" />
+                    <span>{{ std }}</span>
+                  </label>
+                </div>
+              </li>
+           {% endfor %}
+          </div>
+        <button type="submit">Submit</button>
+      {% endfor %}
+  </form>
 </ul>
 
 
