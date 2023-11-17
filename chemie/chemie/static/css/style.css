@@ -675,13 +675,13 @@ p {
   --margin-end: 0vh;
   --margin-start: -100vh;
   pointer-events: none; /* Allows clicks to pass through */
-
+}
 @keyframes swing {
   0% {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(50px);
+    transform: translateX(30px); /* Adjust this to make swings slower */
   }
   100% {
     transform: translateX(0);

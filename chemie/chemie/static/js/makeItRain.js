@@ -64,7 +64,7 @@ function createAndAnimateElement() {
     imageElement.style.top = randomHeight + 'px';
     imageElement.style.left = randomWidth + 'px';
     // Adjust the rain speed by changing height /  XX
-    imageElement.style.animation = `fall ${height / 50}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+    imageElement.style.animation = `fall ${height / 15}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     imageElement.style.animationDelay = randomAnimationDelay + 's';
     // Adjust the image size as needed
     imageElement.style.width = '4rem';
@@ -77,8 +77,8 @@ function createAndAnimateElement() {
     element.style.top = randomHeight + 'px';
     element.style.left = randomWidth + 'px';
     element.innerHTML = randomSymbol;
-    // Adjust the rain speed by changing height /  XX
-    element.style.animation = `fall ${height / 50}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+    // Adjust the rain speed by changing height /  XX and the swing speed by
+    element.style.animation = `fall ${height / 15}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     element.style.animationDelay = randomAnimationDelay + 's';
     element.style.fontSize = '2rem';
     document.getElementById("makeItRain").appendChild(element);
