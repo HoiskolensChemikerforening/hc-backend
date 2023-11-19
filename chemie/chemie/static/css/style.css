@@ -658,6 +658,10 @@ p {
     margin-top: var(--margin-end);
   }
 }
+#makeItRain{
+  --swing-distance: 30px;
+}
+
 .element {
   z-index: 1000000;
   opacity: 0;
@@ -681,7 +685,7 @@ p {
     transform: translateX(0);
   }
   50% {
-    transform: translateX(30px); /* Adjust this to make swings slower */
+    transform: translateX(var(--swing-distance)); /* Adjust this to make swings slower */
   }
   100% {
     transform: translateX(0);

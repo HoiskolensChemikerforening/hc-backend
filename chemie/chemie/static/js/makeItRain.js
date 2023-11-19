@@ -12,6 +12,8 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart6.png"
 ];
 
+
+
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
     return christmasSymbols;
@@ -34,8 +36,24 @@ const selectedSymbols = selectSymbols(chosenHoliday);
 
 const maxElements = 150; // Maximum number of elements
 
+// Image width and hight
+const imageWidth = 4 //rem
+const imageHeight = 3 //rem
+
+// Container containing the rain
+const rainContainer = document.getElementById("makeItRain");
+
+// Swing distance defined in the CSS keyframe
+const swingDistance = parseInt(getComputedStyle(rainContainer).getPropertyValue('--swing-distance'));
+
 // Create and animate the initial set of elements
 createAndAnimateElements(maxElements);
+
+//Convert rem to px
+function convertRemToPixels(rem) {
+    return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
+}
+
 
 function handleResize() {
   const windowHeight = window.innerHeight;
@@ -62,7 +80,8 @@ function createAndAnimateElements(maxElements) {
 
 function createAndAnimateElement() {
   // Random width & height between 0 and viewport
-  var randomWidth = Math.floor(Math.random() * Math.max(document.documentElement.clientWidth, window.innerWidth || 0));
+  //Image hight and width have to be subtracted from the width to avoid overflow.
+  var randomWidth = Math.floor(Math.random() * (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-convertRemToPixels(imageWidth)-swingDistance));
   var randomHeight = Math.floor(Math.random() * Math.max(document.documentElement.clientHeight, window.innerHeight || 0));
 
   // Random animation-delay
@@ -85,9 +104,9 @@ function createAndAnimateElement() {
     imageElement.style.animation = `fall ${height / 15}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     imageElement.style.animationDelay = randomAnimationDelay + 's';
     // Adjust the image size as needed
-    imageElement.style.width = '4rem';
-    imageElement.style.height = '3rem';
-    document.getElementById("makeItRain").appendChild(imageElement);
+    imageElement.style.width = imageWidth+'rem';
+    imageElement.style.height = imageHeight+'rem';
+    rainContainer.appendChild(imageElement);
   } else { // Create text element if emojis
     var element = document.createElement('div');
     element.style.setProperty('--margin-end', `${height}px`);
@@ -99,12 +118,12 @@ function createAndAnimateElement() {
     element.style.animation = `fall ${height / 15}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     element.style.animationDelay = randomAnimationDelay + 's';
     element.style.fontSize = '2rem';
-    document.getElementById("makeItRain").appendChild(element);
+    rainContainer.appendChild(element);
   }
 
   // Remove the oldest element when exceeding the maximum
   const elements = document.getElementsByClassName('element');
   if (elements.length > maxElements) {
-    document.getElementById("makeItRain").removeChild(elements[0]);
+    rainContainer.removeChild(elements[0]);
   }
 }
