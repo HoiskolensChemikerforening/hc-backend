@@ -38,9 +38,7 @@ const maxElements = 150; // Maximum number of elements
 
 const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
 const mainHeight = document.getElementsByTagName("main")[0].offsetHeight;
-const footerHeight = document.getElementsByTagName("footer")[0].offsetHeight;
-const totalHeight = headerHeight +mainHeight;// +footerHeight;
-//console.log(totalHeight);
+const totalHeight = headerHeight +mainHeight;
 
 // Image width and hight
 const imageWidth = 4 //rem
@@ -48,8 +46,6 @@ const imageHeight = 3 //rem
 
 // Container containing the rain
 const rainContainer = document.getElementById("makeItRain");
-
-//rainContainer.style.setProperty("--margin-end", -1*totalHeight + 'px');
 
 // Swing distance defined in the CSS keyframe
 const swingDistance = parseInt(getComputedStyle(rainContainer).getPropertyValue('--swing-distance'));
