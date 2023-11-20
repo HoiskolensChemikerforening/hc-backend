@@ -12,7 +12,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart6.png"
 ];
 
-
+const rainSpeed = 100; // Adjust this value to set the rain speed
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -62,7 +62,6 @@ function convertRemToPixels(rem) {
     return rem * parseFloat(getComputedStyle(document.documentElement).fontSize);
 }
 
-
 function handleResize() {
   const windowHeight = window.innerHeight;
   const content = document.getElementsByTagName("body")[0];
@@ -92,6 +91,9 @@ function createAndAnimateElement() {
   var randomWidth = Math.floor(Math.random() * (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-convertRemToPixels(imageWidth)-swingDistance));
   var randomHeight = Math.floor(Math.random() * Math.max(document.documentElement.clientHeight, window.innerHeight || 0));
 
+  // Calculate the animation duration based on the rain speed
+  const animationDuration = rainSpeed + Math.random() * 5;
+
   // Random animation-delay
   var randomAnimationDelay = Math.floor(Math.random() * 40); // adjust the number to make it longer before the rain starts
 
@@ -110,7 +112,7 @@ function createAndAnimateElement() {
     //imageElement.style.top = randomHeight + 'px';
     imageElement.style.left = randomWidth + 'px';
     // Adjust the rain speed by changing height /  XX
-    imageElement.style.animation = `fall ${height / 15}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+    imageElement.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     imageElement.style.animationDelay = randomAnimationDelay + 's';
     // Adjust the image size as needed
     imageElement.style.width = imageWidth+'rem';
@@ -125,7 +127,7 @@ function createAndAnimateElement() {
     element.style.left = randomWidth + 'px';
     element.innerHTML = randomSymbol;
     // Adjust the rain speed by changing height /  XX and the swing speed by
-    element.style.animation = `fall ${height / 15}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+    element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     element.style.animationDelay = randomAnimationDelay + 's';
     element.style.fontSize = '2rem';
     rainContainer.appendChild(element);
