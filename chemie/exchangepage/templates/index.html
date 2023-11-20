@@ -25,14 +25,14 @@
               <li>
                 <div style="justify-items: center; align-items: center;padding: 10px">
                   <label>
-                    <input type="checkbox" class="filled-in" checked="checked" />
+                    <input type="checkbox" class="filled-in" name="{{ std.name }}"/>
                     <span>{{ std }}</span>
                   </label>
                 </div>
               </li>
            {% endfor %}
           </div>
-        <button type="submit">Submit</button>
+        <input type="submit" value="Submit">
       {% endfor %}
   </form>
 </ul>
