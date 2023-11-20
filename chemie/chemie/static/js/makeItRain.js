@@ -95,7 +95,7 @@ function createAndAnimateElement() {
   // Create element
   const randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
   if (randomSymbol.includes(".png")) { // Create image element
-    var imageElement = document.createElement('img');
+    const imageElement = document.createElement('img');
     imageElement.src = randomSymbol;
     imageElement.style.setProperty("--margin-end", totalHeight + 'px');
     imageElement.className = 'element';
