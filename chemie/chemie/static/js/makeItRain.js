@@ -31,7 +31,7 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "christmas"; // Change this to select the holiday you want
+const chosenHoliday = "pauloween"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 const maxElements = 150; // Maximum number of elements
@@ -98,7 +98,7 @@ function createAndAnimateElement() {
     const imageElement = document.createElement('img');
     imageElement.src = randomSymbol;
     imageElement.style.setProperty("--margin-end", totalHeight + 'px');
-    imageElement.className = 'element';
+    imageElement.className = 'rainElement rainSize';
     imageElement.style.left = randomWidth + 'px';
     imageElement.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     imageElement.style.animationDelay = randomAnimationDelay + 's';
@@ -111,12 +111,12 @@ function createAndAnimateElement() {
   } else { // Create text element if emojis
     const element = document.createElement('div');
     element.style.setProperty("--margin-end", totalHeight + 'px');
-    element.className = 'element';
+    element.className = 'rainElement rainSize';
     element.style.left = randomWidth + 'px';
     element.innerHTML = randomSymbol;
     element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     element.style.animationDelay = randomAnimationDelay + 's';
-    element.style.fontSize = '2rem';
+    // element.style.fontSize = '2rem';
     rainContainer.appendChild(element);
   }
 
