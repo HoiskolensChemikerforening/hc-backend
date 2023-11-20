@@ -109,7 +109,7 @@ function createAndAnimateElement() {
     rainContainer.appendChild(imageElement);
 
   } else { // Create text element if emojis
-    var element = document.createElement('div');
+    const element = document.createElement('div');
     element.style.setProperty("--margin-end", totalHeight + 'px');
     element.className = 'element';
     element.style.left = randomWidth + 'px';
