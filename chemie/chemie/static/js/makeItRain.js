@@ -34,7 +34,7 @@ function selectSymbols(choose_your_holiday) {
 const chosenHoliday = "christmas"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 50; // Maximum number of elements
+const maxElements = 100; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem
@@ -110,7 +110,7 @@ function createAndAnimateElement() {
   rainContainer.appendChild(element);
 
   // Remove the oldest element when exceeding the maximum
-  const elements = document.getElementsByClassName('element');
+  const elements = document.getElementsByClassName('rainElement');
   if (elements.length > maxElements) {
     rainContainer.removeChild(elements[0]);
   }
