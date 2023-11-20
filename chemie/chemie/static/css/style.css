@@ -661,7 +661,7 @@ p {
 #makeItRain{
   --swing-distance: 30px;
   --margin-end: 0vh;
-  --margin-start: -100vh;
+  --margin-start: -5vh;
 }
 
 .element {
