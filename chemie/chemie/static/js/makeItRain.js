@@ -31,7 +31,7 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "pauloween"; // Change this to select the holiday you want
+const chosenHoliday = "easter"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 const maxElements = 150; // Maximum number of elements
@@ -42,7 +42,6 @@ const totalHeight = headerHeight +mainHeight;
 
 // Image width and hight
 const imageWidth = 4 //rem
-const imageHeight = 3 //rem
 
 // Container containing the rain
 const rainContainer = document.getElementById("makeItRain");
@@ -95,30 +94,18 @@ function createAndAnimateElement() {
   // Create element
   const randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
   if (randomSymbol.includes(".png")) { // Create image element
-    const imageElement = document.createElement('img');
-    imageElement.src = randomSymbol;
-    imageElement.style.setProperty("--margin-end", totalHeight + 'px');
-    imageElement.className = 'rainElement rainSize';
-    imageElement.style.left = randomWidth + 'px';
-    imageElement.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
-    imageElement.style.animationDelay = randomAnimationDelay + 's';
-
-    // Adjust the image size as needed
-    imageElement.style.width = imageWidth+'rem';
-    imageElement.style.height = imageHeight+'rem';
-    rainContainer.appendChild(imageElement);
-
+    var element = document.createElement('img');
+    element.src = randomSymbol;
   } else { // Create text element if emojis
-    const element = document.createElement('div');
-    element.style.setProperty("--margin-end", totalHeight + 'px');
-    element.className = 'rainElement rainSize';
-    element.style.left = randomWidth + 'px';
+    var element = document.createElement('div');
     element.innerHTML = randomSymbol;
-    element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
-    element.style.animationDelay = randomAnimationDelay + 's';
-    // element.style.fontSize = '2rem';
-    rainContainer.appendChild(element);
   }
+  element.style.setProperty("--margin-end", totalHeight + 'px');
+  element.className = 'rainElement rainSize';
+  element.style.left = randomWidth + 'px';
+  element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
+  element.style.animationDelay = randomAnimationDelay + 's';
+  rainContainer.appendChild(element);
 
   // Remove the oldest element when exceeding the maximum
   const elements = document.getElementsByClassName('element');
