@@ -84,16 +84,16 @@ function createAndAnimateElements(maxElements) {
 function createAndAnimateElement() {
   // Random width & height between 0 and viewport
   //Image height and swing width have to be subtracted from the width to avoid overflow.
-  var randomWidth = Math.floor(Math.random() * (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-convertRemToPixels(imageWidth)-swingDistance));
+  const randomWidth = Math.floor(Math.random() * (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-convertRemToPixels(imageWidth)-swingDistance));
 
   // Calculate the animation duration based on the rain speed
   const animationDuration = rainSpeed + Math.random() * 5;
 
   // Random animation-delay
-  var randomAnimationDelay = Math.floor(Math.random() * 40); // adjust the number to make it longer before the rain starts
+  const randomAnimationDelay = Math.floor(Math.random() * 40); // adjust the number to make it longer before the rain starts
 
   // Create element
-  var randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
+  const randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
   if (randomSymbol.includes(".png")) { // Create image element
     var imageElement = document.createElement('img');
     imageElement.src = randomSymbol;
