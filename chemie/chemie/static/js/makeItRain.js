@@ -1,4 +1,4 @@
-const christmasSymbols = ["❄️", "❄️", "❄️", "🎄", "🎁", "🎅"]; // add in emojis after every Advent
+const christmasSymbols = ["❄️", "❄️", "❄️"]; // , "🎄", "🎁", "🎅" add in emojis after every Advent
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
@@ -89,7 +89,6 @@ function createAndAnimateElement() {
   // Random width & height between 0 and viewport
   //Image height and swing width have to be subtracted from the width to avoid overflow.
   var randomWidth = Math.floor(Math.random() * (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-convertRemToPixels(imageWidth)-swingDistance));
-  var randomHeight = Math.floor(Math.random() * Math.max(document.documentElement.clientHeight, window.innerHeight || 0));
 
   // Calculate the animation duration based on the rain speed
   const animationDuration = rainSpeed + Math.random() * 5;
@@ -97,36 +96,28 @@ function createAndAnimateElement() {
   // Random animation-delay
   var randomAnimationDelay = Math.floor(Math.random() * 40); // adjust the number to make it longer before the rain starts
 
-
-  // Calculate initial height
-  let height = handleResize();
-
   // Create element
   var randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
   if (randomSymbol.includes(".png")) { // Create image element
     var imageElement = document.createElement('img');
     imageElement.src = randomSymbol;
-    //imageElement.style.setProperty('--margin-end', `${height}px`);
     imageElement.style.setProperty("--margin-end", totalHeight + 'px');
     imageElement.className = 'element';
-    //imageElement.style.top = randomHeight + 'px';
     imageElement.style.left = randomWidth + 'px';
-    // Adjust the rain speed by changing height /  XX
     imageElement.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     imageElement.style.animationDelay = randomAnimationDelay + 's';
+
     // Adjust the image size as needed
     imageElement.style.width = imageWidth+'rem';
     imageElement.style.height = imageHeight+'rem';
     rainContainer.appendChild(imageElement);
+
   } else { // Create text element if emojis
     var element = document.createElement('div');
-    //element.style.setProperty('--margin-end', `${height}px`);
     element.style.setProperty("--margin-end", totalHeight + 'px');
     element.className = 'element';
-    //element.style.top = randomHeight + 'px';
     element.style.left = randomWidth + 'px';
     element.innerHTML = randomSymbol;
-    // Adjust the rain speed by changing height /  XX and the swing speed by
     element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
     element.style.animationDelay = randomAnimationDelay + 's';
     element.style.fontSize = '2rem';
