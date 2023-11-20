@@ -31,17 +31,19 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "easter"; // Change this to select the holiday you want
+const chosenHoliday = "christmas"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 150; // Maximum number of elements
-
-const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
-const mainHeight = document.getElementsByTagName("main")[0].offsetHeight;
-const totalHeight = headerHeight +mainHeight;
+const maxElements = 50; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem
+const imageHeight = 3 //rem
+
+const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
+const mainHeight = document.getElementsByTagName("main")[0].offsetHeight;
+const footerHeight = document.getElementsByTagName("footer")[0].offsetHeight;
+const totalHeight = headerHeight + mainHeight + footerHeight - convertRemToPixels(imageHeight);
 
 // Container containing the rain
 const rainContainer = document.getElementById("makeItRain");
