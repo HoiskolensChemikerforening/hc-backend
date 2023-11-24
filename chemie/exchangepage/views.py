@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
-from .forms import IndexForm
+from .forms import IndexForm, createTravelletterForm
 # Create your views here.
 
 @login_required()
@@ -73,7 +73,18 @@ def detailViews(request, pk):
 
 @permission_required("exchangepage.add_travelletter")
 def createViews(request):
-    return render(request, "create.html")
+    if request.method == 'POST':
+        form = createTravelletterForm(request.POST)
+        if form.is_valid():
+            travelletter = form.save(commit=False)
+            travelletter.save()
+    else:
+        form = createTravelletterForm()
+
+    context = {
+        'form':form
+    }
+    return render(request, "create.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):

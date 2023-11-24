@@ -3,14 +3,14 @@ from chemie.customprofile.models import Profile
 
 class Travelletter(models.Model):
     user           = models.ForeignKey(Profile, on_delete=models.CASCADE)
-    country        = models.CharField(max_length=30)
-    city           = models.CharField(max_length=30)
-    sun            = models.IntegerField(default=0, verbose_name="sun")
-    livingExpences = models.IntegerField(default=0, verbose_name="livingExpences")
-    availability   = models.IntegerField(default=0, verbose_name="availability")
-    nature         = models.IntegerField(default=0, verbose_name="nature")
-    hospitality   = models.IntegerField(default=0, verbose_name="hospitality")
-    workLoad       = models.IntegerField(default=0, verbose_name="workLoad")
+    country        = models.CharField(max_length=30, verbose_name="Land")
+    city           = models.CharField(max_length=30, verbose_name="By")
+    sun            = models.IntegerField(default=0, verbose_name="Solfaktor")
+    livingExpences = models.IntegerField(default=0, verbose_name="Levekostnader")
+    availability   = models.IntegerField(default=0, verbose_name="Tilgjengelighet")
+    nature         = models.IntegerField(default=0, verbose_name="Natur")
+    hospitality   = models.IntegerField(default=0, verbose_name="Gjestfrihet")
+    workLoad       = models.IntegerField(default=0, verbose_name="Arbeidsmengde")
     def __str__(self):
         return self.user.user.first_name
 
