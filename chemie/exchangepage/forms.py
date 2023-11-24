@@ -1,7 +1,8 @@
 from django import forms
 import material as M
-from .models import Travelletter
+from .models import Travelletter, Experience, Questions
 from chemie.customprofile.models import Profile
+from django.forms import inlineformset_factory
 class IndexForm(forms.Form):
     OPTIONS = [
         (1, 'Solfaktor'),
@@ -13,13 +14,13 @@ class IndexForm(forms.Form):
     ]
     Indexfiltering = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
                                           choices=OPTIONS, required=False)
-
 class createTravelletterForm(forms.ModelForm):
+
     layout = M.Layout(
         M.Row("user"),
         M.Row("country", "city"),
         M.Row("sun", "livingExpences", "availability"),
-        M.Row("nature", "hospitality", "workLoad")
+        M.Row("nature", "hospitality", "workLoad"),
     )
 
     class Meta:
@@ -33,8 +34,9 @@ class createTravelletterForm(forms.ModelForm):
             "availability",
             "nature",
             "hospitality",
-            "workLoad"
+            "workLoad",
         ]
+
 
 
 

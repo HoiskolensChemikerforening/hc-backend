@@ -2,7 +2,7 @@ from django.db import models
 from chemie.customprofile.models import Profile
 
 class Travelletter(models.Model):
-    user           = models.ForeignKey(Profile, on_delete=models.CASCADE)
+    user           = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Bruker")
     country        = models.CharField(max_length=30, verbose_name="Land")
     city           = models.CharField(max_length=30, verbose_name="By")
     sun            = models.IntegerField(default=0, verbose_name="Solfaktor")
@@ -81,8 +81,8 @@ class Questions(models.Model):
         return self.question
 
 class Experience(models.Model):
-    question = models.ForeignKey(Questions, on_delete=models.CASCADE)
-    answer = models.TextField()
+    question = models.ForeignKey(Questions, on_delete=models.CASCADE, verbose_name="Spørsmål")
+    answer = models.TextField(verbose_name="Svar")
     travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name="experiences")
     def __str__(self):
         return f'Svar på spørsmål: {self.question}'
