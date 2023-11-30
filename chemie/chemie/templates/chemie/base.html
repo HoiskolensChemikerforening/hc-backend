@@ -51,7 +51,7 @@
 </head>
 
 <body>
-
+  <div id="makeItRain"></div>
   <header>
     <nav class="top-nav">
       <div class="container">
@@ -71,7 +71,7 @@
     <ul id="nav-mobile" class="sidenav sidenav-fixed">
       <li class="logo">
         <a id="logo-container" href="/forside/" class="brand-logo">
-          <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
+          <img id="front-page-logo" type="image/jpg" src="{% static "images/HC_logo_jul.png" %}"></img>
         </a>
         <a href="/forside/" style="height: 100%">
           <h4 class="logo-text">Høiskolens Chemikerforening</h4>
@@ -320,6 +320,8 @@
     ga('create', 'UA-52614731-1', 'auto');
     ga('send', 'pageview');
   </script>
+
+  <script src="{% static "js/makeItRain.js" %}"></script>
 
 </body>
 
