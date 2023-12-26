@@ -31,4 +31,4 @@ function dayCountdown(element,targetString,eventString){
 
 }
 
-dayCountdown(document.getElementById("Countdown"),"2023-03-04 12:00","vinterblotet")
+dayCountdown(document.getElementById("Countdown"),"2024-03-04 12:00","vinterblotet")
