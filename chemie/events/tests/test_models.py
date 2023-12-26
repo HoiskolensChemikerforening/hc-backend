@@ -14,7 +14,7 @@ from ..models import (
     SocialEventRegistration,
     REGISTRATION_STATUS,
 )
-from ..views import set_user_event_status
+from ..views import BedpresRegisterUserView
 
 
 @pytest.mark.django_db
@@ -42,11 +42,15 @@ def test_registration_lists():
     assert reg_two.status == REGISTRATION_STATUS.INTERESTED
 
     # Test that users are registered as attending when there are free slots
-    set_user_event_status(event=bedpres, registration=reg_one)
+    BedpresRegisterUserView.set_user_event_status(
+        event=bedpres, registration=reg_one
+    )
     assert reg_one.status == REGISTRATION_STATUS.CONFIRMED
 
     # Test waiting list functionality
-    set_user_event_status(event=bedpres, registration=reg_two)
+    BedpresRegisterUserView.set_user_event_status(
+        event=bedpres, registration=reg_two
+    )
     assert reg_two.status == REGISTRATION_STATUS.WAITING
 
     # Test de-registration functionality

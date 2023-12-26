@@ -8,7 +8,7 @@ from django.utils import timezone
 from chemie.chemie import settings
 from chemie.customprofile.factories import RandomProfileFactory
 from chemie.events.models import Social, SocialEventRegistration
-from ..views import set_user_event_status
+from ..views import SocialRegisterUserView
 
 
 # Create your tests here.
@@ -51,7 +51,7 @@ class TestEventAndRegistration(TestCase):
             registration = SocialEventRegistration(
                 event=event, user=profile.user
             )
-            set_user_event_status(event, registration)
+            SocialRegisterUserView.set_user_event_status(event, registration)
             registration.save()
             # Bumping all users on wait list by
             # calling overridden save function

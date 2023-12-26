@@ -95,7 +95,6 @@ class ProfileManager(models.Manager):
             padded[(i * 8) : (i + 1) * 8] for i in range(0, len(padded) // 8)
         ]
 
-        # Reverse all elements in each group, join groups together
         reversed = "".join([ci[::-1] for ci in chunked])
 
         # Convert binary back to int
