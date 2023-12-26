@@ -8,7 +8,9 @@ function dayCountdown(element,targetString,eventString){
         const duration = dayjs.duration(targetDate.diff(now));
 
         if (duration.asMilliseconds() <= 0) {
-            element.querySelector(".until__text").textContent = ` ${eventString}!!`
+            element.querySelector(".days__until").textContent = `Vinterblot!`
+            element.querySelector(".days__until").style.fontSize= "4rem"
+            element.querySelector(".until__text").textContent = ``
             return
         };
 
