@@ -46,6 +46,20 @@
   <!-- News -->
   <div class="row">
     <div class="col s12 push-m6 m6 push-l7 l5">
+        <!--countdown-->
+        <div class="col coffee-box" id = "Countdown" style="width: 100%;">
+            <div class="row" style="width:100%">
+                <div class="col s4 m3 l3" style="margin: 0px; padding: 0px">
+                    <div class="days__until" style = "color: #F9CF00; font-size: 5rem; margin-left: 20px">00</div>
+                </div>
+                <div class="col s8 m9 l9">
+                    <p style="margin: auto; margin-top: 0.5rem; margin-bottom: 1rem; color:black; font-size: 30px; text-align: center ", >
+                        Dager til vinterblotet!
+                    </p>
+                </div>
+            </div>
+
+            </div>
     <!-- Events -->
       <h3 class="heading">Arrangementer</h3>
       {% if social or bedpres %}
@@ -116,7 +130,9 @@
 
 
 
-
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/plugin/duration.min.js"></script>
+    <script src="{% static "js/countdown.js" %}"></script>
 {% endblock content %}
 
 
