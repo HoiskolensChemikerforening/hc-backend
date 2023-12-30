@@ -142,14 +142,18 @@ class ListSocialView(ListView):
         ).order_by("date")
 
         my_events = None
+        my_waiting_events = None
         if self.request.user.is_authenticated:
             attending_events = Q(attendees__username__exact=self.request.user)
             authored_events = Q(author=self.request.user)
+            my_authored_events = self.model.objects.filter(authored_events)
             my_events = self.model.objects.filter(
-                attending_events | authored_events
+                attending_events, date__gt=timezone.now()
             ).distinct()
-
-        context.update({"events": future_events, "my_events": my_events})
+            my_past_events = self.model.objects.filter(attending_events, date__lte=timezone.now())
+        context.update({"events": future_events, "my_events": my_events, "my_authored_events": my_authored_events,
+                        "my_past_events": my_past_events, "my_waiting_events": my_waiting_events
+                        })
         return context
 
 

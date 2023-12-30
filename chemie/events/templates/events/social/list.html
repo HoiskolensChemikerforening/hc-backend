@@ -20,11 +20,19 @@
         {% endif %}
       </div>
       <div id="myEvents" class="col s12">
-        {% include "events/list_events.html" with object_list=my_events %}
+
         {% if user.is_authenticated %}
-          {% if not my_events %}
-            <p class="flow-text">Du er ikke påmeldt noen sosiale arrangementer. Finn på noe sprell!</p>
-          {% endif %}
+          <h3 >Påmeldte arrengement</h3>
+                {% include "events/list_events.html" with object_list=my_events %}
+                {% if not my_events %}
+                    <p class="flow-text">Du er ikke påmeldt noen sosiale arrangementer. Finn på noe sprell!</p>
+                 {% endif %}
+                {% if my_waiting_events %}
+                    <h4>Venteliste</h4>
+                        {% include "events/list_events.html" with object_list=my_waiting_events %}
+                {% endif %}
+            <h3>Mine tidligere arrangementer</h3>
+                {% include "events/list_events.html" with object_list=my_past_events %}
         {% else %}
           <p class="flow-text">Vennligst <a href="{% url "login" %}">logg inn</a> for å se dine aktive sosiale arrangementer.</p>
         {% endif %}
@@ -33,3 +41,9 @@
   </div>
 
 {% endblock %}
+
+
+
+{% if not my_events %}
+            <p class="flow-text">Du er ikke påmeldt noen sosiale arrangementer. Finn på noe sprell!</p>
+{% endif %}
