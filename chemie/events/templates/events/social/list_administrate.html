@@ -21,7 +21,16 @@
                     <a class='btn-large' href="{% url "events:index_social" %}#myEvents">Tilbake</a>
                 </div>
         </div>
-
+        {% if my_unpublished_events %}
+            <h3>Mine upubliserte arrangement</h3>
+            {% include "events/list_events.html" with object_list=my_unpublished_events %}
+          {% endif %}
+        {% if my_tentative_events %}
+            <h3>Tentative arrangement</h3>
+            {% include "events/list_events.html" with object_list=my_tentative_events %}
+        {% endif %}
+        <h3>Alle</h3>
+        {% include "events/list_events.html" with object_list=my_authored_events%}
       </div>
     </div>
   </div>

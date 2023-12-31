@@ -166,7 +166,7 @@ class ListBedpresView(ListSocialView):
     template_name = "events/bedpres/list.html"
     model = Bedpres
 
-class ListAdminSocialView(ListsocialView):
+class ListAdminSocialView(ListSocialView):
     template_name = "events/social/list_administrate.html"
     model = Social
 
