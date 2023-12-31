@@ -147,13 +147,17 @@ class ListSocialView(ListView):
             attending_events = Q(attendees__username__exact=self.request.user)
             authored_events = Q(author=self.request.user)
 
-            my_authored_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), published=False)
+            my_authored_events = self.model.objects.filter(authored_events, date__gt=timezone.now())
+            my_unpublished_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), published=False)
+            my_tentative_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), tentative=True)
+
             my_events = self.model.objects.filter(
                 attending_events, date__gt=timezone.now()
             ).distinct()
             my_past_events = self.model.objects.filter(attending_events, date__lte=timezone.now())
         context.update({"events": future_events, "my_events": my_events, "my_authored_events": my_authored_events,
-                        "my_past_events": my_past_events, "my_waiting_events": my_waiting_events
+                        "my_past_events": my_past_events, "my_waiting_events": my_waiting_events,
+                        "my_unpublished_events": my_unpublished_events, "my_tentative_events": my_tentative_events
                         })
         return context
 
@@ -162,6 +166,9 @@ class ListBedpresView(ListSocialView):
     template_name = "events/bedpres/list.html"
     model = Bedpres
 
+class ListAdminSocialView(ListsocialView):
+    template_name = "events/social/list_administrate.html"
+    model = Social
 
 class ListPastSocialView(ListView):
     template_name = "events/social/list_past.html"

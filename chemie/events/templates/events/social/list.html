@@ -20,12 +20,15 @@
         {% endif %}
       </div>
       <div id="myEvents" class="col s12">
+        {% if my_authored_events %}
+            <div class="row">
+                <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 30px; margin-top: 10px">
+                    <a class='btn-large' href="{% url "events:admin_social" %}">Administrer</a>
+                </div>
+            </div>
+        {% endif %}
 
         {% if user.is_authenticated %}
-            {% if my_authored_events %}
-                <h3>Laget</h3>
-                    {% include "events/list_events.html" with object_list=my_authored_events %}
-            {% endif %}
           <h3 >Påmeldte arrengement</h3>
                 {% include "events/list_events.html" with object_list=my_events %}
                 {% if not my_events %}
