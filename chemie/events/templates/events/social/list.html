@@ -22,6 +22,10 @@
       <div id="myEvents" class="col s12">
 
         {% if user.is_authenticated %}
+            {% if my_authored_events %}
+                <h3>Laget</h3>
+                    {% include "events/list_events.html" with object_list=my_authored_events %}
+            {% endif %}
           <h3 >Påmeldte arrengement</h3>
                 {% include "events/list_events.html" with object_list=my_events %}
                 {% if not my_events %}
@@ -33,6 +37,7 @@
                 {% endif %}
             <h3>Mine tidligere arrangementer</h3>
                 {% include "events/list_events.html" with object_list=my_past_events %}
+
         {% else %}
           <p class="flow-text">Vennligst <a href="{% url "login" %}">logg inn</a> for å se dine aktive sosiale arrangementer.</p>
         {% endif %}
