@@ -146,7 +146,8 @@ class ListSocialView(ListView):
         if self.request.user.is_authenticated:
             attending_events = Q(attendees__username__exact=self.request.user)
             authored_events = Q(author=self.request.user)
-            my_authored_events = self.model.objects.filter(authored_events, date__gt=timezone.now())
+
+            my_authored_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), published=False)
             my_events = self.model.objects.filter(
                 attending_events, date__gt=timezone.now()
             ).distinct()
