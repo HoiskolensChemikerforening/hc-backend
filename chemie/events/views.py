@@ -168,9 +168,26 @@ class ListSocialView(ListView):
         return context
 
 
-class ListBedpresView(ListSocialView):
+class ListBedpresView(ListView):
     template_name = "events/bedpres/list.html"
     model = Bedpres
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        future_events = self.model.objects.filter(
+            date__gt=timezone.now(), published=True
+        ).order_by("date")
+
+        my_events = None
+        if self.request.user.is_authenticated:
+            attending_events = Q(attendees__username__exact=self.request.user)
+            authored_events = Q(author=self.request.user)
+            my_events = self.model.objects.filter(
+                attending_events | authored_events
+            ).distinct()
+
+        context.update({"events": future_events, "my_events": my_events})
+        return context
 
 class ListAdminSocialView(ListSocialView):
     template_name = "events/social/list_administrate.html"
