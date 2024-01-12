@@ -4,6 +4,14 @@
   Oversikt
 {% endblock nav_sub_header %}
 
+{% if my_authored_events %}
+    {% block permissions %}
+        <li>
+            <a class="btn-floating blue" href="{% url 'events:admin_social' %}"><i class="material-icons">explore</i></a>
+            <a class="btn-floating mobile-fab-tip" href="{% url 'events:admin_social' %}">Egne arrangement</a>
+        </li>
+    {% endblock %}
+{% endif %}
 {# Main block #}
 {% block maincontent %}
   <div class="row">
@@ -20,14 +28,6 @@
         {% endif %}
       </div>
       <div id="myEvents" class="col s12">
-        {% if my_authored_events %}
-            <div class="row">
-                <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 30px; margin-top: 10px">
-                    <a class='btn-large' href="{% url "events:admin_social" %}">Administrer</a>
-                </div>
-            </div>
-        {% endif %}
-
         {% if user.is_authenticated %}
           <h3 >Påmeldte arrengement</h3>
                 {% include "events/list_events.html" with object_list=my_events %}
