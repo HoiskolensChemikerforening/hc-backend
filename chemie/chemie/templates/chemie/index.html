@@ -49,6 +49,13 @@
 
     <!-- Events -->
       <h3 class="heading">Arrangementer</h3>
+
+      {% if social or bedpres %}
+        {% include 'events/frontpage_list_events.html' with object_list=object_list %}
+      {% else %}
+        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
+      {% endif %}
+
         <!--countdown-->
         <div class="col coffee-box" id = "Countdown" style="width: 100%;">
             <div class="row" style="width:100%">
@@ -61,11 +68,6 @@
             </div>
 
         </div>
-      {% if social or bedpres %}
-        {% include 'events/frontpage_list_events.html' with object_list=object_list %}
-      {% else %}
-        <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
-      {% endif %}
       <!--Kontaktskjema-->
 
       <div class="col coffee-box" style="width: 100%;">
