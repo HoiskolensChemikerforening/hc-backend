@@ -473,7 +473,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
     object = None
 
     def get_success_url(self):
-        return reverse("events:register_social", kwargs={"pk": self.pk})
+        return reverse("events:detail_social", kwargs={"pk": self.pk})
 
     def dispatch(self, request, *args, **kwargs):
         # Set event and registration on the whole object
@@ -575,13 +575,13 @@ class BedpresRegisterUserView(SocialRegisterUserView):
     registration_form = BedpresRegisterUserForm
 
     def get_success_url(self):
-        return reverse("events:register_bedpres", kwargs={"pk": self.pk})
+        return reverse("events:detail_bedpres", kwargs={"pk": self.pk})
 
     def get_form_kwargs(self):
         return {}
 
     def get_success_url(self):
-        return reverse("events:register_bedpres", kwargs={"pk": self.pk})
+        return reverse("events:detail_bedpres", kwargs={"pk": self.pk})
 
 
 class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
