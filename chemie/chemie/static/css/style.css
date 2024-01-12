@@ -681,6 +681,21 @@ p {
     width: 2rem;
     height: 1rem;
 }  }
+
+.until__text {
+  margin: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color:black;
+  font-size: 30px;
+  text-align: center
+}
+
+@media only screen and (max-width: 500px){
+  .until__text {
+    font-size: 25px;
+}  }
+
 @keyframes swing {
   0% {
     transform: translateX(0);
