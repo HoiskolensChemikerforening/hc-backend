@@ -20,12 +20,12 @@ class RefoundRequest(models.Model):
 
 class Refound(models.Model):
     refoundrequest = models.ForeignKey(RefoundRequest, on_delete=models.CASCADE)
-    date = models.DateField()
-    store = models.CharField(max_length=50)
-    item = models.CharField(max_length=500)
-    event = models.CharField(max_length=50)
-    price = models.IntegerField()
-    image = models.ImageField(upload_to="receipts")
+    date = models.DateField(verbose_name="Utleggsdato")
+    store = models.CharField(max_length=50, verbose_name="Kjøpssted")
+    item = models.CharField(max_length=500, verbose_name="Vare")
+    event = models.CharField(max_length=50, verbose_name="Hensikt")
+    price = models.IntegerField(verbose_name="Pris")
+    image = models.ImageField(upload_to="receipts", verbose_name="Kvittering")
 
     def __str__(self):
         return f"{self.date} {self.event} Total: {self.price}"

@@ -4,9 +4,11 @@ from .forms import RefoundForm
 
 def index(request):
     form = RefoundForm()
+    user = request.user
 
     context = {
-        "form":form
+        "form":form,
+        "user":user
     }
     return render(request ,"index.html", context)
 

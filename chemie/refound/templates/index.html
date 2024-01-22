@@ -5,11 +5,29 @@
 {% endblock nav_header %}
 
 {% block content %}
-  <div>
-  <form action="/your-name/" method="post">
-    {% csrf_token %}
-    {{ form }}
-      <input type="submit" value="Submit">
-</form>
-  </div>
+<div class="card">
+
+    <div class="card-content">
+
+    <div>
+        <h3>Kontaktinformasjon</h3>
+        <hr>
+        <p> Navn: {{ user.first_name }} {{ user.last_name }}</p>
+        <p> E-post: {{ user.email }}</p>
+        <p> Mobilnummer: {{ user.profile.phone_number }}</p>
+        <hr>
+    </div>
+
+  <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+      {{ form }}
+
+      <div class="card-action">
+        <div class="right-align">
+          <input class="btn btn-primary pull-right" type='submit' value='Søk om refusjon'/>
+        </div>
+      </div>
+
+  </form>
+    </div>
+</div>
 {% endblock content %}
