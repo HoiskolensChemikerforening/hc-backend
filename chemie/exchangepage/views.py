@@ -2,84 +2,65 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
+from .forms import IndexForm, createTravelletterForm
+
 # Create your views here.
 
 @login_required()
 def index(request):
     travelletters = Travelletter.objects.all().order_by("country")
+    avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability','avg_nature', 'avg_hospitality', 'avg_workLoad']
+    sort_by = request.GET.get('sort_by', 'country')
+    sort_order = request.GET.get('sort_order', 'desc')
 
+    if request.method == 'POST':
+        form = IndexForm(request.POST)
+        if form.is_valid():
+            test = form.cleaned_data
+            #print(form)
+            print("Test", test)
+    else:
+        form = IndexForm()
     # Group the travelletters by country
     travelletters_by_country = {}
-    for letter in travelletters:
-        country = letter.country
-        if country not in travelletters_by_country:
-            travelletters_by_country[country] = {
-                'count': 0,
-                'avg_sun': 0,
-                'avg_livingExpences': 0,
-                'avg_availability': 0,
-                'avg_nature': 0,
-                'avg_hospitality': 0,
-                'avg_workLoad': 0,
-            }
-        travelletters_by_country[country]['count'] += 1
-        travelletters_by_country[country]['avg_sun'] += letter.sun
-        travelletters_by_country[country]['avg_livingExpences'] += letter.livingExpences
-        travelletters_by_country[country]['avg_availability'] += letter.availability
-        travelletters_by_country[country]['avg_nature'] += letter.nature
-        travelletters_by_country[country]['avg_hospitality'] += letter.hospitality
-        travelletters_by_country[country]['avg_workLoad'] += letter.workLoad
-
-    # Calculate the average values for each country
-    for country, data in travelletters_by_country.items():
-        count = data['count']
-        data['avg_sun'] /= count
-        data['avg_livingExpences'] /= count
-        data['avg_availability'] /= count
-        data['avg_nature'] /= count
-        data['avg_hospitality'] /= count
-        data['avg_workLoad'] /= count
-
-
     data_by_country_city = {}
+    country_list = []
+    city_list = []
+
     for letter in travelletters:
         country = letter.country
         city = letter.city
+        if country not in country_list:
+            country_list.append(country)
+
+        if city not in city_list:
+            city_list.append(city)
 
         if country not in data_by_country_city:
             data_by_country_city[country] = {}
-        if city not in data_by_country_city[country]:
-            data_by_country_city[country][city] = {
-                'count': 0,
-                'avg_sun': 0,
-                'avg_livingExpences': 0,
-                'avg_availability': 0,
-                'avg_nature': 0,
-                'avg_hospitality': 0,
-                'avg_workLoad': 0,
-            }
 
-        data_by_country_city[country][city]['count'] += 1
-        data_by_country_city[country][city]['avg_sun'] += letter.sun
-        data_by_country_city[country][city]['avg_livingExpences'] += letter.livingExpences
-        data_by_country_city[country][city]['avg_availability'] += letter.availability
-        data_by_country_city[country][city]['avg_nature'] += letter.nature
-        data_by_country_city[country][city]['avg_hospitality'] += letter.hospitality
-        data_by_country_city[country][city]['avg_workLoad'] += letter.workLoad
+    for country in country_list:
+        travelletters_by_country[country] = Travelletter.country_avg(country)
 
-    # Calculate the average values for each city within each country
-    for country, cities in data_by_country_city.items():
-        for city, data in cities.items():
-            count = data['count']
-            data['avg_sun'] /= count
-            data['avg_livingExpences'] /= count
-            data['avg_availability'] /= count
-            data['avg_nature'] /= count
-            data['avg_hospitality'] /= count
-            data['avg_workLoad'] /= count
-    print(travelletters_by_country)
-    print(data_by_country_city)
-    context = {"travelletters_by_country": travelletters_by_country, "data_by_city": data_by_country_city}
+    for city in city_list:
+        country, data = Travelletter.city_avg(city)
+        data_by_country_city[country][city]= data
+
+    reverse_order = sort_order == 'desc'
+    for avg in avg_list:
+        if sort_by == avg:
+            travelletters_by_country = dict(sorted(travelletters_by_country.items(), key=lambda x: x[1][avg],reverse=reverse_order))
+            for country, city_data in data_by_country_city.items():
+                data_by_country_city[country] = dict(sorted(city_data.items(), key=lambda x: x[1][avg], reverse=reverse_order))
+
+            break
+
+    context = {"travelletters_by_country": travelletters_by_country,
+               "data_by_city": data_by_country_city,
+               "sort_by": sort_by,
+               "sort_order": sort_order,
+               "form": form}
+
     return render(request, "index.html", context)
 
 @login_required()
@@ -106,7 +87,18 @@ def detailViews(request, pk):
 
 @permission_required("exchangepage.add_travelletter")
 def createViews(request):
-    return render(request, "create.html")
+    if request.method == 'POST':
+        form = createTravelletterForm(request.POST)
+        if form.is_valid():
+            travelletter = form.save(commit=False)
+            travelletter.save()
+    else:
+        form = createTravelletterForm()
+
+    context = {
+        'form':form
+    }
+    return render(request, "create.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):

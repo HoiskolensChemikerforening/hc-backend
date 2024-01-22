@@ -15,7 +15,21 @@
 
 {% load material_form %}
 {% block content %}
+<p class="flow-text">Her kan du legge til nytt reisebrev!</p>
+<div class="card">
+  <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+    <div class="card-content">
+      {% form form=form %}
+      {% endform %}
 
+      <div class="card-action">
+        <div class="right-align">
+          <input class="btn btn-primary pull-right" type='submit' value='Lagre reisebrev!'/>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
 {% endblock content %}
 
 {% block footer_script %}
