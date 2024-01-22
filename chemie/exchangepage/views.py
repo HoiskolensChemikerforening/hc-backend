@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
-
+from django.shortcuts import get_object_or_404
 # Create your views here.
 
 @login_required()
@@ -84,13 +84,25 @@ def index(request):
 
 @login_required()
 def cityPageViews(request, city_name):
-    context = {"city_name":city_name}
+    travelletters = Travelletter.objects.filter(city=city_name).order_by("user")
+    context = {
+        "city_name":city_name,
+        "travelletters":travelletters,
+    }
     return render(request, "citypage.html", context)
 
 @login_required()
 def detailViews(request, pk):
-    context = {}
+    travelletter  = Travelletter.objects.get(id=pk)
+
+    print(travelletter.user)
+
+    context = {
+        'travelletter': travelletter,
+    }
+
     return render(request, "detail.html", context)
+
 
 @permission_required("exchangepage.add_travelletter")
 def createViews(request):

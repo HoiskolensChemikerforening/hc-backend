@@ -10,12 +10,36 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-
+    {{ city_name}}
 {% endblock nav_sub_header %}
 
 {% load material_form %}
 {% block content %}
-
+  <ul class="collection">
+    {% for travelletter in travelletters %}
+       <div class="col s12 m6 l3" style="padding-bottom: 5px">
+              <a href="{% url 'exchangepage:detail' travelletter.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">location_city</i>
+                <div style="display: flex;flex-direction: row;justify-content: space-between">
+                  <div style="padding-right: 10px">{{travelletter.user.user.first_name}}</div>
+                  <div style="display: flex">
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
+                      <i class="material-icons" style="color:white">local_atm</i> {{ city_data.avg_sun }}
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
+                      <i class="material-icons" style="color:white">local_dining</i> {{ city_data.avg_livingExpences }}
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
+                      <i class="material-icons" style="color:white">local_see</i> {{ city_data.avg_availability }}
+                    </div>
+                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
+                      <i class="material-icons" style="color:white">local_library</i> {{ city_data.avg_nature }}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            </div>
+    {% endfor %}
+  </ul>
 {% endblock content %}
 
 {% block footer_script %}
