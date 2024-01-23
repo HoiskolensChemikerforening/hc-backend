@@ -1,6 +1,9 @@
 from django import forms
 from .models import Refound
 import material as M
+from django.forms import modelformset_factory
+
+
 
 
 class DatePickerInput(forms.DateTimeInput):
@@ -23,4 +26,10 @@ class RefoundForm(forms.ModelForm):
         widgets = {
             "date": DatePickerInput()
         }
+
+RefoundFormSet = modelformset_factory(
+    Refound, fields=["date", "store", "item", "event", "price", "image"],widgets = {
+            "date": DatePickerInput()
+        }, extra=1
+)
 
