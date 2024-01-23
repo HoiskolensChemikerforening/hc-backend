@@ -1,25 +1,17 @@
 from django import forms
 from .models import Refound
-import material as M
 from django.forms import modelformset_factory
-
+from django.core.validators import MinLengthValidator
 
 
 
 class DatePickerInput(forms.DateTimeInput):
     input_type = 'date'
 
-class RefoundForm(forms.ModelForm):
-    layout = M.Layout(
-        M.Row(
-            M.Column("date", span_columns=1),
+class AccountNumberForm(forms.Form):
+    account_number = forms.CharField(max_length=11, validators=[MinLengthValidator(11)])
 
-            M.Column("store", span_columns=1)
-        ),
-        M.Row("item"),
-        M.Row(M.Column("event"), M.Column("price")),
-        M.Row("image"),
-    )
+class RefoundForm(forms.ModelForm):
     class Meta:
         model = Refound
         fields = ["date", "store", "item", "event", "price", "image"]
