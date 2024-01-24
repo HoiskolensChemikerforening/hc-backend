@@ -5,7 +5,7 @@ from django.core.validators import MinLengthValidator
 class RefoundRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
-    account_number = models.CharField(max_length=11, validators=[MinLengthValidator(11)])
+    account_number = models.CharField(max_length=11, validators=[MinLengthValidator(11)], verbose_name="Kontonummer")
 
     def get_total(self):
         total = 0

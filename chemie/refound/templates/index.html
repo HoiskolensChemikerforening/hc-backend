@@ -20,8 +20,9 @@
         <hr>
         <p id="total-price">Totalt beløp: 0 kr</p>
         <hr>
-        <label for="account-number">Kontonummer: </label>
-        <!---<input name="account-number">--->
+        <!---<label for="account-number">Kontonummer: </label>
+        <input name="account-number">--->
+        {{ accountform }}
     </div>
         </div>
 </div>
@@ -62,15 +63,17 @@
 {% block footer_script %}
 
     <script>
-    let total_price_value = 0;
-    let price_array = []
-    let priceinputs =  document.querySelectorAll('input[type="number"]');
-    console.log(priceinputs);
-    //let input1 = document.getElementById("id_form-0-price")
+    let price_array = [0];
+    let priceinputs =  [...document.querySelectorAll('input[type="number"]')];
     const total_price = document.getElementById("total-price");
-    priceinputs.forEach((inputprice) => {
+
+    priceinputs.forEach((inputprice, index) => {
     inputprice.addEventListener("input", ()=> {
-        total_price.innerText = `Totalt beløp: ${inputprice.value} kr`
+        price_array[index] = parseFloat(inputprice.value) || 0
+        let sum  = price_array.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue
+        },0);
+        total_price.innerText = `Totalt beløp: ${sum} kr`
     })})
 
     //Code found on https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
@@ -84,14 +87,30 @@
 
     function addForm(e) {
     e.preventDefault()
-        console.log("hei")
     console.log(container)
     let newForm = refoundForm[0].cloneNode(true) //Clone the refound form
     let formRegex = RegExp(`form-(\\d){1}-`,'g') //Regex to find all instances of the form number
 
     formNum++ //Increment the form number
     newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form number
-        newForm.querySelectorAll(".receipt-counter")[0].innerText = `Kvittering ${formNum+1}`
+        console.log(newForm)
+    newForm.querySelectorAll(".receipt-counter")[0].innerText = `Kvittering ${formNum+1}`
+
+    //Add event listener
+    let newInput =  newForm.querySelectorAll('input[type="number"]')[0];
+    let index = priceinputs.length
+    priceinputs.push(newInput)
+    price_array.push(0)
+
+
+    newInput.addEventListener("input", ()=> {
+        price_array[index] = parseFloat(newInput.value) || 0
+        let sum  = price_array.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue
+        },0);
+        total_price.innerText = `Totalt beløp: ${sum} kr`
+    })
+
     container.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
 
     totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form

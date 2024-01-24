@@ -1,5 +1,5 @@
 from django import forms
-from .models import Refound
+from .models import Refound, RefoundRequest
 from django.forms import modelformset_factory
 from django.core.validators import MinLengthValidator
 
@@ -8,8 +8,11 @@ from django.core.validators import MinLengthValidator
 class DatePickerInput(forms.DateTimeInput):
     input_type = 'date'
 
-class AccountNumberForm(forms.Form):
-    account_number = forms.CharField(max_length=11, validators=[MinLengthValidator(11)])
+class AccountNumberForm(forms.ModelForm):
+    #account_number = forms.CharField(max_length=11, validators=[MinLengthValidator(11)])
+    class Meta:
+        model = RefoundRequest
+        fields = ["account_number"]
 
 class RefoundForm(forms.ModelForm):
     class Meta:

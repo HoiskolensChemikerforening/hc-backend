@@ -14,8 +14,18 @@ def index(request):
         print("formset", formset.is_valid())
         print("form", accountform.is_valid())
         if formset.is_valid() and accountform.is_valid():
+
+            # Save RefoundRequest instance
             refound_request = accountform.save(commit=False)
             refound_request.user = request.user
+            refound_request.save()
+
+            # Save Receipts
+            for form in formset:
+                refound = form.save(commit=False)
+                refound.refoundrequest = refound_request
+                refound.save()
+
 
             print("valid")
 
