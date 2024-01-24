@@ -1,6 +1,6 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from .forms import RefoundForm, RefoundFormSet, AccountNumberForm
-from .models import Refound
+from .models import Refound,RefoundRequest
 
 
 def index(request):
@@ -11,8 +11,6 @@ def index(request):
     if request.POST:
         accountform = AccountNumberForm(data=request.POST)
         formset = RefoundFormSet(data=request.POST, files=request.FILES)
-        print("formset", formset.is_valid())
-        print("form", accountform.is_valid())
         if formset.is_valid() and accountform.is_valid():
 
             # Save RefoundRequest instance
@@ -28,6 +26,7 @@ def index(request):
 
 
             print("valid")
+            return redirect("refound:myrefounds")
 
     context = {
         "formset": formset,
@@ -35,6 +34,14 @@ def index(request):
         "user": user
     }
     return render(request, "index.html", context)
+
+def my_refounds(request):
+    refound_requests = RefoundRequest.objects.filter(user=request.user)
+    context = {
+        "refound_requests":refound_requests
+    }
+    return render(request, "myrefounds.html", context)
+
 
 def manage(request):
     pass

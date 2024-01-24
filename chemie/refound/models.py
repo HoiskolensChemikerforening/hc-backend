@@ -6,6 +6,7 @@ class RefoundRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     account_number = models.CharField(max_length=11, validators=[MinLengthValidator(11)], verbose_name="Kontonummer")
+    status = models.BooleanField(default=False, verbose_name="Tilbakebetalt")
 
     def get_total(self):
         total = 0
