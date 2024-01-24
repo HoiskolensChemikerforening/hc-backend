@@ -47,7 +47,12 @@
         <div class="refound-form">
           <div class="card">
   <div class="card-content">
-          <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
+          <div style="width: 100%; display: flex; justify-content: space-between">
+              <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
+              <div class="close-receipt">
+                <i class="material-icons" style="color: black; opacity: 70%">clear</i>
+              </div>
+          </div>
         <hr>
           {{ form.as_p }}
 
@@ -72,61 +77,83 @@
 
 {% block footer_script %}
 
-    <script>
+<script>
+    // Array to contain prices of the different receipts
     let price_array = [0];
+    // Array to contain the price input fields of different receipts
     let priceinputs =  [...document.querySelectorAll('input[type="number"]')];
+    // Array to contain all close buttons of different receipts
+    let closebuttons = [...document.querySelectorAll('.close-receipt')];
+    // Variable containing the html container containing the total price
     const total_price = document.getElementById("total-price");
 
-    priceinputs.forEach((inputprice, index) => {
-    inputprice.addEventListener("input", ()=> {
-        price_array[index] = parseFloat(inputprice.value) || 0
-        let sum  = price_array.reduce((accumulator, currentValue) => {
-            return accumulator + currentValue
-        },0);
-        total_price.innerText = `Totalt beløp: ${sum} kr`
-    })})
+    // Function to update the total price parameter if a given price input field is changed
+    function addSumPriceEventListener (inputfield, index){
+        // Add event listener to price input field
+        inputfield.addEventListener("input", ()=> {
+            // Update the price for this receipt in the price array
+            price_array[index] = parseFloat(inputfield.value) || 0;
+            // Sum all prices in price array to get total price
+            let sum  = price_array.reduce((accumulator, currentValue) => {
+                return accumulator + currentValue;
+            },0);
+            // Update the displayed total price
+            total_price.innerText = `${sum} kr`;
+        })
+    }
+    // Add event listener to the price input field from the default receipt
+    addSumPriceEventListener (priceinputs[0], 0);
+
+
+    function addRemoveReceiptEventListener (inputfield, index){
+
+    }
 
     //Code found on https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
 
-    let refoundForm = document.querySelectorAll(".refound-form")
-    let container = document.querySelector("#form-container")
-    let addButton = document.querySelector("#add-form")
-    let totalForms = document.querySelector("#id_form-TOTAL_FORMS")
+    // Array containing all receipts forms (kvittering)
+    let refoundForm = document.querySelectorAll(".refound-form");
+    // Variable containing the whole form
+    let container = document.querySelector("#form-container");
+    // Variable containing the button to add a new receipt
+    let addButton = document.querySelector("#add-form");
+    // Variable containing the number for receipts on the current page
+    let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
 
-    let formNum = refoundForm.length-1 // Get the number of the last form on the page with zero-based indexing
+    let formNum = refoundForm.length-1; // Get the number of the last form on the page with zero-based indexing
 
+    // Function to add a new form
     function addForm(e) {
-    e.preventDefault()
-    console.log(container)
-    let newForm = refoundForm[0].cloneNode(true) //Clone the refound form
-    let formRegex = RegExp(`form-(\\d){1}-`,'g') //Regex to find all instances of the form number
+        e.preventDefault();
+        //Clone the refound form
+        let newForm = refoundForm[0].cloneNode(true);
+        //Regex to find all instances of the form number
+        let formRegex = RegExp(`form-(\\d){1}-`,'g');
 
-    formNum++ //Increment the form number
-    newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`) //Update the new form to have the correct form number
-        console.log(newForm)
-    newForm.querySelectorAll(".receipt-counter")[0].innerText = `Kvittering ${formNum+1}`
+        //Increment the form number
+        formNum++;
 
-    //Add event listener
-    let newInput =  newForm.querySelectorAll('input[type="number"]')[0];
-    let index = priceinputs.length
-    priceinputs.push(newInput)
-    price_array.push(0)
+        //Update the new form to have the correct form number
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
+        //Update receipt number
+        newForm.querySelectorAll(".receipt-counter")[0].innerText = `Kvittering ${formNum+1}`;
 
+        //Add event listener
+        let newInput =  newForm.querySelectorAll('input[type="number"]')[0];
+        let index = priceinputs.length;
+        priceinputs.push(newInput);
+        price_array.push(0);
+        addSumPriceEventListener (newInput, index);
 
-    newInput.addEventListener("input", ()=> {
-        price_array[index] = parseFloat(newInput.value) || 0
-        let sum  = price_array.reduce((accumulator, currentValue) => {
-            return accumulator + currentValue
-        },0);
-        total_price.innerText = `${sum} kr`
-    })
+        //Insert the new form at the end of the list of forms
+        container.insertBefore(newForm, addButton);
 
-    container.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
+        //Increment the number of total forms in the management form
+        totalForms.setAttribute('value', `${formNum+1}`);
+    }
 
-    totalForms.setAttribute('value', `${formNum+1}`) //Increment the number of total forms in the management form
-}
-
-    addButton.addEventListener('click', addForm)
-    </script>
+    // Add an eventlistener to the new receipt button
+    addButton.addEventListener('click', addForm);
+</script>
 
 {% endblock footer_script %}
