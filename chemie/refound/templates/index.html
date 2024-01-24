@@ -12,17 +12,27 @@
     <div class="card-content">
 
     <div>
-        <h3>Kontaktinformasjon</h3>
+        <h3>Refusjonsskjema</h3>
         <hr>
+        <p style="font-weight: bold">Kontaktinformasjon</p>
+
         <p> Navn: {{ user.first_name }} {{ user.last_name }}</p>
         <p> E-post: {{ user.email }}</p>
         <p> Mobilnummer: {{ user.profile.phone_number }}</p>
         <hr>
-        <p id="total-price">Totalt beløp: 0 kr</p>
+        <p style="font-weight: bold">Totalt beløp</p>
+        <p id="total-price">0 kr</p>
         <hr>
         <!---<label for="account-number">Kontonummer: </label>
         <input name="account-number">--->
-        {{ accountform }}
+        <p style="font-weight: bold">Kontonummer</p>
+
+        {% for field in accountform %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field }}
+            </div>
+        {% endfor %}
     </div>
         </div>
 </div>
@@ -108,7 +118,7 @@
         let sum  = price_array.reduce((accumulator, currentValue) => {
             return accumulator + currentValue
         },0);
-        total_price.innerText = `Totalt beløp: ${sum} kr`
+        total_price.innerText = `${sum} kr`
     })
 
     container.insertBefore(newForm, addButton) //Insert the new form at the end of the list of forms
