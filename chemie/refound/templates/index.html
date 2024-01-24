@@ -5,14 +5,30 @@
 {% endblock nav_header %}
 
 {% block content %}
+    <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s6"><a class="active" href="#futureEvents">Søk om refusjon</a></li>
+        <li class="tab col s6"><a href="#myEvents">Mine refusjoner</a></li>
+      </ul>
+    </div>
+    </div>
 
   <form id="form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 <div class="card">
 
     <div class="card-content">
-
     <div>
-        <h3>Refusjonsskjema</h3>
+        <hr>
+        <div>
+        <p style="font-weight: bold">Informasjon</p>
+        <ul style="margin-left: 20px; margin-top: 0;">
+            <li style="list-style-type: disc"> Utleggskjemaet skal leveres senest innen 2 måneder etter kjøpet. </li>
+            <li style="list-style-type: disc"> Det som skal refunderes på kvitteringen skal være godt markert (for eksempel med markeringstusj). Dette gjelder hvis det er flere beløp på samme kvittering som ikke skal refunderes.</li>
+            <li style="list-style-type: disc"> Refusjon for kakeutlegg skal ikke overstige 100 kr. For estimat av hjemmebakt kake (ikke posekake); se skjema for prisberegning </li>
+            <li style="list-style-type: disc"> Ta kontakt på kasserer@hc.ntnu.no for spørsmål.</li>
+        </ul>
+        </div>
         <hr>
         <p style="font-weight: bold">Kontaktinformasjon</p>
 
@@ -49,7 +65,7 @@
   <div class="card-content">
           <div style="width: 100%; display: flex; justify-content: space-between">
               <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
-              <div class="close-receipt">
+              <div class="close-receipt" style="display: none">
                 <i class="material-icons" style="color: black; opacity: 70%">clear</i>
               </div>
           </div>
@@ -82,8 +98,6 @@
     let price_array = [0];
     // Array to contain the price input fields of different receipts
     let priceinputs =  [...document.querySelectorAll('input[type="number"]')];
-    // Array to contain all close buttons of different receipts
-    let closebuttons = [...document.querySelectorAll('.close-receipt')];
     // Variable containing the html container containing the total price
     const total_price = document.getElementById("total-price");
 
@@ -105,10 +119,6 @@
     addSumPriceEventListener (priceinputs[0], 0);
 
 
-    function addRemoveReceiptEventListener (inputfield, index){
-
-    }
-
     //Code found on https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
 
     // Array containing all receipts forms (kvittering)
@@ -120,7 +130,8 @@
     // Variable containing the number for receipts on the current page
     let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
 
-    let formNum = refoundForm.length-1; // Get the number of the last form on the page with zero-based indexing
+    // Get the number of the last form on the page with zero-based indexing
+    let formNum = refoundForm.length-1;
 
     // Function to add a new form
     function addForm(e) {
