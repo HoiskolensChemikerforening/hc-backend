@@ -13,10 +13,38 @@
       </ul>
     </div>
     </div>
+    <div class="card">
+
+    <div class="card-content">
+    <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <p style="font-weight: bold"> Refound </p>
+            <p style="font-weight: bold;"> Status </p>
+        </div>
     {% for refound_request in refound_requests %}
-        <p>{{ forloop.counter }} {{ refound_request }}</p>
+        <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+        <div>
+            <a href="#" style="font-weight: bold; color: black"> {{ refound_request.created.date }}</a>
+            <p>Total sum: {{ refound_request.get_total }} kr</p>
+        </div>
+        <div style="padding-top: 4px; padding-right: 5px;">
+            {% if refound_request.status == 1 %}
+                <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
+            {%  endif %}
+            {% if refound_request.status == 2 %}
+                <i class="material-icons" style="color: yellow; font-size: 3rem">hourglass_empty</i>
+            {%  endif %}
+            {% if refound_request.status == 3 %}
+                <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
+            {%  endif %}
+        </div>
+        </div>
 
     {% endfor %}
+    <hr>
+    </div>
+    </div>
 
     <div>
 

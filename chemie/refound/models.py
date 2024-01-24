@@ -1,12 +1,19 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator
+from extended_choices import Choices
+
+STATUS = Choices(
+    ("REJECTED", 1, "Avslått"),
+    ("PENDING", 2, "Under behandling"),
+    ("APPROVED", 3, "Tilbakebetalt"),
+)
 
 class RefoundRequest(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     account_number = models.CharField(max_length=11, validators=[MinLengthValidator(11)], verbose_name="Kontonummer")
-    status = models.BooleanField(default=False, verbose_name="Tilbakebetalt")
+    status = models.SmallIntegerField(choices=STATUS, default=STATUS.PENDING, verbose_name="Tilbakebetalt")
 
     def get_total(self):
         total = 0
