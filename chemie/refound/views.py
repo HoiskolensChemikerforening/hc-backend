@@ -53,7 +53,7 @@ def admin_refounds(request):
     context = {
         "refound_requests":refound_requests
     }
-    return render(request, "myrefounds.html", context)
+    return render(request, "adminrefounds.html", context)
 
 @login_required()
 def manage(request, id):

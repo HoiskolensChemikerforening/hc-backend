@@ -1,0 +1,53 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Refusjonsskjema
+{% endblock nav_header %}
+
+{% block content %}
+    <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s6"><a target="_self" href="{% url "refound:index" %}">Søk om refusjon</a></li>
+        <li class="tab col s6"><a class="active" target="_self" href="{% url "refound:myrefounds" %}">Mine refusjoner</a></li>
+      </ul>
+    </div>
+    </div>
+    <div class="card">
+
+    <div class="card-content">
+    <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <p style="font-weight: bold"> Refound </p>
+            <p style="font-weight: bold;"> Status </p>
+        </div>
+    {% for refound_request in refound_requests %}
+        <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+        <div>
+            <a href="{% url "refound:detail" id=refound_request.id %}" style="font-weight: bold; color: black">{{ refound_request.created.date }}</a>
+            <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
+        </div>
+        <div style="padding-top: 4px; padding-right: 5px;">
+            {% if refound_request.status == 1 %}
+                <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
+            {%  endif %}
+            {% if refound_request.status == 2 %}
+                <i class="material-icons" style="color: yellow; font-size: 3rem">hourglass_empty</i>
+            {%  endif %}
+            {% if refound_request.status == 3 %}
+                <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
+            {%  endif %}
+        </div>
+        </div>
+
+    {% endfor %}
+    <hr>
+    </div>
+    </div>
+
+    <div>
+
+    </div>
+
+  {% endblock content %}
