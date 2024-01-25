@@ -7,7 +7,7 @@
 {% block content %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "refound:myrefounds" %}" class="breadcrumb">Mine refusjoner</a>
-    <a href="{% url "events:create_social" %}" class="breadcrumb">Detaljer</a>
+    <a href="{% url "refound:detail" id=refound.id %}" class="breadcrumb">Detaljer</a>
   </div>
 <div>
 <div class="card">
@@ -34,7 +34,7 @@
         {% if refound.status == 2 %}
         <div style="width: 100%; display: flex; justify-content: center;">
             <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reject_request" id=refound.id %}">Avslå</a>
-            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Godkjenn</a>
+            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Fullfør</a>
         </div>
         {% endif %}
         {% endif %}
