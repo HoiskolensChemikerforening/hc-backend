@@ -1,0 +1,16 @@
+{% if perms.refound %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.refound.delete_refoundrequest %}
+            <li>
+            <a class="btn-floating " href="{% url "refound:admin_refounds" %}"><i
+                class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip">Se søknader</a>
+            </li>
+    {% endif %}
+      </ul>
+    </div>
+  {% endif %}
