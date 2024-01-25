@@ -5,14 +5,17 @@
 {% endblock nav_header %}
 
 {% block content %}
-
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "refound:myrefounds" %}" class="breadcrumb">Mine refusjoner</a>
+    <a href="{% url "events:create_social" %}" class="breadcrumb">Detaljer</a>
+  </div>
 <div>
 <div class="card">
 <div class="card-content">
         <div style="width: 100%; display: flex; justify-content: space-between;">
         <b> Søknad</b>
         <div>
-            <p></p><b>Status: </b>{{ status}}</p>
+            <p><b>Status: </b>{{ status }}</p>
 
         </div>
         </div>
@@ -27,11 +30,13 @@
         <p style="font-weight: bold">Totalt beløp</p>
         <p id="total-price">{{ refound.get_total }} kr</p>
         <hr>
+        {% if perms.refound.delete_refoundrequest %}
         {% if refound.status == 2 %}
         <div style="width: 100%; display: flex; justify-content: center;">
             <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reject_request" id=refound.id %}">Avslå</a>
             <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Godkjenn</a>
         </div>
+        {% endif %}
         {% endif %}
 
         <!---<label for="account-number">Kontonummer: </label>

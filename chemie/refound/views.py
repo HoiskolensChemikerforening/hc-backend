@@ -67,6 +67,7 @@ def manage(request, id):
     receipts = refound.refound_set.all()
     context = {
         #"refound_requests": refound_requests,
+        "user": request.user,
         "refound": refound,
         "receipts": receipts,
         "status": refound.get_status()
