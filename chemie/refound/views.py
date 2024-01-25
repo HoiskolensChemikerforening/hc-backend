@@ -2,8 +2,9 @@ from django.shortcuts import render, redirect,get_object_or_404
 from .forms import RefoundForm, RefoundFormSet, AccountNumberForm
 from .models import Refound,RefoundRequest
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required, permission_required
 
-
+@login_required()
 def index(request):
     accountform = AccountNumberForm()
     user = request.user
@@ -36,6 +37,7 @@ def index(request):
     }
     return render(request, "index.html", context)
 
+@login_required()
 def my_refounds(request):
     refound_requests = RefoundRequest.objects.filter(user=request.user)
     context = {
@@ -44,9 +46,24 @@ def my_refounds(request):
     return render(request, "myrefounds.html", context)
 
 
+@login_required()
+@permission_required("refound.add_refoundrequest")
+def admin_refounds(request):
+    refound_requests = RefoundRequest.objects.all()
+    context = {
+        "refound_requests":refound_requests
+    }
+    return render(request, "myrefounds.html", context)
+
+@login_required()
 def manage(request, id):
     #refound_requests = RefoundRequest.objects.all().order_by("created")
     refound = get_object_or_404(RefoundRequest, id=id)
+
+    if not request.user.has_perm("refound.delete_refoundrequest"):
+        if request.user != refound.user:
+            return redirect("refound:myrefounds")
+
     receipts = refound.refound_set.all()
     context = {
         #"refound_requests": refound_requests,
@@ -56,6 +73,8 @@ def manage(request, id):
     }
     return render(request, "detail.html", context)
 
+@login_required()
+@permission_required("refound.add_refoundrequest")
 def approve_request(request, id):
     refound = get_object_or_404(RefoundRequest, id=id)
     refound.status = 3
@@ -66,8 +85,10 @@ def approve_request(request, id):
         f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt godkjent.",
         extra_tags="Godkjent",
     )
-    return redirect("refound:admin", id=refound.id)
+    return redirect("refound:detail", id=refound.id)
 
+@login_required()
+@permission_required("refound.add_refoundrequest")
 def reject_request(request, id):
     refound = get_object_or_404(RefoundRequest, id=id)
     refound.status = 1
@@ -78,7 +99,7 @@ def reject_request(request, id):
         f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt avslått.",
         extra_tags="Avslått",
     )
-    return redirect("refound:admin", id=refound.id)
+    return redirect("refound:detail", id=refound.id)
 
 
 

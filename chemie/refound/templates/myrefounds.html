@@ -25,7 +25,7 @@
         <hr>
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
-            <a href="#" style="font-weight: bold; color: black"> {{ refound_request.created.date }}</a>
+            <a href="{% url "refound:detail" id=refound_request.id %}" style="font-weight: bold; color: black"> {{ refound_request.created.date }}</a>
             <p>Total sum: {{ refound_request.get_total }} kr</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
