@@ -25,6 +25,9 @@ class RefoundRequest(models.Model):
     def __str__(self):
         return f"{self.created.date()} {self.user.last_name} Total: {self.get_total()}"
 
+    def get_status(self):
+        return STATUS[self.status-1][1]
+
 
 class Refound(models.Model):
     refoundrequest = models.ForeignKey(RefoundRequest, on_delete=models.CASCADE)

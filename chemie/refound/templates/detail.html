@@ -1,0 +1,72 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Refusjonsskjema
+{% endblock nav_header %}
+
+{% block content %}
+
+<div>
+<div class="card">
+<div class="card-content">
+        <div style="width: 100%; display: flex; justify-content: space-between;">
+        <b> Søknad</b>
+        <div>
+            <p></p><b>Status: </b>{{ status}}</p>
+
+        </div>
+        </div>
+        <hr>
+        <!---<p style="font-weight: bold">Kontaktinformasjon</p>--->
+
+        <p> <b>Navn:</b> {{ refound.user.first_name }} {{ refound.user.last_name }}</p>
+        <p> <b>E-post:</b> {{ refound.user.email }}</p>
+        <p> <b>Mobilnummer:</b> {{ refound.user.profile.phone_number }}</p>
+        <p> <b>Kontonummer:</b> {{ refound.account_number }}</p>
+        <hr>
+        <p style="font-weight: bold">Totalt beløp</p>
+        <p id="total-price">{{ refound.get_total }} kr</p>
+        <hr>
+        {% if refound.status == 2 %}
+        <div style="width: 100%; display: flex; justify-content: center;">
+            <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reject_request" id=refound.id %}">Avslå</a>
+            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Godkjenn</a>
+        </div>
+        {% endif %}
+
+        <!---<label for="account-number">Kontonummer: </label>
+        <input name="account-number">--->
+    </div>
+</div>
+    </div>
+
+
+<div class="row">
+{% for receipt in receipts  %}
+
+    <div class="col s12 m6 l4">
+    <div class="card">
+    <div class="card-content">
+        <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
+        <hr>
+                <p><b>Utleggsdato:</b> {{ receipt.date.date}}</p>
+                <p><b>Kjøpssted:</b> {{receipt.store}}</p>
+                <p><b>Vare:</b> {{receipt.item}}</p>
+                <p><b>Hensikt:</b> {{receipt.event}}</p>
+                <p><b>Pris:</b> {{receipt.price}} kr</p>
+                <hr>
+                <div style="display: flex; justify-content: center;width: 100%; min-height: 300px;">
+                <img src="{{ receipt.image.url }}" alt="kvittering{{ forloop.counter }}" style="max-width: 100%;max-height:300px;">
+                </div>
+        <hr>
+    </div>
+    </div>
+    </div>
+{% endfor %}
+
+{% endblock content %}
+
+{% block footer_script %}
+
+
+{% endblock footer_script %}
