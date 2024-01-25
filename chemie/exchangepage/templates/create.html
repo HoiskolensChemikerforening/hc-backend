@@ -19,8 +19,11 @@
 <div class="card">
   <form method="POST" enctype="multipart/form-data">{% csrf_token %}
     <div class="card-content">
-      {% form form=form %}
-      {% endform %}
+
+      {{ form.travelletter_info.as_p }}
+      {{ form.questions_info.as_p }}
+      {{ form.as_p }}
+      {{ form.errors }}
 
       <div class="card-action">
         <div class="right-align">
