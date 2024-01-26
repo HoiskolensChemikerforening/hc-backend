@@ -15,6 +15,9 @@
 
 {% load material_form %}
 {% block content %}
+<style>
+  select{display: block}
+</style>
 <p class="flow-text">Her kan du legge til nytt reisebrev!</p>
 <div class="card">
   <form method="POST" enctype="multipart/form-data">{% csrf_token %}
@@ -33,6 +36,7 @@
     </div>
   </form>
 </div>
+
 {% endblock content %}
 
 {% block footer_script %}
