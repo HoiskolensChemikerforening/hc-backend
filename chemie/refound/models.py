@@ -28,6 +28,10 @@ class RefoundRequest(models.Model):
     def get_status(self):
         return STATUS[self.status-1][1]
 
+    def print_account_number(self):
+        if len(self.account_number) == 11:
+            return self.account_number[:4] + "." + self.account_number[4:6] + "." + self.account_number[6:]
+        return self.account_number
     @classmethod
     def get_refound_request_annual(cls, year):
         return cls.objects.filter(refound__date__year=year).exclude(refound__date__year__lt=year)

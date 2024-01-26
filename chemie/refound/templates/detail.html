@@ -42,7 +42,7 @@
         <p> <b>Navn:</b> {{ refound.user.first_name }} {{ refound.user.last_name }}</p>
         <p> <b>E-post:</b> {{ refound.user.email }}</p>
         <p> <b>Mobilnummer:</b> {{ refound.user.profile.phone_number }}</p>
-        <p> <b>Kontonummer:</b> {{ refound.account_number }}</p>
+        <p> <b>Kontonummer:</b> {{ refound.print_account_number }}</p>
         <hr>
         <p style="font-weight: bold">Totalt beløp</p>
         <p id="total-price">{{ refound.get_total }} kr</p>
