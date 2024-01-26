@@ -13,17 +13,14 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
-    {% if annual %}
-     <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "refound:index" %}" class="breadcrumb">Refusjonsskjema</a>
-    <a href="{% url "refound:annual_account" year=year %}" class="breadcrumb">Årsrapport {{ year }}</a>
-  </div>
-    {% else %}
     <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "refound:index" %}" class="breadcrumb">Refusjonsskjema</a>
-    <a href="{% url "refound:admin_refounds" %}" class="breadcrumb">Søknader </a>
-  </div>
+    <a href="{% url "refound:admin_refounds" %}" class="breadcrumb">Søknader</a>
+        {% if annual %}
+    <a href="{% url "refound:annual_account" year=year %}" class="breadcrumb">Årsrapport {{ year }}</a>
     {% endif %}
+  </div>
+
     <div class="row">
 
 
