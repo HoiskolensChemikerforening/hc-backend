@@ -14,7 +14,7 @@ class AccountNumberForm(forms.ModelForm):
         model = RefoundRequest
         fields = ["account_number"]
         widgets = {
-            'account_number': forms.TextInput({'placeholder': 'Oppgi elleve sifre uten punktum (.)'})
+            'account_number': forms.TextInput({'placeholder': 'Elleve sifre uten punktum (.)'})
         }
 
 class RefoundForm(forms.ModelForm):
