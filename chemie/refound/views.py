@@ -56,9 +56,8 @@ def admin_refounds(request):
     }
     return render(request, "adminrefounds.html", context)
 
-@login_required()
-def manage(request, id):
-    #refound_requests = RefoundRequest.objects.all().order_by("created")
+
+def get_detail_context(request, id, admin=False):
     refound = get_object_or_404(RefoundRequest, id=id)
 
     if not request.user.has_perm("refound.delete_refoundrequest"):
@@ -67,13 +66,24 @@ def manage(request, id):
 
     receipts = refound.refound_set.all()
     context = {
-        #"refound_requests": refound_requests,
+        # "refound_requests": refound_requests,
         "user": request.user,
         "refound": refound,
         "receipts": receipts,
-        "status": refound.get_status()
+        "status": refound.get_status(),
+        "admin": admin
     }
+    return context
+
+@login_required()
+def detail_view(request, id):
+    context = get_detail_context(request, id, admin=False)
     return render(request, "detail.html", context)
+
+def detail_admin_view(request, id):
+    context = get_detail_context(request, id, admin=True)
+    return render(request, "detail.html", context)
+
 
 @login_required()
 @permission_required("refound.add_refoundrequest")
