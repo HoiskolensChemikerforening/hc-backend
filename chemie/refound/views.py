@@ -116,10 +116,11 @@ def reject_request(request, id):
     return redirect("refound:detail", id=refound.id)
 
 
+
 def admin_dashboard(request, annual=False, year=None):
     years=None
     if annual:
-        refounds = RefoundRequest.objects.filter(refound__date__year=year)
+        refounds = RefoundRequest.get_refound_request_annual(year)
     else:
         refounds = RefoundRequest.objects.all()
         years = set([r.date.year for r in Refound.objects.distinct("date__year")])
@@ -157,7 +158,6 @@ def admin_dashboard(request, annual=False, year=None):
 @permission_required("refound.add_refoundrequest")
 def annual_account_detail(request, year):
     context = admin_dashboard(request, annual=True, year=year)
-    print(context)
     return render(request, "annual_report.html", context)
 
 @login_required()
@@ -165,6 +165,15 @@ def annual_account_detail(request, year):
 def admin_refounds(request):
     context = admin_dashboard(request, annual=False, year=None)
     return render(request, "annual_report.html", context)
+
+
+@login_required()
+@permission_required("refound.add_refoundrequest")
+def delete_annual_report(request, year):
+    refounds = RefoundRequest.get_refound_request_annual(year)
+    for refound in refounds:
+        refound.delete()
+    return redirect("refound:admin_refounds")
 
 
 

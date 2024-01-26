@@ -28,6 +28,10 @@ class RefoundRequest(models.Model):
     def get_status(self):
         return STATUS[self.status-1][1]
 
+    @classmethod
+    def get_refound_request_annual(cls, year):
+        return cls.objects.filter(refound__date__year=year).exclude(refound__date__year__lt=year)
+
 
 class Refound(models.Model):
     refoundrequest = models.ForeignKey(RefoundRequest, on_delete=models.CASCADE)

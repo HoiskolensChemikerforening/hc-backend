@@ -164,9 +164,9 @@
     <div class="card-content">
     <b>Informasjon</b>
     <hr>
-    <p>Etter fullført årsregnskap burde alle refusjonsskjemaer fra dette året slettes av kasserer. Dette gjøres for å ikke lagre personopplysningene lengre enn nødvendig. Refusjonsskjemaer kan slettes ved å trykke på knappen under. OBS! Dette vil slette informasjonen ugjenkallelig.</p>
+    <p>Datoen på kvitteringen avgjør regnskapsåret til søknaden. Den tidligste datoen yeller for søknader som inneholder kvitteringer fra to forskjellige regnskapsår. Etter fullført årsregnskap burde alle refusjonsskjemaer fra dette året slettes av kasserer. Dette gjøres for å ikke lagre personopplysningene lengre enn nødvendig. Refusjonsskjemaer kan slettes ved å trykke på knappen under. OBS! Dette vil slette informasjonen ugjenkallelig.</p>
         <hr>
-    <a class="btn btn-primary red pull-center" style="margin: auto;min-width: 130px;" href="#">Slett skjemaer fra {{ year }}</a>
+    <a class="btn btn-primary red pull-center" style="margin: auto;min-width: 130px;" href="{% url "refound:delete_annual_account" year=year %}">Slett skjemaer fra {{ year }}</a>
     </div>
 </div>
     {% else %}

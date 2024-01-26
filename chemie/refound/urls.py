@@ -12,4 +12,5 @@ urlpatterns = [
     path("admin/<int:id>/godkjenn/", views.approve_request, name="approve_request"),
     path("admin/oversikt/<int:year>/", views.annual_account_detail, name="annual_account"),
     path("admin/detalj/<int:id>/", views.detail_admin_view, name="admin_detail"),
+    path("admin/oversikt/<int:year>/delete/", views.delete_annual_report, name="delete_annual_account"),
     ]
