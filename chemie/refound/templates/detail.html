@@ -5,7 +5,11 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
+    {% if admin %}
+    Administrer
+    {% else %}
     Detaljer
+    {% endif %}
 {% endblock nav_sub_header %}
 
 {% block content %}
@@ -13,7 +17,7 @@
     <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "refound:index" %}" class="breadcrumb">Refusjonsskjema</a>
     <a href="{% url "refound:admin_refounds" %}" class="breadcrumb">Søknader</a>
-    <a href="{% url "refound:admin_detail" id=refound.id %}" class="breadcrumb">Detaljer</a>
+    <a href="{% url "refound:admin_detail" id=refound.id %}" class="breadcrumb">Administrer</a>
   </div>
     {% else %}
 

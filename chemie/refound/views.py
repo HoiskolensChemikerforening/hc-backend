@@ -47,14 +47,14 @@ def my_refounds(request):
     return render(request, "myrefounds.html", context)
 
 
-@login_required()
+"""@login_required()
 @permission_required("refound.add_refoundrequest")
 def admin_refounds(request):
     refound_requests = RefoundRequest.objects.all().order_by("-created")
     context = {
         "refound_requests": refound_requests
     }
-    return render(request, "adminrefounds.html", context)
+    return render(request, "adminrefounds.html", context)"""
 
 
 def get_detail_context(request, id, admin=False):
@@ -116,8 +116,11 @@ def reject_request(request, id):
     return redirect("refound:detail", id=refound.id)
 
 
-def annual_account_detail(request, year):
-    refounds = RefoundRequest.objects.filter(refound__date__year=year)
+def admin_dashboard(request, annual=False, year=None):
+    if annual:
+        refounds = RefoundRequest.objects.filter(refound__date__year=year)
+    else:
+        refounds = RefoundRequest.objects.all()
     rejected = refounds.filter(status=STATUS.REJECTED).order_by("-created")
     approved = refounds.filter(status=STATUS.APPROVED).order_by("-created")
     pending = refounds.filter(status=STATUS.PENDING).order_by("-created")
@@ -125,24 +128,39 @@ def annual_account_detail(request, year):
     pendingsum = sum([r.get_total() for r in pending])
     approvedsum = sum([r.get_total() for r in approved])
 
-    if len(pending) > 0:
-        message = "" if len(pending)==1 else "er"
+
+    if len(pending) > 0 and annual:
+        message = "" if len(pending) == 1 else "er"
         messages.add_message(
-        request,
-        messages.WARNING,
-        f"{len(pending)} søknad{message} under behandling.",
-        extra_tags="Warning",
-    )
+            request,
+            messages.WARNING,
+            f"{len(pending)} søknad{message} under behandling.",
+            extra_tags="Warning",
+        )
 
     context = {
         "rejected": rejected,
-        "approved":approved,
+        "approved": approved,
         "pending": pending,
         "rejectsum": rejectsum,
         "pendingsum": pendingsum,
-        "approvedsum":approvedsum,
-        "year":year
+        "approvedsum": approvedsum,
+        "year": year,
+        "annual": annual
     }
+    return context
+
+@login_required()
+@permission_required("refound.add_refoundrequest")
+def annual_account_detail(request, year):
+    context = admin_dashboard(request, annual=True, year=year)
+    print(context)
+    return render(request, "annual_report.html", context)
+
+@login_required()
+@permission_required("refound.add_refoundrequest")
+def admin_refounds(request):
+    context = admin_dashboard(request, annual=False, year=None)
     return render(request, "annual_report.html", context)
 
 

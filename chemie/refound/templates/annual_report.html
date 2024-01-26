@@ -5,14 +5,25 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
+    {% if annual %}
   Årsrapport {{ year }}
+    {%  else %}
+    Søknader
+    {% endif %}
 {% endblock nav_sub_header %}
 
 {% block content %}
+    {% if annual %}
      <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "refound:index" %}" class="breadcrumb">Refusjonsskjema</a>
-    <a href="{% url "refound:admin_refounds" %}" class="breadcrumb">Årsrapport {{ year }}</a>
+    <a href="{% url "refound:annual_account" year=year %}" class="breadcrumb">Årsrapport {{ year }}</a>
   </div>
+    {% else %}
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "refound:index" %}" class="breadcrumb">Refusjonsskjema</a>
+    <a href="{% url "refound:admin_refounds" %}" class="breadcrumb">Søknader </a>
+  </div>
+    {% endif %}
     <div class="row">
 
 
@@ -95,15 +106,17 @@
         </div>
     {% for refound_request in pending %}
         <hr>
+        <a href="{% url "refound:admin_detail" id=refound_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
-            <a href="{% url "refound:detail" id=refound_request.id %}" style="font-weight: bold; color: black">{{ refound_request.created.date }}</a>
+             <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>
             <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
             <i class="material-icons" style="color: #f9cf00; font-size: 3rem">access_time</i>
         </div>
         </div>
+        </a>
 
     {% endfor %}
     <hr>
@@ -146,7 +159,7 @@
 
 
     <div>
-
+{% if annual %}
 <div class="card">
 
     <div class="card-content">
@@ -157,5 +170,5 @@
     <a class="btn btn-primary red pull-center" style="margin: auto;min-width: 130px;" href="#">Slett skjemaer fra {{ year }}</a>
     </div>
 </div>
-
+    {% endif %}
   {% endblock content %}
