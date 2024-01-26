@@ -76,15 +76,16 @@
         </div>
     {% for refound_request in approved %}
         <hr>
+        <a href="{% url "refound:detail" id=refound_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
-            <a href="{% url "refound:detail" id=refound_request.id %}" style="font-weight: bold; color: black">{{ refound_request.created.date }}</a>
+            <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>
             <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
                 <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
         </div>
-        </div>
+        </div></a>
 
     {% endfor %}
     <hr>
@@ -138,15 +139,16 @@
         </div>
     {% for refound_request in rejected %}
         <hr>
+        <a href="{% url "refound:detail" id=refound_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
-            <a href="{% url "refound:detail" id=refound_request.id %}" style="font-weight: bold; color: black">{{ refound_request.created.date }}</a>
+            <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>
             <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
                 <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
         </div>
-        </div>
+        </div></a>
 
     {% endfor %}
     <hr>
