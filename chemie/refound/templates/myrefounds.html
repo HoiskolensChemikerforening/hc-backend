@@ -23,9 +23,10 @@
         </div>
     {% for refound_request in refound_requests %}
         <hr>
+        <a href="{% url "refound:detail" id=refound_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
-            <a href="{% url "refound:detail" id=refound_request.id %}" style="font-weight: bold; color: black"> {{ refound_request.created.date }}</a>
+             <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>
             <p>Total sum: {{ refound_request.get_total }} kr</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
@@ -39,7 +40,7 @@
                 <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
             {%  endif %}
         </div>
-        </div>
+        </div></a>
 
     {% endfor %}
     <hr>
