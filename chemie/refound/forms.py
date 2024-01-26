@@ -13,6 +13,9 @@ class AccountNumberForm(forms.ModelForm):
     class Meta:
         model = RefoundRequest
         fields = ["account_number"]
+        widgets = {
+            'account_number': forms.TextInput({'placeholder': 'Oppgi 11 siffer uten punktum (.)'})
+        }
 
 class RefoundForm(forms.ModelForm):
     class Meta:
