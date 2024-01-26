@@ -1,0 +1,72 @@
+  <!-- Modal Trigger -->
+
+  <a class="modal-trigger" href="#cakemodal">skjema for prisberegning</a>
+
+  <!-- Modal Structure -->
+  <div id="cakemodal" class="modal">
+    <div class="modal-content">
+        <h4>Kakekalkulator</h4>
+
+        <p>Kalkulatoren brukes for estimere prisen på hjemmebakt kake (ikke posekake). Refusjon for kakeutlegg skal ikke overstige 100 kr.</p>
+
+        <div class="row" style="margin-top: 20px;">
+            <div class="col s12 m4 l4">
+                <label for="milk">Melk [dl]</label>
+                <input class="cake-input" id="milk" name="milk" value=0 type="number">
+                <label for="flour">Mel [g]</label>
+                <input class="cake-input" id="flour" name="flour" value=0 type="number">
+            </div>
+            <div class="col s12 m4 l4">
+                <label for="egg">Egg [egg]</label>
+                <input class="cake-input" id="egg" name="egg" value=0 type="number">
+                <label for="butter">Smør [g]</label>
+                <input class="cake-input" id="butter" name="butter" value=0 type="number">
+            </div>
+            <div class="col s12 m4 l4">
+                <label for="sugar">Sukker [g]</label>
+                <input class="cake-input" id="sugar" name="sugar" value=0 type="number">
+                <label for="powdered_sugar">Melis [g]</label>
+                <input class="cake-input" id="powdered_sugar" name="powdered_sugar" value=0 type="number">
+            </div>
+            <div class="col s12 m12 l12">
+                <span style="margin-top: 20px;"> <p id="total-cake-price"> <b>Kakepris: </b> 0 kr</p> </span>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Lukk</a>
+    </div>
+  </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+});
+
+const cakeFactors = {
+    "milk": 2.3,
+    "flour": 2/100,
+    "egg": 3,
+    "butter": 7/100,
+    "sugar": 3/100,
+    "powdered_sugar": 4/100
+};
+
+const cakeprice = document.getElementById("total-cake-price");
+
+const cakeInputs = [...document.getElementsByClassName("cake-input")];
+cakeInputs.forEach((inputElement) => {
+    inputElement.addEventListener('input', () => {
+        let sum  = 0;
+        cakeInputs.forEach( (element)=> {
+            let value = parseFloat(element.value) || 0;
+            sum += (value * cakeFactors[element.name]);
+        })
+        cakeprice.innerHTML = `<b>Kakepris: </b> ${Math.round(sum * 100) / 100} kr`
+    })
+});
+
+
+</script>
+
