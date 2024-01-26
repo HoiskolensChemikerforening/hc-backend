@@ -100,11 +100,25 @@
     // Container containing the receipts
     const receiptbox = document.getElementById("receipe-box");
     // Array to contain prices of the different receipts
-    let price_array = [0];
+    let price_array = [];
     // Array to contain the price input fields of different receipts
     let priceinputs =  [...receiptbox.querySelectorAll('input[type="number"]')];
+    // Populate the priceinputs array with existing prices or 0
+    priceinputs.forEach((element)=>{
+        price_array.push(parseFloat(element.value) || 0)
+    })
     // Variable containing the html container containing the total price
     const total_price = document.getElementById("total-price");
+
+    // Update the total sum from price array
+    function updatePrices(){
+        // Sum all prices in price array to get total price
+        let sum  = price_array.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue;
+        },0);
+        // Update the displayed total price
+        total_price.innerText = `${sum} kr`;
+    }
 
     // Function to update the total price parameter if a given price input field is changed
     function addSumPriceEventListener (inputfield, index){
@@ -112,16 +126,16 @@
         inputfield.addEventListener("input", ()=> {
             // Update the price for this receipt in the price array
             price_array[index] = parseFloat(inputfield.value) || 0;
-            // Sum all prices in price array to get total price
-            let sum  = price_array.reduce((accumulator, currentValue) => {
-                return accumulator + currentValue;
-            },0);
-            // Update the displayed total price
-            total_price.innerText = `${sum} kr`;
+            updatePrices();
         })
     }
-    // Add event listener to the price input field from the default receipt
-    addSumPriceEventListener (priceinputs[0], 0);
+    // Add event listener to all price input fields
+    priceinputs.forEach((element, index)=>{
+        addSumPriceEventListener(element, index);
+    });
+
+    // Initialize total sum
+    updatePrices()
 
 
     //Code found on https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
@@ -151,6 +165,14 @@
 
         //Update the new form to have the correct form number
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
+
+        // Clear fields
+        let inputBoxes = [...newForm.getElementsByTagName("input")];
+        inputBoxes.pop();
+        inputBoxes.forEach((element)=>{
+            element.value = '';
+        })
+
         //Update receipt number
         newForm.querySelectorAll(".receipt-counter")[0].innerText = `Kvittering ${formNum+1}`;
 
@@ -159,7 +181,9 @@
         let index = priceinputs.length;
         priceinputs.push(newInput);
         price_array.push(0);
+        newInput.value = '';
         addSumPriceEventListener (newInput, index);
+        updatePrices();
 
         //Insert the new form at the end of the list of forms
         container.insertBefore(newForm, addButton);
