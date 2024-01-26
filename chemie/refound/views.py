@@ -1,8 +1,9 @@
 from django.shortcuts import render, redirect,get_object_or_404
 from .forms import RefoundForm, RefoundFormSet, AccountNumberForm
-from .models import Refound,RefoundRequest
+from .models import Refound,RefoundRequest, STATUS
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from django.db.models import Sum
 
 @login_required()
 def index(request):
@@ -51,7 +52,7 @@ def my_refounds(request):
 def admin_refounds(request):
     refound_requests = RefoundRequest.objects.all()
     context = {
-        "refound_requests":refound_requests
+        "refound_requests": refound_requests
     }
     return render(request, "adminrefounds.html", context)
 
@@ -101,6 +102,36 @@ def reject_request(request, id):
         extra_tags="Avslått",
     )
     return redirect("refound:detail", id=refound.id)
+
+
+def annual_account_detail(request, year):
+    refounds = RefoundRequest.objects.filter(refound__date__year=year)
+    rejected = refounds.filter(status=STATUS.REJECTED)
+    approved = refounds.filter(status=STATUS.APPROVED)
+    pending = refounds.filter(status=STATUS.PENDING)
+    rejectsum = sum([r.get_total() for r in rejected])
+    pendingsum = sum([r.get_total() for r in pending])
+    approvedsum = sum([r.get_total() for r in approved])
+
+    if len(pending) > 0:
+        message = "" if len(pending)==1 else "er"
+        messages.add_message(
+        request,
+        messages.WARNING,
+        f"{len(pending)} søknad{message} under behandling.",
+        extra_tags="Warning",
+    )
+
+    context = {
+        "rejected": rejected,
+        "approved":approved,
+        "pending": pending,
+        "rejectsum": rejectsum,
+        "pendingsum": pendingsum,
+        "approvedsum":approvedsum,
+        "year":year
+    }
+    return render(request, "annual_report.html", context)
 
 
 

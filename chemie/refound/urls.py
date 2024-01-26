@@ -10,4 +10,5 @@ urlpatterns = [
     path("admin/", views.admin_refounds, name="admin_refounds"),
     path("admin/<int:id>/avsla/", views.reject_request, name="reject_request"),
     path("admin/<int:id>/godkjenn/", views.approve_request, name="approve_request"),
+    path("admin/oversikt/<int:year>/", views.annual_account_detail, name="annual_account"),
     ]

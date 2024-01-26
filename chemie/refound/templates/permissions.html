@@ -4,6 +4,13 @@
         <i class="large material-icons">edit</i>
       </a>
       <ul>
+      {% if perms.refound.delete_refoundrequest %}
+            <li>
+            <a class="btn-floating " href="{% url "refound:admin_refounds" %}"><i
+                class="material-icons">done_all</i></a>
+            <a class="btn-floating mobile-fab-tip">Avslutt regnskapsåret</a>
+            </li>
+    {% endif %}
         {% if perms.refound.delete_refoundrequest %}
             <li>
             <a class="btn-floating " href="{% url "refound:admin_refounds" %}"><i
@@ -11,6 +18,7 @@
             <a class="btn-floating mobile-fab-tip">Se søknader</a>
             </li>
     {% endif %}
+
       </ul>
     </div>
   {% endif %}

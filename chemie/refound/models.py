@@ -33,8 +33,8 @@ class Refound(models.Model):
     refoundrequest = models.ForeignKey(RefoundRequest, on_delete=models.CASCADE)
     date = models.DateField(verbose_name="Utleggsdato")
     store = models.CharField(max_length=50, verbose_name="Kjøpssted")
-    item = models.CharField(max_length=500, verbose_name="Vare")
-    event = models.CharField(max_length=50, verbose_name="Hensikt")
+    item = models.CharField(max_length=500, verbose_name="Varer")
+    event = models.CharField(max_length=50, verbose_name="Hensikt/Arragement")
     price = models.IntegerField(verbose_name="Pris")
     image = models.ImageField(upload_to="receipts", verbose_name="Kvittering")
 
