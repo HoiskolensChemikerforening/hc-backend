@@ -170,5 +170,18 @@
     <a class="btn btn-primary red pull-center" style="margin: auto;min-width: 130px;" href="#">Slett skjemaer fra {{ year }}</a>
     </div>
 </div>
+    {% else %}
+   <ul class="collapsible">
+    <li>
+      <div class="collapsible-header"><i class="material-icons" style="color: black">collections_bookmark</i>Årsrapporter</div>
+      <div class="collapsible-body">
+          {%   for y in years %}
+              <a href="{% url "refound:annual_account" year=y %}"><div><p>Årsrapport {{ y }}</p></div></a>
+          {% endfor %}
+      </div>
+    </li>
+   </ul>
     {% endif %}
-  {% endblock content %}
+    {% include "permissions.html" %}
+    </div>
+{% endblock content %}

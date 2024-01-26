@@ -117,10 +117,12 @@ def reject_request(request, id):
 
 
 def admin_dashboard(request, annual=False, year=None):
+    years=None
     if annual:
         refounds = RefoundRequest.objects.filter(refound__date__year=year)
     else:
         refounds = RefoundRequest.objects.all()
+        years = set([r.date.year for r in Refound.objects.distinct("date__year")])
     rejected = refounds.filter(status=STATUS.REJECTED).order_by("-created")
     approved = refounds.filter(status=STATUS.APPROVED).order_by("-created")
     pending = refounds.filter(status=STATUS.PENDING).order_by("-created")
@@ -146,7 +148,8 @@ def admin_dashboard(request, annual=False, year=None):
         "pendingsum": pendingsum,
         "approvedsum": approvedsum,
         "year": year,
-        "annual": annual
+        "annual": annual,
+        "years": years
     }
     return context
 
