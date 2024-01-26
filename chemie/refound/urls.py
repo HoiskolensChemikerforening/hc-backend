@@ -11,5 +11,5 @@ urlpatterns = [
     path("admin/<int:id>/avsla/", views.reject_request, name="reject_request"),
     path("admin/<int:id>/godkjenn/", views.approve_request, name="approve_request"),
     path("admin/oversikt/<int:year>/", views.annual_account_detail, name="annual_account"),
-    path("admin/detalj/<int:id>/", views.detail_admin_view, name="detail_admin"),
+    path("admin/detalj/<int:id>/", views.detail_admin_view, name="admin_detail"),
     ]

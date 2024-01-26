@@ -80,6 +80,8 @@ def detail_view(request, id):
     context = get_detail_context(request, id, admin=False)
     return render(request, "detail.html", context)
 
+@login_required()
+@permission_required("refound.add_refoundrequest")
 def detail_admin_view(request, id):
     context = get_detail_context(request, id, admin=True)
     return render(request, "detail.html", context)
