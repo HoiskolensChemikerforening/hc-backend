@@ -40,7 +40,7 @@ def index(request):
 
 @login_required()
 def my_refounds(request):
-    refound_requests = RefoundRequest.objects.filter(user=request.user)
+    refound_requests = RefoundRequest.objects.filter(user=request.user).order_by("-created")
     context = {
         "refound_requests":refound_requests
     }
@@ -50,7 +50,7 @@ def my_refounds(request):
 @login_required()
 @permission_required("refound.add_refoundrequest")
 def admin_refounds(request):
-    refound_requests = RefoundRequest.objects.all()
+    refound_requests = RefoundRequest.objects.all().order_by("-created")
     context = {
         "refound_requests": refound_requests
     }
