@@ -73,7 +73,7 @@
         </div>
     {% for refound_request in approved %}
         <hr>
-        <a href="{% url "refound:detail" id=refound_request.id %}">
+        <a href="{% url "refound:admin_detail" id=refound_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
             <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>
@@ -136,7 +136,7 @@
         </div>
     {% for refound_request in rejected %}
         <hr>
-        <a href="{% url "refound:detail" id=refound_request.id %}">
+        <a href="{% url "refound:admin_detail" id=refound_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
             <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>

@@ -54,6 +54,8 @@
             <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reject_request" id=refound.id %}">Avslå</a>
             <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Fullfør</a>
         </div>
+        {% else %}
+
         {% endif %}
         {% endif %}
         {% endif %}
@@ -80,7 +82,7 @@
                 <p><b>Pris:</b> {{receipt.price}} kr</p>
                 <hr>
                 <div style="display: flex; justify-content: center;width: 100%; min-height: 300px;">
-                <img src="{{ receipt.image.url }}" alt="kvittering{{ forloop.counter }}" style="max-width: 100%;max-height:300px;">
+                <img class="materialboxed" src="{{ receipt.image.url }}" alt="kvittering{{ forloop.counter }}" style="max-width: 100%;max-height:300px;">
                 </div>
         <hr>
     </div>
@@ -93,6 +95,12 @@
 {% endblock content %}
 
 {% block footer_script %}
-
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+  var materialboxes = document.querySelectorAll(".materialboxed");
+  console.log(materialboxes);
+  M.Materialbox.init(materialboxes);
+});
+</script>
 
 {% endblock footer_script %}
