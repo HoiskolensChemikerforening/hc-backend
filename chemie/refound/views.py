@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect,get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from .forms import RefoundForm, RefoundFormSet, AccountNumberForm
-from .models import Refound,RefoundRequest, STATUS
+from .models import Refound, RefoundRequest, STATUS
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Sum
+
 
 @login_required()
 def index(request):
@@ -27,34 +28,25 @@ def index(request):
                 refound.refoundrequest = refound_request
                 refound.save()
 
-
-            print("valid")
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Din søknad om {refound_request.get_total()} kr har blitt opprettet.",
+                extra_tags="Suksess",
+            )
             return redirect("refound:myrefounds")
 
-    context = {
-        "formset": formset,
-        "accountform": accountform,
-        "user": user
-    }
+    context = {"formset": formset, "accountform": accountform, "user": user}
     return render(request, "index.html", context)
+
 
 @login_required()
 def my_refounds(request):
-    refound_requests = RefoundRequest.objects.filter(user=request.user).order_by("-created")
-    context = {
-        "refound_requests":refound_requests
-    }
+    refound_requests = RefoundRequest.objects.filter(
+        user=request.user
+    ).order_by("-created")
+    context = {"refound_requests": refound_requests}
     return render(request, "myrefounds.html", context)
-
-
-"""@login_required()
-@permission_required("refound.add_refoundrequest")
-def admin_refounds(request):
-    refound_requests = RefoundRequest.objects.all().order_by("-created")
-    context = {
-        "refound_requests": refound_requests
-    }
-    return render(request, "adminrefounds.html", context)"""
 
 
 def get_detail_context(request, id, admin=False):
@@ -71,14 +63,16 @@ def get_detail_context(request, id, admin=False):
         "refound": refound,
         "receipts": receipts,
         "status": refound.get_status(),
-        "admin": admin
+        "admin": admin,
     }
     return context
+
 
 @login_required()
 def detail_view(request, id):
     context = get_detail_context(request, id, admin=False)
     return render(request, "detail.html", context)
+
 
 @login_required()
 @permission_required("refound.add_refoundrequest")
@@ -99,7 +93,8 @@ def approve_request(request, id):
         f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt godkjent.",
         extra_tags="Godkjent",
     )
-    return redirect("refound:admin_detail", id=refound.id)
+    return redirect("refound:admin_refounds")
+
 
 @login_required()
 @permission_required("refound.add_refoundrequest")
@@ -113,7 +108,8 @@ def reject_request(request, id):
         f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt avslått.",
         extra_tags="Avslått",
     )
-    return redirect("refound:admin_detail", id=refound.id)
+    return redirect("refound:admin_refounds")
+
 
 def reset_status(request, id):
     refound = get_object_or_404(RefoundRequest, id=id)
@@ -128,21 +124,21 @@ def reset_status(request, id):
     return redirect("refound:admin_detail", id=refound.id)
 
 
-
 def admin_dashboard(request, annual=False, year=None):
-    years=None
+    years = None
     if annual:
         refounds = RefoundRequest.get_refound_request_annual(year)
     else:
         refounds = RefoundRequest.objects.all()
-        years = set([r.date.year for r in Refound.objects.distinct("date__year")])
+        years = set(
+            [r.date.year for r in Refound.objects.distinct("date__year")]
+        )
     rejected = refounds.filter(status=STATUS.REJECTED).order_by("-created")
     approved = refounds.filter(status=STATUS.APPROVED).order_by("-created")
     pending = refounds.filter(status=STATUS.PENDING).order_by("-created")
     rejectsum = sum([r.get_total() for r in rejected])
     pendingsum = sum([r.get_total() for r in pending])
     approvedsum = sum([r.get_total() for r in approved])
-
 
     if len(pending) > 0 and annual:
         message = "" if len(pending) == 1 else "er"
@@ -162,15 +158,17 @@ def admin_dashboard(request, annual=False, year=None):
         "approvedsum": approvedsum,
         "year": year,
         "annual": annual,
-        "years": years
+        "years": years,
     }
     return context
+
 
 @login_required()
 @permission_required("refound.add_refoundrequest")
 def annual_account_detail(request, year):
     context = admin_dashboard(request, annual=True, year=year)
     return render(request, "annual_report.html", context)
+
 
 @login_required()
 @permission_required("refound.add_refoundrequest")
@@ -186,8 +184,3 @@ def delete_annual_report(request, year):
     for refound in refounds:
         refound.delete()
     return redirect("refound:admin_refounds")
-
-
-
-
-
