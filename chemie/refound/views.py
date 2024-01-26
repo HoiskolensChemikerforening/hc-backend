@@ -99,7 +99,7 @@ def approve_request(request, id):
         f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt godkjent.",
         extra_tags="Godkjent",
     )
-    return redirect("refound:detail", id=refound.id)
+    return redirect("refound:admin_detail", id=refound.id)
 
 @login_required()
 @permission_required("refound.add_refoundrequest")
@@ -113,7 +113,19 @@ def reject_request(request, id):
         f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt avslått.",
         extra_tags="Avslått",
     )
-    return redirect("refound:detail", id=refound.id)
+    return redirect("refound:admin_detail", id=refound.id)
+
+def reset_status(request, id):
+    refound = get_object_or_404(RefoundRequest, id=id)
+    refound.status = 2
+    refound.save()
+    messages.add_message(
+        request,
+        messages.WARNING,
+        f'Statusen på {refound.user.first_name}s søknad om {refound.get_total()} kr har blitt satt til "Under behandling".',
+        extra_tags="Nullstilt",
+    )
+    return redirect("refound:admin_detail", id=refound.id)
 
 
 

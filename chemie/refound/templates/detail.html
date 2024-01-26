@@ -49,14 +49,16 @@
         <hr>
         {% if admin %}
         {% if perms.refound.delete_refoundrequest %}
-        {% if refound.status == 2 %}
+
         <div style="width: 100%; display: flex; justify-content: center;">
+        {% if refound.status == 2 %}
             <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reject_request" id=refound.id %}">Avslå</a>
             <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Fullfør</a>
-        </div>
-        {% else %}
-
+             {% else %}
+            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reset_request" id=refound.id %}">Tilbakestill status</a>
         {% endif %}
+        </div>
+
         {% endif %}
         {% endif %}
 
