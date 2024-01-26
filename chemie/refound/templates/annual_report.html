@@ -53,7 +53,7 @@
 
     <ul class="collapsible">
     <li>
-      <div class="collapsible-header"><i class="material-icons" style="color:green">check</i> <b>Fullført</b></div>
+      <div class="collapsible-header"><i class="material-icons" style="color:green">check</i> <b>Fullført ({{ approved|length }})</b></div>
       <div class="collapsible-body">
       <div class="card">
 
@@ -83,7 +83,7 @@
       </div>
     </li>
     <li>
-      <div class="collapsible-header"><i class="material-icons" style="color:#f9cf00">access_time</i> <b>Under behandling</b></div>
+      <div class="collapsible-header"><i class="material-icons" style="color:#f9cf00">access_time</i> <b>Under behandling ({{ pending|length }})</b></div>
       <div class="collapsible-body">
       <div class="card">
 
@@ -113,7 +113,7 @@
       </div>
     </li>
     <li>
-        <div class="collapsible-header"><i class="material-icons" style="color:red">close</i><b>Avvist</b></div>
+        <div class="collapsible-header"><i class="material-icons" style="color:red">close</i><b>Avvist ({{ rejected|length }})</b></div>
       <div class="collapsible-body">
       <div class="card">
 

@@ -106,9 +106,9 @@ def reject_request(request, id):
 
 def annual_account_detail(request, year):
     refounds = RefoundRequest.objects.filter(refound__date__year=year)
-    rejected = refounds.filter(status=STATUS.REJECTED)
-    approved = refounds.filter(status=STATUS.APPROVED)
-    pending = refounds.filter(status=STATUS.PENDING)
+    rejected = refounds.filter(status=STATUS.REJECTED).order_by("-created")
+    approved = refounds.filter(status=STATUS.APPROVED).order_by("-created")
+    pending = refounds.filter(status=STATUS.PENDING).order_by("-created")
     rejectsum = sum([r.get_total() for r in rejected])
     pendingsum = sum([r.get_total() for r in pending])
     approvedsum = sum([r.get_total() for r in approved])
