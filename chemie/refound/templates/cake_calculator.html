@@ -63,7 +63,7 @@ cakeInputs.forEach((inputElement) => {
             let value = parseFloat(element.value) || 0;
             sum += (value * cakeFactors[element.name]);
         })
-        cakeprice.innerHTML = `<b>Kakepris: </b> ${Math.round(sum * 100) / 100} kr`
+        cakeprice.innerHTML = `<b>Kakepris: </b> ${Math.round(sum * 100) / 100} kr`;
     })
 });
 
