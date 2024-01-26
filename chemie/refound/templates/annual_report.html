@@ -71,15 +71,7 @@
             <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
-            {% if refound_request.status == 1 %}
-                <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
-            {%  endif %}
-            {% if refound_request.status == 2 %}
-                <i class="material-icons" style="color: yellow; font-size: 3rem">hourglass_empty</i>
-            {%  endif %}
-            {% if refound_request.status == 3 %}
                 <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
-            {%  endif %}
         </div>
         </div>
 
@@ -109,15 +101,7 @@
             <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
-            {% if refound_request.status == 1 %}
-                <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
-            {%  endif %}
-            {% if refound_request.status == 2 %}
-                <i class="material-icons" style="color: #f9cf00; font-size: 3rem">access_time</i>
-            {%  endif %}
-            {% if refound_request.status == 3 %}
-                <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
-            {%  endif %}
+            <i class="material-icons" style="color: #f9cf00; font-size: 3rem">access_time</i>
         </div>
         </div>
 
@@ -147,15 +131,7 @@
             <p>{{ refound_request.user.first_name }} {{ refound_request.user.last_name }} ({{ refound_request.get_total }} kr)</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
-            {% if refound_request.status == 1 %}
                 <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
-            {%  endif %}
-            {% if refound_request.status == 2 %}
-                <i class="material-icons" style="color: yellow; font-size: 3rem">hourglass_empty</i>
-            {%  endif %}
-            {% if refound_request.status == 3 %}
-                <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
-            {%  endif %}
         </div>
         </div>
 
