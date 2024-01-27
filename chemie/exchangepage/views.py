@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm
 from django.contrib import messages
 # Create your views here.
@@ -123,13 +123,45 @@ def createViews(request):
 
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):
-    experiences = Experience.objects.all()
+    experiences = Experience.objects.all().order_by("id")
     context = {'experiences':experiences}
     return render(request, "admin.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminDetailViews(request, pk):
-    return render(request, "admindetail.html")
+    experience = get_object_or_404(Experience, pk=pk)
+    travelletter = experience.travelletter
+    question = experience.question
+
+    if request.method == 'POST':
+        travelletterform = TravelletterForm(request.POST, instance=travelletter)
+        experienceform = ExperienceForm(request.POST, instance=experience)
+        questionform = QuestionsForm(request.POST, instance=question)
+
+        if experienceform.is_valid() and travelletterform.is_valid() and questionform.is_valid():
+            travelletterform.save()
+            questionform.save()
+            experienceform.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Reisebrevet er oppdatert!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:admin')  # Redirect to the desired page after successful editing
+
+    else:
+        travelletterform = TravelletterForm(instance=travelletter)
+        experienceform = ExperienceForm(instance=experience)
+        questionform = QuestionsForm(instance=question)
+
+    context = {
+        'experienceform': experienceform,
+        'travelletterform': travelletterform,
+        'questionform': questionform
+    }
+    return render(request, "admindetail.html", context)
 
 
 

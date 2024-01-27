@@ -15,10 +15,11 @@ Admin
 
 {% load material_form %}
 {% block content %}
+<p class="flow-text">Velg reisebrev å endre!</p>
   <ul class="collection">
     {% for experience in experiences %}
        <div class="col s12 m6 l3" style="padding-bottom: 5px">
-              <a href="{% url 'exchangepage:admindetail' experience.travelletter.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">person</i>
+              <a href="{% url 'exchangepage:admindetail' experience.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">person</i>
                 <div style="display: flex;flex-direction: row;justify-content: space-between">
                   <div style="padding-right: 10px">{{experience.travelletter.user}}</div>
                   <div style="padding-right: 10px">{{experience.travelletter.city}}</div>
