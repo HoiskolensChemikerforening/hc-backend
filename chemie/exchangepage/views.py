@@ -123,7 +123,13 @@ def createViews(request):
 
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):
-    return render(request, "admin.html")
+    experiences = Experience.objects.all()
+    context = {'experiences':experiences}
+    return render(request, "admin.html", context)
+
+@permission_required("exchangepage.change_travelletter")
+def adminDetailViews(request, pk):
+    return render(request, "admindetail.html")
 
 
 

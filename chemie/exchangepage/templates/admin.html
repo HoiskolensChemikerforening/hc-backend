@@ -10,11 +10,24 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-
+Admin
 {% endblock nav_sub_header %}
 
 {% load material_form %}
 {% block content %}
+  <ul class="collection">
+    {% for experience in experiences %}
+       <div class="col s12 m6 l3" style="padding-bottom: 5px">
+              <a href="{% url 'exchangepage:admindetail' experience.travelletter.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">person</i>
+                <div style="display: flex;flex-direction: row;justify-content: space-between">
+                  <div style="padding-right: 10px">{{experience.travelletter.user}}</div>
+                  <div style="padding-right: 10px">{{experience.travelletter.city}}</div>
+                </div>
+              </a>
+            </div>
+    {% endfor %}
+  </ul>
+
 
 {% endblock content %}
 
