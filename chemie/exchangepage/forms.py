@@ -25,26 +25,10 @@ class TravelletterForm(forms.ModelForm):
         model = Travelletter
         fields = ['user', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
 
-
-
 class ExperienceForm(forms.ModelForm):
-    questions_info = QuestionsForm()
-    travelletter_info = TravelletterForm()
     class Meta:
         model = Experience
         fields = ['answer']
-
-    def save(self, commit=True):
-        questions_instance = self.questions_info.save(commit)
-        travelletter_instance = self.travelletter_info.save(commit)
-        experience_instance = super().save(commit=False)
-        experience_instance.question = questions_instance
-        experience_instance.travelletter = travelletter_instance
-
-        if commit:
-            experience_instance.save()
-
-        return experience_instance
 
 
 

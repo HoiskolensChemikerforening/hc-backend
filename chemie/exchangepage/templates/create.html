@@ -23,10 +23,9 @@
   <form method="POST" enctype="multipart/form-data">{% csrf_token %}
     <div class="card-content">
 
-      {{ form.travelletter_info.as_p }}
-      {{ form.questions_info.as_p }}
-      {{ form.as_p }}
-      {{ form.errors }}
+      {{ travelletterform.as_p }}
+      {{ questionform.as_p }}
+      {{ experienceform.as_p }}
 
       <div class="card-action">
         <div class="right-align">

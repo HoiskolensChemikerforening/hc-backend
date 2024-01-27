@@ -2,8 +2,8 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404
-from .forms import IndexForm, ExperienceForm
-
+from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm
+from django.contrib import messages
 # Create your views here.
 
 @login_required()
@@ -88,15 +88,36 @@ def detailViews(request, pk):
 @permission_required("exchangepage.add_travelletter")
 def createViews(request):
     if request.method == 'POST':
-        form = ExperienceForm(request.POST)
-        if form.is_valid():
-            form.save(commit=False)
+        travelletterform = TravelletterForm(request.POST)
+        experienceform = ExperienceForm(request.POST)
+        questionform = QuestionsForm(request.POST)
+        if experienceform.is_valid() and travelletterform.is_valid() and questionform.is_valid():
+            travelletter = travelletterform.save()
+            question = questionform.save()
+            experience = experienceform.save(commit=False)
+            experience.travelletter = travelletter
+            experience.question = question
+            experience.save()  #links the models
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Nytt reisebrev er lagt inn!",
+                extra_tags="Suksess",
+            )
+            travelletterform = TravelletterForm() #show empty forms after completed
+            experienceform = ExperienceForm()
+            questionform = QuestionsForm()
+
     else:
-        form = ExperienceForm
-        print(form.errors)
+        travelletterform = TravelletterForm()
+        experienceform = ExperienceForm()
+        questionform = QuestionsForm()
 
     context = {
-        'form':form
+        'experienceform':experienceform,
+        'travelletterform':travelletterform,
+        'questionform':questionform
     }
     return render(request, "create.html", context)
 
