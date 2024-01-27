@@ -76,7 +76,7 @@ class Travelletter(models.Model):
 
 
 class Questions(models.Model):
-    question = models.CharField(max_length=200)
+    question = models.CharField(max_length=200, verbose_name="Spørsmål")
     def __str__(self):
         return self.question
 
