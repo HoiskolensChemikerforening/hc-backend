@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator
+from django.core.validators import MinLengthValidator,MinValueValidator
 from extended_choices import Choices
 
 STATUS = Choices(
@@ -63,7 +63,7 @@ class Refound(models.Model):
     store = models.CharField(max_length=50, verbose_name="Kjøpssted")
     item = models.CharField(max_length=500, verbose_name="Varer")
     event = models.CharField(max_length=50, verbose_name="Hensikt/Arragement")
-    price = models.IntegerField(verbose_name="Pris")
+    price = models.IntegerField(verbose_name="Pris", validators=[MinValueValidator(0)],)
     image = models.ImageField(upload_to="receipts", verbose_name="Kvittering")
 
     def __str__(self):
