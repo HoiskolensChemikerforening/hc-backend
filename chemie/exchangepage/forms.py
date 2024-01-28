@@ -28,11 +28,11 @@ class TravelletterForm(forms.ModelForm):
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
-        fields = ['answer']
+        fields = ['question', 'answer']
 
 
-QuestionsFormSet = modelformset_factory(Questions, fields=["question"], extra=1)
-ExperienceFormSet = modelformset_factory(Experience, fields=["answer"], extra=1)
+#QuestionsFormSet = modelformset_factory(Questions, fields=["question"], extra=1)
+ExperienceFormSet = modelformset_factory(Experience, fields=["question", "answer",], extra=1)
 
 
 

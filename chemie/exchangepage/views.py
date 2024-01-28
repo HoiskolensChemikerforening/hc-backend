@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, QuestionsFormSet, ExperienceFormSet
+from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet
 from django.contrib import messages
 # Create your views here.
 
@@ -89,18 +89,14 @@ def detailViews(request, pk):
 def createViews(request):
     if request.method == 'POST':
         travelletterform = TravelletterForm(request.POST)
-        experienceform = ExperienceForm(request.POST)
-        questionform = QuestionsForm(request.POST)
-        #questionformset = QuestionFormset(request.POST)
-        if experienceform.is_valid() and travelletterform.is_valid() and questionform.is_valid(): #questionformset.is_valid()
+        experienceformset = ExperienceFormSet(request.POST)
+        if experienceformset.is_valid() and travelletterform.is_valid():
             travelletter = travelletterform.save()
-            question = questionform.save()
-            experience = experienceform.save(commit=False)
-            experience.travelletter = travelletter
-            experience.question = question
-            experience.save()  #links the models
-            #for q in questionformset:
-            #   q.save()
+
+            for experience in experienceformset:
+                experience.save(commit=False)
+                experience.travelletter = travelletter
+                experience.save()  #links the models
 
             messages.add_message(
                 request,
@@ -109,21 +105,16 @@ def createViews(request):
                 extra_tags="Suksess",
             )
             travelletterform = TravelletterForm() #show empty forms after completed
-            experienceform = ExperienceForm()
-            questionform = QuestionsForm()
-            #questionformset = QuestionFormSet(queryset=Questions.objects.none())
+            experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
+
 
     else:
         travelletterform = TravelletterForm()
-        experienceform = ExperienceForm()
-        questionform = QuestionsForm()
-        #questionformset = QuestionFormSet(queryset=Questions.objects.none())
+        experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
 
     context = {
-        'experienceform':experienceform,
+        'experienceformset':experienceformset,
         'travelletterform':travelletterform,
-        'questionform':questionform
-        #'questionformset':questionformset
     }
     return render(request, "create.html", context)
 
