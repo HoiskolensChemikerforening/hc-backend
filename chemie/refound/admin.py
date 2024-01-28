@@ -17,4 +17,16 @@ class RefoundAdmin(admin.ModelAdmin):
 @admin.register(Refound)
 class RefoundAdmin(admin.ModelAdmin):
     ordering = ("date",)
-    list_display = ("date", "store", "event", "price")
+    list_display = ("receipt","date", "store", "event", "price", "request_user", "request_sum", "request_date")
+
+    def request_user(self, obj):
+        return f"{obj.refoundrequest.user.first_name} {obj.refoundrequest.user.last_name}"
+
+    def request_sum(self, obj):
+        return f"{obj.refoundrequest.get_total()} kr"
+
+    def request_date(self, obj):
+        return f"{obj.refoundrequest.created.strftime('%d/%m/%Y')}"
+
+    def receipt(self, obj):
+        return f"Receipt ({obj.price} kr)"
