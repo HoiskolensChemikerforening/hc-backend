@@ -68,6 +68,8 @@ class BaseEvent(models.Model):
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
+    tentative = models.BooleanField(default= False, verbose_name="tentativ")
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.allowed_grades_previous = self.allowed_grades

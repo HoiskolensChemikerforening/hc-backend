@@ -1,0 +1,97 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+  <link rel="stylesheet" href="{% static 'css/electofood.css' %}" type="text/css" media="screen,projection">
+{% endblock %}
+
+{% block nav_header %}
+  Valgomat
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+<div>
+    <div>
+        {% for electionform in electionforms %}
+            <div class="card">
+                <div class="card-body cardstyle">
+                    <div class="secondary-title">Valgomat</div>
+                    <div class="question decrease-margin">{{ electionform }}</div>
+                    <p>{{ electionform.description }}</p>
+                    <!---<p>HCs valgomat hjelper deg å finne vervet som passer best til deg! Husk at en valgomat ikke er en fasit, men ett av flere råd. Du bestemmer!</p>--->
+                    <div slot="navigation">
+                        {% if answeredList|index:forloop.counter0  %}
+                        <div class="container-btn">
+                              <!-- Dropdown Trigger -->
+                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}start'>Start</a>
+
+                              <!-- Dropdown Structure -->
+                              <ul id='dropdown{{ electionform.id }}start' class='dropdown-content dropdownfix'>
+                                    <li>
+                                        <a href="{% url "valgomat:valgomat_form"  electionform.id %}">Start</a>
+                                    </li>
+                                    <li>
+                                        <a href="{% url "valgomat:valgomat_result" electionform.id %}">Resultater</a>
+                                    </li>
+                              </ul>
+                        </div>
+                        {% else %}
+                        <div class="container-btn"><a class="btn btn-light btn-block" href="{% url "valgomat:valgomat_form"  electionform.id %}"><span class="container-btn">Start</span></a></div>
+                        {% endif %}
+                        <!-- Dropdown Trigger -->
+                        {% if committees %}
+                        <div class="container-btn">
+                              <!-- Dropdown Trigger -->
+                              <a class='dropdown-trigger btn btn-light btn-block' href='#' data-target='dropdown{{ electionform.id }}huhu'>Komite</a>
+
+                              <!-- Dropdown Structure -->
+                              <ul id='dropdown{{ electionform.id }}huhu' class='dropdown-content dropdownfix'>
+                                  {% for committee in committees %}
+                                        <li>
+                                            <a href="{% url "valgomat:committee_valgomat_form"  electionform.id committee.id %}">{{ committee }}</a>
+                                        </li>
+                                  {% endfor %}
+                              </ul>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+    {% if perms.electofood %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+    {% if perms.electofood.delete_social %}
+  <li>
+    <a class="btn-floating blue" href="{% url "valgomat:valgomat_opprett" %}"><i class="material-icons">add</i></a>
+    <a class="btn-floating mobile-fab-tip">Ny valgomat</a>
+  </li>
+          {%  endif %}
+      </ul>
+</div>
+    {%  endif %}
+
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.dropdown-trigger');
+    var instances = M.Dropdown.init(elems, options);
+  });
+
+  // Or with jQuery
+
+  $('.dropdown-trigger').dropdown();
+</script>
+{% endblock %}

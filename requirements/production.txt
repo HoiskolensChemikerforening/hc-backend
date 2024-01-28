@@ -12,7 +12,7 @@ babel==2.10.3
     # via invoicegenerator
 bleach==3.3.1
     # via wiki
-certifi==2021.5.30
+certifi==2022.12.7
     # via requests
 cffi==1.14.6
     # via cryptography
@@ -22,7 +22,7 @@ coverage==4.5.2
     # via
     #   -r base.in
     #   pytest-cov
-cryptography==3.3.2
+cryptography==39.0.1
     # via
     #   apns2
     #   http-ece
@@ -130,6 +130,8 @@ markdown2==2.4.0
     # via
     #   -r base.in
     #   django-markdown2
+markupsafe==2.1.2
+    # via werkzeug
 more-itertools==8.9.0
     # via pytest
 olefile==0.46
@@ -140,7 +142,7 @@ packaging==21.0
     #   pytest
 passlib==1.7.4
     # via django-hashers-passlib
-pillow==9.0.1
+pillow==9.3.0
     # via
     #   invoicegenerator
     #   reportlab
@@ -149,7 +151,7 @@ pluggy==0.13.1
     # via pytest
 psycopg2-binary==2.8.6
     # via -r base.in
-py==1.10.0
+py==1.11.0
     # via
     #   pytest
     #   pytest-forked
@@ -158,10 +160,8 @@ py-vapid==1.8.2
 pycparser==2.20
     # via cffi
 pyjwt==1.7.1
-    # via
-    #   apns2
-    #   djangorestframework-simplejwt
-pyopenssl==18.0.0
+    # via apns2
+pyopenssl==23.1.0
     # via -r base.in
 pyparsing==2.4.7
     # via packaging
@@ -203,7 +203,6 @@ requests==2.26.0
 six==1.16.0
     # via
     #   bleach
-    #   cryptography
     #   django-extensions
     #   freezegun
     #   pyopenssl
@@ -222,7 +221,7 @@ wcwidth==0.2.5
     # via pytest
 webencodings==0.5.1
     # via bleach
-werkzeug==0.15.5
+werkzeug==2.2.3
     # via -r base.in
 wiki==0.7.9
     # via -r base.in

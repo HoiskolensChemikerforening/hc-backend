@@ -2,7 +2,7 @@
 {% load material_form %}
 
 {% block nav_sub_header %}
-  Opprett bedpres
+  Opprett Arrangement
 {% endblock nav_sub_header %}
 
 {# Extra javascript that provides Norwegian locale for time and datepickers#}
@@ -14,8 +14,8 @@
 {# Breadcrumbs #}
 {% block breadcrumbs %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
-    <a href="{% url "events:create_social" %}" class="breadcrumb">Opprett</a>
+    <a href="{% url "events:index_bedpres" %}" class="breadcrumb">Karriere </a>
+    <a href="{% url "events:create_bedpres" %}" class="breadcrumb">Opprett</a>
   </div>
 {% endblock %}
 
