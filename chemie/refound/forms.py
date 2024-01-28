@@ -26,10 +26,15 @@ class RefoundForm(forms.ModelForm):
         fields = ["date", "store", "item", "event", "price", "image"]
         widgets = {"date": DatePickerInput()}
 
+    def __init__(self, *arg, **kwarg):
+        super(RefoundForm, self).__init__(*arg, **kwarg)
+        self.empty_permitted = False
+
 
 RefoundFormSet = modelformset_factory(
     Refound,
-    fields=["date", "store", "item", "event", "price", "image"],
-    widgets={"date": DatePickerInput()},
+    form=RefoundForm,
     extra=1,
 )
+
+
