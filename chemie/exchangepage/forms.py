@@ -2,7 +2,7 @@ from django import forms
 import material as M
 from .models import Travelletter, Experience, Questions
 from chemie.customprofile.models import Profile
-from django.forms import inlineformset_factory
+from django.forms import modelformset_factory
 class IndexForm(forms.Form):
     OPTIONS = [
         (1, 'Solfaktor'),
@@ -29,6 +29,11 @@ class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ['answer']
+
+
+QuestionsFormSet = modelformset_factory(Questions, fields=["question"], extra=1)
+ExperienceFormSet = modelformset_factory(Experience, fields=["answer"], extra=1)
+
 
 
 

@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm
+from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, QuestionsFormSet, ExperienceFormSet
 from django.contrib import messages
 # Create your views here.
 
@@ -91,13 +91,16 @@ def createViews(request):
         travelletterform = TravelletterForm(request.POST)
         experienceform = ExperienceForm(request.POST)
         questionform = QuestionsForm(request.POST)
-        if experienceform.is_valid() and travelletterform.is_valid() and questionform.is_valid():
+        #questionformset = QuestionFormset(request.POST)
+        if experienceform.is_valid() and travelletterform.is_valid() and questionform.is_valid(): #questionformset.is_valid()
             travelletter = travelletterform.save()
             question = questionform.save()
             experience = experienceform.save(commit=False)
             experience.travelletter = travelletter
             experience.question = question
             experience.save()  #links the models
+            #for q in questionformset:
+            #   q.save()
 
             messages.add_message(
                 request,
@@ -108,30 +111,38 @@ def createViews(request):
             travelletterform = TravelletterForm() #show empty forms after completed
             experienceform = ExperienceForm()
             questionform = QuestionsForm()
+            #questionformset = QuestionFormSet(queryset=Questions.objects.none())
 
     else:
         travelletterform = TravelletterForm()
         experienceform = ExperienceForm()
         questionform = QuestionsForm()
+        #questionformset = QuestionFormSet(queryset=Questions.objects.none())
 
     context = {
         'experienceform':experienceform,
         'travelletterform':travelletterform,
         'questionform':questionform
+        #'questionformset':questionformset
     }
     return render(request, "create.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):
-    experiences = Experience.objects.all().order_by("id")
-    context = {'experiences':experiences}
+    travelletters = Travelletter.objects.all().order_by("id")
+    context = {'travelletters':travelletters}
     return render(request, "admin.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminDetailViews(request, pk):
-    experience = get_object_or_404(Experience, pk=pk)
-    travelletter = experience.travelletter
-    question = experience.question
+    travelletter = get_object_or_404(Travelletter, pk=pk)
+    experiences = travelletter.experiences.all()
+    questions = []
+    for experience in experiences:
+        questions.append(experience.question)
+
+    question = questions[0] #OBS TEST FJERN NÅR DYNAMIC FORMSETS
+    experience = experiences[0]
 
     if request.method == 'POST':
         travelletterform = TravelletterForm(request.POST, instance=travelletter)
