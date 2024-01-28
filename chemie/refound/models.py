@@ -34,6 +34,9 @@ class RefoundRequest(models.Model):
     def get_status(self):
         return STATUS[self.status - 1][1]
 
+    def get_amount_receipts(self):
+        return len(self.refound_set.all())
+
     def print_account_number(self):
         if len(self.account_number) == 11:
             return (
