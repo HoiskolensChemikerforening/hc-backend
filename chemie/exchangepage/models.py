@@ -12,7 +12,7 @@ class Travelletter(models.Model):
     hospitality   = models.IntegerField(default=0, verbose_name="Gjestfrihet")
     workLoad       = models.IntegerField(default=0, verbose_name="Arbeidsmengde")
     def __str__(self):
-        return self.user.user.first_name
+        return f"{self.user.user.first_name} {self.country}"
 
     @classmethod
     def country_avg(cls, country_name):

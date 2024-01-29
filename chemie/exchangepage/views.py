@@ -92,9 +92,9 @@ def createViews(request):
         experienceformset = ExperienceFormSet(request.POST)
         if experienceformset.is_valid() and travelletterform.is_valid():
             travelletter = travelletterform.save()
-
-            for experience in experienceformset:
-                experience.save(commit=False)
+            print(travelletter)
+            for form in experienceformset:
+                experience = form.save(commit=False)
                 experience.travelletter = travelletter
                 experience.save()  #links the models
 

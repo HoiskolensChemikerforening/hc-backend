@@ -30,8 +30,6 @@ class ExperienceForm(forms.ModelForm):
         model = Experience
         fields = ['question', 'answer']
 
-
-#QuestionsFormSet = modelformset_factory(Questions, fields=["question"], extra=1)
 ExperienceFormSet = modelformset_factory(Experience, fields=["question", "answer",], extra=1)
 
 
