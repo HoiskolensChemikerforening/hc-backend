@@ -157,6 +157,7 @@ def adminDetailViews(request, pk):
     context = {
         'experienceformset': experienceformset,
         'travelletterform': travelletterform,
+        'travelletter':travelletter
     }
     return render(request, "admindetail.html", context)
 
