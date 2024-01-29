@@ -2,7 +2,7 @@ from django import forms
 import material as M
 from .models import Travelletter, Experience, Questions
 from chemie.customprofile.models import Profile
-from django.forms import modelformset_factory
+from django.forms import modelformset_factory, BaseFormSet, BaseModelFormSet
 class IndexForm(forms.Form):
     OPTIONS = [
         (1, 'Solfaktor'),
@@ -30,7 +30,23 @@ class ExperienceForm(forms.ModelForm):
         model = Experience
         fields = ['question', 'answer']
 
-ExperienceFormSet = modelformset_factory(Experience, fields=["question", "answer",], extra=1)
+
+
+class SensibleFormset(BaseModelFormSet):
+    def total_form_count(self):
+        """Returns the total number of forms in this FormSet."""
+        if self.data or self.files:
+            return self.management_form.cleaned_data['TOTAL_FORMS']
+        else:
+            if self.initial_form_count() > 0:
+                total_forms = self.initial_form_count()
+            else:
+                total_forms = self.initial_form_count() + self.extra
+            if total_forms > self.max_num > 0:
+                total_forms = self.max_num
+            return total_forms
+
+ExperienceFormSet = modelformset_factory(Experience, form=ExperienceForm, extra=1, formset=SensibleFormset)
 
 
 

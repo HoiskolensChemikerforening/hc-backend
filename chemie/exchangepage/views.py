@@ -92,7 +92,7 @@ def createViews(request):
         experienceformset = ExperienceFormSet(request.POST)
         if experienceformset.is_valid() and travelletterform.is_valid():
             travelletter = travelletterform.save()
-            print(travelletter)
+
             for form in experienceformset:
                 experience = form.save(commit=False)
                 experience.travelletter = travelletter
@@ -128,22 +128,18 @@ def adminViews(request):
 def adminDetailViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = travelletter.experiences.all()
-    questions = []
-    for experience in experiences:
-        questions.append(experience.question)
-
-    question = questions[0] #OBS TEST FJERN NÅR DYNAMIC FORMSETS
-    experience = experiences[0]
 
     if request.method == 'POST':
         travelletterform = TravelletterForm(request.POST, instance=travelletter)
-        experienceform = ExperienceForm(request.POST, instance=experience)
-        questionform = QuestionsForm(request.POST, instance=question)
+        experienceformset = ExperienceFormSet(request.POST, queryset=experiences)
 
-        if experienceform.is_valid() and travelletterform.is_valid() and questionform.is_valid():
+        if experienceformset.is_valid() and travelletterform.is_valid():
             travelletterform.save()
-            questionform.save()
-            experienceform.save()
+
+            for form in experienceformset:
+                experience = form.save(commit=False)
+                experience.travelletter = travelletter
+                experience.save()  #links the models
 
             messages.add_message(
                 request,
@@ -155,13 +151,11 @@ def adminDetailViews(request, pk):
 
     else:
         travelletterform = TravelletterForm(instance=travelletter)
-        experienceform = ExperienceForm(instance=experience)
-        questionform = QuestionsForm(instance=question)
+        experienceformset = ExperienceFormSet(queryset=experiences)
 
     context = {
-        'experienceform': experienceform,
+        'experienceformset': experienceformset,
         'travelletterform': travelletterform,
-        'questionform': questionform
     }
     return render(request, "admindetail.html", context)
 
