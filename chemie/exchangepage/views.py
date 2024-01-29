@@ -106,6 +106,7 @@ def createViews(request):
             )
             travelletterform = TravelletterForm() #show empty forms after completed
             experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
+            return redirect('exchangepage:index')
 
 
     else:
@@ -159,5 +160,25 @@ def adminDetailViews(request, pk):
     }
     return render(request, "admindetail.html", context)
 
+@permission_required("exchangepage.change_travelletter")
+def createQuestionViews(request):
+    if request.method == 'POST':
+        questionform = QuestionsForm(request.POST)
+        if questionform.is_valid():
+            questionform.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Nytt spørsmål opprettet!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:index')  # Redirect to the desired page after successful editing
+
+    else:
+        questionform = QuestionsForm()
+
+    context = {'questionform':questionform}
+    return render(request, "createquestion.html", context)
 
 
