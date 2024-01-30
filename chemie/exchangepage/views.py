@@ -4,7 +4,6 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
 from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet
 from django.contrib import messages
-from django.views.generic import DeleteView
 # Create your views here.
 
 @login_required()

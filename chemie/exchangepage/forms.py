@@ -2,7 +2,7 @@ from django import forms
 import material as M
 from .models import Travelletter, Experience, Questions
 from chemie.customprofile.models import Profile
-from django.forms import modelformset_factory, BaseFormSet, BaseModelFormSet
+from django.forms import modelformset_factory, BaseModelFormSet
 class IndexForm(forms.Form):
     OPTIONS = [
         (1, 'Solfaktor'),
