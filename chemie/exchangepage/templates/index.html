@@ -138,9 +138,20 @@
     <i class="large material-icons">edit</i>
   </a>
   <ul>
-    {% include "permissions.html" %}
-    {% block permissions %}
-    {% endblock %}
+      {% if perms.exchangepage.change_travelletter %}
+        <li>
+          <a class="btn-floating yellow" href="{% url "exchangepage:admin" %}"><i
+              class="material-icons">sync</i></a>
+          <a class="btn-floating mobile-fab-tip">Rediger Reisebrev</a>
+        </li>
+      {% endif %}
+      {% if perms.exchangepage.change_travelletter %}
+        <li>
+          <a class="btn-floating yellow" href="{% url "exchangepage:adminquestion" %}"><i
+              class="material-icons">sync</i></a>
+          <a class="btn-floating mobile-fab-tip">Rediger Spørsmål</a>
+        </li>
+      {% endif %}
   </ul>
 </div>
 {% endif %}

@@ -182,4 +182,34 @@ def createQuestionViews(request):
     context = {'questionform':questionform}
     return render(request, "createquestion.html", context)
 
+@permission_required("exchangepage.change_travelletter")
+def adminQuestionViews(request):
+    questions = Questions.objects.all().order_by("id")
+    context = {'questions':questions}
+    return render(request, "adminquestion.html", context)
+
+@permission_required("exchangepage.change_travelletter")
+def adminQuestionDetailViews(request, pk):
+    question = get_object_or_404(Questions, pk=pk)
+
+    if request.method == 'POST':
+        questionform = QuestionsForm(request.POST, instance=question)
+        if questionform.is_valid():
+            questionform.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Spørsmålet er endret!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:adminquestion')  # Redirect to the desired page after successful editing
+
+    else:
+        questionform = QuestionsForm(instance=question)
+        print(questionform)
+
+    context = {'questionform':questionform}
+    return render(request, "adminquestiondetail.html", context)
+
 
