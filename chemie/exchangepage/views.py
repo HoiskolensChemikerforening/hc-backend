@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
 from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet
 from django.contrib import messages
+from django.views.generic import DeleteView
 # Create your views here.
 
 @login_required()
@@ -211,5 +212,18 @@ def adminQuestionDetailViews(request, pk):
 
     context = {'questionform':questionform}
     return render(request, "adminquestiondetail.html", context)
+
+def deleteTravelletter(request, pk):
+    query = Travelletter.objects.get(pk=pk)
+    query.delete()
+
+    messages.add_message(
+        request,
+        messages.WARNING,
+        f"Reisebrev slettet!",
+        extra_tags="Slettet",
+    )
+    return redirect('exchangepage:admin')
+
 
 

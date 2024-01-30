@@ -11,4 +11,5 @@ urlpatterns = [path("", views.index, name="index"),
                path("adminspørsmål/", views.adminQuestionViews, name="adminquestion"),
                path("adminspørsmål/<int:pk>/", views.adminQuestionDetailViews, name="adminquestiondetail"),
                path("admin/<int:pk>/", views.adminDetailViews, name="admindetail"),
+               path("admin/slett/<int:pk>", views.deleteTravelletter, name="deletetravelletter"),
                path("<str:city_name>/", views.cityPageViews, name="citypage")]
