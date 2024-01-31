@@ -79,7 +79,7 @@ class RefundRequest(models.Model):
         """
         return cls.objects.filter(refund__date__year=year).exclude(
             refund__date__year__lt=year
-        )
+        ).distinct()
 
 
 class Refund(models.Model):
