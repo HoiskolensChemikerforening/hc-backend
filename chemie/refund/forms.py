@@ -1,5 +1,5 @@
 from django import forms
-from .models import Refound, RefoundRequest
+from .models import Refund, RefundRequest
 from django.forms import modelformset_factory
 from django.core.validators import MinLengthValidator
 
@@ -13,10 +13,10 @@ class DatePickerInput(forms.DateTimeInput):
 
 class AccountNumberForm(forms.ModelForm):
     """
-    Form to create a RefoundRequest object.
+    Form to create a RefundRequest object.
     """
     class Meta:
-        model = RefoundRequest
+        model = RefundRequest
         fields = ["account_number"]
         widgets = {
             "account_number": forms.TextInput(
@@ -25,12 +25,12 @@ class AccountNumberForm(forms.ModelForm):
         }
 
 
-class RefoundForm(forms.ModelForm):
+class RefundForm(forms.ModelForm):
     """
-    Form to create a Refound object.
+    Form to create a Refund object.
     """
     class Meta:
-        model = Refound
+        model = Refund
         fields = ["date", "store", "item", "event", "price", "image"]
         widgets = {"date": DatePickerInput()}
 
@@ -38,13 +38,13 @@ class RefoundForm(forms.ModelForm):
         """
         Override __init__ to ensure that the form must contain data and can not be submitted empty.
         """
-        super(RefoundForm, self).__init__(*arg, **kwarg)
+        super(RefundForm, self).__init__(*arg, **kwarg)
         self.empty_permitted = False
 
-# Create a formset for the refound object to enable multible refound forms on one page.
-RefoundFormSet = modelformset_factory(
-    Refound,
-    form=RefoundForm,
+# Create a formset for the refund object to enable multible refund forms on one page.
+RefundFormSet = modelformset_factory(
+    Refund,
+    form=RefundForm,
     extra=1,
 )
 

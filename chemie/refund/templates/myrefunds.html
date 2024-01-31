@@ -8,8 +8,8 @@
     <div class="row">
     <div class="col s12">
       <ul class="tabs z-depth-1">
-        <li class="tab col s6"><a target="_self" href="{% url "refound:index" %}">Søk om refusjon</a></li>
-        <li class="tab col s6"><a class="active" target="_self" href="{% url "refound:myrefounds" %}">Mine refusjoner</a></li>
+        <li class="tab col s6"><a target="_self" href="{% url "refund:index" %}">Søk om refusjon</a></li>
+        <li class="tab col s6"><a class="active" target="_self" href="{% url "refund:myrefunds" %}">Mine refusjoner</a></li>
       </ul>
     </div>
     </div>
@@ -21,22 +21,22 @@
             <p style="font-weight: bold"> Refusjon </p>
             <p style="font-weight: bold;"> Status </p>
         </div>
-    {% for refound_request in refound_requests %}
+    {% for refund_request in refund_requests %}
         <hr>
-        <a href="{% url "refound:detail" id=refound_request.id %}">
+        <a href="{% url "refund:detail" id=refund_request.id %}">
         <div style="width: 100%; display: flex; justify-content: space-between">
         <div>
-             <p style="font-weight: bold; color: black">{{ refound_request.created.date }}</p>
-            <p>Total sum: {{ refound_request.get_total }} kr</p>
+             <p style="font-weight: bold; color: black">{{ refund_request.created.date }}</p>
+            <p>Total sum: {{ refund_request.get_total }} kr</p>
         </div>
         <div style="padding-top: 4px; padding-right: 5px;">
-            {% if refound_request.status == 1 %}
+            {% if refund_request.status == 1 %}
                 <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
             {%  endif %}
-            {% if refound_request.status == 2 %}
+            {% if refund_request.status == 2 %}
                 <i class="material-icons" style="color: #f9cf00; font-size: 3rem">access_time</i>
             {%  endif %}
-            {% if refound_request.status == 3 %}
+            {% if refund_request.status == 3 %}
                 <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
             {%  endif %}
         </div>

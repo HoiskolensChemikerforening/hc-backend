@@ -1,13 +1,13 @@
 from . import views
 from django.urls import path
 
-app_name = "refound"
+app_name = "refund"
 
 urlpatterns = [
     path("", views.index, name="index"),
-    path("mine/", views.my_refounds, name="myrefounds"),
+    path("mine/", views.my_refunds, name="myrefunds"),
     path("detalj/<int:id>/", views.detail_view, name="detail"),
-    path("admin/", views.admin_refounds, name="admin_refounds"),
+    path("admin/", views.admin_refunds, name="admin_refunds"),
     path("admin/<int:id>/avsla/", views.reject_request, name="reject_request"),
     path(
         "admin/<int:id>/godkjenn/",

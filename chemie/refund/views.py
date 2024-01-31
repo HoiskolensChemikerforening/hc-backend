@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RefoundForm, RefoundFormSet, AccountNumberForm
-from .models import Refound, RefoundRequest, STATUS
+from .forms import RefundForm, RefundFormSet, AccountNumberForm
+from .models import Refund, RefundRequest, STATUS
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
 from django.db.models import Sum
@@ -10,59 +10,59 @@ from django.db.models import Sum
 def index(request):
     accountform = AccountNumberForm()
     user = request.user
-    formset = RefoundFormSet(queryset=Refound.objects.none())
+    formset = RefundFormSet(queryset=Refund.objects.none())
 
     if request.POST:
         accountform = AccountNumberForm(data=request.POST)
-        formset = RefoundFormSet(data=request.POST, files=request.FILES)
+        formset = RefundFormSet(data=request.POST, files=request.FILES)
         if formset.is_valid() and accountform.is_valid():
 
-            # Save RefoundRequest instance
-            refound_request = accountform.save(commit=False)
-            refound_request.user = request.user
-            refound_request.save()
+            # Save RefundRequest instance
+            refund_request = accountform.save(commit=False)
+            refund_request.user = request.user
+            refund_request.save()
 
             # Save Receipts
             for form in formset:
-                refound = form.save(commit=False)
-                refound.refoundrequest = refound_request
-                refound.save()
+                refund = form.save(commit=False)
+                refund.refundrequest = refund_request
+                refund.save()
 
             messages.add_message(
                 request,
                 messages.SUCCESS,
-                f"Din søknad om {refound_request.get_total()} kr har blitt opprettet.",
+                f"Din søknad om {refund_request.get_total()} kr har blitt opprettet.",
                 extra_tags="Suksess",
             )
-            return redirect("refound:myrefounds")
+            return redirect("refund:myrefunds")
 
     context = {"formset": formset, "accountform": accountform, "user": user}
     return render(request, "index.html", context)
 
 
 @login_required()
-def my_refounds(request):
-    refound_requests = RefoundRequest.objects.filter(
+def my_refunds(request):
+    refund_requests = RefundRequest.objects.filter(
         user=request.user
     ).order_by("-created")
-    context = {"refound_requests": refound_requests}
-    return render(request, "myrefounds.html", context)
+    context = {"refund_requests": refund_requests}
+    return render(request, "myrefunds.html", context)
 
 
 def get_detail_context(request, id, admin=False):
-    refound = get_object_or_404(RefoundRequest, id=id)
+    refund = get_object_or_404(RefundRequest, id=id)
 
-    if not request.user.has_perm("refound.delete_refoundrequest"):
-        if request.user != refound.user:
-            return redirect("refound:myrefounds")
+    if not request.user.has_perm("refund.delete_refundrequest"):
+        if request.user != refund.user:
+            return redirect("refund:myrefunds")
 
-    receipts = refound.refound_set.all()
+    receipts = refund.refund_set.all()
     context = {
-        # "refound_requests": refound_requests,
+        # "refund_requests": refund_requests,
         "user": request.user,
-        "refound": refound,
+        "refund": refund,
         "receipts": receipts,
-        "status": refound.get_status(),
+        "status": refund.get_status(),
         "admin": admin,
     }
     return context
@@ -75,67 +75,67 @@ def detail_view(request, id):
 
 
 @login_required()
-@permission_required("refound.add_refoundrequest")
+@permission_required("refund.add_refundrequest")
 def detail_admin_view(request, id):
     context = get_detail_context(request, id, admin=True)
     return render(request, "detail.html", context)
 
 
 @login_required()
-@permission_required("refound.add_refoundrequest")
+@permission_required("refund.add_refundrequest")
 def approve_request(request, id):
-    refound = get_object_or_404(RefoundRequest, id=id)
-    refound.status = 3
-    refound.save()
+    refund = get_object_or_404(RefundRequest, id=id)
+    refund.status = 3
+    refund.save()
     messages.add_message(
         request,
         messages.SUCCESS,
-        f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt godkjent.",
+        f"{refund.user.first_name}s søknad om {refund.get_total()} kr har blitt godkjent.",
         extra_tags="Godkjent",
     )
-    return redirect("refound:admin_refounds")
+    return redirect("refund:admin_refunds")
 
 
 @login_required()
-@permission_required("refound.add_refoundrequest")
+@permission_required("refund.add_refundrequest")
 def reject_request(request, id):
-    refound = get_object_or_404(RefoundRequest, id=id)
-    refound.status = 1
-    refound.save()
+    refund = get_object_or_404(RefundRequest, id=id)
+    refund.status = 1
+    refund.save()
     messages.add_message(
         request,
         messages.WARNING,
-        f"{refound.user.first_name}s søknad om {refound.get_total()} kr har blitt avslått.",
+        f"{refund.user.first_name}s søknad om {refund.get_total()} kr har blitt avslått.",
         extra_tags="Avslått",
     )
-    return redirect("refound:admin_refounds")
+    return redirect("refund:admin_refunds")
 
 
 def reset_status(request, id):
-    refound = get_object_or_404(RefoundRequest, id=id)
-    refound.status = 2
-    refound.save()
+    refund = get_object_or_404(RefundRequest, id=id)
+    refund.status = 2
+    refund.save()
     messages.add_message(
         request,
         messages.WARNING,
-        f'Statusen på {refound.user.first_name}s søknad om {refound.get_total()} kr har blitt satt til "Under behandling".',
+        f'Statusen på {refund.user.first_name}s søknad om {refund.get_total()} kr har blitt satt til "Under behandling".',
         extra_tags="Nullstilt",
     )
-    return redirect("refound:admin_detail", id=refound.id)
+    return redirect("refund:admin_detail", id=refund.id)
 
 
 def admin_dashboard(request, annual=False, year=None):
     years = None
     if annual:
-        refounds = RefoundRequest.get_refound_request_annual(year)
+        refunds = RefundRequest.get_refund_request_annual(year)
     else:
-        refounds = RefoundRequest.objects.all()
+        refunds = RefundRequest.objects.all()
         years = set(
-            [r.date.year for r in Refound.objects.distinct("date__year")]
+            [r.date.year for r in Refund.objects.distinct("date__year")]
         )
-    rejected = refounds.filter(status=STATUS.REJECTED).order_by("-created")
-    approved = refounds.filter(status=STATUS.APPROVED).order_by("-created")
-    pending = refounds.filter(status=STATUS.PENDING).order_by("-created")
+    rejected = refunds.filter(status=STATUS.REJECTED).order_by("-created")
+    approved = refunds.filter(status=STATUS.APPROVED).order_by("-created")
+    pending = refunds.filter(status=STATUS.PENDING).order_by("-created")
     rejectsum = sum([r.get_total() for r in rejected])
     pendingsum = sum([r.get_total() for r in pending])
     approvedsum = sum([r.get_total() for r in approved])
@@ -164,23 +164,23 @@ def admin_dashboard(request, annual=False, year=None):
 
 
 @login_required()
-@permission_required("refound.add_refoundrequest")
+@permission_required("refund.add_refundrequest")
 def annual_account_detail(request, year):
     context = admin_dashboard(request, annual=True, year=year)
     return render(request, "annual_report.html", context)
 
 
 @login_required()
-@permission_required("refound.add_refoundrequest")
-def admin_refounds(request):
+@permission_required("refund.add_refundrequest")
+def admin_refunds(request):
     context = admin_dashboard(request, annual=False, year=None)
     return render(request, "annual_report.html", context)
 
 
 @login_required()
-@permission_required("refound.add_refoundrequest")
+@permission_required("refund.add_refundrequest")
 def delete_annual_report(request, year):
-    refounds = RefoundRequest.get_refound_request_annual(year)
-    for refound in refounds:
-        refound.delete()
-    return redirect("refound:admin_refounds")
+    refunds = RefundRequest.get_refund_request_annual(year)
+    for refund in refunds:
+        refund.delete()
+    return redirect("refund:admin_refunds")

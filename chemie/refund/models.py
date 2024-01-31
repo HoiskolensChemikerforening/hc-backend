@@ -11,13 +11,13 @@ STATUS = Choices(
 )
 
 
-class RefoundRequest(models.Model):
+class RefundRequest(models.Model):
     """
-    The refound request object contains information about the user requesting a
+    The refund request object contains information about the user requesting a
     refund. It is connected to one or more Refund objects (receipts) which contain further information.
     """
 
-    # Variable containing the user requesting a refound
+    # Variable containing the user requesting a refund
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     # Variable containing the date of the request.
     created = models.DateTimeField(auto_now_add=True)
@@ -37,8 +37,8 @@ class RefoundRequest(models.Model):
         Calculates the total sum the user is requesting.
         """
         total = 0
-        for refound in self.refound_set.all():
-            total += refound.price
+        for refund in self.refund_set.all():
+            total += refund.price
         return total
 
     def __str__(self):
@@ -52,9 +52,9 @@ class RefoundRequest(models.Model):
 
     def get_amount_receipts(self):
         """
-        Returns the amount of receipts (Refound objects) related to this object.
+        Returns the amount of receipts (Refund objects) related to this object.
         """
-        return len(self.refound_set.all())
+        return len(self.refund_set.all())
 
     def print_account_number(self):
         """
@@ -71,25 +71,25 @@ class RefoundRequest(models.Model):
         return self.account_number
 
     @classmethod
-    def get_refound_request_annual(cls, year):
+    def get_refund_request_annual(cls, year):
         """
-        Get a queryset containing all RefoundRequest objects related to a receipt (Refound) from a specified
-        year. RefoundRequest objects can be related to multiple Refound objects (receipts). Those receipts can be from
-        different years. The oldest receipt determines the year used for filtering the RefoundRequest object.
+        Get a queryset containing all RefundRequest objects related to a receipt (Refund) from a specified
+        year. RefundRequest objects can be related to multiple Refund objects (receipts). Those receipts can be from
+        different years. The oldest receipt determines the year used for filtering the RefundRequest object.
         """
-        return cls.objects.filter(refound__date__year=year).exclude(
-            refound__date__year__lt=year
+        return cls.objects.filter(refund__date__year=year).exclude(
+            refund__date__year__lt=year
         )
 
 
-class Refound(models.Model):
+class Refund(models.Model):
     """
-    The refound object contains the data from a specific receipt. It is related to a RefoundRequest.
+    The refund object contains the data from a specific receipt. It is related to a RefundRequest.
     """
 
-    # Variable containing the related RefoundRequest object
-    refoundrequest = models.ForeignKey(
-        RefoundRequest, on_delete=models.CASCADE
+    # Variable containing the related RefundRequest object
+    refundrequest = models.ForeignKey(
+        RefundRequest, on_delete=models.CASCADE
     )
     # Variable containing the date of the receipt
     date = models.DateField(verbose_name="Utleggsdato")

@@ -16,8 +16,8 @@
     <div class="row">
     <div class="col s12">
       <ul class="tabs z-depth-1">
-        <li class="tab col s6"><a class="active" target="_self" href="{% url "refound:index" %}">Søk om refusjon</a></li>
-        <li class="tab col s6"><a target="_self" href="{% url "refound:myrefounds" %}">Mine refusjoner</a></li>
+        <li class="tab col s6"><a class="active" target="_self" href="{% url "refund:index" %}">Søk om refusjon</a></li>
+        <li class="tab col s6"><a target="_self" href="{% url "refund:myrefunds" %}">Mine refusjoner</a></li>
       </ul>
     </div>
     </div>
@@ -30,7 +30,7 @@
         <hr>
         <div>
         <p style="font-weight: bold">Informasjon</p>
-        <ul class="refound-list">
+        <ul class="refund-list">
             <li style="list-style-type: disc"> Utleggskjemaet skal leveres senest innen 2 måneder etter kjøpet. </li>
             <li style="list-style-type: disc"> Det som skal refunderes på kvitteringen skal være godt markert (for eksempel med markeringstusj). Dette gjelder hvis det er flere beløp på samme kvittering som ikke skal refunderes.</li>
             <li style="list-style-type: disc"> Refusjon for kakeutlegg skal ikke overstige 100 kr. For estimat av hjemmebakt kake (ikke posekake); se {% include "cake_calculator.html" %}. </li>
@@ -67,7 +67,7 @@
       {{ formset.management_form }}
       {% for form in formset %}
 
-        <div class="refound-form">
+        <div class="refund-form">
           <div class="card">
   <div class="card-content">
           <div style="width: 100%; display: flex; justify-content: space-between">
@@ -139,7 +139,7 @@
     //Code found on https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
 
     // Array containing all receipts forms (kvittering)
-    let refoundForm = document.querySelectorAll(".refound-form");
+    let refundForm = document.querySelectorAll(".refund-form");
     // Variable containing the whole form
     let container = document.querySelector("#form-container");
     // Variable containing the button to add a new receipt
@@ -148,13 +148,13 @@
     let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
 
     // Get the number of the last form on the page with zero-based indexing
-    let formNum = refoundForm.length-1;
+    let formNum = refundForm.length-1;
 
     // Function to add a new form
     function addForm(e) {
         e.preventDefault();
-        //Clone the refound form
-        let newForm = refoundForm[0].cloneNode(true);
+        //Clone the refund form
+        let newForm = refundForm[0].cloneNode(true);
         //Regex to find all instances of the form number
         let formRegex = RegExp(`form-(\\d){1}-`,'g');
 

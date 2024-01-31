@@ -15,15 +15,15 @@
 {% block content %}
     {% if admin %}
     <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "refound:index" %}" class="breadcrumb">Refusjonsskjema</a>
-    <a href="{% url "refound:admin_refounds" %}" class="breadcrumb">Søknader</a>
-    <a href="{% url "refound:admin_detail" id=refound.id %}" class="breadcrumb">Administrer</a>
+    <a href="{% url "refund:index" %}" class="breadcrumb">Refusjonsskjema</a>
+    <a href="{% url "refund:admin_refunds" %}" class="breadcrumb">Søknader</a>
+    <a href="{% url "refund:admin_detail" id=refund.id %}" class="breadcrumb">Administrer</a>
   </div>
     {% else %}
 
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "refound:myrefounds" %}" class="breadcrumb">Mine refusjoner</a>
-    <a href="{% url "refound:detail" id=refound.id %}" class="breadcrumb">Detaljer</a>
+    <a href="{% url "refund:myrefunds" %}" class="breadcrumb">Mine refusjoner</a>
+    <a href="{% url "refund:detail" id=refund.id %}" class="breadcrumb">Detaljer</a>
   </div>
     {% endif %}
 <div>
@@ -39,23 +39,23 @@
         <hr>
         <!---<p style="font-weight: bold">Kontaktinformasjon</p>--->
 
-        <p> <b>Navn:</b> {{ refound.user.first_name }} {{ refound.user.last_name }}</p>
-        <p> <b>E-post:</b> {{ refound.user.email }}</p>
-        <p> <b>Mobilnummer:</b> {{ refound.user.profile.phone_number }}</p>
-        <p> <b>Kontonummer:</b> {{ refound.print_account_number }}</p>
+        <p> <b>Navn:</b> {{ refund.user.first_name }} {{ refund.user.last_name }}</p>
+        <p> <b>E-post:</b> {{ refund.user.email }}</p>
+        <p> <b>Mobilnummer:</b> {{ refund.user.profile.phone_number }}</p>
+        <p> <b>Kontonummer:</b> {{ refund.print_account_number }}</p>
         <hr>
         <p style="font-weight: bold">Totalt beløp</p>
-        <p id="total-price">{{ refound.get_total }} kr</p>
+        <p id="total-price">{{ refund.get_total }} kr</p>
         <hr>
         {% if admin %}
-        {% if perms.refound.delete_refoundrequest %}
+        {% if perms.refund.delete_refundrequest %}
 
         <div style="width: 100%; display: flex; justify-content: center;">
-        {% if refound.status == 2 %}
-            <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reject_request" id=refound.id %}">Avslå</a>
-            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:approve_request" id=refound.id %}">Fullfør</a>
+        {% if refund.status == 2 %}
+            <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refund:reject_request" id=refund.id %}">Avslå</a>
+            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refund:approve_request" id=refund.id %}">Fullfør</a>
              {% else %}
-            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refound:reset_request" id=refound.id %}">Tilbakestill status</a>
+            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refund:reset_request" id=refund.id %}">Tilbakestill status</a>
         {% endif %}
         </div>
 
