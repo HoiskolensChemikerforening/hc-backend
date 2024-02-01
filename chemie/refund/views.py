@@ -1,9 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .forms import RefundForm, RefundFormSet, AccountNumberForm
+from .forms import RefundFormSet, AccountNumberForm
 from .models import Refund, RefundRequest, STATUS
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
-from django.db.models import Sum
 
 
 @login_required()
@@ -35,6 +34,15 @@ def index(request):
                 extra_tags="Suksess",
             )
             return redirect("refund:myrefunds")
+
+        else:
+            messages.add_message(
+                request,
+                messages.WARNING,
+                f"Husk å fylle ut alle felt",
+                extra_tags="Feil",
+            )
+
 
     context = {"formset": formset, "accountform": accountform, "user": user}
     return render(request, "index.html", context)
