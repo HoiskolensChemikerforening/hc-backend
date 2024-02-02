@@ -648,13 +648,13 @@ p {
   padding: 0rem;
 }
 
-.refound-list {
+.refund-list {
   margin-left: 20px;
   margin-top: 0px;
 }
 
 @media only screen and (max-width: 500px){
-  .refound-list {
+  .refund-list {
     margin-left: 0px;
     margin-top: 0px;
 }  }
