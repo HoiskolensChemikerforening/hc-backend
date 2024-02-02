@@ -1,0 +1,20 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load static %}
+
+{% block nav_header %}
+ TEST
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  TESTEN
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{{liste}}
+{% for element in liste %}
+<p>{{element}}</p>
+{% endfor %}
+
+{% endblock content %}
