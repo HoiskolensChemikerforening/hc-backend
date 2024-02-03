@@ -33,7 +33,7 @@ class ExperienceForm(forms.ModelForm):
 class ImageForm(forms.ModelForm):
     class Meta:
         model = Images
-        fields = ['image', 'travelletter']
+        fields = ['image']
 
 
 
