@@ -96,7 +96,8 @@ def createViews(request):
     if request.method == 'POST':
         travelletterform = TravelletterForm(request.POST)
         experienceformset = ExperienceFormSet(request.POST)
-        imageformset = ImageFormSet(data=request.POST, files=request.FILES)
+        imageformset = ImageFormSet(files=request.FILES, data=request.POST)
+        print(imageformset.total_form_count())
         if experienceformset.is_valid() and travelletterform.is_valid() and imageformset.is_valid():
             travelletter = travelletterform.save()
 
@@ -117,10 +118,7 @@ def createViews(request):
                 extra_tags="Suksess",
             )
 
-            travelletterform = TravelletterForm() #show empty forms after completed
-            experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
-            imageformset = ImageFormSet(queryset=Images.objects.none())
-            return redirect('exchangepage:index')
+            return redirect('exchangepage:admin')
 
     else:
         travelletterform = TravelletterForm()

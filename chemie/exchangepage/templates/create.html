@@ -30,6 +30,7 @@
 
       <div>
       {{ travelletterform.as_p }}
+
       {{ experienceformset.management_form }}
       {% for form in experienceformset %}
       <div class = "experience-form">
@@ -39,12 +40,10 @@
 
       {{ imageformset.management_form }}
       {% for form in imageformset %}
-
       <div class = "image-form">
       {{ form.as_p }}
       </div>
       {% endfor %}
-
       </div>
 
       <div class="card-action" id="button-container">
@@ -88,7 +87,6 @@
         formNum++;
         //Update the new form to have the correct form number
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
-        console.log(newForm)
         //Insert the new form at the end of the list of forms
         container.insertBefore(newForm, addButtonContainer);
         //Increment the number of total forms in the management form
@@ -100,36 +98,35 @@
 
 <!-- image formset -->
 <script>
-    let experienceForm = document.querySelectorAll(".image-form");
+    let imageForm = document.querySelectorAll(".image-form");
     // Variable containing the whole form
-    let container = document.querySelector("#form-container");
+    let container2 = document.querySelector("#form-container");
     // Variable containing the button to add a new receipt
-    let addButton = document.querySelector("#add-image-form");
+    let addButton2 = document.querySelector("#add-image-form");
     // Variable containing the button to add a new receipt
-    let addButtonContainer = document.querySelector("#button-container");
+    let addButtonContainer2 = document.querySelector("#button-container");
     // Variable containing the number for receipts on the current page
-    let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
+    let totalForms2 = document.querySelector("#id_form-TOTAL_FORMS");
     // Get the number of the last form on the page with zero-based indexing
-    let formNum = experienceForm.length-1;
+    let formNum2 = imageForm.length-1;
 
     // Function to add a new form
-    function addForm(e) {
+    function addFormImage(e) {
         e.preventDefault();
-        let newForm = experienceForm[0].cloneNode(true);
+        let newForm = imageForm[0].cloneNode(true);
         //Regex to find all instances of the form number
         let formRegex = RegExp(`form-(\\d){1}-`,'g');
 
-        formNum++;
+        formNum2++;
         //Update the new form to have the correct form number
-        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
-        console.log(newForm)
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum2}-`);
         //Insert the new form at the end of the list of forms
-        container.insertBefore(newForm, addButtonContainer);
+        container2.insertBefore(newForm, addButtonContainer2);
         //Increment the number of total forms in the management form
-        totalForms.setAttribute('value', `${formNum+1}`);
+        totalForms2.setAttribute('value', `${formNum2+1}`);
     }
     // Add an eventlistener to the new receipt button
-    addButton.addEventListener('click', addForm);
+    addButton2.addEventListener('click', addFormImage);
 </script>
 
 {% endblock %}
