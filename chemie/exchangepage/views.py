@@ -4,12 +4,14 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
 from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet
 from django.contrib import messages
+
+
 # Create your views here.
 
 @login_required()
 def index(request):
     travelletters = Travelletter.objects.all().order_by("country")
-    avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability','avg_nature', 'avg_hospitality', 'avg_workLoad']
+    avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability', 'avg_nature', 'avg_hospitality', 'avg_workLoad']
     sort_by = request.GET.get('sort_by', 'country')
     sort_order = request.GET.get('sort_order', 'desc')
 
@@ -17,7 +19,7 @@ def index(request):
         form = IndexForm(request.POST)
         if form.is_valid():
             test = form.cleaned_data
-            #print(form)
+            # print(form)
             print("Test", test)
     else:
         form = IndexForm()
@@ -44,14 +46,16 @@ def index(request):
 
     for city in city_list:
         country, data = Travelletter.city_avg(city)
-        data_by_country_city[country][city]= data
+        data_by_country_city[country][city] = data
 
     reverse_order = sort_order == 'desc'
     for avg in avg_list:
         if sort_by == avg:
-            travelletters_by_country = dict(sorted(travelletters_by_country.items(), key=lambda x: x[1][avg],reverse=reverse_order))
+            travelletters_by_country = dict(
+                sorted(travelletters_by_country.items(), key=lambda x: x[1][avg], reverse=reverse_order))
             for country, city_data in data_by_country_city.items():
-                data_by_country_city[country] = dict(sorted(city_data.items(), key=lambda x: x[1][avg], reverse=reverse_order))
+                data_by_country_city[country] = dict(
+                    sorted(city_data.items(), key=lambda x: x[1][avg], reverse=reverse_order))
 
             break
 
@@ -63,18 +67,20 @@ def index(request):
 
     return render(request, "index.html", context)
 
+
 @login_required()
 def cityPageViews(request, city_name):
     travelletters = Travelletter.objects.filter(city=city_name).order_by("user")
     context = {
-        "city_name":city_name,
-        "travelletters":travelletters,
+        "city_name": city_name,
+        "travelletters": travelletters,
     }
     return render(request, "citypage.html", context)
 
+
 @login_required()
 def detailViews(request, pk):
-    travelletter  = Travelletter.objects.get(id=pk)
+    travelletter = Travelletter.objects.get(id=pk)
 
     print(travelletter.user)
 
@@ -104,10 +110,10 @@ def createViews(request):
                 f"Nytt reisebrev er lagt inn!",
                 extra_tags="Suksess",
             )
+
             travelletterform = TravelletterForm() #show empty forms after completed
             experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
             return redirect('exchangepage:index')
-
 
     else:
         travelletterform = TravelletterForm()
@@ -119,11 +125,13 @@ def createViews(request):
     }
     return render(request, "create.html", context)
 
+
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):
     travelletters = Travelletter.objects.all().order_by("id")
     context = {'travelletters':travelletters}
     return render(request, "admin.html", context)
+
 
 @permission_required("exchangepage.change_travelletter")
 def adminDetailViews(request, pk):
@@ -225,4 +233,21 @@ def deleteTravelletter(request, pk):
     return redirect('exchangepage:admin')
 
 
+def displayIndividualLetter(request, pk):
+    travelletter = get_object_or_404(Travelletter, pk=pk)
+    experiences = Experience.objects.filter(travelletter=travelletter)
+    questions = [experience.question for experience in experiences]
+
+    print("Experiences length:", len(experiences))
+    print("Questions length:", len(questions))
+    print("Experiences:", experiences)
+
+    context = {'travelletter': travelletter,
+               'experiences': experiences,
+               'questions': questions
+    }
+
+    print(len(experiences))
+
+    return render(request, "detail.html", context)
 
