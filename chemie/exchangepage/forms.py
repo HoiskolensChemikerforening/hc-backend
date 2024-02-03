@@ -1,6 +1,6 @@
 from django import forms
 import material as M
-from .models import Travelletter, Experience, Questions
+from .models import Travelletter, Experience, Questions, Images
 from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
 class IndexForm(forms.Form):
@@ -30,6 +30,11 @@ class ExperienceForm(forms.ModelForm):
         model = Experience
         fields = ['question', 'answer']
 
+class ImageForm(forms.ModelForm):
+    class Meta:
+        model = Images
+        fields = ['image', 'travelletter']
+
 
 
 class SensibleFormset(BaseModelFormSet):
@@ -47,6 +52,7 @@ class SensibleFormset(BaseModelFormSet):
             return total_forms
 
 ExperienceFormSet = modelformset_factory(Experience, form=ExperienceForm, extra=1, formset=SensibleFormset)
+ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=1, formset=SensibleFormset)
 
 
 

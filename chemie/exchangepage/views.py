@@ -1,8 +1,8 @@
 from django.shortcuts import render
-from .models import Travelletter, Experience, Questions
+from .models import Travelletter, Experience, Questions, Images
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet
+from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet, ImageFormSet, ImageForm
 from django.contrib import messages
 
 
@@ -96,13 +96,19 @@ def createViews(request):
     if request.method == 'POST':
         travelletterform = TravelletterForm(request.POST)
         experienceformset = ExperienceFormSet(request.POST)
-        if experienceformset.is_valid() and travelletterform.is_valid():
+        imageformset = ImageFormSet(data=request.POST, files=request.FILES)
+        if experienceformset.is_valid() and travelletterform.is_valid() and imageformset.is_valid():
             travelletter = travelletterform.save()
 
             for form in experienceformset:
                 experience = form.save(commit=False)
                 experience.travelletter = travelletter
                 experience.save()  #links the models
+
+            for form in imageformset:
+                image = form.save(commit = False)
+                image.travelletter = travelletter
+                image.save()
 
             messages.add_message(
                 request,
@@ -113,15 +119,18 @@ def createViews(request):
 
             travelletterform = TravelletterForm() #show empty forms after completed
             experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
+            imageformset = ImageFormSet(queryset=Images.objects.none())
             return redirect('exchangepage:index')
 
     else:
         travelletterform = TravelletterForm()
         experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
+        imageformset = ImageFormSet(queryset=Images.objects.none())
 
     context = {
         'experienceformset':experienceformset,
         'travelletterform':travelletterform,
+        'imageformset':imageformset
     }
     return render(request, "create.html", context)
 
