@@ -87,6 +87,10 @@ class Experience(models.Model):
     def __str__(self):
         return f'Svar på spørsmål: {self.question}'
 
+class Images(models.Model):
+    travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name='images', verbose_name="Reisebrev")
+    image = models.ImageField(upload_to="exchangepage", verbose_name="Bilde")
+
 
 
 
