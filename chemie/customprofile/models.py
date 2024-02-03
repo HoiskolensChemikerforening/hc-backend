@@ -27,7 +27,7 @@ GRADES = Choices(
 )
 
 RELATIONSHIP_STATUS = Choices(
-    ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!")
+    ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!"), ("HC", 4, "HC incest")
 )
 
 MEMBERSHIP_DURATIONS = [
