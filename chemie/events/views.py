@@ -155,17 +155,20 @@ class ListSocialView(ListView):
                 event__date__gt=timezone.now(), user__exact=self.request.user, status=REGISTRATION_STATUS.WAITING
             )
 
-
-
             my_waiting_events = self.model.objects.filter(socialeventregistration__in=my_waiting_registrations)
-            print(my_waiting_events[0].get_queue_position(self.request.user))
+            # print(my_waiting_events[0].get_queue_position(self.request.user))
+            if my_waiting_events:
+                my_waiting_queue = []
+                for events in my_waiting_events:
+                    my_waiting_queue.append((events, events.get_queue_position(self.request.user)))
+
             my_events = self.model.objects.filter(
                 attending_events, date__gt=timezone.now()
             ).distinct().exclude(pk__in=my_waiting_events.values('pk'))
             my_past_events = self.model.objects.filter(attending_events, date__lte=timezone.now())
 
         context.update({"events": future_events, "my_events": my_events, "my_authored_events": my_authored_events,
-                        "my_past_events": my_past_events, "my_waiting_events": my_waiting_events,
+                        "my_past_events": my_past_events, "my_waiting_queue": my_waiting_queue,
                         "my_unpublished_events": my_unpublished_events, "my_tentative_events": my_tentative_events
                         })
         return context
