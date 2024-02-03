@@ -11,6 +11,8 @@ class Travelletter(models.Model):
     nature         = models.IntegerField(default=0, verbose_name="Natur")
     hospitality   = models.IntegerField(default=0, verbose_name="Gjestfrihet")
     workLoad       = models.IntegerField(default=0, verbose_name="Arbeidsmengde")
+    destinationInfo = models.TextField(max_length = 2000, verbose_name="countryInfo")
+
     def __str__(self):
         return f"{self.user.user.first_name} {self.country}"
 
