@@ -55,8 +55,8 @@ def index(request):
             messages.add_message(
                 request,
                 messages.WARNING,
-                f"Husk å fylle ut alle felt",
-                extra_tags="Feil",
+                f"Husk å fylle ut alle påkrevde felt.",
+                extra_tags="Ugyldig søknad",
             )
 
 
