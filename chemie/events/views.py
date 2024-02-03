@@ -155,7 +155,10 @@ class ListSocialView(ListView):
                 event__date__gt=timezone.now(), user__exact=self.request.user, status=REGISTRATION_STATUS.WAITING
             )
 
+
+
             my_waiting_events = self.model.objects.filter(socialeventregistration__in=my_waiting_registrations)
+            print(my_waiting_events[0].get_queue_position(self.request.user))
             my_events = self.model.objects.filter(
                 attending_events, date__gt=timezone.now()
             ).distinct().exclude(pk__in=my_waiting_events.values('pk'))
@@ -343,7 +346,7 @@ class SocialEditRemoveUserRegistration(
         # Add queue position
         registration = self.registration
         if registration:
-            if registration.status == REGISTRATION_STATUS.WAITING:
+            """if registration.status == REGISTRATION_STATUS.WAITING:
                 queue_position = (
                     self.registration_model.objects.filter(
                         event=registration.event,
@@ -351,7 +354,9 @@ class SocialEditRemoveUserRegistration(
                         status=REGISTRATION_STATUS.WAITING,
                     ).count()
                     + 1
-                )
+                )"""
+            queue_position = self.registration_model.get_queue_position(registration)
+            if queue_position:
                 context.update({"queue_position": queue_position})
         context["registration"] = registration
         return context
