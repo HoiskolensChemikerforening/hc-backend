@@ -41,6 +41,7 @@ Admin
 
       <div class="card-action" id="button-container">
         <div class="right-align">
+          <a class="btn btn-danger pull-left" id="delete-button" style="background-color: red; border-color: red;">Slett bilder</a>
           <button class="btn btn-primary pull-right" id="add-image-form" type="button">Nytt bilde</button>
           <input class="btn btn-primary pull-right" type='submit' value='Lagre og gå videre!'/>
         </div>
@@ -84,6 +85,20 @@ Admin
     }
     // Add an eventlistener to the new receipt button
     addButton.addEventListener('click', addForm);
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    // Attach a click event listener to the delete button
+    document.getElementById('delete-button').addEventListener('click', function () {
+        // Display a confirmation dialog
+        var confirmDelete = confirm('Er du sikker på at du vil slette bildene?');
+        if (confirmDelete) {
+            // If confirmed, redirect to the deletion URL
+            window.location.href = "{% url 'exchangepage:deleteimages' travelletter.id %}";
+        }
+    });
+});
 </script>
 
 {% endblock %}

@@ -294,6 +294,18 @@ def deleteTravelletter(request, pk):
     )
     return redirect('exchangepage:admin')
 
+def deleteImages(request, pk):
+    travelletter = Travelletter.objects.get(pk=pk)
+    images = travelletter.images.all()
+    images.delete()
+
+    messages.add_message(
+        request,
+        messages.WARNING,
+        f"Bilder slettet!",
+        extra_tags="Slettet",
+    )
+    return redirect('exchangepage:admin')
 
 def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)

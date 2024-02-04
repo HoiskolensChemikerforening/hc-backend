@@ -13,6 +13,7 @@ urlpatterns = [path("", views.index, name="index"),
                path("admin/<int:pk>/", views.adminDetailViews, name="admindetail"),
                path("admin/bilder/<int:pk>/", views.adminDetailImageViews, name="admindetailimage"),
                path("admin/spørsmål/<int:pk>/", views.adminDetailExperienceViews, name="admindetailexperience"),
-               path("admin/slett/<int:pk>", views.deleteTravelletter, name="deletetravelletter"),
+               path("admin/slettreisebrev/<int:pk>", views.deleteTravelletter, name="deletetravelletter"),
+               path("admin/slettbilder/<int:pk>", views.deleteImages, name="deleteimages"),
                path("<str:city_name>/", views.cityPageViews, name="citypage")]
 
