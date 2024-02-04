@@ -72,7 +72,7 @@
 {
 "name": "refund_reject",
 "description": "Reject-refund-request",
-"subject": "Søknad avslått",
+"subject": "{% if status == 1 %}Avslag på søknad om refusjont{% elif status == 2 %}Søknad behandles på nytt{%else%}Godkjent refusjonssøknad{%endif%}",
 "path": "refund/refund_reject"
 }
 ]
