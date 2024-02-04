@@ -150,7 +150,7 @@ def approve_request(request, id):
     mail.send(
         mail_to,
         "HC <noreply@hc.ntnu.no>",
-        template="refund_reject",
+        template="refund_status",
         context={
             "amount": refund.get_total(),
             "created": refund.created.date,
