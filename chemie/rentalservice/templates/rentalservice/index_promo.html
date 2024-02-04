@@ -1,0 +1,72 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Promoteringskomiteen
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m9"> <!---size of the layout--->
+        <div class="container" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-6" style="margin-bottom: 40px;">
+                <p class="lead">
+                    Vi er promoteringskomiteen! Vi tar bilder og video til HC sine arrangementer. 
+                    Det er også mulig å leie promokom sine tjenester (fotoboks, fotograf eller utstyr) for foreneninger og privatpersoner.
+                    <br><br>
+                    Fotoboks
+                    <br>
+                    Ved å leie ut fotoboksen vår, sikrer du fantastiske bilder på ditt arrangement. 
+                    Prisen inkluderer opprigg, nedrigg og redigering av bilder. 
+                    OBS! Man er selv ansvarlig for å fikse transport av fotoboksen til og fra gløshaugen.
+                    <br> 
+                    Pris: 1500kr inkl mva
+                    <br><br>
+                    Fotograf
+                    <br>
+                    Vil du heller ha litt flere candid bilder? 
+                    Det kan du få løst ved å leie en av våre talentfulle fotografer. 
+                    Prisen inkluderer fire timer med fotografering og redigering av bildene.
+                    <br> 
+                    Pris: 1500kr inkl mva
+                    <br><br>
+                    Utstyr
+                    <br>
+                    Er du litt av en fotograf selv, men mangler litt utstyr? Det er også mulig å leie mye av kamera-utstyret vårt. 
+                    Du kan leie lys, blitz, mikrofon eller kamera. Prisen varierer fra utstyr til utstyr.
+                    <br>
+                    Pris: 400kr - 1500kr inkl mva
+                    <br><br>
+                    Er du Chemiker? Da får du rabatt på utstyr fra oss! 
+                    Er det et arrangement der minst et helt klassetrinn er invitert (evt. åpent for deltakelse fra hele foreningen) får du 50% rabatt. 
+                    Alle komitéer som arrangerer fellesarrangementer i HC får låne utstyr gratis.
+                    <br><br>
+                    Ta kontakt via linken på høyre side for å avtale.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m3">
+      <!--Kontaktskjema-->
+      <h2 class="heading">Kontakt</h2>
+      <div class="col card contactForm" style="padding-top: 0.25rem; width: 100%; height: 7rem;">
+        <a href="kontaktinfo">
+            <div class="row">
+                <p style="margin:auto; padding-top: 0.8rem;">
+                  <img type="image/png" src="{% static "images/handlekurv.png" %}"
+      style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+                    max-height:4rem; float: left; margin:-0.5rem; padding-right: 0.5rem; padding-left: 0.5rem;">
+                    Ønsker du å leie noe? <strong>Ta kontakt her!</strong> </img>
+                </p>
+            </div>
+        </a>
+      </div>
+    </div>
+</div>
+
+{% endblock %}
