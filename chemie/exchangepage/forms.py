@@ -23,7 +23,7 @@ class QuestionsForm(forms.ModelForm):
 class TravelletterForm(forms.ModelForm):
     class Meta:
         model = Travelletter
-        fields = ['user', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
+        fields = ['user', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad', 'destinationInfo']
 
 class ExperienceForm(forms.ModelForm):
     class Meta:
@@ -34,8 +34,6 @@ class ImageForm(forms.ModelForm):
     class Meta:
         model = Images
         fields = ['image']
-
-
 
 class SensibleFormset(BaseModelFormSet):
     def total_form_count(self):
@@ -55,7 +53,6 @@ class SensibleFormset2(BaseModelFormSet):
     def total_form_count(self):
         """Returns the total number of forms in this FormSet."""
         if self.data or self.files:
-            print(self.management_form)
             return len(self.files)
         else:
             if self.initial_form_count() > 0:

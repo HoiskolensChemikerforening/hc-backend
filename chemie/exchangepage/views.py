@@ -94,10 +94,11 @@ def detailViews(request, pk):
 @permission_required("exchangepage.add_travelletter")
 def createViews(request):
     if request.method == 'POST':
+        print(request.POST)
+        print("hei", request.POST['form-TOTAL_FORMS'])
         travelletterform = TravelletterForm(request.POST)
         experienceformset = ExperienceFormSet(request.POST)
         imageformset = ImageFormSet(files=request.FILES, data=request.POST)
-        print(imageformset.total_form_count())
         if experienceformset.is_valid() and travelletterform.is_valid() and imageformset.is_valid():
             travelletter = travelletterform.save()
 
@@ -143,15 +144,70 @@ def adminViews(request):
 @permission_required("exchangepage.change_travelletter")
 def adminDetailViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
-    experiences = travelletter.experiences.all()
 
     if request.method == 'POST':
         travelletterform = TravelletterForm(request.POST, instance=travelletter)
-        experienceformset = ExperienceFormSet(request.POST, queryset=experiences)
 
-        if experienceformset.is_valid() and travelletterform.is_valid():
+        if travelletterform.is_valid():
             travelletterform.save()
 
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Reisebrevet er oppdatert!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:admindetailimage',pk=pk)  # Redirect to the desired page after successful editing
+
+    else:
+        travelletterform = TravelletterForm(instance=travelletter)
+
+    context = {
+        'travelletterform': travelletterform,
+        'travelletter':travelletter,
+    }
+    return render(request, "admindetail.html", context)
+
+def adminDetailImageViews(request, pk):
+    travelletter = get_object_or_404(Travelletter, pk=pk)
+    images = travelletter.images.all()
+
+    if request.method == 'POST':
+        imageformset = ImageFormSet(files=request.FILES, data=request.POST, queryset=images)
+
+        if imageformset.is_valid():
+
+            for form in imageformset:
+                image = form.save(commit=False)
+                image.travelletter = travelletter
+                image.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Bilder er oppdatert!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:admindetailexperience', pk=pk)  # Redirect to the desired page after successful editing
+
+    else:
+        imageformset = ImageFormSet(queryset=images)
+
+    context = {
+        'travelletter':travelletter,
+        'imageformset':imageformset
+    }
+    return render(request, "admindetailimage.html", context)
+
+def adminDetailExperienceViews(request, pk):
+    travelletter = get_object_or_404(Travelletter, pk=pk)
+    experiences = travelletter.experiences.all()
+
+    if request.method == 'POST':
+        experienceformset = ExperienceFormSet(request.POST, queryset=experiences)
+
+
+        if experienceformset.is_valid():
             for form in experienceformset:
                 experience = form.save(commit=False)
                 experience.travelletter = travelletter
@@ -160,21 +216,20 @@ def adminDetailViews(request, pk):
             messages.add_message(
                 request,
                 messages.SUCCESS,
-                f"Reisebrevet er oppdatert!",
+                f"Hele reisebrevet er oppdatert!",
                 extra_tags="Suksess",
             )
             return redirect('exchangepage:admin')  # Redirect to the desired page after successful editing
 
     else:
-        travelletterform = TravelletterForm(instance=travelletter)
         experienceformset = ExperienceFormSet(queryset=experiences)
+
 
     context = {
         'experienceformset': experienceformset,
-        'travelletterform': travelletterform,
-        'travelletter':travelletter
+        'travelletter': travelletter
     }
-    return render(request, "admindetail.html", context)
+    return render(request, "admindetailexperience.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def createQuestionViews(request):
