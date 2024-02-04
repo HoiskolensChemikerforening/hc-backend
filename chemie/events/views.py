@@ -444,17 +444,9 @@ class BedpresEditRemoveUserRegistration(
         # Add queue position
         registration = self.registration
         if registration:
-            if registration.status == REGISTRATION_STATUS.WAITING:
-                queue_position = (
-                    self.registration_model.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
-                )
+            queue_position = self.registration_model.get_queue_position(registration)
+            if queue_position:
                 context.update({"queue_position": queue_position})
-
         context["registration"] = registration
         return context
 
