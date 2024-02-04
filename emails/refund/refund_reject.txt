@@ -1,0 +1,4 @@
+Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, har blitt avslått. Ta kontakt med kasserer@hc.ntnu.no for eventuelle spørsmål.<br><br>
+
+Begrunnelse: <br>
+{{reason}}

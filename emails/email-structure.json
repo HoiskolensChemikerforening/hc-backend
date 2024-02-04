@@ -67,5 +67,12 @@
 "description": "Kontakt-epost",
 "subject": "Kontaktskjema- {{ rentalobject }}",
 "path": "rentalservice/rental_contact"
+},
+
+{
+"name": "refund_reject",
+"description": "Reject-refund-request",
+"subject": "Søknad avslått",
+"path": "refund/refund_reject"
 }
 ]

@@ -3,6 +3,9 @@ from .forms import RefundFormSet, AccountNumberForm
 from .models import Refund, RefundRequest, STATUS
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, permission_required
+from post_office import mail
+from django.conf import settings
+from django.contrib.sites.shortcuts import get_current_site
 
 
 @login_required()
@@ -141,6 +144,21 @@ def approve_request(request, id):
     # Approve the refound request
     refund.status = STATUS.APPROVED
     refund.save()
+
+    mail_to = request.user.email
+
+    mail.send(
+        mail_to,
+        "HC <noreply@hc.ntnu.no>",
+        template="refund_reject",
+        context={
+            "amount": refund.get_total(),
+            "created": refund.created.date,
+            "reason": "hsdhajdjasadmsandkndsfbjhdsfsdfvsdbfhsdfsdfhjsdfs",
+            "status": refund.status,
+            "root_url": get_current_site(None),
+        },
+    )
 
     # Generate success message
     messages.add_message(
