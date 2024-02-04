@@ -167,7 +167,14 @@
                   </ul>
                 </div>
               </li>
-            
+          <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">shopping_cart</i>Utleie</a>
+                <div class="collapsible-body">
+                  <ul>
+                    <li><a href="{% url 'rentalservice:index' %}" class="waves-effect">AC</a></li>
+                    <li><a href="{% url 'rentalservice:index_promo' %}" class="waves-effect">Promokom</a></li>
+                  </ul>
+                </div> 
+            </li> 
         </ul>
       </li>
       <li class="bold"><a href="{% url "corporate:index" %}" class="waves-effect"><i class="material-icons micon">business</i>
@@ -176,11 +183,10 @@
             class="material-icons micon">home</i>Kontoret</a></li>
       <li class="bold"><a href="{% url "frontpage:calendar" %}" class="waves-effect"><i
             class="material-icons micon">date_range</i>Kalender</a></li>
+      
+      </li>
       <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
             class="material-icons micon">inbox</i>Bokskap</a></li>
-
-      <li class="bold"><a href="{% url "rentalservice:index" %}" class="waves-effect"><i
-            class="material-icons micon">shopping_cart</i>Utleie</a></li>
     </ul>
   </header>
 
