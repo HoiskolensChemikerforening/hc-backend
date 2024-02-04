@@ -144,6 +144,7 @@ class ListSocialView(ListView):
 
         my_events = None
         my_waiting_events = None
+        my_waiting_queue = None
         if self.request.user.is_authenticated:
             attending_events = Q(attendees__username__exact=self.request.user)
             authored_events = Q(author=self.request.user)
