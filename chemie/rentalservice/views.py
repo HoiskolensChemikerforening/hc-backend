@@ -17,6 +17,9 @@ def index(request):
 
     context = {"rentalObjects": rentalObjects}
     return render(request, "rentalservice/index.html", context)
+def index_promo(request):
+
+    return render(request, "rentalservice/index_promo.html")
 
 
 @permission_required("rentalservice..add_rentalobject")
