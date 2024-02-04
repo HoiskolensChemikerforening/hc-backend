@@ -311,6 +311,7 @@ def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = Experience.objects.filter(travelletter=travelletter)
     questions = [experience.question for experience in experiences]
+    images = travelletter.images.all()
 
     print("Experiences length:", len(experiences))
     print("Questions length:", len(questions))
@@ -318,7 +319,8 @@ def displayIndividualLetter(request, pk):
 
     context = {'travelletter': travelletter,
                'experiences': experiences,
-               'questions': questions
+               'questions': questions,
+               'images':images
     }
 
     print(len(experiences))
