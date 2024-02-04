@@ -49,15 +49,23 @@
         <hr>
         {% if admin %}
         {% if perms.refund.delete_refundrequest %}
-
+        <form method="post">
+        {% csrf_token %}
+        <div>
+        <b>Behandling av søknaden:</b>
+        <p>Vær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren. Forsikre deg om at du har gjennomført alle nødvendige vurderinger før du godkjenner, avslår eller tilbakestiller en søknad. Du kan legge til en begrunnelse i feltet nedenfor for å oppgi ekstra informasjon. Denne begrunnelsen vil inkluderes i e-postmeldingen som sendes til søkeren. </p>
+        <label for="reason-field">Begrunnelse</label>
+        <input type="text" id="reason-field" name="reason" value="">
+        </div>
         <div style="width: 100%; display: flex; justify-content: center;">
         {% if refund.status == 2 %}
-            <a class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refund:reject_request" id=refund.id %}">Avslå</a>
-            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refund:approve_request" id=refund.id %}">Fullfør</a>
+            <button class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" type="submit" formaction="{% url "refund:reject_request" id=refund.id %}">Avslå</button>
+            <button class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;"  type="submit" formaction="{% url "refund:approve_request" id=refund.id %}">Fullfør</button>
              {% else %}
-            <a class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" href="{% url "refund:reset_request" id=refund.id %}">Tilbakestill status</a>
+            <button class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;"  type="submit" formaction="{% url "refund:reset_request" id=refund.id %}">Tilbakestill status</button>
         {% endif %}
         </div>
+        </form>
 
         {% endif %}
         {% endif %}

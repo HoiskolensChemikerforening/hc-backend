@@ -130,21 +130,20 @@ def detail_admin_view(request, id):
     context = get_detail_context(request, id, admin=True)
     return render(request, "detail.html", context)
 
+def error_message(request):
+    # Generate fail message
+    messages.add_message(
+        request,
+        messages.WARNING,
+        f"Det har oppstått en feil.",
+        extra_tags="ERROR",
+    )
+    return
 
-@login_required()
-@permission_required("refund.add_refundrequest")
-def approve_request(request, id):
+def send_status_mail(request, refund):
     """
-    View to approve a refund request. Redirects the page to the admin refund page. Requires refoundrequest permissions.
+    Sends an e-mail to inform a user if there request has been updated.
     """
-
-    # Get the refund request objects by id
-    refund = get_object_or_404(RefundRequest, id=id)
-
-    # Approve the refound request
-    refund.status = STATUS.APPROVED
-    refund.save()
-
     mail_to = request.user.email
 
     mail.send(
@@ -154,19 +153,39 @@ def approve_request(request, id):
         context={
             "amount": refund.get_total(),
             "created": refund.created.date,
-            "reason": "hsdhajdjasadmsandkndsfbjhdsfsdfvsdbfhsdfsdfhjsdfs",
+            "reason": request.POST["reason"],
             "status": refund.status,
             "root_url": get_current_site(None),
         },
     )
 
-    # Generate success message
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        f"{refund.user.first_name}s søknad om {refund.get_total()} kr har blitt godkjent.",
-        extra_tags="Godkjent",
-    )
+@login_required()
+@permission_required("refund.add_refundrequest")
+def approve_request(request, id):
+    """
+    View to approve a refund request. Redirects the page to the admin refund page. Requires refoundrequest permissions.
+    """
+    if request.POST:
+        # Get the refund request objects by id
+        refund = get_object_or_404(RefundRequest, id=id)
+
+        # Approve the refound request
+        refund.status = STATUS.APPROVED
+        refund.save()
+
+        # Send info mail
+        send_status_mail(request, refund)
+
+        # Generate success message
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f"{refund.user.first_name}s søknad om {refund.get_total()} kr har blitt godkjent.",
+            extra_tags="Godkjent",
+        )
+    else:
+        # Generate fail message if not POST
+        error_message(request)
     return redirect("refund:admin_refunds")
 
 
@@ -176,21 +195,27 @@ def reject_request(request, id):
     """
     View to reject a refund request. Redirects the page to the admin refund page. Requires refoundrequest permissions.
     """
+    if request.POST:
+        # Get the refund request objects by id
+        refund = get_object_or_404(RefundRequest, id=id)
 
-    # Get the refund request objects by id
-    refund = get_object_or_404(RefundRequest, id=id)
+        # Reject the refound request
+        refund.status = STATUS.REJECTED
+        refund.save()
 
-    # Reject the refound request
-    refund.status = STATUS.REJECTED
-    refund.save()
+        # Send info mail
+        send_status_mail(request, refund)
 
-    # Generate rejected message
-    messages.add_message(
-        request,
-        messages.WARNING,
-        f"{refund.user.first_name}s søknad om {refund.get_total()} kr har blitt avslått.",
-        extra_tags="Avslått",
-    )
+        # Generate rejected message
+        messages.add_message(
+            request,
+            messages.WARNING,
+            f"{refund.user.first_name}s søknad om {refund.get_total()} kr har blitt avslått.",
+            extra_tags="Avslått",
+        )
+    else:
+        # Generate fail message if not POST
+        error_message(request)
     return redirect("refund:admin_refunds")
 
 
@@ -200,21 +225,27 @@ def reset_status(request, id):
     """
     View to reset the status of a refund request. Redirects the page to the admin_detail page. Requires refoundrequest permissions.
     """
+    if request.POST:
+        # Get the refund request objects by id
+        refund = get_object_or_404(RefundRequest, id=id)
 
-    # Get the refund request objects by id
-    refund = get_object_or_404(RefundRequest, id=id)
+        # Reset the refound request
+        refund.status = STATUS.PENDING
+        refund.save()
 
-    # Reset the refound request
-    refund.status = STATUS.PENDING
-    refund.save()
+        # Send info mail
+        send_status_mail(request, refund)
 
-    # Generate reset message
-    messages.add_message(
-        request,
-        messages.WARNING,
-        f'Statusen på {refund.user.first_name}s søknad om {refund.get_total()} kr har blitt satt til "Under behandling".',
-        extra_tags="Nullstilt",
-    )
+        # Generate reset message
+        messages.add_message(
+            request,
+            messages.WARNING,
+            f'Statusen på {refund.user.first_name}s søknad om {refund.get_total()} kr har blitt satt til "Under behandling".',
+            extra_tags="Nullstilt",
+        )
+    else:
+        # Generate fail message if not POST
+        error_message(request)
     return redirect("refund:admin_detail", id=refund.id)
 
 
