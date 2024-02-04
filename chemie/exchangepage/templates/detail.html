@@ -8,6 +8,11 @@
 {% load material_form %}
 
 {% block content %}
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Land</a>
+    <a href="{% url "exchangepage:citypage" travelletter.city %}" class="breadcrumb">Byer</a>
+    <a class="breadcrumb">{{travelletter.user}}</a>
+</div>
 
 <style>
     .information-box-container {
