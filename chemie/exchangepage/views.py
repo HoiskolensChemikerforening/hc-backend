@@ -173,6 +173,7 @@ def adminDetailImageViews(request, pk):
     images = travelletter.images.all()
 
     if request.method == 'POST':
+        print(request.FILES)
         imageformset = ImageFormSet(files=request.FILES, data=request.POST, queryset=images)
 
         if imageformset.is_valid():
