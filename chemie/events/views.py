@@ -170,6 +170,7 @@ class ListSocialView(ListView):
 
         context.update({"events": future_events, "my_events": my_events, "my_authored_events": my_authored_events,
                         "my_past_events": my_past_events, "my_waiting_queue": my_waiting_queue,
+                        "my_waiting_events": my_waiting_events,
                         "my_unpublished_events": my_unpublished_events, "my_tentative_events": my_tentative_events
                         })
         return context
