@@ -18,9 +18,9 @@ Admin
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
     <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Rediger</a>
-    <a class="breadcrumb">{{travelletter.user}}</a>
+    <a href="{% url "exchangepage:admindetail" travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a>
+    <a class="breadcrumb">Bilder</a>
 </div>
-
 <style>
   select{display: block}
 </style>
@@ -42,7 +42,7 @@ Admin
       <div class="card-action" id="button-container">
         <div class="right-align">
           <button class="btn btn-primary pull-right" id="add-image-form" type="button">Nytt bilde</button>
-          <input class="btn btn-primary pull-right" type='submit' value='Lagre reisebrev!'/>
+          <input class="btn btn-primary pull-right" type='submit' value='Lagre og gå videre!'/>
         </div>
       </div>
 
