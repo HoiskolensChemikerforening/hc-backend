@@ -59,10 +59,10 @@
         </div>
         <div style="width: 100%; display: flex; justify-content: center;">
         {% if refund.status == 2 %}
-            <button class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" type="submit" formaction="{% url "refund:reject_request" id=refund.id %}">Avslå</button>
-            <button class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;"  type="submit" formaction="{% url "refund:approve_request" id=refund.id %}">Fullfør</button>
+            <button id="reject-button" class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" type="submit" formaction="{% url "refund:reject_request" id=refund.id %}">Avslå</button>
+            <button id="approve-button" class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;"  type="submit" formaction="{% url "refund:approve_request" id=refund.id %}">Fullfør</button>
              {% else %}
-            <button class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;"  type="submit" formaction="{% url "refund:reset_request" id=refund.id %}">Tilbakestill status</button>
+            <button id="reset-button" class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" type="submit" formaction="{% url "refund:reset_request" id=refund.id %}">Tilbakestill status</button>
         {% endif %}
         </div>
         </form>
@@ -106,7 +106,42 @@
 
 {% block footer_script %}
 <script>
-    document.addEventListener("DOMContentLoaded", function () {
+// Get input field containing the reason parameter
+let reason = document.getElementById('reason-field');
+
+{% if refund.status == 2 %}
+// Get the buttons visible if the request is pending
+let reject_btn = document.getElementById("reject-button");
+let approve_btn = document.getElementById("approve-button");
+
+// Add event listeners to these buttons to create an idiot security popup when clicked
+reject_btn.addEventListener("click", (e)=>{
+        if(!confirm(`Er du sikker på at du vil avslå denne søknaden med følgende begrunnelse: \n \n"${reason.value}"\n \nVær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren.`)) {
+            e.preventDefault();
+        }
+    });
+approve_btn.addEventListener("click", (e)=>{
+        if(!confirm(`Søkeren vil bli informert om at pengene har blitt overført. Er du sikker på at du vil godkjenne denne søknaden med følgende begrunnelse: \n\n"${reason.value}" \n \nVær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren. `)) {
+            e.preventDefault();
+        }
+    });
+
+ {% else %}
+    // Get the reset button
+    let reset_btn = document.getElementById("reset-button")
+
+    // Add an event listener to this button to create an idiot security popup when clicked
+    reset_btn.addEventListener("click", (e)=>{
+            if(!confirm(`Er du sikker på at du vil tilbakestille statusen til denne søknaden med følgende begrunnelse: \n\n"${reason.value}" \n \nVær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren. `)) {
+                e.preventDefault();
+            }
+        })
+{% endif %}
+
+
+
+// Initialize materialize
+document.addEventListener("DOMContentLoaded", function () {
   var materialboxes = document.querySelectorAll(".materialboxed");
   console.log(materialboxes);
   M.Materialbox.init(materialboxes);
