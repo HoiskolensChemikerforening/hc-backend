@@ -5,7 +5,9 @@ app_name = "exchangepage"
 
 urlpatterns = [path("", views.index, name="index"),
                path('travelletter/<int:pk>/', views.displayIndividualLetter, name='detail'),
-               path("opprett/", views.createViews, name="create"),
+               path("opprett/", views.createTravelletterViews, name="create"),
+               path("opprett/bilder/<int:pk>", views.createImageViews, name="createimage"),
+               path("opprett/spørsmål/<int:pk>", views.createExperienceViews, name="createexperience"),
                path("opprettspørsmål/", views.createQuestionViews, name="createquestion"),
                path("admin/", views.adminViews, name="admin"),
                path("adminspørsmål/", views.adminQuestionViews, name="adminquestion"),

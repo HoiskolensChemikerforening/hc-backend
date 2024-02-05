@@ -19,8 +19,6 @@ def index(request):
         form = IndexForm(request.POST)
         if form.is_valid():
             test = form.cleaned_data
-            # print(form)
-            print("Test", test)
     else:
         form = IndexForm()
     # Group the travelletters by country
@@ -77,40 +75,13 @@ def cityPageViews(request, city_name):
     }
     return render(request, "citypage.html", context)
 
-
-@login_required()
-def detailViews(request, pk):
-    travelletter = Travelletter.objects.get(id=pk)
-
-    print(travelletter.user)
-
-    context = {
-        'travelletter': travelletter,
-    }
-
-    return render(request, "detail.html", context)
-
-
 @permission_required("exchangepage.add_travelletter")
-def createViews(request):
+def createTravelletterViews(request):
     if request.method == 'POST':
-        print(request.POST)
-        print("hei", request.POST['form-TOTAL_FORMS'])
         travelletterform = TravelletterForm(request.POST)
-        experienceformset = ExperienceFormSet(request.POST)
-        imageformset = ImageFormSet(files=request.FILES, data=request.POST)
-        if experienceformset.is_valid() and travelletterform.is_valid() and imageformset.is_valid():
+        if travelletterform.is_valid():
             travelletter = travelletterform.save()
 
-            for form in experienceformset:
-                experience = form.save(commit=False)
-                experience.travelletter = travelletter
-                experience.save()  #links the models
-
-            for form in imageformset:
-                image = form.save(commit = False)
-                image.travelletter = travelletter
-                image.save()
 
             messages.add_message(
                 request,
@@ -118,20 +89,80 @@ def createViews(request):
                 f"Nytt reisebrev er lagt inn!",
                 extra_tags="Suksess",
             )
-
-            return redirect('exchangepage:admin')
+            id = travelletter.id
+            return redirect('exchangepage:createimage', pk=id)
 
     else:
         travelletterform = TravelletterForm()
-        experienceformset = ExperienceFormSet(queryset=Experience.objects.none())
-        imageformset = ImageFormSet(queryset=Images.objects.none())
 
     context = {
-        'experienceformset':experienceformset,
         'travelletterform':travelletterform,
-        'imageformset':imageformset
     }
     return render(request, "create.html", context)
+
+@permission_required("exchangepage.add_travelletter")
+def createImageViews(request, pk):
+    travelletter = get_object_or_404(Travelletter, pk=pk)
+    id = travelletter.id
+    print(request.FILES)
+    if request.method == 'POST':
+        imageformset = ImageFormSet(files=request.FILES, data=request.POST)
+
+        if imageformset.is_valid():
+
+            for form in imageformset:
+                image = form.save(commit=False)
+                image.travelletter = travelletter
+                image.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Bilder er opprettet!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:createexperience', pk=id)  # Redirect to the desired page after successful editing
+
+    else:
+        imageformset = ImageFormSet(queryset=Images.objects.none())
+
+
+    context = {
+        'travelletter':travelletter,
+        'imageformset':imageformset
+    }
+    return render(request, "createimage.html", context)
+
+@permission_required("exchangepage.add_travelletter")
+def createExperienceViews(request, pk):
+    travelletter = get_object_or_404(Travelletter, pk=pk)
+
+    if request.method == 'POST':
+        experienceformset = ExperienceFormSet(request.POST)
+
+
+        if experienceformset.is_valid():
+            for form in experienceformset:
+                experience = form.save(commit=False)
+                experience.travelletter = travelletter
+                experience.save()  #links the models
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Reisebrevet er opprettet!",
+                extra_tags="Suksess",
+            )
+            return redirect('exchangepage:admin')  # Redirect to the desired page after successful editing
+
+    else:
+        experienceformset = ExperienceFormSet(queryset=Images.objects.none())
+
+    context = {
+        'experienceformset': experienceformset,
+        'travelletter': travelletter
+    }
+    return render(request, "createexperience.html", context)
 
 
 @permission_required("exchangepage.change_travelletter")
