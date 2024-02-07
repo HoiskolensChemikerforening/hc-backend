@@ -242,7 +242,7 @@ wcwidth==0.2.5
     # via pytest
 webencodings==0.5.1
     # via bleach
-werkzeug==2.2.3
+werkzeug==3.0.1
     # via -r base.in
 wiki==0.7.9
     # via -r base.in
