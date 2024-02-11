@@ -1,5 +1,5 @@
 Hei {{ user }}!
-Boskapene skal ryddes og du må bekrefte ditt skap # {{ ownership.locker }} om du ønsker å beholde dette. Skaplåsen blir klippet og innholdet kastet om du ikke bekrefter forlengelsen innen 14 dager.
+Bokskapene skal ryddes og du må bekrefte ditt skap # {{ ownership.locker }} om du ønsker å beholde dette. Skaplåsen blir klippet og innholdet kastet om du ikke bekrefter forlengelsen innen 14 dager.
 https://{{ root_url }}/bokskap/aktiver/{{ token.key.hex }}
 
 
