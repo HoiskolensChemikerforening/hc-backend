@@ -1,9 +1,8 @@
 #!/usr/bin/env bash
 
 # Set PATH to include the Node.js binary directory managed by nvm
-# Uncomment and update the path to your node installation
-# Must be an installation on WSL when on windows
-export PATH="/home/paulj/.nvm/versions/node/v21.6.1/bin:$PATH"
+# Uncomment and update the path to your node installation if npm cannot be found
+# export PATH="/home/paulj/.nvm/versions/node/v21.6.1/bin:$PATH"
 
 find . -type f -name '*.html' -delete
 
