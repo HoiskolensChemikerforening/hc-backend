@@ -14,6 +14,7 @@
 {% load material_form %}
 {% block content %}
 
+<!--
 <a class='dropdown-trigger btn' style="width:150px" href='#' data-target='dropdown1'>Endre filtre!</a>
 
 <ul id='dropdown1' class='dropdown-content'>
@@ -36,62 +37,63 @@
       {% endfor %}
   </form>
 </ul>
-
-
-
-
+-->
 
 <ul class="collapsible">
   <li>
-    <div class="collapsible-header" style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-        Sted
-      </div>
-      <div style="display: flex">
-        <a style="color: black" href = "?sort_by=avg_sun&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-          <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-            <i class="material-icons">local_atm</i> Solfaktor
+    <div class="collapsible-header">
+      <div class="container" style="width: 100%">
+        <div class = "row" style="margin-bottom: 0">
+          <div class="col s3">
+            Sted
           </div>
-        </a>
-        <a style="color: black" href = "?sort_by=avg_livingExpences&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_dining</i> Levekostnader
+          <div class="col s9">
+            {% for element_key, element_value in context_data.items %}
+                <div class="col s2 left">
+                  <a style="color: black" href = "?sort_by={{element_value.1}}&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
+                    <div>
+                      <i class="material-icons">{{element_value.2}}</i>
+                    </div>
+                  </a>
+                </div>
+            {% endfor %}
+          </div>
         </div>
-        </a>
-        <a style="color: black" href = "?sort_by=avg_availability&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_see</i> Tilgjengelighet
-        </div>
-        </a>
-        <a style="color: black" href = "?sort_by=avg_nature&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-          <i class="material-icons">local_library</i> Natur
-        </div>
-        </a>
       </div>
     </div>
   </li>
 </ul>
+
 {% for country, data in travelletters_by_country.items %}
 <ul class="collapsible">
   <li>
-    <div class="collapsible-header" style="display: flex; justify-content: space-between; align-items: center;">
-      <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 25px">
-        <i class="material-icons">place</i>
-        {{ country }}
-      </div>
-      <div style="display: flex">
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 100px">
-          {{ data.avg_sun }}
-        </div>
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 150px">
-          {{ data.avg_livingExpences }}
-        </div>
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 125px">
-          {{ data.avg_availability }}
-        </div>
-        <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
-          {{ data.avg_nature }}
+    <div class="collapsible-header">
+      <div class = "container" style="width: 100%">
+        <div class = "row" style="margin-bottom: 0">
+          <div class = "col s3">
+            <i class="material-icons">place</i>
+            {{ country }}
+          </div>
+          <div class = "col s9">
+            <div class = "col s2">
+              {{ data.avg_sun}}
+            </div>
+            <div class = "col s2">
+              {{ data.avg_livingExpences}}
+            </div>
+            <div class = "col s2">
+              {{ data.avg_availability}}
+            </div>
+            <div class = "col s2">
+              {{ data.avg_nature}}
+            </div>
+            <div class = "col s2">
+              {{ data.avg_hospitaility}}
+            </div>
+            <div class = "col s2">
+              {{ data.avg_workLoad}}
+            </div>
+          </div>
         </div>
       </div>
     </div>

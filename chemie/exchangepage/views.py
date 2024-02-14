@@ -12,6 +12,14 @@ from django.contrib import messages
 def index(request):
     travelletters = Travelletter.objects.all().order_by("country")
     avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability', 'avg_nature', 'avg_hospitality', 'avg_workLoad']
+    context_data= {'sun':            [1, "avg_sun"           , "wb_sunny", "Solfaktor"],
+                   'livingExpences': [1, "avg_livingExpences", "local_atm", "Levekostnader"],
+                   'availability':   [1, "avg_availability"  , "airplanemode_active", "Tilgjengelighet"],
+                   'nature':         [1, "avg_nature"        , "local_florist", "Natur"],
+                   'hospitality':    [1, "avg_hospitality"   , "people", "Gjestfrihet"],
+                   'workload':       [1, "avg_workload"      , "school", "Arbeidsmengde"]
+                   }
+
     sort_by = request.GET.get('sort_by', 'country')
     sort_order = request.GET.get('sort_order', 'desc')
 
@@ -61,7 +69,8 @@ def index(request):
                "data_by_city": data_by_country_city,
                "sort_by": sort_by,
                "sort_order": sort_order,
-               "form": form}
+               "form": form,
+               "context_data": context_data}
 
     return render(request, "index.html", context)
 
