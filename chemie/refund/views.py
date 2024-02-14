@@ -144,7 +144,7 @@ def send_status_mail(request, refund):
     """
     Sends an e-mail to inform a user if there request has been updated.
     """
-    mail_to = request.user.email
+    mail_to = refund.user.email
 
     mail.send(
         mail_to,
