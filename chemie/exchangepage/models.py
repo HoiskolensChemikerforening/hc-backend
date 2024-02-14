@@ -25,7 +25,7 @@ class Travelletter(models.Model):
             'avg_livingExpences': 0,
             'avg_availability': 0,
             'avg_nature': 0,
-            'avg_hospitaility': 0,
+            'avg_hospitality': 0,
             'avg_workLoad': 0,
         }
 
@@ -34,14 +34,14 @@ class Travelletter(models.Model):
             data['avg_livingExpences'] += letter.livingExpences
             data['avg_availability'] += letter.availability
             data['avg_nature'] += letter.nature
-            data['avg_hospitaility'] += letter.hospitality
+            data['avg_hospitality'] += letter.hospitality
             data['avg_workLoad'] += letter.workLoad
 
         data['avg_sun']            /= len(travelletters_by_country)
         data['avg_livingExpences'] /= len(travelletters_by_country)
         data['avg_availability']   /= len(travelletters_by_country)
         data['avg_nature']         /= len(travelletters_by_country)
-        data['avg_hospitaility']   /= len(travelletters_by_country)
+        data['avg_hospitality']   /= len(travelletters_by_country)
         data['avg_workLoad']       /= len(travelletters_by_country)
 
         return data
@@ -55,7 +55,7 @@ class Travelletter(models.Model):
             'avg_livingExpences': 0,
             'avg_availability': 0,
             'avg_nature': 0,
-            'avg_hospitaility': 0,
+            'avg_hospitality': 0,
             'avg_workLoad': 0,
         }
 
@@ -64,14 +64,14 @@ class Travelletter(models.Model):
             data['avg_livingExpences'] += letter.livingExpences
             data['avg_availability'] += letter.availability
             data['avg_nature'] += letter.nature
-            data['avg_hospitaility'] += letter.hospitality
+            data['avg_hospitality'] += letter.hospitality
             data['avg_workLoad'] += letter.workLoad
 
         data['avg_sun']            /= len(travelletters_by_city)
         data['avg_livingExpences'] /= len(travelletters_by_city)
         data['avg_availability']   /= len(travelletters_by_city)
         data['avg_nature']         /= len(travelletters_by_city)
-        data['avg_hospitaility']   /= len(travelletters_by_city)
+        data['avg_hospitality']   /= len(travelletters_by_city)
         data['avg_workLoad']       /= len(travelletters_by_city)
 
         return country, data
