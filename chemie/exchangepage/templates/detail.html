@@ -22,19 +22,62 @@
         border-radius: 5px;
     }
 
-
     .info-item {
         margin-bottom: 10px;
     }
 
-    .custom-card {
-        width: 290px;
-        height: 270px;
+    .carousel-item {
+        width:300px !important;
     }
 
-    .carousel-item {
-        width:300px !important;}
+    /* For liten mobildrit */
+    @media only screen and (max-width: 600px) {
+        .custom-card {
+            margin-top: 20px;
+        }
+        .customcol {
+
+        }
+    }
 </style>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+
+</script>
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
@@ -66,14 +109,14 @@
 </div>
 
  <div class="information-box-container">
-    <div class="row">
         <h3>Generell informasjon om {{ travelletter.city }}</h3>
 
-      <div class="col s8">
+     <div class="row customcol">
+      <div class="col s12 m12 l8">
           {{ travelletter.destinationInfo }}
       </div>
-        <div class="col s4">
-          <div class="card yellow custom-card">
+        <div class="col s12 m12 l4">
+          <div class="card yellow">
             <div class="card-content white-text">
               <span class="card-title"> Vurdering: </span>
               <p>
