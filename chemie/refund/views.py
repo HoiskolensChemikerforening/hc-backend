@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
 from .forms import RefundFormSet, AccountNumberForm
 from .models import Refund, RefundRequest, STATUS
 from django.contrib import messages
@@ -128,6 +128,8 @@ def detail_admin_view(request, id):
     Generate the admin detail page for a certain refund request. This view generates the page for users with certain permissions only.
     """
     context = get_detail_context(request, id, admin=True)
+    if type(context) == HttpResponseRedirect:
+        return context
     return render(request, "detail.html", context)
 
 def error_message(request):
