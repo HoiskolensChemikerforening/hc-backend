@@ -69,9 +69,9 @@ class CGP(models.Model):
             cgp: CGP object
         """
         current_year = int(timezone.now().year)
-        if CGP.objects.filter(year=current_year):
+        if cls.objects.filter(year=current_year):
             return None
-        return CGP.objects.create(is_open=False, year=int(timezone.now().year))
+        return cls.objects.create(is_open=False, year=int(timezone.now().year))
 
     @classmethod
     def get_latest_active(cls):
@@ -82,7 +82,7 @@ class CGP(models.Model):
         Return:
             cgp: CGP object (latest open instance) or None (if no instance is open)
         """
-        cgps = CGP.objects.filter(is_open=True).order_by("-year")
+        cgps = cls.objects.filter(is_open=True).order_by("-year")
         if not cgps:
             return None
         return cgps[0]
