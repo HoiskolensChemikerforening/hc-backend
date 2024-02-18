@@ -118,6 +118,8 @@ def detail_view(request, id):
     Generate the detail page for a certain refund request. This view generates the page for normal users.
     """
     context = get_detail_context(request, id, admin=False)
+    if type(context) == HttpResponseRedirect:
+        return context
     return render(request, "detail.html", context)
 
 
