@@ -104,6 +104,18 @@
 
 <div id="confetti-wrapper">
 </div>
+  <script>
+        confetti_wrapper = document.getElementById("confetti-wrapper");
+        contentbox = document.getElementsByTagName("body")[0];
+        confetti_wrapper.style.height = `${contentbox.offsetHeight}px`;
+        confetti_wrapper.style.position = "absolute";
+        confetti_wrapper.style.top = 0;
+        confetti_wrapper.style.left = 0;
+        confetti_wrapper.style.width = `${contentbox.offsetWidth}px`;
+        confetti_wrapper.style.overflow = "hidden";
+        confetti_wrapper.style.zIndex = -200;
+
+  </script>
   <script src="{% static "js/cgp.js" %}"></script>
   </div>
 </body>
