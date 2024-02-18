@@ -35,4 +35,6 @@ urlpatterns = [
     #API
     path("api/profil/", views.ProfileListCreate.as_view(), name="api-profile-list",),
     path("api/profil/<int:pk>/", views.ProfileDetail.as_view(), name="api-profile-detail",),
+    path("api/bruker/", views.UserListCreate.as_view(), name="api-user-list",),
+    path("api/bruker/<int:pk>/", views.UserDetail.as_view(), name="api-bruker-detail",),
 ]

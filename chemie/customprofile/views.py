@@ -52,6 +52,7 @@ from .serializers import (
     MedalSerializer,
     ProfileSerializer,
     CustomTokenObtainPairSerializer,
+    UserSerializerWithId
 )
 
 
@@ -463,10 +464,17 @@ class ProfileListCreate(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
+class UserListCreate(generics.ListCreateAPIView):
+    queryset = User.objects.all().order_by("id")
+    serializer_class = UserSerializerWithId
 
 class ProfileDetail(generics.RetrieveAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
+
+class UserDetail(generics.RetrieveAPIView):
+    queryset = User.objects.all()
+    serializer_class = UserSerializerWithId
 
 
 class MedalListCreate(generics.ListCreateAPIView):
