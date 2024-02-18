@@ -23,15 +23,48 @@
             Sted
           </div>
           <div class="col s9">
-            {% for element_key, element_value in context_data.items %}
-                <div class="col s2">
-                  <a style="color: black" href = "?sort_by={{element_value.1}}&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                    <div>
-                      <i class="material-icons">{{element_value.2}}</i>
-                    </div>
-                  </a>
+            <div class="col s2">
+              <a class ="tooltipped" data-position="top" data-tooltip="Solfaktor" style="color: black" href = "?sort_by=avg_sun&sort_order=asc">
+                <div>
+                  <i class="material-icons">wb_sunny</i>
                 </div>
-            {% endfor %}
+              </a>
+            </div>
+            <div class="col s2">
+              <a class ="tooltipped" data-position="top" data-tooltip="Levekostnader" style="color: black" href = "?sort_by=avg_livingExpences&sort_order=asc">
+                <div>
+                  <i class="material-icons">local_atm</i>
+                </div>
+              </a>
+            </div>
+            <div class="col s2">
+              <a class ="tooltipped" data-position="top" data-tooltip="Tilgjengelighet" style="color: black" href = "?sort_by=avg_availability&sort_order=asc">
+                <div>
+                  <i class="material-icons">airplanemode_active</i>
+                </div>
+              </a>
+            </div>
+            <div class="col s2">
+              <a class ="tooltipped" data-position="top" data-tooltip="Natur" style="color: black" href = "?sort_by=avg_nature&sort_order=asc">
+                <div>
+                  <i class="material-icons">local_florist</i>
+                </div>
+              </a>
+            </div>
+            <div class="col s2">
+              <a class ="tooltipped" data-position="top" data-tooltip="Gjestfrihet" style="color: black" href = "?sort_by=avg_hospitality&sort_order=asc">
+                <div>
+                  <i class="material-icons">people</i>
+                </div>
+              </a>
+            </div>
+            <div class="col s2">
+              <a class ="tooltipped" data-position="top" data-tooltip="Arbeidsmengde" style="color: black" href = "?sort_by=avg_workload&sort_order=asc">
+                <div>
+                  <i class="material-icons">school</i>
+                </div>
+              </a>
+            </div>
           </div>
         </div>
       </div>
@@ -159,6 +192,12 @@
   });
 </script>
 
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var tooltips = document.querySelectorAll('.tooltipped');
+    var tooltipInstances = M.Tooltip.init(tooltips, {});
+  });
+</script>
 
 {% endblock content %}
 
