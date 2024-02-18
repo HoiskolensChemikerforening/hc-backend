@@ -10,10 +10,12 @@
       <mj-section mj-class="primaryColor" padding-top="20">
         <mj-column width="98%">
           <mj-text mj-class="readable">
-            Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, {% if status == 1 %}har blitt avslått{% elif status == 2 %} behandles på nytt {%else%} har blitt godkjent. Beløpet har blitt overført til din konto{%endif%}. Ta kontakt med <a href="mailto:kasserer@hc.ntnu.no" class="blink">kasserer@hc.ntnu.no</a> ved eventuelle spørsmål.<br><br>
+            Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, {% if status == 1 %}har blitt avslått{% elif status == 2 %} behandles på nytt{%else%} har blitt godkjent. Beløpet har blitt overført til din konto{%endif%}. Ta kontakt med <a href="mailto:kasserer@hc.ntnu.no" class="blink">kasserer@hc.ntnu.no</a> ved eventuelle spørsmål.<br><br>
 
+            {% if reason != '' %}
             Begrunnelse: <br>
             {{reason}}
+            {% endif %}
           </mj-text>
         </mj-column>
       </mj-section>

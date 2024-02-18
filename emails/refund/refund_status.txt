@@ -1,4 +1,6 @@
-Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, har blitt avslått. Ta kontakt med kasserer@hc.ntnu.no for eventuelle spørsmål.<br><br>
+Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, {% if status == 1 %}har blitt avslått{% elif status == 2 %} behandles på nytt{%else%} har blitt godkjent. Beløpet har blitt overført til din konto{%endif%}. Ta kontakt med kasserer@hc.ntnu.no ved eventuelle spørsmål.
 
-Begrunnelse: <br>
+{% if reason != '' %}
+Begrunnelse:
 {{reason}}
+{% endif %}

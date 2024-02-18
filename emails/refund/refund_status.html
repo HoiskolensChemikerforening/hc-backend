@@ -164,8 +164,8 @@
                   <tbody>
                     <tr>
                       <td align="left" style="font-size:0px;padding:10px 25px;padding-left:4%;word-break:break-word;">
-                        <div style="font-family:'Proxima Nova', ProximaNova,Proxima-Nova, Helvetica, Arial, sans-serif;font-size:18px;font-weight:300;line-height:1;text-align:left;color:white;">Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, {% if status == 1 %}har blitt avslått{% elif status == 2 %} behandles på nytt {%else%} har blitt godkjent. Beløpet har blitt overført til din konto{%endif%}. Ta kontakt med <a href="mailto:kasserer@hc.ntnu.no" class="blink">kasserer@hc.ntnu.no</a> ved eventuelle spørsmål.<br><br> Begrunnelse: <br>
-                          {{reason}}
+                        <div style="font-family:'Proxima Nova', ProximaNova,Proxima-Nova, Helvetica, Arial, sans-serif;font-size:18px;font-weight:300;line-height:1;text-align:left;color:white;">Din søknad om refusjon av {{amount}} kr, opprettet {{created}}, {% if status == 1 %}har blitt avslått{% elif status == 2 %} behandles på nytt{%else%} har blitt godkjent. Beløpet har blitt overført til din konto{%endif%}. Ta kontakt med <a href="mailto:kasserer@hc.ntnu.no" class="blink">kasserer@hc.ntnu.no</a> ved eventuelle spørsmål.<br><br> {% if reason != '' %} Begrunnelse: <br>
+                          {{reason}} {% endif %}
                         </div>
                       </td>
                     </tr>
