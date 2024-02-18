@@ -23,7 +23,7 @@ class QuestionsForm(forms.ModelForm):
 class TravelletterForm(forms.ModelForm):
     class Meta:
         model = Travelletter
-        fields = ['user', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
+        fields = ['user', 'country', 'semester', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
 
 class ExperienceForm(forms.ModelForm):
     class Meta:

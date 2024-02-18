@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
 from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet
 from django.contrib import messages
-
+from chemie.customprofile.models import SPECIALIZATION
 
 # Create your views here.
 
@@ -71,6 +71,7 @@ def index(request):
 @login_required()
 def cityPageViews(request, city_name):
     travelletters = Travelletter.objects.filter(city=city_name).order_by("user")
+    spec_id = travelletters
     context = {
         "city_name": city_name,
         "travelletters": travelletters,
@@ -81,8 +82,6 @@ def cityPageViews(request, city_name):
 @login_required()
 def detailViews(request, pk):
     travelletter = Travelletter.objects.get(id=pk)
-
-    print(travelletter.user)
 
     context = {
         'travelletter': travelletter,
@@ -237,14 +236,12 @@ def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = Experience.objects.filter(travelletter=travelletter)
     questions = [experience.question for experience in experiences]
-
-    print("Experiences length:", len(experiences))
-    print("Questions length:", len(questions))
-    print("Experiences:", experiences)
+    specialization_id = travelletter.user.specialization
 
     context = {'travelletter': travelletter,
                'experiences': experiences,
-               'questions': questions
+               'questions': questions,
+               'specialization': SPECIALIZATION[specialization_id][1]
     }
 
     print(len(experiences))

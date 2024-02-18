@@ -4,6 +4,7 @@ from chemie.customprofile.models import Profile
 class Travelletter(models.Model):
     user           = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Bruker")
     country        = models.CharField(max_length=30, verbose_name="Land")
+    semester       = models.CharField(max_length = 3, verbose_name="Semester")
     city           = models.CharField(max_length=30, verbose_name="By")
     sun            = models.IntegerField(default=0, verbose_name="Solfaktor")
     livingExpences = models.IntegerField(default=0, verbose_name="Levekostnader")
@@ -11,7 +12,7 @@ class Travelletter(models.Model):
     nature         = models.IntegerField(default=0, verbose_name="Natur")
     hospitality   = models.IntegerField(default=0, verbose_name="Gjestfrihet")
     workLoad       = models.IntegerField(default=0, verbose_name="Arbeidsmengde")
-    destinationInfo = models.TextField(max_length = 2000, verbose_name="countryInfo")
+    destinationInfo = models.TextField(max_length = 700, verbose_name="countryInfo")
 
     def __str__(self):
         return f"{self.user.user.first_name} {self.country}"
