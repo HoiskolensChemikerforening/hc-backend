@@ -37,12 +37,13 @@ class Travelletter(models.Model):
             data['avg_hospitality'] += letter.hospitality
             data['avg_workLoad'] += letter.workLoad
 
-        data['avg_sun']            /= len(travelletters_by_country)
-        data['avg_livingExpences'] /= len(travelletters_by_country)
-        data['avg_availability']   /= len(travelletters_by_country)
-        data['avg_nature']         /= len(travelletters_by_country)
-        data['avg_hospitality']   /= len(travelletters_by_country)
-        data['avg_workLoad']       /= len(travelletters_by_country)
+        num_letters = len(travelletters_by_country)
+        data['avg_sun'] = round(data['avg_sun'] / num_letters, 1)
+        data['avg_livingExpences'] = round(data['avg_livingExpences'] / num_letters, 1)
+        data['avg_availability'] = round(data['avg_availability'] / num_letters, 1)
+        data['avg_nature'] = round(data['avg_nature'] / num_letters, 1)
+        data['avg_hospitality'] = round(data['avg_hospitality'] / num_letters, 1)
+        data['avg_workLoad'] = round(data['avg_workLoad'] / num_letters, 1)
 
         return data
 
@@ -67,12 +68,13 @@ class Travelletter(models.Model):
             data['avg_hospitality'] += letter.hospitality
             data['avg_workLoad'] += letter.workLoad
 
-        data['avg_sun']            /= len(travelletters_by_city)
-        data['avg_livingExpences'] /= len(travelletters_by_city)
-        data['avg_availability']   /= len(travelletters_by_city)
-        data['avg_nature']         /= len(travelletters_by_city)
-        data['avg_hospitality']   /= len(travelletters_by_city)
-        data['avg_workLoad']       /= len(travelletters_by_city)
+        num_letters = len(travelletters_by_city)
+        data['avg_sun'] = round(data['avg_sun'] / num_letters, 1)
+        data['avg_livingExpences'] = round(data['avg_livingExpences'] / num_letters, 1)
+        data['avg_availability'] = round(data['avg_availability'] / num_letters, 1)
+        data['avg_nature'] = round(data['avg_nature'] / num_letters, 1)
+        data['avg_hospitality'] = round(data['avg_hospitality'] / num_letters, 1)
+        data['avg_workLoad'] = round(data['avg_workLoad'] / num_letters, 1)
 
         return country, data
 

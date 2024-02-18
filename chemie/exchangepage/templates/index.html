@@ -14,31 +14,6 @@
 {% load material_form %}
 {% block content %}
 
-<!--
-<a class='dropdown-trigger btn' style="width:150px" href='#' data-target='dropdown1'>Endre filtre!</a>
-
-<ul id='dropdown1' class='dropdown-content'>
-  <form method="post">
-    {% csrf_token %}
-      {% for field in form.visible_fields %}
-          <div style="padding: 5px">
-           {% for std in field %}
-              <li>
-                <div style="justify-items: center; align-items: center;padding: 10px">
-                  <label>
-                    <input type="checkbox" class="filled-in" name="{{ std.name }}"/>
-                    <span>{{ std }}</span>
-                  </label>
-                </div>
-              </li>
-           {% endfor %}
-          </div>
-        <input type="submit" value="Submit">
-      {% endfor %}
-  </form>
-</ul>
--->
-
 <ul class="collapsible">
   <li>
     <div class="collapsible-header">
@@ -49,7 +24,7 @@
           </div>
           <div class="col s9">
             {% for element_key, element_value in context_data.items %}
-                <div class="col s2 left">
+                <div class="col s2">
                   <a style="color: black" href = "?sort_by={{element_value.1}}&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                     <div>
                       <i class="material-icons">{{element_value.2}}</i>
@@ -103,21 +78,36 @@
         {% if land == country %}
           {% for city_name, city_data in city.items %}
             <div class="col s12 m6 l3" style="padding-bottom: 5px">
-              <a href="{% url 'exchangepage:citypage' city_name %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">location_city</i>
-                <div style="display: flex;flex-direction: row;justify-content: space-between">
-                  <div style="padding-right: 10px">{{city_name}}</div>
-                  <div style="display: flex">
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 100px">
-                      {{ city_data.avg_sun }}
+              <a href="{% url 'exchangepage:citypage' city_name %}" class="waves-effect waves-light btn-large" style="width: 100%">
+                <div class="container" style="width: 100%">
+                  <div class = "row" style="margin-bottom: 0">
+                    <div class="col s3 valign-wrapper">
+                      <div>
+                      <i class="material-icons white-text">location_city</i>
+                      </div>
+                      <div class="truncate">
+                      {{city_name}}
+                      </div>
                     </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 150px">
-                      {{ city_data.avg_livingExpences }}
-                    </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 125px">
-                      {{ city_data.avg_availability }}
-                    </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 5px">
-                      {{ city_data.avg_nature }}
+                    <div class = "col s9">
+                      <div class = "col s2">
+                        {{ city_data.avg_sun }}
+                      </div>
+                      <div class = "col s2">
+                        {{ city_data.avg_livingExpences }}
+                      </div>
+                      <div class = "col s2">
+                        {{ city_data.avg_availability }}
+                      </div>
+                      <div class = "col s2">
+                        {{ city_data.avg_nature }}
+                      </div>
+                      <div class = "col s2">
+                        {{ city_data.avg_hospitality }}
+                      </div>
+                      <div class = "col s2">
+                        {{ city_data.avg_workLoad}}
+                      </div>
                     </div>
                   </div>
                 </div>
