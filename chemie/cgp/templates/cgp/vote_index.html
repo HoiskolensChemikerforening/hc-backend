@@ -202,7 +202,7 @@ function handleTouchStart(event) {
 
 
 function handleTouchMove(event){
-    console.log(waiting);
+    //console.log(waiting);
     clearTimeout(timeout);
     if (!waiting){
     //Touch
@@ -212,9 +212,14 @@ function handleTouchMove(event){
         var touch = event.targetTouches[0];
         // Place element where the finger is touching
         //this.style.position = 'absolute';
-        this.parentElement.classList.add("moving")
-        this.parentElement.style.left = parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
+        this.parentElement.classList.add("moving");
+        let leftoffset = this.parentElement.parentElement.getElementsByTagName("span")[0].getBoundingClientRect().right;
+        let rightoffset = this.parentElement.parentElement.getBoundingClientRect().right;
+        let boxwidth= rightoffset-leftoffset;
+        this.parentElement.style.left = parseFloat(leftoffset) + 'px'//parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
+        //this.parentElement.style.left = parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
         this.parentElement.style.top = parseInt(touch.pageY - Math.floor(this.parentElement.offsetHeight/2)) + 'px';
+        this.parentElement.style.width= parseFloat(boxwidth)+'px';
 
         //checks if it exits the screen
         var scollingSpeed = 20;
