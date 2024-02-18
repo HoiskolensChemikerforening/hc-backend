@@ -47,14 +47,23 @@ EMAIL_HOST=smtp.ansatt.ntnu.no
 
 #### Re-create email templates
 Email templates are twofold: A HTML template and a simple text 
-template with no styling. These must be loaded into the database 
-before use. This is done by running:
+template with no styling. The simple text template serves as a default fallback for email clients not supporting HTML. 
+The HTML templates contained in the emails folder are generated from their corresponding MJML file and should not be edited manually. 
+Changes have to be applied to both the simple text template and MJML file. Changes done to these files are not 
+automatically loaded in to the database and the chemie/fixtures/email-templates.json file. This is done by running:
 
 ```shell
 python manage.py import_emails
  ```
-This requires  [MJML](https://mjml.io) to be installed.
-Warning: There is an issue with the import_emails program which leads to all of the templates being deleted without any new ones being created to replace them.
+
+This requires [node.js](https://nodejs.org/) and [MJML](https://mjml.io) to be installed. Run the following command to install MJML globally on your production PC (Not the server).
+
+```shell
+npm install -g mjml
+ ```
+
+Warning: There is an issue with the import_emails program which leads to all of the templates being deleted without any new ones being created to replace them. 
+This happens when the emails/mjml-transpile.sh script can not find the mjml command. 
 Make sure to fix this and test it locally before attempting to use this program.
  
 ### DevOps
