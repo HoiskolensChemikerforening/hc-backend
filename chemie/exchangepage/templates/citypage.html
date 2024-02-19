@@ -32,47 +32,47 @@
     <div class="collapsible-header zerospace">
       <div class="container zerospace" style="width: 100%">
         <div class = "row zerospace" style="margin-bottom: 0;margin-right: 0;margin-left: 0">
-          <div class="col s3">
-            Sted
+          <div class="col l3 m3 s5">
+            Person
           </div>
-          <div class="col s9">
+          <div class="col l9 m9 s7">
             <div class = "row" style="margin-bottom: 0">
-              <div class="col s2">
+              <div class="col l2 m2 s3">
                 <a class ="tooltipped" data-position="top" data-tooltip="Solfaktor" style="color: black" href = "?sort_by=sun&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                   <div>
                     <i class="material-icons">wb_sunny</i>
                   </div>
                 </a>
               </div>
-              <div class="col s2">
+              <div class="col l2 m2 s3">
                 <a class ="tooltipped" data-position="top" data-tooltip="Levekostnader" style="color: black" href = "?sort_by=livingExpences&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                   <div>
                     <i class="material-icons">local_atm</i>
                   </div>
                 </a>
               </div>
-              <div class="col s2">
+              <div class="col l2 m2 s3">
                 <a class ="tooltipped" data-position="top" data-tooltip="Tilgjengelighet" style="color: black" href = "?sort_by=availability&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                   <div>
                     <i class="material-icons">airplanemode_active</i>
                   </div>
                 </a>
               </div>
-              <div class="col s2">
+              <div class="col l2 m2 s3">
                 <a class ="tooltipped" data-position="top" data-tooltip="Natur" style="color: black" href = "?sort_by=nature&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                   <div>
                     <i class="material-icons">local_florist</i>
                   </div>
                 </a>
               </div>
-              <div class="col s2">
+              <div class="col l2 m2 s2 hide-on-small-only">
                 <a class ="tooltipped" data-position="top" data-tooltip="Gjestfrihet" style="color: black" href = "?sort_by=hospitality&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                   <div>
                     <i class="material-icons">people</i>
                   </div>
                 </a>
               </div>
-              <div class="col s2">
+              <div class="col l2 m2 s2 hide-on-small-only">
                 <a class ="tooltipped" data-position="top" data-tooltip="Arbeidsmengde" style="color: black" href = "?sort_by=workLoad&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                   <div>
                     <i class="material-icons">school</i>
@@ -93,7 +93,7 @@
           <a href="{% url 'exchangepage:detail' travelletter.id %}" class="waves-effect waves-light btn-large zerospace" style="width: 100%">
             <div class="container zerospace" style="width: 100%">
               <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
-                <div class="col s3 valign-wrapper">
+                <div class="col l3 m3 s5 valign-wrapper">
                   <div>
                   <i class="material-icons white-text">person</i>
                   </div>
@@ -101,24 +101,24 @@
                   {{travelletter.user}}
                   </div>
                 </div>
-                <div class = "col s9">
+                <div class = "col l9 m9 s7">
                   <div class="row" style="margin-bottom: 0">
-                    <div class = "col s2">
+                    <div class = "col l2 m2 s3">
                       {{ travelletter.sun }}
                     </div>
-                    <div class = "col s2">
+                    <div class = "col l2 m2 s3">
                       {{ travelletter.livingExpences }}
                     </div>
-                    <div class = "col s2">
+                    <div class = "col l2 m2 s3">
                       {{ travelletter.availability }}
                     </div>
-                    <div class = "col s2">
+                    <div class = "col l2 m2 s3">
                       {{ travelletter.nature }}
                     </div>
-                    <div class = "col s2">
+                    <div class = "col l2 m2 s2 hide-on-small-only">
                       {{ travelletter.hospitality }}
                     </div>
-                    <div class = "col s2">
+                    <div class = "col l2 m2 s2 hide-on-small-only">
                       {{ travelletter.workLoad}}
                     </div>
                    </div>
