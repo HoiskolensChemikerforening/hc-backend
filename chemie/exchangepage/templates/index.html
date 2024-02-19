@@ -24,42 +24,42 @@
           </div>
           <div class="col s9">
             <div class="col s2">
-              <a class ="tooltipped" data-position="top" data-tooltip="Solfaktor" style="color: black" href = "?sort_by=avg_sun&sort_order=asc">
+              <a class ="tooltipped" data-position="top" data-tooltip="Solfaktor" style="color: black" href = "?sort_by=avg_sun&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                 <div>
                   <i class="material-icons">wb_sunny</i>
                 </div>
               </a>
             </div>
             <div class="col s2">
-              <a class ="tooltipped" data-position="top" data-tooltip="Levekostnader" style="color: black" href = "?sort_by=avg_livingExpences&sort_order=asc">
+              <a class ="tooltipped" data-position="top" data-tooltip="Levekostnader" style="color: black" href = "?sort_by=avg_livingExpences&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                 <div>
                   <i class="material-icons">local_atm</i>
                 </div>
               </a>
             </div>
             <div class="col s2">
-              <a class ="tooltipped" data-position="top" data-tooltip="Tilgjengelighet" style="color: black" href = "?sort_by=avg_availability&sort_order=asc">
+              <a class ="tooltipped" data-position="top" data-tooltip="Tilgjengelighet" style="color: black" href = "?sort_by=avg_availability&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                 <div>
                   <i class="material-icons">airplanemode_active</i>
                 </div>
               </a>
             </div>
             <div class="col s2">
-              <a class ="tooltipped" data-position="top" data-tooltip="Natur" style="color: black" href = "?sort_by=avg_nature&sort_order=asc">
+              <a class ="tooltipped" data-position="top" data-tooltip="Natur" style="color: black" href = "?sort_by=avg_nature&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                 <div>
                   <i class="material-icons">local_florist</i>
                 </div>
               </a>
             </div>
             <div class="col s2">
-              <a class ="tooltipped" data-position="top" data-tooltip="Gjestfrihet" style="color: black" href = "?sort_by=avg_hospitality&sort_order=asc">
+              <a class ="tooltipped" data-position="top" data-tooltip="Gjestfrihet" style="color: black" href = "?sort_by=avg_hospitality&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                 <div>
                   <i class="material-icons">people</i>
                 </div>
               </a>
             </div>
             <div class="col s2">
-              <a class ="tooltipped" data-position="top" data-tooltip="Arbeidsmengde" style="color: black" href = "?sort_by=avg_workload&sort_order=asc">
+              <a class ="tooltipped" data-position="top" data-tooltip="Arbeidsmengde" style="color: black" href = "?sort_by=avg_workLoad&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
                 <div>
                   <i class="material-icons">school</i>
                 </div>
@@ -163,32 +163,30 @@
         <div class ="col s12">
           <h5>Symbolforklaring</h5>
         </div>
-        <div class ="col s4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">wb_sunny</i>
           <p> - solfaktor</p>
         </div>
-        <div class ="col s4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">local_atm</i>
           <p> - Levekostnader</p>
         </div>
-        <div class ="col s4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">airplanemode_active</i>
           <p> - Tilgjengelighet</p>
         </div>
-        <div class ="col s4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">local_florist</i>
           <p> - Natur</p>
         </div>
-
-        <div class ="col s4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">people</i>
           <p> - Gjestfrihet</p>
         </div>
-        <div class ="col s4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">school</i>
           <p> - Arbeidsmengde</p>
         </div>
-
       </div>
     </div>
   </div>
