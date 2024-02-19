@@ -15,38 +15,129 @@
 
 {% load material_form %}
 {% block content %}
+<style>
+  .zerospace{
+    padding-left: 0;
+    padding-right: 0;
+    border-width: 0;
+  }
+</style>
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "exchangepage:index" %}" class="breadcrumb">Land</a>
     <a class="breadcrumb">Byer</a>
 </div>
 
-  <ul class="collection">
-    {% for travelletter in travelletters %}
-       <div class="col s12 m6 l3" style="padding-bottom: 5px">
-              <a href="{% url 'exchangepage:detail' travelletter.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">location_city</i>
-                <div style="display: flex;flex-direction: row;justify-content: space-between">
-                  <div style="padding-right: 10px">{{travelletter.user.user.first_name}}</div>
-                  <div style="display: flex">
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
-                      <i class="material-icons" style="color:white">local_atm</i> {{ city_data.avg_sun }}
-                    </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
-                      <i class="material-icons" style="color:white">local_dining</i> {{ city_data.avg_livingExpences }}
-                    </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
-                      <i class="material-icons" style="color:white">local_see</i> {{ city_data.avg_availability }}
-                    </div>
-                    <div style="display: flex; flex-direction: row; justify-content: center; align-items: center; padding-right: 50px">
-                      <i class="material-icons" style="color:white">local_library</i> {{ city_data.avg_nature }}
-                    </div>
+<ul class="collapsible zerospace">
+  <li class="zerospace">
+    <div class="collapsible-header zerospace">
+      <div class="container zerospace" style="width: 100%">
+        <div class = "row zerospace" style="margin-bottom: 0;margin-right: 0;margin-left: 0">
+          <div class="col s3">
+            Sted
+          </div>
+          <div class="col s9">
+            <div class = "row" style="margin-bottom: 0">
+              <div class="col s2">
+                <a class ="tooltipped" data-position="top" data-tooltip="Solfaktor" style="color: black" href = "?sort_by=avg_sun&sort_order=asc">
+                  <div>
+                    <i class="material-icons">wb_sunny</i>
+                  </div>
+                </a>
+              </div>
+              <div class="col s2">
+                <a class ="tooltipped" data-position="top" data-tooltip="Levekostnader" style="color: black" href = "?sort_by=avg_livingExpences&sort_order=asc">
+                  <div>
+                    <i class="material-icons">local_atm</i>
+                  </div>
+                </a>
+              </div>
+              <div class="col s2">
+                <a class ="tooltipped" data-position="top" data-tooltip="Tilgjengelighet" style="color: black" href = "?sort_by=avg_availability&sort_order=asc">
+                  <div>
+                    <i class="material-icons">airplanemode_active</i>
+                  </div>
+                </a>
+              </div>
+              <div class="col s2">
+                <a class ="tooltipped" data-position="top" data-tooltip="Natur" style="color: black" href = "?sort_by=avg_nature&sort_order=asc">
+                  <div>
+                    <i class="material-icons">local_florist</i>
+                  </div>
+                </a>
+              </div>
+              <div class="col s2">
+                <a class ="tooltipped" data-position="top" data-tooltip="Gjestfrihet" style="color: black" href = "?sort_by=avg_hospitality&sort_order=asc">
+                  <div>
+                    <i class="material-icons">people</i>
+                  </div>
+                </a>
+              </div>
+              <div class="col s2">
+                <a class ="tooltipped" data-position="top" data-tooltip="Arbeidsmengde" style="color: black" href = "?sort_by=avg_workload&sort_order=asc">
+                  <div>
+                    <i class="material-icons">school</i>
+                  </div>
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </li>
+</ul>
+
+<ul class="collection zerospace">
+{% for travelletter in travelletters %}
+   <div class="col s12 m6 l3 zerospace" style="padding-bottom: 5px">
+          <a href="{% url 'exchangepage:detail' travelletter.id %}" class="waves-effect waves-light btn-large zerospace" style="width: 100%">
+            <div class="container zerospace" style="width: 100%">
+              <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
+                <div class="col s3 valign-wrapper">
+                  <div>
+                  <i class="material-icons white-text">person</i>
+                  </div>
+                  <div class="truncate">
+                  {{travelletter.user}}
                   </div>
                 </div>
-              </a>
+                <div class = "col s9">
+                  <div class="row" style="margin-bottom: 0">
+                    <div class = "col s2">
+                      {{ travelletter.sun }}
+                    </div>
+                    <div class = "col s2">
+                      {{ travelletter.livingExpences }}
+                    </div>
+                    <div class = "col s2">
+                      {{ travelletter.availability }}
+                    </div>
+                    <div class = "col s2">
+                      {{ travelletter.nature }}
+                    </div>
+                    <div class = "col s2">
+                      {{ travelletter.hospitality }}
+                    </div>
+                    <div class = "col s2">
+                      {{ travelletter.workLoad}}
+                    </div>
+                   </div>
+                </div>
+              </div>
             </div>
-    {% endfor %}
-  </ul>
+          </a>
+        </div>
+{% endfor %}
+</ul>
+
 {% endblock content %}
 
 {% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var tooltips = document.querySelectorAll('.tooltipped');
+    var tooltipInstances = M.Tooltip.init(tooltips, {});
+  });
+</script>
 
 {% endblock %}
