@@ -69,8 +69,23 @@ def index(request):
 @login_required()
 def cityPageViews(request, city_name):
     travelletters = Travelletter.objects.filter(city=city_name).order_by("user")
+
+    sort_list = ['sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
+    sort_order = request.GET.get('sort_order', 'desc')
+    sort_by = request.GET.get('sort_by', 'user')
+
+    for item in sort_list:
+        if sort_by == item:
+            if sort_order == 'desc':
+                travelletters = travelletters.order_by(item)
+            elif sort_order == 'asc':
+                travelletters = travelletters.order_by("-"+item)
+            break
+
     context = {
         "city_name": city_name,
+        "sort_by": sort_by,
+        "sort_order": sort_order,
         "travelletters": travelletters,
     }
     return render(request, "citypage.html", context)
