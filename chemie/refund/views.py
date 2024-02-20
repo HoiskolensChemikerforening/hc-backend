@@ -24,7 +24,8 @@ def index(request):
     prev_requests = RefundRequest.objects.filter(user=user).order_by("-created")
     account_number = None
     if prev_requests:
-        account_number = prev_requests[0].account_number
+        if prev_requests[0].account_number.isnumeric():
+            account_number = prev_requests[0].account_number
 
     # Initialize the form asking for the account number
     accountform = AccountNumberForm({"account_number": account_number})
