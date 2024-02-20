@@ -146,6 +146,11 @@ let dragStartIndex;
 
 var overlapping;
 
+let lastDragged;
+
+let prevDragDown = true;
+let prevTouch;
+
 //timer
 var timeout;
 var waiting = true;
@@ -180,8 +185,7 @@ function createList() {
 
       draggable_list.appendChild(listItem);
     });
-
-  addEventListeners();
+    addEventListeners();
 }
 
 
@@ -190,26 +194,37 @@ function handleTouchStart(event) {
     //Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
     event.preventDefault();
     console.log('toooouchstart');
+    if (event.targetTouches.length === 1) {
+        prevTouch = event.targetTouches[0];
+    }
 
     timeout = setTimeout(function (element){
+        console.log("timeout")
         waiting=false;
         element.parentElement.classList.add("selected");
         element.parentElement.classList.remove("draggable-primary")
         //console.log(element.classList);
-        }, time, this);
+        }(this), time);
+    console.log("hei",timeout);
     dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
 
 function handleTouchMove(event){
-    //console.log(waiting);
+    //console.log("move");
     clearTimeout(timeout);
+    //console.log(waiting);
     if (!waiting){
     //Touch
     event.preventDefault();
     //console.log('touchmove');
     if (event.targetTouches.length === 1) {
+        //console.log("hei");
         var touch = event.targetTouches[0];
+        let dragDown = prevDragDown;
+        if (Math.abs(touch.pageY -prevTouch.pageY) > 1 ) {
+            dragDown = touch.pageY - prevTouch.pageY > 0;
+        }
         // Place element where the finger is touching
         //this.style.position = 'absolute';
         this.parentElement.classList.add("moving");
@@ -218,7 +233,12 @@ function handleTouchMove(event){
         let boxwidth= rightoffset-leftoffset;
         this.parentElement.style.left = parseFloat(leftoffset) + 'px'//parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
         //this.parentElement.style.left = parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
-        this.parentElement.style.top = parseInt(touch.pageY - Math.floor(this.parentElement.offsetHeight/2)) + 'px';
+        let draglst = document.getElementById("draggable-list");
+        let minTop = draglst.getBoundingClientRect().top;
+        let maxTop = draglst.getBoundingClientRect().bottom - this.parentElement.parentElement.offsetHeight;
+        let newTop = touch.pageY - Math.floor(this.parentElement.offsetHeight/2);
+
+        this.parentElement.style.top = parseInt(newTop) + 'px';
         this.parentElement.style.width= parseFloat(boxwidth)+'px';
 
         //checks if it exits the screen
@@ -243,9 +263,31 @@ function handleTouchMove(event){
                 rect1.bottom < rect2.top ||
                 rect1.top > rect2.bottom);
             if (overlap) {
+                //console.log(overlapping.length<1, overlapping);
                 if (overlapping.length<1 && div !== this.parentElement){
                     overlapping.push(div);
-                    div.classList.add("draggable-over")
+                    //console.log("hei")
+
+                    let toIndex = +div.parentElement.getAttribute('data-index');
+                    let fromIndex  = +this.parentElement.parentElement.getAttribute('data-index');
+                    if (dragDown !== prevDragDown) {
+                        lastDragged = null;
+                    }
+                    if (lastDragged!==div){
+                        div = swapItems(fromIndex, toIndex);
+                        lastDragged = div;
+                        //div.parentElement.getElementsByClassName("points")[0].style["text-shadow"]=null;
+                        div.parentElement.getElementsByClassName("points")[0].style["box-shadow"]=null;
+                        console.log("hei",div.parentElement.getElementsByClassName("points"))
+                        //this.parentElement.parentElement.getElementsByClassName("points")[0].style["text-shadow"] ="1px 1px 10px #fff, 1px 1px 10px #ccc";
+                        this.parentElement.parentElement.getElementsByClassName("points")[0].style["box-shadow"] ="inset 1px 1px 10px #fff, 1px 1px 10px #ccc";
+                        console.log(this.parentElement.parentElement.getElementsByClassName("points"));
+                        console.log(lastDragged.getElementsByClassName("country-name")[0].innerText)
+                    break;}
+
+
+
+                    //div.classList.add("draggable-over")
                     //div.style.backgroundColor ='green';
                 } else {if (div.classList.contains("draggable-over")){
                     div.classList.remove("draggable-over")
@@ -258,6 +300,8 @@ function handleTouchMove(event){
                 //div.style.backgroundColor ='white';
             }
         }
+        prevTouch= touch;
+        prevDragDown=dragDown;
   }
 }}
 
@@ -266,7 +310,9 @@ function handleTouchEnd(event) {
     if (!waiting) {
         waiting =true;
         this.parentElement.classList.remove("selected");
-        this.parentElement.classList.add("draggable-primary")
+        this.parentElement.classList.add("draggable-primary");
+        //this.parentElement.parentElement.getElementsByClassName("points")[0].style["text-shadow"] =null;
+        this.parentElement.parentElement.getElementsByClassName("points")[0].style["box-shadow"] =null;
         //Touch
         //console.log("end");
         //update from absolute to relative. Resets the element in the case of no overlapping.
@@ -280,10 +326,10 @@ function handleTouchEnd(event) {
             }
         }
         //if the item is overlapping with a valid element get the index and swap it (overlapping is a global variable updated by handle move
-        if (overlapping.length >= 1) {
+        /*if (overlapping.length >= 1) {
             const dragEndIndex = +overlapping[0].parentElement.getAttribute('data-index');
             bumpItems(dragStartIndex, dragEndIndex);
-        }
+        }*/
     }
 }
 
@@ -333,6 +379,7 @@ function swapItems(fromIndex, toIndex) {
     //console.log(fromIndex,toIndex)
   listItems[fromIndex].appendChild(itemTwo);
   listItems[toIndex].appendChild(itemOne);
+  return itemTwo
 }
 
 // Bumps list items that are drag and drop up or down
