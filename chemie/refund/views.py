@@ -14,12 +14,20 @@ def index(request):
     View to display the index page of the refund app (refund form).
     """
 
-    # Initialize the form asking for the account number
-    accountform = AccountNumberForm()
+
     # Get the current user
     user = request.user
     # Initialize a formset to contain different receipts
     formset = RefundFormSet(queryset=Refund.objects.none())
+
+    # Get account number from previous forms
+    prev_requests = RefundRequest.objects.filter(user=user).order_by("-created")
+    account_number = None
+    if prev_requests:
+        account_number = prev_requests[0].account_number
+
+    # Initialize the form asking for the account number
+    accountform = AccountNumberForm({"account_number": account_number})
 
     if request.POST:
 
@@ -66,7 +74,8 @@ def index(request):
     context = {
         "formset": formset,
         "accountform": accountform,
-        "user": user
+        "user": user,
+        "account_number": account_number
     }
     return render(request, "index.html", context)
 
