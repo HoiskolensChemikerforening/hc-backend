@@ -304,6 +304,8 @@ CACHES = {
     "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}
 }
 
+# File upload permissons
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 # CKEDITOR CONFIGURATION
 # ------------------------------------------------------------------------------
