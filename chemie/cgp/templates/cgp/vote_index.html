@@ -199,13 +199,10 @@ function handleTouchStart(event) {
     }
 
     timeout = setTimeout(function (element){
-        console.log("timeout")
         waiting=false;
         element.parentElement.classList.add("selected");
         element.parentElement.classList.remove("draggable-primary")
-        //console.log(element.classList);
         }(this), time);
-    console.log("hei",timeout);
     dragStartIndex = +this.closest('li').getAttribute('data-index');
 }
 
