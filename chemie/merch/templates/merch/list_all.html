@@ -36,19 +36,36 @@
         {% endif %}
         </ul>
     </div>
+
     <div class="row">
       {% for merch in merchs %}
-        <div class="col">
-
+        <div class="col s12 m6 l4">
+        <!-- When card is pressed, a detail view pops up. -->
+            <a href={%url "merch:detail" pk=merch.id %}>
+            <div class="card" style ="height: 350px">
+              <!-- Showing the pictures. -->
+              <div class="card-image" style="padding: 10px">
+                  <img src="{{merch.image.url}}" alt="img" style="height:180px;width: 100%; object-fit: contain;"}>
+              </div>
+              <!-- The box under each picture -->
+              <div class="card-content">
+                  <div class="card-title">{{merch.name}}</div>
+                  <div>{{merch.price|floatformat:2}} kr </div>
+              </div>
+            </div>
+            </a>
+        </div>
+        <!--
+      </div>
+        <div class="col l4 m6 s12">
             <a class="card" href={%url "merch:detail" pk=merch.id %} >
-
                 <img src="{{merch.image.url}}" alt="img" style="height:180px;" href={%url "merch:index" %}>
                 <div class="card" style="color:#222222; background-color:#F9CF00;" href={%url "merch:detail" pk=merch.id %}>{{merch.name}} - {{merch.price|floatformat:2}} kr </div>
-
             <a/>
-        </div>
-        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
+        </div>-->
+        <!--{% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %} -->
       {% endfor %}
+
     </div>
 
     <ul class="pagination nav navbar-nav">
