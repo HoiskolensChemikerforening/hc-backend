@@ -1,0 +1,32 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Innsending av ord
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  
+{% endblock nav_sub_header %}
+
+{% block content %}
+<style>
+
+  select{display: block;}
+</style>
+<div>
+<form method = "POST" enctype = "multipar/form-date"> {% csrf_token %}
+
+{{wordform.as_p}}
+
+  <div>
+  <input type = "submit" value = "Lagre ord i databasen" /> 
+  </div>
+
+</form>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}

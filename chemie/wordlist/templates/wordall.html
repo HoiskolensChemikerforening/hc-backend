@@ -1,0 +1,21 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Ordliste
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{% for objects in ord%}
+
+{{objects}}
+
+{% endfor%}
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
