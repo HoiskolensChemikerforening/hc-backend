@@ -47,4 +47,5 @@ class SortingForm(forms.Form):
     category = forms.ModelChoiceField(
         queryset=MerchCategory.objects.all(),
         widget=autocomplete.ModelSelect2(url="merch:category-autocomplete"),
+        label="Kategori",
     )

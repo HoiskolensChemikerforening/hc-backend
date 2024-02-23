@@ -13,7 +13,6 @@
 {% block content %}
 
     <div>
-        <h3>Velg en kategori:</h3>
         <form enctype="multipart/form-data" method='POST'>
         {% csrf_token %}
         <div class="card-content">
@@ -43,12 +42,12 @@
             <a href={%url "merch:detail" pk=merch.id %}>
             <div class="card" style ="height: 350px">
               <!-- Showing the pictures. -->
-              <div class="card-image" style="padding: 10px">
-                  <img src="{{merch.image.url}}" alt="img" style="height:180px; object-fit: contain;"}>
+              <div class="card-image">
+                  <img src="{{merch.image.url}}" alt="img" style="height:210px; object-fit: cover;"}>
               </div>
               <!-- The box under each picture -->
-              <div class="card-content">
-                  <h5 style="color: black">{{merch.name}}</h5>
+              <div class="card-content" style="">
+                  <h5 style="color: black;overflow-wrap: break-word; hyphens: auto;-ms-hyphens: auto; -moz-hyphens: auto; font-size: 120%">{{merch.name}}</h5>
                   <p style="color: black">{{merch.price|floatformat:2}} kr </p>
               </div>
             </div>
