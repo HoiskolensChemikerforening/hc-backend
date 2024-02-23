@@ -7,6 +7,8 @@ class MerchCategory(models.Model):
 
     def __str__(self):
         return self.name
+    class Meta:
+       ordering = ['name'] #Ordering elements by name in dropdown
 
 
 class Merch(models.Model):
