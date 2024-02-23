@@ -7,7 +7,7 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Selges av styret under kontortid!
+  Selges av Styret under kontortid!
 {% endblock nav_sub_header %}
 
 {% block content %}
@@ -40,10 +40,10 @@
       {% for merch in merchs %}
         <div class="col s12 m6 l4">
             <a href={%url "merch:detail" pk=merch.id %}>
-            <div class="card" style ="height: 350px">
+            <div class="card" style ="height: 390px">
               <!-- Showing the pictures. -->
               <div class="card-image">
-                  <img src="{{merch.image.url}}" alt="img" style="height:210px; object-fit: cover;"}>
+                  <img src="{{merch.image.url}}" alt="img" style="height:250px; object-fit: cover;"}>
               </div>
               <!-- The box under each picture -->
               <div class="card-content" style="">
