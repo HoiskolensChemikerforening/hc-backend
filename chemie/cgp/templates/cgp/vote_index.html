@@ -127,7 +127,7 @@ function dataToArray(dataString) {
 var countries = dataToArray("{{countries}}");
 var realnames = dataToArray("{{ realnames }}");
 var songtiteles = dataToArray("{{ songtiteles }}");
-console.log(songtiteles,realnames,countries);
+//console.log(songtiteles,realnames,countries);
 var points = "{{points}}";
 points = points.split(',');
 while (points.length < countries.length) {
@@ -193,7 +193,7 @@ function handleTouchStart(event) {
     //touch
     //Add the index of the element (in listItems) that is getting dragged to the dragStartIndex variable
     event.preventDefault();
-    console.log('toooouchstart');
+    //console.log('toooouchstart');
     if (event.targetTouches.length === 1) {
         prevTouch = event.targetTouches[0];
     }
@@ -275,11 +275,11 @@ function handleTouchMove(event){
                         lastDragged = div;
                         //div.parentElement.getElementsByClassName("points")[0].style["text-shadow"]=null;
                         div.parentElement.getElementsByClassName("points")[0].style["box-shadow"]=null;
-                        console.log("hei",div.parentElement.getElementsByClassName("points"))
+                        //console.log("hei",div.parentElement.getElementsByClassName("points"))
                         //this.parentElement.parentElement.getElementsByClassName("points")[0].style["text-shadow"] ="1px 1px 10px #fff, 1px 1px 10px #ccc";
                         this.parentElement.parentElement.getElementsByClassName("points")[0].style["box-shadow"] ="inset 1px 1px 10px #fff, 1px 1px 10px #ccc";
-                        console.log(this.parentElement.parentElement.getElementsByClassName("points"));
-                        console.log(lastDragged.getElementsByClassName("country-name")[0].innerText)
+                        //console.log(this.parentElement.parentElement.getElementsByClassName("points"));
+                        //console.log(lastDragged.getElementsByClassName("country-name")[0].innerText)
                     break;}
 
 
