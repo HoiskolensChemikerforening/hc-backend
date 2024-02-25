@@ -202,6 +202,7 @@
   z-index: 100;
   max-width: 527px;
   width: 50vw;
+  height: 80px;
 }
 
 .selected {
