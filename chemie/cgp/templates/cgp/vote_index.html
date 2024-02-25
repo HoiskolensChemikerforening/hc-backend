@@ -140,7 +140,7 @@ while (points.length < countries.length) {
 
 
 // Store listitems
-const listItems = [];
+let listItems = [];
 
 let dragStartIndex;
 
@@ -222,6 +222,10 @@ function handleTouchMove(event){
         if (Math.abs(touch.pageY -prevTouch.pageY) > 1 ) {
             dragDown = touch.pageY - prevTouch.pageY > 0;
         }
+        if (dragDown !== prevDragDown) {
+                        lastDragged = null;
+                    }
+
         // Place element where the finger is touching
         //this.style.position = 'absolute';
         this.parentElement.classList.add("moving");
@@ -230,10 +234,20 @@ function handleTouchMove(event){
         let boxwidth= rightoffset-leftoffset;
         this.parentElement.style.left = parseFloat(leftoffset) + 'px'//parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
         //this.parentElement.style.left = parseInt( touch.pageX - Math.floor(this.parentElement.offsetWidth) + Math.floor(this.offsetWidth/2) + 15 ) + 'px'; //2* ny justering
-        let draglst = document.getElementById("draggable-list");
-        let minTop = draglst.getBoundingClientRect().top;
-        let maxTop = draglst.getBoundingClientRect().bottom - this.parentElement.parentElement.offsetHeight;
+        //let draglst = document.getElementById("draggable-list");
+        let pointSpans = document.getElementsByClassName("points");
+        //let scrollLeft = window.pageXOffset || document.documentElement.scrollLeft,
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+        //let minTop = draglst.getBoundingClientRect().top;
+        let minTop = pointSpans[0].getBoundingClientRect().top + scrollTop;
+        //let maxTop = draglst.getBoundingClientRect().bottom - this.parentElement.parentElement.offsetHeight;
+        let maxTop = pointSpans[pointSpans.length -1].getBoundingClientRect().top+ scrollTop;
         let newTop = touch.pageY - Math.floor(this.parentElement.offsetHeight/2);
+        if (newTop<minTop){
+            newTop=minTop;
+        } else if (newTop>maxTop){
+            newTop=maxTop;
+        }
 
         this.parentElement.style.top = parseInt(newTop) + 'px';
         this.parentElement.style.width= parseFloat(boxwidth)+'px';
@@ -242,34 +256,49 @@ function handleTouchMove(event){
         const scrollingSpeed = 20;
         let exittop = touch.pageY <= window.scrollY;
         let exitbotton = touch.pageY >= window.scrollY + window.innerHeight;
-        if (exittop){
+        let boxHeight = pointSpans[0].getBoundingClientRect().height;
+        if (exittop && window.scrollY > minTop-boxHeight){
             window.scrollBy(0, -scrollingSpeed)
         }
-        if (exitbotton){
+        if (exitbotton && window.scrollY + window.innerHeight < maxTop + 2*boxHeight){
             window.scrollBy(0, scrollingSpeed)
         }
 
         //check if it is on top of a valid drop target iterates over all valid drop areas and checks for overlap
-        divs = document.querySelectorAll('ul div');
+        //divs = document.querySelectorAll('ul div');
         overlapping = [];
-        for (div of [...divs]) {
-            rect1 = this.parentElement.getBoundingClientRect();
-            rect2 = div.getBoundingClientRect();
+        let current_div_index = parseInt(listItems.indexOf(this.parentElement.parentElement));
+        let divs;
+        if (current_div_index===0 && listItems.length>1){
+            divs = [listItems[current_div_index+1].children[1]]
+        } else if (current_div_index=== listItems.length-1 && listItems.length>1){
+            divs = [listItems[current_div_index-1].children[1]]
+        } else if (listItems.length>1) {
+        divs = [listItems[current_div_index-1].children[1], listItems[current_div_index+1].children[1]]}
+        else {
+            divs = [];
+        }
+
+        //console.log("divs",divs);
+        for (let div of [...divs]) {
+            let rect1 = this.parentElement.getBoundingClientRect();
+            let rect2 = div.getBoundingClientRect();
             let overlap = !(rect1.right < rect2.left ||
                 rect1.left > rect2.right ||
-                rect1.bottom < rect2.top ||
-                rect1.top > rect2.bottom);
+                rect1.bottom-rect1.height/4   < rect2.top +rect2.height/4 ||
+                rect1.top + rect1.height/4 > rect2.bottom-rect2.height/4 );
+            // console.log(overlap, rect1.bottom - rect1.bottom/4  < rect2.top+rect2.top/4, rect1.top+rect1.top/4  > rect2.bottom - rect2.bottom/4);
+            //console.log(overlap, div)
             if (overlap) {
                 //console.log(overlapping.length<1, overlapping);
                 if (overlapping.length<1 && div !== this.parentElement){
+
+                    console.log("overlap","down", dragDown,"prevdown", prevDragDown )
                     overlapping.push(div);
-                    //console.log("hei")
 
                     let toIndex = +div.parentElement.getAttribute('data-index');
                     let fromIndex  = +this.parentElement.parentElement.getAttribute('data-index');
-                    if (dragDown !== prevDragDown) {
-                        lastDragged = null;
-                    }
+
                     if (lastDragged!==div){
                         div = swapItems(fromIndex, toIndex);
                         lastDragged = div;
