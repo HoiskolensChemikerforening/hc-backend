@@ -88,7 +88,7 @@ def all_merch(request):
                     merch_objects = Merch.objects.filter(
                         category=form.cleaned_data["category"]
                     )
-    obj_per_page = 25  # Show 25 contacts per page.
+    obj_per_page = 24  # Show 24 contacts per page.
     if len(merch_objects) < obj_per_page:
         context = {"merchs": merch_objects, "form": form}
     else:
