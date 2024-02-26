@@ -74,7 +74,7 @@ def create_category(request):
 
 @login_required
 def all_merch(request):
-    merch_objects = Merch.objects.all()
+    merch_objects = Merch.objects.all().order_by("name")
     form = SortingForm()
 
     if not merch_objects.exists():
