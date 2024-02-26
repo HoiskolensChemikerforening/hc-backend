@@ -44,3 +44,4 @@ def CreateWord(request):
 
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
+
