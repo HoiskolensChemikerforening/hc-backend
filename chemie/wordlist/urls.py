@@ -9,4 +9,8 @@ urlpatterns = [
     path("", views.ordListe, name="index"),
     path("form/", views.CreateWord, name ="innsending" ),
     path("adminord/", views.adminWord, name ="adminword" ),
-    ]
+    path("form/", views.createWord, name ="innsending" ),
+    path("<int:pk>/",views.details, name = "details"  ), 
+    path("kategori/", views.category, name = "category")
+]
+
