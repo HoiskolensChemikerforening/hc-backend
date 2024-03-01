@@ -14,54 +14,62 @@
 {% load material_form %}
 {% block content %}
 
-<ul class="collapsible">
+<style>
+  .zerospace{
+    padding-left: 0;
+    padding-right: 0;
+    border-width: 0;
+  }
+</style>
+
+<ul class="collapsible zerospace">
   <li>
-    <div class="collapsible-header">
-      <div class="container" style="width: 100%">
-        <div class = "row" style="margin-bottom: 0">
-          <div class="col s3">
+    <div class="collapsible-header zerospace" style="padding-left: 5px; padding-right: 5px">
+      <div class="container zerospace" style="width: 100%">
+        <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
+          <div class="col l3 m3 s4">
             Sted
           </div>
-          <div class="col s9">
-            <div class="col s2">
+          <div class="col l9 m9 s8">
+            <div class="col l2 m2 s3">
               <a class ="tooltipped" data-position="top" data-tooltip="Solfaktor" style="color: black" href = "?sort_by=avg_sun&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                <div>
-                  <i class="material-icons">wb_sunny</i>
+                <div class="center-align">
+                  <i class="material-icons" style="margin-right: 0px">wb_sunny</i>
                 </div>
               </a>
             </div>
-            <div class="col s2">
+            <div class="col l2 m2 s3">
               <a class ="tooltipped" data-position="top" data-tooltip="Levekostnader" style="color: black" href = "?sort_by=avg_livingExpences&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                <div>
-                  <i class="material-icons">local_atm</i>
+                <div class="center-align">
+                  <i class="material-icons" style="margin-right: 0px">local_atm</i>
                 </div>
               </a>
             </div>
-            <div class="col s2">
+            <div class="col l2 m2 s3">
               <a class ="tooltipped" data-position="top" data-tooltip="Tilgjengelighet" style="color: black" href = "?sort_by=avg_availability&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                <div>
-                  <i class="material-icons">airplanemode_active</i>
+                <div class="center-align">
+                  <i class="material-icons" style="margin-right: 0px">airplanemode_active</i>
                 </div>
               </a>
             </div>
-            <div class="col s2">
+            <div class="col l2 m2 s3">
               <a class ="tooltipped" data-position="top" data-tooltip="Natur" style="color: black" href = "?sort_by=avg_nature&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                <div>
-                  <i class="material-icons">local_florist</i>
+                <div class="center-align">
+                  <i class="material-icons" style="margin-right: 0px">local_florist</i>
                 </div>
               </a>
             </div>
-            <div class="col s2">
+            <div class="col l2 m2 s3 hide-on-small-only">
               <a class ="tooltipped" data-position="top" data-tooltip="Gjestfrihet" style="color: black" href = "?sort_by=avg_hospitality&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                <div>
-                  <i class="material-icons">people</i>
+                <div class="center-align">
+                  <i class="material-icons" style="margin-right: 0px">people</i>
                 </div>
               </a>
             </div>
-            <div class="col s2">
+            <div class="col l2 m2 s3 hide-on-small-only">
               <a class ="tooltipped" data-position="top" data-tooltip="Arbeidsmengde" style="color: black" href = "?sort_by=avg_workLoad&sort_order={% if sort_order == 'desc' %}asc{% else %}desc{% endif %}">
-                <div>
-                  <i class="material-icons">school</i>
+                <div class="center-align">
+                  <i class="material-icons" style="margin-right: 0px">school</i>
                 </div>
               </a>
             </div>
@@ -73,72 +81,72 @@
 </ul>
 
 {% for country, data in travelletters_by_country.items %}
-<ul class="collapsible">
+<ul class="collapsible zerospace">
   <li>
-    <div class="collapsible-header">
-      <div class = "container" style="width: 100%">
-        <div class = "row" style="margin-bottom: 0">
-          <div class = "col s3">
-            <i class="material-icons">place</i>
+    <div class="collapsible-header zerospace" style="padding-left: 5px; padding-right: 5px">
+      <div class = "container zerospace" style="width: 100%">
+        <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
+          <div class = "col l3 m3 s4 valign-wrapper">
+            <i class="material-icons hide-on-small-only">place</i>
             {{ country }}
           </div>
-          <div class = "col s9">
-            <div class = "col s2">
+          <div class = "col l9 m9 s8">
+            <div class = "col l2 m2 s3 center-align">
               {{ data.avg_sun}}
             </div>
-            <div class = "col s2">
+            <div class = "col l2 m2 s3 center-align">
               {{ data.avg_livingExpences}}
             </div>
-            <div class = "col s2">
+            <div class = "col l2 m2 s3 center-align">
               {{ data.avg_availability}}
             </div>
-            <div class = "col s2">
+            <div class = "col l2 m2 s3 center-align">
               {{ data.avg_nature}}
             </div>
-            <div class = "col s2">
+            <div class = "col l2 m2 s3 center-align hide-on-small-only">
               {{ data.avg_hospitality}}
             </div>
-            <div class = "col s2">
+            <div class = "col l2 m2 s3  center-align hide-on-small-only">
               {{ data.avg_workLoad}}
             </div>
           </div>
         </div>
       </div>
     </div>
-    <div class="collapsible-body">
+    <div class="collapsible-body zerospace">
       <div class="col">
       {% for land, city in data_by_city.items %}
         {% if land == country %}
           {% for city_name, city_data in city.items %}
-            <div class="col s12 m6 l3" style="padding-bottom: 5px">
-              <a href="{% url 'exchangepage:citypage' city_name %}" class="waves-effect waves-light btn-large" style="width: 100%">
-                <div class="container" style="width: 100%">
-                  <div class = "row" style="margin-bottom: 0">
-                    <div class="col s3 valign-wrapper">
+            <div class="col s12 m6 l3 zerospace" style="padding-bottom: 5px; padding-right: 5px; padding-left: 5px">
+              <a href="{% url 'exchangepage:citypage' city_name %}" class="waves-effect waves-light btn-large zerospace" style="width: 100%">
+                <div class="container zerospace" style="width: 100%">
+                  <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
+                    <div class="col l3 m3 s4 valign-wrapper">
                       <div>
-                      <i class="material-icons white-text">location_city</i>
+                      <i class="material-icons white-text hide-on-small-only">location_city</i>
                       </div>
                       <div class="truncate">
                       {{city_name}}
                       </div>
                     </div>
-                    <div class = "col s9">
-                      <div class = "col s2">
+                    <div class = "col l9 m9 s8">
+                      <div class = "col l2 m2 s3">
                         {{ city_data.avg_sun }}
                       </div>
-                      <div class = "col s2">
+                      <div class = "col l2 m2 s3">
                         {{ city_data.avg_livingExpences }}
                       </div>
-                      <div class = "col s2">
+                      <div class = "col l2 m2 s3">
                         {{ city_data.avg_availability }}
                       </div>
-                      <div class = "col s2">
+                      <div class = "col l2 m2 s3">
                         {{ city_data.avg_nature }}
                       </div>
-                      <div class = "col s2">
+                      <div class = "col l2 m2 s3 hide-on-small-only">
                         {{ city_data.avg_hospitality }}
                       </div>
-                      <div class = "col s2">
+                      <div class = "col l2 m2 s3 hide-on-small-only">
                         {{ city_data.avg_workLoad}}
                       </div>
                     </div>
@@ -165,7 +173,7 @@
         </div>
         <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">wb_sunny</i>
-          <p> - solfaktor</p>
+          <p> - Solfaktor</p>
         </div>
         <div class ="col s12 m6 l4 valign-wrapper">
           <i class="material-icons">local_atm</i>
@@ -179,11 +187,11 @@
           <i class="material-icons">local_florist</i>
           <p> - Natur</p>
         </div>
-        <div class ="col s12 m6 l4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper hide-on-small-only">
           <i class="material-icons">people</i>
           <p> - Gjestfrihet</p>
         </div>
-        <div class ="col s12 m6 l4 valign-wrapper">
+        <div class ="col s12 m6 l4 valign-wrapper hide-on-small-only">
           <i class="material-icons">school</i>
           <p> - Arbeidsmengde</p>
         </div>
