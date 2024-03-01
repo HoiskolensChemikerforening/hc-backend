@@ -10,7 +10,7 @@ urlpatterns = [
     path("adminord/", views.adminWord, name ="adminword" ),
     path("form/", views.createWord, name ="innsending" ),
     path("<int:pk>/",views.details, name = "details"  ), 
-    path("kategori/", views.category, name = "category")
-    path("adminkategori/", views.categoryViews, name="admincategory" )
+    path("kategori/", views.category, name = "category"),
+    path("adminkategori/", views.categoryViews, name="admincategory" ),
 ]
 
