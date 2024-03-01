@@ -45,3 +45,7 @@ def CreateWord(request):
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
 
+@login_required()
+def adminWord(request):
+    context = {}
+    return render(request, "adminWord.html", context)
