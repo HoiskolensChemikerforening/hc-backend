@@ -88,12 +88,9 @@ Admin
 
 <script>
 document.addEventListener('DOMContentLoaded', function () {
-    // Attach a click event listener to the delete button
     document.getElementById('delete-button').addEventListener('click', function () {
-        // Display a confirmation dialog
         var confirmDelete = confirm('Er du sikker på at du vil slette dette reisebrevet?');
         if (confirmDelete) {
-            // If confirmed, redirect to the deletion URL
             window.location.href = "{% url 'exchangepage:deletetravelletter' travelletter.id %}";
         }
     });
