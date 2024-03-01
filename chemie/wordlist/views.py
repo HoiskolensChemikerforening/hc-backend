@@ -13,16 +13,16 @@ from django.contrib.auth.decorators import login_required
 
 @login_required()
 def ordListe(request):
-    print(request.user)
-    #profile = get_object_or_404(Profile, user=request.user)
-    #print(profile.grade)
-  #  if profile.grade < 2:
-  #      alle_ord = Word.objects.all().filter(secret=False)
+    # print(request.user)
+    profile = get_object_or_404(Profile, user=request.user)
+    # print(profile.grade)
+    if int(profile.grade) < 2:
+       alle_ord = Word.objects.all().filter(secret=False)
 
-#    else:
- #       alle_ord = Word.objects.all()
+    else:
+       alle_ord = Word.objects.all()
 
-    alle_ord = Word.objects.all()
+    # alle_ord = Word.objects.all()
 
     context = {"ord": alle_ord}
 
