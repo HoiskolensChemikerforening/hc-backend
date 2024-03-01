@@ -3,18 +3,6 @@ import material as M
 from .models import Travelletter, Experience, Questions, Images
 from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
-class IndexForm(forms.Form):
-    OPTIONS = [
-        (1, 'Solfaktor'),
-        (2, 'Levekostnader'),
-        (3, 'Tilgjengelighet'),
-        (4, 'Natur'),
-        (5, 'Gjestfrihet'),
-        (6, 'Arbeidsmengde')
-    ]
-    Indexfiltering = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                          choices=OPTIONS, required=False)
-
 class QuestionsForm(forms.ModelForm):
     class Meta:
         model = Questions
