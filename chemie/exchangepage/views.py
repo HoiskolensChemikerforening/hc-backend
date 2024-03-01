@@ -360,10 +360,8 @@ def displayIndividualLetter(request, pk):
                'experiences': experiences,
                'questions': questions,
                'images':images,
-               'specialization': SPECIALIZATION[specialization_id][1]
+               'specialization': SPECIALIZATION[specialization_id-1][1]
     }
-
-    print(len(experiences))
 
     return render(request, "detail.html", context)
 
