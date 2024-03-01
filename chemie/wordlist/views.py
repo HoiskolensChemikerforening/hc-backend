@@ -1,5 +1,6 @@
 
 from .models import Word
+from .models import Category
 from .forms import WordInput
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
@@ -32,7 +33,7 @@ def ordListe(request):
 
 
 @login_required()
-def CreateWord(request):
+def createWord(request):
     if request.method == "POST":
         wordform = WordInput(request.POST)
         if wordform.is_valid():
@@ -44,4 +45,20 @@ def CreateWord(request):
 
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
+
+
+
+def category(request):
+
+    alle_ord = Category.objects.all()
+    context = {"ord": alle_ord}
+    return render(request, "category.html", context)
+
+
+
+def details(request, pk):
+    
+    alle_ord = Category.objects.all()
+    context = {"ord": alle_ord}
+    return render(request, "details.html", context)
 
