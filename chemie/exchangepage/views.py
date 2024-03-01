@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
 from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet, ImageFormSet, ImageForm
 from django.contrib import messages
-
+from chemie.customprofile.models import SPECIALIZATION
 
 # Create your views here.
 
@@ -351,16 +351,16 @@ def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = Experience.objects.filter(travelletter=travelletter)
     questions = [experience.question for experience in experiences]
-    images = travelletter.images.all()
 
-    print("Experiences length:", len(experiences))
-    print("Questions length:", len(questions))
-    print("Experiences:", experiences)
+    images = travelletter.images.all()
+    specialization_id = travelletter.user.specialization
+
 
     context = {'travelletter': travelletter,
                'experiences': experiences,
                'questions': questions,
-               'images':images
+               'images':images,
+               'specialization': SPECIALIZATION[specialization_id][1]
     }
 
     print(len(experiences))

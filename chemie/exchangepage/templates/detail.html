@@ -5,6 +5,10 @@
     {{ travelletter.user.user.first_name }}s eventyr i {{ travelletter.city }}
 {% endblock nav_header %}
 
+{% block nav_sub_header %}
+   Retning: {{ specialization }}, Semester: {{ travelletter.semester }}
+{% endblock nav_sub_header %}
+
 {% load material_form %}
 
 {% block content %}
@@ -23,15 +27,17 @@
         border-radius: 5px;
     }
 
-
     .info-item {
         margin-bottom: 10px;
     }
 
-    .custom-card {
-        width: 290px;
-        height: 270px;
-}
+    .carousel-item {
+        width:400px !important;
+    }
+
+
+    /* Width definert i bilder kan ikke overskride width i bildekarusell får da overflow. :( Ser scuffed ut når man trykker inn på et bilde og :(( og bildene er scuffed /*
+
 </style>
 
 <script>
@@ -40,13 +46,50 @@
     var instances = M.Carousel.init(elems);
   });
 
+
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems, options);
+    var instances = M.Collapsible.init(elems);
   });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+
 </script>
 
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.materialboxed');
     var instances = M.Materialbox.init(elems);
@@ -62,14 +105,16 @@
 </div>
 
  <div class="information-box-container">
-    <div class="information-box">
         <h3>Generell informasjon om {{ travelletter.city }}</h3>
-        {{ travelletter.destinationInfo }}
-      <div class="row">
-        <div class="col s12 m6 offset-m8">
-          <div class="card blue-grey darken-1 custom-card">
+
+     <div class="row customcol">
+      <div class="col s12 m12 l8">
+          {{ travelletter.destinationInfo }}
+      </div>
+        <div class="col s12 m12 l4">
+          <div class="card yellow">
             <div class="card-content white-text">
-              <span class="card-title">Score</span>
+              <span class="card-title"> Vurdering: </span>
               <p>
                 <div class="info-item">
                     <p>Solfaktor: {{ travelletter.sun }}</p>
@@ -95,7 +140,6 @@
         </div>
       </div>
     </div>
-</div>
 
  <div class="information-box-container">
     <div class="information-box">
@@ -110,8 +154,8 @@
                     {% endfor %}
                 {% else %}
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">info</i>No experiences available.</div>
-                        <div class="collapsible-body"><span>Sorry, there are no experiences to display.</span></div>
+                        <div class="collapsible-header"><i class="material-icons">info</i>Ingen tilgjengelige erfaringer.</div>
+                        <div class="collapsible-body"><span>BASJ!, er ingen erfaringer som kan vises her >:(( </span></div>
                     </li>
                 {% endif %}
     </div>
