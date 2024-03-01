@@ -2,7 +2,7 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions, Images
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import IndexForm, ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet, ImageFormSet, ImageForm
+from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet, ImageFormSet, ImageForm
 from django.contrib import messages
 
 
@@ -15,12 +15,6 @@ def index(request):
     sort_by = request.GET.get('sort_by', 'country')
     sort_order = request.GET.get('sort_order', 'desc')
 
-    if request.method == 'POST':
-        form = IndexForm(request.POST)
-        if form.is_valid():
-            test = form.cleaned_data
-    else:
-        form = IndexForm()
     # Group the travelletters by country
     travelletters_by_country = {}
     data_by_country_city = {}
@@ -60,8 +54,7 @@ def index(request):
     context = {"travelletters_by_country": travelletters_by_country,
                "data_by_city": data_by_country_city,
                "sort_by": sort_by,
-               "sort_order": sort_order,
-               "form": form}
+               "sort_order": sort_order}
 
     return render(request, "index.html", context)
 
