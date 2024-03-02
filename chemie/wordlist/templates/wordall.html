@@ -1,4 +1,10 @@
+
 {% extends "chemie/base.html" %}
+{% load static %}
+{% block extra_css %}
+  <link href = "{% static "css/wordlist.css" %}" type = "text/css" rel = "stylesheet" media = "screen,projection" /> 
+{% endblock %}
+
 {% block nav_header %}
   Ordliste
 {% endblock nav_header %}
@@ -9,11 +15,37 @@
 
 {% block content %}
 
-{% for objects in ord%}
+<div class="row">
+  <div class="col s6 m6 l6">
+    {% for word in words%}
+  
 
-{{objects}}
+    <p class="words_cloumn">
+      {{word.word}}
+    </p>
+    
+    {% endfor%}
 
-{% endfor%}
+  </div>
+
+  <div class="col s6 m6 l6">
+    {% for word in words%}
+  
+
+    <p class="words_cloumn">
+      {{word.explanations}}
+    </p>
+    
+    {% endfor%}
+
+  </div>
+
+</div>
+
+
+
+</div>
+
 {% endblock content %}
 
 {% block footer_script %}
