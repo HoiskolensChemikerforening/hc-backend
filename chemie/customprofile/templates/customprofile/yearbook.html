@@ -149,17 +149,12 @@
             <!-- Picture in detail view -->
             <div class="center-align">
               <div class="col s12 m4 l4">
-                {% if profile.image_primary %}
-                    {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
-                        <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
-                            href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
-                    {% endthumbnail %}
-                {% else %}
-                    <!-- Provide a default image or placeholder -->
-                    {% thumbnail 'images/default_avatar.png' "400x680" crop="center" as default_avatar %}
-                        <img src="{{ default_avatar.url }}" alt="" class="rcorners6 responsive-img z-depth-1" style="margin-top: 10px;">
-                    {% endthumbnail %}
-                {% endif %}
+                  {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
+                      <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
+                           href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
+                  {% empty %}
+                      <img src="{% static 'images/blank_avatar.png' %}" alt="" class="rcorners6 responsive-img z-depth-1" style="margin-top: 10px;">
+                  {% endthumbnail %}
               </div>
             </div>
 
