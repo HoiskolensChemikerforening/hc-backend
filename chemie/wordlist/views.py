@@ -37,12 +37,20 @@ def createWord(request):
     if request.method == "POST":
         wordform = WordInput(request.POST)
         if wordform.is_valid():
-            wordform.save()
+            wordform_instace = wordform.save(commit=False)
+            wordform_instace.author = request.user
+            wordform_instace.save()
 
-
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Ditt ord er lagret.",
+                extra_tags="Suksess",
+            )
+            #return redirect("refund:myrefunds")
     else:
         wordform = WordInput()
-
+    print(request.POST)
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
 
