@@ -45,7 +45,7 @@ def createWord(request):
                 request,
                 messages.SUCCESS,
                 f"Ditt ord er lagret.",
-                extra_tags="Suksess",
+                extra_tags="Big slay",
             )
             #return redirect("refund:myrefunds")
     else:
@@ -67,12 +67,12 @@ def category(request):
     return render(request, "category.html", context)
 
 
-
 def details(request, pk):
-    
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "details.html", context)
+
+
 def categoryViews(request):
     context = {}
     return render(request, "admincategory.html", context)
