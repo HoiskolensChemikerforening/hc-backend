@@ -18,14 +18,16 @@ def ordListe(request):
     profile = get_object_or_404(Profile, user=request.user)
     # print(profile.grade)
     if int(profile.grade) < 2:
-       alle_ord = Word.objects.all().filter(secret=False)
+       all_words = Word.objects.all().filter(secret=False).order_by("word")
+       
 
     else:
-       alle_ord = Word.objects.all()
+       all_words = Word.objects.all()
 
-    # alle_ord = Word.objects.all()
+    
 
-    context = {"ord": alle_ord}
+    context = {"words": all_words}
+    
 
 
     return render(request, "wordall.html", context)
