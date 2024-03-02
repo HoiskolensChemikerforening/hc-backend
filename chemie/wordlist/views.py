@@ -39,12 +39,20 @@ def createWord(request):
     if request.method == "POST":
         wordform = WordInput(request.POST)
         if wordform.is_valid():
-            wordform.save()
+            wordform_instace = wordform.save(commit=False)
+            wordform_instace.author = request.user
+            wordform_instace.save()
 
-
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Ditt ord er lagret.",
+                extra_tags="Big slay",
+            )
+            #return redirect("refund:myrefunds")
     else:
         wordform = WordInput()
-
+    print(request.POST)
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
 
@@ -61,12 +69,12 @@ def category(request):
     return render(request, "category.html", context)
 
 
-
 def details(request, pk):
-    
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "details.html", context)
+
+
 def categoryViews(request):
     context = {}
     return render(request, "admincategory.html", context)
