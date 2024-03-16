@@ -1,18 +1,18 @@
 from django.db import models
 from chemie.customprofile.models import Profile
-
+from django.core.validators import MinValueValidator, MaxValueValidator
 class Travelletter(models.Model):
     user           = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Bruker")
     country        = models.CharField(max_length=30, verbose_name="Land")
     semester       = models.CharField(max_length = 3, verbose_name="Semester")
     city           = models.CharField(max_length=30, verbose_name="By")
-    sun            = models.IntegerField(default=0, verbose_name="Solfaktor")
-    livingExpences = models.IntegerField(default=0, verbose_name="Levekostnader")
-    availability   = models.IntegerField(default=0, verbose_name="Tilgjengelighet")
-    nature         = models.IntegerField(default=0, verbose_name="Natur")
-    hospitality   = models.IntegerField(default=0, verbose_name="Gjestfrihet")
-    workLoad       = models.IntegerField(default=0, verbose_name="Arbeidsmengde")
-    destinationInfo = models.TextField(max_length = 700, verbose_name="countryInfo")
+    sun            = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Solfaktor")
+    livingExpences = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Levekostnader")
+    availability   = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Tilgjengelighet")
+    nature         = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Natur")
+    hospitality   = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Gjestfrihet")
+    workLoad       = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Arbeidsmengde")
+    destinationInfo = models.TextField(max_length = 700, verbose_name="Info om sted")
 
 
     def __str__(self):

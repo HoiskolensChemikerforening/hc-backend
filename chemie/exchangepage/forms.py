@@ -13,6 +13,12 @@ class TravelletterForm(forms.ModelForm):
     class Meta:
         model = Travelletter
         fields = ['user', 'semester', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad', 'destinationInfo']
+        widgets = {
+            "semester": forms.TextInput(
+                {"placeholder": "Eks. V12"}
+            )
+        }
+
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience

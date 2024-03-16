@@ -29,9 +29,19 @@
   <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
 
-      <div>
-      {{ travelletterform.as_p }}
-      </div>
+      {% for field in travelletterform %}
+        <div>
+          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+          {{ field }}
+          {% if field.errors %}
+            <ul class="errorlist">
+              {% for error in field.errors %}
+                <li style="color: red">{{ error }}</li>
+              {% endfor %}
+            </ul>
+          {% endif %}
+        </div>
+      {% endfor %}
 
       <div class="card-action" id="button-container">
         <div class="right-align">
