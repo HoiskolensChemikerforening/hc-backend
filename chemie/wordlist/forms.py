@@ -9,3 +9,12 @@ class WordInput(forms.ModelForm):
         model = Word
         fields = ["word", "explanations", "picture", "secret", "category"]
 
+
+
+
+class CategorySortingMainPage(forms.Modelform):
+
+    class Meta:
+        model = Category
+        fields = ["typeOfWord"]
+

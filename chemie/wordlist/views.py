@@ -25,11 +25,13 @@ def ordListe(request):
        all_words = Word.objects.all()
 
     
+    for i in all_words:
+        i.explanations = i.explanations[:25] + "..."
+    
+    print(all_words[0].picture)
 
     context = {"words": all_words}
     
-
-
     return render(request, "wordall.html", context)
 
 
@@ -78,3 +80,11 @@ def categoryViews(request):
     context = {}
     return render(request, "admincategory.html", context)
 
+
+def sortingMainPageView(request):
+    if request.method == "POST":
+    
+
+    else:
+
+    return render(request, "category.html")

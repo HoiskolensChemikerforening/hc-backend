@@ -16,24 +16,50 @@
 
 {% block content %}
 
+<div>
+
+  <h3>Velg en kategori:</h3>
+  <form enctype="multipart/form-data" method='POST'>
+    {% csrf_token %}
+    <div class="card-content">
+     {{ form.media }}
+      {{ form.as_p }}
+      <input class="btn" type='submit' name='submit' value='Sorter!'/>
+      <input class="btn" type='submit' name='submit' value='Nullstill'/>
+    </div>
+</form>
+
+
+ 
+
+
+
+</div>
+
+
+
+
+
+
+
+
 {% for word in words %}
   <div class="row">
 
-    <div class="col" s4>
+    <div class="col" s>
       <a class="card" href="{%url 'wordlist:details' word.id %}" >
-        <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.word}} </div>
+        <div class="card" style="color:#222222; background-color:#F9CF00;"  >
+          
+          <div>{{word.word}}:</div> 
+
+          <div><i class="material-icons">arrow_forward</i> {{word.explanations}}</div>
+          <img src="{{word.picture.url}}" alt="{{word.explanations}}">
+        
+        
+        </div>
       </a>
     </div>
-    <div class="col" s4>
-      <a class="card" href="{%url 'wordlist:details' word.id %}" >
-        <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.category}}  </div>
-      </a>
-    </div>
-    <div class="col" s4>
-      <a class="card" href="{%url 'wordlist:details' word.id %}" >
-        <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.date}}  </div>
-      </a>
-    </div>
+   
 
 
   </div> 
