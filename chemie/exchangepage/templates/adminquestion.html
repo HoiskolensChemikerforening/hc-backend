@@ -24,9 +24,9 @@ Admin
   <ul class="collection">
     {% for question in questions %}
        <div class="col s12 m6 l3" style="padding-bottom: 5px">
-              <a href="{% url 'exchangepage:adminquestiondetail' question.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">person</i>
+              <a href="{% url 'exchangepage:adminquestiondetail' question.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">label_outline</i>
                 <div style="display: flex;flex-direction: row;justify-content: space-between">
-                  <div style="padding-right: 10px">{{question}}</div>
+                  <div class="truncate" style="padding-right: 10px">{{question}}</div>
                 </div>
               </a>
             </div>

@@ -3,6 +3,8 @@ import material as M
 from .models import Travelletter, Experience, Questions, Images
 from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
+from ckeditor.widgets import CKEditorWidget
+
 
 class QuestionsForm(forms.ModelForm):
     class Meta:
@@ -23,6 +25,7 @@ class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience
         fields = ['question', 'answer']
+
 
 class ImageForm(forms.ModelForm):
     class Meta:

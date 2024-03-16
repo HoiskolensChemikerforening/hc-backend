@@ -1,6 +1,7 @@
 from django.db import models
 from chemie.customprofile.models import Profile
 from django.core.validators import MinValueValidator, MaxValueValidator
+from ckeditor.fields import RichTextField #Change from TextField to RichTextField
 class Travelletter(models.Model):
     user           = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Bruker")
     country        = models.CharField(max_length=30, verbose_name="Land")
@@ -103,7 +104,7 @@ class Experience(models.Model):
 
 class Images(models.Model):
     travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name='images', verbose_name="Reisebrev")
-    image = models.ImageField(upload_to="exchangepage", verbose_name="Bilde", blank=True)
+    image = models.ImageField(upload_to="exchangepage", verbose_name="Bilde")
 
     def __str__(self):
         return f'Bilde id: {self.id}, Reisebrev: {self.travelletter}'
