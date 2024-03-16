@@ -38,6 +38,18 @@ def ordListe(request):
 def createWord(request):
     if request.method == "POST":
         wordform = WordInput(request.POST)
+        if "nytt" in request.POST and wordform.is_valid():
+            wordform_instace = wordform.save(commit=False)
+            wordform_instace.author = request.user
+            wordform_instace.save()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Ditt ord er lagret",
+                extra_tags="Big slay",
+            )
+            return HttpResponseRedirect(reverse("wordlist:innsending"))
+        
         if wordform.is_valid():
             wordform_instace = wordform.save(commit=False)
             wordform_instace.author = request.user
@@ -49,21 +61,33 @@ def createWord(request):
                 f"Ditt ord er lagret.",
                 extra_tags="Big slay",
             )
-            #return redirect("refund:myrefunds")
+            return HttpResponseRedirect(reverse("wordlist:index"))
     else:
         wordform = WordInput()
-    print(request.POST)
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
 
 @login_required()
-def adminWord(request):
-    context = {}
-    return render(request, "adminWord.html", context)
+def adminWord(request, pk):
+    word = get_object_or_404(Word, id=pk)
+    form = WordInput(
+        request.POST or None, request.FILES or None, instance=word
+    )
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
 
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Ordet ble endret",
+                extra_tags="Endret",
+            )
+            return HttpResponseRedirect(reverse("wordlist:index"))
+    context = {"wordform": form, "word":word}
+    return render(request, "createWord.html", context)
 
 def category(request):
-
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "category.html", context)
