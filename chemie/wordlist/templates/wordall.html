@@ -16,20 +16,28 @@
 
 {% block content %}
 
+{% for word in words %}
+  <div class="row">
 
-    <div class="row">
-      {% for word in words %}
-        <div class="col">
+    <div class="col" s4>
+      <a class="card" href="{%url 'wordlist:details' word.id %}" >
+        <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.word}} </div>
+      </a>
+    </div>
+    <div class="col" s4>
+      <a class="card" href="{%url 'wordlist:details' word.id %}" >
+        <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.category}}  </div>
+      </a>
+    </div>
+    <div class="col" s4>
+      <a class="card" href="{%url 'wordlist:details' word.id %}" >
+        <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.date}}  </div>
+      </a>
+    </div>
 
-              <a class="card" href="{%url 'wordlist:details' word.id %}" >
 
-            <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.word}} : {{word.explanations}} </div>
-          </a>
-        </div>
-        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
-      {% endfor %}
-    </div> 
-
+  </div> 
+{% endfor %}
 
 
 
