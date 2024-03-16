@@ -1,5 +1,6 @@
-
 {% extends "chemie/base.html" %}
+
+{% load material_form %}
 {% load static %}
 {% block extra_css %}
   <link href = "{% static "css/wordlist.css" %}" type = "text/css" rel = "stylesheet" media = "screen,projection" /> 
@@ -10,44 +11,53 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Oversikt
+  Alle ord i ordlisten
 {% endblock nav_sub_header %}
 
 {% block content %}
 
-<div class="row">
-  <div class="col s6 m6 l6">
-    {% for word in words%}
-  
 
-    <p class="words_cloumn">
-      {{word.word}}
-    </p>
-    
-    {% endfor%}
+    <div class="row">
+      {% for word in words %}
+        <div class="col">
 
-  </div>
+              <a class="card" href="{%url 'wordlist:details' word.id %}" >
 
-  <div class="col s6 m6 l6">
-    {% for word in words%}
-  
-
-    <p class="words_cloumn">
-      {{word.explanations}}
-    </p>
-    
-    {% endfor%}
-
-  </div>
-
-</div>
+            <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.word}} : {{word.explanations}} </div>
+          </a>
+        </div>
+        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
+      {% endfor %}
+    </div> 
 
 
 
-</div>
+
+
+
 
 {% endblock content %}
 
+
+
+
+
 {% block footer_script %}
+
+
+<script>
+$(function(){
+        $("#refresh").click(function(event){
+            $.ajax({
+             type: "POST",
+             url: 'refresh/',
+              success:function(response) {
+              location.reload(true);
+
+              //do something with 'response'
+             }
+            });
+    });
+</script>
 
 {% endblock footer_script %}

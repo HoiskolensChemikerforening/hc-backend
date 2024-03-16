@@ -55,7 +55,6 @@ def adminWord(request):
 
 
 def category(request):
-
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "category.html", context)
@@ -63,10 +62,11 @@ def category(request):
 
 
 def details(request, pk):
-    
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "details.html", context)
+
+
 def categoryViews(request):
     context = {}
     return render(request, "admincategory.html", context)
