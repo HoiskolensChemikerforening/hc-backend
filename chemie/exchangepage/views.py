@@ -351,8 +351,9 @@ def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = Experience.objects.filter(travelletter=travelletter)
     questions = [experience.question for experience in experiences]
-
     images = travelletter.images.all()
+    if len(images) == 0: #If no image, pass 0 instead to catch in template
+        images = 0
     specialization_id = travelletter.user.specialization
 
 

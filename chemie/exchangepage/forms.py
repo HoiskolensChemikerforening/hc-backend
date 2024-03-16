@@ -3,6 +3,7 @@ import material as M
 from .models import Travelletter, Experience, Questions, Images
 from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
+
 class QuestionsForm(forms.ModelForm):
     class Meta:
         model = Questions
@@ -12,7 +13,6 @@ class TravelletterForm(forms.ModelForm):
     class Meta:
         model = Travelletter
         fields = ['user', 'semester', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad', 'destinationInfo']
-
 class ExperienceForm(forms.ModelForm):
     class Meta:
         model = Experience

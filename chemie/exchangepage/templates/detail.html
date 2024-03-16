@@ -2,20 +2,34 @@
 {% load static %}
 
 {% block nav_header %}
-    {{ travelletter.user.user.first_name }}s eventyr i {{ travelletter.city }}
+<div class="hide-on-med-and-down">
+    {{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}
+</div>
+<div class="hide-on-large-only">Reisebrev</div>
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
+<div class="hide-on-med-and-down">
    Retning: {{ specialization }}, Semester: {{ travelletter.semester }}
+</div>
 {% endblock nav_sub_header %}
 
 {% load material_form %}
 
 {% block content %}
+
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "exchangepage:index" %}" class="breadcrumb">Land</a>
     <a href="{% url "exchangepage:citypage" travelletter.city %}" class="breadcrumb">Byer</a>
     <a class="breadcrumb">{{travelletter.user}}</a>
+</div>
+
+<div class="hide-on-large-only">
+    <h4>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</h4>
+</div>
+<div class="hide-on-large-only row" style="margin-left: 0;margin-right: 0">
+    <h5>Retning: {{ specialization }}</h5>
+    <h5>Semester: {{ travelletter.semester }}</h5>
 </div>
 
 <style>
@@ -96,16 +110,29 @@
   });
 </script>
 
-<div class="carousel">
-    {% for image in images %}
-    <a class="carousel-item" href="#{{ forloop.counter }}!">
-        <img class="materialboxed" style="width: 100%" src="{{ image.image.url }}">
-    </a>
-    {% endfor %}
-</div>
+<style>
+    .materialboxed {width:100%;height: 300px;object-fit: contain !important;}
+</style>
+
+{% if images != 0 %}
+    {% if images|length == 1 %}
+        {% for image in images %}
+            <img style="width: 100%; height: 300px; object-fit: contain" src="{{ image.image.url }}">
+        {% endfor %}
+
+    {% else %}
+        <div class="carousel">
+            {% for image in images %}
+            <a class="carousel-item" href="#{{ forloop.counter }}!">
+                <img class="materialboxed" src="{{ image.image.url }}">
+            </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
 
  <div class="information-box-container">
-        <h3>Generell informasjon om {{ travelletter.city }}</h3>
+        <h4>Generell informasjon om {{ travelletter.city }}</h4>
 
      <div class="row customcol">
       <div class="col s12 m12 l8">
@@ -143,7 +170,7 @@
 
  <div class="information-box-container">
     <div class="information-box">
-        <h3>Erfaringer</h3>
+        <h4>Erfaringer</h4>
             <ul class="collapsible">
                 {% if experiences %}
                     {% for experience in experiences %}

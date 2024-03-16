@@ -18,6 +18,14 @@ class Travelletter(models.Model):
     def __str__(self):
         return f"{self.user.user.first_name} {self.country}"
 
+    def save(self, *args, **kwargs):
+        # Make the first letter uppercase for country and city
+        if self.country:
+            self.country = self.country[0].upper()+self.country[1:]
+        if self.city:
+            self.city = self.city[0].upper() + self.city[1:]
+
+        super(Travelletter, self).save(*args, **kwargs)
     @classmethod
     def country_avg(cls, country_name):
         travelletters_by_country = cls.objects.filter(country = country_name)
@@ -95,7 +103,7 @@ class Experience(models.Model):
 
 class Images(models.Model):
     travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name='images', verbose_name="Reisebrev")
-    image = models.ImageField(upload_to="exchangepage", verbose_name="Bilde")
+    image = models.ImageField(upload_to="exchangepage", verbose_name="Bilde", blank=True)
 
     def __str__(self):
         return f'Bilde id: {self.id}, Reisebrev: {self.travelletter}'
