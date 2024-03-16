@@ -63,7 +63,6 @@ def adminWord(request):
 
 
 def category(request):
-
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "category.html", context)
