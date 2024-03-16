@@ -11,6 +11,25 @@
 {% block content %}
 
 
+<style>
+
+  select{display: block;}
+  .knapp{display: block;}
+  
+  
+</style>
+<div>
+<form method = "POST" enctype = "multipar/form-date"> {% csrf_token %}
+
+{%form form=wordform%}
+{% endform %}
+
+  <div>
+  <input type = "submit" value = "Lagre ord i databasen", class = "knapp" /> 
+  </div>
+
+</form>
+</div>
 
 {% endblock content %}
 
