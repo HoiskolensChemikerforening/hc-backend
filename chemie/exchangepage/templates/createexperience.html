@@ -15,9 +15,14 @@ Admin
 
 {% load material_form %}
 {% block content %}
-<style>
-  select{display: block}
-</style>
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
+    <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Admin</a>
+    <a href="{% url "exchangepage:admindetail" travelletter.id %}" class="breadcrumb">Opprett Reisebrev</a> <!-- takes user to edit page -->
+    <a href="{% url "exchangepage:admindetailimage" travelletter.id %}" class="breadcrumb">Bilder</a>
+    <a class="breadcrumb">Spørsmål</a>
+</div>
+
 <p class="flow-text">Her kan du opprette svar!</p>
 <div class="card">
   <div class="card-content">
@@ -42,6 +47,9 @@ Admin
   </div>
 </div>
 
+<style>
+  select{display: block}
+</style>
 {% endblock content %}
 
 {% block footer_script %}
