@@ -17,7 +17,7 @@ class TravelletterForm(forms.ModelForm):
         fields = ['user', 'semester', 'country', 'city', 'sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad', 'destinationInfo']
         widgets = {
             "semester": forms.TextInput(
-                {"placeholder": "Eks. V12"}
+                {"placeholder": " Ett semester ('H13'), To semester ('H13/V14')"}
             )
         }
 

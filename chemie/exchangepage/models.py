@@ -1,11 +1,11 @@
 from django.db import models
 from chemie.customprofile.models import Profile
-from django.core.validators import MinValueValidator, MaxValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
 from ckeditor.fields import RichTextField #Change from TextField to RichTextField
 class Travelletter(models.Model):
     user           = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Bruker")
     country        = models.CharField(max_length=30, verbose_name="Land")
-    semester       = models.CharField(max_length = 3, verbose_name="Semester")
+    semester       = models.CharField(max_length = 7,validators=[MinLengthValidator(3), MaxLengthValidator(7)], verbose_name="Semester")
     city           = models.CharField(max_length=30, verbose_name="By")
     sun            = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Solfaktor")
     livingExpences = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Levekostnader")
