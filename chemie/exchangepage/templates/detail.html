@@ -5,13 +5,14 @@
 <div class="hide-on-med-and-down">
     {{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}
 </div>
-<div class="hide-on-large-only">Reisebrev</div>
+
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
 <div class="hide-on-med-and-down">
    Retning: {{ specialization }}, Semester: {{ travelletter.semester }}
 </div>
+<div class="hide-on-large-only">Reisebrev</div>
 {% endblock nav_sub_header %}
 
 {% load material_form %}
@@ -32,88 +33,6 @@
     <h5>Semester: {{ travelletter.semester }}</h5>
 </div>
 
-<style>
-    .information-box-container {
-        background-color: #f0f0f0;
-        padding: 20px;
-        margin: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-    }
-
-    .info-item {
-        margin-bottom: 10px;
-    }
-
-    .carousel-item {
-        width:400px !important;
-    }
-
-
-    /* Width definert i bilder kan ikke overskride width i bildekarusell får da overflow. :( Ser scuffed ut når man trykker inn på et bilde og :(( og bildene er scuffed /*
-
-</style>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.carousel');
-    var instances = M.Carousel.init(elems);
-  });
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems);
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.materialboxed');
-    var instances = M.Materialbox.init(elems);
-  });
-
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.carousel');
-    var instances = M.Carousel.init(elems);
-  });
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems);
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.materialboxed');
-    var instances = M.Materialbox.init(elems);
-  });
-
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.carousel');
-    var instances = M.Carousel.init(elems);
-  });
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems);
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.materialboxed');
-    var instances = M.Materialbox.init(elems);
-  });
-</script>
-
-<style>
-    .materialboxed {width:100%;height: 300px;object-fit: contain !important;}
-</style>
-
 {% if images != 0 %}
     {% if images|length == 1 %}
         {% for image in images %}
@@ -132,7 +51,7 @@
 {% endif %}
 
  <div class="information-box-container">
-        <h4>Generell informasjon om {{ travelletter.city }}</h4>
+     <h4>Generell informasjon om {{ travelletter.city }}</h4>
 
      <div class="row customcol">
       <div class="col s12 m12 l8">
@@ -171,25 +90,105 @@
  <div class="information-box-container">
     <div class="information-box">
         <h4>Erfaringer</h4>
-            <ul class="collapsible">
-                {% if experiences %}
-                    {% for experience in experiences %}
-                        <li>
-                            <div class="collapsible-header"><strong>{{ experience.question }}</strong></div>
-                            <div class="collapsible-body"><p>{{ experience.answer }}</p></div>
-                        </li>
-                    {% endfor %}
-                {% else %}
+        <ul class="collapsible">
+            {% if experiences %}
+                {% for experience in experiences %}
                     <li>
-                        <div class="collapsible-header"><i class="material-icons">info</i>Ingen tilgjengelige erfaringer.</div>
-                        <div class="collapsible-body"><span>BASJ!, er ingen erfaringer som kan vises her >:(( </span></div>
+                        <div class="collapsible-header"><strong>{{ experience.question }}</strong></div>
+                        <div class="collapsible-body"><p>{{ experience.answer }}</p></div>
                     </li>
-                {% endif %}
+                {% endfor %}
+            {% else %}
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">info</i>Ingen tilgjengelige erfaringer.</div>
+                    <div class="collapsible-body"><span>BASJ!, er ingen erfaringer som kan vises her >:(( </span></div>
+                </li>
+            {% endif %}
+        </ul>
     </div>
 </div>
+<style>
+    .information-box-container {
+        background-color: #f0f0f0;
+        padding: 20px;
+        margin: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
 
+    .info-item {
+        margin-bottom: 10px;
+    }
+
+    .carousel-item {
+        width:400px !important;
+    }
+
+    .materialboxed {
+        width:100%;
+        height: 300px;
+        object-fit: contain !important;
+    }
+    /* Width definert i bilder kan ikke overskride width i bildekarusell får da overflow. :( Ser scuffed ut når man trykker inn på et bilde og :(( og bildene er scuffed /*
+
+</style>
 {% endblock content %}
 
 {% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  });
+</script>
 
 {% endblock %}
