@@ -69,9 +69,9 @@ class CGP(models.Model):
             cgp: CGP object
         """
         current_year = int(timezone.now().year)
-        if CGP.objects.filter(year=current_year):
+        if cls.objects.filter(year=current_year):
             return None
-        return CGP.objects.create(is_open=False, year=int(timezone.now().year))
+        return cls.objects.create(is_open=False, year=int(timezone.now().year))
 
     @classmethod
     def get_latest_active(cls):
@@ -82,7 +82,7 @@ class CGP(models.Model):
         Return:
             cgp: CGP object (latest open instance) or None (if no instance is open)
         """
-        cgps = CGP.objects.filter(is_open=True).order_by("-year")
+        cgps = cls.objects.filter(is_open=True).order_by("-year")
         if not cgps:
             return None
         return cgps[0]
@@ -321,12 +321,19 @@ class Vote(models.Model):
             .split(",")
         )
         vote_dict = {vote_list[i]: i for i in range(len(vote_list))}
-        group_list = sorted(
-            list(
-                self.group.cgp.group_set.exclude(id=self.group.id).exclude(
+        voteable_groups = self.group.cgp.group_set.exclude(id=self.group.id).exclude(
                     audience=True
                 )
+        # Place newly created groups not contained in the previous vote groups last
+        for group in voteable_groups:
+            if group.country.country_name not in vote_dict.keys():
+                vote_dict[group.country.country_name] = len(vote_list)
+
+        group_list = sorted(
+            list(
+                voteable_groups
             ),
             key=lambda group: vote_dict[group.country.country_name],
         )
+
         return group_list, self.failureprize_vote, self.showprize_vote
