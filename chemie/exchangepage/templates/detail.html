@@ -95,7 +95,7 @@
                 {% for experience in experiences %}
                     <li>
                         <div class="collapsible-header"><strong>{{ experience.question }}</strong></div>
-                        <div class="collapsible-body"><p>{{ experience.answer }}</p></div>
+                        <div class="collapsible-body">{{ experience.answer|safe }}</div>
                     </li>
                 {% endfor %}
             {% else %}
@@ -128,6 +128,9 @@
         width:100%;
         height: 300px;
         object-fit: contain !important;
+    }
+    .flow-text{
+        font-size: 1rem;
     }
     /* Width definert i bilder kan ikke overskride width i bildekarusell får da overflow. :( Ser scuffed ut når man trykker inn på et bilde og :(( og bildene er scuffed /*
 

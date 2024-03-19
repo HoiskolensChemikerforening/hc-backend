@@ -32,7 +32,8 @@ Admin
       {{ experienceformset.management_form }}
       {% for form in experienceformset %}
       <div class = "experience-form">
-      {{ form.as_p }}
+          {{ form.media }}
+          {{ form.as_p }}
       </div>
       {% endfor %}
       </div>

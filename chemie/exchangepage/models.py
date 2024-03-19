@@ -97,7 +97,7 @@ class Questions(models.Model):
 
 class Experience(models.Model):
     question = models.ForeignKey(Questions, on_delete=models.CASCADE, verbose_name="Spørsmål")
-    answer = models.TextField(verbose_name="Svar")
+    answer = RichTextField(verbose_name="Svar", config_name="news")
     travelletter = models.ForeignKey(Travelletter, on_delete=models.CASCADE, related_name="experiences")
     def __str__(self):
         return f'Svar på spørsmål: {self.question}'
