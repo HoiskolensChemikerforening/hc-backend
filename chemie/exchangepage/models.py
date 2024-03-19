@@ -13,7 +13,7 @@ class Travelletter(models.Model):
     nature         = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Natur")
     hospitality   = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Gjestfrihet")
     workLoad       = models.IntegerField(default=0, validators=[MinValueValidator(1), MaxValueValidator(10)],verbose_name="Arbeidsmengde")
-    destinationInfo = models.TextField(max_length = 700, verbose_name="Info om sted")
+    destinationInfo = RichTextField(max_length = 700, verbose_name="Info om sted", config_name="news")
 
 
     def __str__(self):

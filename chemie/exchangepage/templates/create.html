@@ -28,7 +28,7 @@
   <div class="card-content">
   <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-
+      {{ travelletterform.media }}
       {% for field in travelletterform %}
         <div>
           <label for="{{ field.id_for_label }}">{{ field.label }}</label>
