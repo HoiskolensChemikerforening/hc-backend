@@ -246,7 +246,8 @@
   background-color: var(--dark-background);
   color: var(--text-color);
   margin: auto;
-  width: 100px;
+  width: 50%;
+  height: 30px;
 }
 .container-btn {
   width:100%;
@@ -333,6 +334,7 @@
   border-radius: 5px;
   border-color: var(--text-color);
   color: var(--text-color);
+  max-width: 100%;
 }
 
 .showfiaskoform > select > option {
@@ -373,5 +375,8 @@
   padding-left: 26px;
 }
 
-
-
+@media only screen and (max-width: 510px){
+  .divbackground{
+    max-width:85vw;
+  }
+}
