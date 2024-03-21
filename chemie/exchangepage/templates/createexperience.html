@@ -50,6 +50,9 @@ Admin
 
 <style>
   select{display: block}
+  .cke_1{
+      width: 100% !important;
+  }
 </style>
 {% endblock content %}
 
@@ -74,6 +77,7 @@ Admin
         //Regex to find all instances of the form number
         let formRegex = RegExp(`form-(\\d){1}-`,'g');
 
+
         formNum++;
         //Update the new form to have the correct form number
         newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
@@ -81,6 +85,10 @@ Admin
         container.insertBefore(newForm, addButtonContainer);
         //Increment the number of total forms in the management form
         totalForms.setAttribute('value', `${formNum+1}`);
+        document.getElementById(`cke_id_form-${formNum}-answer`).remove();
+
+        let config = JSON.parse(`{{ck_config|escapejs}}`);
+        CKEDITOR.replace(`form-${formNum}-answer`, config);
     }
     // Add an eventlistener to the new receipt button
     addButton.addEventListener('click', addForm);

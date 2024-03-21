@@ -1,3 +1,5 @@
+import json
+
 from django.shortcuts import render
 from .models import Travelletter, Experience, Questions, Images
 from django.contrib.auth.decorators import login_required, permission_required
@@ -5,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect
 from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet, ImageFormSet, ImageForm
 from django.contrib import messages
 from chemie.customprofile.models import SPECIALIZATION
-
+from chemie.chemie.settings.base import CKEDITOR_CONFIGS
 # Create your views here.
 
 @login_required()
@@ -143,6 +145,8 @@ def createImageViews(request, pk):
 
 @permission_required("exchangepage.add_travelletter")
 def createExperienceViews(request, pk):
+    ck_config = CKEDITOR_CONFIGS['news']
+    ck_config = json.dumps(ck_config)
     travelletter = get_object_or_404(Travelletter, pk=pk)
 
     if request.method == 'POST':
@@ -168,7 +172,8 @@ def createExperienceViews(request, pk):
 
     context = {
         'experienceformset': experienceformset,
-        'travelletter': travelletter
+        'travelletter': travelletter,
+        'ck_config': ck_config
     }
     return render(request, "createexperience.html", context)
 
@@ -240,6 +245,8 @@ def adminDetailImageViews(request, pk):
     return render(request, "admindetailimage.html", context)
 
 def adminDetailExperienceViews(request, pk):
+    ck_config = CKEDITOR_CONFIGS['news']
+    ck_config = json.dumps(ck_config)
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = travelletter.experiences.all()
 
@@ -267,7 +274,8 @@ def adminDetailExperienceViews(request, pk):
 
     context = {
         'experienceformset': experienceformset,
-        'travelletter': travelletter
+        'travelletter': travelletter,
+        'ck_config':ck_config
     }
     return render(request, "admindetailexperience.html", context)
 
