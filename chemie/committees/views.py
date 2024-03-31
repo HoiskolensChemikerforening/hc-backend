@@ -34,6 +34,9 @@ def view_committee(request, slug):
     context = {"committee": committee, "positions": positions}
     return render(request, "committees/view_committee.html", context)
 
+def EmailDownloadView(request, slug):
+
+
 
 @permission_required("committees.change_committee")
 def edit_description(request, slug):
