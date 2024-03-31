@@ -34,7 +34,7 @@ def view_committee(request, slug):
     context = {"committee": committee, "positions": positions}
     return render(request, "committees/view_committee.html", context)
 
-def EmailDownloadView(request, slug):
+def email_download_view(request, slug):
     template_name = "committees/email_download.html"
     committee = get_object_or_404(Committee, slug=slug)
     positions = Position.objects.filter(committee=committee).prefetch_related(
