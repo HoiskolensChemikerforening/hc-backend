@@ -17,17 +17,14 @@
 {% endblock header %}
 
 {% block nav_header %}
-  Undergrupper
+{{ committee.title }}
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  e-postliste
+   E-postliste
 {% endblock nav_sub_header %}
 
 {% block content %}
-<div class="row">
-  <div class="col s12 m12 l12"><h3 class="heading">komiteenavn</h3></div>
-</div>
 <div class="row">
   <div class="col s12 m12 l10">
     <p class="flow-text" >
@@ -49,7 +46,7 @@
       <tbody>
       {% for member in members %}
         <tr>
-            <td>{{ member.user.email }} </td>
+            <td>{{ member.email }} </td>
         </tr>
       {% endfor %}
       </tbody>

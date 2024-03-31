@@ -35,6 +35,19 @@ def view_committee(request, slug):
     return render(request, "committees/view_committee.html", context)
 
 def EmailDownloadView(request, slug):
+    template_name = "committees/email_download.html"
+    committee = get_object_or_404(Committee, slug=slug)
+    positions = Position.objects.filter(committee=committee).prefetch_related(
+        "users"
+    )
+    members = []
+    for position in positions:
+        members.extend(position.users.all())
+
+    members = list(set(members))
+    context = {"members": members, "committee": committee}
+
+    return render(request, template_name, context)
 
 
 
