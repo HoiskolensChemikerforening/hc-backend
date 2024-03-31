@@ -13,6 +13,24 @@
           src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
+  <script>
+  $(function () {
+    var table = $('table')
+    $('.download').click(function (){
+        table.trigger('outputTable');
+    });
+
+    table.tablesorter({
+        theme: "materialize",
+        widgets: ['output', 'zebra'],
+        widgetOptions: {
+            output_delivery: 'd',
+            zebra: ['even', 'odd'],
+            output_saveFileName  : '{{ committee.title }}_epostliste.csv',
+        }
+    })
+})
+  </script>
 
 {% endblock header %}
 
@@ -28,7 +46,7 @@
 <div class="row">
   <div class="col s12 m12 l10">
     <p class="flow-text" >
-      Last ned e-posten til alle komiteemedlemmer som en csv fil.
+      Last ned e-postadressen til alle komiteemedlemmer som en csv fil.
     </p>
     <button class="download btn">Last ned</button>
   </div>
