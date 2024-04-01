@@ -14,22 +14,40 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
   <script>
-  $(function () {
-    var table = $('table')
-    $('.download').click(function (){
-        table.trigger('outputTable');
-    });
+    function tableToCSV(){
+        let csv_data = [];
+        let rows = document.getElementsByTagName('tr');
+        for (let i=1; i < rows.length; i++ ){
+            let cols = rows[i].querySelectorAll('tr','th');
+            let csv_rows = [];
 
-    table.tablesorter({
-        theme: "materialize",
-        widgets: ['output', 'zebra'],
-        widgetOptions: {
-            output_delivery: 'd',
-            zebra: ['even', 'odd'],
-            output_saveFileName  : '{{ committee.title }}_epostliste.csv',
+            for (let j=0; j < cols.length; i++){
+                csv_rows.push(cols[j].innerHTML);
+
+            }
+            csv_data.push(csv_rows.join(","));
         }
-    })
-})
+        csv_data = csv_data.join('\n');
+        downloadCSV(csv_data);
+    }
+
+    function downloadCSV(csv){
+
+        CSVFile = new Blob([csv],{
+            type: "text/csv"
+        });
+
+        let temp_link = document.createElement('a');
+        temp_link.download = "{{ committee.title }}_epostliste.csv";
+        let url = window.URL.createObjectURL(CSVFile);
+        temp_link.href = url;
+
+        temp_link.style.display = "none";
+        document.body.appendChild(temp_link);
+
+        temp_link.click();
+        document.body.removeChild(temp_link);
+    }
   </script>
 
 {% endblock header %}
@@ -48,7 +66,7 @@
     <p class="flow-text" >
       Last ned e-postadressen til alle komiteemedlemmer som en csv fil.
     </p>
-    <button class="download btn">Last ned</button>
+    <button class="download btn" onclick="tableToCSV()">Last ned</button>
   </div>
 
 </div>
