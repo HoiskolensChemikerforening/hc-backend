@@ -18,10 +18,10 @@
         let csv_data = [];
         let rows = document.getElementsByTagName('tr');
         for (let i=1; i < rows.length; i++ ){
-            let cols = rows[i].querySelectorAll('tr','th');
+            let cols = rows[i].querySelectorAll('td , th');
             let csv_rows = [];
 
-            for (let j=0; j < cols.length; i++){
+            for (let j=0; j < cols.length; j++){
                 csv_rows.push(cols[j].innerHTML);
 
             }
@@ -87,7 +87,6 @@
       {% endfor %}
       </tbody>
     </table>
-
+  </div>
 </div>
 {% endblock content %}
-
