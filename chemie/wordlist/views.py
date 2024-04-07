@@ -173,12 +173,15 @@ def category(request):
 
 
 def details(request, pk):
-    alle_ord = Category.objects.all()
-    context = {"ord": alle_ord}
+    ordet = get_object_or_404(Word, id=pk)
+    if ordet.picture:
+        print(1)
+    else:
+        print(2)
+    context = {"ord": ordet}
     return render(request, "details.html", context)
 
 
 def categoryViews(request):
     context = {}
     return render(request, "admincategory.html", context)
-

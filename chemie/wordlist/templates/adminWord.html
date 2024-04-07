@@ -29,6 +29,16 @@
   </div>
 
 </form>
+<form method = "POST" enctype = "multipar/form-date"> {% csrf_token %}
+
+  {%form form=categoryform%}
+  {% endform %}
+  
+    <div>
+    <input type = "submit" value = "Lagre ord i databasen", class = "knapp" /> 
+    </div>
+  
+  </form>
 </div>
 
 {% endblock content %}
