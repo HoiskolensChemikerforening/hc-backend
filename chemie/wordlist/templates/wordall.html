@@ -16,20 +16,59 @@
 
 {% block content %}
 
+<div>
+  <h5>Søkemotor: </h5>
+  <form enctype="multipart/form-data" method='POST'>
+    {% csrf_token %}
+    <div class="card-content">
+      {% for field in form %}{{field.error}}{{field}}{%endfor%}
+      <input class="btn" type='submit' name='submit' value='Søk!'/>
+      <input class="btn" type='submit' name='submit' value='Nullstill søk'/>
+    </div>
+</form>
+</div>
 
-    <div class="row">
-      {% for word in words %}
-        <div class="col">
 
-              <a class="card" href="{%url 'wordlist:details' word.id %}" >
 
-            <div class="card" style="color:#222222; background-color:#F9CF00;"  >{{word.word}} : {{word.explanations}} </div>
-          </a>
+<div>
+  <h5>Velg en kategori:</h5>
+  <form>
+    {% csrf_token %}
+    {%form form=category_form%}
+      {% endform %}
+    <div class="card-content">
+        
+      
+      
+      <input class="btn" type='submit' name='submit' value='Ta meg til kategorien'/>
+    </div>
+  </form>
+</div>
+
+
+
+
+{% for word in word %}
+  <div class="row">
+
+    <div class="col" s>
+      <a class="card" href="{%url 'wordlist:details' word.id %}" >
+        <div class="card" style="color:#222222; background-color:#F9CF00;"  >
+          
+          <div>{{word.word}}:</div> 
+
+          <div><i class="material-icons">arrow_forward</i> {{word.explanations}}</div>
+          <img src="{{word.picture.url}}" alt="{{word.explanations}}">
+        
+        
         </div>
-        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
-      {% endfor %}
-    </div> 
+      </a>
+    </div>
+   
 
+
+  </div> 
+{% endfor %}
 
 
 
