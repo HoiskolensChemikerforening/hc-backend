@@ -179,7 +179,8 @@
 }
 
 .draggable-list .country-name {
-  margin: 0 20px 0 0;
+  /*margin: 0 20px 0 0;*/
+  margin: 0 0px 0 0;
 
 }
 
