@@ -1,0 +1,41 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+{% load material_form %}
+{% block nav_header %}
+  Ordliste 
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Detaljer
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+<card>
+    <h2>{{ord}}</h2>
+    {%if ord.picture%}
+      <img src="{{ord.picture.url}}" style="height:400px"/>
+      {%else%}
+      <img alt="bilde"  src="{% static "images/blank_avatar.png" %}"/ style="height:400px">
+    {%endif%}
+    <h6>Laget av: {{ord.author.profile}}</h6>
+    <h6>Laget: {{ord.date}}</h6>
+    <h5>Forklaring: 
+      {{ord.explanations}}</h5>
+    <h5>Kategori: {%for word in ord.category.all%}
+      {{word}}{% if not forloop.last %}
+      ,
+      {% endif %}
+      {% empty %}
+      Ingen kategori
+      {%endfor%} </h5>
+
+    
+</card>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
