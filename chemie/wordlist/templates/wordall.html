@@ -58,7 +58,9 @@
           <div>{{word.word}}:</div> 
 
           <div><i class="material-icons">arrow_forward</i> {{word.explanations}}</div>
+          {% if word.picture %}
           <img src="{{word.picture.url}}" alt="{{word.explanations}}">
+          {% endif %}
         
         
         </div>
