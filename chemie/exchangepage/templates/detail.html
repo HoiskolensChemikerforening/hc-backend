@@ -2,9 +2,11 @@
 {% load static %}
 
 {% block nav_header %}
-<div class="hide-on-med-and-down">
-    {{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}
+
+<div class="hide-on-med-and-down" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 100%;">
+    <span>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</span>
 </div>
+
 
 {% endblock nav_header %}
 
@@ -192,7 +194,18 @@
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.materialboxed');
     var instances = M.Materialbox.init(elems);
-  });
+  })
+
+  window.onload = function() {
+      var div = document.querySelector('.hide-on-med-and-down');
+      var span = div.querySelector('span');
+      var fontSize = parseInt(window.getComputedStyle(div).getPropertyValue('font-size'));
+
+      while (span.offsetWidth > div.offsetWidth && fontSize > 8) {
+          fontSize -= 1;
+          div.style.fontSize = fontSize + 'px';
+        }
+    };
 </script>
 
 {% endblock %}
