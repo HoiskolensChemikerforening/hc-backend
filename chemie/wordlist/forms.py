@@ -12,9 +12,12 @@ class WordInput(forms.ModelForm):
 
 
 
-class CategorySortingMainPage(forms.Modelform):
+class WordSearchMainPage(forms.Form):
+    the_word = forms.CharField(max_length=120, required=False)
 
-    class Meta:
-        model = Category
-        fields = ["typeOfWord"]
+
+
+
+class CategorySortingMainPage(forms.Form):
+    category = forms.ModelChoiceField(queryset = Category.objects.all(), label='Car Type', required=False)
 

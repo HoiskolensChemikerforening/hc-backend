@@ -17,33 +17,38 @@
 {% block content %}
 
 <div>
-
-  <h3>Velg en kategori:</h3>
+  <h5>Søkemotor: </h5>
   <form enctype="multipart/form-data" method='POST'>
     {% csrf_token %}
     <div class="card-content">
-     {{ form.media }}
-      {{ form.as_p }}
-      <input class="btn" type='submit' name='submit' value='Sorter!'/>
-      <input class="btn" type='submit' name='submit' value='Nullstill'/>
+      {% for field in form %}{{field.error}}{{field}}{%endfor%}
+      <input class="btn" type='submit' name='submit' value='Søk!'/>
+      <input class="btn" type='submit' name='submit' value='Nullstill søk'/>
     </div>
 </form>
-
-
- 
+</div>
 
 
 
+<div>
+  <h5>Velg en kategori:</h5>
+  <form>
+    {% csrf_token %}
+    {%form form=category_form%}
+      {% endform %}
+    <div class="card-content">
+        
+      
+      
+      <input class="btn" type='submit' name='submit' value='Ta meg til kategorien'/>
+    </div>
+  </form>
 </div>
 
 
 
 
-
-
-
-
-{% for word in words %}
+{% for word in word %}
   <div class="row">
 
     <div class="col" s>

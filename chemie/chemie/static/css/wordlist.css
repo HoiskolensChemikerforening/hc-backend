@@ -5,6 +5,10 @@
 
 }
 
+select {
+    display: block;
+}
+
 
 
 .word-header {
