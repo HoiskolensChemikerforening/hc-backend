@@ -407,5 +407,9 @@
   #legendcountry {
     padding-left: 10px;
   }
+  .legend p[id] {
+    background-color: var(--dark-background);
+  }
+
 
 }
