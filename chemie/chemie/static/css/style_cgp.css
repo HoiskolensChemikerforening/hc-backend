@@ -381,3 +381,31 @@
     max-width:85vw;
   }
 }
+
+@media only screen and (max-width: 350px) {
+  .legend p {
+    font-weight: bold;
+    text-align: center;
+    width: 40px;
+    margin-bottom: 0;
+    height: 30px;
+  }
+  .draggable-list .points {
+    background-color: var(--dark-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    width: 40px;
+    height: 80px;
+  }
+  #legendpoints{
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+  #legendcountry {
+    padding-left: 10px;
+  }
+
+}
