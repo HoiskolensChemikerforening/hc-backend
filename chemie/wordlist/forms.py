@@ -9,3 +9,8 @@ class WordInput(forms.ModelForm):
         model = Word
         fields = "__all__"
 
+class CategoryInput(forms.ModelForm):
+
+    class Meta:
+        model = Category
+        fields = "__all__"

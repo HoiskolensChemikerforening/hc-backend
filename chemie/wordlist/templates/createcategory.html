@@ -1,0 +1,22 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block nav_header %}
+  Lag ny kategori
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  
+{% endblock nav_sub_header %}
+
+{% block content %}
+<form enctype="multipart/form-data" method='POST'>
+  {% csrf_token %}
+  {{ categoryform.as_p }}
+  <input class="btn" type='submit' value='Lagre kategori'/>
+</form>
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}

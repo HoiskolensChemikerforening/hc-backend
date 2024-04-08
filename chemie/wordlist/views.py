@@ -1,7 +1,7 @@
 
 from .models import Word
 from .models import Category
-from .forms import WordInput
+from .forms import WordInput, CategoryInput
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
@@ -59,13 +59,59 @@ def category(request):
     return render(request, "category.html", context)
 
 
-
 def details(request, pk):
     
     alle_ord = Category.objects.all()
     context = {"ord": alle_ord}
     return render(request, "details.html", context)
-def categoryViews(request):
-    context = {}
+
+def admincategoryViews(request):
+    categories = Category.objects.all()
+    context = {"admincategory":categories}
     return render(request, "admincategory.html", context)
+
+def editcategoryViews(request, pk):
+    category = get_object_or_404(Category, id = pk)
+
+    
+    if request.method == "POST":
+        categoryform = CategoryInput(request.POST,instance=category)
+        if categoryform.is_valid():
+            category_instance = categoryform.save(commit=False)
+            category_instance.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "OG FET B)",
+                extra_tags="KATEGORIEN DIN ER LAGRET"
+            )
+            return HttpResponseRedirect(reverse("Wordlist:admincategory"))
+    else:
+        categoryform = CategoryInput(instance=category)
+    context = {"categoryform":categoryform, "category":category}
+    return render(request, "editcategory.html", context )
+
+@login_required
+def createcategoryViews(request):
+    if request.method == "POST":
+        categoryform = CategoryInput(request.POST)
+
+        if categoryform.is_valid():
+            category_instance = categoryform.save(commit=False)
+            category_instance.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "OG FET B)",
+                extra_tags="KATEGORIEN DIN ER LAGRET"
+            )
+            return HttpResponseRedirect(reverse("wordlist:admincategory"))
+        
+    else:
+        categoryform = CategoryInput()
+    context = {"categoryform":categoryform}
+    return render(request, "createcategory.html", context )
+
 
