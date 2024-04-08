@@ -1,6 +1,6 @@
 
 from .models import Word, Category
-from .forms import WordInput, WordSearchMainPage, CategorySortingMainPage
+from .forms import WordInput, WordSearchMainPage, CategorySortingMainPage, CategoryInput
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
@@ -170,7 +170,6 @@ def category(request):
 
 
 
-
 def details(request, pk):
     ordet = get_object_or_404(Word, id=pk)
     if ordet.picture:
@@ -180,7 +179,56 @@ def details(request, pk):
     context = {"ord": ordet}
     return render(request, "details.html", context)
 
+def admincategoryViews(request):
+    categories = Category.objects.all()
+    context = {"admincategory":categories}
+
 
 def categoryViews(request):
     context = {}
     return render(request, "admincategory.html", context)
+
+def editcategoryViews(request, pk):
+    category = get_object_or_404(Category, id = pk)
+
+    
+    if request.method == "POST":
+        categoryform = CategoryInput(request.POST,instance=category)
+        if categoryform.is_valid():
+            category_instance = categoryform.save(commit=False)
+            category_instance.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "OG FET B)",
+                extra_tags="KATEGORIEN DIN ER LAGRET"
+            )
+            return HttpResponseRedirect(reverse("Wordlist:admincategory"))
+    else:
+        categoryform = CategoryInput(instance=category)
+    context = {"categoryform":categoryform, "category":category}
+    return render(request, "editcategory.html", context )
+
+@login_required
+def createcategoryViews(request):
+    if request.method == "POST":
+        categoryform = CategoryInput(request.POST)
+
+        if categoryform.is_valid():
+            category_instance = categoryform.save(commit=False)
+            category_instance.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "OG FET B)",
+                extra_tags="KATEGORIEN DIN ER LAGRET"
+            )
+            return HttpResponseRedirect(reverse("wordlist:admincategory"))
+        
+    else:
+        categoryform = CategoryInput()
+    context = {"categoryform":categoryform}
+    return render(request, "createcategory.html", context )
+

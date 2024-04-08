@@ -4,10 +4,41 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Admin
+  Endre og slette kategorier
 {% endblock nav_sub_header %}
 
 {% block content %}
+
+<div>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Kategori</th>
+        <th>Rediger</th>
+        <th>Slett</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% for category in admincategory %}
+      <tr>
+        <td>{{category}}</td>
+        <td>
+        
+          <a class="btn-floating btn-large waves-effect waves-light green" href = "{% url 'wordlist:editcategory' category.id %}"><i class="material-icons">edit</i></a>
+        </td>
+
+        <td>
+        <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+        </td>
+
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
 
 {% endblock content %}
 

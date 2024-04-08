@@ -35,3 +35,8 @@ class WordSearchMainPage(forms.Form):
 class CategorySortingMainPage(forms.Form):
     category = forms.ModelChoiceField(queryset = Category.objects.all(), label='Car Type', required=False)
 
+class CategoryInput(forms.ModelForm):
+
+    class Meta:
+        model = Category
+        fields = "__all__"
