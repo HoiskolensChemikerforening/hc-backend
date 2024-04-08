@@ -42,8 +42,7 @@ def ordListe(request):
             if category_form.is_valid():                
                 if request.POST["submit"] == "Ta meg til kategorien":
                     the_category = category_form.cleaned_data.get("category")
-                    context = {"the_category": the_category}
-                    return render(request, "category.html", context)
+                    alle_ord = Word.objects.filter(category = the_category)
                     
                     
                         
