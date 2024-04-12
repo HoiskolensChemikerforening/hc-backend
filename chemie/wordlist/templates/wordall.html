@@ -25,21 +25,19 @@
       <input class="btn" type='submit' name='submit' value='Søk!'/>
       <input class="btn" type='submit' name='submit' value='Nullstill søk'/>
     </div>
-</form>
+  </form>
 </div>
 
 
 
 <div>
   <h5>Velg en kategori:</h5>
-  <form>
+  <form enctype="multipart/form-data" method='POST'>
     {% csrf_token %}
     {%form form=category_form%}
       {% endform %}
     <div class="card-content">
         
-      
-      
       <input class="btn" type='submit' name='submit' value='Ta meg til kategorien'/>
     </div>
   </form>
@@ -73,7 +71,20 @@
 {% endfor %}
 
 
+<div>
+  <ul class="pagination nav navbar-nav">
+    {% if word.has_previous %}
+     <li><a href="?page={{ word.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in word.paginator.page_range %}
+    <li class="{% if word.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
 
+    {% if word.has_next %}
+      <li><a href="?page={{ word.next_page_number }}">Neste</a></li>
+    {% endif %}
+    </ul>
+</div>
 
 
 
