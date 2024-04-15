@@ -12,6 +12,7 @@ from chemie.customprofile.models import Profile, User
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
+
 @login_required()
 def ordListe(request):
 
@@ -74,7 +75,7 @@ def ordListe(request):
 
 
 
-@login_required()
+@permission_required("wordlist.add_word")
 def createWord(request):
     if request.method == "POST":
         wordform = WordInput(request.POST)
@@ -107,7 +108,7 @@ def createWord(request):
     context = {"wordform":wordform}
     return render(request, "createWord.html", context)
 
-@login_required()
+@permission_required("wordlist.change_word")
 def adminWord(request, pk):
     word = get_object_or_404(Word, id=pk)
     form = WordInput(
@@ -123,22 +124,27 @@ def adminWord(request, pk):
                 "Ordet ble endret",
                 extra_tags="Endret",
             )
-            return HttpResponseRedirect(reverse("wordlist:index"))
+            return HttpResponseRedirect(reverse("wordlist:details", args=[pk]))
     context = {"wordform": form, "word":word}
     return render(request, "createWord.html", context)
 
+@permission_required("wordlist.delete_word")
+def word_delete(request, pk):
+    word = get_object_or_404(Word, id=pk)
 
+    word.delete()
+    messages.add_message(
+        request, messages.SUCCESS, "Ordet ble slettet", extra_tags="Slettet"
+    )
+    return HttpResponseRedirect(reverse("wordlist:index"))
 
-
+@login_required()
 def details(request, pk):
     ordet = get_object_or_404(Word, id=pk)
-    if ordet.picture:
-        print(1)
-    else:
-        print(2)
     context = {"ord": ordet}
     return render(request, "details.html", context)
 
+@permission_required("wordlist.add_word")
 def admincategoryViews(request):
     categories = Category.objects.all()
     context = {"admincategory":categories}
@@ -151,7 +157,6 @@ def categoryViews(request):
 
 def editcategoryViews(request, pk):
     category = get_object_or_404(Category, id = pk)
-
     
     if request.method == "POST":
         categoryform = CategoryInput(request.POST,instance=category)

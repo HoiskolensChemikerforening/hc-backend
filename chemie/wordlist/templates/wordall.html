@@ -16,6 +16,20 @@
 
 {% block content %}
 
+<style>/* Rounded corners of cards */
+  .card,
+  .card-image,
+  .card .card-image img {
+    border-radius: 8px 8px 0 0;
+  }
+  .card,
+  .card {
+    border-radius: 8px 8px 8px 8px;
+  }
+</style>
+
+
+
 <div>
   <h5>Søkemotor: </h5>
   <form enctype="multipart/form-data" method='POST'>
@@ -44,31 +58,68 @@
 </div>
 
 
-
-
-{% for word in word %}
+<div class="container">
   <div class="row">
-
-    <div class="col" s>
-      <a class="card" href="{%url 'wordlist:details' word.id %}" >
-        <div class="card" style="color:#222222; background-color:#F9CF00;"  >
-          
-          <div>{{word.word}}:</div> 
-
-          <div><i class="material-icons">arrow_forward</i> {{word.explanations}}</div>
-          {% if word.picture %}
-          <img src="{{word.picture.url}}" alt="{{word.explanations}}">
-          {% endif %}
-        
-        
-        </div>
-      </a>
+    {% for word in word %}
+    <div class="col s14 m6 l4">
+      <div class="card small">
+        <a href="{% url 'wordlist:details' word.id %}">
+          <div class="card-image">
+            {% if word.picture %}
+              <img src="{{ word.picture.url }}" alt="{{ word.explanations }}">
+            {% else %}
+              <img src="{% static "images/blank_avatar.png" %}" alt="bilde">
+            {% endif %}
+          </div>
+          <div class="card-content">
+            <span class="card-title" style="font-size: 18px; font-weight: 400;">{{ word.word }}</span>
+            <p>{{word.explanations}}</p>
+          </div>
+        </a>
+      </div>
     </div>
-   
+    {% endfor %}
+  </div>
+</div>
 
 
-  </div> 
-{% endfor %}
+{% if perms.wordlist%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">dehaze</i>
+          </a>
+          <ul>
+            {% if perms.wordlist.add_word %}
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:admincategory" %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:admincategory" %}>Endre eller slette kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:createcategory" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:createcategory" %}>Legg til en ny kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:innsending" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:innsending" %}>Legg til ett ord</a>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+
+
+
+
+
+
+
+
 
 
 <div>
@@ -98,7 +149,7 @@
 
 
 <script>
-$(function(){
+$function()
         $("#refresh").click(function(event){
             $.ajax({
              type: "POST",
