@@ -33,6 +33,33 @@
     
 </card>
 
+{% if perms.wordlist%}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">dehaze</i>
+  </a>
+  <ul>
+
+    {% if perms.wordlist.delete_word %}
+      <li>
+        <a class="btn-floating red" href={% url "wordlist:delete" pk=ord.id %}>
+          <i class="material-icons">delete</i>
+          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:delete" pk=ord.id %}>Slett</a>
+        </a></li>
+    {% endif %}
+
+    {% if perms.wordlist.change_word %}
+        <li>
+        <a class="btn-floating blue" href={% url "wordlist:adminword" pk=ord.id %}>
+          <i class="material-icons">edit</i>
+          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:adminword" pk=ord.id %}>Rediger</a>
+        </a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+</div>
 
 {% endblock content %}
 
