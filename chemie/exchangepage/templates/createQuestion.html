@@ -23,6 +23,7 @@
 <p class="flow-text">Her kan du legge til nytt spørsmål!</p>
 <div class="card">
   <div class="card-content">
+
   <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
       {{questionform.as_p}}
@@ -33,6 +34,7 @@
         </div>
       </div>
   </form>
+
   </div>
 </div>
 
