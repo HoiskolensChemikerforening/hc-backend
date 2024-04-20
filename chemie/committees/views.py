@@ -34,9 +34,17 @@ def view_committee(request, slug):
     context = {"committee": committee, "positions": positions}
     return render(request, "committees/view_committee.html", context)
 
+
+@permission_required("committees.change_committee")
 def email_download_view(request, slug):
     template_name = "committees/email_download.html"
     committee = get_object_or_404(Committee, slug=slug)
+
+    # check permissions
+    no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
+    if no_permissions:
+        return redirect_target
+
     positions = Position.objects.filter(committee=committee).prefetch_related(
         "users"
     )
@@ -50,10 +58,11 @@ def email_download_view(request, slug):
     return render(request, template_name, context)
 
 
-
-@permission_required("committees.change_committee")
-def edit_description(request, slug):
-    committee = get_object_or_404(Committee, slug=slug)
+def check_if_admin_of_group(request, committee, slug):
+    """
+    Checks if the current user is has permissions to edit the current committee.
+    Redirects the user if not.
+    """
     managers = Position.objects.filter(
         can_manage_committee=True, committee=committee
     )
@@ -63,16 +72,28 @@ def edit_description(request, slug):
     enough_perms = admin_of_this_group or request.user.has_perm(
         "committees.add_committee"
     )
-    if not (enough_perms):
+    if not enough_perms:
         messages.add_message(
             request,
             messages.ERROR,
             "Du har bare lov å endre egne undergrupper.",
             extra_tags="Manglende rettigheter!",
         )
-        return redirect(
-            reverse("verv:committee_detail", kwargs={"slug": slug})
+        return True, redirect(
+             reverse("verv:committee_detail", kwargs={"slug": slug})
         )
+    return False, None
+
+
+@permission_required("committees.change_committee")
+def edit_description(request, slug):
+    committee = get_object_or_404(Committee, slug=slug)
+
+    # check permissions
+    no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
+    if no_permissions:
+        return redirect_target
+    print("hei")
 
     form = EditDescription(
         request.POST or None, request.FILES or None, instance=committee
