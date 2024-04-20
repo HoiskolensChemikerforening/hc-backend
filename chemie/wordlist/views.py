@@ -148,7 +148,6 @@ def details(request, pk):
 def admincategoryViews(request):
     categories = Category.objects.all()
     context = {"admincategory":categories}
-
     return render(request, "admincategory.html", context)
 
 
