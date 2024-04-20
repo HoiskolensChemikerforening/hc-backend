@@ -4,7 +4,7 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions, Images
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ExperienceFormSet, ImageFormSet, ImageForm
+from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet, ImageForm
 from django.contrib import messages
 from chemie.customprofile.models import SPECIALIZATION
 from chemie.chemie.settings.base import CKEDITOR_CONFIGS
@@ -148,16 +148,16 @@ def createExperienceViews(request, pk):
     ck_config = CKEDITOR_CONFIGS['news']
     ck_config = json.dumps(ck_config)
     travelletter = get_object_or_404(Travelletter, pk=pk)
+    experiences = travelletter.experiences.all()
 
     if request.method == 'POST':
-        experienceformset = ExperienceFormSet(request.POST)
+        experienceform = ExperienceForm(request.POST)
 
 
-        if experienceformset.is_valid():
-            for form in experienceformset:
-                experience = form.save(commit=False)
-                experience.travelletter = travelletter
-                experience.save()  #links the models
+        if experienceform.is_valid():
+            experience = experienceform.save(commit=False)
+            experience.travelletter = travelletter
+            experience.save()  #links the models
 
             messages.add_message(
                 request,
@@ -165,13 +165,14 @@ def createExperienceViews(request, pk):
                 f"Reisebrevet er opprettet!",
                 extra_tags="Suksess",
             )
-            return redirect('exchangepage:admin')  # Redirect to the desired page after successful editing
+            experienceform = ExperienceForm()
 
     else:
-        experienceformset = ExperienceFormSet(queryset=Images.objects.none())
+        experienceform = ExperienceForm()
 
     context = {
-        'experienceformset': experienceformset,
+        'experienceform': experienceform,
+        'experiences': experiences,
         'travelletter': travelletter,
         'ck_config': ck_config
     }
@@ -217,7 +218,6 @@ def adminDetailImageViews(request, pk):
     images = travelletter.images.all()
 
     if request.method == 'POST':
-        print(request.FILES)
         imageformset = ImageFormSet(files=request.FILES, data=request.POST, queryset=images)
 
         if imageformset.is_valid():
@@ -247,18 +247,18 @@ def adminDetailImageViews(request, pk):
 def adminDetailExperienceViews(request, pk):
     ck_config = CKEDITOR_CONFIGS['news']
     ck_config = json.dumps(ck_config)
-    travelletter = get_object_or_404(Travelletter, pk=pk)
-    experiences = travelletter.experiences.all()
+    experience = get_object_or_404(Experience, pk=pk)
+    travelletter = experience.travelletter
 
     if request.method == 'POST':
-        experienceformset = ExperienceFormSet(request.POST, queryset=experiences)
+        experienceform = ExperienceForm(request.POST, instance=experience)
 
 
-        if experienceformset.is_valid():
-            for form in experienceformset:
-                experience = form.save(commit=False)
-                experience.travelletter = travelletter
-                experience.save()  #links the models
+        if experienceform.is_valid():
+
+            experience = experienceform.save(commit=False)
+            experience.travelletter = travelletter
+            experience.save()  #links the models
 
             messages.add_message(
                 request,
@@ -266,14 +266,14 @@ def adminDetailExperienceViews(request, pk):
                 f"Hele reisebrevet er oppdatert!",
                 extra_tags="Suksess",
             )
-            return redirect('exchangepage:admin')  # Redirect to the desired page after successful editing
+            return redirect('exchangepage:createexperience', pk=travelletter.id)  # Redirect to the desired page after successful editing
 
     else:
-        experienceformset = ExperienceFormSet(queryset=experiences)
+        experienceform = ExperienceForm(instance=experience)
 
 
     context = {
-        'experienceformset': experienceformset,
+        'experienceform': experienceform,
         'travelletter': travelletter,
         'ck_config':ck_config
     }

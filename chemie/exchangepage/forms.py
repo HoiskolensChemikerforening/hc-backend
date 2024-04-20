@@ -61,7 +61,7 @@ class SensibleFormset2(BaseModelFormSet):
             return total_forms
 
 
-ExperienceFormSet = modelformset_factory(Experience, form=ExperienceForm, extra=1, formset=SensibleFormset)
+#ExperienceFormSet = modelformset_factory(Experience, form=ExperienceForm, extra=1, formset=SensibleFormset)
 ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=1, formset=SensibleFormset)
 
 

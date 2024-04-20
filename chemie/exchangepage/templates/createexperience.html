@@ -15,6 +15,8 @@ Admin
 
 {% load material_form %}
 {% block content %}
+<p class="flow-text">Her kan du legge inn spørsmål og svar!</p>
+
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
     <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Admin</a>
@@ -22,29 +24,35 @@ Admin
     <a href="{% url "exchangepage:admindetailimage" travelletter.id %}" class="breadcrumb">Bilder</a>
     <a class="breadcrumb">Spørsmål</a>
 </div>
+{% if experiences|length != 0 %}
+<div class = "card">
+    <div class ="card-content">
+        {% for experience in experiences %}
+            <div class="col s12 m6 l3" style="padding-bottom: 5px">
+              <a href="{% url 'exchangepage:admindetailexperience' experience.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">label_outline</i>
+                <div style="display: flex;flex-direction: row;justify-content: space-between">
+                  <div class="truncate" style="padding-right: 10px">{{experience.question}}</div>
+                </div>
+              </a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endif %}
 
-<p class="flow-text">Her kan du legge inn spørsmål og svar!</p>
 <div class="card">
   <div class="card-content">
   <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-      <div>
-      {{ experienceformset.management_form }}
-      {% for form in experienceformset %}
-      <div class = "experience-form">
-          {{ form.media }}
-          {{ form.as_p }}
-      </div>
-      {% endfor %}
-      </div>
+      {{ experienceform.as_p }}
 
       <div class="card-action" id="button-container">
         <div class="right-align">
-          <button class="btn btn-primary pull-right" style="margin: 5px" id="add-form" type="button">Nytt spørsmål</button>
           <input class="btn btn-primary pull-right" style="margin: 5px" type='submit' value='Lagre reisebrev!'/>
         </div>
       </div>
   </form>
+      <button href="{% url 'exchangepage:index' %}" class="btn btn-primary pull-right">Ferdig!</button>
   </div>
 </div>
 
@@ -57,40 +65,5 @@ Admin
 {% endblock content %}
 
 {% block footer_script %}
-<script>
-    let experienceForm = document.querySelectorAll(".experience-form");
-    // Variable containing the whole form
-    let container = document.querySelector("#form-container");
-    // Variable containing the button to add a new receipt
-    let addButton = document.querySelector("#add-form");
-    // Variable containing the button to add a new receipt
-    let addButtonContainer = document.querySelector("#button-container");
-    // Variable containing the number for receipts on the current page
-    let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
-    // Get the number of the last form on the page with zero-based indexing
-    let formNum = experienceForm.length-1;
 
-    // Function to add a new form
-    function addForm(e) {
-        e.preventDefault();
-        let newForm = experienceForm[0].cloneNode(true);
-        //Regex to find all instances of the form number
-        let formRegex = RegExp(`form-(\\d){1}-`,'g');
-
-
-        formNum++;
-        //Update the new form to have the correct form number
-        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
-        //Insert the new form at the end of the list of forms
-        container.insertBefore(newForm, addButtonContainer);
-        //Increment the number of total forms in the management form
-        totalForms.setAttribute('value', `${formNum+1}`);
-        document.getElementById(`cke_id_form-${formNum}-answer`).remove();
-
-        let config = JSON.parse(`{{ck_config|escapejs}}`);
-        CKEDITOR.replace(`form-${formNum}-answer`, config);
-    }
-    // Add an eventlistener to the new receipt button
-    addButton.addEventListener('click', addForm);
-</script>
 {% endblock %}
