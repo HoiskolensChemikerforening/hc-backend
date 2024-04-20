@@ -151,9 +151,6 @@ def admincategoryViews(request):
     return render(request, "admincategory.html", context)
 
 
-def categoryViews(request):
-    context = {}
-    return render(request, "admincategory.html", context)
 
 def editcategoryViews(request, pk):
     category = get_object_or_404(Category, id = pk)

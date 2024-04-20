@@ -11,6 +11,15 @@
 
 {% block content %}
 
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a class = "breadcrumb"> {{ord}}</a>
+  </div>
+{% endblock %}
+
+
 <card>
     <h2>{{ord}}</h2>
     {%if ord.picture%}
