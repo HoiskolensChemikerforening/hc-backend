@@ -17,7 +17,7 @@
   </style>
   <div class="row">
     {% for committee in committees %}
-      <div class="col s6 m6 l4">
+      <div class="col s12 m6 l4">
         <div class="card small">
           <div class="card-image">
             <a href="{{ committee.get_absolute_url }}">
@@ -26,7 +26,7 @@
               {% endthumbnail %}
             </a>
             <a class="card-title card-event-title" href="{{ committee.get_absolute_url }}">
-              <h5 style="font-size: 1.54rem;">{{ committee.title }}</h5>
+              <h5 class="truncate" style="font-size: 1.54rem;">{{ committee.title }}</h5>
             </a>
           </div>
           <div class="card-content">
@@ -35,11 +35,15 @@
             </p>
           </div>
           <div class="card-action">
-            <div class="valign-wrapper">
-              <a href="{{ committee.get_absolute_url }}">Detaljer</a>
-              <a href="mailto:{{ committee.email }}">
-                <i class="material-icons valign right small">email</i>
-              </a>
+            <div class="row valign-wrapper" style="margin: 0">
+              <div class="col s8 m8 l8">
+                <a href="{{ committee.get_absolute_url }}">Detaljer</a>
+              </div>
+              <div class="col s4 m4 l4">
+                <a href="mailto:{{ committee.email }}" class="valign-wrapper">
+                  <i class="material-icons valign right small">email</i>
+                </a>
+              </div>
             </div>
 
           </div>
