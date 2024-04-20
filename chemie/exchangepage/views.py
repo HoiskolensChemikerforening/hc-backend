@@ -292,7 +292,7 @@ def createQuestionViews(request):
                 f"Nytt spørsmål opprettet!",
                 extra_tags="Suksess",
             )
-            return redirect('exchangepage:index')  # Redirect to the desired page after successful editing
+            return redirect('exchangepage:adminquestion')  # Redirect to the desired page after successful editing
 
     else:
         questionform = QuestionsForm()
