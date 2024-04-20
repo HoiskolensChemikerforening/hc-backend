@@ -34,7 +34,7 @@
 
 
   <div class="row">
-    <h1 class="heading">{{ committee.title }}</h1>
+    <h1 id="committe-header" class="heading" style="word-break: break-word;">{{ committee.title }}</h1>
     <div class="col s12 m12 l8">
       {% thumbnail committee.image "1600" crop="center" as im %}
         <img class="responsive-img materialboxed" src="{{ im.url }}">
@@ -91,6 +91,19 @@
   </div>
 
   {{ committee.description|safe }}
+
+<style>
+  @media only screen and (max-width: 500px){
+    #committe-header {
+      font-size: xx-large;
+    }
+  }
+  @media only screen and (min-width: 500px) {
+    #committe-header {
+      font-size: 3.5rem;
+    }
+  }
+</style>
 
 {% endblock content %}
 
