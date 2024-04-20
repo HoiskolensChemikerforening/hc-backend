@@ -182,11 +182,9 @@ def details(request, pk):
 def admincategoryViews(request):
     categories = Category.objects.all()
     context = {"admincategory":categories}
+    return render(request, "admincategory.html", context )
 
 
-def categoryViews(request):
-    context = {}
-    return render(request, "admincategory.html", context)
 
 def editcategoryViews(request, pk):
     category = get_object_or_404(Category, id = pk)
@@ -202,9 +200,9 @@ def editcategoryViews(request, pk):
                 request,
                 messages.SUCCESS,
                 "OG FET B)",
-                extra_tags="KATEGORIEN DIN ER LAGRET"
+                extra_tags="KATEGORIEN DIN ER ENDRET"
             )
-            return HttpResponseRedirect(reverse("Wordlist:admincategory"))
+            return HttpResponseRedirect(reverse("wordlist:admincategory"))
     else:
         categoryform = CategoryInput(instance=category)
     context = {"categoryform":categoryform, "category":category}
@@ -231,4 +229,18 @@ def createcategoryViews(request):
         categoryform = CategoryInput()
     context = {"categoryform":categoryform}
     return render(request, "createcategory.html", context )
+
+
+def deletecategoryViews(request, pk):
+    category_object = get_object_or_404(Category, id = pk)
+
+    category_object.delete()
+
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Kategorien gikk adundas",
+        extra_tags = "Slettet",
+    )
+    return HttpResponseRedirect(reverse("wordlist:admincategory"))
 
