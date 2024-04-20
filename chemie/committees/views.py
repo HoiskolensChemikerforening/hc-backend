@@ -93,7 +93,6 @@ def edit_description(request, slug):
     no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
     if no_permissions:
         return redirect_target
-    print("hei")
 
     form = EditDescription(
         request.POST or None, request.FILES or None, instance=committee
