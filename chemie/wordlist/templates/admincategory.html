@@ -36,11 +36,15 @@
         <td>{{category}}</td>
         <td>
         
-          <a class="btn-floating btn-large waves-effect waves-light green" href = "{% url 'wordlist:editcategory' category.id %}"><i class="material-icons">edit</i></a>
+          <a class="btn-floating btn-large waves-effect waves-light green" href = "{% url 'wordlist:editcategory' category.id %}">
+          <i class="material-icons">edit</i></a>
         </td>
 
         <td>
-        <a class="btn-floating btn-large waves-effect waves-light red"><i class="material-icons">add</i></a>
+        
+          <a class="btn-floating btn-large waves-effect waves-light red" href = "{% url 'wordlist:deletecategory' category.id %}">
+          <i class="material-icons">delete</i></a>
+     
         </td>
 
         {% endfor %}
