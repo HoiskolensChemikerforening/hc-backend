@@ -20,7 +20,8 @@ Admin
     <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Rediger</a>
     <a href="{% url "exchangepage:admindetail" travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a>
     <a href="{% url "exchangepage:admindetailimage" travelletter.id %}" class="breadcrumb">Bilder</a>
-    <a class="breadcrumb">Spørsmål</a>
+        <a href="{% url "exchangepage:createexperience" travelletter.id %}" class="breadcrumb">Spørsmål</a>
+    <a class="breadcrumb">Rediger</a>
 </div>
 
 <style>
@@ -38,6 +39,7 @@ Admin
 
       <div class="card-action" id="button-container">
         <div class="right-align">
+          <a class="btn btn-danger pull-left" id="delete-button" style="background-color: red; border-color: red; margin: 5px">Slett spørsmål</a>
           <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre svar!'/>
         </div>
       </div>
@@ -48,4 +50,14 @@ Admin
 {% endblock content %}
 
 {% block footer_script %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    document.getElementById('delete-button').addEventListener('click', function () {
+        var confirmDelete = confirm('Er du sikker på at du vil slette dette spørsmålet?');
+        if (confirmDelete) {
+            window.location.href = "{% url 'exchangepage:deleteexperience' experience.id %}";
+        }
+    });
+});
+</script>
 {% endblock %}

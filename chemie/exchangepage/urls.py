@@ -16,6 +16,7 @@ urlpatterns = [path("", views.index, name="index"),
                path("admin/bilder/<int:pk>/", views.adminDetailImageViews, name="admindetailimage"),
                path("admin/spørsmål/<int:pk>/", views.adminDetailExperienceViews, name="admindetailexperience"),
                path("admin/slettreisebrev/<int:pk>", views.deleteTravelletter, name="deletetravelletter"),
+               path("admin/slettspørsmål/<int:pk>", views.deleteExperienceViews, name="deleteexperience"),
                path("admin/slettbilder/<int:pk>", views.deleteImages, name="deleteimages"),
                path("<str:city_name>/", views.cityPageViews, name="citypage")]
 

@@ -233,7 +233,7 @@ def adminDetailImageViews(request, pk):
                 f"Bilder er oppdatert!",
                 extra_tags="Suksess",
             )
-            return redirect('exchangepage:admindetailexperience', pk=pk)  # Redirect to the desired page after successful editing
+            return redirect('exchangepage:createexperience', pk=pk)  # Redirect to the desired page after successful editing
 
     else:
         imageformset = ImageFormSet(queryset=images)
@@ -274,6 +274,7 @@ def adminDetailExperienceViews(request, pk):
 
     context = {
         'experienceform': experienceform,
+        'experience': experience,
         'travelletter': travelletter,
         'ck_config':ck_config
     }
@@ -342,6 +343,19 @@ def deleteTravelletter(request, pk):
     )
     return redirect('exchangepage:admin')
 
+def deleteExperienceViews(request, pk):
+    query = Experience.objects.get(pk=pk)
+    travelletter = query.travelletter
+    query.delete()
+
+    messages.add_message(
+        request,
+        messages.WARNING,
+        f"Spørsmål slettet!",
+        extra_tags="Slettet",
+    )
+    return redirect('exchangepage:createexperience', pk=travelletter.id)
+
 def deleteImages(request, pk):
     travelletter = Travelletter.objects.get(pk=pk)
     images = travelletter.images.all()
@@ -371,14 +385,15 @@ def displayIndividualLetter(request, pk):
             except:
                 images=0
 
-    specialization_id = travelletter.user.specialization
+    specialization_id = travelletter.user.specialization-1
 
 
     context = {'travelletter': travelletter,
                'experiences': experiences,
                'questions': questions,
                'images':images,
-               'specialization': SPECIALIZATION[specialization_id-1][1]
+               'specialization_id': specialization_id,
+               'specialization': SPECIALIZATION[specialization_id][1]
     }
 
     return render(request, "detail.html", context)

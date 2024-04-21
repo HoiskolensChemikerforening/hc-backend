@@ -18,22 +18,29 @@ Admin
 <p class="flow-text">Her kan du legge inn spørsmål og svar!</p>
 
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
-    <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Admin</a>
-    <a href="{% url "exchangepage:admindetail" travelletter.id %}" class="breadcrumb">Opprett Reisebrev</a> <!-- takes user to edit page -->
-    <a href="{% url "exchangepage:admindetailimage" travelletter.id %}" class="breadcrumb">Bilder</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
+    <a href="{% url 'exchangepage:admin' %}" class="breadcrumb">Admin</a>
+    <a href="{% url 'exchangepage:admindetail' travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a> <!-- takes user to edit page -->
+    <a href="{% url 'exchangepage:admindetailimage' travelletter.id %}" class="breadcrumb">Bilder</a>
     <a class="breadcrumb">Spørsmål</a>
 </div>
 {% if experiences|length != 0 %}
 <div class = "card">
     <div class ="card-content">
         {% for experience in experiences %}
-            <div class="col s12 m6 l3" style="padding-bottom: 5px">
-              <a href="{% url 'exchangepage:admindetailexperience' experience.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">label_outline</i>
-                <div style="display: flex;flex-direction: row;justify-content: space-between">
-                  <div class="truncate" style="padding-right: 10px">{{experience.question}}</div>
+            <div class="row valign-wrapper" style="margin: 0; padding-bottom: 5px">
+                <div class="col s10 m10 l10">
+                  <a href="{% url 'exchangepage:admindetailexperience' experience.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">label_outline</i>
+                    <div style="display: flex;flex-direction: row;justify-content: space-between">
+                      <div class="truncate" style="padding-right: 10px">{{experience.question}}</div>
+                    </div>
+                  </a>
                 </div>
-              </a>
+                <div class="col s2 m2 l2 valign-wrapper">
+                    <a class="delete-button btn-floating red valign-wrapper" href="{% url 'exchangepage:deleteexperience' experience.id%}">
+                        <i class="material-icons">delete</i>
+                    </a>
+                </div>
             </div>
         {% endfor %}
     </div>
@@ -42,17 +49,19 @@ Admin
 
 <div class="card">
   <div class="card-content">
-  <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-      {{ experienceform.as_p }}
+          {{ experienceform.as_p }}
 
-      <div class="card-action" id="button-container">
-        <div class="right-align">
-          <input class="btn btn-primary pull-right" style="margin: 5px" type='submit' value='Lagre reisebrev!'/>
-        </div>
+          <div class="card-action" id="button-container">
+            <div class="right-align">
+              <input class="btn btn-primary pull-right" style="margin: 5px" type='submit' value='Lagre spørsmål!'/>
+            </div>
+          </div>
+      </form>
+      <div class="right-align" style="padding-right: 24px">
+        <a href="{% url 'exchangepage:admin' %}" class="btn btn-primary pull-right" style="margin: 5px">Ferdig!</a>
       </div>
-  </form>
-      <button href="{% url 'exchangepage:index' %}" class="btn btn-primary pull-right">Ferdig!</button>
   </div>
 </div>
 
@@ -65,5 +74,17 @@ Admin
 {% endblock content %}
 
 {% block footer_script %}
-
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var deleteButtons = document.querySelectorAll('.delete-button');
+    deleteButtons.forEach(function(button) {
+        button.addEventListener('click', function () {
+            var confirmDelete = confirm('Er du sikker på at du vil slette dette svaret?');
+            if (confirmDelete) {
+                window.location.href = button.getAttribute('href');
+            }
+        });
+    });
+});
+</script>
 {% endblock %}

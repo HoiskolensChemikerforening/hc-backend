@@ -12,7 +12,7 @@
 
 {% block nav_sub_header %}
 <div class="hide-on-med-and-down">
-   Retning: {{ specialization }}, Semester: {{ travelletter.semester }}
+   {% if specialization_id != 0 %} Retning: {{ specialization }}, {% endif %} Semester: {{ travelletter.semester }}
 </div>
 <div class="hide-on-large-only">Reisebrev</div>
 {% endblock nav_sub_header %}
