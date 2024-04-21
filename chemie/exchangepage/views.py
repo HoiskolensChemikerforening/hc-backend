@@ -367,7 +367,7 @@ def deleteImages(request, pk):
         f"Bilder slettet!",
         extra_tags="Slettet",
     )
-    return redirect('exchangepage:admin')
+    return redirect('exchangepage:admindetailimage', travelletter.id)
 
 def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)

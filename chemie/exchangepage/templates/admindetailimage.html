@@ -41,13 +41,25 @@ Admin
 
       <div class="card-action" id="button-container">
         <div class="right-align">
-          <a class="btn btn-danger pull-left" id="delete-button" style="background-color: red; border-color: red; margin: 5px">Slett bilder</a>
+          <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett bilder</a>
           <button class="btn btn-primary pull-right" id="add-image-form" style="margin: 5px" type="button">Nytt bilde</button>
           <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre og gå videre!'/>
         </div>
       </div>
 
   </form>
+  </div>
+</div>
+
+<!-- Modal Structure -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <h4>Slett bilder</h4>
+    <p>Er du sikker på at du vil slette bildene?</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Avbryt</a>
+    <a href="{% url 'exchangepage:deleteimages' travelletter.id %}" class="modal-close waves-effect waves-green btn-flat red-text">Slett</a>
   </div>
 </div>
 
@@ -88,17 +100,9 @@ Admin
 </script>
 
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    // Attach a click event listener to the delete button
-    document.getElementById('delete-button').addEventListener('click', function () {
-        // Display a confirmation dialog
-        var confirmDelete = confirm('Er du sikker på at du vil slette bildene?');
-        if (confirmDelete) {
-            // If confirmed, redirect to the deletion URL
-            window.location.href = "{% url 'exchangepage:deleteimages' travelletter.id %}";
-        }
-    });
-});
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
 </script>
-
 {% endblock %}
