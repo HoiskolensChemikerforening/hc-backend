@@ -131,6 +131,7 @@ def vote_index(request, slug):
         request, group
     )
 
+
     points = POINTS
     if request.method == "POST":
         if not request.POST.get("showprize") or not request.POST.get(
@@ -169,7 +170,6 @@ def vote_index(request, slug):
             extra_tags="Stemme registrert",
         )
         return JsonResponse({"url": reverse("cgp:index")}, status=200)
-
     context = {
         "country": country,
         "current_group": group,

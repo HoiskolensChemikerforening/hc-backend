@@ -1,0 +1,28 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+
+{% block nav_header %}
+  Kontaktinfo
+{% endblock nav_header %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12"> <!---size of the layout--->
+        <div class="container" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-6" style="margin-bottom: 40px;">
+                <p class="flow-text">
+                Har dere lyst til å leie ut våre tjenester eller vårt utstyr? 
+                Utleieavtalen gjøres via epost, og vi blir enige der om henting av utstyr og fakturering, og ordner signering av utleiekontrakt.
+                Vi hjelper gjerne til med å finne ut av hva dere trenger å leie, så om dere er usikre på hva som vil fungere best til deres arrangement er det bare å spørre. 
+                Jo tidligere du gi beskjed til oss, jo større sannsynlighet for at vi får det til å gå! 
+                Gleder oss til å høre fra dere!
+                <br><br>
+                Send epost til promokom@hc.ntnu.no, eller ved å trykke <a href = "mailto: promokom@hc.ntnu.no">her!</a>
+                <br><br>
+                Tilbake til <a href="{% url 'rentalservice:index_promo' %}"> utleieproduktene. </a>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

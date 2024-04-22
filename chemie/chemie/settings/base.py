@@ -100,7 +100,8 @@ LOCAL_APPS = [
     "chemie.cgp",
     "chemie.merch",
     "chemie.electofood",
-    "chemie.exchangepage"
+    "chemie.exchangepage",
+    "chemie.refund",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -304,6 +305,8 @@ CACHES = {
     "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}
 }
 
+# File upload permissons
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 # CKEDITOR CONFIGURATION
 # ------------------------------------------------------------------------------

@@ -67,5 +67,12 @@
 "description": "Kontakt-epost",
 "subject": "Kontaktskjema- {{ rentalobject }}",
 "path": "rentalservice/rental_contact"
+},
+
+{
+"name": "refund_status",
+"description": "Informere brukeren om at søkndaden om refusjon har blitt behandlet.",
+"subject": "{% if status == 1 %}Avslag på søknad om refusjon{% elif status == 2 %}Søknad behandles på nytt{%else%}Godkjent refusjonssøknad{%endif%}",
+"path": "refund/refund_status"
 }
 ]

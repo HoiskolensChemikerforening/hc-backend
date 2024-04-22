@@ -7,10 +7,12 @@ class MerchCategory(models.Model):
 
     def __str__(self):
         return self.name
+    class Meta:
+       ordering = ['name'] #Ordering elements by name in dropdown
 
 
 class Merch(models.Model):
-    name = models.CharField(max_length=100, verbose_name="Navn")
+    name = models.CharField(max_length=40, verbose_name="Navn")
     price = models.FloatField(verbose_name="Pris")
     image = models.ImageField(upload_to="merch", verbose_name="Bilde")
     info = models.TextField(
