@@ -46,8 +46,8 @@ def ordListe(request):
                     alle_ord = Word.objects.filter(category = the_category)
                     
                     
-    for i in alle_ord:
-        i.explanations = i.explanations[:25] + "..."
+   
+
     
 
 
@@ -69,6 +69,9 @@ def ordListe(request):
     # if Profile.user.date_joined
     if int(profile.grade) < 2:
        alle_ord = alle_ord.filter(secret=False).order_by("word")
+
+    #for i in alle_ord:
+        #i.explanations = i.explanations[:25] + "..."
     
     context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
     return render(request, "wordall.html", context)
@@ -78,11 +81,16 @@ def ordListe(request):
 @permission_required("wordlist.add_word")
 def createWord(request):
     if request.method == "POST":
-        wordform = WordInput(request.POST)
+        wordform = WordInput(data=request.POST, files=request.FILES)
+        print(request.POST)
         if "nytt" in request.POST and wordform.is_valid():
             wordform_instace = wordform.save(commit=False)
             wordform_instace.author = request.user
             wordform_instace.save()
+            wordform.save_m2m()
+
+            
+            print(wordform_instace.category)
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -95,6 +103,7 @@ def createWord(request):
             wordform_instace = wordform.save(commit=False)
             wordform_instace.author = request.user
             wordform_instace.save()
+            wordform.save_m2m()
 
             messages.add_message(
                 request,
