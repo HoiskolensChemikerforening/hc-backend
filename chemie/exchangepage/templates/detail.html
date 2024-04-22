@@ -31,7 +31,9 @@
     <h4>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</h4>
 </div>
 <div class="hide-on-large-only row" style="margin-left: 0;margin-right: 0">
+    {% if specialization_id != 0 %}
     <h5>Retning: {{ specialization }}</h5>
+    {% endif %}
     <h5>Semester: {{ travelletter.semester }}</h5>
 </div>
 

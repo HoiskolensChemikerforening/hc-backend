@@ -344,9 +344,9 @@ def deleteTravelletter(request, pk):
     return redirect('exchangepage:admin')
 
 def deleteExperienceViews(request, pk):
-    query = Experience.objects.get(pk=pk)
-    travelletter = query.travelletter
-    query.delete()
+    experience = Experience.objects.get(pk=pk)
+    travelletter = experience.travelletter
+    experience.delete()
 
     messages.add_message(
         request,
@@ -398,3 +398,6 @@ def displayIndividualLetter(request, pk):
 
     return render(request, "detail.html", context)
 
+def countDownViews(request):
+    context = {}
+    return render(request, "countdown.html", context)

@@ -39,7 +39,7 @@ Admin
 
       <div class="card-action" id="button-container">
         <div class="right-align">
-          <a class="btn btn-danger pull-left" id="delete-button" style="background-color: red; border-color: red; margin: 5px">Slett spørsmål</a>
+          <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett svar</a>
           <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre svar!'/>
         </div>
       </div>
@@ -47,17 +47,25 @@ Admin
   </div>
 </div>
 
+<!-- Modal Structure -->
+<div id="deleteModal" class="modal">
+  <div class="modal-content">
+    <h4>Slett Spørsmål og Svar</h4>
+    <p>Er du sikker på at du vil slette dette spørsmålet og svaret?</p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Avbryt</a>
+    <a href="{% url 'exchangepage:deleteexperience' experience.id %}" class="modal-close waves-effect waves-green btn-flat red-text">Slett</a>
+  </div>
+</div>
 {% endblock content %}
 
 {% block footer_script %}
+
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    document.getElementById('delete-button').addEventListener('click', function () {
-        var confirmDelete = confirm('Er du sikker på at du vil slette dette spørsmålet?');
-        if (confirmDelete) {
-            window.location.href = "{% url 'exchangepage:deleteexperience' experience.id %}";
-        }
-    });
-});
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
 </script>
 {% endblock %}
