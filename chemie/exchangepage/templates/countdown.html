@@ -16,9 +16,68 @@
 {% load material_form %}
 {% block content %}
 
-
+<h1 class="center" style="color: #F9CF00;">Webkom x Indkom</h1>
+<div class="card" id="Countdown">
+    <div class="row" style="width:100%;margin: 20px;padding:10px">
+        <div class="col s2 m2 l2">
+            <div class="days__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
+        </div>
+        <div class="col s2 m2 l2">
+            <div class="hours__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
+        </div>
+        <div class="col s2 m2 l2">
+            <div class="minutes__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
+        </div>
+        <div class="col s2 m2 l2">
+            <div class="seconds__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
+        </div>
+        <div class="col s4 m4 l4">
+            <div class="until__text" style="color: #F9CF00; font-size: 2rem; margin-left: 20px">igjen</div>
+        </div>
+    </div>
+</div>
 {% endblock content %}
 
 {% block footer_script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/plugin/duration.min.js"></script>
+<script>
+  dayjs.extend(dayjs_plugin_duration);
+
+function dayCountdown(element, targetString, eventString){
+    const targetDate = dayjs(targetString);
+
+    setInterval(() => {
+        const now = dayjs();
+        const duration = dayjs.duration(targetDate.diff(now));
+
+        if (duration.asMilliseconds() <= 0) {
+            element.querySelector(".days__until").textContent = `Utvekslingssiden er klar!`;
+            element.querySelector(".days__until").style.fontSize= "4rem";
+            element.querySelector(".until__text").textContent = ``;
+            return;
+        }
+
+        // Calculate days, hours, minutes, and seconds
+        const days = Math.floor(duration.asDays());
+        const hours = duration.hours();
+        const minutes = duration.minutes();
+        const seconds = duration.seconds();
+
+        // Update the elements with the calculated values
+        element.querySelector(".days__until").textContent = days+" d";
+        element.querySelector(".hours__until").textContent = hours.toString().padStart(2, "0")+" t";
+        element.querySelector(".minutes__until").textContent = minutes.toString().padStart(2, "0")+" m";
+        element.querySelector(".seconds__until").textContent = seconds.toString().padStart(2, "0")+" s";
+        element.querySelector(".until__text").textContent = `igjen`;
+
+    }, 1000); // Update every 1 second
+
+}
+
+dayCountdown(document.getElementById("Countdown"), "2024-06-06 12:00", "utvekslingsside");
+
+
+</script>
 
 {% endblock %}
