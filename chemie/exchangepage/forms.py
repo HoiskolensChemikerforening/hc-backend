@@ -46,22 +46,6 @@ class SensibleFormset(BaseModelFormSet):
                 total_forms = self.max_num
             return total_forms
 
-class SensibleFormset2(BaseModelFormSet):
-    def total_form_count(self):
-        """Returns the total number of forms in this FormSet."""
-        if self.data or self.files:
-            return len(self.files)
-        else:
-            if self.initial_form_count() > 0:
-                total_forms = self.initial_form_count()
-            else:
-                total_forms = self.initial_form_count() + self.extra
-            if total_forms > self.max_num > 0:
-                total_forms = self.max_num
-            return total_forms
-
-
-#ExperienceFormSet = modelformset_factory(Experience, form=ExperienceForm, extra=1, formset=SensibleFormset)
 ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=1, formset=SensibleFormset)
 
 
