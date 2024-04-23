@@ -51,9 +51,9 @@
 
 </head>
 
-<body>
+<body style="background-color: black;">
 <a href="/forside/" class="waves-effect waves-light btn" style="margin: 25px">Tilbake</a>
-<div style="width: 100vw;height: 100vh;position: absolute;top: 0;left: 0;background-color: black;padding-top: 50px">
+<div class="fadeIn" style="width: 100vw;height: 100vh;position: absolute;top: 0;left: 0;padding-top: 50px">
     <h1 class="center" style="color: #F9CF00;">Webkom x Indkom</h1>
     <h4 class="center" style="color: #F9CF00;">Lanserer Utvekslingssiden!</h4>
     <div class="card" id="Countdown" style="background-color: black">
@@ -79,6 +79,7 @@
         </div>
     </div>
 </div>
+
 
 
 
@@ -134,3 +135,19 @@ dayCountdown(document.getElementById("Countdown"), "2024-08-23 10:00");
 
 {% endblock footer_script %}
 </body>
+
+<style>
+    .fadeIn {
+        animation: fadeInAnimation ease 5s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fadeInAnimation {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
