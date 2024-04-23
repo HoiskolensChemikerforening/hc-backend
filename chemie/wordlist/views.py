@@ -62,6 +62,8 @@ def ordListe(request):
         page_obj = paginator.get_page(page_number)
         alle_ord = page_obj
 
+
+    #dette må gjøres noe med, finne en måte å gjøre det hemmelig for førsteklasse de første 2 månedene
     # print(request.user)
     # print(User.date_joined)
     profile = get_object_or_404(Profile, user=request.user)
