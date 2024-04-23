@@ -1,7 +1,7 @@
 from django.db import models
 from chemie.customprofile.models import Profile
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator, MaxLengthValidator
-from ckeditor.fields import RichTextField #Change from TextField to RichTextField
+from ckeditor.fields import RichTextField
 class Travelletter(models.Model):
     user           = models.ForeignKey(Profile, on_delete=models.CASCADE, verbose_name="Bruker")
     country        = models.CharField(max_length=30, verbose_name="Land")

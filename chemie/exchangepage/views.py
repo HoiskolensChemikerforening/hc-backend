@@ -4,7 +4,7 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions, Images
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet, ImageForm
+from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet
 from django.contrib import messages
 from chemie.customprofile.models import SPECIALIZATION, Medal
 from chemie.chemie.settings.base import CKEDITOR_CONFIGS
