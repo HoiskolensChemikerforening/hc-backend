@@ -13,6 +13,11 @@ from django.utils import timezone
 
 @login_required()
 def index(request):
+
+    launch_date = timezone.make_aware(timezone.datetime(2024, 8, 23, 12, 0, 0)) #yyyy m d
+    if not request.user.has_perm("exchangepage.add_travelletter") and timezone.now() < launch_date:
+        return redirect('exchangepage:countdown')
+
     travelletters = Travelletter.objects.all().order_by("country")
     avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability', 'avg_nature', 'avg_hospitality', 'avg_workLoad']
     sort_by = request.GET.get('sort_by', 'country')
@@ -54,28 +59,11 @@ def index(request):
 
             break
 
-    #Medals for countdown
-    webkom = Medal.objects.filter(title="Webkomiteen")
-    indkom = Medal.objects.filter(title="Industrikomiteen")
-    if len(webkom)>0 and len(indkom)>0:
-        webkom = webkom[0]
-        indkom = indkom[0]
-    else:
-        webkom = None
-        indkom = None
-
-    temp_context ={"webkom": webkom,
-               "indkom": indkom}
-
     context = {"travelletters_by_country": travelletters_by_country,
                "data_by_city": data_by_country_city,
                "sort_by": sort_by,
                "sort_order": sort_order,
                }
-
-    launch_date = timezone.make_aware(timezone.datetime(2024, 8, 23, 12, 0, 0)) #yyyy m d
-    if not request.user.has_perm("exchangepage.add_travelletter") and timezone.now() < launch_date:
-        return render(request, "countdown.html", temp_context)
 
     return render(request, "index.html", context)
 
@@ -83,6 +71,9 @@ def index(request):
 @login_required()
 def cityPageViews(request, city_name):
     travelletters = Travelletter.objects.filter(city=city_name).order_by("user")
+
+    if len(travelletters) == 0: #Prevents entering citypages without cities
+        return redirect('exchangepage:index')
 
     sort_list = ['sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
     sort_order = request.GET.get('sort_order', 'desc')
@@ -424,7 +415,7 @@ def displayIndividualLetter(request, pk):
     return render(request, "detail.html", context)
 
 @login_required()
-def countDownViews(request): #for testing, delete after loggin
+def countDownViews(request):
     #Medals
     webkom = Medal.objects.filter(title="Webkomiteen")
     indkom = Medal.objects.filter(title="Industrikomiteen")
@@ -434,5 +425,5 @@ def countDownViews(request): #for testing, delete after loggin
     else:
         webkom = None
         indkom = None
-    context = {'webkom':webkom, 'indkom':indkom}
+    context = {'webkom': webkom, 'indkom': indkom}
     return render(request, "countdown.html", context)
