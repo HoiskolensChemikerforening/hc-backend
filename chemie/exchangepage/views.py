@@ -14,7 +14,7 @@ from django.utils import timezone
 @login_required()
 def index(request):
 
-    launch_date = timezone.make_aware(timezone.datetime(2024, 8, 23, 12, 0, 0)) #yyyy m d
+    launch_date = timezone.make_aware(timezone.datetime(2024, 8, 1, 12, 0, 0)) #yyyy m d
     if not request.user.has_perm("exchangepage.add_travelletter") and timezone.now() < launch_date:
         return redirect('exchangepage:countdown')
 
