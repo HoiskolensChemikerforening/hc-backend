@@ -6,9 +6,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
 from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet, ImageForm
 from django.contrib import messages
-from chemie.customprofile.models import SPECIALIZATION
+from chemie.customprofile.models import SPECIALIZATION, Medal
 from chemie.chemie.settings.base import CKEDITOR_CONFIGS
-# Create your views here.
+from django.utils import timezone
+
 
 @login_required()
 def index(request):
@@ -53,10 +54,28 @@ def index(request):
 
             break
 
+    #Medals for countdown
+    webkom = Medal.objects.filter(title="Webkomiteen")
+    indkom = Medal.objects.filter(title="Industrikomiteen")
+    if len(webkom)>0 and len(indkom)>0:
+        webkom = webkom[0]
+        indkom = indkom[0]
+    else:
+        webkom = None
+        indkom = None
+
+    temp_context ={"webkom": webkom,
+               "indkom": indkom}
+
     context = {"travelletters_by_country": travelletters_by_country,
                "data_by_city": data_by_country_city,
                "sort_by": sort_by,
-               "sort_order": sort_order}
+               "sort_order": sort_order,
+               }
+
+    launch_date = timezone.make_aware(timezone.datetime(2024, 8, 23, 12, 0, 0)) #yyyy m d
+    if not request.user.has_perm("exchangepage.add_travelletter") and timezone.now() < launch_date:
+        return render(request, "countdown.html", temp_context)
 
     return render(request, "index.html", context)
 
@@ -213,6 +232,7 @@ def adminDetailViews(request, pk):
     }
     return render(request, "admindetail.html", context)
 
+@permission_required('exchangepage.change_images')
 def adminDetailImageViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     images = travelletter.images.all()
@@ -244,6 +264,7 @@ def adminDetailImageViews(request, pk):
     }
     return render(request, "admindetailimage.html", context)
 
+@permission_required('exchangepage.change_experience')
 def adminDetailExperienceViews(request, pk):
     ck_config = CKEDITOR_CONFIGS['news']
     ck_config = json.dumps(ck_config)
@@ -331,6 +352,7 @@ def adminQuestionDetailViews(request, pk):
     context = {'questionform':questionform}
     return render(request, "adminquestiondetail.html", context)
 
+@permission_required('exchangepage.delete_travelletter')
 def deleteTravelletter(request, pk):
     query = Travelletter.objects.get(pk=pk)
     query.delete()
@@ -343,6 +365,7 @@ def deleteTravelletter(request, pk):
     )
     return redirect('exchangepage:admin')
 
+@permission_required('exchangepage.delete_experience')
 def deleteExperienceViews(request, pk):
     experience = Experience.objects.get(pk=pk)
     travelletter = experience.travelletter
@@ -356,6 +379,7 @@ def deleteExperienceViews(request, pk):
     )
     return redirect('exchangepage:createexperience', pk=travelletter.id)
 
+@permission_required('exchangepage.delete_images')
 def deleteImages(request, pk):
     travelletter = Travelletter.objects.get(pk=pk)
     images = travelletter.images.all()
@@ -369,6 +393,7 @@ def deleteImages(request, pk):
     )
     return redirect('exchangepage:admindetailimage', travelletter.id)
 
+@login_required()
 def displayIndividualLetter(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = Experience.objects.filter(travelletter=travelletter)
@@ -398,6 +423,16 @@ def displayIndividualLetter(request, pk):
 
     return render(request, "detail.html", context)
 
-def countDownViews(request):
-    context = {}
+@login_required()
+def countDownViews(request): #for testing, delete after loggin
+    #Medals
+    webkom = Medal.objects.filter(title="Webkomiteen")
+    indkom = Medal.objects.filter(title="Industrikomiteen")
+    if len(webkom)>0 and len(indkom)>0:
+        webkom = webkom[0]
+        indkom = indkom[0]
+    else:
+        webkom = None
+        indkom = None
+    context = {'webkom':webkom, 'indkom':indkom}
     return render(request, "countdown.html", context)
