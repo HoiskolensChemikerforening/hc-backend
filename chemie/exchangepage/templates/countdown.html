@@ -6,7 +6,6 @@
 {% endblock %}
 
 {% block nav_header %}
-  Reisebrev
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
@@ -17,22 +16,11 @@
 {% block content %}
 
 <h1 class="center" style="color: #F9CF00;">Webkom x Indkom</h1>
+<h4 class="center" style="color: #F9CF00;">Presenterer Utvekslingssiden!</h4>
 <div class="card" id="Countdown">
-    <div class="row" style="width:100%;margin: 20px;padding:10px">
-        <div class="col s2 m2 l2">
-            <div class="days__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
-        </div>
-        <div class="col s2 m2 l2">
-            <div class="hours__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
-        </div>
-        <div class="col s2 m2 l2">
-            <div class="minutes__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
-        </div>
-        <div class="col s2 m2 l2">
-            <div class="seconds__until" style="color: #F9CF00; font-size: 2rem; margin-left: 20px; font-weight: bold">00</div>
-        </div>
-        <div class="col s4 m4 l4">
-            <div class="until__text" style="color: #F9CF00; font-size: 2rem; margin-left: 20px">igjen</div>
+    <div class="row align-items-center" style="margin: 20px;padding:10px">
+        <div class="col s12 m12 l12">
+            <div class="until__text" style="color: #F9CF00; font-size: 2rem; font-weight: bold">00</div>
         </div>
     </div>
 </div>
@@ -64,12 +52,8 @@ function dayCountdown(element, targetString, eventString){
         const minutes = duration.minutes();
         const seconds = duration.seconds();
 
-        // Update the elements with the calculated values
-        element.querySelector(".days__until").textContent = days+" d";
-        element.querySelector(".hours__until").textContent = hours.toString().padStart(2, "0")+" t";
-        element.querySelector(".minutes__until").textContent = minutes.toString().padStart(2, "0")+" m";
-        element.querySelector(".seconds__until").textContent = seconds.toString().padStart(2, "0")+" s";
-        element.querySelector(".until__text").textContent = `igjen`;
+        element.querySelector(".until__text").textContent = days+" dager "+hours.toString().padStart(2, "0")+" timer "
+            +minutes.toString().padStart(2, "0")+" minutter  "+seconds.toString().padStart(2, "0")+" sekunder  "+`igjen`;
 
     }, 1000); // Update every 1 second
 
