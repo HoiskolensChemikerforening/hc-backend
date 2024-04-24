@@ -40,13 +40,61 @@
       Ingen kategori
       {%endfor%} </h5>
 
-    
 </card>
 
-
-
-
-
+{%if substantiv.indefinite_singular%}
+<div>
+  <p>Substantiv:</p>
+   <table>
+      <tr>
+        <th>Ubestemt entall</th>
+        <th>Bestemt entall</th>
+        <th>Ubestemt flertall</th>
+        <th>Bestemt flertall</th>
+      </tr>
+      <tr>
+        <td>{{substantiv.indefinite_singular}}</td>
+        <td>{{substantiv.indefinite_plural}}</td>
+        <td>{{substantiv.definite_singular}}</td>
+        <td>{{substantiv.definite_plural}}</td>
+      </tr>
+   </table>
+</div>
+{%elif verb.infinitive%}
+<div>
+  <p>Verb:</p>
+   <table>
+      <tr>
+        <th>Infinitiv</th>
+        <th>Presens</th>
+        <th>Preteritum</th>
+        <th>Presens futurum</th>
+      </tr>
+      <tr>
+        <td>{{verb.infinitive}}</td>
+        <td>{{verb.present}}</td>
+        <td>{{verb.past}}</td>
+        <td>{{verb.future}}</td>
+      </tr>
+   </table>
+</div>
+{%elif adjektiv.positive%}
+<div>
+  <p>Adjektiv:</p>
+   <table>
+      <tr>
+        <th>Positiv</th>
+        <th>Komparlativ</th>
+        <th>Superlativ</th>
+      </tr>
+      <tr>
+        <td>{{adjektiv.positive}}</td>
+        <td>{{adjektiv.comparative}}</td>
+        <td>{{adjektiv.superlative}}</td>
+      </tr>
+   </table>
+</div>
+{%endif%}
 
 
 {% if perms.wordlist%}

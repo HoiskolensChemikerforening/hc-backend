@@ -26,23 +26,24 @@ class Word(models.Model):
 
 class Noun(models.Model):
     word = models.ForeignKey(Word, on_delete = models.CASCADE, related_name='noun')
-    indefinite_singular = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = True)
-    indefinite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = True)
-    definite_singular = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = True)
-    definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = True)
+    indefinite_singular = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False)
+    indefinite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = False)
+    definite_singular = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False)
+    definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = False)
     
     def __str__(self):
-        return self.word
-
+        return self.word.word
+ 
 
 class Verb(models.Model):
     word = models.ForeignKey(Word, on_delete = models.CASCADE, related_name='verb')
-    present = models.CharField(max_length = 100, verbose_name = "nåtid", unique = True)
-    past = models.CharField(max_length = 100, verbose_name = "fortid", unique = True)
-    future = models.CharField(max_length = 100, verbose_name = "fremtid", unique = True)
+    infinitive = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = True)
+    present = models.CharField(max_length = 100, verbose_name = "presens", unique = True)
+    past = models.CharField(max_length = 100, verbose_name = "preteritum", unique = True)
+    future = models.CharField(max_length = 100, verbose_name = "presens futurum", unique = True)
 
     def __str__(self):
-        return self.word
+        return self.word.word
     
 
 
@@ -53,9 +54,8 @@ class Adjective(models.Model):
     superlative = models.CharField(max_length = 100, verbose_name = "superlativ", unique = True)
 
     def __str__(self):
-        return self.word
+        return self.word.word
 
 
 
 
-# word.noun.prese

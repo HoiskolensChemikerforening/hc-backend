@@ -1,5 +1,5 @@
 
-from .models import Word, Category
+from .models import Word, Category, Noun, Verb, Adjective
 from .forms import WordInput, WordSearchMainPage, CategorySortingMainPage, CategoryInput
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
@@ -149,11 +149,35 @@ def word_delete(request, pk):
     )
     return HttpResponseRedirect(reverse("wordlist:index"))
 
+
+
+
+
 @login_required()
 def details(request, pk):
     ordet = get_object_or_404(Word, id=pk)
-    context = {"ord": ordet}
+
+    try:
+        substantiv = Noun.objects.get( word=ordet)
+    except:
+        substantiv = ""
+
+    try:
+        verb = Verb.objects.get( word=ordet)
+    except:
+        verb = ""
+
+    try:
+        adjektiv = Adjective.objects.get( word=ordet)
+    except:
+        adjektiv = ""
+    
+    context = {"ord": ordet, "substantiv": substantiv, "verb": verb, "adjektiv": adjektiv} 
     return render(request, "details.html", context)
+
+
+
+
 
 @permission_required("wordlist.add_word")
 def admincategoryViews(request):
