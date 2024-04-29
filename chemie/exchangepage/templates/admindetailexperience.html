@@ -35,6 +35,7 @@ Admin
   <div class="card-content">
   <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
+      {{ experienceform.media }}
       {{ experienceform.as_p }}
 
       <div class="card-action" id="button-container">
