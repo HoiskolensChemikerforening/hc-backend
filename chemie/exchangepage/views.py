@@ -175,7 +175,7 @@ def createExperienceViews(request, pk):
                 f"Reisebrevet er opprettet!",
                 extra_tags="Suksess",
             )
-            experienceform = ExperienceForm()
+            return redirect('exchangepage:createexperience', pk=pk)
 
     else:
         experienceform = ExperienceForm()
