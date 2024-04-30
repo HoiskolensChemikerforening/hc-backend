@@ -57,12 +57,12 @@
  <div class="information-box-container">
      <h4>Generell informasjon om {{ travelletter.city }}</h4>
 
-     <div class="row customcol">
+     <div class="row" style="margin: 0">
       <div class="col s12 m6 l8">
           {{ travelletter.destinationInfo|safe }}
       </div>
         <div class="col s12 m6 l4">
-          <div class="card" style="background-color: #F9CF00; width: 225px">
+          <div class="card" style="background-color: #F9CF00; width: 225px;margin-left: auto;margin-right: auto;position: revert">
             <div class="card-content white-text">
               <span class="card-title"> Vurdering: </span>
               <p>
@@ -91,15 +91,15 @@
       </div>
     </div>
 
- <div class="card">
-    <div class="card-content">
+ <div class="information-box-container">
+    <div class="info-item">
         <h4>Erfaringer</h4>
         <ul class="collapsible">
             {% if experiences %}
                 {% for experience in experiences %}
                     <li>
                         <div class="collapsible-header"><strong>{{ experience.question }}</strong></div>
-                        <div class="collapsible-body">{{ experience.answer|safe }}</div>
+                        <div class="collapsible-body" style="background-color: white">{{ experience.answer|safe }}</div>
                     </li>
                 {% endfor %}
             {% else %}
@@ -111,9 +111,10 @@
         </ul>
     </div>
 </div>
+
 <style>
     .information-box-container {
-        background-color: #f0f0f0;
+        background-color: #f2f2f2;
         padding: 20px;
         margin: 20px;
         border: 1px solid #ccc;
