@@ -65,7 +65,7 @@ def index(request):
                "sort_order": sort_order,
                }
 
-    return render(request, "index.html", context)
+    return render(request, "exchangepage/index.html", context)
 
 
 @login_required()
@@ -93,7 +93,7 @@ def cityPageViews(request, city_name):
         "sort_order": sort_order,
         "travelletters": travelletters,
     }
-    return render(request, "citypage.html", context)
+    return render(request, "exchangepage/citypage.html", context)
 
 @permission_required("exchangepage.add_travelletter")
 def createTravelletterViews(request):
@@ -118,7 +118,7 @@ def createTravelletterViews(request):
     context = {
         'travelletterform':travelletterform,
     }
-    return render(request, "create.html", context)
+    return render(request, "exchangepage/create.html", context)
 
 @permission_required("exchangepage.add_travelletter")
 def createImageViews(request, pk):
@@ -151,7 +151,7 @@ def createImageViews(request, pk):
         'travelletter':travelletter,
         'imageformset':imageformset
     }
-    return render(request, "createimage.html", context)
+    return render(request, "exchangepage/createimage.html", context)
 
 @permission_required("exchangepage.add_travelletter")
 def createExperienceViews(request, pk):
@@ -186,14 +186,14 @@ def createExperienceViews(request, pk):
         'travelletter': travelletter,
         'ck_config': ck_config
     }
-    return render(request, "createexperience.html", context)
+    return render(request, "exchangepage/createexperience.html", context)
 
 
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):
     travelletters = Travelletter.objects.all().order_by("id")
     context = {'travelletters':travelletters}
-    return render(request, "admin.html", context)
+    return render(request, "exchangepage/admin.html", context)
 
 
 @permission_required("exchangepage.change_travelletter")
@@ -221,7 +221,7 @@ def adminDetailViews(request, pk):
         'travelletterform': travelletterform,
         'travelletter':travelletter,
     }
-    return render(request, "admindetail.html", context)
+    return render(request, "exchangepage/admindetail.html", context)
 
 @permission_required('exchangepage.change_images')
 def adminDetailImageViews(request, pk):
@@ -253,7 +253,7 @@ def adminDetailImageViews(request, pk):
         'travelletter':travelletter,
         'imageformset':imageformset
     }
-    return render(request, "admindetailimage.html", context)
+    return render(request, "exchangepage/admindetailimage.html", context)
 
 @permission_required('exchangepage.change_experience')
 def adminDetailExperienceViews(request, pk):
@@ -290,7 +290,7 @@ def adminDetailExperienceViews(request, pk):
         'travelletter': travelletter,
         'ck_config':ck_config
     }
-    return render(request, "admindetailexperience.html", context)
+    return render(request, "exchangepage/admindetailexperience.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def createQuestionViews(request):
@@ -311,13 +311,13 @@ def createQuestionViews(request):
         questionform = QuestionsForm()
 
     context = {'questionform':questionform}
-    return render(request, "createquestion.html", context)
+    return render(request, "exchangepage/createquestion.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminQuestionViews(request):
     questions = Questions.objects.all().order_by("id")
     context = {'questions':questions}
-    return render(request, "adminquestion.html", context)
+    return render(request, "exchangepage/adminquestion.html", context)
 
 @permission_required("exchangepage.change_travelletter")
 def adminQuestionDetailViews(request, pk):
@@ -341,7 +341,7 @@ def adminQuestionDetailViews(request, pk):
         print(questionform)
 
     context = {'questionform':questionform}
-    return render(request, "adminquestiondetail.html", context)
+    return render(request, "exchangepage/adminquestiondetail.html", context)
 
 @permission_required('exchangepage.delete_travelletter')
 def deleteTravelletter(request, pk):
@@ -412,7 +412,7 @@ def displayIndividualLetter(request, pk):
                'specialization': SPECIALIZATION[specialization_id][1]
     }
 
-    return render(request, "detail.html", context)
+    return render(request, "exchangepage/detail.html", context)
 
 @login_required()
 def countDownViews(request):
@@ -426,4 +426,4 @@ def countDownViews(request):
         webkom = None
         indkom = None
     context = {'webkom': webkom, 'indkom': indkom}
-    return render(request, "countdown.html", context)
+    return render(request, "exchangepage/countdown.html", context)
