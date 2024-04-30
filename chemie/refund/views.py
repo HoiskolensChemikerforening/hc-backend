@@ -79,7 +79,7 @@ def index(request):
         "accountform": accountform,
         "user": user
     }
-    return render(request, "index.html", context)
+    return render(request, "index_refund.html", context)
 
 
 @login_required()
