@@ -29,14 +29,14 @@ Admin
     <div class ="card-content">
         {% for experience in experiences %}
             <div class="row valign-wrapper" style="margin: 0; padding-bottom: 5px">
-                <div class="col s10 m10 l10">
+                <div class="col s9 m10 l10">
                   <a href="{% url 'exchangepage:admindetailexperience' experience.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">label_outline</i>
                     <div style="display: flex;flex-direction: row;justify-content: space-between">
                       <div class="truncate" style="padding-right: 10px">{{experience.question}}</div>
                     </div>
                   </a>
                 </div>
-                <div class="col s2 m2 l2 valign-wrapper">
+                <div class="col s3 m2 l2 valign-wrapper">
                     <a class="delete-button btn-floating red valign-wrapper" href="{% url 'exchangepage:deleteexperience' experience.id%}">
                         <i class="material-icons">delete</i>
                     </a>
