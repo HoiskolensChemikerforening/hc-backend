@@ -37,9 +37,21 @@ Admin
                   </a>
                 </div>
                 <div class="col s3 m2 l2 valign-wrapper">
-                    <a class="delete-button btn-floating red valign-wrapper" href="{% url 'exchangepage:deleteexperience' experience.id%}">
+                    <!-- Modal Trigger -->
+                    <a class="modal-trigger delete-button btn-floating red valign-wrapper" href="#deleteModal{{ experience.id }}">
                         <i class="material-icons">delete</i>
                     </a>
+                    <!-- Modal Structure -->
+                    <div id="deleteModal{{ experience.id }}" class="modal">
+                        <div class="modal-content">
+                            <h4>Slett Svar på Spørsmål</h4>
+                            <p>Er du sikker på at du vil slette dette svaret?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <a href="#!" class="modal-close waves-effect waves-green btn-flat">Avbryt</a>
+                            <a href="{% url 'exchangepage:deleteexperience' experience.id %}" class="waves-effect waves-green btn-flat" style="color: red">Slett</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}
@@ -76,16 +88,9 @@ Admin
 
 {% block footer_script %}
 <script>
-document.addEventListener('DOMContentLoaded', function () {
-    var deleteButtons = document.querySelectorAll('.delete-button');
-    deleteButtons.forEach(function(button) {
-        button.addEventListener('click', function () {
-            var confirmDelete = confirm('Er du sikker på at du vil slette dette svaret?');
-            if (confirmDelete) {
-                window.location.href = button.getAttribute('href');
-            }
-        });
+    document.addEventListener('DOMContentLoaded', function() {
+        var modals = document.querySelectorAll('.modal');
+        M.Modal.init(modals);
     });
-});
 </script>
 {% endblock %}
