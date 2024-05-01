@@ -4,11 +4,11 @@ from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
 
 
-
 class QuestionsForm(forms.ModelForm):
     class Meta:
         model = Questions
         fields = ['question']
+
 
 class TravelletterForm(forms.ModelForm):
     class Meta:
@@ -19,6 +19,7 @@ class TravelletterForm(forms.ModelForm):
                 {"placeholder": " Ett semester ('H13'), To semester ('H13/V14')"}
             )
         }
+
 
 class ExperienceForm(forms.ModelForm):
     class Meta:
@@ -31,7 +32,8 @@ class ImageForm(forms.ModelForm):
         model = Images
         fields = ['image']
 
-class SensibleFormset(BaseModelFormSet):
+
+class SensibleFormset(BaseModelFormSet):  # Modifikasjon til imageformset
     def total_form_count(self):
         """Returns the total number of forms in this FormSet."""
         if self.data or self.files:
@@ -44,6 +46,7 @@ class SensibleFormset(BaseModelFormSet):
             if total_forms > self.max_num > 0:
                 total_forms = self.max_num
             return total_forms
+
 
 ImageFormSet = modelformset_factory(Images, form=ImageForm, extra=1, formset=SensibleFormset)
 

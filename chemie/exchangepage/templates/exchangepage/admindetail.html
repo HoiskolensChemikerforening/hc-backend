@@ -16,48 +16,41 @@ Admin
 {% load material_form %}
 {% block content %}
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
-    <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Rediger</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
+    <a href="{% url 'exchangepage:admin' %}" class="breadcrumb">Rediger</a>
     <a class="breadcrumb">{{travelletter.user}}</a>
 </div>
 
-<style>
-  select{display: block}
-  .cke_1{
-      width: 100% !important;
-  }
-</style>
 <p class="flow-text">Her kan du oppdatere reisebrev!</p>
 <div class="card">
   <div class="card-content">
-  <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-      {{ travelletterform.media}}
-      {% for field in travelletterform %}
-        <div>
-          <label for="{{ field.id_for_label }}">{{ field.label }}</label>
-          {{ field }}
-          {% if field.errors %}
-            <ul class="errorlist">
-              {% for error in field.errors %}
-                <li style="color: red">{{ error }}</li>
-              {% endfor %}
-            </ul>
-          {% endif %}
-        </div>
-      {% endfor %}
+          {{ travelletterform.media}}
+          {% for field in travelletterform %}
+            <div>
+              <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+              {{ field }}
+              {% if field.errors %}
+                <ul class="errorlist">
+                  {% for error in field.errors %}
+                    <li style="color: red">{{ error }}</li>
+                  {% endfor %}
+                </ul>
+              {% endif %}
+            </div>
+          {% endfor %}
 
-      <div class="card-action" id="button-container">
-        <div class="right-align">
-          <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett reisebrev</a>
-          <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre og gå videre!'/>
-        </div>
-      </div>
+          <div class="card-action" id="button-container">
+            <div class="right-align">
+              <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett reisebrev</a>
+              <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre og gå videre!'/>
+            </div>
+          </div>
 
-  </form>
+      </form>
   </div>
 </div>
-
 
 <!-- Modal Structure -->
 <div id="deleteModal" class="modal">
@@ -70,6 +63,13 @@ Admin
     <a href="{% url 'exchangepage:deletetravelletter' travelletter.id %}" class="modal-close waves-effect waves-green btn-flat red-text">Slett</a>
   </div>
 </div>
+
+<style>
+  select{display: block}
+  .cke_1{
+      width: 100% !important;
+  }
+</style>
 {% endblock content %}
 
 {% block footer_script %}
@@ -79,6 +79,4 @@ Admin
     var instances = M.Modal.init(elems);
   });
 </script>
-
-
 {% endblock %}

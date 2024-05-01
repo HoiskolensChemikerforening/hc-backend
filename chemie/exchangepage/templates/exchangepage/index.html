@@ -13,15 +13,6 @@
 
 {% load material_form %}
 {% block content %}
-
-<style>
-  .zerospace{
-    padding-left: 0;
-    padding-right: 0;
-    border-width: 0;
-  }
-</style>
-
 <ul class="collapsible zerospace">
   <li>
     <div class="collapsible-header zerospace" style="padding-left: 5px; padding-right: 5px">
@@ -163,7 +154,6 @@
 </ul>
 {% endfor %}
 
-
 <div class ="card">
   <div class = "container">
     <div class = "row">
@@ -209,7 +199,7 @@
   <ul>
       {% if perms.exchangepage.change_travelletter %}
         <li>
-          <a class="btn-floating yellow" href="{% url "exchangepage:admin" %}"><i
+          <a class="btn-floating yellow" href="{% url 'exchangepage:admin' %}"><i
               class="material-icons">sync</i></a>
           <a class="btn-floating mobile-fab-tip">Rediger Reisebrev</a>
         </li>
@@ -218,6 +208,16 @@
 </div>
 {% endif %}
 
+<style>
+  .zerospace{
+    padding-left: 0;
+    padding-right: 0;
+    border-width: 0;
+  }
+</style>
+{% endblock content %}
+
+{% block footer_script %}
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');
@@ -235,9 +235,4 @@
     var tooltipInstances = M.Tooltip.init(tooltips, {});
   });
 </script>
-
-{% endblock content %}
-
-{% block footer_script %}
-
 {% endblock %}

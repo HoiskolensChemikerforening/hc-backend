@@ -15,8 +15,6 @@ Admin
 
 {% load material_form %}
 {% block content %}
-<p class="flow-text">Her kan du legge inn spørsmål og svar!</p>
-
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
     <a href="{% url 'exchangepage:admin' %}" class="breadcrumb">Admin</a>
@@ -24,6 +22,8 @@ Admin
     <a href="{% url 'exchangepage:admindetailimage' travelletter.id %}" class="breadcrumb">Bilder</a>
     <a class="breadcrumb">Spørsmål</a>
 </div>
+
+<p class="flow-text">Her kan du legge inn spørsmål og svar!</p>
 {% if experiences|length != 0 %}
 <div class = "card">
     <div class ="card-content">

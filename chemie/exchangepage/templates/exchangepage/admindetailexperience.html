@@ -16,35 +16,29 @@ Admin
 {% load material_form %}
 {% block content %}
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
-    <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Rediger</a>
-    <a href="{% url "exchangepage:admindetail" travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a>
-    <a href="{% url "exchangepage:admindetailimage" travelletter.id %}" class="breadcrumb">Bilder</a>
-        <a href="{% url "exchangepage:createexperience" travelletter.id %}" class="breadcrumb">Spørsmål</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
+    <a href="{% url 'exchangepage:admin' %}" class="breadcrumb">Rediger</a>
+    <a href="{% url 'exchangepage:admindetail' travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a>
+    <a href="{% url 'exchangepage:admindetailimage' travelletter.id %}" class="breadcrumb">Bilder</a>
+    <a href="{% url 'exchangepage:createexperience' travelletter.id %}" class="breadcrumb">Spørsmål</a>
     <a class="breadcrumb">Rediger</a>
 </div>
 
-<style>
-  select{display: block}
-  .cke{
-      width: 100% !important;
-  }
-</style>
 <p class="flow-text">Her kan du oppdatere spørsmål og svar!</p>
 <div class="card">
   <div class="card-content">
-  <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-      {{ experienceform.media }}
-      {{ experienceform.as_p }}
+          {{ experienceform.media }}
+          {{ experienceform.as_p }}
 
-      <div class="card-action" id="button-container">
-        <div class="right-align">
-          <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett svar</a>
-          <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre svar!'/>
-        </div>
-      </div>
-  </form>
+          <div class="card-action" id="button-container">
+            <div class="right-align">
+              <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett svar</a>
+              <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre svar!'/>
+            </div>
+          </div>
+      </form>
   </div>
 </div>
 
@@ -59,10 +53,16 @@ Admin
     <a href="{% url 'exchangepage:deleteexperience' experience.id %}" class="modal-close waves-effect waves-green btn-flat red-text">Slett</a>
   </div>
 </div>
+
+<style>
+  select{display: block}
+  .cke{
+      width: 100% !important;
+  }
+</style>
 {% endblock content %}
 
 {% block footer_script %}
-
 <script>
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.modal');

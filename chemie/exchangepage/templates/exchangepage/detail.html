@@ -2,11 +2,9 @@
 {% load static %}
 
 {% block nav_header %}
-
 <div class="hide-on-med-and-down" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 100%;">
     <span>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</span>
 </div>
-
 
 {% endblock nav_header %}
 
@@ -15,6 +13,7 @@
    {% if specialization_id != 0 %} Retning: {{ specialization }}, {% endif %} Semester: {{ travelletter.semester }}
 </div>
 <div class="hide-on-large-only">Reisebrev</div>
+
 {% endblock nav_sub_header %}
 
 {% load material_form %}
@@ -22,8 +21,8 @@
 {% block content %}
 
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Land</a>
-    <a href="{% url "exchangepage:citypage" travelletter.city %}" class="breadcrumb">By</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Land</a>
+    <a href="{% url 'exchangepage:citypage' travelletter.city %}" class="breadcrumb">By</a>
     <a class="breadcrumb">{{travelletter.user}}</a>
 </div>
 
@@ -58,9 +57,9 @@
      <h4>Litt om {{ travelletter.city }}</h4>
 
      <div class="row" style="margin: 0">
-      <div class="col s12 m6 l8">
+        <div class="col s12 m6 l8">
           {{ travelletter.destinationInfo|safe }}
-      </div>
+        </div>
         <div class="col s12 m6 l4">
           <div class="card" style="background-color: #F9CF00; width: 225px;margin-left: auto;margin-right: auto;position: revert">
             <div class="card-content white-text">
@@ -88,8 +87,8 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+     </div>
+ </div>
 
  <div class="information-box-container">
     <div class="info-item">
@@ -147,9 +146,6 @@
         hyphens: auto;
         vertical-align: top;
     }
-
-    /* Width definert i bilder kan ikke overskride width i bildekarusell får da overflow. :( Ser scuffed ut når man trykker inn på et bilde og :(( og bildene er scuffed /*
-
 </style>
 {% endblock content %}
 

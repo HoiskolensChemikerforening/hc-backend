@@ -15,17 +15,8 @@
 
 {% load material_form %}
 {% block content %}
-
-<style>
-  .zerospace{
-    padding-left: 0;
-    padding-right: 0;
-    border-width: 0;
-  }
-</style>
-
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Land</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Land</a>
     <a class="breadcrumb">By</a>
 </div>
 
@@ -92,46 +83,53 @@
 <ul class="collection zerospace">
 {% for travelletter in travelletters %}
    <div class="col s12 m6 l3 zerospace" style="padding-bottom: 5px">
-          <a href="{% url 'exchangepage:detail' travelletter.id %}" class="waves-effect waves-light btn-large zerospace" style="width: 100%">
-            <div class="container zerospace" style="width: 100%">
-              <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
-                <div class="col l3 m3 s5 valign-wrapper">
-                  <div>
-                  <i class="material-icons white-text">person</i>
-                  </div>
-                  <div class="truncate">
-                  {{travelletter.user}}
-                  </div>
-                </div>
-                <div class = "col l9 m9 s7">
-                  <div class="row" style="margin-bottom: 0">
-                    <div class = "col l2 m2 s3">
-                      {{ travelletter.sun }}
-                    </div>
-                    <div class = "col l2 m2 s3">
-                      {{ travelletter.livingExpences }}
-                    </div>
-                    <div class = "col l2 m2 s3">
-                      {{ travelletter.availability }}
-                    </div>
-                    <div class = "col l2 m2 s3">
-                      {{ travelletter.nature }}
-                    </div>
-                    <div class = "col l2 m2 s2 hide-on-small-only">
-                      {{ travelletter.hospitality }}
-                    </div>
-                    <div class = "col l2 m2 s2 hide-on-small-only">
-                      {{ travelletter.workLoad}}
-                    </div>
-                   </div>
-                </div>
+      <a href="{% url 'exchangepage:detail' travelletter.id %}" class="waves-effect waves-light btn-large zerospace" style="width: 100%">
+        <div class="container zerospace" style="width: 100%">
+          <div class = "row zerospace" style="margin-bottom: 0;margin-left: 0;margin-right: 0">
+            <div class="col l3 m3 s5 valign-wrapper">
+              <div>
+                <i class="material-icons white-text">person</i>
+              </div>
+              <div class="truncate">
+                {{travelletter.user}}
               </div>
             </div>
-          </a>
+            <div class = "col l9 m9 s7">
+              <div class="row" style="margin-bottom: 0">
+                <div class = "col l2 m2 s3">
+                  {{ travelletter.sun }}
+                </div>
+                <div class = "col l2 m2 s3">
+                  {{ travelletter.livingExpences }}
+                </div>
+                <div class = "col l2 m2 s3">
+                  {{ travelletter.availability }}
+                </div>
+                <div class = "col l2 m2 s3">
+                  {{ travelletter.nature }}
+                </div>
+                <div class = "col l2 m2 s2 hide-on-small-only">
+                  {{ travelletter.hospitality }}
+                </div>
+                <div class = "col l2 m2 s2 hide-on-small-only">
+                  {{ travelletter.workLoad}}
+                </div>
+               </div>
+            </div>
+          </div>
         </div>
+      </a>
+   </div>
 {% endfor %}
 </ul>
 
+<style>
+  .zerospace{
+    padding-left: 0;
+    padding-right: 0;
+    border-width: 0;
+  }
+</style>
 {% endblock content %}
 
 {% block footer_script %}
@@ -141,5 +139,4 @@
     var tooltipInstances = M.Tooltip.init(tooltips, {});
   });
 </script>
-
 {% endblock %}

@@ -2,7 +2,7 @@
 {% load thumbnail %}
 {% load chemie_tags %}
 {% load cache %}
-
+<!-- For countdown can be deleted afterwards -->
 <!-- copied base header-->
 <!DOCTYPE html>
 <html lang="no">
@@ -72,9 +72,9 @@
         </div>
         <div class="col s3 m3 l2">
         {% if indkom %}
-        <div style="height: 20vh;background-color: #F9CF00;-webkit-mask-image: url({{indkom.image.url}});mask-image: url({{indkom.image.url}});mask-size: contain;mask-position: center;
-        mask-repeat: no-repeat;">
-        </div>
+            <div style="height: 20vh;background-color: #F9CF00;-webkit-mask-image: url({{indkom.image.url}});mask-image: url({{indkom.image.url}});mask-size: contain;mask-position: center;
+            mask-repeat: no-repeat;">
+            </div>
         {% endif %}
         </div>
     </div>
@@ -101,7 +101,6 @@ function calc_duration(now, target) {
     const hours = working_time%24;
     const days = (working_time-hours)/24;
     return {millisec:millisec,sec: sec, min:min, hours:hours, days:days}
-
 }
 
 function dayCountdown(element, targetString){

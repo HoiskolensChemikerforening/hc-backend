@@ -18,7 +18,7 @@ Admin
 <div class="row">
   <div class="col s9 m10 l10">
     <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-        <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
+        <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
         <a class="breadcrumb">Admin</a>
     </div>
   </div>
@@ -53,13 +53,13 @@ Admin
   <ul>
     {% if perms.exchangepage.add_travelletter %}
     <li>
-      <a class="btn-floating blue" href="{% url "exchangepage:create" %}"><i class="material-icons">add</i></a>
+      <a class="btn-floating blue" href="{% url 'exchangepage:create' %}"><i class="material-icons">add</i></a>
       <a class="btn-floating mobile-fab-tip">Nytt Reisebrev</a>
     </li>
     {% endif %}
     {% if perms.exchangepage.change_travelletter %}
       <li>
-        <a class="btn-floating yellow" href="{% url "exchangepage:adminquestion" %}"><i
+        <a class="btn-floating yellow" href="{% url 'exchangepage:adminquestion' %}"><i
             class="material-icons">sync</i></a>
         <a class="btn-floating mobile-fab-tip">Rediger Spørsmål</a>
       </li>
