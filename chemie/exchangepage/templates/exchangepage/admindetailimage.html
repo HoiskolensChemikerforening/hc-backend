@@ -30,7 +30,7 @@ Admin
           <div>
               {{ imageformset.management_form }}
               {% for form in imageformset %}
-                  <div class = "image-form">
+                  <div class = "image-form" style="padding: 15px">
                       {{ form.as_p }}
                   </div>
               {% endfor %}
@@ -40,8 +40,12 @@ Admin
             <div class="right-align">
               <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett bilder</a>
               <button class="btn btn-primary pull-right" id="add-image-form" style="margin: 5px" type="button">Nytt bilde</button>
-              <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre og gå videre!'/>
+              <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre!'/>
             </div>
+          </div>
+
+          <div class="card-action right-align" style="padding-right: 24px; padding-bottom: 0px">
+              <a href="{% url 'exchangepage:createexperience' pk=travelletter.id%}" class="btn btn-primary pull-right" style="margin: 5px">Neste!</a>
           </div>
 
       </form>

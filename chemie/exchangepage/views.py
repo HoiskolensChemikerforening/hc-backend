@@ -228,21 +228,20 @@ def adminDetailImageViews(request, pk):
     if request.method == 'POST':
         imageformset = ImageFormSet(files=request.FILES, data=request.POST, queryset=images)
 
-        if imageformset.is_valid():
-
-            for form in imageformset:
+        for form in imageformset:
+            if form.is_valid():
                 image = form.save(commit=False)
                 image.travelletter = travelletter
                 image.save()
 
-            messages.add_message(
-                request,
-                messages.SUCCESS,
-                f"Bilder er oppdatert!",
-                extra_tags="Suksess",
-            )
-            # Redirect to the desired page after successful editing
-            return redirect('exchangepage:createexperience', pk=pk)
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            f"Bilder er oppdatert!",
+            extra_tags="Suksess",
+        )
+        # Redirect to the desired page after successful editing
+        return redirect('exchangepage:admindetailimage', pk=pk)
 
     else:
         imageformset = ImageFormSet(queryset=images)
@@ -392,26 +391,19 @@ def displayIndividualLetter(request, pk):
     experiences = Experience.objects.filter(travelletter=travelletter)
     questions = [experience.question for experience in experiences]
     images = Images.objects.filter(travelletter=travelletter)
+    context = {}
 
-    if len(images) == 0:  # QUICKFIIIXX
-        images = 0
-
-    else:
-        for image in images:  # checking if image exists, quickfix
-            try:
-                image.image.url
-            except:
-                images = 0
+    if images.exists():
+        context['images'] = images
 
     specialization_id = travelletter.user.specialization-1
 
-    context = {'travelletter': travelletter,
-               'experiences': experiences,
-               'questions': questions,
-               'images': images,
-               'specialization_id': specialization_id,
-               'specialization': SPECIALIZATION[specialization_id][1]
-    }
+    context['travelletter'] = travelletter
+    context['experiences'] = experiences
+    context['questions'] = questions
+    context['images'] = images
+    context['specialization_id'] = specialization_id
+    context['specialization'] = SPECIALIZATION[specialization_id][1]
 
     return render(request, "exchangepage/detail.html", context)
 
