@@ -100,7 +100,8 @@ LOCAL_APPS = [
     "chemie.cgp",
     "chemie.merch",
     "chemie.electofood",
-    "chemie.refund"
+    "chemie.exchangepage",
+    "chemie.refund",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -477,6 +478,29 @@ CKEDITOR_CONFIGS = {
         "customConfig": "/static/js/ckeditor_config.js",
         "width": "100%",
     },
+    "exchangepage": {
+        "skin": "bootstrapck",
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            [
+                "Bold",
+                "Italic",
+                "Underline",
+                "Subscript",
+                "Superscript",
+                "-",
+                "Undo",
+                "Redo",
+                "-",
+                "PasteText",
+            ],
+            ["NumberedList", "BulletedList", "-", "Link"],
+            ["Maximize", "Find", "Replace"],
+            ["Table"],
+        ],
+        'extraPlugins': 'table',
+        "customConfig": "/static/js/ckeditor_config.js",
+    }
 }
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
