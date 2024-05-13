@@ -128,11 +128,11 @@ def createImageViews(request, pk):
         imageformset = ImageFormSet(files=request.FILES, data=request.POST)
 
         if imageformset.is_valid():
-
             for form in imageformset:
-                image = form.save(commit=False)
-                image.travelletter = travelletter
-                image.save()
+                if form.is_valid() and form.cleaned_data.get('image'):
+                    image = form.save(commit=False)
+                    image.travelletter = travelletter
+                    image.save()
 
             messages.add_message(
                 request,
@@ -393,6 +393,7 @@ def displayIndividualLetter(request, pk):
     images = Images.objects.filter(travelletter=travelletter)
     context = {}
 
+    print(images)
     if images.exists():
         context['images'] = images
 
