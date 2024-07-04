@@ -81,7 +81,7 @@ def cityPageViews(request, city_name):
     if len(travelletters) == 0:
         return redirect('exchangepage:index')
 
-    sort_list = ['sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad']
+    sort_list = ['sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad', 'user']
     sort_order = request.GET.get('sort_order', 'desc')
     sort_by = request.GET.get('sort_by', 'user')
 
