@@ -16,7 +16,7 @@ def index(request):
         return redirect('exchangepage:countdown')
 
     travelletters = Travelletter.objects.all().order_by("country")
-    avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability', 'avg_nature', 'avg_hospitality', 'avg_workLoad']
+    avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability', 'avg_nature', 'avg_hospitality', 'avg_workLoad', 'alphabetic']
     sort_by = request.GET.get('sort_by', 'country')
     sort_order = request.GET.get('sort_order', 'desc')
 
@@ -47,15 +47,22 @@ def index(request):
 
     # Logic for sorting the table
     reverse_order = sort_order == 'desc'
-    for avg in avg_list:
-        if sort_by == avg:
-            travelletters_by_country = dict(
-                sorted(travelletters_by_country.items(), key=lambda x: x[1][avg], reverse=reverse_order))
-            for country, city_data in data_by_country_city.items():
-                data_by_country_city[country] = dict(
-                    sorted(city_data.items(), key=lambda x: x[1][avg], reverse=reverse_order))
+    if sort_by == 'alphabetic':
+        travelletters_by_country = dict(
+            sorted(travelletters_by_country.items(), key=lambda x: x[0], reverse=reverse_order))
+        for country, city_data in data_by_country_city.items():
+            data_by_country_city[country] = dict(
+                sorted(city_data.items(), key=lambda x: x[0], reverse=reverse_order))
+    else:
+        for avg in avg_list:
+            if sort_by == avg:
+                travelletters_by_country = dict(
+                    sorted(travelletters_by_country.items(), key=lambda x: x[1][avg], reverse=reverse_order))
+                for country, city_data in data_by_country_city.items():
+                    data_by_country_city[country] = dict(
+                        sorted(city_data.items(), key=lambda x: x[1][avg], reverse=reverse_order))
 
-            break
+                break
 
     context = {"travelletters_by_country": travelletters_by_country,
                "data_by_city": data_by_country_city,
