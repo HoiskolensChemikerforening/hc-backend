@@ -1,0 +1,199 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block nav_header %}
+<div class="hide-on-med-and-down" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 100%;">
+    <span>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</span>
+</div>
+
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+<div class="hide-on-med-and-down">
+   {% if specialization_id != 0 %} Retning: {{ specialization }}, {% endif %} Semester: {{ travelletter.semester }}
+</div>
+<div class="hide-on-large-only">Reisebrev</div>
+
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+
+{% block content %}
+
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Land</a>
+    <a href="{% url 'exchangepage:citypage' travelletter.city %}" class="breadcrumb">By</a>
+    <a class="breadcrumb">{{travelletter.user}}</a>
+</div>
+
+<div class="hide-on-large-only">
+    <h4>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</h4>
+</div>
+<div class="hide-on-large-only row" style="margin-left: 0;margin-right: 0">
+    {% if specialization_id != 0 %}
+    <h5>Retning: {{ specialization }}</h5>
+    {% endif %}
+    <h5>Semester: {{ travelletter.semester }}</h5>
+</div>
+
+{% if images %}
+    {% if images|length == 1 %}
+        {% for image in images %}
+            <img style="width: 100%; height: 300px; object-fit: contain" src="{{ image.image.url }}">
+        {% endfor %}
+
+    {% else %}
+        <div class="carousel">
+            {% for image in images %}
+            <a class="carousel-item" href="#{{ forloop.counter }}!">
+                <img class="materialboxed" src="{{ image.image.url }}">
+            </a>
+            {% endfor %}
+        </div>
+    {% endif %}
+{% endif %}
+
+ <div class="information-box-container">
+     <h4>Litt om {{ travelletter.city }}</h4>
+
+     <div class="row" style="margin: 0">
+        <div class="col s12 m6 l8">
+          {{ travelletter.destinationInfo|safe }}
+        </div>
+        <div class="col s12 m6 l4">
+          <div class="card" style="background-color: #F9CF00; width: 225px;margin-left: auto;margin-right: auto;position: revert">
+            <div class="card-content white-text">
+              <span class="card-title"> Vurdering: </span>
+              <p>
+                <div class="info-item">
+                    <p>Solfaktor: {{ travelletter.sun }}</p>
+                </div>
+                <div class="info-item">
+                    <p>Levekostnader: {{ travelletter.livingExpences }}</p>
+                </div>
+                <div class="info-item">
+                    <p>Tilgjengelighet: {{ travelletter.availability }}</p>
+                </div>
+                <div class="info-item">
+                    <p>Natur: {{ travelletter.nature }}</p>
+                </div>
+                <div class="info-item">
+                    <p>Gjestfrihet: {{ travelletter.hospitality }}</p>
+                </div>
+                <div class="info-item">
+                    <p>Arbeidsmengde: {{ travelletter.workLoad }}</p>
+                </div>
+              </p>
+            </div>
+          </div>
+        </div>
+     </div>
+ </div>
+
+ <div class="information-box-container">
+    <div class="info-item">
+        <h4>Erfaringer</h4>
+        <ul class="collapsible">
+            {% if experiences %}
+                {% for experience in experiences %}
+                    <li>
+                        <div class="collapsible-header"><strong>{{ experience.question }}</strong></div>
+                        <div class="collapsible-body" style="background-color: white">{{ experience.answer|safe }}</div>
+                    </li>
+                {% endfor %}
+            {% else %}
+                <li>
+                    <div class="collapsible-header"><i class="material-icons">info</i>Ingen tilgjengelige erfaringer.</div>
+                    <div class="collapsible-body"><span>BASJ!, er ingen erfaringer som kan vises her >:(( </span></div>
+                </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+<!-- Add Button -->
+{% if perms.exchangepage %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">edit</i>
+  </a>
+  <ul>
+      {% if perms.exchangepage.change_travelletter %}
+        <li>
+          <a class="btn-floating yellow" href="{% url 'exchangepage:admindetail' travelletter.id %}"><i
+              class="material-icons">sync</i></a>
+          <a class="btn-floating mobile-fab-tip">Rediger</a>
+        </li>
+      {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+<style>
+    .information-box-container {
+        background-color: white;
+        padding: 20px;
+        margin: 20px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .info-item {
+        margin-bottom: 10px;
+    }
+
+    .carousel-item {
+        width:400px !important;
+    }
+
+    .materialboxed {
+        width:100%;
+        height: 300px;
+        object-fit: contain !important;
+    }
+    .flow-text{
+        font-size: 1rem;
+    }
+    table {
+        table-layout: fixed;
+        width:100% !important;
+    }
+
+    td {
+        overflow-wrap: break-word;
+        hyphens: auto;
+        vertical-align: top;
+    }
+</style>
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.carousel');
+    var instances = M.Carousel.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.collapsible');
+    var instances = M.Collapsible.init(elems);
+  });
+
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.materialboxed');
+    var instances = M.Materialbox.init(elems);
+  })
+
+  window.onload = function() {
+      var div = document.querySelector('.hide-on-med-and-down');
+      var span = div.querySelector('span');
+      var fontSize = parseInt(window.getComputedStyle(div).getPropertyValue('font-size'));
+
+      while (span.offsetWidth > div.offsetWidth && fontSize > 8) {
+          fontSize -= 1;
+          div.style.fontSize = fontSize + 'px';
+        }
+    };
+</script>
+
+{% endblock %}

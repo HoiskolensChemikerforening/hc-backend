@@ -1,0 +1,152 @@
+{% load static %}
+{% load thumbnail %}
+{% load chemie_tags %}
+{% load cache %}
+<!-- For countdown can be deleted afterwards -->
+<!-- copied base header-->
+<!DOCTYPE html>
+<html lang="no">
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1, maximum-scale=1">
+  <title>Høiskolens Chemikerforening</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicons/apple-touch-icon.png" %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicons/favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicons/favicon-16x16.png" %}">
+  <link rel="manifest" href="{% static "favicons/manifest.json" %}">
+  <link rel="mask-icon" href="{% static "favicons/safari-pinned-tab.svg" %}" color="#5bbad5">
+
+  <!-- CSS  -->
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
+  {% block extra_css %}
+  {% endblock %}
+
+  <!-- JS -->
+  <!-- Firebase App is always required and must be first -->
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/5.5.3/firebase-messaging.js"></script>
+  {% if request.user.is_authenticated %}
+  <script src="{% static "js/firebase-initial.js" %}"></script>
+  {%endif%}
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+  {% block extra_js %}
+  {% endblock %}
+
+  {% block header %}
+  {% endblock header %}
+  <meta name="theme-color" content="#3C91E6">
+  <!-- Windows Phone -->
+  <meta name="msapplication-navbutton-color" content="#3C91E6">
+  <!-- iOS Safari -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+</head>
+
+<body style="background-color: black;">
+<a href="/forside/" class="waves-effect waves-light btn" style="margin: 25px">Tilbake</a>
+<div class="fadeIn" style="width: 100vw;height: 100vh;position: absolute;top: 0;left: 0;padding-top: 50px">
+    <h1 class="center" style="color: #F9CF00;">Webkom x Indkom</h1>
+    <h4 class="center" style="color: #F9CF00;">Lanserer Utvekslingssiden!</h4>
+    <div class="card" id="Countdown" style="background-color: black">
+        <div class="row align-items-center" style="margin: 20px;padding:10px">
+            <div class="col s12 m12 l12">
+                <div class="until__text" style="color: #F9CF00; font-size: 2rem; font-weight: bold">00</div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col s3 m3 l2 offset-l4 offset-m3 offset-s3">
+            {% if webkom %}
+            <div style="height: 20vh;background-color: #F9CF00;-webkit-mask-image: url({{webkom.image.url}});mask-image: url({{webkom.image.url}});mask-size: contain;mask-position: center;
+            mask-repeat: no-repeat;"></div>
+            {% endif %}
+        </div>
+        <div class="col s3 m3 l2">
+        {% if indkom %}
+            <div style="height: 20vh;background-color: #F9CF00;-webkit-mask-image: url({{indkom.image.url}});mask-image: url({{indkom.image.url}});mask-size: contain;mask-position: center;
+            mask-repeat: no-repeat;">
+            </div>
+        {% endif %}
+        </div>
+    </div>
+</div>
+
+
+
+
+{% block footer_script %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
+<script>
+function calc_duration(now, target) {
+    if (target-now<0){
+        return null
+    }
+
+    let working_time = (target-now)
+    const millisec = working_time%1000;
+    working_time = (working_time-millisec)/1000;
+    const sec = working_time%60;
+    working_time = (working_time-sec)/60;
+    const min = working_time%60;
+    working_time = (working_time-min)/60;
+    const hours = working_time%24;
+    const days = (working_time-hours)/24;
+    return {millisec:millisec,sec: sec, min:min, hours:hours, days:days}
+}
+
+function dayCountdown(element, targetString){
+    const targetDate = dayjs(targetString);
+
+    setInterval(() => {
+        const now = dayjs();
+        const duration= calc_duration(now, targetDate);
+
+        if (!duration) {
+            element.querySelector(".until__text").textContent = `Utvekslingssiden er klar!`;
+            element.querySelector(".until__text").style.fontSize= "4rem";
+            return;
+        } else {
+
+            // Calculate days, hours, minutes, and seconds
+            const days = duration.days;
+            const hours = duration.hours;
+            const minutes = duration.min;
+            const seconds = duration.sec;
+
+            element.querySelector(".until__text").textContent = days + " dager " + hours.toString().padStart(2, "0") + " timer "
+                + minutes.toString().padStart(2, "0") + " minutter  " + seconds.toString().padStart(2, "0") + " sekunder  " + `igjen`;
+        }
+    }, 1000); // Update every 1 second
+
+}
+
+dayCountdown(document.getElementById("Countdown"), "2024-08-01 12:00");
+</script>
+
+{% endblock footer_script %}
+</body>
+
+<style>
+    .fadeIn {
+        animation: fadeInAnimation ease 5s;
+        animation-iteration-count: 1;
+        animation-fill-mode: forwards;
+    }
+    @keyframes fadeInAnimation {
+        0% {
+            opacity: 0;
+        }
+        100% {
+            opacity: 1;
+        }
+    }
+</style>
