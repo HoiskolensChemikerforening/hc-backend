@@ -5,10 +5,11 @@ from .models import (
     SurveyQuestion,
     Survey,
     AnswerKeyValuePair,
-    PositionType
+    PositionType,
 )
 
 from django import forms
+
 
 class InterviewForm(forms.ModelForm):
     specializations = forms.ModelMultipleChoiceField(
@@ -44,7 +45,7 @@ class JobForm(forms.ModelForm):
 
     class Meta:
         model = Job
-        fields = ["title", "description", "specializations","postype"]
+        fields = ["title", "description", "specializations", "postype"]
 
 
 class CreateSurveyForm(forms.ModelForm):

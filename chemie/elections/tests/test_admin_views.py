@@ -289,7 +289,7 @@ def test_start_voting_for_current_position_with_pre_votes(
         candidate.pre_votes = 1
         candidate.save()
     client.post(
-        reverse("elections:admin_start_voting", kwargs={"pk": position.id}),
+        reverse("elections:admin_start_voting", kwargs={"pk": position.id})
     )
     position.refresh_from_db()
     assert position.get_total_votes() == number_of_candidates
