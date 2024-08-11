@@ -20,7 +20,6 @@ def index(request):
 
 
 def index_promo(request):
-
     return render(request, "rentalservice/index_promo.html")
 
 
@@ -108,7 +107,6 @@ def contact(request, rentalobject_id):
         return redirect(reverse("rentalservice:index"))
 
     else:
-
         context = {"contact_form": contact_form, "rentalobject": rental_object}
 
         return render(request, "rentalservice/contact.html", context)

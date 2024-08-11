@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from chemie.customprofile.models import Profile, GRADES, SPECIALIZATION
 from .forms import NameSearchForm
 
+
 # not in use, correct is in custom profiles
 @login_required
 def index(request, year=1):
