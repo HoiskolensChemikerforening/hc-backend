@@ -39,3 +39,5 @@ django-crispy-forms==1.7.2
 django-cors-headers==3.5.0
 
 reportlab==3.5.59
+
+pillow==9.5.0
