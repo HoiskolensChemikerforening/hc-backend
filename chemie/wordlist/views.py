@@ -72,8 +72,8 @@ def ordListe(request):
     if int(profile.grade) < 2:
        alle_ord = alle_ord.filter(secret=False).order_by("word")
 
-    #for i in alle_ord:
-        #i.explanations = i.explanations[:25] + "..."
+    for i in alle_ord:
+        i.explanations = i.explanations[:25] + "..."
     
     context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
     return render(request, "wordall.html", context)
