@@ -10,6 +10,6 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: Black Code Formatter
-      uses: lgeiger/black-action@v1.0.1
+      uses: HoiskolensChemikerforening/black-action #lgeiger/black-action@v1.0.1
       with:
           args: "./chemie --check"
