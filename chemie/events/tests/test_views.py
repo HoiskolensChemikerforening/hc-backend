@@ -44,7 +44,7 @@ def test_overview_bedpres(client, create_user):
     client.login(username=user.username, password="defaultpassword")
     request = client.get(reverse("events:index_bedpres"))
     assert future_bedpres.title in request.content.decode("utf-8")
-    assert "Det er ingen aktive bedpresser" not in request.content.decode(
+    assert "Det er ingen aktive arrangementer nå. Finn på noe kult da vel!" not in request.content.decode(
         "utf-8"
     )
 
@@ -54,7 +54,7 @@ def test_overview_bedpres(client, create_user):
         assert future_bedpres.title in request.content.decode("utf-8")
 
         request = client.get(reverse("events:index_bedpres"))
-        assert "Det er ingen aktive bedpreser nå" in request.content.decode(
+        assert "Det er ingen aktive arrangementer nå. Finn på noe kult da vel!" in request.content.decode(
             "utf-8"
         )
 
