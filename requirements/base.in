@@ -19,7 +19,7 @@ django-recaptcha==1.4.0
 django-smart-selects==1.5.4
 django-multiselectfield==0.1.8
 
-pyopenssl==18.0.0
+pyopenssl==24.2.1
 pytest==5.3.5
 pytest-cov==2.8.1
 pytest-django==3.8.0

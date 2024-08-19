@@ -30,7 +30,7 @@ coverage==4.5.2
     # via
     #   -r requirements/base.in
     #   pytest-cov
-cryptography==39.0.1
+cryptography==43.0.0
     # via
     #   apns2
     #   http-ece
@@ -174,7 +174,7 @@ pyjwt==1.7.1
     # via
     #   apns2
     #   djangorestframework-simplejwt
-pyopenssl==18.0.0
+pyopenssl==24.2.1
     # via -r requirements/base.in
 pyparsing==2.4.6
     # via packaging
@@ -219,7 +219,6 @@ six==1.14.0
     #   django-sekizai
     #   freezegun
     #   packaging
-    #   pyopenssl
     #   pytest-xdist
     #   python-dateutil
 sorl-thumbnail==12.6.3
