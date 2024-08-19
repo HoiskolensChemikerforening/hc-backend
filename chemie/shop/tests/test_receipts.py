@@ -62,7 +62,10 @@ def test_order_is_created_when_several_items_bought(
 
 @pytest.mark.django_db
 def test_refill_equates_to_spent_plus_balance(
-    client, create_user_refill_perms, create_multiple_items,create_second_user_base
+    client,
+    create_user_refill_perms,
+    create_multiple_items,
+    create_second_user_base,
 ):
     # Create admin to refill balance
     admin = create_user_refill_perms
@@ -74,7 +77,8 @@ def test_refill_equates_to_spent_plus_balance(
     client.login(username=admin.username, password="defaultpassword")
     amount = 10
     client.post(
-        reverse("shop:refill"), data={"receiver": customer.id, "amount": amount}
+        reverse("shop:refill"),
+        data={"receiver": customer.id, "amount": amount},
     )
     customer.refresh_from_db()
 
@@ -110,7 +114,8 @@ def test_refill_amount_receiver_and_provider_ok(
     client.get(reverse("shop:index"))
     amount = 10
     client.post(
-        reverse("shop:refill"), data={"receiver": receiver.id, "amount": amount}
+        reverse("shop:refill"),
+        data={"receiver": receiver.id, "amount": amount},
     )
     receiver.refresh_from_db()
     admin.refresh_from_db()

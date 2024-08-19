@@ -42,7 +42,9 @@ def test_create_item(
 
 
 @pytest.mark.django_db
-def test_refill_balance(client, create_user_refill_perms, create_second_user_base):
+def test_refill_balance(
+    client, create_user_refill_perms, create_second_user_base
+):
     provider = create_user_refill_perms
     client.login(username=provider.username, password="defaultpassword")
     receiver = create_second_user_base

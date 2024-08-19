@@ -28,6 +28,7 @@ def create_second_user_base():
     new_user.save()
     return new_user
 
+
 @pytest.fixture(scope="function")
 def create_permissions():
     p_item = Permission.objects.get_or_create(name="Can add item")[0]

@@ -117,7 +117,6 @@ def test_grade_guarding():
 @freeze_time("2052-12-01 00:30")
 @pytest.mark.django_db
 def test_signup_email():
-
     call_command("loaddata", "chemie/fixtures/email-templates.json")
 
     now = timezone.now()

@@ -159,7 +159,6 @@ def test_vote_for_one_user(
         reverse("elections:vote"), {"candidates": candidate.id}, follow=True
     )
 
-
     assert (reverse("elections:has_voted"), 302) == request.redirect_chain[0]
 
     assert "Din stemme har blitt registrert" in request.content.decode("utf-8")
