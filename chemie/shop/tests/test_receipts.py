@@ -62,20 +62,31 @@ def test_order_is_created_when_several_items_bought(
 
 @pytest.mark.django_db
 def test_refill_equates_to_spent_plus_balance(
-    client, create_user_refill_perms, create_multiple_items
+    client, create_user_refill_perms, create_multiple_items,create_second_user_base
 ):
-    user = create_user_refill_perms
-    client.login(username=user.username, password="defaultpassword")
+    # Create admin to refill balance
+    admin = create_user_refill_perms
+
+    # Create customer to shop
+    customer = create_second_user_base
+
+    # Refill balance
+    client.login(username=admin.username, password="defaultpassword")
+    amount = 10
+    client.post(
+        reverse("shop:refill"), data={"receiver": customer.id, "amount": amount}
+    )
+    customer.refresh_from_db()
+
+    #  Buy
+    client.login(username=customer.username, password="defaultpassword")
     client.get(reverse("shop:index"))
     items = create_multiple_items
-    # Refill balance and buy
-    amount = 10
+
     for item in items:
         amount += item.price
-    client.post(
-        reverse("shop:refill"), data={"receiver": user.id, "amount": amount}
-    )
-    user.refresh_from_db()
+
+    customer.refresh_from_db()
     # Try to buy item
     try_to_buy_item(client, items)
     # Get the order
@@ -83,22 +94,27 @@ def test_refill_equates_to_spent_plus_balance(
     spent_money = order.get_total_price()
     # Get the refill receipt
     receipt = RefillReceipt.objects.latest("id")
-    assert receipt.amount == spent_money + user.profile.balance
+    assert receipt.amount == spent_money + customer.profile.balance
 
 
 @pytest.mark.django_db
 def test_refill_amount_receiver_and_provider_ok(
-    client, create_user_refill_perms
+    client, create_user_refill_perms, create_second_user_base
 ):
-    user = create_user_refill_perms
-    client.login(username=user.username, password="defaultpassword")
+    admin = create_user_refill_perms
+
+    # Create receiver for refill
+    receiver = create_second_user_base
+
+    client.login(username=admin.username, password="defaultpassword")
     client.get(reverse("shop:index"))
     amount = 10
     client.post(
-        reverse("shop:refill"), data={"receiver": user.id, "amount": amount}
+        reverse("shop:refill"), data={"receiver": receiver.id, "amount": amount}
     )
-    user.refresh_from_db()
+    receiver.refresh_from_db()
+    admin.refresh_from_db()
     receipt = RefillReceipt.objects.latest("id")
-    assert receipt.provider == user
-    assert receipt.receiver == user
+    assert receipt.provider == admin
+    assert receipt.receiver == receiver
     assert receipt.amount == amount

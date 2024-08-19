@@ -20,6 +20,15 @@ def create_user_base():
 
 
 @pytest.fixture(scope="function")
+# Base user with profile and all perms
+def create_second_user_base():
+    new_profile = RandomProfileFactory.create()
+    new_user = new_profile.user
+    new_user.set_password("defaultpassword")
+    new_user.save()
+    return new_user
+
+@pytest.fixture(scope="function")
 def create_permissions():
     p_item = Permission.objects.get_or_create(name="Can add item")[0]
     p_category = Permission.objects.get_or_create(name="Can add category")[0]

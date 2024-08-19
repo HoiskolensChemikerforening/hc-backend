@@ -58,7 +58,7 @@ def test_buy_item_and_checkout_no_money(
     # Try to buy item
     request = try_to_buy_item(client, item)
     assert request.status_code == 200
-    assert "Du har itj nok HC-coin, kiis" in request.content.decode("utf-8")
+    assert "Du har itj nok HC-coins, kiis" in request.content.decode("utf-8")
 
 
 @pytest.mark.django_db
@@ -98,7 +98,7 @@ def test_buy_item_and_checkout_with_too_little_money(
     request = try_to_buy_item(client, item)
     user.refresh_from_db()
     assert request.status_code == 200
-    assert "Du har itj nok HC-coin, kiis" in request.content.decode("utf-8")
+    assert "Du har itj nok HC-coins, kiis" in request.content.decode("utf-8")
     assert user.profile.balance == balance
 
 
@@ -141,5 +141,5 @@ def test_buy_several_items_and_checkout_without_money(
     request = try_to_buy_item(client, items)
     user.refresh_from_db()
     assert request.status_code == 200
-    assert "Du har itj nok HC-coin, kiis" in request.content.decode("utf-8")
+    assert "Du har itj nok HC-coins, kiis" in request.content.decode("utf-8")
     assert user.profile.balance == balance

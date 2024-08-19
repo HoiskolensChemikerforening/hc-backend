@@ -42,20 +42,22 @@ def test_create_item(
 
 
 @pytest.mark.django_db
-def test_refill_balance(client, create_user_refill_perms):
-    user = create_user_refill_perms
-    client.login(username=user.username, password="defaultpassword")
-    receiver = user
+def test_refill_balance(client, create_user_refill_perms, create_second_user_base):
+    provider = create_user_refill_perms
+    client.login(username=provider.username, password="defaultpassword")
+    receiver = create_second_user_base
+    print(provider.id, receiver.id)
     amount = Decimal(100)
     request = client.post(
         reverse("shop:refill"),
         data={"receiver": receiver.id, "amount": amount},
     )
-    user.profile.refresh_from_db()
-    assert request.status_code == 200
-    assert user.profile.balance == amount
+    receiver.profile.refresh_from_db()
+    assert provider != receiver
+    assert request.status_code == 302
+    assert receiver.profile.balance == amount
     # We have not touched any other balances
     all_profiles = Profile.objects.all()
-    other_profiles = all_profiles.exclude(user=user)
+    other_profiles = all_profiles.exclude(user=receiver)
     for p in other_profiles:
         assert p.balance == 0
