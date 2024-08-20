@@ -42,6 +42,23 @@
       {{ form.category }}
     </div>
     {% endform %}
+
+    <p>Substantiv:</p>
+    {%form form=nounform%}
+    {% endform %}
+    
+    <p>Verb::</p>
+    {%form form=verbform%}
+    {% endform %}
+
+    <p>Adjektiv:</p>
+    {%form form=adjectiveform%}
+    {% endform %}
+    
+
+    
+
+
   
     <div>
       <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 

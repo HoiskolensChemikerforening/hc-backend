@@ -32,12 +32,29 @@
 {%form form=wordform%}
 {% endform %}
 
+<h9>Substantiv:</h9>
+{%form form=nounform%}
+<div class="input-field col s12"></div>
+{% endform %}
+
+<h9>Verb:</h9>
+{%form form=verbform%}
+<div class="input-field col s12"></div>
+{% endform %}
+
+<h9>Adjektiv:</h9>
+{%form form=adjectiveform%}
+<div class="input-field col s12"></div>
+{% endform %}
+
   <div>
   <input type = "submit" value = "Lagre ord i databasen", class = "knapp" /> 
   </div>
 
 </form>
-<form method = "POST" enctype = "multipar/form-date"> {% csrf_token %}
+
+
+<!-- <form method = "POST" enctype = "multipar/form-date"> {% csrf_token %}
 
   {%form form=categoryform%}
   {% endform %}
@@ -47,7 +64,7 @@
     </div>
   
   </form>
-</div>
+</div> -->
 
 {% endblock content %}
 
