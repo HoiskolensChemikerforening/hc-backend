@@ -204,7 +204,7 @@ def edit_flatpage(request, url):
 
 class OfficeAccessApplicationListView(PermissionRequiredMixin, ListView):
     template_name = "home/office_access_list.html"
-    queryset = OfficeApplication.objects.order_by("-created")
+    queryset = OfficeApplication.objects.filter(created__gte=timezone.now() - timezone.timedelta(days=365)).order_by("-created")
     permission_required = "home.change_officeapplication"
 
 
