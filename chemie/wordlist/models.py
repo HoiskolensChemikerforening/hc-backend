@@ -3,28 +3,28 @@ from django.contrib.auth.models import User
   
 
 class Noun(models.Model):
-    indefinite_singular = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = True)
-    indefinite_plural = models.CharField(max_length = 100, verbose_name = "ubestemt_flertall", unique = True)
-    definite_singular = models.CharField(max_length = 100, verbose_name = "bestemt_entall", unique = True)
-    definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = True)
+    indefinite_singular = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False)
+    indefinite_plural = models.CharField(max_length = 100, verbose_name = "ubestemt_flertall", unique = False)
+    definite_singular = models.CharField(max_length = 100, verbose_name = "bestemt_entall", unique = False)
+    definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = False)
     
     def __str__(self):
          return self.indefinite_singular
 
 class Verb(models.Model):
-    infinitive = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = True)
-    present = models.CharField(max_length = 100, verbose_name = "presens", unique = True)
-    past = models.CharField(max_length = 100, verbose_name = "preteritum", unique = True)
-    future = models.CharField(max_length = 100, verbose_name = "presens futurum", unique = True)
+    infinitive = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = False)
+    present = models.CharField(max_length = 100, verbose_name = "presens", unique = False)
+    past = models.CharField(max_length = 100, verbose_name = "preteritum", unique = False)
+    future = models.CharField(max_length = 100, verbose_name = "presens futurum", unique = False)
 
     def __str__(self):
          return self.infinitive
 
 
 class Adjective(models.Model):
-    positive = models.CharField(max_length = 100, verbose_name = "positiv", unique = True)
-    comparative = models.CharField(max_length = 100, verbose_name = "komparativ", unique = True)
-    superlative = models.CharField(max_length = 100, verbose_name = "superlativ", unique = True)
+    positive = models.CharField(max_length = 100, verbose_name = "positiv", unique = False)
+    comparative = models.CharField(max_length = 100, verbose_name = "komparativ", unique = False)
+    superlative = models.CharField(max_length = 100, verbose_name = "superlativ", unique = False)
 
     def __str__(self):
          return self.positive
