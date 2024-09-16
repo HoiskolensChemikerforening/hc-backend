@@ -16,7 +16,7 @@ from ..views import set_user_event_status
 
 class TestEventAndRegistration(TestCase):
     # Fetch all templates for sending mail
-    fixtures = ["fixtures/email-templates.json"]
+    fixtures = ["chemie/fixtures/email-templates.json"]
 
     def setUp(self):
         user = User.objects.create(username="glenny")
