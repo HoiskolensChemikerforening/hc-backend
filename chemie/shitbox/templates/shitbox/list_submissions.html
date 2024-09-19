@@ -16,6 +16,21 @@
       width: auto;
       max-width: 300px;
     }
+    @media only screen and (max-width: 600px){
+        .hide_on_small{
+            display: none;
+        }
+    }
+    @media only screen and (max-width: 600px){
+        .break_on_small{
+            width: 0;
+        }
+    }
+    @media only screen and (max-width: 992px) {
+    .card-content {
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+}
   </style>
   <div class="row center">
     <ul class="pagination nav navbar-nav">
@@ -42,28 +57,28 @@
   <div class="row">
     <div class="card">
       <div class="card-content">
-        <table class="responsive-table bordered">
+        <table class="bordered" id="shittable">
           <thead>
           <tr>
             <th>Innsender</th>
-            <th>Dato</th>
+            <th class="hide_on_small">Dato</th>
             <th>Gullkorn</th>
-            <th>Bilde</th>
-            <th>Brukt</th>
+            <th class="hide_on_small">Bilde</th>
+            <th class="hide_on_small">Brukt</th>
           </tr>
           </thead>
           <tbody>
           {% for submission in submission_page %}
             <tr>
               <td><p>{{ submission.author.profile }}</p></td>
-              <td><p>{{ submission.date|date:"j. F" }}</p></td>
-              <td><p>{{ submission.content }}</p></td>
-              <td>
+              <td class="hide_on_small"><p>{{ submission.date|date:"j. F" }}</p></td>
+              <td class="break_on_small"><p>{{ submission.content }}</p></td>
+              <td class="hide_on_small">
                 {% if submission.image %}
                   <img class="responsive-img materialboxed" src="{{ submission.image.url }}">
                 {% endif %}
               </td>
-              <td>
+              <td class="hide_on_small">
                 <p>
                   <label>
                     <input type="checkbox" class="usedStatus" id="{{ submission.id }}"
