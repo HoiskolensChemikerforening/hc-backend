@@ -381,9 +381,9 @@
     ga('create', 'UA-52614731-1', 'auto');
     ga('send', 'pageview');
   </script>
-
+    {% if request.user.profile.grade <= 3 %}
    <script src="{% static "js/makeItRain.js" %}"></script>
-
+    {% endif %}
 </body>
 
 </html>
