@@ -6,7 +6,7 @@ from .models import (
     Survey,
     SurveyQuestion,
     AnswerKeyValuePair,
-    PositionType
+    PositionType,
 )
 
 admin.site.register(Interview)

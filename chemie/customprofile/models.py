@@ -27,7 +27,10 @@ GRADES = Choices(
 )
 
 RELATIONSHIP_STATUS = Choices(
-    ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!"), ("HC", 4, "HC forhold")
+    ("SINGLE", 1, "Singel"),
+    ("TAKEN", 2, "Opptatt"),
+    ("NSA", 3, "Hemmelig!"),
+    ("HC", 4, "HC forhold"),
 )
 
 MEMBERSHIP_DURATIONS = [
@@ -231,8 +234,9 @@ class Profile(models.Model):
 
     @classmethod
     def get_balance_sum_for_first_to_fifth_grades(cls):
-        return cls.objects.filter(grade__in=[1, 2, 3, 4, 5]).aggregate(Sum("balance"))["balance__sum"]
-
+        return cls.objects.filter(grade__in=[1, 2, 3, 4, 5]).aggregate(
+            Sum("balance")
+        )["balance__sum"]
 
 
 class Membership(models.Model):

@@ -8,6 +8,7 @@ class DatePickerInput(forms.DateTimeInput):
     """
     Class to add a date picker to the date field.
     """
+
     input_type = "date"
 
 
@@ -15,6 +16,7 @@ class AccountNumberForm(forms.ModelForm):
     """
     Form to create a RefundRequest object.
     """
+
     class Meta:
         model = RefundRequest
         fields = ["account_number"]
@@ -29,6 +31,7 @@ class RefundForm(forms.ModelForm):
     """
     Form to create a Refund object.
     """
+
     class Meta:
         model = Refund
         fields = ["date", "store", "item", "event", "price", "image"]
@@ -41,11 +44,6 @@ class RefundForm(forms.ModelForm):
         super(RefundForm, self).__init__(*arg, **kwarg)
         self.empty_permitted = False
 
+
 # Create a formset for the refund object to enable multible refund forms on one page.
-RefundFormSet = modelformset_factory(
-    Refund,
-    form=RefundForm,
-    extra=1,
-)
-
-
+RefundFormSet = modelformset_factory(Refund, form=RefundForm, extra=1)

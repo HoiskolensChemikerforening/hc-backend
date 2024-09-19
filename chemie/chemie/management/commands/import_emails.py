@@ -15,7 +15,6 @@ import subprocess
 EMAIL_TEMPLATE_DIR = os.path.join(settings.BASE_DIR, "emails", "")
 
 
-
 class Command(BaseCommand):
     help = (
         "Command for importing email HTML-files. "

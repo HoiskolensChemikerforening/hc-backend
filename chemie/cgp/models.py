@@ -321,18 +321,16 @@ class Vote(models.Model):
             .split(",")
         )
         vote_dict = {vote_list[i]: i for i in range(len(vote_list))}
-        voteable_groups = self.group.cgp.group_set.exclude(id=self.group.id).exclude(
-                    audience=True
-                )
+        voteable_groups = self.group.cgp.group_set.exclude(
+            id=self.group.id
+        ).exclude(audience=True)
         # Place newly created groups not contained in the previous vote groups last
         for group in voteable_groups:
             if group.country.country_name not in vote_dict.keys():
                 vote_dict[group.country.country_name] = len(vote_list)
 
         group_list = sorted(
-            list(
-                voteable_groups
-            ),
+            list(voteable_groups),
             key=lambda group: vote_dict[group.country.country_name],
         )
 

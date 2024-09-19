@@ -16,7 +16,7 @@ from .models import (
     Survey,
     AnswerKeyValuePair,
     SurveyQuestion,
-    PositionType
+    PositionType,
 )
 
 from .forms import (
@@ -47,10 +47,11 @@ def index(request):
 
     return render(request, "corporate/index.html", context)
 
+
 def job(request):
     jobs = Job.objects.all().order_by("-id")
 
-    #Unpacking av tuppel for å filtrere på enten spec:spec__nam eller postyp:post...
+    # Unpacking av tuppel for å filtrere på enten spec:spec__nam eller postyp:post...
 
     if request.method == "GET":
         filter_parameters = {
@@ -69,13 +70,17 @@ def job(request):
                 except ValueError:
                     pass
 
-
     specializations = Specialization.objects.all().order_by("id")
-    postypes        = PositionType.objects.all().order_by("id")
+    postypes = PositionType.objects.all().order_by("id")
 
-    context = {"jobs": jobs, "specializations": specializations, "postypes": postypes}
+    context = {
+        "jobs": jobs,
+        "specializations": specializations,
+        "postypes": postypes,
+    }
 
     return render(request, "corporate/job.html", context)
+
 
 def job_detail(request, id):
     job = get_object_or_404(Job, pk=id)
@@ -232,7 +237,7 @@ def interview_edit(request, id):
 
 @permission_required("corporate.add_job")
 def job_create(request):
-    form         = JobForm(request.POST or None, request.FILES or None)
+    form = JobForm(request.POST or None, request.FILES or None)
 
     if form.is_valid():
         form.save()

@@ -19,7 +19,9 @@ def test_election_not_open(client, create_user):
 
     request = client.get(reverse("elections:index"))
     assert "Valget har ikke åpnet enda" in request.content.decode("utf-8")
-    assert "Resultater fra tidligere valg" in request.content.decode("utf-8")
+
+    # The links for previous elections are commented out, because we don't want people to have access to them
+    # assert "Resultater fra tidligere valg" in request.content.decode("utf-8")
 
     request = client.get(reverse("elections:vote"))
     assert request.status_code == 302
@@ -154,16 +156,19 @@ def test_vote_for_one_user(
     # Vote for the candidate chosen
     client.login(username=user.username, password="defaultpassword")
     request = client.post(
-        reverse("elections:vote"), {"candidates": candidate.id}
+        reverse("elections:vote"), {"candidates": candidate.id}, follow=True
     )
-    assert request.url == reverse("elections:has_voted")
+
+    assert (reverse("elections:has_voted"), 302) == request.redirect_chain[0]
+
+    assert "Din stemme har blitt registrert" in request.content.decode("utf-8")
 
     # Check that when user tries to vote again, he is redirected
     request = client.post(
         reverse("elections:vote"), {"candidates": candidate.id}, follow=True
     )
-    assert (reverse("elections:has_voted"), 302) == request.redirect_chain[0]
-    assert "Din stemme har blitt registrert" in request.content.decode("utf-8")
+
+    assert (reverse("elections:index"), 302) == request.redirect_chain[0]
 
     # Check that when user accesses url where he has voted, he receives proper message
     request = client.get(reverse("elections:has_voted"))

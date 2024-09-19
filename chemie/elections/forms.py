@@ -99,7 +99,6 @@ class CastVoteForm(forms.Form):
         self.fields["candidates"].queryset = candidatesChoices(self.election)
 
     def is_valid(self, candidate_list, election):
-
         valid = super(CastVoteForm, self).is_valid()
         if not valid:
             return False

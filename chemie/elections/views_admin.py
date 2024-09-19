@@ -38,7 +38,6 @@ def admin_register_positions(request):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         election = Election.get_latest_election()
         form = AddPositionForm(request.POST or None)
 
@@ -86,11 +85,9 @@ def admin_register_candidates(request, pk):
     if is_redirected:
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         position = get_object_or_404(Position, pk=pk)
         add_candidate_form = AddCandidateForm(request.POST or None)
         if request.method == "POST":
-
             if add_candidate_form.is_valid():
                 user = add_candidate_form.cleaned_data["user"]
                 position.add_candidate(user)
@@ -114,7 +111,6 @@ def admin_delete_candidate(request, pk):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         if request.method == "POST":
             candidate_username = request.POST.get("Delete", "0")
             position = Position.objects.get(id=pk)
@@ -139,7 +135,6 @@ def admin_start_voting(request, pk):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         if request.method == "POST":
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
@@ -154,7 +149,6 @@ def admin_acclamation(request, pk):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         if request.method == "POST":
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
@@ -169,7 +163,6 @@ def admin_register_prevotes(request, pk):
     if is_redirected:
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         position = get_object_or_404(Position, pk=pk)
         prevote_form = AddPrevoteForm(
             request.POST or None, instance=position, prefix="total_voters"
@@ -187,7 +180,6 @@ def admin_register_prevotes(request, pk):
 
         if request.method == "POST":
             if formset.is_valid() and prevote_form.is_valid():
-
                 if prevote_form.prevotes_allowed(
                     formset, position
                 ):  # checks that the ammount of pre_votes does not exceed feasable amount

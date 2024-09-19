@@ -119,7 +119,11 @@ class CreateBedpresView(
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
     initial = {"allowed_grades": list(GRADES.values.keys())}
-    message_content = messages.SUCCESS, "Arrangementet ble opprettet", "Opprettet"
+    message_content = (
+        messages.SUCCESS,
+        "Arrangementet ble opprettet",
+        "Opprettet",
+    )
 
 
 class EditBedpresView(
@@ -149,30 +153,55 @@ class ListSocialView(ListView):
             attending_events = Q(attendees__username__exact=self.request.user)
             authored_events = Q(author=self.request.user)
 
-            my_authored_events = self.model.objects.filter(authored_events, date__gt=timezone.now())
-            my_unpublished_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), published=False)
-            my_tentative_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), tentative=True)
+            my_authored_events = self.model.objects.filter(
+                authored_events, date__gt=timezone.now()
+            )
+            my_unpublished_events = self.model.objects.filter(
+                authored_events, date__gt=timezone.now(), published=False
+            )
+            my_tentative_events = self.model.objects.filter(
+                authored_events, date__gt=timezone.now(), tentative=True
+            )
             my_waiting_registrations = self.registration_model.objects.filter(
-                event__date__gt=timezone.now(), user__exact=self.request.user, status=REGISTRATION_STATUS.WAITING
+                event__date__gt=timezone.now(),
+                user__exact=self.request.user,
+                status=REGISTRATION_STATUS.WAITING,
             )
 
-            my_waiting_events = self.model.objects.filter(socialeventregistration__in=my_waiting_registrations)
+            my_waiting_events = self.model.objects.filter(
+                socialeventregistration__in=my_waiting_registrations
+            )
 
             if my_waiting_events:
                 my_waiting_queue = []
                 for events in my_waiting_events:
-                    my_waiting_queue.append((events, events.get_queue_position(self.request.user)))
+                    my_waiting_queue.append(
+                        (events, events.get_queue_position(self.request.user))
+                    )
 
-            my_events = self.model.objects.filter(
-                attending_events, date__gt=timezone.now()
-            ).distinct().exclude(pk__in=my_waiting_events.values('pk'))
-            my_past_events = self.model.objects.filter(attending_events, date__lte=timezone.now()).order_by("-date")
+            my_events = (
+                self.model.objects.filter(
+                    attending_events, date__gt=timezone.now()
+                )
+                .distinct()
+                .exclude(pk__in=my_waiting_events.values("pk"))
+            )
+            my_past_events = self.model.objects.filter(
+                attending_events, date__lte=timezone.now()
+            ).order_by("-date")
 
-        context.update({"events": future_events, "my_events": my_events, "my_authored_events": my_authored_events,
-                        "my_past_events": my_past_events, "my_waiting_queue": my_waiting_queue,
-                        "my_waiting_events": my_waiting_events,
-                        "my_unpublished_events": my_unpublished_events, "my_tentative_events": my_tentative_events
-                        })
+        context.update(
+            {
+                "events": future_events,
+                "my_events": my_events,
+                "my_authored_events": my_authored_events,
+                "my_past_events": my_past_events,
+                "my_waiting_queue": my_waiting_queue,
+                "my_waiting_events": my_waiting_events,
+                "my_unpublished_events": my_unpublished_events,
+                "my_tentative_events": my_tentative_events,
+            }
+        )
         return context
 
 
@@ -197,9 +226,11 @@ class ListBedpresView(ListView):
         context.update({"events": future_events, "my_events": my_events})
         return context
 
+
 class ListAdminSocialView(ListSocialView):
     template_name = "events/social/list_administrate.html"
     model = Social
+
 
 class ListPastSocialView(ListView):
     template_name = "events/social/list_past.html"
@@ -351,7 +382,9 @@ class SocialEditRemoveUserRegistration(
         # Add queue position
         registration = self.registration
         if registration:
-            queue_position = self.registration_model.get_queue_position(registration)
+            queue_position = self.registration_model.get_queue_position(
+                registration
+            )
             if queue_position:
                 context.update({"queue_position": queue_position})
         context["registration"] = registration
@@ -444,7 +477,9 @@ class BedpresEditRemoveUserRegistration(
         # Add queue position
         registration = self.registration
         if registration:
-            queue_position = self.registration_model.get_queue_position(registration)
+            queue_position = self.registration_model.get_queue_position(
+                registration
+            )
             if queue_position:
                 context.update({"queue_position": queue_position})
         context["registration"] = registration
@@ -631,7 +666,7 @@ class SocialBaseRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
         self.set_initial()
         event = self.object
 
-        #Prevent people from entering the page if tentative
+        # Prevent people from entering the page if tentative
         if event.tentative:
             return redirect("events:detail_social", pk=event.id)
         registration = self.registration_model.objects.filter(

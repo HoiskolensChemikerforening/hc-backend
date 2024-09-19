@@ -28,10 +28,5 @@ class JobSerializer(serializers.ModelSerializer):
     specializations = SpecializationSerializer(read_only=True)
 
     class Meta:
-        fields = (
-            "id",
-            "job_object",
-            "description",
-            "specializations",
-        )
+        fields = ("id", "job_object", "description", "specializations")
         model = Job

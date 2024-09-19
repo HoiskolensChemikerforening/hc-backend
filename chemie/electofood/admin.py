@@ -9,6 +9,7 @@ from .models import (
 # Registrer ElectionQuestionForm
 admin.site.register(ElectionQuestionForm)
 
+
 # Registrer ElectionQuestion
 @admin.register(ElectionQuestion)
 class ElectionQuestionAdmin(admin.ModelAdmin):

@@ -12,12 +12,7 @@ from push_notifications.gcm import GCMError
 
 @admin.register(Device)
 class WebPushDeviceAdmin(admin.ModelAdmin):
-    list_display = (
-        "owner",
-        "date_created",
-        "is_active",
-        "Device_token",
-    )
+    list_display = ("owner", "date_created", "is_active", "Device_token")
     actions = ["send_message"]
 
     def Device_token(cls, obj):

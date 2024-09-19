@@ -105,3 +105,5 @@ urlpatterns = admin_urlpatterns + user_urlpatterns + api_urlpatterns
 """
 
 # The links for previous elections are commented out, because we don't want people to have access to them
+
+# The corresponding tests are also commented out

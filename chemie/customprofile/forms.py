@@ -292,7 +292,6 @@ class ApprovedTermsForm(forms.Form):
 
 
 class GetRFIDForm(forms.Form):
-
     rfid = forms.CharField(
         label="Studentkortnr",
         max_length=255,
@@ -314,7 +313,6 @@ class AddCardForm(forms.Form):
 
 
 class ManualRFIDForm(forms.Form):
-
     user = forms.ModelChoiceField(
         queryset=User.objects.all(),
         widget=autocomplete.ModelSelect2(url="verv:user-autocomplete"),

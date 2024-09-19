@@ -19,7 +19,9 @@ urlpatterns = [
     path(
         "<slug:slug>/rediger/", views.edit_description, name="edit_description"
     ),
-    path("<slug:slug>/epost/", views.email_download_view, name="download_email"),
+    path(
+        "<slug:slug>/epost/", views.email_download_view, name="download_email"
+    ),
     path(
         "<slug:slug>/rediger-medlemmmer/",
         views.edit_committee_memberships,

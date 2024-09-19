@@ -54,7 +54,6 @@ class Position(models.Model):
     def consistent_permissions(
         sender, instance, action, reverse, model, pk_set, **kwargs
     ):
-
         if action == "pre_add":
             if len(pk_set) + instance.users.count() > instance.max_members:
                 raise ValidationError(

@@ -47,7 +47,6 @@ def delete_podcast(request, pk):
 
 
 def list_all(request):
-
     all_posts = Podcast.objects.filter(published=True).order_by(
         "-published_date"
     )

@@ -131,7 +131,6 @@ def vote_index(request, slug):
         request, group
     )
 
-
     points = POINTS
     if request.method == "POST":
         if not request.POST.get("showprize") or not request.POST.get(
