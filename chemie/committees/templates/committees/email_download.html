@@ -1,0 +1,92 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+
+{% block header %}
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/css/theme.materialize.min.css">
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.min.js"></script>
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/widgets/widget-output.min.js"></script>
+  <script type="text/javascript"
+          src="https://cdnjs.cloudflare.com/ajax/libs/jquery.tablesorter/2.28.9/js/jquery.tablesorter.widgets.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+  <script>
+    function tableToCSV(){
+        let csv_data = [];
+        let rows = document.getElementsByTagName('tr');
+        for (let i=1; i < rows.length; i++ ){
+            let cols = rows[i].querySelectorAll('td , th');
+            let csv_rows = [];
+
+            for (let j=0; j < cols.length; j++){
+                csv_rows.push(cols[j].innerHTML);
+
+            }
+            csv_data.push(csv_rows.join(","));
+        }
+        csv_data = csv_data.join('\n');
+        downloadCSV(csv_data);
+    }
+
+    function downloadCSV(csv){
+
+        CSVFile = new Blob([csv],{
+            type: "text/csv"
+        });
+
+        let temp_link = document.createElement('a');
+        temp_link.download = "{{ committee.title }}_epostliste.csv";
+        let url = window.URL.createObjectURL(CSVFile);
+        temp_link.href = url;
+
+        temp_link.style.display = "none";
+        document.body.appendChild(temp_link);
+
+        temp_link.click();
+        document.body.removeChild(temp_link);
+    }
+  </script>
+
+{% endblock header %}
+
+{% block nav_header %}
+{{ committee.title }}
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+   E-postliste
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+  <div class="col s12 m12 l10">
+    <p class="flow-text" >
+      Last ned e-postadressen til alle komiteemedlemmer som en csv fil.
+    </p>
+    <button class="download btn" onclick="tableToCSV()">Last ned</button>
+  </div>
+
+</div>
+<div class="row">
+  <div class="col s12 m12 l10">
+    <table id="myTable" class="tablesorter">
+      <thead>
+        <tr>
+            <th>E-post</th>
+        </tr>
+      </thead>
+
+      <tbody>
+      {% for member in members %}
+        <tr>
+            <td>{{ member.email }} </td>
+        </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock content %}
