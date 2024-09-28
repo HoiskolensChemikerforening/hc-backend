@@ -78,7 +78,7 @@ def ordListe(request):
 
 @permission_required("wordlist.add_word")
 def createWord(request):
-    checkwhatformform = CheckWhatFormForm()
+    
 
     if request.method == "POST" and checkwhatformform.is_valid():
         if checkwhatformform == "Et annet type ord":
@@ -166,8 +166,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
     else:
-        
-        
+        checkwhatformform = CheckWhatFormForm()
         
     context = {"checkwhatformform":checkwhatformform, "wordform":wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform} 
     return render(request, "createWord.html", context)
