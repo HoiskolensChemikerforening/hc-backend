@@ -1,6 +1,6 @@
 from django import forms
 import material as M
-from .models import Word, Category, Noun, Verb, Adjective
+from .models import AbstractWord, Word, Category, Noun, Verb, Adjective
 
 
 
@@ -36,12 +36,21 @@ class NounInput(forms.ModelForm):
 
     layout = M.Layout(
         M.Row("word"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),        
         M.Row("definite_singular"),
         M.Row("indefinite_plural"),
         M.Row("definite_plural"),
         
     )
-    
+
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
     class Meta:
         model = Noun 
         fields = "__all__"
@@ -54,10 +63,18 @@ class VerbInput(forms.ModelForm):
 
     layout = M.Layout(
         M.Row("word"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),
         M.Row("present"),
         M.Row("past"),
         M.Row("future"),
         
+    )
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
@@ -68,10 +85,18 @@ class VerbInput(forms.ModelForm):
 class AdjectiveInput(forms.ModelForm):
 
     layout = M.Layout(
-    M.Row("word"),
+        M.Row("word"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),
         M.Row("comparative"),
         M.Row("superlative"),
         
+    )
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
