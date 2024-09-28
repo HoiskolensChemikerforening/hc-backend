@@ -1,6 +1,6 @@
 
 from .models import Word, Category, Noun, Verb, Adjective
-from .forms import WordInput, WordSearchMainPage, CategorySortingMainPage, CategoryInput, NounInput, VerbInput, AdjectiveInput
+from .forms import WordInput, WordSearchMainPage, CategorySortingMainPage, CategoryInput, NounInput, VerbInput, AdjectiveInput, CheckWhatFormForm
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
@@ -78,64 +78,50 @@ def ordListe(request):
 
 @permission_required("wordlist.add_word")
 def createWord(request):
+    checkwhatformform = CheckWhatFormForm()
+
+    if request.method == "POST" and checkwhatformform.is_valid():
+        if checkwhatformform == "Et annet type ord":
+            wordform = WordInput()
+        if checkwhatformform == "Verb":
+            verbform = VerbInput()
+        if checkwhatformform == "Substantiv":
+            nounform = NounInput()
+        if checkwhatformform == "Adjektiv":
+            adjectiveform = AdjectiveInput()
+
+
     if request.method == "POST":
         wordform = WordInput(data=request.POST, files=request.FILES)
         nounform = NounInput(data=request.POST, files=request.FILES)
         verbform = VerbInput(data=request.POST, files=request.FILES)
         adjectiveform = AdjectiveInput(data=request.POST, files=request.FILES)
         
+        if "nytt" in request.POST and nounform.is_valid():       
+            nounform_instace = nounform.save(commit=False)
+            nounform_instace.author = request.user
+            nounform_instace.save()
+            nounform.save_m2m()
+
+        if "nytt" in request.POST and verbform.is_valid():       
+            verbform_instace = verbform.save(commit=False)
+            verbform_instace.author = request.user
+            verbform_instace.save()
+            verbform.save_m2m()
+
+        if "nytt" in request.POST and adjectiveform.is_valid():       
+            adjectiveform_instace = adjectiveform.save(commit=False)
+            adjectiveform_instace.author = request.user
+            adjectiveform_instace.save()
+            adjectiveform.save_m2m()
+
+
         if "nytt" in request.POST and wordform.is_valid():
-            referanse = 0
-            try:
-                if "nytt" in request.POST and nounform.is_valid():
-                    nounform_instace = nounform.save(commit = False)
-                    nounform_instace.save()
-                    referanse = 1
-                                                                     
-            except:
-                try:
-                    if "nytt" in request.POST and verbform.is_valid():
-                        verbform_instace = verbform.save(commit = False)
-                        verbform_instace.save()
-                        referanse = 2
-                        
-                except:
-                    try:
-                        if "nytt" in request.POST and adjectiveform.is_valid():
-                            adjectiveform_instace = adjectiveform.save(commit = False)
-                            adjectiveform_instace.save()
-                            referanse = 3
-                            
-                    except:
-                        pass
-        
             wordform_instace = wordform.save(commit=False)
             wordform_instace.author = request.user
             wordform_instace.save()
             wordform.save_m2m()
 
-            ordet = get_object_or_404(Word, word = wordform.cleaned_data["word"])
-
-            if referanse == 0:
-                pass
-
-            if referanse == 1:
-                for i in range(len(Noun.objects.all())):
-                    if str(Noun.objects.all()[i]) == str(nounform.cleaned_data["indefinite_singular"]):
-                        ordet.noun = Noun.objects.all()[i]
-                        ordet.save()
-
-            if referanse == 2:
-                for i in range(len(Verb.objects.all())):
-                    if str(Verb.objects.all()[i]) == str(verbform.cleaned_data["infinitive"]):
-                        ordet.noun = Noun.objects.all()[i]
-                        ordet.save()
-
-            if referanse == 3:
-                for i in range(len(Adjective.objects.all())):
-                    if str(Adjective.objects.all()[i]) == str(adjectiveform.cleaned_data["positive"]):
-                        ordet.noun = Noun.objects.all()[i]
-                        ordet.save()
                 
             messages.add_message(
                 request,
@@ -145,58 +131,32 @@ def createWord(request):
                 )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
         
+
+
+        if nounform.is_valid():       
+            nounform_instace = nounform.save(commit=False)
+            nounform_instace.author = request.user
+            nounform_instace.save()
+            nounform.save_m2m()
+
+        if verbform.is_valid():       
+            verbform_instace = verbform.save(commit=False)
+            verbform_instace.author = request.user
+            verbform_instace.save()
+            verbform.save_m2m()
+
+        if adjectiveform.is_valid():       
+            adjectiveform_instace = adjectiveform.save(commit=False)
+            adjectiveform_instace.author = request.user
+            adjectiveform_instace.save()
+            adjectiveform.save_m2m()
+
         if wordform.is_valid():
-            referanse = 0
-            try:
-                if nounform.is_valid():
-                    nounform_instace = nounform.save(commit = False)
-                    nounform_instace.save()
-                    referanse = 1
-                                                                     
-            except:
-                try:
-                    if verbform.is_valid():
-                        verbform_instace = verbform.save(commit = False)
-                        verbform_instace.save()
-                        referanse = 2
-                        
-                except:
-                    try:
-                        if adjectiveform.is_valid():
-                            adjectiveform_instace = adjectiveform.save(commit = False)
-                            adjectiveform_instace.save()
-                            referanse = 3
-                            
-                    except:
-                        pass
-        
             wordform_instace = wordform.save(commit=False)
             wordform_instace.author = request.user
             wordform_instace.save()
             wordform.save_m2m()
 
-            ordet = get_object_or_404(Word, word = wordform.cleaned_data["word"])
-
-            if referanse == 0:
-                pass
-
-            if referanse == 1:
-                for i in range(len(Noun.objects.all())):
-                    if str(Noun.objects.all()[i]) == str(nounform.cleaned_data["indefinite_singular"]):
-                        ordet.noun = Noun.objects.all()[i]
-                        ordet.save()
-
-            if referanse == 2:
-                for i in range(len(Verb.objects.all())):
-                    if str(Verb.objects.all()[i]) == str(verbform.cleaned_data["infinitive"]):
-                        ordet.noun = Noun.objects.all()[i]
-                        ordet.save()
-
-            if referanse == 3:
-                for i in range(len(Adjective.objects.all())):
-                    if str(Adjective.objects.all()[i]) == str(adjectiveform.cleaned_data["positive"]):
-                        ordet.noun = Noun.objects.all()[i]
-                        ordet.save()
 
             messages.add_message(
                 request,
@@ -206,11 +166,10 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
     else:
-        wordform = WordInput()
-        nounform = NounInput()
-        verbform = VerbInput()
-        adjectiveform = AdjectiveInput()
-    context = {"wordform":wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform} 
+        
+        
+        
+    context = {"checkwhatformform":checkwhatformform, "wordform":wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform} 
     return render(request, "createWord.html", context)
 
 
