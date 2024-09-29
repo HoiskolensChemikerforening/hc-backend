@@ -917,12 +917,13 @@ class SetPagination(PageNumberPagination):
 class SocialListCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all().order_by("-date")
     serializer_class = SocialSerializer
+    pagination_class = SetPagination
 
 
 class SocialListCreateKommende(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
-    #pagination_class = SetPagination
+    pagination_class = SetPagination
 
 class SocialListCreateTidligere(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__lt=timezone.now()).order_by("-date")
@@ -936,6 +937,7 @@ class SocialListCreateMine(generics.ListCreateAPIView): #Mine social events
         return Social.objects.filter(attendees=user).order_by("-date")
 
     serializer_class = SocialSerializer
+    pagination_class = SetPagination
 
 class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
     queryset = SocialEventRegistration.objects.all()
