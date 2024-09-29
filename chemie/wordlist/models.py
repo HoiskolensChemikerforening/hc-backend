@@ -17,44 +17,51 @@ class AbstractWord(models.Model):
     picture = models.ImageField(upload_to = "posters", verbose_name="Bilde", null = True, blank = True)
     secret = models.BooleanField(default=False, verbose_name="Hemmelig?")
     category = models.ManyToManyField(Category, verbose_name="Kategori", blank=True)
+
+    class Meta: # Viktig for å kunne lage fields i subclasses (Noun, Verb, Adjective, Word) som ikkje skal komme i konflikt med AbstractWord
+        abstract = True # Definerer den som en kun abstract class, fordi det aldri vil eksisterer et objekt i AbstractWord
     
     
 
 class Noun(AbstractWord):
-    noun = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False)
-    indefinite_plural = models.CharField(max_length = 100, verbose_name = "ubestemt_flertall", unique = False)
-    definite_singular = models.CharField(max_length = 100, verbose_name = "bestemt_entall", unique = False)
-    definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = False)
+    noun = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False, blank=True)
+    indefinite_plural = models.CharField(max_length = 100, verbose_name = "ubestemt_flertall", unique = False, blank=True)
+    definite_singular = models.CharField(max_length = 100, verbose_name = "bestemt_entall", unique = False, blank=True)
+    definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = False, blank=True)
     
     def __str__(self):
-         return self.word
+         return self.noun
+
 
 class Verb(AbstractWord):
-    verb = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = False)
-    present = models.CharField(max_length = 100, verbose_name = "presens", unique = False)
-    past = models.CharField(max_length = 100, verbose_name = "preteritum", unique = False)
-    future = models.CharField(max_length = 100, verbose_name = "presens futurum", unique = False)
+    verb = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = False, blank=True)
+    present = models.CharField(max_length = 100, verbose_name = "presens", unique = False, blank=True)
+    past = models.CharField(max_length = 100, verbose_name = "preteritum", unique = False, blank=True)
+    future = models.CharField(max_length = 100, verbose_name = "presens futurum", unique = False, blank=True)
 
     def __str__(self):
-         return self.word
+        return self.verb
+
 
 
 class Adjective(AbstractWord):
-    word = models.CharField(max_length = 100, verbose_name = "positiv", unique = False)
-    comparative = models.CharField(max_length = 100, verbose_name = "komparativ", unique = False)
-    superlative = models.CharField(max_length = 100, verbose_name = "superlativ", unique = False)
+    adjective = models.CharField(max_length = 100, verbose_name = "positiv", unique = False, blank=True)
+    comparative = models.CharField(max_length = 100, verbose_name = "komparativ", unique = False, blank=True)
+    superlative = models.CharField(max_length = 100, verbose_name = "superlativ", unique = False, blank=True)
 
     def __str__(self):
-         return self.word
+        return self.adjective
     
+
+
 class Word(AbstractWord):
-    word = models.CharField(max_length = 100, verbose_name = "Ord", unique = True)
+    word = models.CharField(max_length = 100, verbose_name = "Ord", unique = True, blank=True)
 
     def __str__(self):
         return self.word
 
 
-    
+
  
 
 
