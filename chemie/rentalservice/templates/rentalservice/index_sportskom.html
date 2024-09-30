@@ -1,0 +1,79 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Sportskomiteen
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m12 l8" > <!---size of the layout--->
+        <div class="container" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-6" style="margin-bottom: 40px;">
+                <p class="flow-text">
+                    Vi er sportskomiteen! Vi har som ansvar å arrangere BlotsCup, HC-fjelltur, Gaukerenn og andre sportslige begivenheter.
+                    Det er også mulig å leie utstyr fra oss. 
+                    </p>
+                    <br>
+                    <h4>Fotoboks</h4>
+                    <p class="flow-text">Ved å leie ut fotoboksen vår, sikrer du fantastiske bilder på ditt arrangement. 
+                    Prisen inkluderer opprigg, nedrigg og redigering av bilder. 
+                    OBS! Man er selv ansvarlig for å fikse transport av fotoboksen til og fra gløshaugen.
+                    <br> 
+                    <i>Pris: 1500 kr inkl. mva</i></p>
+                    <div class="row" style="justify-content: center;">
+                        <img type="image/jpg" src="/static/images/JR-3832.jpg" alt="Fotoboks_bilde_1" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem; ">
+                        <img type="image/jpg" src="/static/images/Fotoboks-010.JPG" alt="Fotoboks_bilde_2" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem;">
+                    </div>
+                    <br><br>
+                    <h4>Fotograf</h4>
+                    <p class="flow-text"> Vil du heller ha litt flere candid bilder? 
+                    Det kan du få løst ved å leie en av våre talentfulle fotografer. 
+                    Prisen inkluderer fire timer med fotografering og redigering av bildene.
+                    <br> 
+                    <i>Pris: 1500 kr inkl. mva</i>
+                    <div class="row" style="justify-content: center;">
+                        <img type="image/jpg" src="/static/images/fotograf1.JPG" alt="Fotograf_bilde_1" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem; ">
+                        <img type="image/jpg" src="/static/images/fotograf2.jpg" alt="Fotograf_bilde_2" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem;">
+                    </div>
+                    <br><br>
+                    <h4>Utstyr</h4>
+                    <p class="flow-text">Er du litt av en fotograf selv, men mangler litt utstyr? Det er også mulig å leie mye av kamera-utstyret vårt. 
+                    Du kan leie lys, blitz, mikrofon eller kamera. Prisen varierer fra utstyr til utstyr.
+                    <br>
+                    <i>Pris: 400 kr - 1500 kr inkl. mva</i>
+                    <br><br>
+                    Er du Chemiker? Da får du rabatt på utstyr fra oss! 
+                    Er det et arrangement der minst et helt klassetrinn er invitert (evt. åpent for deltakelse fra hele foreningen) får du 50% rabatt. 
+                    Alle komitéer som arrangerer fellesarrangementer i HC får låne utstyr gratis.
+                    <br><br>
+                    Ta kontakt via kontakt-knappen for å avtale.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m12 l4" style="max-width:350px;" >
+        <!--Kontaktskjema-->
+        <h2 class="heading">Kontakt</h2>
+        <div class="col coffee-box" style="width: 100%; height:auto;">
+          <a href="hc-backend/chemie/chemie/rentalservice/templates/rentalservice/contact_sportskom.html" style="width: 100%;">
+            <div class="row" style="display: flex; align-items: center;">
+              <div class="col s4 m3 l4">
+                <i class="material-icons micon" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+                max-height: 5rem; margin: 2rem; transform: scale(2); color:#0b3954;" >shopping_cart</i> 
+              </div>
+              <div class="col s8 m9 l8">
+                <p style="color: black;">Ønsker du å leie noe? <br>Ta kontakt her!</p>
+              </div>
+            </div>
+          </a>
+        </div>
+      </div>      
+</div>
+
+{% endblock %}
