@@ -137,3 +137,6 @@ def contact_page(request):
 
 def contact_page_promo(request):
     return render(request, "rentalservice/contact_page_promo.html")
+
+def contact_page_sportskom(request):
+    return render(request, "rentalservice/contact_sportskom.html")
