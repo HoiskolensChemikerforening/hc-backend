@@ -21,6 +21,10 @@ def index_promo(request):
 
     return render(request, "rentalservice/index_promo.html")
 
+def index_sportskom(request):
+
+    return render(request, "rentalservice/index_sportskom.html")
+
 
 @permission_required("rentalservice..add_rentalobject")
 def new_object(request):
