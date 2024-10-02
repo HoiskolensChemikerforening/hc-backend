@@ -7,56 +7,19 @@ app_name = "events"
 
 # Sosial
 urlpatterns = [
-    path(
-        "", login_required(views.ListSocialView.as_view()), name="index_social"
-    ),
-    path(
-        "tidligere/",
-        login_required(views.ListPastSocialView.as_view()),
-        name="past_social",
-    ),
+    path("", login_required(views.ListSocialView.as_view()), name="index_social"),
+    path("tidligere/", login_required(views.ListPastSocialView.as_view()), name="past_social"),
     path("opprett/", views.CreateSocialView.as_view(), name="create_social"),
-    path(
-        "rediger/<int:pk>/", views.EditSocialView.as_view(), name="edit_social"
-    ),
-    path(
-        "<int:pk>/",
-        login_required(views.ViewSocialDetailsView.as_view()),
-        name="detail_social",
-    ),
-    path(
-        "registrer/<int:pk>/",
-        login_required(views.SocialBaseRegisterUserView.as_view()),
-        name="register_social",
-    ),
-    path(
-        "adminliste/<int:pk>/",
-        views.SocialEnlistedUsersView.as_view(),
-        name="adminlist_social",
-    ),
+    path("rediger/<int:pk>/", views.EditSocialView.as_view(), name="edit_social"),
+    path("<int:pk>/", login_required(views.ViewSocialDetailsView.as_view()), name="detail_social"),
+    path("registrer/<int:pk>/", login_required(views.SocialBaseRegisterUserView.as_view()), name="register_social"),
+    path("adminliste/<int:pk>/", views.SocialEnlistedUsersView.as_view(), name="adminlist_social"),
     path("<int:pk>/checkin/", views.check_in_to_social, name="checkin_social"),
-    path(
-        "adminliste/betalingsstatus/",
-        views.change_payment_status,
-        name="payment_status_social",
-    ),
-    path(
-        "slett/<int:pk>/",
-        views.DeleteSocialView.as_view(),
-        name="delete_social",
-    ),
-    path(
-        "adminliste/oppmotestatus/",
-        views.change_arrival_status,
-        name="arrival_status_social",
-    ),
-    path(
-        "slett/",
-        permission_required("events.delete_event")(
-            views.ListSocialDeleteView.as_view()
-        ),
-        name="delete_list_social",
-    ),
+    path("adminliste/betalingsstatus/", views.change_payment_status, name="payment_status_social"),
+    path("slett/<int:pk>/", views.DeleteSocialView.as_view(), name="delete_social"),
+    path("adminliste/oppmotestatus/", views.change_arrival_status, name="arrival_status_social"),
+    path("slett/", permission_required("events.delete_event")(views.ListSocialDeleteView.as_view()), name="delete_list_social"),
+
     #API
     path("api/sosial/", views.SocialListCreate.as_view(), name="api_sosial"),
     path("api/sosial/kommende/", views.SocialListCreateKommende.as_view(), name="api_sosial_kommende"),
