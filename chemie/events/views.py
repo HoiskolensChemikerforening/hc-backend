@@ -947,22 +947,26 @@ class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
 class BedpresListCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all().order_by("-date")
     serializer_class = BedpresSerializer
+    pagination_class = SetPagination
 
 class BedpresListKommende(generics.ListCreateAPIView):
     queryset = Bedpres.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = BedpresSerializer
+    pagination_class = SetPagination
 
 class BedpresListTidligere(generics.ListCreateAPIView):
     queryset = Bedpres.objects.filter(date__lt=timezone.now()).order_by("-date")
     serializer_class = BedpresSerializer
+    pagination_class = SetPagination
 
 class BedpresListCreateMine(generics.ListCreateAPIView): #Mine bedpres events
     def get_queryset(self): #Må overstyre get metoden
-        # Filter the queryset to show only 'Social' instances associated with the authenticated user.
+        # Filter the queryset to show only 'karrierel' instances associated with the authenticated user.
         user = self.request.user
         return Bedpres.objects.filter(attendees=user).order_by("-date")
 
     serializer_class = BedpresSerializer
+    pagination_class = SetPagination
 
 class BedpresRegistrationListCreate(generics.ListCreateAPIView):
     queryset = BedpresRegistration.objects.all()
