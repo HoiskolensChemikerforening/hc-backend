@@ -54,4 +54,26 @@
       </form>
     </div>
   </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const textarea = document.getElementById('id_description');
+
+        // Function to resize the textarea based on its content
+        function autoResize() {
+            textarea.style.height = 40+'px'; // Reset the height
+                        // If the content exceeds the textarea, resize it to match the scrollHeight
+            if (textarea.scrollHeight > textarea.clientHeight) {
+                textarea.style.height = textarea.scrollHeight + 'px';
+            }
+        }
+
+        // Call autoResize on input event (when the user types)
+        textarea.addEventListener('input', autoResize);
+
+        // Optionally, call it on page load to fit initial content
+        autoResize();
+    });
+</script>
+
 {% endblock content %}
