@@ -14,7 +14,6 @@ from chemie.committees.serializers import CommitteeSerializer
 class AttendeeSerializer(serializers.ModelSerializer):
     full_name = serializers.CharField(source="get_full_name")
     grade = serializers.IntegerField(source="profile.grade")
-    #status = serializers.IntegerField(source="event.status")
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name", "full_name", "grade")
@@ -23,11 +22,12 @@ class AttendeeSerializer(serializers.ModelSerializer):
 class SocialSerializer(serializers.ModelSerializer):
     author = UserSerializer()
     committee = CommitteeSerializer()
-    attendees = AttendeeSerializer(read_only=True, many=True)
-
+    confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
+    waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
     class Meta:
         model = Social
         fields = "__all__"
+
 
 class SocialEventRegistrationSerializer(serializers.ModelSerializer):
     event = SocialSerializer()

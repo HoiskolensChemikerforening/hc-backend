@@ -154,6 +154,20 @@ class BaseEvent(models.Model):
     class Meta:
         abstract = True
 
+    def get_confirmed_users(self):
+        confirmed_user_registrations = self.attendees.through.objects.filter(
+            status=REGISTRATION_STATUS.CONFIRMED, event=self
+        )
+        confirmed_users= [registration.user for registration in confirmed_user_registrations]
+        return confirmed_users
+
+    def get_waiting_users(self):
+        waiting_user_registrations = self.attendees.through.objects.filter(
+            status=REGISTRATION_STATUS.WAITING, event=self
+        )
+        waiting_users = [registration.user for registration in waiting_user_registrations]
+        return waiting_users
+
 
 class Social(BaseEvent):
     author = models.ForeignKey(
