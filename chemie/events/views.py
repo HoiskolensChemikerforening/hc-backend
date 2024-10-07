@@ -951,6 +951,10 @@ class SocialDetailDelete(generics.DestroyAPIView):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
 
+class SocialDetailUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Social.objects.all()
+    serializer_class = SocialSerializer
+
 class BedpresListCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all().order_by("-date")
     serializer_class = BedpresSerializer
