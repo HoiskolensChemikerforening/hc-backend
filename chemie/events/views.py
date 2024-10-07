@@ -943,6 +943,9 @@ class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
     queryset = SocialEventRegistration.objects.all()
     serializer_class = SocialEventRegistrationSerializer
 
+class SocialDetailCreate(generics.CreateAPIView):
+    queryset = Social.objects.all()
+    serializer_class = SocialSerializer
 
 class BedpresListCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all().order_by("-date")

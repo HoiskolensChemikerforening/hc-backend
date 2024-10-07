@@ -28,6 +28,7 @@ urlpatterns = [
     path("api/sosialregistrering/<int:pk>/",views.SocialEventRegistrationDetail.as_view()),
     path("api/sosial/mine/", views.SocialListCreateMine.as_view(), name="api_sosial_mine"),
     path("api/sosial/tidligere/", views.SocialListCreateTidligere.as_view(), name="api_sosial_tidligere"),
+    path("api/sosial/opprett/", views.SocialDetailCreate.as_view(), name="api_detail_create"),
 ]
 
 # Karriere
