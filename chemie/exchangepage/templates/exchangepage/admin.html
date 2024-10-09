@@ -1,0 +1,103 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+
+{% block extra_css %}
+
+{% endblock %}
+
+{% block nav_header %}
+  Reisebrev
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Admin
+{% endblock nav_sub_header %}
+
+{% load material_form %}
+{% block content %}
+<div class="row">
+  <div class="col s9 m10 l10">
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+        <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
+        <a class="breadcrumb">Admin</a>
+    </div>
+  </div>
+  <div class="col s3 m2 l2" style="display: flex;justify-content: center">
+    <!-- Trigger for the Modal -->
+    <a class="btn-floating btn-large modal-trigger" href="#mobileModal">
+      <i class="material-icons" style="font-size: 2.5rem">help_outline</i>
+    </a>
+  </div>
+</div>
+
+<p class="flow-text">Velg reisebrev å endre!</p>
+  <ul class="collection">
+    {% for travelletter in travelletters %}
+       <div class="col s12 m6 l3" style="padding-bottom: 5px">
+              <a href="{% url 'exchangepage:admindetail' travelletter.id %}" class="waves-effect waves-light btn-large" style="width: 100%"><i class="material-icons left">person</i>
+                <div style="display: flex;flex-direction: row;justify-content: space-between">
+                  <div style="padding-right: 10px">{{travelletter.user}}</div>
+                  <div style="padding-right: 10px">{{travelletter.city}}</div>
+                </div>
+              </a>
+            </div>
+    {% endfor %}
+  </ul>
+
+<!-- Add Button -->
+{% if perms.exchangepage %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">edit</i>
+  </a>
+  <ul>
+    {% if perms.exchangepage.add_travelletter %}
+    <li>
+      <a class="btn-floating blue" href="{% url 'exchangepage:create' %}"><i class="material-icons">add</i></a>
+      <a class="btn-floating mobile-fab-tip">Nytt Reisebrev</a>
+    </li>
+    {% endif %}
+    {% if perms.exchangepage.change_travelletter %}
+      <li>
+        <a class="btn-floating yellow" href="{% url 'exchangepage:adminquestion' %}"><i
+            class="material-icons">sync</i></a>
+        <a class="btn-floating mobile-fab-tip">Rediger Spørsmål</a>
+      </li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+<!-- modal info -->
+<div id="mobileModal" class="modal">
+  <div class="modal-content">
+    <h4>Velkommen til Admin</h4>
+    <p><b>Slik funker Utvekslingssiden:</b></p>
+    <p><b>Legge til:</b> Start med å legge til aktuelle spørsmål under <b>Rediger Spørsmål</b>.
+    Når spørsmålene er lagt til kan du starte arbeidet med å legge inn Reisebrev under <b>Nytt Reisebrev</b>.
+    Skjemaet krever at alle punker i reisebrevet fylles ut, men bilder og spørsmål som fylles ut på de neste sidene
+    kan fylles ut ved en senere anledning. <br> Merk at når reisebrevet er opprettet vil det bli synlig for brukerne selv
+    uten bilder og svar, så det kan være lurt å ha det meste av info for hånden ved utfylling av skjema. <br> <br>
+
+    <b>Sletting</b>: Bilder og svar på spørsmål kan slettes uten at reisebrevet slettes. Dersom reisebrevet slettes
+    vil bilder og tilhørende svar på spørsmål også slettes. Spørsmål kan ikke slettes, dersom du ønsker å slette disse
+    må du kontakte Webkom. <br> <br>
+    Har du spørsmål? Kontakt Webkom
+  </p>
+  </div>
+  <div class="modal-footer">
+    <a href="#!" class="modal-close waves-effect waves-green btn-flat">Lukk</a>
+  </div>
+</div>
+
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+  // Initialize Modal
+  document.addEventListener('DOMContentLoaded', function() {
+    var elems = document.querySelectorAll('.modal');
+    var instances = M.Modal.init(elems);
+  });
+</script>
+{% endblock %}

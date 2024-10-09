@@ -2,6 +2,7 @@ const christmasSymbols = ["❄️", "❄️", "❄️", "🎁", "🎄", "🎅"];
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
+const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>25.09.24","🕸️", "💻", "🔌", "‼️", "👩‍💻", "👨‍💻","🍰", "❤️","../../static/images/holiday_images/webkom.png", " ", " ", " "];
 const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
 const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart1.png",
@@ -12,7 +13,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart6.png"
 ];
 
-const rainSpeed = 100; // Adjust this value to set the rain speed
+const rainSpeed = 40; // Adjust this value to set the rain speed
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -27,6 +28,8 @@ function selectSymbols(choose_your_holiday) {
     return paulImages;
   } else if (choose_your_holiday === "mustache") {
     return mustacheNovemberImages;
+  } else if (choose_your_holiday === "webkom"){
+    return webkomSymbols;
   }
   return [ ]; // Return an empty array if the holiday is not recognized
 }
@@ -107,6 +110,10 @@ function createAndAnimateElement() {
   element.style.left = randomWidth + 'px';
   element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
   element.style.animationDelay = randomAnimationDelay + 's';
+  element.style.color = 'hsl('+(Math.random()*360|0)+',80%,50%)';
+  element.style.fontWeight = "bold";
+  element.style.width = "auto";
+  element.style.textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;";
   rainContainer.appendChild(element);
 
   // Remove the oldest element when exceeding the maximum

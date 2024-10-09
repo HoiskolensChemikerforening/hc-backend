@@ -650,6 +650,17 @@ p {
   padding: 0rem;
 }
 
+.refund-list {
+  margin-left: 20px;
+  margin-top: 0px;
+}
+
+@media only screen and (max-width: 500px){
+  .refund-list {
+    margin-left: 0px;
+    margin-top: 0px;
+}  }
+
 @keyframes fall {
   0% {
     opacity: 1;
@@ -683,6 +694,21 @@ p {
     width: 2rem;
     height: 1rem;
 }  }
+
+.until__text {
+  margin: auto;
+  margin-top: 0.5rem;
+  margin-bottom: 1rem;
+  color:black;
+  font-size: 30px;
+  text-align: center
+}
+
+@media only screen and (max-width: 500px){
+  .until__text {
+    font-size: 25px;
+}  }
+
 @keyframes swing {
   0% {
     transform: translateX(0);

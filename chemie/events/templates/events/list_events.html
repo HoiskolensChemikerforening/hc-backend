@@ -5,40 +5,90 @@
   }
 </style>
 <div class="row">
-  {% for event in object_list %}
-    <div class="col s12 m10 l6">
-      <div class="card medium">
-        <div class="card-image">
-          <a href="{{ event.get_absolute_url }}">
-            {% thumbnail event.image "630x400" crop="center" as im %}
-              <img src="{{ im.url }}">
-            {% endthumbnail %}
-          </a>
-          <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
-            <h5 style="font-size: 1.34rem;">{{ event.date|date:"j F - H:i" }}</h5>
-          </a>
-        </div>
-        <div class="card-content">
-          <p class="flow-text truncate">
-            {{ event.title }}
-          </p>
-              {% if event.sluts == 0 %}
-              <p>Arrangementet er åpent for alle!</p>
-              <div class="card-action">
-                <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
-              </div>
-            {% else %}
-          <p>{{ event.registered_users|default_if_none:0 }} av {{ event.sluts }} påmeldte</p>
-          <div class="progress">
-            <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
+  {% if not type%}
+      {% for event in object_list %}
+        <div class="col s12 m10 l6">
+          <div class="card medium">
+            <div class="card-image">
+              <a href="{{ event.get_absolute_url }}">
+                {% thumbnail event.image "630x400" crop="center" as im %}
+                  <img src="{{ im.url }}">
+                {% endthumbnail %}
+              </a>
+              <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
+                <h5 style="font-size: 1.34rem;">{{ event.date|date:"j F - H:i" }}</h5>
+              </a>
+            </div>
+            <div class="card-content">
+              <p class="flow-text truncate">
+                {{ event.title }}
+              </p>
+                {% if event.tentative %}
+                    <p>Informasjon kommer!</p>
+                    <div class="card-action">
+                    <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
+                  </div>
+                {% else %}
+                    {% if event.sluts == 0 %}
+                      <p>Arrangementet er åpent for alle!</p>
+                      <div class="card-action">
+                        <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
+                      </div>
+                    {% else %}
+                      <p>{{ event.registered_users|default_if_none:0 }} av {{ event.sluts }} påmeldte</p>
+                      <div class="progress">
+                        <div class="determinate" style="width: {{ event.percentage_filled }}%"></div>
+                      </div>
+                    <div class="card-action">
+                      <a href="{{ event.get_absolute_registration_url }}" class="left">Til påmelding</a>
+                      <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
           </div>
-        <div class="card-action">
-          <a href="{{ event.get_absolute_registration_url }}" class="left">Til påmelding</a>
-          <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
         </div>
-      {% endif %}
+      {% endfor %}
+    {% elif type == "Waiting" %}
+      {% for event, queue_pos in object_list %}
+        <div class="col s12 m10 l6">
+          <div class="card medium">
+            <div class="card-image">
+              <a href="{{ event.get_absolute_url }}">
+                {% thumbnail event.image "630x400" crop="center" as im %}
+                  <img src="{{ im.url }}">
+                {% endthumbnail %}
+              </a>
+              <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
+                <h5 style="font-size: 1.34rem;">{{ event.date|date:"j F - H:i" }}</h5>
+              </a>
+            </div>
+            <div class="card-content">
+              <p class="flow-text truncate">
+                {{ event.title }}
+              </p>
+                {% if event.tentative %}
+                    <p>Informasjon kommer!</p>
+                    <div class="card-action">
+                    <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
+                  </div>
+                {% else %}
+                    {% if event.sluts == 0 %}
+                      <p>Arrangementet er åpent for alle!</p>
+                      <div class="card-action">
+                        <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
+                      </div>
+                    {% else %}
+                      <p> Du er nummer {{ queue_pos }} på ventelisten </p>
+                    <div class="card-action">
+                      <a href="{{ event.get_absolute_registration_url }}" class="left">Til påmelding</a>
+                      <a href="{{ event.get_absolute_url }}" class="right">Les mer</a>
+                    </div>
+                    {% endif %}
+                {% endif %}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
-  {% endfor %}
+      {% endfor %}
+    {% endif %}
 </div>

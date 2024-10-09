@@ -12,7 +12,8 @@
   display:flex;
   align-items: center;
   justify-content: flex-start;
-  height:100vh;
+  /*height:100vh;*/
+  min-height: 100vh;
   padding: 25px;
 }
 .divbackground{
@@ -178,7 +179,8 @@
 }
 
 .draggable-list .country-name {
-  margin: 0 20px 0 0;
+  /*margin: 0 20px 0 0;*/
+  margin: 0 0px 0 0;
 
 }
 
@@ -201,6 +203,7 @@
   z-index: 100;
   max-width: 527px;
   width: 50vw;
+  height: 80px;
 }
 
 .selected {
@@ -235,7 +238,7 @@
   margin-bottom: 0;
   height:30px;
 }
-.legend p[id] {
+#legendpoints {
   background-color: var(--dark-background);
 }
 
@@ -244,7 +247,8 @@
   background-color: var(--dark-background);
   color: var(--text-color);
   margin: auto;
-  width: 100px;
+  width: 50%;
+  height: 30px;
 }
 .container-btn {
   width:100%;
@@ -331,6 +335,7 @@
   border-radius: 5px;
   border-color: var(--text-color);
   color: var(--text-color);
+  max-width: 100%;
 }
 
 .showfiaskoform > select > option {
@@ -371,5 +376,38 @@
   padding-left: 26px;
 }
 
+@media only screen and (max-width: 510px){
+  .divbackground{
+    max-width:85vw;
+  }
+}
+
+@media only screen and (max-width: 350px) {
+  .legend p {
+    font-weight: bold;
+    text-align: center;
+    width: 40px;
+    margin-bottom: 0;
+    height: 30px;
+  }
+  .draggable-list .points {
+    background-color: var(--dark-background);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 28px;
+    width: 40px;
+    height: 80px;
+  }
+  #legendpoints{
+    padding-left: 10px;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    background-color: var(--dark-background);
+  }
+  #legendcountry {
+    padding-left: 10px;
+  }
 
 
+}

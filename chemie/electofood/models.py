@@ -91,6 +91,33 @@ class ElectionQuestionForm(models.Model):
                 committes.append(committe)
         return committes
 
+    def userHasAnswered(self, user):
+        """
+        Checks if a user has answered every question at least once.
+        Args:
+            user: User
+        Returns:
+            userHasAnswered: boolean
+        """
+
+        # Get all questions
+        questions = self.electionquestion_set.all()
+
+        # Get all related answers
+        answers = UserAnswer.objects.filter(
+            user=user, question__question_form=self
+        )
+
+        answered_questions = ElectionQuestion.objects.filter(
+            question_form=self, answer__in=answers
+        ).distinct()
+
+        # Return True if there ar
+        if len(answered_questions) == len(questions):
+            return True
+
+        return False
+
     def get_max_disagreement_sum(self):
         """
         Get the maximum disagreement sum.

@@ -1,0 +1,186 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Refusjonsskjema
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    {% if annual %}
+  Årsrapport {{ year }}
+    {%  else %}
+    Søknader
+    {% endif %}
+{% endblock nav_sub_header %}
+
+{% block content %}
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "refund:index" %}" class="breadcrumb">Refusjonsskjema</a>
+    <a href="{% url "refund:admin_refunds" %}" class="breadcrumb">Søknader</a>
+        {% if annual %}
+    <a href="{% url "refund:annual_account" year=year %}" class="breadcrumb">Årsrapport {{ year }}</a>
+    {% endif %}
+  </div>
+
+    <div class="row">
+
+
+    <div class="col s12 m4 l4">
+    <div class="card">
+    <div class="card-content">
+         <span><b>Fullført</b></span></span>
+        <hr>
+        <p><b>Antall:</b> {{ approved|length }}</p>
+        <p><b>Total sum:</b> {{ approvedsum }} kr</p>
+    </div>
+    </div>
+    </div>
+
+    <div class="col s12 m4 l4">
+    <div class="card">
+    <div class="card-content">
+         <span><b>Under behandling</b></span>
+        <hr>
+        <p><b>Antall:</b> {{ pending|length }}</p>
+        <p><b>Total sum: </b>{{ pendingsum }} kr</p>
+    </div>
+    </div>
+    </div>
+
+    <div class="col s12 m4 l4">
+    <div class="card">
+    <div class="card-content">
+        <span><b>Avvist</b> </span>
+        <hr>
+        <p><b>Antall:</b> {{ rejected|length }}</p>
+        <p><b>Total sum:</b> {{ rejectsum }} kr</p>
+    </div>
+    </div>
+    </div>
+
+    </div>
+
+    <ul class="collapsible">
+    <li>
+      <div class="collapsible-header"><i class="material-icons" style="color:green">check</i> <b>Fullført ({{ approved|length }})</b></div>
+      <div class="collapsible-body">
+      <div class="card">
+
+    <div class="card-content">
+          <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <p style="font-weight: bold"> Refusjon </p>
+            <p style="font-weight: bold;"> Status </p>
+        </div>
+    {% for refund_request in approved %}
+        <hr>
+        <a href="{% url "refund:admin_detail" id=refund_request.id %}">
+        <div style="width: 100%; display: flex; justify-content: space-between">
+        <div>
+            <p style="font-weight: bold; color: black">{{ refund_request.created.date }}</p>
+            <p>{{ refund_request.user.first_name }} {{ refund_request.user.last_name }} ({{ refund_request.get_total }} kr)</p>
+        </div>
+        <div style="padding-top: 4px; padding-right: 5px;">
+                <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
+        </div>
+        </div></a>
+
+    {% endfor %}
+    <hr>
+    </div>
+        </div>
+
+      </div>
+    </li>
+    <li>
+      <div class="collapsible-header"><i class="material-icons" style="color:#f9cf00">access_time</i> <b>Under behandling ({{ pending|length }})</b></div>
+      <div class="collapsible-body">
+      <div class="card">
+
+    <div class="card-content">
+          <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <p style="font-weight: bold"> Refusjon </p>
+            <p style="font-weight: bold;"> Status </p>
+        </div>
+    {% for refund_request in pending %}
+        <hr>
+        <a href="{% url "refund:admin_detail" id=refund_request.id %}">
+        <div style="width: 100%; display: flex; justify-content: space-between">
+        <div>
+             <p style="font-weight: bold; color: black">{{ refund_request.created.date }}</p>
+            <p>{{ refund_request.user.first_name }} {{ refund_request.user.last_name }} ({{ refund_request.get_total }} kr)</p>
+        </div>
+        <div style="padding-top: 4px; padding-right: 5px;">
+            <i class="material-icons" style="color: #f9cf00; font-size: 3rem">access_time</i>
+        </div>
+        </div>
+        </a>
+
+    {% endfor %}
+    <hr>
+      </div>
+        </div>
+
+      </div>
+    </li>
+    <li>
+        <div class="collapsible-header"><i class="material-icons" style="color:red">close</i><b>Avvist ({{ rejected|length }})</b></div>
+      <div class="collapsible-body">
+      <div class="card">
+
+    <div class="card-content">
+              <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <p style="font-weight: bold"> Refusjon </p>
+            <p style="font-weight: bold;"> Status </p>
+        </div>
+    {% for refund_request in rejected %}
+        <hr>
+        <a href="{% url "refund:admin_detail" id=refund_request.id %}">
+        <div style="width: 100%; display: flex; justify-content: space-between">
+        <div>
+            <p style="font-weight: bold; color: black">{{ refund_request.created.date }}</p>
+            <p>{{ refund_request.user.first_name }} {{ refund_request.user.last_name }} ({{ refund_request.get_total }} kr)</p>
+        </div>
+        <div style="padding-top: 4px; padding-right: 5px;">
+                <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
+        </div>
+        </div></a>
+
+    {% endfor %}
+    <hr>
+      </div>
+        </div>
+
+      </div>
+    </li>
+  </ul>
+
+
+    <div>
+{% if annual %}
+<div class="card">
+
+    <div class="card-content">
+    <b>Informasjon</b>
+    <hr>
+    <p>Datoen på kvitteringen avgjør regnskapsåret til søknaden. Den tidligste datoen gjelder for søknader som inneholder kvitteringer fra to forskjellige regnskapsår. Etter fullført årsregnskap burde alle refusjonsskjemaer fra dette året slettes av kasserer. Dette gjøres for å ikke lagre personopplysningene lengre enn nødvendig. Refusjonsskjemaer kan slettes ved å trykke på knappen under. OBS! Dette vil slette informasjonen ugjenkallelig.</p>
+        <hr>
+    <a class="btn btn-primary red pull-center" style="margin: auto;min-width: 130px;" href="{% url "refund:delete_annual_account" year=year %}">Slett skjemaer fra {{ year }}</a>
+    </div>
+</div>
+    {% else %}
+   <ul class="collapsible">
+    <li>
+      <div class="collapsible-header"><i class="material-icons" style="color: black">collections_bookmark</i>Årsrapporter</div>
+      <div class="collapsible-body">
+          {%   for y in years %}
+              <a href="{% url "refund:annual_account" year=y %}"><div><p>Årsrapport {{ y }}</p></div></a>
+          {% endfor %}
+      </div>
+    </li>
+   </ul>
+    {% endif %}
+    {% include "permissions.html" %}
+    </div>
+{% endblock content %}

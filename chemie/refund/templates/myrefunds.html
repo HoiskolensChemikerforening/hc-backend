@@ -1,0 +1,55 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Refusjonsskjema
+{% endblock nav_header %}
+
+{% block content %}
+    <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s6"><a target="_self" href="{% url "refund:index" %}">Søk om refusjon</a></li>
+        <li class="tab col s6"><a class="active" target="_self" href="{% url "refund:myrefunds" %}">Mine Søknader</a></li>
+      </ul>
+    </div>
+    </div>
+    <div class="card">
+
+    <div class="card-content">
+    <hr>
+        <div style="width: 100%; display: flex; justify-content: space-between">
+            <p style="font-weight: bold"> Refusjon </p>
+            <p style="font-weight: bold;"> Status </p>
+        </div>
+    {% for refund_request in refund_requests %}
+        <hr>
+        <a href="{% url "refund:detail" id=refund_request.id %}">
+        <div style="width: 100%; display: flex; justify-content: space-between">
+        <div>
+             <p style="font-weight: bold; color: black">{{ refund_request.created.date }}</p>
+            <p>Total sum: {{ refund_request.get_total }} kr</p>
+        </div>
+        <div style="padding-top: 4px; padding-right: 5px;">
+            {% if refund_request.status == 1 %}
+                <i class="medium material-icons" style="color: red; font-size: 3rem">close</i>
+            {%  endif %}
+            {% if refund_request.status == 2 %}
+                <i class="material-icons" style="color: #f9cf00; font-size: 3rem">access_time</i>
+            {%  endif %}
+            {% if refund_request.status == 3 %}
+                <i class="material-icons" style="color: forestgreen; font-size: 3rem">check</i>
+            {%  endif %}
+        </div>
+        </div></a>
+
+    {% endfor %}
+    <hr>
+    </div>
+    </div>
+
+    <div>
+
+    </div>
+    {% include "permissions.html" %}
+
+  {% endblock content %}

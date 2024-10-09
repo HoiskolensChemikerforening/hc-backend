@@ -1,0 +1,38 @@
+{% extends "events/social/social_base.html" %}
+
+{% block nav_sub_header %}
+  Oversikt
+{% endblock nav_sub_header %}
+
+{# Main block #}
+{% block maincontent %}
+
+  <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s4"><a target="_self" href="{% url "events:index_social" %}#futureEvents">Kommende sosiale arrangementer</a></li>
+        <li class="tab col s4"><a class="active" target="_self" href="{% url "events:index_social" %}#myEvents">Mine festligheter</a></li>
+        <li class="tab col s4"><a target="_self" href="{% url "events:past_social" %}">Tidligere sosiale arrangementer</a></li>
+      </ul>
+
+      <div id="myAuthoredEvents" class="col s12">
+        <div class="row">
+                <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 30px; margin-top: 10px">
+                    <a class='btn-large' href="{% url "events:index_social" %}#myEvents">Tilbake</a>
+                </div>
+        </div>
+        {% if my_unpublished_events %}
+            <h3>Mine upubliserte arrangement</h3>
+            {% include "events/list_events.html" with object_list=my_unpublished_events %}
+          {% endif %}
+        {% if my_tentative_events %}
+            <h3>Tentative arrangement</h3>
+            {% include "events/list_events.html" with object_list=my_tentative_events %}
+        {% endif %}
+        <h3>Alle</h3>
+        {% include "events/list_events.html" with object_list=my_authored_events%}
+      </div>
+    </div>
+  </div>
+
+{% endblock %}

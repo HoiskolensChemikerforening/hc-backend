@@ -193,6 +193,7 @@ Kontoret
       <div class="modal-content">
         <div class="modal-header">
           <h5>Handlevogn</h5>
+
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">&times;</span>
           </button>
@@ -244,6 +245,7 @@ Kontoret
 
             </div>
           </div>
+
           <script>
             $("#cart-modal").on("shown.bs.modal", function () {
               $("#id_rfid").focus();
@@ -257,6 +259,77 @@ Kontoret
           </form>
           {% endif %}
         </div>
+      <!---{% if is_tablet_user %}
+          <style>
+          @keyframes moveText {
+            0% {
+                transform: translateX(100%);
+            }
+            100% {
+                transform: translateX(-100%);
+            }}
+          @keyframes moveText2 {
+            0% {
+                transform: translateX(0%);
+            }
+            100% {
+                transform: translateX(-200%);
+            }}
+
+           /* Colorful text animation */
+        @keyframes colorfulText {
+            0% {
+                color: red;
+            }
+            25% {
+                color: orange;
+            }
+            50% {
+                color: yellow;
+            }
+            75% {
+                color: green;
+            }
+            100% {
+                color: blue;
+            }
+        }
+           .moving-text {
+            font-size: 2rem;
+            font-weight: bold;
+            white-space: nowrap;
+            display: inline-block;
+            padding-right: 150pt;
+
+        }
+           #moving-text-1{
+               animation: moveText 10s linear infinite, colorfulText 5s linear infinite;
+           }
+           #moving-text-2 {
+               animation: moveText2 10s linear infinite, colorfulText 5s linear infinite;
+           }
+           .moving-text-item{
+               display: inline-block;
+           }
+           #moving-text-container{
+               display: flex;
+           }
+
+          </style>
+        <div style="border-top: 1px solid #e9ecef;padding: 1rem; overflow: hidden">
+            <div id="moving-text-container">
+            <div class="moving-text" id="moving-text-1">
+                <div class="moving-text-item" style="margin-right: 100pt"> Søk Webkom!!! </div>
+                <div class="moving-text-item"> Søknadsfrist: 25.09.2024 </div>
+            </div>
+            <div class="moving-text" id="moving-text-2" style="animation-delay: 5s;">
+                <div class="moving-text-item" style="margin-right: 100pt"> Søk Webkom!!! </div>
+                <div class="moving-text-item"> Søknadsfrist: 25.09.2024 </div>
+            </div>
+
+            </div>
+        </div>
+      {% endif %}-->
       </div>
     </div>
   </div>
