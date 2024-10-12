@@ -1,0 +1,17 @@
+{% if perms.refund %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.refund.delete_refundrequest %}
+            <li>
+            <a class="btn-floating " href="{% url "refund:admin_refunds" %}"><i
+                class="material-icons">list</i></a>
+            <a class="btn-floating mobile-fab-tip">Se søknader</a>
+            </li>
+    {% endif %}
+
+      </ul>
+    </div>
+  {% endif %}

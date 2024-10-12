@@ -5,7 +5,9 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
+<div class="hide-on-small-only">
   Oversikt
+</div>
 {% endblock nav_sub_header %}
 
 
@@ -17,8 +19,8 @@
   </style>
   <div class="row">
     {% for committee in committees %}
-      <div class="col s6 m6 l4">
-        <div class="card small">
+      <div class="col s12 m6 l4">
+        <div class="card small" style="height: 320px">
           <div class="card-image">
             <a href="{{ committee.get_absolute_url }}">
               {% thumbnail committee.image "400x300" crop="center" as im %}
@@ -26,7 +28,7 @@
               {% endthumbnail %}
             </a>
             <a class="card-title card-event-title" href="{{ committee.get_absolute_url }}">
-              <h5 style="font-size: 1.54rem;">{{ committee.title }}</h5>
+              <h5 class="truncate" style="font-size: 1.54rem;">{{ committee.title }}</h5>
             </a>
           </div>
           <div class="card-content">
@@ -35,13 +37,16 @@
             </p>
           </div>
           <div class="card-action">
-            <div class="valign-wrapper">
-              <a href="{{ committee.get_absolute_url }}">Detaljer</a>
-              <a href="mailto:{{ committee.email }}">
-                <i class="material-icons valign right small">email</i>
-              </a>
+            <div class="row valign-wrapper" style="margin: 0">
+              <div class="col s8 m8 l8">
+                <a href="{{ committee.get_absolute_url }}">Detaljer</a>
+              </div>
+              <div class="col s4 m4 l4" style="display: flex;justify-content: right">
+                <a href="mailto:{{ committee.email }}" class="valign-wrapper" style="margin: 0">
+                  <i class="material-icons valign small">email</i>
+                </a>
+              </div>
             </div>
-
           </div>
         </div>
       </div>

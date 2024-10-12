@@ -57,9 +57,9 @@ class OfficeApplication(models.Model):
     )
     # When application is sent
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
-    # The users student username
+    # The users student username (now student email)
     student_username = models.CharField(
-        max_length=20, default="NOT_VALID", verbose_name="Studentbrukernavn"
+        max_length=50, default="NOT_VALID", verbose_name="Student-e-post (@ntnu.no)"
     )
 
     def __str__(self):

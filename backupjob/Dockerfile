@@ -1,10 +1,11 @@
-FROM phusion/baseimage:latest
+FROM phusion/baseimage:jammy-1.0.1
 
 RUN apt-get update && apt-get install -y wget
-RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list.d/pgdg.list
-RUN wget --quiet -O - \ 
+RUN echo "deb http://apt-archive.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list.d/pgdg.list
+RUN wget --quiet -O - \
     https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
     apt-key add -
+
 RUN apt-get update && apt-get install -y \
     postgresql-client-9.6 \
     postfix \

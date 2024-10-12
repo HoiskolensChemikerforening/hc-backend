@@ -1,0 +1,197 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Refusjonsskjema
+{% endblock nav_header %}
+
+{% block extra_css %}
+<style>
+.errorlist {
+    color: red;
+}
+</style>
+{% endblock extra_css %}
+
+{% block content %}
+    <div class="row">
+    <div class="col s12">
+      <ul class="tabs z-depth-1">
+        <li class="tab col s6"><a class="active" target="_self" href="{% url "refund:index" %}">Søk om refusjon</a></li>
+        <li class="tab col s6"><a target="_self" href="{% url "refund:myrefunds" %}">Mine Søknader</a></li>
+      </ul>
+    </div>
+    </div>
+
+  <form id="form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
+<div class="card">
+
+    <div class="card-content">
+    <div>
+        <hr>
+        <div>
+        <p style="font-weight: bold">Informasjon</p>
+        <ul class="refund-list">
+            <li style="list-style-type: disc"> Utleggskjemaet skal leveres senest innen 2 måneder etter kjøpet. </li>
+            <li style="list-style-type: disc"> Det som skal refunderes på kvitteringen skal være godt markert (for eksempel med markeringstusj). Dette gjelder hvis det er flere beløp på samme kvittering som ikke skal refunderes.</li>
+            <li style="list-style-type: disc"> Refusjon for kakeutlegg skal ikke overstige 100 kr. For estimat av hjemmebakt kake (ikke posekake); se {% include "cake_calculator.html" %}. </li>
+            <li style="list-style-type: disc"> Ta kontakt på <a href="mailto:kasserer@hc.ntnu.no">kasserer@hc.ntnu.no</a> for spørsmål.</li>
+        </ul>
+
+        </div>
+        <hr>
+        <p style="font-weight: bold">Kontaktinformasjon</p>
+
+        <p> Navn: {{ user.first_name }} {{ user.last_name }}</p>
+        <p> E-post: {{ user.email }}</p>
+        <p> Mobilnummer: {{ user.profile.phone_number }}</p>
+        <hr>
+        <p style="font-weight: bold">Totalt beløp</p>
+        <p id="total-price">0 kr</p>
+        <hr>
+        <p style="font-weight: bold">Kontonummer</p>
+
+        {% for field in accountform %}
+            <div class="fieldWrapper">
+                {{ field.errors }}
+                {{ field }}
+            </div>
+        {% endfor %}
+    </div>
+        </div>
+</div>
+
+
+
+<div id="receipe-box">
+
+      {{ formset.management_form }}
+      {% for form in formset %}
+
+        <div class="refund-form">
+          <div class="card">
+  <div class="card-content">
+          <div style="width: 100%; display: flex; justify-content: space-between">
+              <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
+              <div class="close-receipt" style="display: none">
+                <i class="material-icons" style="color: black; opacity: 70%">clear</i>
+              </div>
+          </div>
+        <hr>
+          {{ form.as_p }}
+          </div>
+  </div>
+          </div>
+      {% endfor %}
+</div>
+<button class="btn btn-primary pull-right" id="add-form" type="button">Ny kvittering</button>
+          <input class="btn btn-primary pull-right" type='submit' value='Søk om refusjon'/>
+  </form>
+
+{% include "permissions.html" %}
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+<script>
+    // Container containing the receipts
+    const receiptbox = document.getElementById("receipe-box");
+    // Array to contain prices of the different receipts
+    let price_array = [];
+    // Array to contain the price input fields of different receipts
+    let priceinputs =  [...receiptbox.querySelectorAll('input[type="number"]')];
+    // Populate the priceinputs array with existing prices or 0
+    priceinputs.forEach((element)=>{
+        price_array.push(parseFloat(element.value) || 0)
+    })
+    // Variable containing the html container containing the total price
+    const total_price = document.getElementById("total-price");
+
+    // Update the total sum from price array
+    function updatePrices(){
+        // Sum all prices in price array to get total price
+        let sum  = price_array.reduce((accumulator, currentValue) => {
+            return accumulator + currentValue;
+        },0);
+        // Update the displayed total price
+        total_price.innerText = `${sum} kr`;
+    }
+
+    // Function to update the total price parameter if a given price input field is changed
+    function addSumPriceEventListener (inputfield, index){
+        // Add event listener to price input field
+        inputfield.addEventListener("input", ()=> {
+            // Update the price for this receipt in the price array
+            price_array[index] = parseFloat(inputfield.value) || 0;
+            updatePrices();
+        })
+    }
+    // Add event listener to all price input fields
+    priceinputs.forEach((element, index)=>{
+        addSumPriceEventListener(element, index);
+    });
+
+    // Initialize total sum
+    updatePrices()
+
+
+    //Code found on https://www.brennantymrak.com/articles/django-dynamic-formsets-javascript
+
+    // Array containing all receipts forms (kvittering)
+    let refundForm = document.querySelectorAll(".refund-form");
+    // Variable containing the whole form
+    let container = document.querySelector("#form-container");
+    // Variable containing the button to add a new receipt
+    let addButton = document.querySelector("#add-form");
+    // Variable containing the number for receipts on the current page
+    let totalForms = document.querySelector("#id_form-TOTAL_FORMS");
+
+    // Get the number of the last form on the page with zero-based indexing
+    let formNum = refundForm.length-1;
+
+    // Function to add a new form
+    function addForm(e) {
+        e.preventDefault();
+        //Clone the refund form
+        let newForm = refundForm[0].cloneNode(true);
+        //Regex to find all instances of the form number
+        let formRegex = RegExp(`form-(\\d){1}-`,'g');
+
+        //Increment the form number
+        formNum++;
+
+        //Update the new form to have the correct form number
+        newForm.innerHTML = newForm.innerHTML.replace(formRegex, `form-${formNum}-`);
+
+        // Clear fields
+        let inputBoxes = [...newForm.getElementsByTagName("input")];
+        inputBoxes.pop();
+        inputBoxes.forEach((element)=>{
+            element.value = '';
+        })
+
+        //Update receipt number
+        newForm.querySelectorAll(".receipt-counter")[0].innerText = `Kvittering ${formNum+1}`;
+
+        //Add event listener
+        let newInput =  newForm.querySelectorAll('input[type="number"]')[0];
+        let index = priceinputs.length;
+        priceinputs.push(newInput);
+        price_array.push(0);
+        newInput.value = '';
+        addSumPriceEventListener (newInput, index);
+        updatePrices();
+
+        //Insert the new form at the end of the list of forms
+        container.insertBefore(newForm, addButton);
+
+        //Increment the number of total forms in the management form
+        totalForms.setAttribute('value', `${formNum+1}`);
+    }
+
+    // Add an eventlistener to the new receipt button
+    addButton.addEventListener('click', addForm);
+</script>
+
+{% endblock footer_script %}

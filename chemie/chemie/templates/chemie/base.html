@@ -51,7 +51,7 @@
 </head>
 
 <body>
-
+  <div id="makeItRain"></div>
   <header>
     <nav class="top-nav">
       <div class="container">
@@ -145,16 +145,15 @@
               <ul>
                 <li><a href="{% url "profile:yearbook-index" %}" class="waves-effect">Klassekatalog</a></li>
                 <li><a href="{% url "merch:index" %}" class="waves-effect waves-teal">Merch</a></li>
-                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
-                <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
                 <li><a href="{% url "quiz:index" %}" class="waves-effect waves-teal">Quiz</a></li>
-                <li><a href="{% url "sugepodden:index" %}" class="waves-effect waves-teal">Sugepodden</a></li>
-                <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                <li><a href="{% url "shitbox:index" %}" class="waves-effect waves-teal">Sladreboks</a></li>
                 <li><a href="{% url "frontpage:officeaccess" %}" class="waves-effect">Søknad om kontortilgang</a> </li>
-                <li><a href="{% url "carousel:submit" %}" class="waves-effect waves-teal">Bilder</a></li>
+                <li><a href="{% url "frontpage:fundsapplication" %}" class="waves-effect">Søknad om midler</a></li>
+                <li><a href="{% url "refund:index" %}" class="waves-effect">Søknad om refusjon</a></li>
+                <li><a href="{% url "exchangepage:index" %}" class="waves-effect"> <div style="display: flex;flex-direction: row;justify-items: center; align-items: center">Utvekslingsside <i class="material-icons" style="padding-left: 10px">new_releases</i></div></a></li>
                 <li><a href="{% url "elections:index" %}" class="waves-effect">Valg</a></li>
                 <li><a href="{% url "electofood:index_valgomat" %}" class="waves-effect">Valgomat</a></li>
-                <li><a href="/s/veggvegg" class="waves-effect">World Wide Wegard</a></li>
+                <li><a href="{% url "wiki:root" %}" class="waves-effect">Wiki</a></li>
               </ul>
             </div>
           </li>
@@ -167,7 +166,14 @@
                   </ul>
                 </div>
               </li>
-            
+          <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">shopping_cart</i>Utleie</a>
+                <div class="collapsible-body">
+                  <ul>
+                    <li><a href="{% url 'rentalservice:index' %}" class="waves-effect">Audiochromatene</a></li>
+                    <li><a href="{% url 'rentalservice:index_promo' %}" class="waves-effect">Promoteringskomiteen</a></li>
+                  </ul>
+                </div> 
+            </li> 
         </ul>
       </li>
       <li class="bold"><a href="{% url "corporate:index" %}" class="waves-effect"><i class="material-icons micon">business</i>
@@ -176,11 +182,10 @@
             class="material-icons micon">home</i>Kontoret</a></li>
       <li class="bold"><a href="{% url "frontpage:calendar" %}" class="waves-effect"><i
             class="material-icons micon">date_range</i>Kalender</a></li>
+      
+      </li>
       <li class="bold"><a href="{% url "bokskap:index" %}" class="waves-effect"><i
             class="material-icons micon">inbox</i>Bokskap</a></li>
-
-      <li class="bold"><a href="{% url "rentalservice:index" %}" class="waves-effect"><i
-            class="material-icons micon">shopping_cart</i>Utleie</a></li>
     </ul>
   </header>
 
@@ -222,22 +227,32 @@
       <div class="row">
 
         <!-- About -->
-        <div class="col s12 m6 l4">
+        <div class="col s12 m4 l3">
           <h5 class="white-text">Om oss</h5>
           <p class="grey-text text-lighten-4">
             Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
           </p>
-
+        
           <a href="https://github.com/HoiskolensChemikerforening/website">
             <img src="{% static "images/github.svg" %}" alt="Github"
-              style="display: inline-block;vertical-align: middle;">
+                 style="display: inline-block;vertical-align: middle;">
             <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
           </a>
+          <br>
+        
+         
+          <div style="padding-top: 10px;">
+            <a class="grey-text text-lighten-4" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+          </div>
         </div>
 
+        
+        
+
       <!-- Media/Social -->
-      <div class="col s12 m6 l4">
+      <div class="col s12 m8 l9">
         <h5 class="white-text">Sosialt</h5>
+        <div class="col s12 m4 l3">
         <div class="valign-wrapper">
           <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
@@ -251,14 +266,65 @@
           </a>
         </div>
         <div class="valign-wrapper">
+          <a href="https://www.instagram.com/hcntnu/" target="_blank">
+            <img src ="/static/images/instagram-white-icon.png" alt="Instagram_logo"
+                style="max-width: 20px;" >       
+         </a>
+          <a href="https://www.instagram.com/hcntnu/" target="_blank">
+            <p class="left-align white-text" style="margin-left: 10px">Instagram</p>
+          </a>
+        </div>
+        </div>
+        <div class="col s12 m4 l3">
+
+          <div class="valign-wrapper">
+            <a href="https://www.youtube.com/@hcntnu" target="_blank" class="valign-wrapper">
+              <img src ="/static/images/youtube-app-white-icon.png" alt="YouTube_logo"
+                  style="max-width: 20px;" >       
+           </a>
+            <a href="https://www.youtube.com/@hcntnu" target="_blank">
+              <p class="left-align white-text" style="margin-left: 10px">YouTube</p>
+            </a>
+          </div>
+
+          
+
+        <div class="valign-wrapper">
           <a href="mailto:styret@hc.ntnu.no">
             <i class="material-icons valign left white-text">email</i>
           </a>
           <a href="mailto:styret@hc.ntnu.no">
             <p class="left-align white-text">Epost</p>
           </a>
+          </div>
         </div>
-        <a class="white-text" href="/s/kontaktinfo">Kontakt oss!</a>
+
+
+      
+        <div class="col s12 m4 l6 hide-on-small-only" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
+          <p class="grey-text text-lighten-4" style="position: relative; right: 23px;" >
+
+            I samarbeid med:
+          </p>
+          <img src="/static/images/Tekna_logo_Horisontal_Hvit.png" alt="Tekna_logo" style="height: auto; max-height: 50px; max-width: inherit;">
+        </div>
+        <div class="col s12 m4 l6 hide-on-med-and-up" >
+          <p class="grey-text text-lighten-4" style="margin-right: 50px; ">
+            I samarbeid med:
+          </p>
+          <img src="/static/images/Tekna_logo_Horisontal_Hvit.png" alt="Tekna_logo" style="height: auto; max-height: 50px; justify-content: center; max-width: inherit;">
+        </div>
+        
+      
+    
+        <div class="row">
+          <div class="col s12">
+              <div >
+                <div style="height: 18px;"></div>
+                  <a class="white-text" href="/s/kontaktinfo">Kontakt oss!</a>
+              </div>
+          </div>
+      </div>
       </div>
 
         <!-- Sponsors -->
@@ -267,12 +333,7 @@
         {% endcache %}
     </div>
 
-    <!-- Copyright, credits -->
-    <div class="footer-copyright">
-      <div class="container">
-        <a class="grey-text text-lighten-4 right" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
-      </div>
-    </div>
+    
   </footer>
 
   {% block footer_js_files %}
@@ -320,6 +381,10 @@
     ga('create', 'UA-52614731-1', 'auto');
     ga('send', 'pageview');
   </script>
+
+  <!--  {% if request.user.profile.grade <= 3 %} -->
+  <!--<script src="{% static "js/makeItRain.js" %}"></script> -->
+  <!--  {% endif %} -->
 
 </body>
 

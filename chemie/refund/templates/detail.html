@@ -1,0 +1,151 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Refusjonsskjema
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+    {% if admin %}
+    Administrer
+    {% else %}
+    Detaljer
+    {% endif %}
+{% endblock nav_sub_header %}
+
+{% block content %}
+    {% if admin %}
+    <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "refund:index" %}" class="breadcrumb">Refusjonsskjema</a>
+    <a href="{% url "refund:admin_refunds" %}" class="breadcrumb">Søknader</a>
+    <a href="{% url "refund:admin_detail" id=refund.id %}" class="breadcrumb">Administrer</a>
+  </div>
+    {% else %}
+
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "refund:myrefunds" %}" class="breadcrumb">Mine refusjoner</a>
+    <a href="{% url "refund:detail" id=refund.id %}" class="breadcrumb">Detaljer</a>
+  </div>
+    {% endif %}
+<div>
+<div class="card">
+<div class="card-content">
+        <div style="width: 100%; display: flex; justify-content: space-between;">
+        <b> Søknad</b>
+        <div>
+            <p><b>Status: </b>{{ status }}</p>
+
+        </div>
+        </div>
+        <hr>
+        <!---<p style="font-weight: bold">Kontaktinformasjon</p>--->
+
+        <p> <b>Navn:</b> {{ refund.user.first_name }} {{ refund.user.last_name }}</p>
+        <p> <b>E-post:</b> {{ refund.user.email }}</p>
+        <p> <b>Mobilnummer:</b> {{ refund.user.profile.phone_number }}</p>
+        <p> <b>Kontonummer:</b> {{ refund.print_account_number }}</p>
+        <hr>
+        <p style="font-weight: bold">Totalt beløp</p>
+        <p id="total-price">{{ refund.get_total }} kr</p>
+        <hr>
+        {% if admin %}
+        {% if perms.refund.delete_refundrequest %}
+        <form method="post">
+        {% csrf_token %}
+        <div>
+        <b>Behandling av søknaden:</b>
+        <p>Vær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren. Forsikre deg om at du har gjennomført alle nødvendige vurderinger før du godkjenner, avslår eller tilbakestiller en søknad. Du kan legge til en begrunnelse i feltet nedenfor for å oppgi ekstra informasjon. Denne begrunnelsen vil inkluderes i e-postmeldingen som sendes til søkeren. </p>
+        <label for="reason-field">Begrunnelse</label>
+        <input type="text" id="reason-field" name="reason" value="">
+        </div>
+        <div style="width: 100%; display: flex; justify-content: center;">
+        {% if refund.status == 2 %}
+            <button id="reject-button" class="btn btn-primary red pull-center" style="margin: 5px;min-width: 130px;" type="submit" formaction="{% url "refund:reject_request" id=refund.id %}">Avslå</button>
+            <button id="approve-button" class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;"  type="submit" formaction="{% url "refund:approve_request" id=refund.id %}">Fullfør</button>
+             {% else %}
+            <button id="reset-button" class="btn btn-primary pull-center" style="margin: 5px;min-width: 130px;" type="submit" formaction="{% url "refund:reset_request" id=refund.id %}">Tilbakestill status</button>
+        {% endif %}
+        </div>
+        </form>
+
+        {% endif %}
+        {% endif %}
+
+        <!---<label for="account-number">Kontonummer: </label>
+        <input name="account-number">--->
+    </div>
+</div>
+    </div>
+
+
+<div class="row">
+{% for receipt in receipts  %}
+
+    <div class="col s12 m6 l4">
+    <div class="card">
+    <div class="card-content">
+        <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
+        <hr>
+                <p><b>Utleggsdato:</b> {{ receipt.date.date}}</p>
+                <p><b>Kjøpssted:</b> {{receipt.store}}</p>
+                <p><b>Vare:</b> {{receipt.item}}</p>
+                <p><b>Hensikt:</b> {{receipt.event}}</p>
+                <p><b>Pris:</b> {{receipt.price}} kr</p>
+                <hr>
+                <div style="display: flex; justify-content: center;width: 100%; min-height: 300px;">
+                <img class="materialboxed" src="{{ receipt.image.url }}" alt="kvittering{{ forloop.counter }}" style="max-width: 100%;max-height:300px;">
+                </div>
+        <hr>
+    </div>
+    </div>
+    </div>
+{% endfor %}
+
+{% include "permissions.html" %}
+
+{% endblock content %}
+
+{% block footer_script %}
+<script>
+// Get input field containing the reason parameter
+let reason = document.getElementById('reason-field');
+
+{% if refund.status == 2 %}
+// Get the buttons visible if the request is pending
+let reject_btn = document.getElementById("reject-button");
+let approve_btn = document.getElementById("approve-button");
+
+// Add event listeners to these buttons to create an idiot security popup when clicked
+reject_btn.addEventListener("click", (e)=>{
+        if(!confirm(`Er du sikker på at du vil avslå denne søknaden med følgende begrunnelse: \n \n"${reason.value}"\n \nVær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren.`)) {
+            e.preventDefault();
+        }
+    });
+approve_btn.addEventListener("click", (e)=>{
+        if(!confirm(`Søkeren vil bli informert om at pengene har blitt overført. Er du sikker på at du vil godkjenne denne søknaden med følgende begrunnelse: \n\n"${reason.value}" \n \nVær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren. `)) {
+            e.preventDefault();
+        }
+    });
+
+ {% else %}
+    // Get the reset button
+    let reset_btn = document.getElementById("reset-button")
+
+    // Add an event listener to this button to create an idiot security popup when clicked
+    reset_btn.addEventListener("click", (e)=>{
+            if(!confirm(`Er du sikker på at du vil tilbakestille statusen til denne søknaden med følgende begrunnelse: \n\n"${reason.value}" \n \nVær oppmerksom på at å oppdatere søknadens status vil utløse et e-postvarsel til søkeren. `)) {
+                e.preventDefault();
+            }
+        })
+{% endif %}
+
+
+
+// Initialize materialize
+document.addEventListener("DOMContentLoaded", function () {
+  var materialboxes = document.querySelectorAll(".materialboxed");
+  console.log(materialboxes);
+  M.Materialbox.init(materialboxes);
+});
+</script>
+
+{% endblock footer_script %}

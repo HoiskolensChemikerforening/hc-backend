@@ -4,7 +4,8 @@ from django.urls import path
 app_name = "rentalservice"
 
 urlpatterns = [
-    path("", views.index, name="index"),
+    path("AC", views.index, name="index"),
+    path("promo", views.index_promo, name="index_promo"),
     path("ny/", views.new_object, name="new_object"),
     path("<int:rentalobject_id>/", views.detail, name="detail"),
     path(
@@ -18,5 +19,6 @@ urlpatterns = [
         name="edit_rentalobject",
     ),
     path("nyFaktura/", views.new_invoice, name="new_invoice"),
-    path("kontaktinfo", views.contact_page, name="contact_info"),
+    path("kontaktinfo/", views.contact_page, name="contact_info"),
+    path("kontaktpromo/", views.contact_page_promo, name="contact_info_promo"),
 ]

@@ -95,6 +95,9 @@ class BaseEvent(models.Model):
             status=REGISTRATION_STATUS.WAITING, event=self
         ).count()
 
+
+
+
     @property
     def can_signup(self):
         return (timezone.now() >= self.register_startdate) and (
@@ -218,6 +221,10 @@ class Social(BaseEvent):
     def get_model_type(self):
         return "social"
 
+    def get_queue_position(self, user):
+        user_reg = self.socialeventregistration_set.all().filter(user=user).first()
+        return SocialEventRegistration.get_queue_position(user_reg)
+
 
 class Bedpres(BaseEvent):
     author = models.ForeignKey(
@@ -236,6 +243,10 @@ class Bedpres(BaseEvent):
 
     def get_model_type(self):
         return "bedpres"
+
+    def get_queue_position(self, user):
+        user_reg = self.bedpresregistration_set.all().filter(user=user).first()
+        return BedpresRegistration.get_queue_position(user_reg)
 
 
 class RegistrationManager(models.Manager):
@@ -279,6 +290,21 @@ class BaseRegistration(models.Model):
     def waiting(self):
         self.status = REGISTRATION_STATUS.WAITING
         self.save()
+
+    @classmethod
+    def get_queue_position(cls, registration):
+        # Finner plass på ventiliste eller none om ikke
+        queue_position = None
+        if registration.status == REGISTRATION_STATUS.WAITING:
+            queue_position = (
+                    cls.objects.filter(
+                        event=registration.event,
+                        created__lt=registration.created,
+                        status=REGISTRATION_STATUS.WAITING,
+                    ).count()
+                    + 1
+            )
+        return queue_position
 
     class Meta:
         abstract = True

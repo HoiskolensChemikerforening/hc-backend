@@ -99,7 +99,9 @@ LOCAL_APPS = [
     "chemie.sugepodden",
     "chemie.cgp",
     "chemie.merch",
-    "chemie.electofood"
+    "chemie.electofood",
+    "chemie.exchangepage",
+    "chemie.refund",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -303,6 +305,8 @@ CACHES = {
     "default": {"BACKEND": "django.core.cache.backends.locmem.LocMemCache"}
 }
 
+# File upload permissons
+FILE_UPLOAD_PERMISSIONS = 0o644
 
 # CKEDITOR CONFIGURATION
 # ------------------------------------------------------------------------------
@@ -474,6 +478,29 @@ CKEDITOR_CONFIGS = {
         "customConfig": "/static/js/ckeditor_config.js",
         "width": "100%",
     },
+    "exchangepage": {
+        "skin": "bootstrapck",
+        "toolbar": "Custom",
+        "toolbar_Custom": [
+            [
+                "Bold",
+                "Italic",
+                "Underline",
+                "Subscript",
+                "Superscript",
+                "-",
+                "Undo",
+                "Redo",
+                "-",
+                "PasteText",
+            ],
+            ["NumberedList", "BulletedList", "-", "Link"],
+            ["Maximize", "Find", "Replace"],
+            ["Table"],
+        ],
+        'extraPlugins': 'table',
+        "customConfig": "/static/js/ckeditor_config.js",
+    }
 }
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS

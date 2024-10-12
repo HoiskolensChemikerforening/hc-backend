@@ -8,7 +8,8 @@ app_name = "events"
 # Sosial
 urlpatterns = [
     path("", login_required(views.ListSocialView.as_view()), name="index_social"),
-    path("tidligere/", login_required(views.ListPastSocialView.as_view()), name="past_social"),
+    path("tidligere/",login_required(views.ListPastSocialView.as_view()),name="past_social"),
+    path("administrer/",login_required(views.ListAdminSocialView.as_view()),name="admin_social"),
     path("opprett/", views.CreateSocialView.as_view(), name="create_social"),
     path("rediger/<int:pk>/", views.EditSocialView.as_view(), name="edit_social"),
     path("<int:pk>/", login_required(views.ViewSocialDetailsView.as_view()), name="detail_social"),
