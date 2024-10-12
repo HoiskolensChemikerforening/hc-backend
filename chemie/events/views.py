@@ -1041,7 +1041,10 @@ class BedpresDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bedpres.objects.all()
     serializer_class = BedpresSerializer
 
-
 class BedpresRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = BedpresRegistration.objects.all()
     serializer_class = BedpresRegistrationSerializer
+
+class BedpresUpdate(generics.RetrieveUpdateAPIView):
+    queryset = Bedpres.objects.all()
+    serializer_class = BedpresCreateSerializer
