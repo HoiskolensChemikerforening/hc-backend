@@ -50,9 +50,12 @@ from rest_framework import generics
 
 from .serializer import (
     SocialSerializer,
+    SocialCreateSerializer,
     SocialEventRegistrationSerializer,
     BedpresSerializer,
+    BedpresCreateSerializer,
     BedpresRegistrationSerializer,
+
 )
 
 from rest_framework.pagination import PageNumberPagination
@@ -972,7 +975,7 @@ class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
 
 class SocialDetailCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all()
-    serializer_class = SocialSerializer
+    serializer_class = SocialCreateSerializer
 
 class SocialDetailDelete(generics.DestroyAPIView):
     queryset = Social.objects.all()
@@ -980,7 +983,7 @@ class SocialDetailDelete(generics.DestroyAPIView):
 
 class SocialDetailUpdate(generics.RetrieveUpdateAPIView):
     queryset = Social.objects.all()
-    serializer_class = SocialSerializer
+    serializer_class = SocialCreateSerializer
 
 class SocialDelete(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
@@ -1032,14 +1035,7 @@ class BedpresRegistrationListCreate(generics.ListCreateAPIView):
 
 class BedpresDetailCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all()
-    serializer_class = BedpresSerializer
-
-
-
-
-
-
-
+    serializer_class = BedpresCreateSerializer
 
 class BedpresDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Bedpres.objects.all()

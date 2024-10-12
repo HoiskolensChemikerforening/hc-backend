@@ -9,6 +9,7 @@ from .models import (
 
 from chemie.customprofile.serializers import UserSerializer
 from chemie.committees.serializers import CommitteeSerializer
+from chemie.committees.models import Committee
 
 
 class AttendeeSerializer(serializers.ModelSerializer):
@@ -20,7 +21,7 @@ class AttendeeSerializer(serializers.ModelSerializer):
 
 
 class SocialSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author = UserSerializer()
     committee = CommitteeSerializer()
     confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
     waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
@@ -28,6 +29,14 @@ class SocialSerializer(serializers.ModelSerializer):
         model = Social
         fields = "__all__"
 
+class SocialCreateSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    committee = serializers.PrimaryKeyRelatedField(queryset=Committee.objects.all())
+    confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
+    waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
+    class Meta:
+        model = Social
+        fields = "__all__"
 
 class SocialEventRegistrationSerializer(serializers.ModelSerializer):
     event = SocialSerializer()
@@ -39,7 +48,7 @@ class SocialEventRegistrationSerializer(serializers.ModelSerializer):
 
 
 class BedpresSerializer(serializers.ModelSerializer):
-    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    author = UserSerializer
     confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
     waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
 
@@ -47,6 +56,15 @@ class BedpresSerializer(serializers.ModelSerializer):
         model = Bedpres
         fields = "__all__"
 
+
+class BedpresCreateSerializer(serializers.ModelSerializer):
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
+    confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
+    waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
+
+    class Meta:
+        model = Bedpres
+        fields = "__all__"
 
 class BedpresRegistrationSerializer(serializers.ModelSerializer):
     event = BedpresSerializer()
