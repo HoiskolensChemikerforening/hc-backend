@@ -60,5 +60,6 @@ urlpatterns += [
     path("api/karriere/mine/", views.BedpresListCreateMine.as_view(), name="api_karriere_mine"),
     path("api/karriere/opprett/", views.BedpresDetailCreate.as_view(), name="api_karriere_opprett"),
     path("api/karriere/rediger/<int:pk>/", views.BedpresUpdate.as_view(), name="api_karriere_rediger"),
-    path("api/karriere/slett/", views.BedpresDelete.as_view(), name="api_slett")
+    path("api/karriere/slett/", views.BedpresDelete.as_view(), name="api_slett"),
+    path("api/karriere/slett/<int:pk>/", views.BedpresDetailDelete.as_view(), name="api_detail_slett"),
 ]

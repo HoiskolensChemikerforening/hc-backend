@@ -1052,3 +1052,7 @@ class BedpresUpdate(generics.RetrieveUpdateAPIView):
 class BedpresDelete(generics.ListAPIView):
     queryset = Bedpres.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = BedpresSerializer
+
+class BedpresDetailDelete(generics.DestroyAPIView):
+    queryset = Bedpres.objects.all()
+    serializer_class = BedpresSerializer
