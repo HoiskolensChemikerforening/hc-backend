@@ -926,7 +926,7 @@ def check_in_to_social(request, pk):
 DEFAULT_PAGE = 1
 class SetPagination(PageNumberPagination):
 
-    page_size = 2
+    page_size = 2 # brukes kun dersom fronend ikke sender ?page_size
     page_size_query_param = 'page_size'
 
     def get_paginated_response(self, data):
@@ -941,12 +941,11 @@ class SetPagination(PageNumberPagination):
             'results': data
         })
 
-
+# SOCIAL API
 class SocialListCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all().order_by("-date")
     serializer_class = SocialSerializer
     pagination_class = SetPagination
-
 
 class SocialListCreateKommende(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
@@ -987,6 +986,22 @@ class SocialDelete(generics.ListCreateAPIView):
     queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
     serializer_class = SocialSerializer
 
+class SocialDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Social.objects.all()
+    serializer_class = SocialSerializer
+
+class SocialEventRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = SocialEventRegistration.objects.all()
+    serializer_class = SocialEventRegistrationSerializer
+
+class SocialAdministrate(generics.ListCreateAPIView):
+    def get_queryset(self):  # Må overstyre get metoden
+        # Filter the queryset to show only 'Social' instances associated with the authenticated user.
+        user = self.request.user
+        return Social.objects.filter(author=user).order_by("-date")
+    serializer_class = SocialSerializer
+
+# BEDPRES API
 class BedpresListCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all().order_by("-date")
     serializer_class = BedpresSerializer
@@ -1016,14 +1031,7 @@ class BedpresRegistrationListCreate(generics.ListCreateAPIView):
     serializer_class = BedpresRegistrationSerializer
 
 
-class SocialDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Social.objects.all()
-    serializer_class = SocialSerializer
 
-
-class SocialEventRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = SocialEventRegistration.objects.all()
-    serializer_class = SocialEventRegistrationSerializer
 
 
 
