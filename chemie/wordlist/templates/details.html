@@ -20,19 +20,21 @@
   </div>
 {% endblock %}
 
+<!--(1 = verb, 2 = adjective, 3 = noun, 4 = word)--> 
+
 
 <card>
-    <h2>{{ord}}</h2>
-    {%if ord.picture%}
-      <img src="{{ord.picture.url}}" style="height:400px"/>
+    <h2>{{ord.0.word}}</h2>
+    {%if ord.0.picture%}
+      <img src="{{ord.0.picture.url}}" style="height:400px"/>
       {%else%}
       <img alt="bilde"  src="{% static "images/holiday_images/paul_tullebilde.png" %}"/ style="height:400px">
     {%endif%}
-    <h6>Laget av: {{ord.author.profile}}</h6>
-    <h6>Laget: {{ord.date}}</h6>
+    <h6>Laget av: {{ord.0.author.profile}}</h6>
+    <h6>Laget: {{ord.0.date}}</h6>
     <h5>Forklaring: 
-      {{ord.explanations}}</h5>
-    <h5>Kategori: {%for word in ord.category.all%}
+      {{ord.0.explanations}}</h5>
+    <h5>Kategori: {%for word in ord.0.category.all%}
       {{word}}{% if not forloop.last %}
       ,
       {% endif %}
@@ -40,61 +42,71 @@
       Ingen kategori
       {%endfor%} </h5>
 
+    {%if ord.1 == 1%}
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>Infinitiv</th>
+              <th>Presens</th>
+              <th>Preteritum</th>
+              <th>Presens futurum</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>{{ord.0.word}}</td>
+            <td>{{ord.0.present}}</td>
+            <td>{{ord.0.past}}</td>
+            <td>{{ord.0.future}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {%endif%}
+    {%if ord.1 == 2%}
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>Positiv</th>
+              <th>Komparativ</th>
+              <th>Superlativ</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>{{ord.0.word}}</td>
+            <td>{{ord.0.comparative}}</td>
+            <td>{{ord.0.superlative}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {%endif%}
+    {%if ord.1 == 3%}
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>Ubestemt entall</th>
+              <th>Bestemt entall</th>
+              <th>Ubestemt flertall</th>
+              <th>Bestemt flertall</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>{{ord.0.word}}</td>
+            <td>{{ord.0.definite_singular}}</td>
+            <td>{{ord.0.infinite_plural}}</td>
+            <td>{{ord.0.definite_plural}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {%endif%}
+
 </card>
 
-{%if substantiv%}
-<div>
-  <p>Substantiv:</p>
-   <table>
-      <tr>
-        <th>Ubestemt entall</th>
-        <th>Bestemt entall</th>
-        <th>Ubestemt flertall</th>
-        <th>Bestemt flertall</th>
-      </tr>
-      <tr>
-        <td>{{substantiv.indefinite_singular}}</td>
-        <td>{{substantiv.indefinite_plural}}</td>
-        <td>{{substantiv.definite_singular}}</td>
-        <td>{{substantiv.definite_plural}}</td>
-      </tr>
-   </table>
-</div>
-{%elif verb%}
-<div>
-  <p>Verb:</p>
-   <table>
-      <tr>
-        <th>Infinitiv</th>
-        <th>Presens</th>
-        <th>Preteritum</th>
-        <th>Presens futurum</th>
-      </tr>
-      <tr>
-        <td>{{verb.infinitive}}</td>
-        <td>{{verb.present}}</td>
-        <td>{{verb.past}}</td>
-        <td>{{verb.future}}</td>
-      </tr>
-   </table>
-</div>
-{%elif adjektiv%}
-<div>
-  <p>Adjektiv:</p>
-   <table>
-      <tr>
-        <th>Positiv</th>
-        <th>Komparlativ</th>
-        <th>Superlativ</th>
-      </tr>
-      <tr>
-        <td>{{adjektiv.positive}}</td>
-        <td>{{adjektiv.comparative}}</td>
-        <td>{{adjektiv.superlative}}</td>
-      </tr>
-   </table>
-</div>
-{%endif%}
+
 
 
 {% if perms.wordlist%}

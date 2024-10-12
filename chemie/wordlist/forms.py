@@ -114,7 +114,7 @@ class WordSearchMainPage(forms.Form):
 
 
 class CategorySortingMainPage(forms.Form):
-    category = forms.ModelChoiceField(queryset = Category.objects.all(), required=False, label = False)
+    category = forms.ModelChoiceField(queryset = Category.objects.all(), required=False, label = " ")
 
 
 

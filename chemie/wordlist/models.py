@@ -24,33 +24,33 @@ class AbstractWord(models.Model):
     
 
 class Noun(AbstractWord):
-    noun = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False, blank=True)
+    word = models.CharField(max_length = 100, verbose_name = "ubestemt_entall", unique = False, blank=True)
     indefinite_plural = models.CharField(max_length = 100, verbose_name = "ubestemt_flertall", unique = False, blank=True)
     definite_singular = models.CharField(max_length = 100, verbose_name = "bestemt_entall", unique = False, blank=True)
     definite_plural = models.CharField(max_length = 100, verbose_name = "bestemt_flertall", unique = False, blank=True)
     
     def __str__(self):
-         return self.noun
+         return self.word
 
 
 class Verb(AbstractWord):
-    verb = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = False, blank=True)
+    word = models.CharField(max_length = 100, verbose_name = "infinitiv", unique = False, blank=True)
     present = models.CharField(max_length = 100, verbose_name = "presens", unique = False, blank=True)
     past = models.CharField(max_length = 100, verbose_name = "preteritum", unique = False, blank=True)
     future = models.CharField(max_length = 100, verbose_name = "presens futurum", unique = False, blank=True)
 
     def __str__(self):
-        return self.verb
+        return self.word
 
 
 
 class Adjective(AbstractWord):
-    adjective = models.CharField(max_length = 100, verbose_name = "positiv", unique = False, blank=True)
+    word = models.CharField(max_length = 100, verbose_name = "positiv", unique = False, blank=True)
     comparative = models.CharField(max_length = 100, verbose_name = "komparativ", unique = False, blank=True)
     superlative = models.CharField(max_length = 100, verbose_name = "superlativ", unique = False, blank=True)
 
     def __str__(self):
-        return self.adjective
+        return self.word
     
 
 

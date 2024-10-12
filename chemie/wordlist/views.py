@@ -16,64 +16,80 @@ from django.core.paginator import Paginator
 @login_required()
 def ordListe(request):
 
-    alle_ord = Word.objects.all()
+    verbs = Verb.objects.all()
+    adjectives = Adjective.objects.all()
+    nouns = Noun.objects.all()
+    word = Word.objects.all()
+
+    alle_ord = [] # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
+    for i in verbs:
+        alle_ord.append((i, 1))
+    for i in adjectives:
+        alle_ord.append((i, 2))
+    for i in nouns:
+        alle_ord.append((i, 3))
+    for i in word:
+        alle_ord.append((i, 4))
+    print(alle_ord)
+    print(len(alle_ord))
+    
     form = WordSearchMainPage()
     kategorier = Category.objects.all()
     category_form = CategorySortingMainPage()
     
 
 
-    if not alle_ord.exists():
-        return render(request, "404.html")
-    else:
-        form = WordSearchMainPage(request.POST or None)
 
-        if request.method == "POST":
-            if form.is_valid():                
-                if request.POST["submit"] == "Søk!":
-                    the_word = form.cleaned_data.get("the_word")
-                    alle_ord = Word.objects.filter(word__icontains = the_word)
+    # if len(alle_ord) == 0:
+    #     return render(request, "404.html")
+    # else:
+    #     form = WordSearchMainPage(request.POST or None)
+
+    #     if request.method == "POST":
+    #         if form.is_valid():                
+    #             if request.POST["submit"] == "Søk!":
+    #                 the_word = form.cleaned_data.get("the_word")
+    #                 alle_ord = alle_ord.filter(word__icontains = the_word)
                     
-    if not kategorier.exists():
-            return render(request, "404.html")
-    else:
-        category_form = CategorySortingMainPage(request.POST or None)
-        if request.method == "POST":
-            if category_form.is_valid():              
-                if request.POST["submit"] == "Ta meg til kategorien":
+    # if not kategorier.exists():
+    #         return render(request, "404.html")
+    # else:
+    #     category_form = CategorySortingMainPage(request.POST or None)
+    #     if request.method == "POST":
+    #         if category_form.is_valid():              
+    #             if request.POST["submit"] == "Ta meg til kategorien":
                     
-                    the_category = category_form.cleaned_data.get("category")
-                    alle_ord = Word.objects.filter(category = the_category)
+    #                 the_category = category_form.cleaned_data.get("category")
+    #                 alle_ord = alle_ord.filter(category = the_category)
                     
 
-    profile = get_object_or_404(Profile, user=request.user)
 
-    if int(profile.grade) < 2:
-       alle_ord = alle_ord.filter(secret=False).order_by("word")
+    # profile = get_object_or_404(Profile, user=request.user)
+
+    # if int(profile.grade) < 2:
+    #    alle_ord = alle_ord.filter(secret=False).order_by("word")
 
 
-    obj_per_page = 30  # Show 30 words per page.
-    if len(alle_ord) < obj_per_page:
-        context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
+    # obj_per_page = 30  # Show 30 words per page.
+    # if len(alle_ord) < obj_per_page:
+    #     context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
 
-    else:
-        paginator = Paginator(alle_ord, obj_per_page)
+    # else:
+    #     paginator = Paginator(alle_ord, obj_per_page)
 
-        page_number = request.GET.get("page")
-        page_obj = paginator.get_page(page_number)
-        alle_ord = page_obj
+    #     page_number = request.GET.get("page")
+    #     page_obj = paginator.get_page(page_number)
+    #     alle_ord = page_obj
   
 
-    for i in alle_ord:
-        i.explanations = i.explanations[:25] + "..."
+    # for i in alle_ord:
+    #     i.explanations = i.explanations[:25] + "..."
     
-    context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
+    context = {"alle_ord": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
     return render(request, "wordall.html", context)
 
 
-# There may occur a lot of duplicate Nouns, Verbs or Adjectives: (unique = False).
-# That is because it is needed to make the forms valid in createWord and adminWord. 
-# They will not be valid if you make changes and the variable aleady exists.
+
 
 
 @permission_required("wordlist.add_word")
@@ -267,25 +283,19 @@ def word_delete(request, pk):
 
 
 @login_required()
-def details(request, pk):
-    ordet = get_object_or_404(Word, id=pk)
-
-    try:
-        substantiv = ordet.noun
-    except:
-        substantiv = ""
-
-    try:
-        verb = ordet.verb
-    except:
-        verb = ""
-
-    try:
-        adjektiv = ordet.adjective
-    except:
-        adjektiv = ""
+def details(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
     
-    context = {"ord": ordet, "substantiv": substantiv, "verb": verb, "adjektiv": adjektiv} 
+    if klassetall == 1:
+        ordet = (get_object_or_404(Verb, id=pk), klassetall)
+    if klassetall == 2:
+        ordet = (get_object_or_404(Adjective, id=pk), klassetall)
+    if klassetall == 3:
+        ordet = (get_object_or_404(Noun, id=pk), klassetall)
+    if klassetall == 4:
+        ordet = (get_object_or_404(Word, id=pk), klassetall)
+
+
+    context = {"ord": ordet} # "substantiv": substantiv, "verb": verb, "adjektiv": adjektiv
     return render(request, "details.html", context)
 
 

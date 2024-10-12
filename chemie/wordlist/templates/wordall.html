@@ -58,23 +58,24 @@
 </div>
 
 
-<div class="container">
+
+<div class="container"> <!--Vi bruker 0 for å indeksere første verdi i settet gitt fra viewen-->
   <div class="row">
-    {% for word in word %}
+    {% for alle_ord in alle_ord %}
     <div class="col s14 m6 l4">
       <div class="card small">
-        <a href="{% url 'wordlist:details' word.id %}">
+        <a href="{% url 'wordlist:details' alle_ord.0.id alle_ord.1%}"> <!--sikkerhets problem, dersom man har både et adjektiv og et substantiv med samme id og navn-->
           <div class="card-image">
-            {% if word.picture %}
-              <img src="{{ word.picture.url }}" alt="{{ word.explanations }}">
+            {% if alle_ord.0.picture %}
+              <img src="{{ alle_ord.0.picture.url }}" alt="{{ alle_ord.0.explanations }}">
             {% else %}
               <img src="{% static "images/holiday_images/paul_tullebilde.png" %}" alt="bilde">
             {% endif %}
           </div>
           <div class="card-content">
             <div style="overflow: hidden">
-            <span class="card-title" style="font-size: 18px; font-weight: 400;">{{ word.word }}</span>
-            <p>{{word.explanations}}</p>
+            <span class="card-title" style="font-size: 18px; font-weight: 400;">{{ alle_ord.0.word }}</span>
+            <p>{{alle_ord.0.explanations}}</p>
           </div>     </div>
         </a>
       </div>
@@ -82,6 +83,7 @@
     {% endfor %}
   </div>
 </div>
+
 
 
 {% if perms.wordlist%}
