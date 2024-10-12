@@ -20,7 +20,7 @@ class AttendeeSerializer(serializers.ModelSerializer):
 
 
 class SocialSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     committee = CommitteeSerializer()
     confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
     waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
@@ -31,7 +31,7 @@ class SocialSerializer(serializers.ModelSerializer):
 
 class SocialEventRegistrationSerializer(serializers.ModelSerializer):
     event = SocialSerializer()
-    user = UserSerializer()
+    user = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
 
     class Meta:
         model = SocialEventRegistration
@@ -39,7 +39,7 @@ class SocialEventRegistrationSerializer(serializers.ModelSerializer):
 
 
 class BedpresSerializer(serializers.ModelSerializer):
-    author = UserSerializer()
+    author = serializers.PrimaryKeyRelatedField(queryset=User.objects.all())
     confirmed_attendees = AttendeeSerializer(read_only=True, many=True, source="get_confirmed_users")
     waiting_attendees = AttendeeSerializer(read_only=True, many=True, source="get_waiting_users")
 

@@ -970,7 +970,7 @@ class SocialEventRegistrationListCreate(generics.ListCreateAPIView):
     queryset = SocialEventRegistration.objects.all()
     serializer_class = SocialEventRegistrationSerializer
 
-class SocialDetailCreate(generics.CreateAPIView):
+class SocialDetailCreate(generics.ListCreateAPIView):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
 
@@ -1029,6 +1029,11 @@ class BedpresListCreateMine(generics.ListCreateAPIView): #Mine bedpres events
 class BedpresRegistrationListCreate(generics.ListCreateAPIView):
     queryset = BedpresRegistration.objects.all()
     serializer_class = BedpresRegistrationSerializer
+
+class BedpresDetailCreate(generics.ListCreateAPIView):
+    queryset = Bedpres.objects.all()
+    serializer_class = BedpresSerializer
+
 
 
 

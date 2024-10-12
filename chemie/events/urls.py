@@ -32,8 +32,8 @@ urlpatterns = [
     path("api/sosial/opprett/", views.SocialDetailCreate.as_view(), name="api_detail_opprett"),
     path("api/sosial/slett/<int:pk>", views.SocialDetailDelete.as_view(), name="api_detail_slett"),
     path("api/sosial/rediger/<int:pk>", views.SocialDetailUpdate.as_view(), name="api_detail_rediger"),
-    path("api/social/slett/", views.SocialDelete.as_view(), name="api_slett"),
-    path("api/social/administrer/", views.SocialAdministrate.as_view(), name="api_sosial_administrer")
+    path("api/sosial/slett/", views.SocialDelete.as_view(), name="api_slett"),
+    path("api/sosial/administrer/", views.SocialAdministrate.as_view(), name="api_sosial_administrer")
 ]
 
 # Karriere
@@ -57,5 +57,6 @@ urlpatterns += [
     path("api/karriereregistrering/<int:pk>/", views.BedpresRegistrationDetail.as_view()),
     path("api/karriere/kommende/", views.BedpresListKommende.as_view(), name="api_karriere_kommende"),
     path("api/karriere/tidligere/", views.BedpresListTidligere.as_view(), name="api_karriere_tidligere"),
-    path("api/karriere/mine/", views.BedpresListCreateMine.as_view(), name="api_karriere_mine")
+    path("api/karriere/mine/", views.BedpresListCreateMine.as_view(), name="api_karriere_mine"),
+    path("api/karriere/opprett/", views.BedpresDetailCreate.as_view(), name="api_karriere_opprett")
 ]
