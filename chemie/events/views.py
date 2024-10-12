@@ -983,6 +983,10 @@ class SocialDetailUpdate(generics.RetrieveUpdateAPIView):
     queryset = Social.objects.all()
     serializer_class = SocialSerializer
 
+class SocialDelete(generics.ListCreateAPIView):
+    queryset = Social.objects.filter(date__gt=timezone.now()).order_by("-date")
+    serializer_class = SocialSerializer
+
 class BedpresListCreate(generics.ListCreateAPIView):
     queryset = Bedpres.objects.all().order_by("-date")
     serializer_class = BedpresSerializer
@@ -1020,6 +1024,8 @@ class SocialDetail(generics.RetrieveUpdateDestroyAPIView):
 class SocialEventRegistrationDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = SocialEventRegistration.objects.all()
     serializer_class = SocialEventRegistrationSerializer
+
+
 
 
 class BedpresDetail(generics.RetrieveUpdateDestroyAPIView):
