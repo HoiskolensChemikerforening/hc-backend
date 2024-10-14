@@ -4,7 +4,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
-from .models import Profile, Medal
+from .models import Profile, Medal, User
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -29,11 +29,17 @@ class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ("username", "email", "first_name", "last_name", "full_name")
-
+    
 
 class ProfileSerializer(serializers.ModelSerializer):
     user = UserSerializer()
 
+    def create(self, validated_data):
+        user_data = validated_data.pop('user')  # Extract user data
+        user = User.objects.create(**user_data)  # Create User instance
+        profile = Profile.objects.create(user=user, **validated_data)  # Create Profile instance
+        return profile
+    
     class Meta:
         model = Profile
         fields = "__all__"

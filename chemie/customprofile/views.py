@@ -464,10 +464,9 @@ class ProfileListCreate(generics.ListCreateAPIView):
     serializer_class = ProfileSerializer
 
 
-class ProfileDetail(generics.RetrieveAPIView):
+class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
-
 
 class MedalListCreate(generics.ListCreateAPIView):
     queryset = Medal.objects.all()
