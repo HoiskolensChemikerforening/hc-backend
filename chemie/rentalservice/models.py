@@ -8,7 +8,7 @@ from django.core.validators import MaxValueValidator, MinValueValidator
 
 OWNER = Choices(
     ("PROMOKOM", 1, "Promoterigskomiteen"),
-    ("AC", 2, "Audio..."),
+    ("AC", 2, "Audiochromatene"),
     ("SPORTSKOM", 3, "Sportskomiteen"),
     ("NONE", 4, "Ingen")
 )
