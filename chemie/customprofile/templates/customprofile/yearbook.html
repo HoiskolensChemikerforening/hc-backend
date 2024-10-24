@@ -119,7 +119,7 @@
                    data-alt-src="{{ secondary.url }}"
                   {% endthumbnail %}>
             {% empty %}
-              <img src="{% static 'images/blank_avatar.png' %}">
+              <img src="{% static 'images/blank_avatar.png' %}" data-field-id="#modal-{{ profile.pk }}" >
             {% endthumbnail %}
           </div>
 
@@ -149,10 +149,12 @@
             <!-- Picture in detail view -->
             <div class="center-align">
               <div class="col s12 m4 l4">
-                {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
-                  <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
-                       href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
-                {% endthumbnail %}
+                  {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
+                      <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
+                           href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
+                  {% empty %}
+                      <img src="{% static 'images/blank_avatar.png' %}" alt="" class="rcorners6 responsive-img z-depth-1" style="margin-top: 10px;">
+                  {% endthumbnail %}
               </div>
             </div>
 

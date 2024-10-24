@@ -134,6 +134,51 @@ class EditBedpresView(
 class ListSocialView(ListView):
     template_name = "events/social/list.html"
     model = Social
+    registration_model = SocialEventRegistration
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        future_events = self.model.objects.filter(
+            date__gt=timezone.now(), published=True
+        ).order_by("date")
+
+        my_events = None
+        my_waiting_events = None
+        my_waiting_queue = None
+        if self.request.user.is_authenticated:
+            attending_events = Q(attendees__username__exact=self.request.user)
+            authored_events = Q(author=self.request.user)
+
+            my_authored_events = self.model.objects.filter(authored_events, date__gt=timezone.now())
+            my_unpublished_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), published=False)
+            my_tentative_events = self.model.objects.filter(authored_events, date__gt=timezone.now(), tentative=True)
+            my_waiting_registrations = self.registration_model.objects.filter(
+                event__date__gt=timezone.now(), user__exact=self.request.user, status=REGISTRATION_STATUS.WAITING
+            )
+
+            my_waiting_events = self.model.objects.filter(socialeventregistration__in=my_waiting_registrations)
+
+            if my_waiting_events:
+                my_waiting_queue = []
+                for events in my_waiting_events:
+                    my_waiting_queue.append((events, events.get_queue_position(self.request.user)))
+
+            my_events = self.model.objects.filter(
+                attending_events, date__gt=timezone.now()
+            ).distinct().exclude(pk__in=my_waiting_events.values('pk'))
+            my_past_events = self.model.objects.filter(attending_events, date__lte=timezone.now()).order_by("-date")
+
+        context.update({"events": future_events, "my_events": my_events, "my_authored_events": my_authored_events,
+                        "my_past_events": my_past_events, "my_waiting_queue": my_waiting_queue,
+                        "my_waiting_events": my_waiting_events,
+                        "my_unpublished_events": my_unpublished_events, "my_tentative_events": my_tentative_events
+                        })
+        return context
+
+
+class ListBedpresView(ListView):
+    template_name = "events/bedpres/list.html"
+    model = Bedpres
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -152,11 +197,9 @@ class ListSocialView(ListView):
         context.update({"events": future_events, "my_events": my_events})
         return context
 
-
-class ListBedpresView(ListSocialView):
-    template_name = "events/bedpres/list.html"
-    model = Bedpres
-
+class ListAdminSocialView(ListSocialView):
+    template_name = "events/social/list_administrate.html"
+    model = Social
 
 class ListPastSocialView(ListView):
     template_name = "events/social/list_past.html"
@@ -308,15 +351,8 @@ class SocialEditRemoveUserRegistration(
         # Add queue position
         registration = self.registration
         if registration:
-            if registration.status == REGISTRATION_STATUS.WAITING:
-                queue_position = (
-                    self.registration_model.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
-                )
+            queue_position = self.registration_model.get_queue_position(registration)
+            if queue_position:
                 context.update({"queue_position": queue_position})
         context["registration"] = registration
         return context
@@ -408,17 +444,9 @@ class BedpresEditRemoveUserRegistration(
         # Add queue position
         registration = self.registration
         if registration:
-            if registration.status == REGISTRATION_STATUS.WAITING:
-                queue_position = (
-                    self.registration_model.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
-                )
+            queue_position = self.registration_model.get_queue_position(registration)
+            if queue_position:
                 context.update({"queue_position": queue_position})
-
         context["registration"] = registration
         return context
 

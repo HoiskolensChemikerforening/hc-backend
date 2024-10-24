@@ -7,13 +7,12 @@
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Selges av styret under kontortid!
+  Selges av Styret under kontortid!
 {% endblock nav_sub_header %}
 
 {% block content %}
 
     <div>
-        <h3>Velg en kategori:</h3>
         <form enctype="multipart/form-data" method='POST'>
         {% csrf_token %}
         <div class="card-content">
@@ -36,19 +35,26 @@
         {% endif %}
         </ul>
     </div>
+
     <div class="row">
       {% for merch in merchs %}
-        <div class="col">
-
-            <a class="card" href={%url "merch:detail" pk=merch.id %} >
-
-                <img src="{{merch.image.url}}" alt="img" style="height:180px;" href={%url "merch:index" %}>
-                <div class="card" style="color:#222222; background-color:#F9CF00;" href={%url "merch:detail" pk=merch.id %}>{{merch.name}} - {{merch.price|floatformat:2}} kr </div>
-
-            <a/>
+        <div class="col s12 m6 l4">
+            <a href={%url "merch:detail" pk=merch.id %}>
+            <div class="card" style ="height: 390px">
+              <!-- Showing the pictures. -->
+              <div class="card-image">
+                  <img src="{{merch.image.url}}" alt="img" style="height:250px; object-fit: cover;"}>
+              </div>
+              <!-- The box under each picture -->
+              <div class="card-content" style="">
+                  <h5 style="color: black;overflow-wrap: break-word; hyphens: auto;-ms-hyphens: auto; -moz-hyphens: auto; font-size: 120%">{{merch.name}}</h5>
+                  <p style="color: black">{{merch.price|floatformat:2}} kr </p>
+              </div>
+            </div>
+            </a>
         </div>
-        {% if forloop.counter|divisibleby:3 %} </div> <div class="row"> {% endif %}
       {% endfor %}
+
     </div>
 
     <ul class="pagination nav navbar-nav">
