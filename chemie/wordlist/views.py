@@ -13,6 +13,66 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 
+
+def fsort(settet, sorteringsord): #listesortering
+
+    filtersett = []
+    enerord = []
+    toerord = []
+    treerord =[]
+    fireerord = []
+
+    for i in range(len(settet)):
+        a =  str(settet[i][0])
+        b = list(a)
+
+        
+        førstesortering = []
+        andresortering = []
+        tredjesortering = []
+        fjerdesortering = []
+
+        for j in range(len(b)):
+            if b[j] in sorteringsord:
+                førstesortering.append(b[j])
+        for k in range(len(førstesortering) - 1):
+                num1 = førstesortering[k] + førstesortering[k+1]
+                if num1 in sorteringsord:
+                    andresortering.append(num1)
+                try:
+                    num2 = førstesortering[k] + førstesortering[k+1] + førstesortering[k+2]
+                    if num2 in sorteringsord:
+                        tredjesortering.append(num2)
+                    num3 = førstesortering[k] + førstesortering[k+1] + førstesortering[k+2] + førstesortering[k+3]
+                    if num3 in sorteringsord:
+                        fjerdesortering.append(num3)
+                except:
+                    pass
+        if len(fjerdesortering) > 0:
+            fireerord.append(settet[i])
+        else: 
+            if len(tredjesortering) > 0:
+                treerord.append(settet[i])
+            else:
+                if len(andresortering) > 0:
+                    toerord.append(settet[i])
+                else:
+                    if len(førstesortering) > 0:
+                        enerord.append(settet[i])
+
+    for i in fireerord:
+        filtersett.append(i)
+    for i in treerord:
+        filtersett.append(i)
+    for i in toerord:
+        filtersett.append(i)
+    for i in enerord:
+        filtersett.append(i)
+        
+    return filtersett
+                
+
+
 @login_required()
 def ordListe(request):
 
@@ -20,6 +80,19 @@ def ordListe(request):
     adjectives = Adjective.objects.all()
     nouns = Noun.objects.all()
     word = Word.objects.all()
+
+    # print(verbs)
+    # print(adjectives)
+    # print(nouns)
+    # print(word)
+    # verbs = verbs.values_list('word', 'picture', 'explanations', 'category')
+    # adjectives = adjectives.values_list('word', 'picture', 'explanations', 'category')
+    # nouns = nouns.values_list('word', 'picture', 'explanations', 'category')
+    # word = word.values_list('word', 'picture', 'explanations', 'category')
+    
+    # alle_ord = ((verbs.union(adjectives)).union(nouns)).union(word)
+
+    # print(alle_ord)
 
     alle_ord = [] # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
     for i in verbs:
@@ -30,8 +103,8 @@ def ordListe(request):
         alle_ord.append((i, 3))
     for i in word:
         alle_ord.append((i, 4))
-    print(alle_ord)
-    print(len(alle_ord))
+    # print(alle_ord)
+    # print(len(alle_ord))
     
     form = WordSearchMainPage()
     kategorier = Category.objects.all()
@@ -40,27 +113,52 @@ def ordListe(request):
 
 
 
-    # if len(alle_ord) == 0:
-    #     return render(request, "404.html")
-    # else:
-    #     form = WordSearchMainPage(request.POST or None)
+    if len(alle_ord) == 0:
+        return render(request, "404.html")
+    else:
+        form = WordSearchMainPage(request.POST or None)
 
-    #     if request.method == "POST":
-    #         if form.is_valid():                
-    #             if request.POST["submit"] == "Søk!":
-    #                 the_word = form.cleaned_data.get("the_word")
-    #                 alle_ord = alle_ord.filter(word__icontains = the_word)
+        if request.method == "POST":
+            if form.is_valid():                
+                if request.POST["submit"] == "Søk!":
+                    the_word = form.cleaned_data.get("the_word")
+                    print(alle_ord)
+                    alle_ord = fsort(alle_ord, the_word)
+                    # alle_ord = filter(fsort, alle_ord)
+                    # alle_ord = alle_ord.objects.filter(word__icontains = the_word)
                     
-    # if not kategorier.exists():
-    #         return render(request, "404.html")
-    # else:
-    #     category_form = CategorySortingMainPage(request.POST or None)
-    #     if request.method == "POST":
-    #         if category_form.is_valid():              
-    #             if request.POST["submit"] == "Ta meg til kategorien":
+    if not kategorier.exists():
+            return render(request, "404.html")
+    else:
+        category_form = CategorySortingMainPage(request.POST or None)
+        if request.method == "POST":
+            if category_form.is_valid():              
+                if request.POST["submit"] == "Ta meg til kategorien":
+                    print(alle_ord)
+                    the_category = category_form.cleaned_data.get("category")
+                    alle_ord_2 = []
+
+                    instance0 = Word.objects.filter(category = the_category)
+                    instance1 = Adjective.objects.filter(category = the_category)
+                    instance2 = Noun.objects.filter(category = the_category)
+                    instance3 = Verb.objects.filter(category = the_category)
+
+                    for i in instance0:
+                        alle_ord_2.append(i)
+                    for i in instance1:
+                        alle_ord_2.append(i)
+                    for i in instance2:
+                        alle_ord_2.append(i)
+                    for i in instance3:
+                        alle_ord_2.append(i)
                     
-    #                 the_category = category_form.cleaned_data.get("category")
-    #                 alle_ord = alle_ord.filter(category = the_category)
+                    alle_ord_3 = []
+                    for i in alle_ord:
+                        if i[0] in alle_ord_2:
+                            alle_ord_3.append(i)
+
+                    alle_ord = alle_ord_3
+
                     
 
 
