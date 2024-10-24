@@ -501,7 +501,9 @@ CKEDITOR_CONFIGS = {
             ],
             ["NumberedList", "BulletedList", "-", "Link"],
             ["Maximize", "Find", "Replace"],
+            ["Table"],
         ],
+        'extraPlugins': 'table',
         "customConfig": "/static/js/ckeditor_config.js",
     }
 }

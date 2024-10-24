@@ -18,14 +18,14 @@ Admin
 <div class="row">
   <div class="col s9 m10 l10">
     <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-        <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
+        <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
         <a class="breadcrumb">Admin</a>
     </div>
   </div>
   <div class="col s3 m2 l2" style="display: flex;justify-content: center">
     <!-- Trigger for the Modal -->
     <a class="btn-floating btn-large modal-trigger" href="#mobileModal">
-      <i class="large material-icons">lightbulb_outline</i>
+      <i class="material-icons" style="font-size: 2.5rem">help_outline</i>
     </a>
   </div>
 </div>
@@ -53,13 +53,13 @@ Admin
   <ul>
     {% if perms.exchangepage.add_travelletter %}
     <li>
-      <a class="btn-floating blue" href="{% url "exchangepage:create" %}"><i class="material-icons">add</i></a>
+      <a class="btn-floating blue" href="{% url 'exchangepage:create' %}"><i class="material-icons">add</i></a>
       <a class="btn-floating mobile-fab-tip">Nytt Reisebrev</a>
     </li>
     {% endif %}
     {% if perms.exchangepage.change_travelletter %}
       <li>
-        <a class="btn-floating yellow" href="{% url "exchangepage:adminquestion" %}"><i
+        <a class="btn-floating yellow" href="{% url 'exchangepage:adminquestion' %}"><i
             class="material-icons">sync</i></a>
         <a class="btn-floating mobile-fab-tip">Rediger Spørsmål</a>
       </li>
@@ -71,13 +71,19 @@ Admin
 <!-- modal info -->
 <div id="mobileModal" class="modal">
   <div class="modal-content">
-    <h4>Hvordan funker dette?</h4>
-    <p><b>Slik funker det:</b> <p>Lypsum grombles, spling flurg miziks gack. Zroopz blibz blik,
-    zink blorbs foom. Grivvies snootchle, plip blorpt fazz. Splinx plorf bazzle, zroox flupz plink.
-    Blopz flerx gazz, zizz gloomp foom. Gribbles florg blip, snazzle foomp grinx. Plibz gloomp zlox,
-    zribz florp zink. Znazzle zlax flupz, gronk flibb grinx. Blaz gronk zlorp, fleep zonk zlurp.
-    Fleep flix plorf, glip gloomp zlurp. Zribz foom glork, blonk zonk plorp. Zlix zribz zonk,
-    fleep gloomp flibb. Zonk glip gloomp, zorx foom zlox. Foom gronk glip, zribz fleep zlurp.</p>
+    <h4>Velkommen til Admin</h4>
+    <p><b>Slik funker Utvekslingssiden:</b></p>
+    <p><b>Legge til:</b> Start med å legge til aktuelle spørsmål under <b>Rediger Spørsmål</b>.
+    Når spørsmålene er lagt til kan du starte arbeidet med å legge inn Reisebrev under <b>Nytt Reisebrev</b>.
+    Skjemaet krever at alle punker i reisebrevet fylles ut, men bilder og spørsmål som fylles ut på de neste sidene
+    kan fylles ut ved en senere anledning. <br> Merk at når reisebrevet er opprettet vil det bli synlig for brukerne selv
+    uten bilder og svar, så det kan være lurt å ha det meste av info for hånden ved utfylling av skjema. <br> <br>
+
+    <b>Sletting</b>: Bilder og svar på spørsmål kan slettes uten at reisebrevet slettes. Dersom reisebrevet slettes
+    vil bilder og tilhørende svar på spørsmål også slettes. Spørsmål kan ikke slettes, dersom du ønsker å slette disse
+    må du kontakte Webkom. <br> <br>
+    Har du spørsmål? Kontakt Webkom
+  </p>
   </div>
   <div class="modal-footer">
     <a href="#!" class="modal-close waves-effect waves-green btn-flat">Lukk</a>

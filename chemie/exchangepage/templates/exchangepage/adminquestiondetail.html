@@ -16,26 +16,27 @@ Admin
 {% load material_form %}
 {% block content %}
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
-    <a href="{% url "exchangepage:adminquestion" %}" class="breadcrumb">Spørsmål</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
+    <a href="{% url 'exchangepage:adminquestion' %}" class="breadcrumb">Spørsmål</a>
     <a class="breadcrumb">Rediger Spørsmål</a>
 </div>
+
 <p class="flow-text">Her kan du redigere spørsmål!</p>
 <div class="card">
   <div class="card-content">
-  <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
-      <div>
-      {{ questionform.as_p }}
-      </div>
+          <div>
+              {{ questionform.as_p }}
+          </div>
 
-      <div class="card-action" id="button-container">
-        <div class="right-align">
-          <input class="btn btn-primary pull-right" type='submit' value='Lagre spørsmål!'/>
-        </div>
-      </div>
+          <div class="card-action" id="button-container">
+            <div class="right-align">
+              <input class="btn btn-primary pull-right" type='submit' value='Lagre spørsmål!'/>
+            </div>
+          </div>
 
-  </form>
+      </form>
   </div>
 </div>
 

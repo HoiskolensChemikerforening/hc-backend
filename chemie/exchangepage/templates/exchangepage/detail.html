@@ -2,11 +2,9 @@
 {% load static %}
 
 {% block nav_header %}
-
 <div class="hide-on-med-and-down" style="white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-size: 100%;">
     <span>{{ travelletter.user.user.first_name }}'s eventyr i {{ travelletter.city }}</span>
 </div>
-
 
 {% endblock nav_header %}
 
@@ -15,6 +13,7 @@
    {% if specialization_id != 0 %} Retning: {{ specialization }}, {% endif %} Semester: {{ travelletter.semester }}
 </div>
 <div class="hide-on-large-only">Reisebrev</div>
+
 {% endblock nav_sub_header %}
 
 {% load material_form %}
@@ -22,8 +21,8 @@
 {% block content %}
 
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Land</a>
-    <a href="{% url "exchangepage:citypage" travelletter.city %}" class="breadcrumb">Byer</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Land</a>
+    <a href="{% url 'exchangepage:citypage' travelletter.city %}" class="breadcrumb">By</a>
     <a class="breadcrumb">{{travelletter.user}}</a>
 </div>
 
@@ -37,7 +36,7 @@
     <h5>Semester: {{ travelletter.semester }}</h5>
 </div>
 
-{% if images != 0 %}
+{% if images %}
     {% if images|length == 1 %}
         {% for image in images %}
             <img style="width: 100%; height: 300px; object-fit: contain" src="{{ image.image.url }}">
@@ -55,14 +54,14 @@
 {% endif %}
 
  <div class="information-box-container">
-     <h4>Generell informasjon om {{ travelletter.city }}</h4>
+     <h4>Litt om {{ travelletter.city }}</h4>
 
-     <div class="row customcol">
-      <div class="col s12 m12 l8">
+     <div class="row" style="margin: 0">
+        <div class="col s12 m6 l8">
           {{ travelletter.destinationInfo|safe }}
-      </div>
-        <div class="col s12 m12 l4">
-          <div class="card" style="background-color: #F9CF00">
+        </div>
+        <div class="col s12 m6 l4">
+          <div class="card" style="background-color: #F9CF00; width: 225px;margin-left: auto;margin-right: auto;position: revert">
             <div class="card-content white-text">
               <span class="card-title"> Vurdering: </span>
               <p>
@@ -88,18 +87,18 @@
             </div>
           </div>
         </div>
-      </div>
-    </div>
+     </div>
+ </div>
 
  <div class="information-box-container">
-    <div class="information-box">
+    <div class="info-item">
         <h4>Erfaringer</h4>
         <ul class="collapsible">
             {% if experiences %}
                 {% for experience in experiences %}
                     <li>
                         <div class="collapsible-header"><strong>{{ experience.question }}</strong></div>
-                        <div class="collapsible-body">{{ experience.answer|safe }}</div>
+                        <div class="collapsible-body" style="background-color: white">{{ experience.answer|safe }}</div>
                     </li>
                 {% endfor %}
             {% else %}
@@ -111,9 +110,28 @@
         </ul>
     </div>
 </div>
+
+<!-- Add Button -->
+{% if perms.exchangepage %}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">edit</i>
+  </a>
+  <ul>
+      {% if perms.exchangepage.change_travelletter %}
+        <li>
+          <a class="btn-floating yellow" href="{% url 'exchangepage:admindetail' travelletter.id %}"><i
+              class="material-icons">sync</i></a>
+          <a class="btn-floating mobile-fab-tip">Rediger</a>
+        </li>
+      {% endif %}
+  </ul>
+</div>
+{% endif %}
+
 <style>
     .information-box-container {
-        background-color: #f0f0f0;
+        background-color: white;
         padding: 20px;
         margin: 20px;
         border: 1px solid #ccc;
@@ -136,9 +154,16 @@
     .flow-text{
         font-size: 1rem;
     }
+    table {
+        table-layout: fixed;
+        width:100% !important;
+    }
 
-    /* Width definert i bilder kan ikke overskride width i bildekarusell får da overflow. :( Ser scuffed ut når man trykker inn på et bilde og :(( og bildene er scuffed /*
-
+    td {
+        overflow-wrap: break-word;
+        hyphens: auto;
+        vertical-align: top;
+    }
 </style>
 {% endblock content %}
 
@@ -148,45 +173,6 @@
     var elems = document.querySelectorAll('.carousel');
     var instances = M.Carousel.init(elems);
   });
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems);
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.materialboxed');
-    var instances = M.Materialbox.init(elems);
-  });
-
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.carousel');
-    var instances = M.Carousel.init(elems);
-  });
-
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.collapsible');
-    var instances = M.Collapsible.init(elems);
-  });
-
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.materialboxed');
-    var instances = M.Materialbox.init(elems);
-  });
-
-</script>
-
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    var elems = document.querySelectorAll('.carousel');
-    var instances = M.Carousel.init(elems);
-  });
-
 
   document.addEventListener('DOMContentLoaded', function() {
     var elems = document.querySelectorAll('.collapsible');

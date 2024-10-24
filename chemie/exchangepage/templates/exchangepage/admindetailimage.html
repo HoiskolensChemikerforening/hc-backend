@@ -16,38 +16,39 @@ Admin
 {% load material_form %}
 {% block content %}
 <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "exchangepage:index" %}" class="breadcrumb">Reisebrev</a>
-    <a href="{% url "exchangepage:admin" %}" class="breadcrumb">Rediger</a>
-    <a href="{% url "exchangepage:admindetail" travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a>
+    <a href="{% url 'exchangepage:index' %}" class="breadcrumb">Reisebrev</a>
+    <a href="{% url 'exchangepage:admin' %}" class="breadcrumb">Rediger</a>
+    <a href="{% url 'exchangepage:admindetail' travelletter.id %}" class="breadcrumb">{{travelletter.user}}</a>
     <a class="breadcrumb">Bilder</a>
 </div>
-<style>
-  select{display: block}
-</style>
+
 <p class="flow-text">Her kan du oppdatere bilder!</p>
 <div class="card">
   <div class="card-content">
-  <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
+      <form id = "form-container" method="POST" enctype="multipart/form-data">{% csrf_token %}
 
+          <div>
+              {{ imageformset.management_form }}
+              {% for form in imageformset %}
+                  <div class = "image-form" style="padding: 15px">
+                      {{ form.as_p }}
+                  </div>
+              {% endfor %}
+          </div>
 
-      <div>
-      {{ imageformset.management_form }}
-      {% for form in imageformset %}
-      <div class = "image-form">
-      {{ form.as_p }}
-      </div>
-      {% endfor %}
-      </div>
+          <div class="card-action" id="button-container">
+            <div class="right-align">
+              <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett bilder</a>
+              <button class="btn btn-primary pull-right" id="add-image-form" style="margin: 5px" type="button">Nytt bilde</button>
+              <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre!'/>
+            </div>
+          </div>
 
-      <div class="card-action" id="button-container">
-        <div class="right-align">
-          <a class="btn btn-danger pull-left modal-trigger" href="#deleteModal" style="background-color: red; border-color: red; margin: 5px">Slett bilder</a>
-          <button class="btn btn-primary pull-right" id="add-image-form" style="margin: 5px" type="button">Nytt bilde</button>
-          <input class="btn btn-primary pull-right" type='submit' style="margin: 5px" value='Lagre og gå videre!'/>
-        </div>
-      </div>
+          <div class="card-action right-align" style="padding-right: 24px; padding-bottom: 0px">
+              <a href="{% url 'exchangepage:createexperience' pk=travelletter.id%}" class="btn btn-primary pull-right" style="margin: 5px">Neste!</a>
+          </div>
 
-  </form>
+      </form>
   </div>
 </div>
 
@@ -63,6 +64,9 @@ Admin
   </div>
 </div>
 
+<style>
+  select{display: block}
+</style>
 {% endblock content %}
 
 {% block footer_script %}
