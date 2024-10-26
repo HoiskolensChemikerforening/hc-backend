@@ -100,15 +100,11 @@ LOCAL_APPS = [
     "chemie.cgp",
     "chemie.merch",
     "chemie.electofood",
-<<<<<<< HEAD
     "chemie.refund",
-    "chemie.wordlist"
-=======
     "chemie.exchangepage",
-    "chemie.refund",
->>>>>>> bfc87d59bcbcda9233d394205be07bfddd530e6e
+    "chemie.wordlist",
+    
 ]
-
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 # For bootstrap crispy forms
