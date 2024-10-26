@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from post_office import mail
@@ -11,19 +11,18 @@ from .models import RentalObject
 from .forms import CreateRentalObjectForm, InvoiceForm, RentalObjectForm
 from chemie.home.forms import ContactForm
 
-
 def index(request):
-    rentalObjects = RentalObject.objects.all().order_by("name")
+    return render(request, "rentalservice/index.html")
 
-    context = {"rentalObjects": rentalObjects}
-    return render(request, "rentalservice/index.html", context)
 def index_promo(request):
-
     return render(request, "rentalservice/index_promo.html")
 
+@login_required
 def index_sportskom(request):
 
-    return render(request, "rentalservice/index_sportskom.html")
+    rentalObjects = RentalObject.objects.all().order_by("name")
+    context = {"rentalObjects": rentalObjects}
+    return render(request, "rentalservice/index_sportskom.html", context)
 
 
 @permission_required("rentalservice..add_rentalobject")
@@ -31,7 +30,7 @@ def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
-        return redirect("rentalservice:index")
+        return redirect("rentalservice:index_sportskom")
 
     context = {"new_obj_form": form}
     return render(request, "rentalservice/new_object.html", context)
@@ -72,7 +71,7 @@ def edit_rentalobject(request, rentalobject_id):
                 "Utleieobjekt ble endret",
                 extra_tags="Endret",
             )
-            return HttpResponseRedirect(reverse("rentalservice:index"))
+            return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
     context = {"new_obj_form": form}
 
     return render(request, "rentalservice/new_object.html", context)

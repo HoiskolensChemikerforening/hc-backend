@@ -18,50 +18,10 @@ Sportskomiteen
                 <p class="flow-text">
                     Vi er sportskomiteen! Vi har som ansvar å arrangere BlotsCup, HC-fjelltur, Gaukerenn og andre sportslige begivenheter.
                     Det er også mulig å leie utstyr fra oss. 
-                    </p>
-                    <br>
-                    <h4>Hengekøye</h4>
-                    <p class="flow-text">Å leie en hengekøye er som å få en VIP-billett til avslapningens verden,
-                      uten å måtte eie "avslapningsstolen" permanent. Hvorfor eie når du kan leie, slenge deg ned under trærne,
-                      og late som om du er en ekte friluftsentusiast som bare "tilfeldigvis" har glemt alt annet utstyr?
-                      Perfekt for deg som vil være ett med naturen... i noen timer før Netflix kaller!
-                    <br> 
-                    <i>for free inkl. mva</i></p>
-                    <div class="row" style="justify-content: center;">
-                        <img type="image/jpg" src="/static/images/JR-3832.jpg" alt="Fotoboks_bilde_1" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem; ">
-                        <img type="image/jpg" src="/static/images/Fotoboks-010.JPG" alt="Fotoboks_bilde_2" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem;">
-                    </div>
-                    <br><br>
-                    <h4>Lavvo</h4>
-                    <p class="flow-text"> Vil du heller leie en lavvo? 
-                      Å leie en lavvo er som å gi deg selv en personlig glamping-opplevelse uten at du trenger å sette opp teltet selv! 
-                      Bare tenk deg å være omgitt av natur, mens du sitter komfortabelt på en skinnfell, 
-                      med en kopp kakao i hånden og en bålflamme som danser foran deg. Det er som å være en moderne nomade, 
-                      men uten all stressen med å bære med seg en hel campingbutikk! Dessuten, hvem trenger vel fancy hoteller når du kan ha en "gammeldags" 
-                      glampingtur der du faktisk får sove under stjernene, med bare et lite hint av musikk fra myggene som danser rundt leirbålet!
-                    <br> 
-                    <i>Pris: 5 mill kr inkl. mva</i>
-                    <div class="row" style="justify-content: center;">
-                        <img type="image/jpg" src="/static/images/fotograf1.JPG" alt="Fotograf_bilde_1" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem; ">
-                        <img type="image/jpg" src="/static/images/fotograf2.jpg" alt="Fotograf_bilde_2" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem;">
-                    </div>
-                    <br><br>
-                    <h4>Liggunderlag</h4>
-                    <p class="flow-text">Å leie et liggunderlag er som å gi den harde bakken en real "merkelapp" om at du ikke er 
-                      interessert i å være en menneskelig spikermatte! Det er den perfekte løsningen for alle som ønsker å overnatte 
-                      under stjernene uten å våkne opp som en forvridd pretzel dagen etter. Med et liggunderlag kan du late som om du er 
-                      på et luksuriøst spa, mens du faktisk ligger ute i skogen og er omringet av glade mygg og nysgjerrige ekorn. 
-                      Så slipp bekymringene, og ta med deg et liggunderlag – for hvorfor risikere å våkne opp med ryggsmerter når du kan sove 
-                      som en konge, selv om omgivelsene dine ligner mer på en viltvoksende jungel?
-                    <br>
-                    <i>Pris: en god natts søvn inkl. mva</i>
-                    <br><br>
-                    Er du Chemiker? Da får du rabatt på utstyr fra oss! 
-                    Er det et arrangement der minst et helt klassetrinn er invitert (evt. åpent for deltakelse fra hele foreningen) får du 50% rabatt. 
-                    Alle komitéer som arrangerer fellesarrangementer i HC får låne utstyr gratis.
-                    <br><br>
-                    Ta kontakt via kontakt-knappen for å avtale.
                 </p>
+                
+                    
+                <p class="flow-text"> Ta kontakt via kontakt-knappen for å avtale</p>
             </div>
         </div>
     </div>
@@ -81,7 +41,53 @@ Sportskomiteen
             </div>
           </a>
         </div>
-      </div>      
+      </div> 
+           
 </div>
+
+{% if perms.rentalservice %}
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.rentalservice.add_rentalobject %}
+          <li>
+            <a class="btn-floating blue" href="ny/">
+              <i class="material-icons">add</i>
+              <a class="btn-floating mobile-fab-tip" href="ny/">Legg til ny</a>
+            </a></li>
+        {% endif %}
+      </ul>
+    </div>
+  {% endif %}
+<div class="row">
+        <div class="col s12"> <!---size of the layout--->
+            <div class="row">
+            {% for object in rentalObjects %}
+                <div class="col s12 m4">
+                <div class="card small">
+                    <div class="card-image">
+                        <a href="{% url 'rentalservice:detail' object.id %}">
+                            {% thumbnail object.image "630x400" crop="center" as im %} <!--- standard image crop for HC--->
+                                <img src="{{ im.url }}"> <!--- locates image url--->
+                            {% endthumbnail %}
+                        </a>
+                    </div>
+                    <div class="card-content" style="padding-top: 0px; margin-top: -15px;" >
+                        <br>
+                        <h5>{{ object.name }}</h5>
+                        <p class="card-text"> {{ object.description|safe }} </p>
+                    </div>
+                    <div class="card-action center">
+                        <a href="{% url 'rentalservice:detail' object.id %}">Mer info</a> <!--- det er ingen hyperlenke her nå--->
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+</div>
+
 
 {% endblock %}
