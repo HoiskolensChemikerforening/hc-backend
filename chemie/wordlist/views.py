@@ -163,10 +163,14 @@ def ordListe(request):
 
 
     # profile = get_object_or_404(Profile, user=request.user)
-
+    # alle_ord_2 = []
     # if int(profile.grade) < 2:
-    #    alle_ord = alle_ord.filter(secret=False).order_by("word")
+    #     for i in alle_ord:
+    #         if i[0].secret == False:
+    #             alle_ord_2.append(i)
+    #     alle_ord = alle_ord_2
 
+        # alle_ord = alle_ord.filter(secret=False).order_by("word")
 
     # obj_per_page = 30  # Show 30 words per page.
     # if len(alle_ord) < obj_per_page:
@@ -180,8 +184,8 @@ def ordListe(request):
     #     alle_ord = page_obj
   
 
-    # for i in alle_ord:
-    #     i.explanations = i.explanations[:25] + "..."
+    for i in alle_ord:
+        i[0].explanations = i[0].explanations[:25] + "..."
     
     context = {"alle_ord": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
     return render(request, "wordall.html", context)
@@ -193,16 +197,28 @@ def ordListe(request):
 @permission_required("wordlist.add_word")
 def createWord(request):
     
+    checkwhatformform = CheckWhatFormForm()
+    wordform = WordInput()
+    verbform = VerbInput()
+    nounform = NounInput()
+    adjectiveform = NounInput()
+    formindex = 0
 
-    if request.method == "POST" and checkwhatformform.is_valid():
-        if checkwhatformform == "Et annet type ord":
+    if request.method == "POST" :
+        print(request.POST,"hei")
+        # print(checkwhatformform.cleaned_data)
+        if request.POST['choice'] == "1":
             wordform = WordInput()
-        if checkwhatformform == "Verb":
+            formindex = 1
+        if request.POST['choice'] == "2":
             verbform = VerbInput()
-        if checkwhatformform == "Substantiv":
+            formindex = 2
+        if request.POST['choice'] == "3":
             nounform = NounInput()
-        if checkwhatformform == "Adjektiv":
+            formindex = 3
+        if request.POST['choice'] == "4":
             adjectiveform = AdjectiveInput()
+            formindex = 4
 
 
     if request.method == "POST":
@@ -279,10 +295,9 @@ def createWord(request):
                 extra_tags="Big slay",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
-    else:
-        checkwhatformform = CheckWhatFormForm()
         
-    context = {"checkwhatformform":checkwhatformform, "wordform":wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform} 
+        
+    context = {"checkwhatformform":checkwhatformform, "wordform":wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform, "formindex":formindex} 
     return render(request, "createWord.html", context)
 
 

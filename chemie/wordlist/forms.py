@@ -129,4 +129,4 @@ class CategoryInput(forms.ModelForm):
 
 
 class CheckWhatFormForm(forms.Form):
-    choice = forms.MultipleChoiceField(choices = ["Et annet type ord", "Verb", "Substantiv", "Adjektiv"], label = False, required=True)
+    choice = forms.ChoiceField(choices = ((1, "Et annet type ord"), (2, "Verb"), (3, "Substantiv"), (4, "Adjektiv")), label = "",  required=True)

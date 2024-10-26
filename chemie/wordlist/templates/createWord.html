@@ -28,7 +28,101 @@
   
 </style>
 
+
 <div>
+  <form method = "POST" enctype = "multipart/form-data" id="select"> 
+    {% csrf_token %}
+    {%form form=checkwhatformform%}
+    <!---<div class="input-field col s12">
+      <label>Velg type form:</label>
+      {{form.choice}}
+    </div>---->
+    {% endform %}
+    <div>
+      <input type = "submit" value = "Velg form", class = "btn" />
+      <!-- <button type = "submit"  form = "select" value="Submit" >Velg form</button>  -->
+    </div>
+  </form>
+</div>
+
+{% if formindex == 1 %}
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=wordform%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}}
+
+{% if formindex == 2 %}
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=verbform%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}}
+
+{% if formindex == 3 %}
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=nounform%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}}
+
+{% if formindex == 4 %}
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=adjectiveform%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}}
+
+
+<!-- <div>
   
   <form method = "POST" enctype = "multipart/form-data"> 
   
@@ -66,7 +160,7 @@
     </div>
 
   </form>
-</div>
+</div> -->
 
 
 {% endblock content %}
