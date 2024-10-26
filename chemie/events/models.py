@@ -163,8 +163,8 @@ class Social(BaseEvent):
         User, related_name="social_author", on_delete=models.CASCADE
     )
     #   Name of the committee responsible for the event
-    committee = models.ForeignKey(
-        Committee, null=True, blank=True, on_delete=models.CASCADE
+    committee = models.ManyToManyField(
+        Committee
     )
     # Payment information
     payment_information = models.TextField(

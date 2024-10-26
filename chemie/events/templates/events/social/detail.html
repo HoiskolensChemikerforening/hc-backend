@@ -50,9 +50,15 @@
                     <div class="section">
                       <div class="valign-wrapper">
                         <i class="material-icons valign left">contacts</i>
-                        <h5 class="left-align">Komité</h5>
+                        {% if social.committee.count > 1 %}
+                            <h5 class="left-align">Komiteer</h5>
+                        {% else %}
+                            <h5 class="left-align">Komité</h5>
+                        {% endif %}
                       </div>
-                      <p>{{ social.committee }}</p>
+                    {% for committee in social.committee.all %}
+                     <div>{{ committee.title }}</div>
+                      {% endfor %}
                     </div>
                     <div class="divider"></div>
                   {% endif %}
@@ -63,11 +69,7 @@
                     </div>
                     <p>{{ social.author.get_full_name }}</p>
                   </div>
-
-
-
                 </div>
-
               </div>
             </div>
           </div>
@@ -96,8 +98,6 @@
           </div>
 
     {% else  %}
-
-
           <div class="row">
             <p class="col s12 m12 l12">
             <h1 class="heading">{{ social.title }}</h1>
@@ -134,9 +134,15 @@
                     <div class="section">
                       <div class="valign-wrapper">
                         <i class="material-icons valign left">contacts</i>
-                        <h5 class="left-align">Komité</h5>
+                        {% if social.committee.count > 1 %}
+                            <h5 class="left-align">Komiteer</h5>
+                        {% else %}
+                            <h5 class="left-align">Komité</h5>
+                        {% endif %}
                       </div>
-                      <p>{{ social.committee }}</p>
+                      {% for committee in social.committee.all %}
+                     <div>{{ committee.title }}</div>
+                      {% endfor %}
                     </div>
                   {% endif %}
                   <div class="section">
