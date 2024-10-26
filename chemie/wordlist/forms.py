@@ -1,6 +1,6 @@
 from django import forms
 import material as M
-from .models import Word, Category, Noun, Verb, Adjective
+from .models import AbstractWord, Word, Category, Noun, Verb, Adjective
 
 
 
@@ -27,7 +27,7 @@ class WordInput(forms.ModelForm):
 
     class Meta:
         model = Word
-        fields = ["word", "explanations", "picture", "secret", "category"]
+        fields = "__all__"
 
 
 
@@ -35,16 +35,25 @@ class WordInput(forms.ModelForm):
 class NounInput(forms.ModelForm):
 
     layout = M.Layout(
-        M.Row("indefinite_singular"),
+        M.Row("word"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),        
         M.Row("definite_singular"),
         M.Row("indefinite_plural"),
         M.Row("definite_plural"),
         
     )
-    
+
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
+
     class Meta:
         model = Noun 
-        fields = ["indefinite_singular", "indefinite_plural", "definite_singular", "definite_plural"]
+        fields = "__all__"
         
     
 
@@ -53,30 +62,46 @@ class NounInput(forms.ModelForm):
 class VerbInput(forms.ModelForm):
 
     layout = M.Layout(
-        M.Row("infinitive"),
+        M.Row("word"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),
         M.Row("present"),
         M.Row("past"),
         M.Row("future"),
         
     )
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
 
     class Meta:
         model = Verb 
-        fields = ["infinitive", "present", "past", "future"]
+        fields = "__all__"
         
 
 class AdjectiveInput(forms.ModelForm):
 
     layout = M.Layout(
-        M.Row("positive"),
+        M.Row("word"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),
         M.Row("comparative"),
         M.Row("superlative"),
         
     )
+    category = forms.ModelMultipleChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.CheckboxSelectMultiple
+    )
 
     class Meta:
         model = Adjective 
-        fields = ["positive", "comparative", "superlative"]
+        fields = "__all__"
         
 
 
@@ -89,10 +114,19 @@ class WordSearchMainPage(forms.Form):
 
 
 class CategorySortingMainPage(forms.Form):
-    category = forms.ModelChoiceField(queryset = Category.objects.all(), label='Car Type', required=False)
+    category = forms.ModelChoiceField(queryset = Category.objects.all(), required=False, label = " ")
+
+
+
 
 class CategoryInput(forms.ModelForm):
 
     class Meta:
         model = Category
         fields = "__all__"
+
+
+
+
+class CheckWhatFormForm(forms.Form):
+    choice = forms.MultipleChoiceField(choices = ["Et annet type ord", "Verb", "Substantiv", "Adjektiv"], label = False, required=True)
