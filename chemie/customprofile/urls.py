@@ -25,5 +25,8 @@ urlpatterns = [
     #API
     path("api/profil/", views.ProfileListCreate.as_view(), name="api-profile-list",),
     path("api/profil/<int:pk>/", views.ProfileDetail.as_view(), name="api-profile-detail",),
+    path("api/katalog/", views.ListFullCatalog.as_view(), name= "api-full-catalog"),
+    path("api/profil/registrer/", views.ProfileCreate.as_view(), name= "api-profile-registration"  ),
+    
     
 ]

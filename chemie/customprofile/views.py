@@ -463,6 +463,9 @@ class ProfileListCreate(generics.ListCreateAPIView):
     queryset = Profile.objects.all()
     serializer_class = ProfileSerializer
 
+class ProfileCreate(generics.CreateAPIView):
+    queryset = Profile.objects.all()
+    serializer_class = ProfileSerializer
 
 class ProfileDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Profile.objects.all()
@@ -476,3 +479,7 @@ class MedalListCreate(generics.ListCreateAPIView):
 class MedalDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Medal.objects.all()
     serializer_class = MedalSerializer
+
+class ListFullCatalog(generics.ListAPIView):
+    queryset = Profile.objects.all().order_by("-start_year")
+    serializer_class = ProfileSerializer

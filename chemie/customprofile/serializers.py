@@ -24,7 +24,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
 
 class UserSerializer(serializers.ModelSerializer):
-    full_name = serializers.CharField(source="get_full_name")
+    full_name = serializers.CharField(source="get_full_name", read_only = True)
 
     class Meta:
         model = User
@@ -44,8 +44,22 @@ class ProfileSerializer(serializers.ModelSerializer):
         model = Profile
         fields = "__all__"
 
+    def update(self, instance, validated_data):
+        devices = validated_data.pop('devices', None)
+        if devices is not None:
+            instance.devices.set(devices)
+        return super().update(instance, validated_data)
+
 
 class MedalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Medal
+        fields = "__all__"
+
+
+class CatalogSerializer(serializers.ModelSerializer): 
+    users = UserSerializer
+
+    class Meta: 
+        model = Profile
         fields = "__all__"
