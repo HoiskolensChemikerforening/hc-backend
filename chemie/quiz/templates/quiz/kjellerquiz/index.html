@@ -16,12 +16,36 @@
     <a class="breadcrumb">Kjellerquiz</a>
   </div>
 
+  <style>
+    img.responsive-img, video.responsive-video {
+      height: auto;
+      width: auto;
+      max-width: 300px;
+    }
+    @media only screen and (max-width: 600px){
+        .hide_on_small{
+            display: none;
+        }
+    }
+    @media only screen and (max-width: 600px){
+        .break_on_small{
+            width: 0;
+        }
+    }
+    @media only screen and (max-width: 992px) {
+    .card-content {
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+}
+  </style>
+  
   <div class="card-panel">
     {% if active_term %}
       <a href="{% url 'quiz:term_detail' active_term.pk %}">
         <h4 class="heading">{{ active_term }}</h4>
       </a>
       {% if top_scores %}
+      
         <table class="striped responsive-table">
           <thead>
           <tr>
