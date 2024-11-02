@@ -52,7 +52,7 @@ def delete_rentalobject(request, rentalobject_id):
         "Utleieobjektet ble slettet",
         extra_tags="Slettet",
     )
-    return HttpResponseRedirect(reverse("rentalservice:index"))
+    return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
 
 
 @permission_required("rentalservice.change_rentalobject")
