@@ -34,6 +34,7 @@ wiki==0.7.9
 InvoiceGenerator==1.1.0
 
 coverage==4.5.2
+markdown==3.1.1
 markdown2==2.4.0
 
 django-environ==0.4.5
