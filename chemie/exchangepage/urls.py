@@ -51,4 +51,3 @@ urlpatterns = [
     ),
     path("<str:city_name>/", views.cityPageViews, name="citypage"),
 ]
-

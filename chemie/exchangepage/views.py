@@ -446,4 +446,3 @@ def displayIndividualLetter(request, pk):
     context["specialization"] = SPECIALIZATION[specialization_id][1]
 
     return render(request, "exchangepage/detail.html", context)
-
