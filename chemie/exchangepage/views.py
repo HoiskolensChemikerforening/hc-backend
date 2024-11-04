@@ -15,16 +15,6 @@ from django.utils import timezone
 
 @login_required()
 def index(request):
-    # Logic for countdown, can be removed afterwards
-    launch_date = timezone.make_aware(
-        timezone.datetime(2024, 8, 1, 12, 0, 0)
-    )  # yyyy m d h m s
-    if (
-        not request.user.has_perm("exchangepage.add_travelletter")
-        and timezone.now() < launch_date
-    ):
-        return redirect("exchangepage:countdown")
-
     travelletters = Travelletter.objects.all().order_by("country")
     avg_list = [
         "avg_sun",
@@ -457,17 +447,3 @@ def displayIndividualLetter(request, pk):
 
     return render(request, "exchangepage/detail.html", context)
 
-
-@login_required()
-def countDownViews(request):
-    # This view is for countdown and can be deleted afterwards
-    webkom = Medal.objects.filter(title="Webkomiteen")
-    indkom = Medal.objects.filter(title="Industrikomiteen")
-    if len(webkom) > 0 and len(indkom) > 0:
-        webkom = webkom[0]
-        indkom = indkom[0]
-    else:
-        webkom = None
-        indkom = None
-    context = {"webkom": webkom, "indkom": indkom}
-    return render(request, "exchangepage/countdown.html", context)

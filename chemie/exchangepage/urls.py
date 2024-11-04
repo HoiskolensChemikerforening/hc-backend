@@ -49,8 +49,6 @@ urlpatterns = [
     path(
         "admin/slettbilder/<int:pk>", views.deleteImages, name="deleteimages"
     ),
-    path(
-        "nedtelling/", views.countDownViews, name="countdown"
-    ),  # For countdown, can be removed afterwards
     path("<str:city_name>/", views.cityPageViews, name="citypage"),
 ]
+
