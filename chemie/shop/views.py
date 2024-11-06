@@ -161,7 +161,6 @@ def index_user(request):
             balance = user.profile.balance
             total_price = cart.get_total_price()
             if balance < total_price:
-                print("not money")
                 messages.add_message(
                     request,
                     messages.ERROR,
@@ -169,7 +168,6 @@ def index_user(request):
                     extra_tags="Nei!",
                 )
             else:
-                print(request.POST)
                 cart.buy(user)
                 messages.add_message(
                     request,

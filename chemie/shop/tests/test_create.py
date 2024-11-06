@@ -48,7 +48,6 @@ def test_refill_balance(
     provider = create_user_refill_perms
     client.login(username=provider.username, password="defaultpassword")
     receiver = create_second_user_base
-    print(provider.id, receiver.id)
     amount = Decimal(100)
     request = client.post(
         reverse("shop:refill"),
