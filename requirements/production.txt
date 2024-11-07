@@ -34,8 +34,9 @@ coverage==4.5.2
     # via
     #   -r requirements/base.in
     #   pytest-cov
-cryptography==43.0.3
+cryptography==39.0.1
     # via
+    #   -r requirements/base.in
     #   apns2
     #   http-ece
     #   py-vapid
@@ -198,7 +199,7 @@ pyjwt==1.7.1
     # via
     #   apns2
     #   djangorestframework-simplejwt
-pyopenssl==24.2.1
+pyopenssl==23.1.0
     # via -r requirements/base.in
 pypng==0.20220715.0
     # via qrcode

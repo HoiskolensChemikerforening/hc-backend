@@ -20,8 +20,9 @@ django-recaptcha==1.4.0
 django-smart-selects==1.5.4
 django-sekizai==2.0.0
 django-multiselectfield==0.1.8
+django-classy-tags==2.0.0
 
-pyopenssl==24.2.1
+pyopenssl==23.1.0
 pytest==5.3.5
 pytest-cov==2.8.1
 pytest-django==3.8.0
@@ -44,3 +45,5 @@ django-cors-headers==3.5.0
 reportlab==3.5.59
 
 pillow==9.5.0
+
+cryptography==39.0.1
