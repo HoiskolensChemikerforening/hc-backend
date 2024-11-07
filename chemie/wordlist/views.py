@@ -204,46 +204,77 @@ def createWord(request):
     adjectiveform = NounInput()
     formindex = 0
 
-    if request.method == "POST" :
-        print(request.POST,"hei")
-        # print(checkwhatformform.cleaned_data)
-        if request.POST['choice'] == "1":
+    if request.method == "POST" and "check" in request.POST:
+        print(request.POST)
+        print("checkform")
+        if request.POST['choice'] == "1" and "check" in request.POST:
             wordform = WordInput()
             formindex = 1
-        if request.POST['choice'] == "2":
+        if request.POST['choice'] == "2" and "check" in request.POST:
             verbform = VerbInput()
             formindex = 2
-        if request.POST['choice'] == "3":
+        if request.POST['choice'] == "3" and "check" in request.POST:
             nounform = NounInput()
             formindex = 3
-        if request.POST['choice'] == "4":
+        if request.POST['choice'] == "4" and "check" in request.POST:
             adjectiveform = AdjectiveInput()
             formindex = 4
 
 
-    if request.method == "POST":
+    if request.method == "POST" and "check" not in request.POST:
+        print(request.POST)
+        print("forms")
         wordform = WordInput(data=request.POST, files=request.FILES)
         nounform = NounInput(data=request.POST, files=request.FILES)
         verbform = VerbInput(data=request.POST, files=request.FILES)
         adjectiveform = AdjectiveInput(data=request.POST, files=request.FILES)
-        
-        if "nytt" in request.POST and nounform.is_valid():       
+        print(nounform)
+        if "nytt" in request.POST and nounform.is_valid(): 
+            print(1)      
             nounform_instace = nounform.save(commit=False)
+            print(2)
             nounform_instace.author = request.user
+            print(3)
             nounform_instace.save()
+            print(4)
             nounform.save_m2m()
+            print(5)
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Ditt ord er lagret",
+                extra_tags="Big slay",
+                )
+            return HttpResponseRedirect(reverse("wordlist:innsending"))
+            
 
         if "nytt" in request.POST and verbform.is_valid():       
             verbform_instace = verbform.save(commit=False)
             verbform_instace.author = request.user
             verbform_instace.save()
             verbform.save_m2m()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Ditt ord er lagret",
+                extra_tags="Big slay",
+                )
+            return HttpResponseRedirect(reverse("wordlist:innsending"))
+            
 
         if "nytt" in request.POST and adjectiveform.is_valid():       
             adjectiveform_instace = adjectiveform.save(commit=False)
             adjectiveform_instace.author = request.user
             adjectiveform_instace.save()
             adjectiveform.save_m2m()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Ditt ord er lagret",
+                extra_tags="Big slay",
+                )
+            return HttpResponseRedirect(reverse("wordlist:innsending"))
+            
 
 
         if "nytt" in request.POST and wordform.is_valid():
@@ -251,8 +282,6 @@ def createWord(request):
             wordform_instace.author = request.user
             wordform_instace.save()
             wordform.save_m2m()
-
-                
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -268,26 +297,45 @@ def createWord(request):
             nounform_instace.author = request.user
             nounform_instace.save()
             nounform.save_m2m()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Ditt ord er lagret.",
+                extra_tags="Big slay",
+            )
+            return HttpResponseRedirect(reverse("wordlist:index"))
 
         if verbform.is_valid():       
             verbform_instace = verbform.save(commit=False)
             verbform_instace.author = request.user
             verbform_instace.save()
             verbform.save_m2m()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Ditt ord er lagret.",
+                extra_tags="Big slay",
+            )
+            return HttpResponseRedirect(reverse("wordlist:index"))
 
         if adjectiveform.is_valid():       
             adjectiveform_instace = adjectiveform.save(commit=False)
             adjectiveform_instace.author = request.user
             adjectiveform_instace.save()
             adjectiveform.save_m2m()
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Ditt ord er lagret.",
+                extra_tags="Big slay",
+            )
+            return HttpResponseRedirect(reverse("wordlist:index"))
 
         if wordform.is_valid():
             wordform_instace = wordform.save(commit=False)
             wordform_instace.author = request.user
             wordform_instace.save()
             wordform.save_m2m()
-
-
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -397,7 +445,9 @@ def word_delete(request, pk):
 
 @login_required()
 def details(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
-    
+    print(pk)
+    print(klassetall)
+    print(request)
     if klassetall == 1:
         ordet = (get_object_or_404(Verb, id=pk), klassetall)
     if klassetall == 2:

@@ -27,7 +27,7 @@ class WordInput(forms.ModelForm):
 
     class Meta:
         model = Word
-        fields = "__all__"
+        fields = ("word", "explanations", "picture", "secret", "category")
 
 
 
@@ -35,11 +35,12 @@ class WordInput(forms.ModelForm):
 class NounInput(forms.ModelForm):
 
     layout = M.Layout(
-        M.Row("word"),
+        
         M.Row("explanations"),
         M.Row("picture"),
         M.Row("secret"),
-        M.Row("category"),        
+        M.Row("category"),
+        M.Row("word"),        
         M.Row("definite_singular"),
         M.Row("indefinite_plural"),
         M.Row("definite_plural"),
@@ -53,7 +54,7 @@ class NounInput(forms.ModelForm):
 
     class Meta:
         model = Noun 
-        fields = "__all__"
+        fields = ("word", "explanations", "picture", "secret", "category", "indefinite_plural", "definite_singular",  "definite_plural")
         
     
 
@@ -62,11 +63,12 @@ class NounInput(forms.ModelForm):
 class VerbInput(forms.ModelForm):
 
     layout = M.Layout(
-        M.Row("word"),
+        
         M.Row("explanations"),
         M.Row("picture"),
         M.Row("secret"),
         M.Row("category"),
+        M.Row("word"),
         M.Row("present"),
         M.Row("past"),
         M.Row("future"),
@@ -79,17 +81,18 @@ class VerbInput(forms.ModelForm):
 
     class Meta:
         model = Verb 
-        fields = "__all__"
+        fields = ("word", "explanations", "picture", "secret", "category", "present", "past", "future")
         
 
 class AdjectiveInput(forms.ModelForm):
 
     layout = M.Layout(
-        M.Row("word"),
+        
         M.Row("explanations"),
         M.Row("picture"),
         M.Row("secret"),
         M.Row("category"),
+        M.Row("word"),
         M.Row("comparative"),
         M.Row("superlative"),
         
@@ -101,7 +104,7 @@ class AdjectiveInput(forms.ModelForm):
 
     class Meta:
         model = Adjective 
-        fields = "__all__"
+        fields = ("word", "explanations", "picture", "secret", "category", "comparative", "superlative")
         
 
 
@@ -129,4 +132,4 @@ class CategoryInput(forms.ModelForm):
 
 
 class CheckWhatFormForm(forms.Form):
-    choice = forms.ChoiceField(choices = ((1, "Et annet type ord"), (2, "Verb"), (3, "Substantiv"), (4, "Adjektiv")), label = "",  required=True)
+    choice = forms.ChoiceField(choices = ((0, "Ikke valgt"), (1, "Et annet type ord"), (2, "Verb"), (3, "Substantiv"), (4, "Adjektiv")), label = "",  required=True)
