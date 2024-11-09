@@ -11,7 +11,7 @@ from sorl.thumbnail import ImageField
 from extended_choices import Choices
 
 COMMITTEE_TYPE = Choices(
-    ("COMMITTEE", 1, "Kommitee"),
+    ("COMMITTEE", 1, "Komité"),
     ("SUBGROUP", 2, "Undergruppe"),
     ("ASSOSIATEDGROUP", 3, "Organisasjon med særskilt tilknytning"),
 )
