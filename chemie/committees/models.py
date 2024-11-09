@@ -16,6 +16,7 @@ COMMITTEE_TYPE = Choices(
     ("ASSOSIATEDGROUP", 3, "Organisasjon med særskilt tilknytning"),
 )
 
+
 class Committee(models.Model):
     title = models.CharField(max_length=100, unique=True)
     email = models.EmailField(null=True, blank=True)
@@ -30,6 +31,7 @@ class Committee(models.Model):
         default=COMMITTEE_TYPE.COMMITTEE,
         verbose_name="gruppe_type",
     )
+
     def __str__(self):
         return self.title
 
