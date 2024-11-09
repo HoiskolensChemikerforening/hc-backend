@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
 from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 from django.urls import reverse
 from post_office import mail
 
@@ -20,7 +21,19 @@ def index_promo(request):
 @login_required
 def index_sportskom(request):
     rentalObjects = RentalObject.objects.filter(owner=3)
-    context = {"rentalObjects": rentalObjects}
+    if not rentalObjects.exists():
+        return render(request, "/empty.html")
+
+    obj_per_page = 3  # Show 24 contacts per page.
+    if len(rentalObjects) < obj_per_page:
+        context = {"rentalObjects": rentalObjects}
+    else:
+        paginator = Paginator(rentalObjects, obj_per_page)
+
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context = {"rentalObjects": page_obj}
     return render(request, "rentalservice/index_sportskom.html", context)
 
 
