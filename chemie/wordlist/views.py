@@ -81,18 +81,7 @@ def ordListe(request):
     nouns = Noun.objects.all()
     word = Word.objects.all()
 
-    # print(verbs)
-    # print(adjectives)
-    # print(nouns)
-    # print(word)
-    # verbs = verbs.values_list('word', 'picture', 'explanations', 'category')
-    # adjectives = adjectives.values_list('word', 'picture', 'explanations', 'category')
-    # nouns = nouns.values_list('word', 'picture', 'explanations', 'category')
-    # word = word.values_list('word', 'picture', 'explanations', 'category')
-    
-    # alle_ord = ((verbs.union(adjectives)).union(nouns)).union(word)
-
-    # print(alle_ord)
+   
 
     alle_ord = [] # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
     for i in verbs:
@@ -103,8 +92,7 @@ def ordListe(request):
         alle_ord.append((i, 3))
     for i in word:
         alle_ord.append((i, 4))
-    # print(alle_ord)
-    # print(len(alle_ord))
+
     
     form = WordSearchMainPage()
     kategorier = Category.objects.all()
@@ -122,10 +110,8 @@ def ordListe(request):
             if form.is_valid():                
                 if request.POST["submit"] == "Søk!":
                     the_word = form.cleaned_data.get("the_word")
-                    print(alle_ord)
                     alle_ord = fsort(alle_ord, the_word)
-                    # alle_ord = filter(fsort, alle_ord)
-                    # alle_ord = alle_ord.objects.filter(word__icontains = the_word)
+
                     
     if not kategorier.exists():
             return render(request, "404.html")
@@ -134,7 +120,7 @@ def ordListe(request):
         if request.method == "POST":
             if category_form.is_valid():              
                 if request.POST["submit"] == "Ta meg til kategorien":
-                    print(alle_ord)
+                    
                     the_category = category_form.cleaned_data.get("category")
                     alle_ord_2 = []
 
@@ -212,8 +198,7 @@ def createWord(request):
     formindex = 0
 
     if request.method == "POST" and "check" in request.POST:
-        print(request.POST)
-        print("checkform")
+        
         if request.POST['choice'] == "1" and "check" in request.POST:
             wordform = WordInput()
             formindex = 1
@@ -229,23 +214,17 @@ def createWord(request):
 
 
     if request.method == "POST" and "check" not in request.POST:
-        print(request.POST)
-        print("forms")
+        
         wordform = WordInput(data=request.POST, files=request.FILES)
         nounform = NounInput(data=request.POST, files=request.FILES)
         verbform = VerbInput(data=request.POST, files=request.FILES)
         adjectiveform = AdjectiveInput(data=request.POST, files=request.FILES)
-        print(nounform)
-        if "nytt" in request.POST and nounform.is_valid(): 
-            print(1)      
+        
+        if "nytt" in request.POST and nounform.is_valid():    
             nounform_instace = nounform.save(commit=False)
-            print(2)
             nounform_instace.author = request.user
-            print(3)
             nounform_instace.save()
-            print(4)
             nounform.save_m2m()
-            print(5)
             messages.add_message(
                 request,
                 messages.SUCCESS,
@@ -429,9 +408,7 @@ def word_delete(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 
 
 @login_required()
 def details(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
-    print(pk)
-    print(klassetall)
-    print(request)
+    
     if klassetall == 1:
         ordet = (get_object_or_404(Verb, id=pk), klassetall)
     if klassetall == 2:
