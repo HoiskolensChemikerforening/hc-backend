@@ -11,7 +11,7 @@ class Category(models.Model):
 
 
 class AbstractWord(models.Model):
-    explanations = models.CharField(max_length = 150, verbose_name ="Forklaring",  unique = True)
+    explanations = models.CharField(max_length = 300, verbose_name ="Forklaring",  unique = True)
     author = models.ForeignKey(User, on_delete = models.CASCADE, verbose_name = "Forfatter")
     date = models.DateField(auto_now = False, verbose_name="Dato",auto_now_add=True)
     picture = models.ImageField(upload_to = "posters", verbose_name="Bilde", null = True, blank = True)

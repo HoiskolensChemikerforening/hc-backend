@@ -127,15 +127,15 @@
 
 <div>
   <ul class="pagination nav navbar-nav">
-    {% if word.has_previous %}
-     <li><a href="?page={{ word.previous_page_number }}">Forrige</a></li>
+    {% if alle_ord.has_previous %}
+     <li><a href="?page={{ alle_ord.previous_page_number }}">Forrige</a></li>
     {% endif %}
-    {% for page in word.paginator.page_range %}
-    <li class="{% if word.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% for page in alle_ord.paginator.page_range %}
+    <li class="{% if alle_ord.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
     {% endfor %}
 
-    {% if word.has_next %}
-      <li><a href="?page={{ word.next_page_number }}">Neste</a></li>
+    {% if alle_ord.has_next %}
+      <li><a href="?page={{ alle_ord.next_page_number }}">Neste</a></li>
     {% endif %}
     </ul>
 </div>

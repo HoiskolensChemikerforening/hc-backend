@@ -162,30 +162,37 @@ def ordListe(request):
                     
 
 
-    # profile = get_object_or_404(Profile, user=request.user)
-    # alle_ord_2 = []
-    # if int(profile.grade) < 2:
-    #     for i in alle_ord:
-    #         if i[0].secret == False:
-    #             alle_ord_2.append(i)
-    #     alle_ord = alle_ord_2
+    profile = get_object_or_404(Profile, user=request.user)
+    
+    if int(profile.grade) < 2:# (1 = verb, 2 = adjective, 3 = noun, 4 = word)
+        
+        alle_ord_2 = []
+        for i in alle_ord:
+            if i[0].secret == True:
+                
+                alle_ord_2.append(i)
+        for i in alle_ord_2:
+            alle_ord.remove(i)
 
-        # alle_ord = alle_ord.filter(secret=False).order_by("word")
-
-    # obj_per_page = 30  # Show 30 words per page.
-    # if len(alle_ord) < obj_per_page:
-    #     context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
-
-    # else:
-    #     paginator = Paginator(alle_ord, obj_per_page)
-
-    #     page_number = request.GET.get("page")
-    #     page_obj = paginator.get_page(page_number)
-    #     alle_ord = page_obj
-  
 
     for i in alle_ord:
-        i[0].explanations = i[0].explanations[:25] + "..."
+            i[0].explanations = i[0].explanations[:25] + "..."
+
+
+
+
+
+    obj_per_page = 30  # Show 30 words per page.
+    if len(alle_ord) < obj_per_page:
+        context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
+
+    else:
+        paginator = Paginator(alle_ord, obj_per_page)
+
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        alle_ord = page_obj
+  
     
     context = {"alle_ord": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
     return render(request, "wordall.html", context)
@@ -353,76 +360,43 @@ def createWord(request):
 
 
 @permission_required("wordlist.change_word")
-def adminWord(request, pk):
-    word = get_object_or_404(Word, id=pk)
-    wordform = WordInput(data=request.POST or None, files=request.FILES or None, instance=word)
-    nounform = NounInput(data=request.POST or None, files=request.FILES or None, instance=word.noun)
-    verbform = VerbInput(data=request.POST or None, files=request.FILES or None, instance=word.verb)
-    adjectiveform = AdjectiveInput(data=request.POST or None, files=request.FILES or None, instance=word.adjective)
-    referanse = 0
+def adminWord(request, pk, klassetall):
+
+    if klassetall == 1:
+        ordet = (get_object_or_404(Verb, id=pk), klassetall)
+        form = VerbInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+    if klassetall == 2:
+        ordet = (get_object_or_404(Adjective, id=pk), klassetall)
+        form = AdjectiveInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+    if klassetall == 3:
+        ordet = (get_object_or_404(Noun, id=pk), klassetall)
+        form = NounInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+    if klassetall == 4:
+        ordet = (get_object_or_404(Word, id=pk), klassetall)
+        form = WordInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+
 
     if request.method == "POST":
 
-        try:
-            if nounform.is_valid():
-                nounform_instace = nounform.save(commit = False)
-                nounform_instace.save()
-                referanse = 1
-
-        except:
-            try:
-                if verbform.is_valid():
-                    verbform_instace = verbform.save(commit = False)
-                    verbform_instace.save()
-                    referanse = 2
-                    
-            except:
-                try:
-                    if adjectiveform.is_valid():
-                        adjectiveform_instace = adjectiveform.save(commit = False)
-                        adjectiveform_instace.save()
-                        referanse = 3
-                        
-                except:
-                    try:
-                        print(1)
-                        nounform.save()
-                    except:
-                        try:
-                            print(1)
-                            verbform.save()
-                        except:
-                            try:
-                                print(1)
-                                adjectiveform.save()
-                            except:
-                                pass
-        if referanse == 0:
-            pass
-        if referanse == 1:
-            for i in range(len(Noun.objects.all())):
-                if str(Noun.objects.all()[i]) == str(nounform.cleaned_data["indefinite_singular"]):
-                    word.noun = Noun.objects.all()[i]
-                    word.save()
-
-        if referanse == 2:
-            for i in range(len(Verb.objects.all())):
-                if str(Verb.objects.all()[i]) == str(verbform.cleaned_data["infinitive"]):
-                    word.noun = Noun.objects.all()[i]
-                    word.save()
-
-        if referanse == 3:
-            for i in range(len(Adjective.objects.all())):
-                if str(Adjective.objects.all()[i]) == str(adjectiveform.cleaned_data["positive"]):
-                    word.noun = Noun.objects.all()[i]
-                    word.save()
-
+        if ordet[1] == 1 and form.is_valid():
+            verbform_instace = form.save(commit = False)
+            verbform_instace.save()
+            
+        if ordet[1] == 2 and form.is_valid():
+            adjectiveform_instace = form.save(commit = False)
+            adjectiveform_instace.save()
         
-
+        if ordet[1] == 3 and form.is_valid():
+            nounform_instace = form.save(commit = False)
+            nounform_instace.save()
         
-        return HttpResponseRedirect(reverse("wordlist:details", args=[pk]))
+        if ordet[1] == 4 and form.is_valid():
+            wordform_instace = form.save(commit = False)
+            wordform_instace.save()
+
+        return HttpResponseRedirect(reverse("wordlist:details", args=[pk, klassetall]))
     
-    context = {"wordform": wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform}
+    context = {"form": form } 
     return render(request, "adminWord.html", context)
 
 
@@ -430,10 +404,20 @@ def adminWord(request, pk):
 
 
 @permission_required("wordlist.delete_word")
-def word_delete(request, pk):
-    word = get_object_or_404(Word, id=pk)
+def word_delete(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
 
-    word.delete()
+
+    if klassetall == 1:
+        ordet = (get_object_or_404(Verb, id=pk), klassetall)
+    if klassetall == 2:
+        ordet = (get_object_or_404(Adjective, id=pk), klassetall)
+    if klassetall == 3:
+        ordet = (get_object_or_404(Noun, id=pk), klassetall)
+    if klassetall == 4:
+        ordet = (get_object_or_404(Word, id=pk), klassetall)
+
+
+    ordet[0].delete()
     messages.add_message(
         request, messages.SUCCESS, "Ordet ble slettet", extra_tags="Slettet"
     )

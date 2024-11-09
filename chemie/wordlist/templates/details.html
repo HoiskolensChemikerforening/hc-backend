@@ -16,7 +16,7 @@
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
     
-    <a class = "breadcrumb"> {{ord}}</a>
+    <a class = "breadcrumb"> {{ord.0.word}}</a>
   </div>
 {% endblock %}
 
@@ -32,17 +32,19 @@
     {%endif%}
     <h6>Laget av: {{ord.0.author.profile}}</h6>
     <h6>Laget: {{ord.0.date}}</h6>
-    <h5>Forklaring: 
-      {{ord.0.explanations}}</h5>
-    <h5>Kategori: {%for word in ord.0.category.all%}
+    <h5>Forklaring:</h5>
+    <p>{{ord.0.explanations}}</p>
+    <h5>Kategori: </h5>
+    <p> {%for word in ord.0.category.all%}
       {{word}}{% if not forloop.last %}
       ,
       {% endif %}
       {% empty %}
       Ingen kategori
-      {%endfor%} </h5>
+      {%endfor%}</p> 
 
     {%if ord.1 == 1%}
+    <h5>Ordklasse: <h6> Verb: </h6> </h5>
       <table class="highlight">
         <thead>
           <tr>
@@ -64,6 +66,7 @@
       </table>
     {%endif%}
     {%if ord.1 == 2%}
+    <h5>Ordklasse: <h6> Adjektiv: </h6> </h5>
       <table class="highlight">
         <thead>
           <tr>
@@ -83,6 +86,7 @@
       </table>
     {%endif%}
     {%if ord.1 == 3%}
+    <h5>Ordklasse: <h6> Substantiv: </h6> </h5>
       <table class="highlight">
         <thead>
           <tr>
@@ -97,7 +101,7 @@
           <tr>
             <td>{{ord.0.word}}</td>
             <td>{{ord.0.definite_singular}}</td>
-            <td>{{ord.0.infinite_plural}}</td>
+            <td>{{ord.0.indefinite_plural}}</td>
             <td>{{ord.0.definite_plural}}</td>
           </tr>
         </tbody>
@@ -118,17 +122,17 @@
 
     {% if perms.wordlist.delete_word %}
       <li>
-        <a class="btn-floating red" href={% url "wordlist:delete" pk=ord.id %}>
+        <a class="btn-floating red" href={% url "wordlist:delete" pk=ord.0.id klassetall=ord.1 %}>
           <i class="material-icons">delete</i>
-          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:delete" pk=ord.id %}>Slett</a>
+          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:delete" pk=ord.0.id klassetall=ord.1 %}>Slett</a>
         </a></li>
     {% endif %}
 
     {% if perms.wordlist.change_word %}
         <li>
-        <a class="btn-floating blue" href={% url "wordlist:adminword" pk=ord.id %}>
+        <a class="btn-floating blue" href={% url "wordlist:adminword" pk=ord.0.id klassetall=ord.1 %}>
           <i class="material-icons">edit</i>
-          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:adminword" pk=ord.id %}>Rediger</a>
+          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:adminword" pk=ord.0.id klassetall=ord.1 %}>Rediger</a>
         </a></li>
     {% endif %}
   </ul>

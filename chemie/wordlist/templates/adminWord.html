@@ -28,23 +28,11 @@
 
     
 
-    {%form form=wordform%}
+    {%form form=form%}
     <div class="input-field col s12">
       <label>Velg kategorier:</label>
       {{ form.category }}
     </div>
-    {% endform %}
-
-    <p>Substantiv:</p>
-    {%form form=nounform%}
-    {% endform %}
-    
-    <p>Verb:</p>
-    {%form form=verbform%}
-    {% endform %}
-
-    <p>Adjektiv:</p>
-    {%form form=adjectiveform%}
     {% endform %}
     
 
