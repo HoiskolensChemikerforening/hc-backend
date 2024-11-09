@@ -499,9 +499,9 @@ CKEDITOR_CONFIGS = {
             ["Maximize", "Find", "Replace"],
             ["Table"],
         ],
-        'extraPlugins': 'table',
+        "extraPlugins": "table",
         "customConfig": "/static/js/ckeditor_config.js",
-    }
+    },
 }
 
 DEFAULT_CONFIG = CKEDITOR_CONFIGS
