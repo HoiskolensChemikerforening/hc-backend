@@ -7,20 +7,19 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from post_office import mail
 
-from .models import RentalObject
+from .models import RentalObject, Landlord
 from .forms import CreateRentalObjectForm, InvoiceForm, RentalObjectForm
 from chemie.home.forms import ContactForm
 
 def index(request):
-    return render(request, "rentalservice/index.html")
+    return render(request, "rentalservice/index_ac.html")
 
 def index_promo(request):
     return render(request, "rentalservice/index_promo.html")
 
 @login_required
 def index_sportskom(request):
-
-    rentalObjects = RentalObject.objects.all().order_by("name")
+    rentalObjects = RentalObject.objects.filter(owner=3)
     context = {"rentalObjects": rentalObjects}
     return render(request, "rentalservice/index_sportskom.html", context)
 
@@ -106,7 +105,7 @@ def contact(request, rentalobject_id):
             },
         )
 
-        return redirect(reverse("rentalservice:index"))
+        return redirect(reverse("rentalservice:index_ac"))
 
     else:
 
@@ -120,7 +119,7 @@ def new_invoice(request):
     form = InvoiceForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect("rentalservice:index")
+        return redirect("rentalservice:index_ac")
 
     context = {"form": form}
     return render(request, "rentalservice/create_invoice.html", context)

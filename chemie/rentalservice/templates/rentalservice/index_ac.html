@@ -1,0 +1,98 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+{% block nav_header %}
+  Utleie
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+Audiochromatene
+{% endblock nav_sub_header %}
+
+{% block content %}
+<div class="row">
+    <div class="col s12 m12 l8"> <!---size of the layout--->
+        <div class="container" style="margin-bottom: 40px;">
+            <div class="col-12 col-md-6" style="margin-bottom: 40px;">
+                <p class="flow-text">
+                    Vi er Audiochromatene, lys- og lydteknisk komité i HC!
+                    Vi har masse utstyr vi bruker på arrangementer i linjeforeningen,
+                    men det meste av dette utstyret kan også leies - både av foreninger og privatpersoner.
+                    Under er dette listet med tilhørende priser og inne på hver enhet er det mer info og tekniske spesifikasjoner.
+                    Om du ønsker å leie men ikke vet helt hva du trenger,
+                    hjelper vi gjerne til for å komme frem til hvilket utstyr som passer best til ditt arrangement.
+                    Ta kontakt via kontakt-knappen for å avtale.
+                    <br><br>
+                    Er du Chemiker? Da får du rabatt på utstyr fra oss! Er du medlem i HC og skal ha et privat arrangement,
+                    får du 25% rabatt. Er det et arrangement der minst et helt klassetrinn er invitert
+                    (evt. åpent for deltakelse fra hele foreningen) får du 50% rabatt.
+                    Alle komitéer som arrangerer fellesarrangementer i HC får låne utstyr gratis.
+                </p>
+            </div>
+        </div>
+    </div>
+    <div class="col s12 m12 l4" style="max-width:350px;" >
+      <!--Kontaktskjema-->
+      <h2 class="heading">Kontakt</h2>
+      <div class="col coffee-box" style="width: 100%; height:auto;">
+        <a href="kontaktac" style="width: 100%;">
+          <div class="row" style="display: flex; align-items: center; margin: 0; padding: 0">
+            <div class="col s4 m3 l4">
+              <i class="material-icons micon" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
+              max-height: 5rem; margin: 2rem; transform: scale(2); color:#0b3954;" >shopping_cart</i> 
+            </div>
+            <div class="col s8 m9 l8">
+              <p style="color: black; margin: 0; padding: 0">Ønsker du å leie noe? <br>Ta kontakt her!</p>
+            </div>
+          </div>
+        </a>
+      </div>
+    </div>
+</div>
+
+{% if perms.rentalservice %}
+    <!---<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.rentalservice.add_rentalobject %}
+          <li>
+            <a class="btn-floating blue" href="ny/">
+              <i class="material-icons">add</i>
+              <a class="btn-floating mobile-fab-tip" href="ny/">Legg til ny</a>
+            </a></li>
+        {% endif %}
+      </ul>
+    </div> --->
+  {% endif %}
+<div class="row">
+        <div class="col s12"> <!---size of the layout--->
+            <div class="row">
+            {% for object in rentalObjects %}
+                <div class="col s12 m4">
+                <div class="card small">
+                    <div class="card-image">
+                        <a href="{% url 'rentalservice:detail' object.id %}">
+                            {% thumbnail object.image "630x400" crop="center" as im %} <!--- standard image crop for HC--->
+                                <img src="{{ im.url }}"> <!--- locates image url--->
+                            {% endthumbnail %}
+                        </a>
+                    </div>
+                    <div class="card-content" style="padding-top: 0px; margin-top: -15px;" >
+                        <br>
+                        <h5>{{ object.name }}</h5>
+                        <p class="card-text"> {{ object.description|safe }} </p>
+                    </div>
+                    <div class="card-action center">
+                        <a href="{% url 'rentalservice:detail' object.id %}">Mer info</a> <!--- det er ingen hyperlenke her nå--->
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+</div>
+
+{% endblock %}
