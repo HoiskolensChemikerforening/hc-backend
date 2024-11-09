@@ -132,7 +132,7 @@ def rental_list(request):
 
 
 def contact_page(request):
-    return render(request, "rentalservice/contact_page.html")
+    return render(request, "rentalservice/contact_page_ac.html")
 
 def contact_page_promo(request):
     return render(request, "rentalservice/contact_page_promo.html")
