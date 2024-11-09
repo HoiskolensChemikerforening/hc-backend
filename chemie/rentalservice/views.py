@@ -15,6 +15,7 @@ from chemie.home.forms import ContactForm
 def index(request):
     return render(request, "rentalservice/index_ac.html")
 
+
 def index_promo(request):
     return render(request, "rentalservice/index_promo.html")
 
@@ -119,7 +120,6 @@ def contact(request, rentalobject_id):
         return redirect(reverse("rentalservice:index_ac"))
 
     else:
-
         context = {"contact_form": contact_form, "rentalobject": rental_object}
 
         return render(request, "rentalservice/contact.html", context)
@@ -138,6 +138,7 @@ def new_invoice(request):
 
 def contact_page(request):
     return render(request, "rentalservice/contact_page_ac.html")
+
 
 def contact_page_promo(request):
     return render(request, "rentalservice/contact_page_promo.html")

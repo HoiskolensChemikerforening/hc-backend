@@ -35,7 +35,7 @@ class PostFundsForm(forms.ModelForm):
             "price_range": forms.RadioSelect,
             "description": forms.Textarea(
                 attrs={
-                    "placeholder": "Beskrivelse av formålet, dato, hvor, hvor mye midler det søkes på, hva pengene skal brukes på, osv."
+                    "placeholder": "Beskrivelse av formålet, dato, hvor, hvor mye midler det søkes på."
                 }
             ),
             "purpose": forms.TextInput(

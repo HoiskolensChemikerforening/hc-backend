@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import login_required
 from chemie.customprofile.models import Profile, GRADES, SPECIALIZATION
 from .forms import NameSearchForm
 
+
 # not in use, correct is in custom profiles
 @login_required
 def index(request, year=1):
@@ -27,7 +28,12 @@ def index(request, year=1):
         profiles = Profile.objects.filter(
             grade=year, user__is_active=True
         ).order_by("user__last_name")
-    context = {"profiles": profiles, "grades": GRADES,"spez": SPECIALIZATION ,"search_form": form}
+    context = {
+        "profiles": profiles,
+        "grades": GRADES,
+        "spez": SPECIALIZATION,
+        "search_form": form,
+    }
     return render(request, "customprofile/yearbook.html", context)
 
 
