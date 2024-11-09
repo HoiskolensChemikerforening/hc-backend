@@ -25,7 +25,7 @@ def index_sportskom(request):
     if not rentalObjects.exists():
         return render(request, "/empty.html")
 
-    obj_per_page = 24  # Show 24 contacts per page.
+    obj_per_page = 3  # Show 24 contacts per page.
     if len(rentalObjects) < obj_per_page:
         context = {"rentalObjects": rentalObjects}
     else:

@@ -11,6 +11,8 @@ Sportskomiteen
 {% endblock nav_sub_header %}
 
 {% block content %}
+
+
 <div class="row">
     <div class="col s12 m12 l8" > <!---size of the layout--->
         <div class="container" style="margin-bottom: 40px;">
@@ -44,6 +46,20 @@ Sportskomiteen
         </div>
       </div> 
            
+</div>
+<div>
+  <ul class="pagination nav navbar-nav">
+    {% if rentalObjects.has_previous %}
+     <li><a href="?page={{ rentalObjects.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in rentalObjects.paginator.page_range %}
+    <li class="{% if rentalObjects.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if rentalObjects.has_next %}
+      <li><a href="?page={{ rentalObjects.next_page_number }}">Neste</a></li>
+    {% endif %}
+    </ul>
 </div>
 
 {% if perms.rentalservice %}
@@ -89,6 +105,22 @@ Sportskomiteen
             </div>
         </div>
 </div>
+
+<div>
+  <ul class="pagination nav navbar-nav">
+    {% if rentalObjects.has_previous %}
+     <li><a href="?page={{ rentalObjects.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in rentalObjects.paginator.page_range %}
+    <li class="{% if rentalObjects.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if rentalObjects.has_next %}
+      <li><a href="?page={{ rentalObjects.next_page_number }}">Neste</a></li>
+    {% endif %}
+    </ul>
+</div>
+
 
 
 {% endblock %}
