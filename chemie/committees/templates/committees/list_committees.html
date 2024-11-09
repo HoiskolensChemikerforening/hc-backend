@@ -10,47 +10,60 @@
 </div>
 {% endblock nav_sub_header %}
 
-
 {% block content %}
+<div class="row">
+    <div class="col s12">
+        <ul class="tabs z-depth-1">
+            <li class="tab col s4 m4 l4"><a href="#committee" style="text-transform: initial">Komitteer</a></li>
+            <li class="tab col s5 m4 l4"><a href="#subgroup" style="text-transform: initial">Undergrupper</a></li>
+            <li class="tab col s4 m4 l4 hide-on-small-only"><a href="#associatedgroup" style="text-transform: initial">Særskilt tilknytning</a></li>
+            <li class="tab col s3 m4 l4 hide-on-med-and-up"><a href="#associatedgroup" style="text-transform: initial">Særskilt</a></li>
+        </ul>
+    </div>
+</div>
+
+{% for type, committees in committees_by_type.items %}
+    <div id="{{ type|lower }}" class="col s12">
+        <div class="row">
+            {% for committee in committees %}
+                <div class="col s12 m6 l4">
+                    <div class="card small" style="height: 320px">
+                        <div class="card-image">
+                            <a href="{{ committee.get_absolute_url }}">
+                                {% thumbnail committee.image "400x300" crop="center" as im %}
+                                    <img src="{{ im.url }}">
+                                {% endthumbnail %}
+                            </a>
+                            <a class="card-title card-event-title" href="{{ committee.get_absolute_url }}">
+                                <h5 class="truncate" style="font-size: 1.54rem;">{{ committee.title }}</h5>
+                            </a>
+                        </div>
+                        <div class="card-content">
+                            <p>{{ committee.one_liner }}</p>
+                        </div>
+                        <div class="card-action">
+                            <div class="row valign-wrapper" style="margin: 0">
+                                <div class="col s8 m8 l8">
+                                    <a href="{{ committee.get_absolute_url }}">Detaljer</a>
+                                </div>
+                                <div class="col s4 m4 l4" style="display: flex;justify-content: right">
+                                    <a href="mailto:{{ committee.email }}" class="valign-wrapper" style="margin: 0">
+                                        <i class="material-icons valign small">email</i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endfor %}
+
   <style>
     .card .card-image .card-title {
       padding: 10px;
     }
   </style>
-  <div class="row">
-    {% for committee in committees %}
-      <div class="col s12 m6 l4">
-        <div class="card small" style="height: 320px">
-          <div class="card-image">
-            <a href="{{ committee.get_absolute_url }}">
-              {% thumbnail committee.image "400x300" crop="center" as im %}
-                <img src="{{ im.url }}">
-              {% endthumbnail %}
-            </a>
-            <a class="card-title card-event-title" href="{{ committee.get_absolute_url }}">
-              <h5 class="truncate" style="font-size: 1.54rem;">{{ committee.title }}</h5>
-            </a>
-          </div>
-          <div class="card-content">
-            <p>
-              {{ committee.one_liner }}
-            </p>
-          </div>
-          <div class="card-action">
-            <div class="row valign-wrapper" style="margin: 0">
-              <div class="col s8 m8 l8">
-                <a href="{{ committee.get_absolute_url }}">Detaljer</a>
-              </div>
-              <div class="col s4 m4 l4" style="display: flex;justify-content: right">
-                <a href="mailto:{{ committee.email }}" class="valign-wrapper" style="margin: 0">
-                  <i class="material-icons valign small">email</i>
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    {% endfor %}
-  </div>
 
 {% endblock %}
