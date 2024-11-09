@@ -13,14 +13,13 @@
 {% block content %}
 <div class="row">
     <div class="col s12">
-      <ul class="tabs z-depth-1">
+        <ul class="tabs z-depth-1">
             <li class="tab col s4 m4 l4"><a href="#committee" style="text-transform: initial">Komitteer</a></li>
             <li class="tab col s4 m4 l4"><a href="#subgroup" style="text-transform: initial">Undergrupper</a></li>
             <li class="tab col s4 m4 l4"><a href="#associatedgroup" style="text-transform: initial">Særskilt tilknytning</a></li>
-      </ul>
+        </ul>
     </div>
-  </div>
-
+</div>
 
 {% for type, committees in committees_by_type.items %}
     <div id="{{ type|lower }}" class="col s12">
@@ -59,13 +58,6 @@
         </div>
     </div>
 {% endfor %}
-
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('.tabs');
-        var instances = M.Tabs.init(elems);
-    });
-</script>
 
   <style>
     .card .card-image .card-title {
