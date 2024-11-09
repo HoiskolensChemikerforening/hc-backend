@@ -21,11 +21,9 @@ def index_promo(request):
 @login_required
 def index_sportskom(request):
     rentalObjects = RentalObject.objects.filter(owner=3)
-    if not rentalObjects.exists():
-        return render(request, "/empty.html")
 
-    obj_per_page = 3  # Show 24 contacts per page.
-    if len(rentalObjects) < obj_per_page:
+    obj_per_page = 12  # Show 24 contacts per page.
+    if len(rentalObjects) <= obj_per_page:
         context = {"rentalObjects": rentalObjects}
     else:
         paginator = Paginator(rentalObjects, obj_per_page)
@@ -37,7 +35,7 @@ def index_sportskom(request):
     return render(request, "rentalservice/index_sportskom.html", context)
 
 
-@permission_required("rentalservice..add_rentalobject")
+@permission_required("rentalservice.add_rentalobject")
 def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
@@ -47,7 +45,7 @@ def new_object(request):
     context = {"new_obj_form": form}
     return render(request, "rentalservice/new_object.html", context)
 
-
+@login_required
 def detail(request, rentalobject_id):
     rental_object = get_object_or_404(RentalObject, pk=rentalobject_id)
     context = {"rental_object": rental_object}
@@ -138,16 +136,12 @@ def new_invoice(request):
     return render(request, "rentalservice/create_invoice.html", context)
 
 
-def rental_list(request):
-    object_list = RentalObject.objects.all()
-    current_rental_products = []
-
-
 def contact_page(request):
     return render(request, "rentalservice/contact_page_ac.html")
 
 def contact_page_promo(request):
     return render(request, "rentalservice/contact_page_promo.html")
 
+@login_required
 def contact_page_sportskom(request):
     return render(request, "rentalservice/contact_sportskom.html")
