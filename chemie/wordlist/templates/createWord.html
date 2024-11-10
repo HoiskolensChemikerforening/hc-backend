@@ -29,6 +29,7 @@
 </style>
 
 {% if formindex == 0 %}
+<h5>Velg skjema for type ord du vil legge inn i ordlisten:</h5>
 <div>
   <form method = "POST" enctype = "multipart/form-data" id="select"> 
     {% csrf_token %}
@@ -36,7 +37,7 @@
     
     {% endform %}
     <div>
-      <input type = "submit" value = "Velg form", name = "check" class = "btn" />
+      <input type = "submit" value = "Velg skjema", name = "check" class = "btn" />
       
     </div>
   </form>
@@ -45,6 +46,7 @@
 
 
 {% if formindex == 1 %}
+<h5>Ord (uspesifisert klasse):</h5>
 <div>
   
   <form method = "POST" enctype = "multipart/form-data"> 
@@ -55,8 +57,8 @@
     {% endform %}
     
     <div>
-      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 1 class = "btn" /> 
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_1" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_1" class = "btn" /> 
     </div>
 
   </form>
@@ -64,6 +66,7 @@
 {% endif %}
 
 {% if formindex == 2 %}
+<h5>Verb:</h5>
 <div>
   
   <form method = "POST" enctype = "multipart/form-data"> 
@@ -74,8 +77,8 @@
     {% endform %}
     
     <div>
-      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 2 class = "btn" /> 
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_2" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_2" class = "btn" /> 
     </div>
 
   </form>
@@ -83,6 +86,7 @@
 {% endif %}
 
 {% if formindex == 3 %}
+<h5>Substantiv:</h5>
 <div>
   
   <form method = "POST" enctype = "multipart/form-data"> 
@@ -93,8 +97,8 @@
     {% endform %}
     
     <div>
-      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 3 class = "btn" /> 
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_3" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_3" class = "btn" /> 
     </div>
 
   </form>
@@ -102,6 +106,7 @@
 {% endif %}
 
 {% if formindex == 4 %}
+<h5>Adjektiv:</h5>
 <div>
   
   <form method = "POST" enctype = "multipart/form-data"> 
@@ -112,8 +117,8 @@
     {% endform %}
     
     <div>
-      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 4 class = "btn" /> 
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_4" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_4" class = "btn" /> 
     </div>
 
   </form>

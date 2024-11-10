@@ -190,13 +190,9 @@ def ordListe(request):
 @permission_required("wordlist.add_word")
 def createWord(request):
     form = CheckWhatFormForm()
-    # wordform = WordInput()
-    # verbform = VerbInput()
-    # nounform = NounInput()
-    # adjectiveform = NounInput()
     formindex = 0
+   
 
-#choices=((0, "Ikke valgt"),(1, "Et annet type ord"),(2, "Verb"),(3, "Substantiv"),(4, "Adjektiv"),),
 
     if request.method == "POST" and "check" in request.POST: 
         if request.POST["choice"] == "1" and "check" in request.POST:
@@ -212,19 +208,21 @@ def createWord(request):
             form = AdjectiveInput()
             formindex = 4
 
+
     if request.method == "POST" and "check" not in request.POST:
-        print(formindex)
-        if formindex == 1:
+        
+        if ("nytt_tag_1" or "tag_1") in request.POST:
             form = WordInput(data=request.POST, files=request.FILES)
-        if formindex == 2:
+        if ("nytt_tag_2" or "tag_2") in request.POST:
             form = VerbInput(data=request.POST, files=request.FILES)
-        if formindex == 3:
+        if ("nytt_tag_3" or "tag_3") in request.POST:
             form = NounInput(data=request.POST, files=request.FILES)
-        if formindex == 4:
+        if ("nytt_tag_4" or "tag_4") in request.POST:
             form = AdjectiveInput(data=request.POST, files=request.FILES)
 
 
-        if "nytt" in request.POST and "tag" == 3 and form.is_valid():
+        if "nytt_tag_3" in request.POST and form.is_valid():
+            
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -237,7 +235,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt" in request.POST and "tag" == 2 and form.is_valid():
+        if "nytt_tag_2" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -250,7 +248,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt" in request.POST and "tag" == 4 and form.is_valid():
+        if "nytt_tag_4" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -263,7 +261,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt" in request.POST and "tag" == 1 and form.is_valid():
+        if "nytt_tag_1" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -276,7 +274,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if formindex == 3 and form.is_valid():
+        if "tag_3" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -289,7 +287,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if formindex == 2 and form.is_valid():
+        if "tag_2" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -302,7 +300,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if formindex == 4 and form.is_valid():
+        if "tag_4" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -315,7 +313,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if formindex == 1 and form.is_valid():
+        if "tag_1" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -328,7 +326,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-    context = {"form": form, "formindex":formindex}#"checkwhatformform": checkwhatformform,"wordform": wordform,"nounform": nounform, "verbform": verbform, "adjectiveform": adjectiveform, "formindex": formindex,
+    context = {"form": form, "formindex":formindex}
     return render(request, "createWord.html", context)
 
 
