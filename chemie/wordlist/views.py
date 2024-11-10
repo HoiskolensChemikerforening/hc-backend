@@ -189,145 +189,146 @@ def ordListe(request):
 
 @permission_required("wordlist.add_word")
 def createWord(request):
-    checkwhatformform = CheckWhatFormForm()
-    wordform = WordInput()
-    verbform = VerbInput()
-    nounform = NounInput()
-    adjectiveform = NounInput()
+    form = CheckWhatFormForm()
+    # wordform = WordInput()
+    # verbform = VerbInput()
+    # nounform = NounInput()
+    # adjectiveform = NounInput()
     formindex = 0
 
-    if request.method == "POST" and "check" in request.POST:
+#choices=((0, "Ikke valgt"),(1, "Et annet type ord"),(2, "Verb"),(3, "Substantiv"),(4, "Adjektiv"),),
+
+    if request.method == "POST" and "check" in request.POST: 
         if request.POST["choice"] == "1" and "check" in request.POST:
-            wordform = WordInput()
+            form = WordInput()
             formindex = 1
         if request.POST["choice"] == "2" and "check" in request.POST:
-            verbform = VerbInput()
+            form = VerbInput()
             formindex = 2
         if request.POST["choice"] == "3" and "check" in request.POST:
-            nounform = NounInput()
+            form = NounInput()
             formindex = 3
         if request.POST["choice"] == "4" and "check" in request.POST:
-            adjectiveform = AdjectiveInput()
+            form = AdjectiveInput()
             formindex = 4
 
     if request.method == "POST" and "check" not in request.POST:
-        wordform = WordInput(data=request.POST, files=request.FILES)
-        nounform = NounInput(data=request.POST, files=request.FILES)
-        verbform = VerbInput(data=request.POST, files=request.FILES)
-        adjectiveform = AdjectiveInput(data=request.POST, files=request.FILES)
+        print(formindex)
+        if formindex == 1:
+            form = WordInput(data=request.POST, files=request.FILES)
+        if formindex == 2:
+            form = VerbInput(data=request.POST, files=request.FILES)
+        if formindex == 3:
+            form = NounInput(data=request.POST, files=request.FILES)
+        if formindex == 4:
+            form = AdjectiveInput(data=request.POST, files=request.FILES)
 
-        if "nytt" in request.POST and nounform.is_valid():
-            nounform_instace = nounform.save(commit=False)
-            nounform_instace.author = request.user
-            nounform_instace.save()
-            nounform.save_m2m()
+
+        if "nytt" in request.POST and "tag" == 3 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 "Ditt ord er lagret",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt substantiv!",
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt" in request.POST and verbform.is_valid():
-            verbform_instace = verbform.save(commit=False)
-            verbform_instace.author = request.user
-            verbform_instace.save()
-            verbform.save_m2m()
+        if "nytt" in request.POST and "tag" == 2 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 "Ditt ord er lagret",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt verb!",
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt" in request.POST and adjectiveform.is_valid():
-            adjectiveform_instace = adjectiveform.save(commit=False)
-            adjectiveform_instace.author = request.user
-            adjectiveform_instace.save()
-            adjectiveform.save_m2m()
+        if "nytt" in request.POST and "tag" == 4 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 "Ditt ord er lagret",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt adjektiv!",
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt" in request.POST and wordform.is_valid():
-            wordform_instace = wordform.save(commit=False)
-            wordform_instace.author = request.user
-            wordform_instace.save()
-            wordform.save_m2m()
+        if "nytt" in request.POST and "tag" == 1 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 "Ditt ord er lagret",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt ord!",
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if nounform.is_valid():
-            nounform_instace = nounform.save(commit=False)
-            nounform_instace.author = request.user
-            nounform_instace.save()
-            nounform.save_m2m()
+        if formindex == 3 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 f"Ditt ord er lagret.",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt substantiv!",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if verbform.is_valid():
-            verbform_instace = verbform.save(commit=False)
-            verbform_instace.author = request.user
-            verbform_instace.save()
-            verbform.save_m2m()
+        if formindex == 2 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 f"Ditt ord er lagret.",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt verb!",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if adjectiveform.is_valid():
-            adjectiveform_instace = adjectiveform.save(commit=False)
-            adjectiveform_instace.author = request.user
-            adjectiveform_instace.save()
-            adjectiveform.save_m2m()
+        if formindex == 4 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 f"Ditt ord er lagret.",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt adjektiv!",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if wordform.is_valid():
-            wordform_instace = wordform.save(commit=False)
-            wordform_instace.author = request.user
-            wordform_instace.save()
-            wordform.save_m2m()
+        if formindex == 1 and form.is_valid():
+            form_instace = form.save(commit=False)
+            form_instace.author = request.user
+            form_instace.save()
+            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
                 f"Ditt ord er lagret.",
-                extra_tags="Big slay",
+                extra_tags="Big slay; et nytt ord!",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-    context = {
-        "checkwhatformform": checkwhatformform,
-        "wordform": wordform,
-        "nounform": nounform,
-        "verbform": verbform,
-        "adjectiveform": adjectiveform,
-        "formindex": formindex,
-    }
+    context = {"form": form, "formindex":formindex}#"checkwhatformform": checkwhatformform,"wordform": wordform,"nounform": nounform, "verbform": verbform, "adjectiveform": adjectiveform, "formindex": formindex,
     return render(request, "createWord.html", context)
 
 
@@ -422,7 +423,7 @@ def details(
 
     context = {
         "ord": ordet
-    }  # "substantiv": substantiv, "verb": verb, "adjektiv": adjektiv
+    }
     return render(request, "details.html", context)
 
 

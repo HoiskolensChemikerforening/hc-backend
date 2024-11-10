@@ -28,11 +28,11 @@
   
 </style>
 
-
+{% if formindex == 0 %}
 <div>
   <form method = "POST" enctype = "multipart/form-data" id="select"> 
     {% csrf_token %}
-    {%form form=checkwhatformform%}
+    {%form form=form%}
     
     {% endform %}
     <div>
@@ -41,6 +41,8 @@
     </div>
   </form>
 </div>
+{% endif %}
+
 
 {% if formindex == 1 %}
 <div>
@@ -49,17 +51,17 @@
   
     {% csrf_token %}
 
-    {%form form=wordform%}
+    {%form form=form%}
     {% endform %}
     
     <div>
       <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 1 class = "btn" /> 
     </div>
 
   </form>
 </div>
-{% endif %}}
+{% endif %}
 
 {% if formindex == 2 %}
 <div>
@@ -68,17 +70,17 @@
   
     {% csrf_token %}
 
-    {%form form=verbform%}
+    {%form form=form%}
     {% endform %}
     
     <div>
       <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 2 class = "btn" /> 
     </div>
 
   </form>
 </div>
-{% endif %}}
+{% endif %}
 
 {% if formindex == 3 %}
 <div>
@@ -87,17 +89,17 @@
   
     {% csrf_token %}
 
-    {%form form=nounform%}
+    {%form form=form%}
     {% endform %}
     
     <div>
       <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 3 class = "btn" /> 
     </div>
 
   </form>
 </div>
-{% endif %}}
+{% endif %}
 
 {% if formindex == 4 %}
 <div>
@@ -106,17 +108,17 @@
   
     {% csrf_token %}
 
-    {%form form=adjectiveform%}
+    {%form form=form%}
     {% endform %}
     
     <div>
       <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
-      <input type = "submit" value = "Lag ett ord til!" name = "nytt", class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt" tag = 4 class = "btn" /> 
     </div>
 
   </form>
 </div>
-{% endif %}}
+{% endif %}
 
 
 
