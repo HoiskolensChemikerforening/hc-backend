@@ -1,6 +1,14 @@
-
 from .models import Word, Category, Noun, Verb, Adjective
-from .forms import WordInput, WordSearchMainPage, CategorySortingMainPage, CategoryInput, NounInput, VerbInput, AdjectiveInput, CheckWhatFormForm
+from .forms import (
+    WordInput,
+    WordSearchMainPage,
+    CategorySortingMainPage,
+    CategoryInput,
+    NounInput,
+    VerbInput,
+    AdjectiveInput,
+    CheckWhatFormForm,
+)
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required
 from django.http import HttpResponseRedirect
@@ -13,20 +21,17 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 
 
-
-def fsort(settet, sorteringsord): #listesortering
-
+def fsort(settet, sorteringsord):  # listesortering
     filtersett = []
     enerord = []
     toerord = []
-    treerord =[]
+    treerord = []
     fireerord = []
 
     for i in range(len(settet)):
-        a =  str(settet[i][0])
+        a = str(settet[i][0])
         b = list(a)
 
-        
         førstesortering = []
         andresortering = []
         tredjesortering = []
@@ -36,21 +41,30 @@ def fsort(settet, sorteringsord): #listesortering
             if b[j] in sorteringsord:
                 førstesortering.append(b[j])
         for k in range(len(førstesortering) - 1):
-                num1 = førstesortering[k] + førstesortering[k+1]
-                if num1 in sorteringsord:
-                    andresortering.append(num1)
-                try:
-                    num2 = førstesortering[k] + førstesortering[k+1] + førstesortering[k+2]
-                    if num2 in sorteringsord:
-                        tredjesortering.append(num2)
-                    num3 = førstesortering[k] + førstesortering[k+1] + førstesortering[k+2] + førstesortering[k+3]
-                    if num3 in sorteringsord:
-                        fjerdesortering.append(num3)
-                except:
-                    pass
+            num1 = førstesortering[k] + førstesortering[k + 1]
+            if num1 in sorteringsord:
+                andresortering.append(num1)
+            try:
+                num2 = (
+                    førstesortering[k]
+                    + førstesortering[k + 1]
+                    + førstesortering[k + 2]
+                )
+                if num2 in sorteringsord:
+                    tredjesortering.append(num2)
+                num3 = (
+                    førstesortering[k]
+                    + førstesortering[k + 1]
+                    + førstesortering[k + 2]
+                    + førstesortering[k + 3]
+                )
+                if num3 in sorteringsord:
+                    fjerdesortering.append(num3)
+            except:
+                pass
         if len(fjerdesortering) > 0:
             fireerord.append(settet[i])
-        else: 
+        else:
             if len(tredjesortering) > 0:
                 treerord.append(settet[i])
             else:
@@ -68,22 +82,18 @@ def fsort(settet, sorteringsord): #listesortering
         filtersett.append(i)
     for i in enerord:
         filtersett.append(i)
-        
+
     return filtersett
-                
 
 
 @login_required()
 def ordListe(request):
-
     verbs = Verb.objects.all()
     adjectives = Adjective.objects.all()
     nouns = Noun.objects.all()
     word = Word.objects.all()
 
-   
-
-    alle_ord = [] # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
+    alle_ord = []  # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
     for i in verbs:
         alle_ord.append((i, 1))
     for i in adjectives:
@@ -93,13 +103,9 @@ def ordListe(request):
     for i in word:
         alle_ord.append((i, 4))
 
-    
     form = WordSearchMainPage()
     kategorier = Category.objects.all()
     category_form = CategorySortingMainPage()
-    
-
-
 
     if len(alle_ord) == 0:
         return render(request, "404.html")
@@ -107,27 +113,25 @@ def ordListe(request):
         form = WordSearchMainPage(request.POST or None)
 
         if request.method == "POST":
-            if form.is_valid():                
+            if form.is_valid():
                 if request.POST["submit"] == "Søk!":
                     the_word = form.cleaned_data.get("the_word")
                     alle_ord = fsort(alle_ord, the_word)
 
-                    
     if not kategorier.exists():
-            return render(request, "404.html")
+        return render(request, "404.html")
     else:
         category_form = CategorySortingMainPage(request.POST or None)
         if request.method == "POST":
-            if category_form.is_valid():              
+            if category_form.is_valid():
                 if request.POST["submit"] == "Ta meg til kategorien":
-                    
                     the_category = category_form.cleaned_data.get("category")
                     alle_ord_2 = []
 
-                    instance0 = Word.objects.filter(category = the_category)
-                    instance1 = Adjective.objects.filter(category = the_category)
-                    instance2 = Noun.objects.filter(category = the_category)
-                    instance3 = Verb.objects.filter(category = the_category)
+                    instance0 = Word.objects.filter(category=the_category)
+                    instance1 = Adjective.objects.filter(category=the_category)
+                    instance2 = Noun.objects.filter(category=the_category)
+                    instance3 = Verb.objects.filter(category=the_category)
 
                     for i in instance0:
                         alle_ord_2.append(i)
@@ -137,7 +141,7 @@ def ordListe(request):
                         alle_ord_2.append(i)
                     for i in instance3:
                         alle_ord_2.append(i)
-                    
+
                     alle_ord_3 = []
                     for i in alle_ord:
                         if i[0] in alle_ord_2:
@@ -145,32 +149,27 @@ def ordListe(request):
 
                     alle_ord = alle_ord_3
 
-                    
-
-
     profile = get_object_or_404(Profile, user=request.user)
-    
-    if int(profile.grade) < 2:# (1 = verb, 2 = adjective, 3 = noun, 4 = word)
-        
+
+    if int(profile.grade) < 2:  # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
         alle_ord_2 = []
         for i in alle_ord:
             if i[0].secret == True:
-                
                 alle_ord_2.append(i)
         for i in alle_ord_2:
             alle_ord.remove(i)
 
-
     for i in alle_ord:
-            i[0].explanations = i[0].explanations[:25] + "..."
-
-
-
-
+        i[0].explanations = i[0].explanations[:25] + "..."
 
     obj_per_page = 30  # Show 30 words per page.
     if len(alle_ord) < obj_per_page:
-        context = {"word": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
+        context = {
+            "word": alle_ord,
+            "form": form,
+            "category": kategorier,
+            "category_form": category_form,
+        }
 
     else:
         paginator = Paginator(alle_ord, obj_per_page)
@@ -178,18 +177,18 @@ def ordListe(request):
         page_number = request.GET.get("page")
         page_obj = paginator.get_page(page_number)
         alle_ord = page_obj
-  
-    
-    context = {"alle_ord": alle_ord, "form": form, "category": kategorier, "category_form": category_form}
+
+    context = {
+        "alle_ord": alle_ord,
+        "form": form,
+        "category": kategorier,
+        "category_form": category_form,
+    }
     return render(request, "wordall.html", context)
-
-
-
 
 
 @permission_required("wordlist.add_word")
 def createWord(request):
-    
     checkwhatformform = CheckWhatFormForm()
     wordform = WordInput()
     verbform = VerbInput()
@@ -198,29 +197,26 @@ def createWord(request):
     formindex = 0
 
     if request.method == "POST" and "check" in request.POST:
-        
-        if request.POST['choice'] == "1" and "check" in request.POST:
+        if request.POST["choice"] == "1" and "check" in request.POST:
             wordform = WordInput()
             formindex = 1
-        if request.POST['choice'] == "2" and "check" in request.POST:
+        if request.POST["choice"] == "2" and "check" in request.POST:
             verbform = VerbInput()
             formindex = 2
-        if request.POST['choice'] == "3" and "check" in request.POST:
+        if request.POST["choice"] == "3" and "check" in request.POST:
             nounform = NounInput()
             formindex = 3
-        if request.POST['choice'] == "4" and "check" in request.POST:
+        if request.POST["choice"] == "4" and "check" in request.POST:
             adjectiveform = AdjectiveInput()
             formindex = 4
 
-
     if request.method == "POST" and "check" not in request.POST:
-        
         wordform = WordInput(data=request.POST, files=request.FILES)
         nounform = NounInput(data=request.POST, files=request.FILES)
         verbform = VerbInput(data=request.POST, files=request.FILES)
         adjectiveform = AdjectiveInput(data=request.POST, files=request.FILES)
-        
-        if "nytt" in request.POST and nounform.is_valid():    
+
+        if "nytt" in request.POST and nounform.is_valid():
             nounform_instace = nounform.save(commit=False)
             nounform_instace.author = request.user
             nounform_instace.save()
@@ -230,11 +226,10 @@ def createWord(request):
                 messages.SUCCESS,
                 "Ditt ord er lagret",
                 extra_tags="Big slay",
-                )
+            )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
-            
 
-        if "nytt" in request.POST and verbform.is_valid():       
+        if "nytt" in request.POST and verbform.is_valid():
             verbform_instace = verbform.save(commit=False)
             verbform_instace.author = request.user
             verbform_instace.save()
@@ -244,11 +239,10 @@ def createWord(request):
                 messages.SUCCESS,
                 "Ditt ord er lagret",
                 extra_tags="Big slay",
-                )
+            )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
-            
 
-        if "nytt" in request.POST and adjectiveform.is_valid():       
+        if "nytt" in request.POST and adjectiveform.is_valid():
             adjectiveform_instace = adjectiveform.save(commit=False)
             adjectiveform_instace.author = request.user
             adjectiveform_instace.save()
@@ -258,10 +252,8 @@ def createWord(request):
                 messages.SUCCESS,
                 "Ditt ord er lagret",
                 extra_tags="Big slay",
-                )
+            )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
-            
-
 
         if "nytt" in request.POST and wordform.is_valid():
             wordform_instace = wordform.save(commit=False)
@@ -273,12 +265,10 @@ def createWord(request):
                 messages.SUCCESS,
                 "Ditt ord er lagret",
                 extra_tags="Big slay",
-                )
+            )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
-        
 
-
-        if nounform.is_valid():       
+        if nounform.is_valid():
             nounform_instace = nounform.save(commit=False)
             nounform_instace.author = request.user
             nounform_instace.save()
@@ -291,7 +281,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if verbform.is_valid():       
+        if verbform.is_valid():
             verbform_instace = verbform.save(commit=False)
             verbform_instace.author = request.user
             verbform_instace.save()
@@ -304,7 +294,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if adjectiveform.is_valid():       
+        if adjectiveform.is_valid():
             adjectiveform_instace = adjectiveform.save(commit=False)
             adjectiveform_instace.author = request.user
             adjectiveform_instace.save()
@@ -329,63 +319,78 @@ def createWord(request):
                 extra_tags="Big slay",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
-        
-        
-    context = {"checkwhatformform":checkwhatformform, "wordform":wordform, "nounform":nounform, "verbform":verbform, "adjectiveform":adjectiveform, "formindex":formindex} 
+
+    context = {
+        "checkwhatformform": checkwhatformform,
+        "wordform": wordform,
+        "nounform": nounform,
+        "verbform": verbform,
+        "adjectiveform": adjectiveform,
+        "formindex": formindex,
+    }
     return render(request, "createWord.html", context)
-
-
-
 
 
 @permission_required("wordlist.change_word")
 def adminWord(request, pk, klassetall):
-
     if klassetall == 1:
         ordet = (get_object_or_404(Verb, id=pk), klassetall)
-        form = VerbInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+        form = VerbInput(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=ordet[0],
+        )
     if klassetall == 2:
         ordet = (get_object_or_404(Adjective, id=pk), klassetall)
-        form = AdjectiveInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+        form = AdjectiveInput(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=ordet[0],
+        )
     if klassetall == 3:
         ordet = (get_object_or_404(Noun, id=pk), klassetall)
-        form = NounInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
+        form = NounInput(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=ordet[0],
+        )
     if klassetall == 4:
         ordet = (get_object_or_404(Word, id=pk), klassetall)
-        form = WordInput(data=request.POST or None, files=request.FILES or None, instance=ordet[0])
-
+        form = WordInput(
+            data=request.POST or None,
+            files=request.FILES or None,
+            instance=ordet[0],
+        )
 
     if request.method == "POST":
-
         if ordet[1] == 1 and form.is_valid():
-            verbform_instace = form.save(commit = False)
+            verbform_instace = form.save(commit=False)
             verbform_instace.save()
-            
+
         if ordet[1] == 2 and form.is_valid():
-            adjectiveform_instace = form.save(commit = False)
+            adjectiveform_instace = form.save(commit=False)
             adjectiveform_instace.save()
-        
+
         if ordet[1] == 3 and form.is_valid():
-            nounform_instace = form.save(commit = False)
+            nounform_instace = form.save(commit=False)
             nounform_instace.save()
-        
+
         if ordet[1] == 4 and form.is_valid():
-            wordform_instace = form.save(commit = False)
+            wordform_instace = form.save(commit=False)
             wordform_instace.save()
 
-        return HttpResponseRedirect(reverse("wordlist:details", args=[pk, klassetall]))
-    
-    context = {"form": form } 
+        return HttpResponseRedirect(
+            reverse("wordlist:details", args=[pk, klassetall])
+        )
+
+    context = {"form": form}
     return render(request, "adminWord.html", context)
 
 
-
-
-
 @permission_required("wordlist.delete_word")
-def word_delete(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
-
-
+def word_delete(
+    request, pk, klassetall
+):  # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
     if klassetall == 1:
         ordet = (get_object_or_404(Verb, id=pk), klassetall)
     if klassetall == 2:
@@ -394,7 +399,6 @@ def word_delete(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 
         ordet = (get_object_or_404(Noun, id=pk), klassetall)
     if klassetall == 4:
         ordet = (get_object_or_404(Word, id=pk), klassetall)
-
 
     ordet[0].delete()
     messages.add_message(
@@ -403,12 +407,10 @@ def word_delete(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 
     return HttpResponseRedirect(reverse("wordlist:index"))
 
 
-
-
-
 @login_required()
-def details(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
-    
+def details(
+    request, pk, klassetall
+):  # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
     if klassetall == 1:
         ordet = (get_object_or_404(Verb, id=pk), klassetall)
     if klassetall == 2:
@@ -418,29 +420,24 @@ def details(request, pk, klassetall): # (1 = verb, 2 = adjective, 3 = noun, 4 = 
     if klassetall == 4:
         ordet = (get_object_or_404(Word, id=pk), klassetall)
 
-
-    context = {"ord": ordet} # "substantiv": substantiv, "verb": verb, "adjektiv": adjektiv
+    context = {
+        "ord": ordet
+    }  # "substantiv": substantiv, "verb": verb, "adjektiv": adjektiv
     return render(request, "details.html", context)
-
-
-
 
 
 @permission_required("wordlist.add_word")
 def admincategoryViews(request):
     categories = Category.objects.all()
-    context = {"admincategory":categories}
+    context = {"admincategory": categories}
     return render(request, "admincategory.html", context)
 
 
-
-
-
 def editcategoryViews(request, pk):
-    category = get_object_or_404(Category, id = pk)
-    
+    category = get_object_or_404(Category, id=pk)
+
     if request.method == "POST":
-        categoryform = CategoryInput(request.POST,instance=category)
+        categoryform = CategoryInput(request.POST, instance=category)
         if categoryform.is_valid():
             category_instance = categoryform.save(commit=False)
             category_instance.save()
@@ -449,16 +446,13 @@ def editcategoryViews(request, pk):
                 request,
                 messages.SUCCESS,
                 "OG FET B)",
-                extra_tags="KATEGORIEN DIN ER ENDRET"
+                extra_tags="KATEGORIEN DIN ER ENDRET",
             )
             return HttpResponseRedirect(reverse("wordlist:admincategory"))
     else:
         categoryform = CategoryInput(instance=category)
-    context = {"categoryform":categoryform, "category":category}
-    return render(request, "editcategory.html", context )
-
-
-
+    context = {"categoryform": categoryform, "category": category}
+    return render(request, "editcategory.html", context)
 
 
 @login_required
@@ -474,20 +468,17 @@ def createcategoryViews(request):
                 request,
                 messages.SUCCESS,
                 "OG FET B)",
-                extra_tags="KATEGORIEN DIN ER LAGRET"
+                extra_tags="KATEGORIEN DIN ER LAGRET",
             )
             return HttpResponseRedirect(reverse("wordlist:admincategory"))
     else:
         categoryform = CategoryInput()
-    context = {"categoryform":categoryform}
-    return render(request, "createcategory.html", context )
-
-
-
+    context = {"categoryform": categoryform}
+    return render(request, "createcategory.html", context)
 
 
 def deletecategoryViews(request, pk):
-    category_object = get_object_or_404(Category, id = pk)
+    category_object = get_object_or_404(Category, id=pk)
 
     category_object.delete()
 
@@ -495,7 +486,6 @@ def deletecategoryViews(request, pk):
         request,
         messages.SUCCESS,
         "Kategorien gikk adundas",
-        extra_tags = "Slettet",
+        extra_tags="Slettet",
     )
     return HttpResponseRedirect(reverse("wordlist:admincategory"))
-
