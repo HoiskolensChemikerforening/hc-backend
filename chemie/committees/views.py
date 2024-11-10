@@ -22,9 +22,9 @@ def index(request):
     # Group all these members by the committee type
     committees = Committee.objects.order_by("title")
     committees_by_type = {
-        'COMMITTEE': committees.filter(committee_type=1),
-        'SUBGROUP': committees.filter(committee_type=2),
-        'ASSOCIATEDGROUP': committees.filter(committee_type=3),
+        "COMMITTEE": committees.filter(committee_type=1),
+        "SUBGROUP": committees.filter(committee_type=2),
+        "ASSOCIATEDGROUP": committees.filter(committee_type=3),
     }
     context = {"committees_by_type": committees_by_type}
 
