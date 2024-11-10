@@ -37,8 +37,8 @@ class Noun(AbstractWord):
     word = models.CharField(
         max_length=100,
         verbose_name="ubestemt_entall",
-        unique=False,
-        blank=True,
+        unique=True,
+        blank=False,
     )
     indefinite_plural = models.CharField(
         max_length=100,
@@ -62,7 +62,7 @@ class Noun(AbstractWord):
 
 class Verb(AbstractWord):
     word = models.CharField(
-        max_length=100, verbose_name="infinitiv", unique=False, blank=True
+        max_length=100, verbose_name="infinitiv", unique=True, blank=False
     )
     present = models.CharField(
         max_length=100, verbose_name="presens", unique=False, blank=True
@@ -83,7 +83,7 @@ class Verb(AbstractWord):
 
 class Adjective(AbstractWord):
     word = models.CharField(
-        max_length=100, verbose_name="positiv", unique=False, blank=True
+        max_length=100, verbose_name="positiv", unique=True, blank=False
     )
     comparative = models.CharField(
         max_length=100, verbose_name="komparativ", unique=False, blank=True

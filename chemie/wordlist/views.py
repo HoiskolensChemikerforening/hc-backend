@@ -191,10 +191,8 @@ def ordListe(request):
 def createWord(request):
     form = CheckWhatFormForm()
     formindex = 0
-   
 
-
-    if request.method == "POST" and "check" in request.POST: 
+    if request.method == "POST" and "check" in request.POST:
         if request.POST["choice"] == "1" and "check" in request.POST:
             form = WordInput()
             formindex = 1
@@ -208,9 +206,7 @@ def createWord(request):
             form = AdjectiveInput()
             formindex = 4
 
-
     if request.method == "POST" and "check" not in request.POST:
-        
         if ("nytt_tag_1" or "tag_1") in request.POST:
             form = WordInput(data=request.POST, files=request.FILES)
         if ("nytt_tag_2" or "tag_2") in request.POST:
@@ -220,9 +216,7 @@ def createWord(request):
         if ("nytt_tag_4" or "tag_4") in request.POST:
             form = AdjectiveInput(data=request.POST, files=request.FILES)
 
-
         if "nytt_tag_3" in request.POST and form.is_valid():
-            
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -235,7 +229,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt_tag_2" in request.POST and form.is_valid():
+        elif "nytt_tag_2" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -248,7 +242,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt_tag_4" in request.POST and form.is_valid():
+        elif "nytt_tag_4" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -261,7 +255,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "nytt_tag_1" in request.POST and form.is_valid():
+        elif "nytt_tag_1" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -274,7 +268,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:innsending"))
 
-        if "tag_3" in request.POST and form.is_valid():
+        elif "tag_3" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -287,7 +281,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if "tag_2" in request.POST and form.is_valid():
+        elif "tag_2" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -300,7 +294,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if "tag_4" in request.POST and form.is_valid():
+        elif "tag_4" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -313,7 +307,7 @@ def createWord(request):
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
 
-        if "tag_1" in request.POST and form.is_valid():
+        elif "tag_1" in request.POST and form.is_valid():
             form_instace = form.save(commit=False)
             form_instace.author = request.user
             form_instace.save()
@@ -325,8 +319,15 @@ def createWord(request):
                 extra_tags="Big slay; et nytt ord!",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
+        else: 
+            messages.add_message(
+                request,
+                messages.ERROR,
+                f"Ditt ord ble ikke lagret.",
+                extra_tags="Dette kan skyldes ",
+            )
 
-    context = {"form": form, "formindex":formindex}
+    context = {"form": form, "formindex": formindex}
     return render(request, "createWord.html", context)
 
 
@@ -419,9 +420,7 @@ def details(
     if klassetall == 4:
         ordet = (get_object_or_404(Word, id=pk), klassetall)
 
-    context = {
-        "ord": ordet
-    }
+    context = {"ord": ordet}
     return render(request, "details.html", context)
 
 
