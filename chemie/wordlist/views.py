@@ -319,7 +319,7 @@ def createWord(request):
                 extra_tags="Big slay; et nytt ord!",
             )
             return HttpResponseRedirect(reverse("wordlist:index"))
-        else: 
+        else:
             messages.add_message(
                 request,
                 messages.ERROR,
