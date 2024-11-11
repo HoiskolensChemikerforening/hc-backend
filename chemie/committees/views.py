@@ -21,7 +21,12 @@ def index(request):
     # Fetch all members, who belong to a committee (Member -> Committee)
     # Group all these members by the committee type
     committees = Committee.objects.order_by("title")
-    context = {"committees": committees}
+    committees_by_type = {
+        "COMMITTEE": committees.filter(committee_type=1),
+        "SUBGROUP": committees.filter(committee_type=2),
+        "ASSOCIATEDGROUP": committees.filter(committee_type=3),
+    }
+    context = {"committees_by_type": committees_by_type}
 
     return render(request, "committees/list_committees.html", context)
 
@@ -41,7 +46,9 @@ def email_download_view(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
 
     # check permissions
-    no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
+    no_permissions, redirect_target = check_if_admin_of_group(
+        request, committee, slug
+    )
     if no_permissions:
         return redirect_target
 
@@ -79,8 +86,9 @@ def check_if_admin_of_group(request, committee, slug):
             "Du har bare lov å endre egne undergrupper.",
             extra_tags="Manglende rettigheter!",
         )
-        return True, redirect(
-             reverse("verv:committee_detail", kwargs={"slug": slug})
+        return (
+            True,
+            redirect(reverse("verv:committee_detail", kwargs={"slug": slug})),
         )
     return False, None
 
@@ -90,7 +98,9 @@ def edit_description(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
 
     # check permissions
-    no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
+    no_permissions, redirect_target = check_if_admin_of_group(
+        request, committee, slug
+    )
     if no_permissions:
         return redirect_target
 

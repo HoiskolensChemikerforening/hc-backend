@@ -68,7 +68,7 @@ class BaseEvent(models.Model):
 
     published = models.BooleanField(default=True, verbose_name="publisert")
 
-    tentative = models.BooleanField(default= False, verbose_name="tentativ")
+    tentative = models.BooleanField(default=False, verbose_name="tentativ")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -83,7 +83,7 @@ class BaseEvent(models.Model):
         else:
             return [GRADES.for_value(x).display for x in self.allowed_grades]
 
-        #Makes nicer view on detalis page.
+        # Makes nicer view on detalis page.
 
     def registered_users(self):
         return self.attendees.through.objects.filter(
@@ -94,9 +94,6 @@ class BaseEvent(models.Model):
         return self.attendees.through.objects.filter(
             status=REGISTRATION_STATUS.WAITING, event=self
         ).count()
-
-
-
 
     @property
     def can_signup(self):
@@ -208,7 +205,9 @@ class Social(BaseEvent):
         return "social"
 
     def get_queue_position(self, user):
-        user_reg = self.socialeventregistration_set.all().filter(user=user).first()
+        user_reg = (
+            self.socialeventregistration_set.all().filter(user=user).first()
+        )
         return SocialEventRegistration.get_queue_position(user_reg)
 
 
@@ -283,12 +282,12 @@ class BaseRegistration(models.Model):
         queue_position = None
         if registration.status == REGISTRATION_STATUS.WAITING:
             queue_position = (
-                    cls.objects.filter(
-                        event=registration.event,
-                        created__lt=registration.created,
-                        status=REGISTRATION_STATUS.WAITING,
-                    ).count()
-                    + 1
+                cls.objects.filter(
+                    event=registration.event,
+                    created__lt=registration.created,
+                    status=REGISTRATION_STATUS.WAITING,
+                ).count()
+                + 1
             )
         return queue_position
 
