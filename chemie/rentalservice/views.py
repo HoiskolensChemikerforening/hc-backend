@@ -43,6 +43,13 @@ def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
+        
+        messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Utleieobjektet ble opprettet",
+        extra_tags="Opprettet",
+    )
         return redirect("rentalservice:index_sportskom")
 
     context = {"new_obj_form": form}
