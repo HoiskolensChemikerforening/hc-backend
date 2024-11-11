@@ -207,13 +207,14 @@ def createWord(request):
             formindex = 4
 
     if request.method == "POST" and "check" not in request.POST:
-        if ("nytt_tag_1" or "tag_1") in request.POST:
+        print(request.POST)
+        if ("nytt_tag_1" in request.POST or "tag_1" in request.POST) :
             form = WordInput(data=request.POST, files=request.FILES)
-        if ("nytt_tag_2" or "tag_2") in request.POST:
+        if ("nytt_tag_2" in request.POST or "tag_2" in request.POST):
             form = VerbInput(data=request.POST, files=request.FILES)
-        if ("nytt_tag_3" or "tag_3") in request.POST:
+        if ("nytt_tag_3" in request.POST or "tag_3" in request.POST):
             form = NounInput(data=request.POST, files=request.FILES)
-        if ("nytt_tag_4" or "tag_4") in request.POST:
+        if ("nytt_tag_4" in request.POST or "tag_4" in request.POST):
             form = AdjectiveInput(data=request.POST, files=request.FILES)
 
         if "nytt_tag_3" in request.POST and form.is_valid():
@@ -323,8 +324,8 @@ def createWord(request):
             messages.add_message(
                 request,
                 messages.ERROR,
-                f"Ditt ord ble ikke lagret.",
-                extra_tags="Dette kan skyldes ",
+                f"Dette kan skyldes at orde allerede finnes i databasen, eller at forklaringen ikke er unik.",
+                extra_tags="Ditt ord ble ikke lagret.",
             )
 
     context = {"form": form, "formindex": formindex}
