@@ -208,13 +208,13 @@ def createWord(request):
 
     if request.method == "POST" and "check" not in request.POST:
         print(request.POST)
-        if ("nytt_tag_1" in request.POST or "tag_1" in request.POST) :
+        if "nytt_tag_1" in request.POST or "tag_1" in request.POST:
             form = WordInput(data=request.POST, files=request.FILES)
-        if ("nytt_tag_2" in request.POST or "tag_2" in request.POST):
+        if "nytt_tag_2" in request.POST or "tag_2" in request.POST:
             form = VerbInput(data=request.POST, files=request.FILES)
-        if ("nytt_tag_3" in request.POST or "tag_3" in request.POST):
+        if "nytt_tag_3" in request.POST or "tag_3" in request.POST:
             form = NounInput(data=request.POST, files=request.FILES)
-        if ("nytt_tag_4" in request.POST or "tag_4" in request.POST):
+        if "nytt_tag_4" in request.POST or "tag_4" in request.POST:
             form = AdjectiveInput(data=request.POST, files=request.FILES)
 
         if "nytt_tag_3" in request.POST and form.is_valid():
@@ -425,13 +425,14 @@ def details(
     return render(request, "details.html", context)
 
 
-@permission_required("wordlist.add_word")
+@permission_required("wordlist.view_wordlist_category")
 def admincategoryViews(request):
     categories = Category.objects.all()
     context = {"admincategory": categories}
     return render(request, "admincategory.html", context)
 
 
+@permission_required("wordlist.change_wordlist_category")
 def editcategoryViews(request, pk):
     category = get_object_or_404(Category, id=pk)
 
@@ -454,7 +455,7 @@ def editcategoryViews(request, pk):
     return render(request, "editcategory.html", context)
 
 
-@login_required
+@permission_required("wordlist.add_wordlist_category")
 def createcategoryViews(request):
     if request.method == "POST":
         categoryform = CategoryInput(request.POST)
@@ -476,6 +477,7 @@ def createcategoryViews(request):
     return render(request, "createcategory.html", context)
 
 
+@permission_required("wordlist.delete_wordlist_category")
 def deletecategoryViews(request, pk):
     category_object = get_object_or_404(Category, id=pk)
 
