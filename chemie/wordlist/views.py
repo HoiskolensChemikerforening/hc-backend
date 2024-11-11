@@ -86,7 +86,7 @@ def fsort(settet, sorteringsord):  # listesortering
     return filtersett
 
 
-@login_required()
+@login_required
 def ordListe(request):
     verbs = Verb.objects.all()
     adjectives = Adjective.objects.all()
@@ -408,7 +408,7 @@ def word_delete(
     return HttpResponseRedirect(reverse("wordlist:index"))
 
 
-@login_required()
+@login_required
 def details(
     request, pk, klassetall
 ):  # (1 = verb, 2 = adjective, 3 = noun, 4 = word)
@@ -425,7 +425,7 @@ def details(
     return render(request, "details.html", context)
 
 
-@permission_required("wordlist.view_wordlist_category")
+@login_required
 def admincategoryViews(request):
     categories = Category.objects.all()
     context = {"admincategory": categories}
