@@ -1,7 +1,9 @@
 {% extends "events/social/social_base.html" %}
 
 {% block nav_sub_header %}
+<div class="hide-on-small-only">
   Oversikt
+</div>
 {% endblock nav_sub_header %}
 
 {# Main block #}
@@ -10,9 +12,25 @@
 <div class="row">
     <div class="col s12">
         <ul class="tabs z-depth-1">
-            <li class="tab col s4"><a target="_self" href="{% url "events:index_social" %}#futureEvents">Kommende sosiale arrangementer</a></li>
-            <li class="tab col s4"><a target="_self" href="{% url "events:index_social" %}#myEvents">Mine festligheter</a></li>
-            <li class="tab col s4"><a class="active" href="#pastEvents">Tidligere sosiale arrangementer</a></li>
+            <li class="tab col s4">
+                <a target="_self" href="{% url "events:index_social" %}#futureEvents">
+                    <span class="hide-on-med-and-down">Kommende sosiale arrangementer</span>
+                    <span class="hide-on-large-only">Kommende</span>
+                </a>
+            </li>
+            <li class="tab col s4">
+                <a target="_self" href="{% url "events:index_social" %}#myEvents">
+                    <span class="hide-on-med-and-down">Mine festligheter</span>
+                    <span class="hide-on-large-only">Mine</span>
+                </a>
+            </li>
+            <li class="tab col s4">
+                <a class="active" href="#pastEvents">
+                    <span class="hide-on-med-and-down">Tidligere sosiale arrangementer</span>
+                    <span class="hide-on-large-only">Tidligere</span>
+                </a>
+            </li>
+
         </ul>
         <div id="pastEvents" class="col s12">
 
