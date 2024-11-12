@@ -36,7 +36,9 @@ def create_permissions():
     # Category test is tied to the category model since there are multiple cateory models in other apps
     content_model = ContentType.objects.get_for_model(Category)
     p_item = Permission.objects.get_or_create(name="Can add item")[0]
-    p_category = Permission.objects.get_or_create(name="Can add category", content_type=content_model)[0]
+    p_category = Permission.objects.get_or_create(
+        name="Can add category", content_type=content_model
+    )[0]
     p_refill = Permission.objects.get_or_create(name="Can refill balance")[0]
     return p_item, p_category, p_refill
 

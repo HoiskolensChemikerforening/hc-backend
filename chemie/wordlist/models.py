@@ -30,7 +30,9 @@ class AbstractWord(models.Model):
     )
 
     class Meta:  # Viktig for å kunne lage fields i subclasses (Noun, Verb, Adjective, Word) som ikkje skal komme i konflikt med AbstractWord
-        abstract = True  # Definerer den som en kun abstract class, fordi det aldri vil eksisterer et objekt i AbstractWord
+        abstract = (
+            True
+        )  # Definerer den som en kun abstract class, fordi det aldri vil eksisterer et objekt i AbstractWord
 
 
 class Noun(AbstractWord):

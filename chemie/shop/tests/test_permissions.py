@@ -2,7 +2,7 @@ import pytest
 from django.shortcuts import reverse
 from chemie.shop.urls import urlpatterns
 
-MAX_AMOUNT = 10**4
+MAX_AMOUNT = 10 ** 4
 
 
 # --------------------------------- #
