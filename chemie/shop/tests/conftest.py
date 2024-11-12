@@ -7,6 +7,8 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 
 from chemie.customprofile.factories import RandomProfileFactory
 from chemie.shop.tests.factories import ItemFactory, CategoryFactory
+from django.contrib.contenttypes.models import ContentType
+from chemie.shop.models import Category
 
 
 @pytest.fixture(scope="function")
@@ -31,8 +33,10 @@ def create_second_user_base():
 
 @pytest.fixture(scope="function")
 def create_permissions():
+    # Category test is tied to the category model since there are multiple cateory models in other apps
+    content_model = ContentType.objects.get_for_model(Category)
     p_item = Permission.objects.get_or_create(name="Can add item")[0]
-    p_category = Permission.objects.get_or_create(name="Can add category")[0]
+    p_category = Permission.objects.get_or_create(name="Can add category", content_type=content_model)[0]
     p_refill = Permission.objects.get_or_create(name="Can refill balance")[0]
     return p_item, p_category, p_refill
 
