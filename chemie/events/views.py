@@ -246,6 +246,7 @@ class ListPastSocialView(ListView):
 class ListPastBedpresView(ListPastSocialView):
     template_name = "events/bedpres/list_past.html"
     model = Bedpres
+    # Pagination set in ListPastSocialView
 
 
 class ListSocialDeleteView(PermissionRequiredMixin, ListView):
