@@ -324,7 +324,7 @@ def createWord(request):
             messages.add_message(
                 request,
                 messages.ERROR,
-                f"Dette kan skyldes at orde allerede finnes i databasen, eller at forklaringen ikke er unik.",
+                f"Dette kan skyldes at ordet allerede finnes i databasen, eller at forklaringen ikke er unik.",
                 extra_tags="Ditt ord ble ikke lagret.",
             )
 
