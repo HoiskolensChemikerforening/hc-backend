@@ -235,7 +235,7 @@ class ListAdminSocialView(ListSocialView):
 class ListPastSocialView(ListView):
     template_name = "events/social/list_past.html"
     model = Social
-    paginate_by = 2
+    paginate_by = 24
 
     def get_queryset(self):
         return self.model.objects.filter(date__lte=timezone.now()).order_by(
