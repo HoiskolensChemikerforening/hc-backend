@@ -10,8 +10,10 @@ OWNER = Choices(
     ("PROMOKOM", 1, "Promoterigskomiteen"),
     ("AC", 2, "Audiochromatene"),
     ("SPORTSKOM", 3, "Sportskomiteen"),
-    ("NONE", 4, "Ingen")
+    ("NONE", 4, "Ingen"),
 )
+
+
 class Landlord(models.Model):  # Utleier aka promokom/ac
     committee = models.ForeignKey(Committee, on_delete=models.CASCADE)
 
@@ -43,9 +45,7 @@ class RentalObject(models.Model):
     description = RichTextField(verbose_name="Beskrivelse", config_name="news")
     image = ImageField(upload_to="rentalservice", verbose_name="Bilde")
     owner = models.PositiveSmallIntegerField(
-        choices=OWNER,
-        verbose_name="Utleier",
-        default=OWNER.NONE,
+        choices=OWNER, verbose_name="Utleier", default=OWNER.NONE
     )
     price = models.FloatField(
         validators=[MinValueValidator(0.0)],

@@ -12,12 +12,14 @@ from .models import RentalObject, Landlord
 from .forms import CreateRentalObjectForm, InvoiceForm, RentalObjectForm
 from chemie.home.forms import ContactForm
 
+
 def index(request):
     return render(request, "rentalservice/index_ac.html")
 
 
 def index_promo(request):
     return render(request, "rentalservice/index_promo.html")
+
 
 @login_required
 def index_sportskom(request):
@@ -45,6 +47,7 @@ def new_object(request):
 
     context = {"new_obj_form": form}
     return render(request, "rentalservice/new_object.html", context)
+
 
 @login_required
 def detail(request, rentalobject_id):
@@ -82,7 +85,9 @@ def edit_rentalobject(request, rentalobject_id):
                 "Utleieobjekt ble endret",
                 extra_tags="Endret",
             )
-            return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
+            return HttpResponseRedirect(
+                reverse("rentalservice:index_sportskom")
+            )
     context = {"new_obj_form": form}
 
     return render(request, "rentalservice/new_object.html", context)
@@ -142,6 +147,7 @@ def contact_page(request):
 
 def contact_page_promo(request):
     return render(request, "rentalservice/contact_page_promo.html")
+
 
 @login_required
 def contact_page_sportskom(request):
