@@ -8,6 +8,8 @@ from django.db.models.signals import pre_save
 from extended_choices import Choices
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
+import datetime
+from django.utils import timezone
 
 
 HAPPY_HOUR_DURATION = Choices(
@@ -141,7 +143,7 @@ class Order(models.Model):
         related_name="orders",
         on_delete=models.CASCADE,
     )
-    created = models.DateTimeField(auto_now_add=True)
+    created = models.DateTimeField() # TEMPORARY DISABLED: auto_now_add=True
 
     def __str__(self):
         return self.buyer.get_full_name() + " ordre " + str(self.id)
@@ -152,6 +154,10 @@ class Order(models.Model):
             totalprice += item.total_price
         return totalprice
 
+    def save(self, *args, **kwargs):  # DELETE: ONLY FOR TEST OBJECT GENERATION
+        if not self.pk:  # Check if the instance is being created
+            self.created = timezone.now() - datetime.timedelta(days=30)
+        super(Order, self).save(*args, **kwargs)
 
 class HappyHour(models.Model):
     provider = models.ForeignKey(User, on_delete=models.DO_NOTHING)
