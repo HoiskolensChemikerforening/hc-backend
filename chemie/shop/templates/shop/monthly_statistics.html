@@ -51,9 +51,23 @@
 <div>
     <h2>Monthly Statistics for {{ current_month }}</h2>
     <ul>
-        {% for item in order_items %}
-            <li>{{ item }}</li>
-        {% endfor %}
+        <h4>
+          {{ current_month }} - {{month_total}}
+          <img type="image/png" src="{% static 'images/HC_coin.png' %}" style="width:1.8rem; margin-left:1rem; margin-top:-0.5rem">
+        </h4>
+
+        <div style="display: flex; margin:1rem; flex-wrap:wrap; margin-top:2rem; justify-content:center; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
+            {% if order_items %}
+                {% for key, value in order_items.items %}
+                    <div class="border item-list d-flex" style="height:8rem; margin:1rem; width:13rem">
+                        <h6 style="text-align:center">{{ key }}</h6>
+                        <p style="margin:auto; width:100%;">Antall solgt: {{ value }}</p>
+                        <p style="margin:auto; width:100%;">Totalt: {{ order_price }}</p>
+                        <img type="image/png" src="{% static 'images/HC_coin.png' %}" style="margin-top:-2.5rem; margin-left:8rem; width:1.8rem; padding-bottom:0.2rem;">
+                    </div>
+                {% endfor %}
+            {% endif %}
+        </div>
     </ul>
 
     <div>
