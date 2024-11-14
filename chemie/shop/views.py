@@ -9,7 +9,7 @@ from django.shortcuts import get_object_or_404, render, redirect, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 import operator
-
+from django.core.paginator import Paginator
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.web_push.models import Subscription
@@ -557,15 +557,39 @@ def view_all_refills(request):
 
 @permission_required("customprofile.refill_balance")
 def view_monthly_statistics(request):
-    order_items, order_price, monthTotal = get_last_year_receipts()
+    order_items, order_price, month_total = get_last_year_receipts()
+
     items = Item.objects.all()
+    order = Order.objects.all()
+    months = sorted(set(item.created.strftime('%Y-%m') for item in order), reverse=True)
+
+    # Paginate the months
+    paginator = Paginator(months, 1)  # Show one month per page
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
+    # Get the current month from the paginated months
+    current_month = page_obj.object_list[0]
+
+    # Filter order_items by the current month
+    order_items = order_items[int(page_number)-1]
+    month_total = month_total[int(page_number)-1]
+    order_price = order_price[int(page_number)-1]
+
     return render(
         request,
         "shop/monthly_statistics.html",
         {
-            "monthTotal": monthTotal,
+            "month_total": month_total,
             "order_items": order_items,
             "order_price": order_price,
             "items": items,
+            "months": months,
+            "current_month": current_month,
+            "page_obj": page_obj,
         },
     )
+
+
+
+
