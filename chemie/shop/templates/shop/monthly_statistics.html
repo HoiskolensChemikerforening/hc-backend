@@ -29,9 +29,8 @@
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item "><a href="{%url "shop:index"%}" style="color:#edcd2f">Forside</a>
-    </li>
-    <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Admin</li>
+    <li class="breadcrumb-item"><a href="{%url "shop:index"%}" style="color:#edcd2f">Forside</a></li>
+    <li class="breadcrumb-item"><a href="{%url "shop:admin"%}" style="color:#edcd2f">Admin</a></li>
     <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Statistikk</li>
   </ol>
 </nav>
@@ -42,10 +41,8 @@
 
 {% block content %}
 
-{{ order_items }} <br>
+{{ item_stats }} <br>
 {{month_total}} <br>
-{{order_price}}<br>
-{{items}} <br>
 {{months}}
 
 <div>
@@ -57,12 +54,12 @@
         </h4>
 
         <div style="display: flex; margin:1rem; flex-wrap:wrap; margin-top:2rem; justify-content:center; box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
-            {% if order_items %}
-                {% for key, value in order_items.items %}
+            {% if item_stats %}
+                {% for key, stats in item_stats.items %}
                     <div class="border item-list d-flex" style="height:8rem; margin:1rem; width:13rem">
                         <h6 style="text-align:center">{{ key }}</h6>
-                        <p style="margin:auto; width:100%;">Antall solgt: {{ value }}</p>
-                        <p style="margin:auto; width:100%;">Totalt: {{ order_price }}</p>
+                        <p style="margin:auto; width:100%;">Antall solgt: {{ stats.quantity }}</p>
+                        <p style="margin:auto; width:100%;">Totalt: {{ stats.price }}</p>
                         <img type="image/png" src="{% static 'images/HC_coin.png' %}" style="margin-top:-2.5rem; margin-left:8rem; width:1.8rem; padding-bottom:0.2rem;">
                     </div>
                 {% endfor %}

@@ -10,6 +10,8 @@ from django.utils import timezone
 from django.utils.html import format_html
 import operator
 from django.core.paginator import Paginator
+from dateutil.relativedelta import relativedelta
+
 
 from chemie.customprofile.forms import GetRFIDForm
 from chemie.web_push.models import Subscription
@@ -56,65 +58,39 @@ def is_happy_hour():
     except HappyHour.DoesNotExist:
         return False, False
 
-
-def get_last_year_receipts():
-    all_receipts = Order.objects.all()
+def get_monthly_receipts(month_index):
     now = timezone.now()
-    # Get 11 months back
-    if now.month == 12:
-        first_date = timezone.datetime(year=now.year, month=1, day=1)
-    else:
-        first_date = timezone.datetime(
-            year=now.year - 1, month=now.month + 1, day=1
-        )
-    receipts = all_receipts.filter(created__gte=first_date, created__lte=now)
-    months, m, i = 12, 0, 0
-    year, month = now.year, now.month
-    item_quantity = []
-    item_price = []
-    monthTotal = []
-    while i < months:
-        # Get the receipts at current_month - m
-        if (month - m) > 0:
-            month_c = month - m
-        else:
-            year = now.year - 1
-            month, month_c = 12, 12
-            m = 0
-        current_receipts = receipts.filter(
-            created__year=year, created__month=month_c
-        )
-        monthTotal.append(0)
-        item_quantity.append({})
-        item_price.append({})
-        for r in current_receipts:
-            for order_item in r.items.all():
-                order_item_key = order_item.item.name
-                if order_item_key not in item_quantity[i]:
-                    item_quantity[i][order_item_key] = order_item.quantity
-                    item_price[i][order_item_key] = order_item.total_price
-                    monthTotal[i] += order_item.total_price
 
-                else:
-                    item_quantity[i][order_item_key] += order_item.quantity
-                    item_price[i][order_item_key] += order_item.total_price
-                    monthTotal[i] += order_item.total_price
+    # Calculate the target month and year
+    target_date = now - relativedelta(months=month_index - 1)
+    target_year, target_month = target_date.year, target_date.month
 
-        if len(item_quantity[i]) > 0:
-            sorted_item_quantity = sorted(
-                item_quantity[i].items(),
-                key=operator.itemgetter(1),
-                reverse=True,
-            )
-            item_quantity[i] = dict(sorted_item_quantity)
-        if len(item_price[i]) > 0:
-            sorted_item_price = sorted(
-                item_price[i].items(), key=operator.itemgetter(1), reverse=True
-            )
-            item_price[i] = dict(sorted_item_price)
-        m += 1
-        i += 1
-    return item_quantity, item_price, monthTotal
+    # Filter receipts for the target month at the database level
+    receipts = Order.objects.filter(
+        created__year=target_year, created__month=target_month
+    ).prefetch_related('items')
+
+    # Initialize statistics
+    item_stats = {}
+    month_total = 0
+
+    # Aggregate item quantities and prices
+    for receipt in receipts:
+        for order_item in receipt.items.all():
+            key = order_item.item.name
+            if key not in item_stats:
+                item_stats[key] = {'quantity': 0, 'price': 0}
+            item_stats[key]['quantity'] += order_item.quantity
+            item_stats[key]['price'] += order_item.total_price
+            month_total += order_item.total_price
+
+    # Optional: Sort the dictionary by quantity or price
+    item_stats = dict(
+        sorted(item_stats.items(), key=lambda x: x[1]['quantity'], reverse=True)
+    )
+
+    return item_stats, month_total
+
 
 
 @login_required
@@ -557,33 +533,34 @@ def view_all_refills(request):
 
 @permission_required("customprofile.refill_balance")
 def view_monthly_statistics(request):
-    order_items, order_price, month_total = get_last_year_receipts()
 
-    items = Item.objects.all()
     order = Order.objects.all()
     months = sorted(set(item.created.strftime('%Y-%m') for item in order), reverse=True)
 
     # Paginate the months
     paginator = Paginator(months, 1)  # Show one month per page
-    page_number = request.GET.get('page')
+    page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
+
+    if not (1 <= int(page_number) <= 12):
+        messages.add_message(
+            request,
+            messages.ERROR,
+            "IKKE GYLDIG DATO"
+        )
+        return redirect(reverse("shop:admin"))
+
+    item_stats, month_total = get_monthly_receipts(int(page_number))
 
     # Get the current month from the paginated months
     current_month = page_obj.object_list[0]
-
-    # Filter order_items by the current month
-    order_items = order_items[int(page_number)-1]
-    month_total = month_total[int(page_number)-1]
-    order_price = order_price[int(page_number)-1]
 
     return render(
         request,
         "shop/monthly_statistics.html",
         {
             "month_total": month_total,
-            "order_items": order_items,
-            "order_price": order_price,
-            "items": items,
+            "item_stats": item_stats,
             "months": months,
             "current_month": current_month,
             "page_obj": page_obj,
