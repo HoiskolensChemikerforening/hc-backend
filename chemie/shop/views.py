@@ -11,6 +11,7 @@ from django.utils.html import format_html
 import operator
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
+from datetime import datetime
 
 
 from chemie.customprofile.forms import GetRFIDForm
@@ -58,6 +59,7 @@ def is_happy_hour():
     except HappyHour.DoesNotExist:
         return False, False
 
+
 def get_monthly_receipts(month_index):
     now = timezone.now()
 
@@ -65,7 +67,7 @@ def get_monthly_receipts(month_index):
     target_date = now - relativedelta(months=month_index - 1)
     target_year, target_month = target_date.year, target_date.month
 
-    # Filter receipts for the target month at the database level
+    # Filter receipts for the target month
     receipts = Order.objects.filter(
         created__year=target_year, created__month=target_month
     ).prefetch_related('items')
@@ -84,14 +86,23 @@ def get_monthly_receipts(month_index):
             item_stats[key]['price'] += order_item.total_price
             month_total += order_item.total_price
 
-    # Optional: Sort the dictionary by quantity or price
+    # Sort the dictionary by quantity (or price)
     item_stats = dict(
         sorted(item_stats.items(), key=lambda x: x[1]['quantity'], reverse=True)
     )
 
     return item_stats, month_total
 
+def get_last_12_months():
+    now = datetime.now()
+    # Create a list with last 12 months in 'YYYY-MM' format
+    last_12_months = []
 
+    for i in range(12):
+        month = (now - relativedelta(months=i))
+        last_12_months.append(month.strftime('%Y-%m'))
+
+    return last_12_months
 
 @login_required
 def index(request):
@@ -530,18 +541,16 @@ def view_all_refills(request):
     context["refill_sum_total"] = refill_sum_total
     return render(request, "shop/all_refills.html", context)
 
-
 @permission_required("customprofile.refill_balance")
 def view_monthly_statistics(request):
-
-    order = Order.objects.all()
-    months = sorted(set(item.created.strftime('%Y-%m') for item in order), reverse=True)
+    months = get_last_12_months()
 
     # Paginate the months
     paginator = Paginator(months, 1)  # Show one month per page
     page_number = request.GET.get('page', 1)
     page_obj = paginator.get_page(page_number)
 
+    # Check for valid month input
     if not (1 <= int(page_number) <= 12):
         messages.add_message(
             request,
@@ -550,10 +559,14 @@ def view_monthly_statistics(request):
         )
         return redirect(reverse("shop:admin"))
 
+    # Obtain statistics
     item_stats, month_total = get_monthly_receipts(int(page_number))
 
     # Get the current month from the paginated months
     current_month = page_obj.object_list[0]
+
+    # Reformat for html page
+    current_month = datetime.strptime(current_month, "%Y-%m")
 
     return render(
         request,
@@ -561,7 +574,6 @@ def view_monthly_statistics(request):
         {
             "month_total": month_total,
             "item_stats": item_stats,
-            "months": months,
             "current_month": current_month,
             "page_obj": page_obj,
         },
