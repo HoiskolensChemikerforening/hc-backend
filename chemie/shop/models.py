@@ -152,6 +152,7 @@ class Order(models.Model):
             totalprice += item.total_price
         return totalprice
 
+
 class HappyHour(models.Model):
     provider = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Oprettet")
