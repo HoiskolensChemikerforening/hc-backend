@@ -70,7 +70,7 @@ def get_monthly_receipts(month_index):
     # Filter receipts for the target month
     receipts = Order.objects.filter(
         created__year=target_year, created__month=target_month
-    ).prefetch_related('items')
+    ).prefetch_related("items")
 
     # Initialize statistics
     item_stats = {}
@@ -81,17 +81,20 @@ def get_monthly_receipts(month_index):
         for order_item in receipt.items.all():
             key = order_item.item.name
             if key not in item_stats:
-                item_stats[key] = {'quantity': 0, 'price': 0}
-            item_stats[key]['quantity'] += order_item.quantity
-            item_stats[key]['price'] += order_item.total_price
+                item_stats[key] = {"quantity": 0, "price": 0}
+            item_stats[key]["quantity"] += order_item.quantity
+            item_stats[key]["price"] += order_item.total_price
             month_total += order_item.total_price
 
     # Sort the dictionary by quantity (or price)
     item_stats = dict(
-        sorted(item_stats.items(), key=lambda x: x[1]['quantity'], reverse=True)
+        sorted(
+            item_stats.items(), key=lambda x: x[1]["quantity"], reverse=True
+        )
     )
 
     return item_stats, month_total
+
 
 def get_last_12_months():
     now = datetime.now()
@@ -99,10 +102,11 @@ def get_last_12_months():
     last_12_months = []
 
     for i in range(12):
-        month = (now - relativedelta(months=i))
-        last_12_months.append(month.strftime('%Y-%m'))
+        month = now - relativedelta(months=i)
+        last_12_months.append(month.strftime("%Y-%m"))
 
     return last_12_months
+
 
 @login_required
 def index(request):
@@ -541,22 +545,19 @@ def view_all_refills(request):
     context["refill_sum_total"] = refill_sum_total
     return render(request, "shop/all_refills.html", context)
 
+
 @permission_required("customprofile.refill_balance")
 def view_monthly_statistics(request):
     months = get_last_12_months()
 
     # Paginate the months
     paginator = Paginator(months, 1)  # Show one month per page
-    page_number = request.GET.get('page', 1)
+    page_number = request.GET.get("page", 1)
     page_obj = paginator.get_page(page_number)
 
     # Check for valid month input
     if not (1 <= int(page_number) <= 12):
-        messages.add_message(
-            request,
-            messages.ERROR,
-            "IKKE GYLDIG DATO"
-        )
+        messages.add_message(request, messages.ERROR, "IKKE GYLDIG DATO")
         return redirect(reverse("shop:admin"))
 
     # Obtain statistics
@@ -578,7 +579,3 @@ def view_monthly_statistics(request):
             "page_obj": page_obj,
         },
     )
-
-
-
-

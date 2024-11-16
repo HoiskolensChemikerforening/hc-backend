@@ -143,7 +143,7 @@ class Order(models.Model):
         related_name="orders",
         on_delete=models.CASCADE,
     )
-    created = models.DateTimeField() # TEMPORARY DISABLED: auto_now_add=True
+    created = models.DateTimeField()  # TEMPORARY DISABLED: auto_now_add=True
 
     def __str__(self):
         return self.buyer.get_full_name() + " ordre " + str(self.id)
@@ -158,6 +158,7 @@ class Order(models.Model):
         if not self.pk:  # Check if the instance is being created
             self.created = timezone.now() - datetime.timedelta(days=30)
         super(Order, self).save(*args, **kwargs)
+
 
 class HappyHour(models.Model):
     provider = models.ForeignKey(User, on_delete=models.DO_NOTHING)
