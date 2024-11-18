@@ -69,12 +69,12 @@
                 {% if page_obj.has_previous %}
                     <li class="page-item" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
                         <a class="page-link" href="?page=1" aria-label="First">
-                            <span aria-hidden="true"><i class="material-icons" style="color:#f9cf00;">first_page</i></span>
+                            <span aria-hidden="true"><i class="material-icons" style="color:#343a40;">first_page</i></span>
                         </a>
                     </li>
                     <li class="page-item" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
                         <a class="page-link" href="?page={{ page_obj.previous_page_number }}" aria-label="Previous">
-                            <span aria-hidden="true"><i class="material-icons" style="color:#f9cf00;">chevron_left</i></span>
+                            <span aria-hidden="true"><i class="material-icons" style="color:#343a40;">chevron_left</i></span>
                         </a>
                     </li>
                 {% else %}
@@ -87,7 +87,7 @@
                 {% endif %}
 
                 <li class="page-item active" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
-                    <span class="page-link d-flex align-items-center" style="height:45.5px;color:#f9cf00;;background-color: white;border-color:#dee2e6">
+                    <span class="page-link d-flex align-items-center" style="height:45.5px;color:#343a40;background-color: white;border-color:#dee2e6">
                         <b>{{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</b>
                     </span>
                 </li>
@@ -95,12 +95,12 @@
                 {% if page_obj.has_next %}
                     <li class="page-item" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
                         <a class="page-link" href="?page={{ page_obj.next_page_number }}" aria-label="Next">
-                            <span aria-hidden="true"><i class="material-icons" style="color:#f9cf00;">chevron_right</i></span>
+                            <span aria-hidden="true"><i class="material-icons" style="color:#343a40;">chevron_right</i></span>
                         </a>
                     </li>
                     <li class="page-item" style="box-shadow: 0 1px 6px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.24)">
                         <a class="page-link" href="?page={{ page_obj.paginator.num_pages }}" aria-label="Last">
-                            <span aria-hidden="true"><i class="material-icons" style="color:#f9cf00;">last_page</i></span>
+                            <span aria-hidden="true"><i class="material-icons" style="color:#343a40;">last_page</i></span>
                         </a>
                     </li>
                 {% else %}
