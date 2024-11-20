@@ -1,0 +1,62 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Kategori
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Endre og slette kategorier
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a class="breadcrumb">Kategori</a>
+  </div>
+{% endblock %}
+
+
+
+
+<div>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Kategori</th>
+        <th>Rediger</th>
+        <th>Slett</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% for category in admincategory %}
+      <tr>
+        <td>{{category}}</td>
+        <td>
+        
+          <a class="btn-floating btn-large waves-effect waves-light green" href = "{% url 'wordlist:editcategory' category.id %}">
+          <i class="material-icons">edit</i></a>
+        </td>
+
+        <td>
+        
+          <a class="btn-floating btn-large waves-effect waves-light red" href = "{% url 'wordlist:deletecategory' category.id %}">
+          <i class="material-icons">delete</i></a>
+     
+        </td>
+
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}

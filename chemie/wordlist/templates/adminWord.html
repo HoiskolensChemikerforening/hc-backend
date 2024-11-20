@@ -1,0 +1,60 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block nav_header %}
+  Endring av ord
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+
+
+<style>
+
+  select{display: block;}
+  .knapp{display: block;}
+  
+  
+</style>
+
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    
+
+    {%form form=form%}
+    <div class="input-field col s12">
+      <label>Velg kategorier:</label>
+      {{ form.category }}
+    </div>
+    {% endform %}
+    
+
+    
+
+
+  
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
+       
+    </div>
+
+  </form>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
+
+
+
+
