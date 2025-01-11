@@ -325,8 +325,8 @@ def yearbook(request, year=1, spec=1):
                 .prefetch_related("medals")
             )
     else:
-        #print(year)
-        #print(int(spec))
+        # print(year)
+        # print(int(spec))
         if year != GRADES.DONE:
             if spec == SPECIALIZATION.NONE:
                 profiles = (
@@ -336,7 +336,9 @@ def yearbook(request, year=1, spec=1):
                 )
             else:
                 profiles = (
-                    Profile.objects.filter(grade=year, user__is_active=True,specialization=spec)
+                    Profile.objects.filter(
+                        grade=year, user__is_active=True, specialization=spec
+                    )
                     .order_by("user__last_name")
                     .prefetch_related("medals")
                 )

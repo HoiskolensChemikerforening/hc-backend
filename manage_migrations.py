@@ -7,7 +7,8 @@ import os
 from django.conf import settings
 from django.utils.module_loading import import_module
 from django.core.management import execute_from_command_line
-os.environ['DJANGO_SETTINGS_MODULE'] = 'chemie.chemie.settings'
+
+os.environ["DJANGO_SETTINGS_MODULE"] = "chemie.chemie.settings"
 
 
 def initial_migrations():
@@ -22,9 +23,9 @@ def initial_migrations():
             continue
     execute_from_command_line(["manage.py", "makemigrations", "thumbnail"])
     execute_from_command_line(["manage.py", "migrate", "thumbnail"])
-    #print("\n\nNow creating admin user. Please follow instructions below (you can press enter to skip email when prompted)")
-    #execute_from_command_line(["manage.py", "createsuperuser"])
+    # print("\n\nNow creating admin user. Please follow instructions below (you can press enter to skip email when prompted)")
+    # execute_from_command_line(["manage.py", "createsuperuser"])
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     initial_migrations()

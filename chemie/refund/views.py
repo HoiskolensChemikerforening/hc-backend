@@ -1,4 +1,9 @@
-from django.shortcuts import render, redirect, get_object_or_404, HttpResponseRedirect
+from django.shortcuts import (
+    render,
+    redirect,
+    get_object_or_404,
+    HttpResponseRedirect,
+)
 from .forms import RefundFormSet, AccountNumberForm
 from .models import Refund, RefundRequest, STATUS
 from django.contrib import messages
@@ -14,7 +19,6 @@ def index(request):
     View to display the index page of the refund app (refund form).
     """
 
-
     # Get the current user
     user = request.user
     # Initialize a formset to contain different receipts
@@ -23,17 +27,16 @@ def index(request):
     # Initialize the form asking for the account number
     accountform = AccountNumberForm()
     # Get account number from previous forms
-    prev_requests = RefundRequest.objects.filter(user=user).order_by("-created")
+    prev_requests = RefundRequest.objects.filter(user=user).order_by(
+        "-created"
+    )
     account_number = None
     if prev_requests:
         if prev_requests[0].account_number.isnumeric():
             account_number = prev_requests[0].account_number
             accountform = AccountNumberForm({"account_number": account_number})
 
-
-
     if request.POST:
-
         # Populate the accountform with POST data
         accountform = AccountNumberForm(data=request.POST)
         # Populate the formset with POST data and files
@@ -41,7 +44,6 @@ def index(request):
 
         # Check if formset and accountform is valid
         if formset.is_valid() and accountform.is_valid():
-
             # Save RefundRequest instance
             refund_request = accountform.save(commit=False)
             refund_request.user = request.user
@@ -73,12 +75,7 @@ def index(request):
                 extra_tags="Ugyldig søknad",
             )
 
-
-    context = {
-        "formset": formset,
-        "accountform": accountform,
-        "user": user
-    }
+    context = {"formset": formset, "accountform": accountform, "user": user}
     return render(request, "index.html", context)
 
 
@@ -89,9 +86,9 @@ def my_refunds(request):
     """
 
     # Get all RefundRequest objects created by the current user
-    refund_requests = RefundRequest.objects.filter(
-        user=request.user
-    ).order_by("-created")
+    refund_requests = RefundRequest.objects.filter(user=request.user).order_by(
+        "-created"
+    )
 
     context = {"refund_requests": refund_requests}
     return render(request, "myrefunds.html", context)
@@ -145,6 +142,7 @@ def detail_admin_view(request, id):
         return context
     return render(request, "detail.html", context)
 
+
 def error_message(request):
     # Generate fail message
     messages.add_message(
@@ -154,6 +152,7 @@ def error_message(request):
         extra_tags="ERROR",
     )
     return
+
 
 def send_status_mail(request, refund):
     """
@@ -173,6 +172,7 @@ def send_status_mail(request, refund):
             "root_url": get_current_site(None),
         },
     )
+
 
 @login_required()
 @permission_required("refund.add_refundrequest")

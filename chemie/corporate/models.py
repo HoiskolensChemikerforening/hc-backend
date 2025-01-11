@@ -20,6 +20,7 @@ class Specialization(models.Model):
     def __str__(self):
         return self.get_name_display()
 
+
 class PositionType(models.Model):
     POSITIONTYPES = (
         (1, "Graduatestilling"),
@@ -28,9 +29,8 @@ class PositionType(models.Model):
         (4, "Fulltidsjobb"),
     )
 
-    name = models.PositiveSmallIntegerField(
-        choices=POSITIONTYPES, unique=True
-    )
+    name = models.PositiveSmallIntegerField(choices=POSITIONTYPES, unique=True)
+
     def __str__(self):
         return self.get_name_display()
 
@@ -150,5 +150,3 @@ class AnswerKeyValuePair(models.Model):
             + " - "
             + str(self.value)
         )
-
-

@@ -168,6 +168,7 @@ class TestViewsWithLargerDataBase(TestCase):
                 4,
             ],
         ]
+
         # Points                 184 183 130 132
         def generateVotes(array, voteString, fiaskovoteindex, showvoteindex):
             for u in array:

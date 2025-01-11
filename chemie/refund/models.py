@@ -77,9 +77,11 @@ class RefundRequest(models.Model):
         year. RefundRequest objects can be related to multiple Refund objects (receipts). Those receipts can be from
         different years. The oldest receipt determines the year used for filtering the RefundRequest object.
         """
-        return cls.objects.filter(refund__date__year=year).exclude(
-            refund__date__year__lt=year
-        ).distinct()
+        return (
+            cls.objects.filter(refund__date__year=year)
+            .exclude(refund__date__year__lt=year)
+            .distinct()
+        )
 
 
 class Refund(models.Model):
@@ -88,9 +90,7 @@ class Refund(models.Model):
     """
 
     # Variable containing the related RefundRequest object
-    refundrequest = models.ForeignKey(
-        RefundRequest, on_delete=models.CASCADE
-    )
+    refundrequest = models.ForeignKey(RefundRequest, on_delete=models.CASCADE)
     # Variable containing the date of the receipt
     date = models.DateField(verbose_name="Utleggsdato")
     # Variable containing the name of the store
@@ -100,7 +100,10 @@ class Refund(models.Model):
     # Variable containing the event or reason why the items have been bought
     event = models.CharField(max_length=50, verbose_name="Hensikt/Arragement")
     # Variable containing the price of the items bought
-    price = models.IntegerField(verbose_name="Pris", validators=[MinValueValidator(0)],)
+    price = models.IntegerField(
+        verbose_name="Pris",
+        validators=[MinValueValidator(0)],
+    )
     # Variable containing an image of the receipt
     image = models.ImageField(upload_to="receipts", verbose_name="Kvittering")
 

@@ -41,7 +41,9 @@ def email_download_view(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
 
     # check permissions
-    no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
+    no_permissions, redirect_target = check_if_admin_of_group(
+        request, committee, slug
+    )
     if no_permissions:
         return redirect_target
 
@@ -80,7 +82,7 @@ def check_if_admin_of_group(request, committee, slug):
             extra_tags="Manglende rettigheter!",
         )
         return True, redirect(
-             reverse("verv:committee_detail", kwargs={"slug": slug})
+            reverse("verv:committee_detail", kwargs={"slug": slug})
         )
     return False, None
 
@@ -90,7 +92,9 @@ def edit_description(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
 
     # check permissions
-    no_permissions, redirect_target = check_if_admin_of_group(request, committee, slug)
+    no_permissions, redirect_target = check_if_admin_of_group(
+        request, committee, slug
+    )
     if no_permissions:
         return redirect_target
 
