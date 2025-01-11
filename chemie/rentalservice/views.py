@@ -25,8 +25,12 @@ def index_promo(request):
 def index_sportskom(request):
     rentalObjects = RentalObject.objects.filter(owner=3)
 
+    rentalObjects = RentalObject.objects.all().order_by("name")
+    if not rentalObjects.exists():
+        return render(request, "/empty.html")
+
     obj_per_page = 12  # Show 24 contacts per page.
-    if len(rentalObjects) <= obj_per_page:
+    if len(rentalObjects) < obj_per_page:
         context = {"rentalObjects": rentalObjects}
     else:
         paginator = Paginator(rentalObjects, obj_per_page)
@@ -43,6 +47,13 @@ def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
+        
+        messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Utleieobjektet ble opprettet",
+        extra_tags="Opprettet",
+    )
         return redirect("rentalservice:index_sportskom")
 
     context = {"new_obj_form": form}
