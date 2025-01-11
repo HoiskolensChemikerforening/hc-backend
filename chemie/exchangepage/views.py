@@ -2,7 +2,12 @@ from django.shortcuts import render
 from .models import Travelletter, Experience, Questions, Images
 from django.contrib.auth.decorators import login_required, permission_required
 from django.shortcuts import get_object_or_404, redirect
-from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet
+from .forms import (
+    ExperienceForm,
+    TravelletterForm,
+    QuestionsForm,
+    ImageFormSet,
+)
 from django.contrib import messages
 from chemie.customprofile.models import SPECIALIZATION, Medal
 from django.utils import timezone
@@ -11,9 +16,17 @@ from django.utils import timezone
 @login_required()
 def index(request):
     travelletters = Travelletter.objects.all().order_by("country")
-    avg_list = ['avg_sun', 'avg_livingExpences', 'avg_availability', 'avg_nature', 'avg_hospitality', 'avg_workLoad', 'alphabetic']
-    sort_by = request.GET.get('sort_by', 'country')
-    sort_order = request.GET.get('sort_order', 'desc')
+    avg_list = [
+        "avg_sun",
+        "avg_livingExpences",
+        "avg_availability",
+        "avg_nature",
+        "avg_hospitality",
+        "avg_workLoad",
+        "alphabetic",
+    ]
+    sort_by = request.GET.get("sort_by", "country")
+    sort_order = request.GET.get("sort_order", "desc")
 
     # Group the travelletters by country
     travelletters_by_country = {}
@@ -41,52 +54,83 @@ def index(request):
         data_by_country_city[country][city] = data
 
     # Logic for sorting the table
-    reverse_order = sort_order == 'desc'
-    if sort_by == 'alphabetic':
+    reverse_order = sort_order == "desc"
+    if sort_by == "alphabetic":
         travelletters_by_country = dict(
-            sorted(travelletters_by_country.items(), key=lambda x: x[0], reverse=reverse_order))
+            sorted(
+                travelletters_by_country.items(),
+                key=lambda x: x[0],
+                reverse=reverse_order,
+            )
+        )
         for country, city_data in data_by_country_city.items():
             data_by_country_city[country] = dict(
-                sorted(city_data.items(), key=lambda x: x[0], reverse=reverse_order))
+                sorted(
+                    city_data.items(),
+                    key=lambda x: x[0],
+                    reverse=reverse_order,
+                )
+            )
     else:
         for avg in avg_list:
             if sort_by == avg:
                 travelletters_by_country = dict(
-                    sorted(travelletters_by_country.items(), key=lambda x: x[1][avg], reverse=reverse_order))
+                    sorted(
+                        travelletters_by_country.items(),
+                        key=lambda x: x[1][avg],
+                        reverse=reverse_order,
+                    )
+                )
                 for country, city_data in data_by_country_city.items():
                     data_by_country_city[country] = dict(
-                        sorted(city_data.items(), key=lambda x: x[1][avg], reverse=reverse_order))
+                        sorted(
+                            city_data.items(),
+                            key=lambda x: x[1][avg],
+                            reverse=reverse_order,
+                        )
+                    )
 
                 break
 
-    context = {"travelletters_by_country": travelletters_by_country,
-               "data_by_city": data_by_country_city,
-               "sort_by": sort_by,
-               "sort_order": sort_order,
-               }
+    context = {
+        "travelletters_by_country": travelletters_by_country,
+        "data_by_city": data_by_country_city,
+        "sort_by": sort_by,
+        "sort_order": sort_order,
+    }
 
     return render(request, "exchangepage/index.html", context)
 
 
 @login_required()
 def cityPageViews(request, city_name):
-    travelletters = Travelletter.objects.filter(city=city_name).order_by("user")
+    travelletters = Travelletter.objects.filter(city=city_name).order_by(
+        "user"
+    )
 
     # Prevents entering citypages without cities
     if len(travelletters) == 0:
-        return redirect('exchangepage:index')
+        return redirect("exchangepage:index")
 
-    sort_list = ['sun', 'livingExpences', 'availability', 'nature', 'hospitality', 'workLoad', 'user']
-    sort_order = request.GET.get('sort_order', 'desc')
-    sort_by = request.GET.get('sort_by', 'user')
+    sort_list = [
+        "sun",
+        "livingExpences",
+        "availability",
+        "nature",
+        "hospitality",
+        "workLoad",
+        "user",
+    ]
+    sort_order = request.GET.get("sort_order", "desc")
+    sort_by = request.GET.get("sort_by", "user")
 
     # Logic for sorting the table
     for item in sort_list:
         if sort_by == item:
-            if sort_order == 'desc':
+            if sort_order == "desc":
                 travelletters = travelletters.order_by(item)
-            elif sort_order == 'asc':
-                travelletters = travelletters.order_by("-"+item)
+            elif sort_order == "asc":
+                travelletters = travelletters.order_by("-" + item)
             break
 
     context = {
@@ -100,7 +144,7 @@ def cityPageViews(request, city_name):
 
 @permission_required("exchangepage.add_travelletter")
 def createTravelletterViews(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         travelletterform = TravelletterForm(request.POST)
         if travelletterform.is_valid():
             travelletter = travelletterform.save()
@@ -112,26 +156,24 @@ def createTravelletterViews(request):
                 extra_tags="Suksess",
             )
 
-            return redirect('exchangepage:createimage', pk=travelletter.id)
+            return redirect("exchangepage:createimage", pk=travelletter.id)
 
     else:
         travelletterform = TravelletterForm()
 
-    context = {
-        'travelletterform': travelletterform,
-    }
+    context = {"travelletterform": travelletterform}
     return render(request, "exchangepage/create.html", context)
 
 
 @permission_required("exchangepage.add_travelletter")
 def createImageViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
-    if request.method == 'POST':
+    if request.method == "POST":
         imageformset = ImageFormSet(files=request.FILES, data=request.POST)
 
         if imageformset.is_valid():
             for form in imageformset:
-                if form.is_valid() and form.cleaned_data.get('image'):
+                if form.is_valid() and form.cleaned_data.get("image"):
                     image = form.save(commit=False)
                     image.travelletter = travelletter
                     image.save()
@@ -143,15 +185,14 @@ def createImageViews(request, pk):
                 extra_tags="Suksess",
             )
             # Redirect to the desired page after successful editing
-            return redirect('exchangepage:createexperience', pk=travelletter.id)
+            return redirect(
+                "exchangepage:createexperience", pk=travelletter.id
+            )
 
     else:
         imageformset = ImageFormSet(queryset=Images.objects.none())
 
-    context = {
-        'travelletter': travelletter,
-        'imageformset': imageformset
-    }
+    context = {"travelletter": travelletter, "imageformset": imageformset}
     return render(request, "exchangepage/createimage.html", context)
 
 
@@ -160,7 +201,7 @@ def createExperienceViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     experiences = travelletter.experiences.all()
 
-    if request.method == 'POST':
+    if request.method == "POST":
         experienceform = ExperienceForm(request.POST)
 
         if experienceform.is_valid():
@@ -174,15 +215,15 @@ def createExperienceViews(request, pk):
                 f"Reisebrevet er opprettet!",
                 extra_tags="Suksess",
             )
-            return redirect('exchangepage:createexperience', pk=pk)
+            return redirect("exchangepage:createexperience", pk=pk)
 
     else:
         experienceform = ExperienceForm()
 
     context = {
-        'experienceform': experienceform,
-        'experiences': experiences,
-        'travelletter': travelletter,
+        "experienceform": experienceform,
+        "experiences": experiences,
+        "travelletter": travelletter,
     }
     return render(request, "exchangepage/createexperience.html", context)
 
@@ -190,7 +231,7 @@ def createExperienceViews(request, pk):
 @permission_required("exchangepage.change_travelletter")
 def adminViews(request):
     travelletters = Travelletter.objects.all().order_by("id")
-    context = {'travelletters': travelletters}
+    context = {"travelletters": travelletters}
     return render(request, "exchangepage/admin.html", context)
 
 
@@ -198,8 +239,10 @@ def adminViews(request):
 def adminDetailViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
 
-    if request.method == 'POST':
-        travelletterform = TravelletterForm(request.POST, instance=travelletter)
+    if request.method == "POST":
+        travelletterform = TravelletterForm(
+            request.POST, instance=travelletter
+        )
 
         if travelletterform.is_valid():
             travelletterform.save()
@@ -211,24 +254,27 @@ def adminDetailViews(request, pk):
                 extra_tags="Suksess",
             )
             # Redirect to the desired page after successful editing
-            return redirect('exchangepage:admindetailimage', pk=pk)
+            return redirect("exchangepage:admindetailimage", pk=pk)
 
     else:
         travelletterform = TravelletterForm(instance=travelletter)
 
     context = {
-        'travelletterform': travelletterform,
-        'travelletter': travelletter,
+        "travelletterform": travelletterform,
+        "travelletter": travelletter,
     }
     return render(request, "exchangepage/admindetail.html", context)
 
-@permission_required('exchangepage.change_images')
+
+@permission_required("exchangepage.change_images")
 def adminDetailImageViews(request, pk):
     travelletter = get_object_or_404(Travelletter, pk=pk)
     images = travelletter.images.all()
 
-    if request.method == 'POST':
-        imageformset = ImageFormSet(files=request.FILES, data=request.POST, queryset=images)
+    if request.method == "POST":
+        imageformset = ImageFormSet(
+            files=request.FILES, data=request.POST, queryset=images
+        )
 
         for form in imageformset:
             if form.is_valid():
@@ -243,24 +289,21 @@ def adminDetailImageViews(request, pk):
             extra_tags="Suksess",
         )
         # Redirect to the desired page after successful editing
-        return redirect('exchangepage:admindetailimage', pk=pk)
+        return redirect("exchangepage:admindetailimage", pk=pk)
 
     else:
         imageformset = ImageFormSet(queryset=images)
 
-    context = {
-        'travelletter': travelletter,
-        'imageformset': imageformset
-    }
+    context = {"travelletter": travelletter, "imageformset": imageformset}
     return render(request, "exchangepage/admindetailimage.html", context)
 
 
-@permission_required('exchangepage.change_experience')
+@permission_required("exchangepage.change_experience")
 def adminDetailExperienceViews(request, pk):
     experience = get_object_or_404(Experience, pk=pk)
     travelletter = experience.travelletter
 
-    if request.method == 'POST':
+    if request.method == "POST":
         experienceform = ExperienceForm(request.POST, instance=experience)
 
         if experienceform.is_valid():
@@ -276,21 +319,24 @@ def adminDetailExperienceViews(request, pk):
                 extra_tags="Suksess",
             )
             # Redirect to the desired page after successful editing
-            return redirect('exchangepage:createexperience', pk=travelletter.id)
+            return redirect(
+                "exchangepage:createexperience", pk=travelletter.id
+            )
 
     else:
         experienceform = ExperienceForm(instance=experience)
 
     context = {
-        'experienceform': experienceform,
-        'experience': experience,
-        'travelletter': travelletter,
+        "experienceform": experienceform,
+        "experience": experience,
+        "travelletter": travelletter,
     }
     return render(request, "exchangepage/admindetailexperience.html", context)
 
+
 @permission_required("exchangepage.change_travelletter")
 def createQuestionViews(request):
-    if request.method == 'POST':
+    if request.method == "POST":
         questionform = QuestionsForm(request.POST)
         if questionform.is_valid():
             questionform.save()
@@ -302,19 +348,19 @@ def createQuestionViews(request):
                 extra_tags="Suksess",
             )
             # Redirect to the desired page after successful editing
-            return redirect('exchangepage:adminquestion')
+            return redirect("exchangepage:adminquestion")
 
     else:
         questionform = QuestionsForm()
 
-    context = {'questionform': questionform}
+    context = {"questionform": questionform}
     return render(request, "exchangepage/createquestion.html", context)
 
 
 @permission_required("exchangepage.change_travelletter")
 def adminQuestionViews(request):
     questions = Questions.objects.all().order_by("id")
-    context = {'questions': questions}
+    context = {"questions": questions}
     return render(request, "exchangepage/adminquestion.html", context)
 
 
@@ -322,7 +368,7 @@ def adminQuestionViews(request):
 def adminQuestionDetailViews(request, pk):
     question = get_object_or_404(Questions, pk=pk)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         questionform = QuestionsForm(request.POST, instance=question)
         if questionform.is_valid():
             questionform.save()
@@ -334,57 +380,49 @@ def adminQuestionDetailViews(request, pk):
                 extra_tags="Suksess",
             )
             # Redirect to the desired page after successful editing
-            return redirect('exchangepage:adminquestion')
+            return redirect("exchangepage:adminquestion")
 
     else:
         questionform = QuestionsForm(instance=question)
         print(questionform)
 
-    context = {'questionform': questionform}
+    context = {"questionform": questionform}
     return render(request, "exchangepage/adminquestiondetail.html", context)
 
-@permission_required('exchangepage.delete_travelletter')
+
+@permission_required("exchangepage.delete_travelletter")
 def deleteTravelletter(request, pk):
     query = Travelletter.objects.get(pk=pk)
     query.delete()
 
     messages.add_message(
-        request,
-        messages.WARNING,
-        f"Reisebrev slettet!",
-        extra_tags="Slettet",
+        request, messages.WARNING, f"Reisebrev slettet!", extra_tags="Slettet"
     )
-    return redirect('exchangepage:admin')
+    return redirect("exchangepage:admin")
 
 
-@permission_required('exchangepage.delete_experience')
+@permission_required("exchangepage.delete_experience")
 def deleteExperienceViews(request, pk):
     experience = Experience.objects.get(pk=pk)
     travelletter = experience.travelletter
     experience.delete()
 
     messages.add_message(
-        request,
-        messages.WARNING,
-        f"Spørsmål slettet!",
-        extra_tags="Slettet",
+        request, messages.WARNING, f"Spørsmål slettet!", extra_tags="Slettet"
     )
-    return redirect('exchangepage:createexperience', pk=travelletter.id)
+    return redirect("exchangepage:createexperience", pk=travelletter.id)
 
 
-@permission_required('exchangepage.delete_images')
+@permission_required("exchangepage.delete_images")
 def deleteImages(request, pk):
     travelletter = Travelletter.objects.get(pk=pk)
     images = travelletter.images.all()
     images.delete()
 
     messages.add_message(
-        request,
-        messages.WARNING,
-        f"Bilder slettet!",
-        extra_tags="Slettet",
+        request, messages.WARNING, f"Bilder slettet!", extra_tags="Slettet"
     )
-    return redirect('exchangepage:admindetailimage', travelletter.id)
+    return redirect("exchangepage:admindetailimage", travelletter.id)
 
 
 @login_required()
@@ -397,16 +435,15 @@ def displayIndividualLetter(request, pk):
 
     print(images)
     if images.exists():
-        context['images'] = images
+        context["images"] = images
 
-    specialization_id = travelletter.user.specialization-1
+    specialization_id = travelletter.user.specialization - 1
 
-    context['travelletter'] = travelletter
-    context['experiences'] = experiences
-    context['questions'] = questions
-    context['images'] = images
-    context['specialization_id'] = specialization_id
-    context['specialization'] = SPECIALIZATION[specialization_id][1]
+    context["travelletter"] = travelletter
+    context["experiences"] = experiences
+    context["questions"] = questions
+    context["images"] = images
+    context["specialization_id"] = specialization_id
+    context["specialization"] = SPECIALIZATION[specialization_id][1]
 
     return render(request, "exchangepage/detail.html", context)
-

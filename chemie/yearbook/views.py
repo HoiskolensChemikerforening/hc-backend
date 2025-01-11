@@ -27,7 +27,12 @@ def index(request, year=1):
         profiles = Profile.objects.filter(
             grade=year, user__is_active=True
         ).order_by("user__last_name")
-    context = {"profiles": profiles, "grades": GRADES,"spez": SPECIALIZATION ,"search_form": form}
+    context = {
+        "profiles": profiles,
+        "grades": GRADES,
+        "spez": SPECIALIZATION,
+        "search_form": form,
+    }
     return render(request, "customprofile/yearbook.html", context)
 
 

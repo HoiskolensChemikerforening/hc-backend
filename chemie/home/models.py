@@ -59,7 +59,9 @@ class OfficeApplication(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     # The users student username (now student email)
     student_username = models.CharField(
-        max_length=50, default="NOT_VALID", verbose_name="Student-e-post (@ntnu.no)"
+        max_length=50,
+        default="NOT_VALID",
+        verbose_name="Student-e-post (@ntnu.no)",
     )
 
     def __str__(self):

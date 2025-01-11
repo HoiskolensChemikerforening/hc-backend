@@ -379,14 +379,16 @@ def add_item(request):
     initial_checkbox_state = True
 
     if request.POST:
-        if ("checkForm" in request.POST.keys()) and ("filterActiveItems" in request.POST.keys()): #IsActive form er checked
+        if ("checkForm" in request.POST.keys()) and (
+            "filterActiveItems" in request.POST.keys()
+        ):  # IsActive form er checked
             items = Item.objects.filter(is_active=True).order_by("name")
 
-        elif "checkForm" in request.POST.keys(): #IsActive form unchecked
+        elif "checkForm" in request.POST.keys():  # IsActive form unchecked
             items = Item.objects.order_by("name")
             initial_checkbox_state = False
 
-        else: #Add item form posted
+        else:  # Add item form posted
             form = AddItemForm(request.POST or None, request.FILES or None)
             if form.is_valid():
                 messages.add_message(
@@ -398,7 +400,11 @@ def add_item(request):
                 form.save()
                 form = AddItemForm(None, None)
 
-    context = {"form": form, "items": items, "initialCheckboxState": initial_checkbox_state}
+    context = {
+        "form": form,
+        "items": items,
+        "initialCheckboxState": initial_checkbox_state,
+    }
 
     return render(request, "shop/add_item.html", context)
 
@@ -530,11 +536,15 @@ def view_all_refills(request):
         if request.method == "POST":
             if form.is_valid():
                 receiver = form.cleaned_data.get("receiver")
-                refill_receipts = RefillReceipt.objects.order_by("-created")[:100]
+                refill_receipts = RefillReceipt.objects.order_by("-created")[
+                    :100
+                ]
                 context["refill_receipts"] = refill_receipts
                 context["receiver"] = receiver
         else:
-            refill_receipts = RefillReceipt.objects.all().order_by("-created")[:100]
+            refill_receipts = RefillReceipt.objects.all().order_by("-created")[
+                :100
+            ]
             context["refill_receipts"] = refill_receipts
     except ObjectDoesNotExist:
         pass
