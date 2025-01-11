@@ -307,7 +307,6 @@ def adminDetailExperienceViews(request, pk):
         experienceform = ExperienceForm(request.POST, instance=experience)
 
         if experienceform.is_valid():
-
             experience = experienceform.save(commit=False)
             experience.travelletter = travelletter
             experience.save()

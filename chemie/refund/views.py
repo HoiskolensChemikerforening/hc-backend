@@ -37,7 +37,6 @@ def index(request):
             accountform = AccountNumberForm({"account_number": account_number})
 
     if request.POST:
-
         # Populate the accountform with POST data
         accountform = AccountNumberForm(data=request.POST)
         # Populate the formset with POST data and files
@@ -45,7 +44,6 @@ def index(request):
 
         # Check if formset and accountform is valid
         if formset.is_valid() and accountform.is_valid():
-
             # Save RefundRequest instance
             refund_request = accountform.save(commit=False)
             refund_request.user = request.user
