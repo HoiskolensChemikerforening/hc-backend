@@ -190,6 +190,342 @@
 
     {% endfor %}
   </div>
+  <style>
+
+.popup-container {
+  width: 400px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  font-family: Arial, sans-serif;
+}
+
+.popup-header img {
+  max-width: 100px;
+  display: block;
+  margin: 0 auto 10px;
+}
+
+.popup-header h2 {
+  font-size: 2rem;
+  margin-bottom: 20px;
+  font-weight: 700;
+  letter-spacing: 0;
+}
+
+.subscription-options h3, .features h3 {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.subscription-plans {
+  /*display: flex;
+  flex-direction: column;*/
+  overflow: hidden;
+  margin-bottom: 1.5rem;
+}
+
+.subscription-plans-inner{
+    width: 100%;
+    overflow: auto;
+    height: 100%;
+    padding-right: 15px;
+    display: inline-flex; /* Arrange child items in a row */
+    gap: 10px; /* Space between items */
+    overflow: auto;
+    scrollbar-width: none;
+}
+
+.plan {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border: 2px solid #ddd;
+  border-radius: 8px;
+  cursor: pointer;
+  min-width: calc(66.6667% - 4px);
+  max-width: calc(66.6667% - 4px);
+
+}
+
+.plan-details {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.plan input {
+  display: none;
+}
+
+.plan input:checked + .plan-details{
+  border-color: #f0c040;
+}
+
+input[type="radio"]:checked+label{
+  border-color: #896707;
+  border-width: 2px;
+}
+
+.features ul {
+  list-style: none;
+  padding: 0;
+}
+
+.features li {
+  margin: 8px 0;
+}
+
+.gold-box {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(0deg, #ffffff, #ffe8a5);
+  padding: 20px;
+  margin: auto;
+}
+
+.gold-logo {
+  width: 50px;
+  margin-right: 10px; /* Spacing between the image and text */
+}
+
+.gold-text {
+  text-align: center;
+  font-family: Arial, sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #000;
+  margin: 1rem;
+}
+
+.gold-mark{
+  background: linear-gradient(15deg, #e7b019, #ffe8a5);
+  border-radius: 10px;
+  padding: 5px;
+  transform: skew(-15deg);
+}
+
+.blah{
+  transform: skew(15deg);
+  margin-left: 2px;
+  margin-right: 2px;
+  font-size: 20px;
+}
+
+.parallelogram {
+	width: 100px;
+	height: 50px;
+	transform: skew(-20deg);
+	background: #555;
+}
+
+#modal-gull{
+  background-color: #ffffff;
+  border-radius: 1rem;
+  scrollbar-width: none;
+}
+
+#gull-content{
+  padding-top: 0;
+}
+
+.duration{
+  font-weight: 700;
+  font-size: 1rem;
+  color: #000;
+
+}
+
+.popular{
+  color: #896707;
+}
+
+.price{
+  color:#000;
+  font-weight: 700;
+}
+
+.invis{
+  color:white;
+}
+
+.discount{
+  color:#000;
+  font-weight: 700;
+}
+
+.plan svg {
+  display: none;
+}
+
+/* Show the SVG icon when the input is checked */
+.sub-input:checked + .plan svg {
+  display: inline-block; /* Makes the SVG visible */
+}
+
+
+.continue-btn{
+  display: block;
+  border-radius: 1.5rem;
+  height:3rem;
+  background: linear-gradient(to top right, #e6af16, #f7d472);
+  color:black;
+  text-align: center;
+  font-weight: 700;
+  font-size: 1.4rem;
+  line-height: 2.2;
+  margin-bottom: 1rem;
+}
+
+.continue-btn:hover{
+  background: #e6af16;
+}
+
+  </style>
+  <!-- Detail view in yearbook -->
+  <div id="modal-gull" class="modal fade bd-example-modal-sm" tabindex="-1">
+
+    <div class="gold-box">
+      <img class="gold-logo" style="width: 30px;" type="image/jpg" src="{% static "images/gullogo.png" %}" alt="Logo"></img>
+      <div class="gold-text">HC</div>
+      <div class="gold-text gold-mark"><div class="blah">GULL</div></div>
+    </div>
+    <!-- All content in popup goes here -->
+    <div class="modal-content" id="gull-content">
+
+
+      <div class="popup-header">
+      <h2>Se hvem som stalker deg og søk ubegrenset med HC Gul(l).</h2>
+    </div>
+
+
+      <div class="subscription-options">
+        <h3 style="font-weight: 700;">Velg et abonnement</h3>
+        <div class="subscription-plans">
+          <div class="subscription-plans-inner">
+            
+          <input class="sub-input" type="radio" name="subscription" value="1m" id="1m">
+          <label class="plan" for="1m">
+            <div class="plan-details">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 24px;">
+                <div>
+                  <div class="popular">Populær</div>
+                  <div class="duration">1 måned</div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#896707" class="bi bi-check" viewBox="0 0 16 16">
+                  <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                </svg>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span class="price">65,00  <span><img type="image/png" style="width:0.7rem" src="{% static "images/HC_coin.png" %}"></span>/uke</span>
+                <span class="discount">Spar 51%</span>
+              </div>
+            </div>
+          </label>
+          <input class="sub-input" type="radio" name="subscription" value="1w" id="1w">
+          <label class="plan" for="1w">
+            <div class="plan-details">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 24px;">
+                <div>
+                  <div class="invis">Populær</div>
+                  <div class="duration">1 uke</div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#896707" class="bi bi-check" viewBox="0 0 16 16">
+                  <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                </svg>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span class="price">157,50  <span><img type="image/png" style="width:0.7rem" src="{% static "images/HC_coin.png" %}"></span>/uke</span>
+                <span class="discount"></span>
+              </div>
+            </div>
+          </label>
+
+          
+          
+          <input class="sub-input" type="radio" name="subscription" value="6m" id="6m" checked>
+
+          <label class="plan" for="6m">
+            <div class="plan-details">
+              <div style="display: flex; justify-content: space-between; align-items: center; padding-bottom: 24px;">
+                <div>
+                  <div class="invis">Populær</div>
+                  <div class="duration">6 måneder</div>
+                </div>
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#896707" class="bi bi-check" viewBox="0 0 16 16">
+                  <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+                </svg>
+              </div>
+              <div style="display: flex; justify-content: space-between;">
+                <span class="price">32,21  <span><img type="image/png" style="width:0.7rem" src="{% static "images/HC_coin.png" %}"></span>/uke</span>
+                <span class="discount">Spar 76%</span>
+              </div>
+            </div>
+          </label>
+        </div>
+      </div>
+      </div>
+    
+      <div class="features">
+        <div style="text-align: center; font-size: small;">Inkludert in HC Gul(l)</div>
+        <ul>
+          <li style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-check" viewBox="0 0 16 16">
+              <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+            </svg>
+            <div style="font-weight: 700;">Ubegrensede søk</div>
+          </li>
+          <li style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-check" viewBox="0 0 16 16">
+              <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+            </svg>
+            <div style="font-weight: 700;">Se hvem som søker deg opp</div>
+          </li>
+          <li style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-check" viewBox="0 0 16 16">
+              <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+            </svg>
+            <div style="font-weight: 700;">Prioritert kø for påmeldinger</div>
+          </li>
+          <li style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-check" viewBox="0 0 16 16">
+              <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+            </svg>
+            <div style="font-weight: 700;">1 ekstra stemme per valg</div>
+          </li>
+          <li style="display: flex; align-items: center;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="black" class="bi bi-check" viewBox="0 0 16 16">
+              <path d="M10.97 4.97a.75.75 0 0 1 1.07 1.05l-3.99 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425z"/>
+            </svg>
+            <div style="font-weight: 700;">Tilgang til premium sladder</div>
+          </li>
+        </ul>
+      </div>
+              <!-- Footer on popup. Contains closing button. -->
+              <div style="  position: sticky;
+              bottom: 0;
+              background-color: white; display: block; text-align: left; font-size: small; padding-top: 1rem;padding-bottom: 1rem;">
+              <p style="font-size: small;">
+                Når du trykker på «fortsett», vil betalingen gjennomføres, og abonnementet ditt fornyes automatisk til samme pris og pakkelengde inntil du avbestiller via innstillingene. Du godkjenner samtidig våre 
+                <a href="#">vilkår</a>.
+              </p>
+                <a  class="continue-btn" href="#!" class="modal-action modal-close waves-effect waves-green">Fortsett</a>
+          
+              </div>
+    </div>
+
+    </div>
+                    
+
+  </div>
+
+  
+   
+  
+
 
 {% endblock content %}
 
@@ -242,5 +578,9 @@
           $('.dropdown-trigger').dropdown();
           $('.modal').modal();
       });
+
+    $(document).ready(function(){
+      $("#modal-gull").modal('open');
+    });
   </script>
 {% endblock %}
