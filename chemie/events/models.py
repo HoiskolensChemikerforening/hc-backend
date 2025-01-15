@@ -10,11 +10,16 @@ from chemie.customprofile.models import GRADES
 from chemie.committees.models import Committee
 from .email import send_event_mail
 
+from django.db import transaction
+
 
 REGISTRATION_STATUS = Choices(
     ("CONFIRMED", 1, "Confirmed"),
     ("WAITING", 2, "Waiting"),
     ("INTERESTED", 3, "Interested"),
+    ("SOLD", 4, "Sold"),
+    ("INACTIVE", 5, "Inactive"),
+    ("OFFERED", 6, "Offered"),
 )
 
 ARRIVAL_STATUS = Choices(
@@ -276,6 +281,18 @@ class BaseRegistration(models.Model):
         self.status = REGISTRATION_STATUS.WAITING
         self.save()
 
+    def sold(self):
+        self.status = REGISTRATION_STATUS.SOLD
+        self.save()
+
+    def inactivate(self):
+        self.status = REGISTRATION_STATUS.INACTIVE
+        self.save()
+
+    def offered(self):
+        self.status = REGISTRATION_STATUS.OFFERED
+        self.save()
+
     @classmethod
     def get_queue_position(cls, registration):
         # Finner plass på ventiliste eller none om ikke
@@ -345,3 +362,86 @@ class BedpresEventMessage(RegistrationMessage):
     event = models.ForeignKey(
         Bedpres, related_name="custom_message", on_delete=models.CASCADE
     )
+
+
+class BaseResellReceipt(models.Model):
+
+    resell_payment_status = models.BooleanField(default=False)
+    sold = models.BooleanField(default=False)
+    
+
+    # Time data
+    created = models.DateTimeField(auto_now=False, auto_now_add=True)
+    edited = models.DateTimeField(auto_now=True, auto_now_add=False)
+    response_time = models.DurationField() 
+    deadline = models.DateTimeField(null=True, blank=True) 
+
+    def save(self, *args, **kwargs):
+        """Override save to calculate the deadline when the model is saved."""
+        if self.response_time and self.edited:
+            self.deadline = self.edited + self.response_time  
+        super().save(*args, **kwargs)  
+
+
+    class Meta:
+        abstract = True
+
+class SocialResellReceipt(BaseResellReceipt):
+    seller_registration = models.OneToOneField(SocialEventRegistration, on_delete=models.CASCADE, related_name='sosial_resell_receipt_seller')
+    buyer_registration = models.OneToOneField(SocialEventRegistration, on_delete=models.SET_NULL, blank=True, null=True, related_name='sosial_resell_receipt_buyer') 
+
+    @transaction.atomic
+    def offer(self):
+        """
+        Get a new buyer from the queue as long as there are candidates in the queue
+        """
+        event = self.seller_registration.event
+        if self.buyer_registration:
+            self.buyer_registration.inactivate()
+        waiting = SocialEventRegistration.objects.filter(event=event, status=REGISTRATION_STATUS.WAITING)
+        if waiting:
+            candidate_registration = waiting.order_by("created")[0]
+            candidate_registration.offered()
+            self.buyer_registration = candidate_registration
+            self.save()
+
+
+        # Send e-mail to offer a ticket
+
+    def save(self, *args, **kwargs):
+        """Override save to offer to the first person in the queue."""
+        if not self.buyer_registration:
+            event = self.seller_registration.event
+            waiting = SocialEventRegistration.objects.filter(event=event, status=REGISTRATION_STATUS.WAITING)
+            if waiting:
+                candidate_registration = waiting.order_by("created")[0]
+                candidate_registration.offered()
+                self.buyer_registration = candidate_registration
+
+        super().save(*args, **kwargs)  
+    
+    def buy(self):
+        self.sold = True
+        self.save()
+        #Send e-mail to ask for confirming the payment
+
+    
+    @transaction.atomic
+    def sell(self):
+        self.seller_registration.inactivate()
+        self.buyer_registration.confirm()
+    
+    def confirm_payment(self):
+        self.resell_payment_status = True
+        self.save()
+        self.sell()
+        # Send confirmation e-mail
+
+
+
+
+
+        
+
+
+

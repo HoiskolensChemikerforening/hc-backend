@@ -14,5 +14,10 @@ try:
         """Send queued mail every 10 seconds"""
         call_command("send_queued_mail", processes=1)
 
+    @uwsgidecorators.timer(60*30)
+    def update_event_resale(num):
+        """Find a new potential buyer for ignored offers every 30 minutes"""
+        call_command("update_event_resale", processes=1)
+
 except ImportError:
     print("uwsgidecorators not found. Cron and timers are disabled")
