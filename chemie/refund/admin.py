@@ -11,7 +11,6 @@ class RefundAdmin(admin.ModelAdmin):
     ordering = ("created",)
     list_display = ("total_sum", "user", "created", "number_of_receipts")
 
-
     def number_of_receipts(self, obj):
         return obj.get_amount_receipts()
 

@@ -86,8 +86,9 @@ def check_if_admin_of_group(request, committee, slug):
             "Du har bare lov å endre egne undergrupper.",
             extra_tags="Manglende rettigheter!",
         )
-        return True, redirect(
-             reverse("verv:committee_detail", kwargs={"slug": slug})
+        return (
+            True,
+            redirect(reverse("verv:committee_detail", kwargs={"slug": slug})),
         )
     return False, None
 

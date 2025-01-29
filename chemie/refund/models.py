@@ -101,7 +101,6 @@ class Refund(models.Model):
     event = models.CharField(max_length=50, verbose_name="Hensikt/Arragement")
     # Variable containing the price of the items bought
     price = models.IntegerField(
-
         verbose_name="Pris", validators=[MinValueValidator(0)]
     )
     # Variable containing an image of the receipt

@@ -161,7 +161,6 @@ def createTravelletterViews(request):
     else:
         travelletterform = TravelletterForm()
 
-
     context = {"travelletterform": travelletterform}
     return render(request, "exchangepage/create.html", context)
 
