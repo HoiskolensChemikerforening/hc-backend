@@ -161,9 +161,8 @@ def createTravelletterViews(request):
     else:
         travelletterform = TravelletterForm()
 
-    context = {
-        "travelletterform": travelletterform,
-    }
+
+    context = {"travelletterform": travelletterform}
     return render(request, "exchangepage/create.html", context)
 
 
@@ -397,10 +396,7 @@ def deleteTravelletter(request, pk):
     query.delete()
 
     messages.add_message(
-        request,
-        messages.WARNING,
-        f"Reisebrev slettet!",
-        extra_tags="Slettet",
+        request, messages.WARNING, f"Reisebrev slettet!", extra_tags="Slettet"
     )
     return redirect("exchangepage:admin")
 
@@ -412,10 +408,7 @@ def deleteExperienceViews(request, pk):
     experience.delete()
 
     messages.add_message(
-        request,
-        messages.WARNING,
-        f"Spørsmål slettet!",
-        extra_tags="Slettet",
+        request, messages.WARNING, f"Spørsmål slettet!", extra_tags="Slettet"
     )
     return redirect("exchangepage:createexperience", pk=travelletter.id)
 
@@ -427,10 +420,7 @@ def deleteImages(request, pk):
     images.delete()
 
     messages.add_message(
-        request,
-        messages.WARNING,
-        f"Bilder slettet!",
-        extra_tags="Slettet",
+        request, messages.WARNING, f"Bilder slettet!", extra_tags="Slettet"
     )
     return redirect("exchangepage:admindetailimage", travelletter.id)
 

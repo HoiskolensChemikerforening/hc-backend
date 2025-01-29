@@ -26,7 +26,7 @@ class TestViews(TestCase):
 
         response = self.client.get(self.index_url)
 
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "cgp/index.html")
 
     def test_vote_index_GET(self):
@@ -39,7 +39,7 @@ class TestViews(TestCase):
         self.cgp.is_open = True
         self.cgp.save()
         response = self.client.get(self.vote_index_url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, "cgp/vote_index.html")
 
 
@@ -190,4 +190,4 @@ class TestViewsWithLargerDataBase(TestCase):
         self.cgp.toggle(self.users[0])
         self.cgp.toggle(self.users[0])
         audiencevote = Vote.objects.get(final_vote=True, group__audience=True)
-        self.assertEquals(audiencevote.vote[:11], "1c,2c,4c,3c")
+        self.assertEqual(audiencevote.vote[:11], "1c,2c,4c,3c")

@@ -44,7 +44,7 @@ class LockerUserLimitTest(TestCase):
 
 class TokenTest(TestCase):
     # Fetch all templates for sending mail
-    fixtures = ["fixtures/email-templates.json"]
+    fixtures = ["chemie/fixtures/email-templates.json"]
 
     def setUp(self):
         user = LockerUser.objects.create(

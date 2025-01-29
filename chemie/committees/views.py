@@ -21,7 +21,12 @@ def index(request):
     # Fetch all members, who belong to a committee (Member -> Committee)
     # Group all these members by the committee type
     committees = Committee.objects.order_by("title")
-    context = {"committees": committees}
+    committees_by_type = {
+        "COMMITTEE": committees.filter(committee_type=1),
+        "SUBGROUP": committees.filter(committee_type=2),
+        "ASSOCIATEDGROUP": committees.filter(committee_type=3),
+    }
+    context = {"committees_by_type": committees_by_type}
 
     return render(request, "committees/list_committees.html", context)
 
@@ -82,7 +87,7 @@ def check_if_admin_of_group(request, committee, slug):
             extra_tags="Manglende rettigheter!",
         )
         return True, redirect(
-            reverse("verv:committee_detail", kwargs={"slug": slug})
+             reverse("verv:committee_detail", kwargs={"slug": slug})
         )
     return False, None
 
