@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class RentalserviceConfig(AppConfig):
-    name = "rentalservice"
+    name = "chemie.rentalservice"

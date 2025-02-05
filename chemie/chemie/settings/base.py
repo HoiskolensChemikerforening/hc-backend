@@ -23,6 +23,8 @@ ALLOWED_HOSTS = ["*"]
 
 SHELL_PLUS = "ipython"
 
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # ADMINS is a list of recipients which errors are sent to, see link below
