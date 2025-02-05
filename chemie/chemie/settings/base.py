@@ -23,7 +23,7 @@ ALLOWED_HOSTS = ["*"]
 
 SHELL_PLUS = "ipython"
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
 
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
