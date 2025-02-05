@@ -91,6 +91,7 @@ backupjob/ssh_key
 chemie/static/
 chemie/media/
 venv/
+venv3.9/
 
 # Ignore vscode settings for now
 .vscode/*

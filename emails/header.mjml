@@ -1,5 +1,5 @@
         <mj-raw>
-          {% load staticfiles %}
+          {% load static %}
           {% load thumbnail %}
         </mj-raw>
 <mj-section mj-class="tertiaryColor" padding-top="40px" padding-bottom="40px">
