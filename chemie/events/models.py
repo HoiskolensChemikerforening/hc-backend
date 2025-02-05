@@ -405,7 +405,7 @@ class SocialResellReceipt(BaseResellReceipt):
             self.buyer_registration = candidate_registration
             self.save()
 
-
+        print("send mail to ", self.buyer_registration)
         # Send e-mail to offer a ticket
 
     def save(self, *args, **kwargs):

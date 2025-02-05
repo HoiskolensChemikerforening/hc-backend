@@ -34,6 +34,7 @@ from .forms import (
     DeRegisterUserForm,
     RegisterBedpresForm,
     BedpresRegisterUserForm,
+    SocialResellForm
 )
 
 from .models import (
@@ -44,6 +45,7 @@ from .models import (
     Bedpres,
     BedpresRegistration,
     ARRIVAL_STATUS,
+    SocialResellReceipt,
 )
 
 from rest_framework import generics
@@ -329,6 +331,7 @@ class SocialEditRemoveUserRegistration(
     form_classes = {
         "deregister": DeRegisterUserForm,
         "edit": SocialRegisterUserForm,
+        "sell": SocialResellForm,
     }
     success_url = "event:register"
     email_template = "social"
@@ -429,6 +432,31 @@ class SocialEditRemoveUserRegistration(
         )
 
         return redirect(registration.event.get_absolute_registration_url())
+    
+    def sell_form_valid(self, form):
+        event = self.object
+
+        resale_objs = SocialResellReceipt.objects.filter(seller_registration=self.registration)
+        # Contact the next user in queue 
+        if not event.can_de_register and not resale_objs:
+            resell_receipt = SocialResellReceipt()
+            resell_receipt.response_time = timezone.timedelta(hours=24)
+            resell_receipt.seller_registration = self.registration
+            resell_receipt.save()
+            messages.add_message(
+                self.request,
+                messages.WARNING,
+                "Din billett til {} er nå lagt ut for salg. **Person** har blitt tilbudt billetten. Tilbudet varer i 24 timer.".format(event.title),
+                extra_tags="Lagt ut for salg",
+            )
+        elif resale_objs:
+            messages.add_message(
+                self.request,
+                messages.WARNING,
+                "Din billett til {} er nå lagt ut for salg. **Person** har blitt tilbudt billetten. Tilbudet varer i 24 timer.".format(event.title),
+                extra_tags="Allerede lagt ut for salg",
+            )
+        return redirect(event.get_absolute_registration_url())
 
     def signup_form_valid(self, form):
         user = form.save(self.request)

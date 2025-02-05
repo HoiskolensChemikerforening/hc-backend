@@ -229,3 +229,11 @@ class DeRegisterUserForm(forms.Form):
     really_sure = forms.BooleanField(
         required=True, label="Er dette ditt endelige svar?"
     )
+
+class SocialResellForm(forms.Form):
+        approval_resale_terms = forms.BooleanField(
+        required=True, label="Jeg har lest og godkjenner Høiskolens Chemikerforenings samtykkeerklæring videresalg av billetter"
+    )
+        really_sure = forms.BooleanField(
+        required=True, label="Er dette ditt endelige svar?"
+    )

@@ -5,6 +5,7 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
+    SocialResellReceipt,
 )
 from django.contrib.admin.filters import (
     AllValuesFieldListFilter,
@@ -104,5 +105,8 @@ class EventAdmin(admin.ModelAdmin):
     search_fields = ("title",)
     list_display = ("title", "sluts", "date", "created", "edited", "published")
 
+@admin.register(SocialResellReceipt)
+class EventAdmin(admin.ModelAdmin):
+    pass
 
 # admin.site.register(RegistrationMessage)

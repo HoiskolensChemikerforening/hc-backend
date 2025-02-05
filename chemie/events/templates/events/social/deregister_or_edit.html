@@ -68,7 +68,16 @@
       </div>
       </form>
       {% else %}
-        Avmeldingsfristen har passert.
+        <div>Avmeldingsfristen har passert. </div>
+        <form class="sell" method="POST">{% csrf_token %}
+          <div style="display: flex; flex-direction: row; justify-content: center; align-items: center;flex-wrap: wrap">
+            <button name='action' value='sell' type="submit"
+                    class="waves-effect waves-light btn btn-primary red" style="margin: 0 20px 20px 0;">Legg ut for salg
+            </button>
+            {% form form=forms.sell %}{% endform %}
+        </div>
+        </form>
+
       {% endif %}
     </div>
   </div>
