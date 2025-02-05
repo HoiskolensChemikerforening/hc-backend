@@ -1,13 +1,13 @@
 FROM phusion/baseimage:jammy-1.0.1
 
 RUN apt-get update && apt-get install -y wget
-RUN echo "deb http://apt-archive.postgresql.org/pub/repos/apt/ trusty-pgdg main" >> /etc/apt/sources.list.d/pgdg.list
+RUN echo "deb http://apt.postgresql.org/pub/repos/apt/ jammy-pgdg main" | tee /etc/apt/sources.list.d/pgdg.list
 RUN wget --quiet -O - \
     https://www.postgresql.org/media/keys/ACCC4CF8.asc | \
     apt-key add -
 
 RUN apt-get update && apt-get install -y \
-    postgresql-client-9.6 \
+    postgresql-client-16 \
     postfix \
     zip \
     rsync
