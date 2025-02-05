@@ -125,6 +125,11 @@ MIDDLEWARE = [
 ]
 
 
+# Depreciated this line exists only until sorl.thumbnails resolves the issue.
+# The DEFAULT_FILE_STORAGE can be deleated afterwards
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 TEMPLATES = [
