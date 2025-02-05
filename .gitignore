@@ -92,7 +92,8 @@ chemie/static/
 chemie/media/
 venv/
 venv3.9/
-
+venv3.92/
+venv3.11/
 # Ignore vscode settings for now
 .vscode/*
 # Ignore pytest cache showing the last tests that failed

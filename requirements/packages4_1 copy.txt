@@ -112,7 +112,7 @@ pywebpush==2.0.1
 PyYAML==6.0.2
 qrcode==7.4.2
 qrplatba==1.0.0
-reportlab==3.5.59
+reportlab==3.6.12
 requests==2.31.0
 rsa==4.9
 six==1.16.0
