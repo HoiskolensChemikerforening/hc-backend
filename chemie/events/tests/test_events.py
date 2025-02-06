@@ -24,10 +24,16 @@ class TestEventAndRegistration(TestCase):
         start_date = timezone.now()
         reg_deadline = timezone.now() + timezone.timedelta(days=1)
         dereg_deadline = timezone.now() + timezone.timedelta(days=2)
-        image_path = (
-            settings.BASE_DIR + "media" + "events" + "blank_person.png"
-        )
-        image = File(image_path)
+        #image_path = (
+        #    settings.BASE_DIR + "media" + "events" + "blank_person.png"
+        #)
+
+        #image_path = (
+        #    settings.BASE_DIR + "chemie" + "chemie" +"static" + "images" + "blank_avatar.png"
+        #)
+        #with open(image_path, "rb") as img_file:  
+        #    image = File(img_file, name="blank_avatar.png")
+            
         Social.objects.create(
             title="Indok er helt ok",
             author=user,
@@ -37,7 +43,7 @@ class TestEventAndRegistration(TestCase):
             deregister_deadline=dereg_deadline,
             location="Samfundet",
             description="Litta fest",
-            image=image,
+        #    image=image,
             sluts=10,
             payment_information="Alle maa benytte Vipps til aa betale",
             allowed_grades=[1, 2, 3, 4, 5, 6],
