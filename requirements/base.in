@@ -1,5 +1,4 @@
 psycopg2==2.9.10
-setuptools==75.8.0
 
 Django==5.1.6
 djangorestframework==3.14.0

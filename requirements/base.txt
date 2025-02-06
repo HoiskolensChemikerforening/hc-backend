@@ -203,6 +203,3 @@ werkzeug==2.2.3
     # via -r .\requirements\base.in
 wiki==0.11.2
     # via -r .\requirements\base.in
-
-# The following packages are considered to be unsafe in a requirements file:
-# setuptools
