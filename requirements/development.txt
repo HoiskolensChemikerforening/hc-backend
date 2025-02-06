@@ -6,10 +6,6 @@
 #
 asgiref==3.8.1
     # via django
-atomicwrites==1.4.1
-    # via pytest
-attrs==25.1.0
-    # via pytest
 babel==2.17.0
     # via invoicegenerator
 black==23.3.0
@@ -118,10 +114,12 @@ factory-boy==2.11.1
     # via -r .\requirements\development.in
 faker==35.2.0
     # via factory-boy
-freezegun==0.3.11
+freezegun==1.5.1
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
 future==1.0.0
     # via django-extended-choices
+iniconfig==2.0.0
+    # via pytest
 invoicegenerator==1.1.0
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
 jsonfield==3.1.0
@@ -137,8 +135,6 @@ markdown2==2.4.0
     #   django-markdown2
 markupsafe==3.0.2
     # via werkzeug
-more-itertools==10.6.0
-    # via pytest
 mypy-extensions==1.0.0
     # via black
 olefile==0.46
@@ -156,14 +152,12 @@ pillow==11.1.0
     #   wiki
 platformdirs==4.3.6
     # via black
-pluggy==0.13.1
+pluggy==1.5.0
     # via pytest
 psycopg2==2.9.10
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
 py==1.11.0
-    # via
-    #   pytest
-    #   pytest-forked
+    # via pytest-forked
 pycparser==2.22
     # via cffi
 pyjwt==2.10.1
@@ -174,7 +168,7 @@ pyopenssl==23.1.0
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
 pypng==0.20220715.0
     # via qrcode
-pytest==5.3.5
+pytest==8.3.4
     # via
     #   -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
     #   pytest-cov
@@ -183,7 +177,7 @@ pytest==5.3.5
     #   pytest-xdist
 pytest-cov==2.8.1
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
-pytest-django==3.8.0
+pytest-django==4.9.0
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
 pytest-forked==1.6.0
     # via pytest-xdist
@@ -211,7 +205,6 @@ six==1.17.0
     # via
     #   django-autocomplete-light
     #   django-material
-    #   freezegun
     #   pytest-xdist
     #   python-dateutil
 sorl-thumbnail==12.11.0
@@ -228,8 +221,6 @@ typing-extensions==4.12.2
     #   qrcode
 tzdata==2025.1
     # via django
-wcwidth==0.2.13
-    # via pytest
 webencodings==0.5.1
     # via
     #   bleach
