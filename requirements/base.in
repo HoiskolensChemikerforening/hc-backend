@@ -23,12 +23,12 @@ django-smart-selects==1.7.2
 
 
 pyOpenSSL==23.1.0
-pytest==5.3.5
+pytest==8.3.4
 pytest-cov==2.8.1
-pytest-django==3.8.0
+pytest-django==4.9.0
 pytest-xdist==1.31.0
 
-freezegun==0.3.11
+freezegun==1.5.1
 Werkzeug==2.2.3
 olefile==0.46
 wiki==0.11.2
