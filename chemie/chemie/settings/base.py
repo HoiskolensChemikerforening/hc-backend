@@ -180,10 +180,10 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.BCryptPasswordHasher",
-    "django.contrib.auth.hashers.SHA1PasswordHasher",
+    #"django.contrib.auth.hashers.SHA1PasswordHasher",
     "django.contrib.auth.hashers.MD5PasswordHasher",
-    "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
-    "django.contrib.auth.hashers.CryptPasswordHasher",
+    #"django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
+    #"django.contrib.auth.hashers.CryptPasswordHasher",
     # "hashers_passlib.phpass", # Old password hasher for backward compatibility. It is assumed that there are no passwords left using this hasher. The first algorithm in this list is the standard method.  
 )
 
