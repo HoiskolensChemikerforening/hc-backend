@@ -325,7 +325,6 @@ def yearbook(request, year=1, spec=1):
                 .prefetch_related("medals")
             )
     else:
-
         if year != GRADES.DONE:
             if spec == SPECIALIZATION.NONE:
                 profiles = (

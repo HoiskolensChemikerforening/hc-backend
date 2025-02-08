@@ -33,20 +33,20 @@ class CreateRentalObjectForm(RentalObjectForm):
     )
 
     new_type_name = forms.CharField(
-       max_length=100, required=False, label="Ny produkttype"
+        max_length=100, required=False, label="Ny produkttype"
     )
 
     layout = M.Layout(
         M.Row("name"),
         M.Row("description"),
-        #M.Row("price", "quantity"),
-        #M.Row("is_new_type"),
-        #M.Row("type", "new_type_name"),
+        # M.Row("price", "quantity"),
+        # M.Row("is_new_type"),
+        # M.Row("type", "new_type_name"),
         M.Row("image"),
         M.Row("owner"),
     )
 
-    #def clean(self):
+    # def clean(self):
     #    self.cleaned_data["is_new_type"] = bool(int(self.data["is_new_type"]))
     #    super(CreateRentalObjectForm, self).clean()
     #    if not self.is_valid:
@@ -57,7 +57,7 @@ class CreateRentalObjectForm(RentalObjectForm):
     #            type=self.cleaned_data["new_type_name"]
     #        ):
     #            raise ValidationError("Produkttypen finnes allerede")
-     #       new_type = RentalObjectType(
+    #       new_type = RentalObjectType(
     #            type=self.cleaned_data["new_type_name"]
     #        )
     #        new_type.save()

@@ -47,4 +47,3 @@ class RefundForm(forms.ModelForm):
 
 # Create a formset for the refund object to enable multible refund forms on one page.
 RefundFormSet = modelformset_factory(Refund, form=RefundForm, extra=1)
-
