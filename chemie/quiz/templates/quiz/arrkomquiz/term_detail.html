@@ -12,14 +12,14 @@
 {% block content %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
-    <a href="{% url "quiz:kjellerquiz_index" %}" class="breadcrumb">Kjellerquiz</a>
+    <a href="{% url "quiz:arrkomquiz_index" %}" class="breadcrumb">Arrkomquiz</a>
     <a class="breadcrumb">{{ term }}</a>
   </div>
 
   <div class="card-panel">
     <h4>{{ term }}</h4>
     {% if scores %}
-      <table class="striped responsive-table">
+      <table class="striped table">
         <thead>
         <tr>
           <th>Plass</th>

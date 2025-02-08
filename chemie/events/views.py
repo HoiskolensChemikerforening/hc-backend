@@ -235,8 +235,9 @@ class ListAdminSocialView(ListSocialView):
 class ListPastSocialView(ListView):
     template_name = "events/social/list_past.html"
     model = Social
+    paginate_by = 24
 
-    def queryset(self):
+    def get_queryset(self):
         return self.model.objects.filter(date__lte=timezone.now()).order_by(
             "-date"
         )
@@ -245,6 +246,7 @@ class ListPastSocialView(ListView):
 class ListPastBedpresView(ListPastSocialView):
     template_name = "events/bedpres/list_past.html"
     model = Bedpres
+    # Pagination set in ListPastSocialView
 
 
 class ListSocialDeleteView(PermissionRequiredMixin, ListView):
