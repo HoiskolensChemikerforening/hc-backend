@@ -35,7 +35,7 @@ def view_committee(request, slug):
     committee = get_object_or_404(Committee, slug=slug)
     positions = Position.objects.filter(committee=committee).prefetch_related(
         "users"
-    )
+    ).order_by('rank')
     context = {"committee": committee, "positions": positions}
     return render(request, "committees/view_committee.html", context)
 
