@@ -43,7 +43,9 @@ def index_sportskom(request):
 @permission_required("rentalservice.add_rentalobject")
 def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
+    print(request.POST)
     if form.is_valid():
+        print(request.POST)
         form.save()
         
         messages.add_message(
