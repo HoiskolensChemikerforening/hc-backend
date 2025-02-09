@@ -1,0 +1,78 @@
+{% extends "chemie/base.html" %}
+
+{% load material_form %}
+{% load static %}
+{% block extra_css %}
+  <link href = "{% static "css/wordlist.css" %}" type = "text/css" rel = "stylesheet" media = "screen,projection" /> 
+{% endblock %}
+
+{% block nav_header %}
+  Ordliste 
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  En ordliste uten ord, er en trist ordliste...
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+Bruk knappen helt nede til høyre for å legge til nye ord. Lag en kategori først, dette fordi alle ord behøver å ha en eller flere kategorier
+
+
+
+{% if perms.wordlist%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">dehaze</i>
+          </a>
+          <ul>
+            {% if perms.wordlist.add_word %}
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:admincategory" %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:admincategory" %}>Endre eller slette kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:createcategory" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:createcategory" %}>Legg til en ny kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:innsending" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:innsending" %}>Legg til ett ord</a>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+
+
+
+{% endblock content %}
+
+
+
+
+{% block footer_script %}
+
+
+<script>
+$function()
+        $("#refresh").click(function(event){
+            $.ajax({
+             type: "POST",
+             url: 'refresh/',
+              success:function(response) {
+              location.reload(true);
+
+              //do something with 'response'
+             }
+            });
+    });
+</script>
+
+{% endblock footer_script %}

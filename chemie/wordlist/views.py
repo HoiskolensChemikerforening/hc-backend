@@ -108,7 +108,7 @@ def ordListe(request):
     category_form = CategorySortingMainPage()
 
     if len(alle_ord) == 0:
-        return render(request, "404.html")
+        return render(request, "empty.html")
     else:
         form = WordSearchMainPage(request.POST or None)
 
