@@ -19,11 +19,11 @@ Sportskomiteen
             <div class="col-12 col-md-6" style="margin-bottom: 40px;">
                 <p class="flow-text">
                     Vi er Sportskomiteen! Vi har som ansvar å arrangere BlotsCup, HC-fjelltur, Gaukerenn og andre sportslige begivenheter.
-                    Det er også mulig å leie utstyr fra oss. 
+                    Det er også mulig å låne utstyr fra oss. 
                 </p>
                 
                     
-                <p class="flow-text"> Ta kontakt via kontakt-knappen for å avtale</p>
+                <p class="flow-text"> Ta kontakt via kontakt-knappen for å avtale!</p>
             </div>
         </div>
     </div>
@@ -80,6 +80,9 @@ Sportskomiteen
 <div class="row">
         <div class="col s12"> <!---size of the layout--->
             <div class="row">
+            {% if not rentalObjects %}
+            <p class="flow-text">Ingenting å låne enda!</p>
+            {% endif %}
             {% for object in rentalObjects %}
                 <div class="col s12 m6 l4">
                 <div class="card small">

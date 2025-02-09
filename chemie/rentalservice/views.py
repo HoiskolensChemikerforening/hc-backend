@@ -26,10 +26,10 @@ def index_sportskom(request):
     rentalObjects = RentalObject.objects.filter(owner=3)
 
     rentalObjects = RentalObject.objects.all().order_by("name")
-    if not rentalObjects.exists():
-        return render(request, "/empty.html")
+    #if not rentalObjects.exists():
+    #    return render(request, "/empty.html")
 
-    obj_per_page = 12  # Show 24 contacts per page.
+    obj_per_page = 24  # Show 24 contacts per page.
     if len(rentalObjects) < obj_per_page:
         context = {"rentalObjects": rentalObjects}
     else:
