@@ -196,6 +196,11 @@ def clear_locker(request, locker_number):
     )
 
 
+def renderRules(request):
+    context = {}
+    return render(request, "lockers/Bokskapreglement.html", context)
+
+
 class LockerListCreate(generics.ListCreateAPIView):
     queryset = Locker.objects.all()
     serializer_class = LockerSerializer
