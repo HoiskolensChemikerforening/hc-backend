@@ -24,7 +24,7 @@ def index_promo(request):
 @login_required
 def index_sportskom(request):
     rentalObjects = RentalObject.objects.filter(owner=3).order_by("name")
-    #if not rentalObjects.exists():
+    # if not rentalObjects.exists():
     #    return render(request, "/empty.html")
 
     obj_per_page = 24  # Show 24 contacts per page.
