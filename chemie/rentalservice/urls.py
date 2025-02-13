@@ -4,9 +4,9 @@ from django.urls import path
 app_name = "rentalservice"
 
 urlpatterns = [
-    path("AC", views.index, name="index"),
-    path("promo", views.index_promo, name="index_promo"),
-    path("sportskom", views.index_sportskom, name="index_sportskom"),
+    path("AC/", views.index, name="index"),
+    path("promo/", views.index_promo, name="index_promo"),
+    path("sportskom/", views.index_sportskom, name="index_sportskom"),
     path("ny/", views.new_object, name="new_object"),
     path("<int:rentalobject_id>/", views.detail, name="detail"),
     path(

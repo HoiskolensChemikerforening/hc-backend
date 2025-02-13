@@ -23,14 +23,12 @@ def index_promo(request):
 
 @login_required
 def index_sportskom(request):
-    rentalObjects = RentalObject.objects.filter(owner=3)
-
-    rentalObjects = RentalObject.objects.all().order_by("name")
+    rentalObjects = RentalObject.objects.filter(owner=3).order_by("name")
     #if not rentalObjects.exists():
     #    return render(request, "/empty.html")
 
     obj_per_page = 24  # Show 24 contacts per page.
-    if len(rentalObjects) < obj_per_page:
+    if len(rentalObjects) <= obj_per_page:
         context = {"rentalObjects": rentalObjects}
     else:
         paginator = Paginator(rentalObjects, obj_per_page)
@@ -45,9 +43,7 @@ def index_sportskom(request):
 @permission_required("rentalservice.add_rentalobject")
 def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
-    print(request.POST)
     if form.is_valid():
-        print(request.POST)
         form.save()
 
         messages.add_message(
