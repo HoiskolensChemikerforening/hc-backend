@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class PicturecarouselConfig(AppConfig):
-    name = "picturecarousel"
+    name = "chemie.picturecarousel"

@@ -2,4 +2,4 @@ from django.apps import AppConfig
 
 
 class NotificationsConfig(AppConfig):
-    name = "chemie.Notifications"
+    name = "chemie.web_push"
