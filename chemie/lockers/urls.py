@@ -44,5 +44,4 @@ urlpatterns = [
     path("api/lockeruser/<int:pk>", views.LockerUserDetail.as_view()),
     path("api/ownership/<int:pk>", views.OwnershipDetail.as_view()),
     path("api/lockertoken/<int_pk>", views.LockerTokenDetail.as_view()),
-    path("Bokskapregler/", views.pdf_view, name="renderRules"),
 ]

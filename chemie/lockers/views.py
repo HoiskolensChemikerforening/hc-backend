@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import permission_required
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.urls import reverse
-from django.http import Http404, FileResponse
+from django.http import Http404
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 
@@ -197,14 +197,6 @@ def clear_locker(request, locker_number):
     )
 
 
-def pdf_view(request):
-    try:
-        return FileResponse(
-            open("chemie/lockers/Bokskapreglement/Bokskapreglement.pdf", "rb"),
-            content_type="application/pdf",
-        )
-    except FileNotFoundError:
-        raise Http404()
 
 
 class LockerListCreate(generics.ListCreateAPIView):
