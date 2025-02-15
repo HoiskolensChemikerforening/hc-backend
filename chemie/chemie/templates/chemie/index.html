@@ -49,21 +49,20 @@
 
     <!-- Events -->
       <h3 class="heading">Arrangementer</h3>
+    <!-- COUNTDOWN -->
+    <div class="col coffee-box" id="Countdown" style="width: 100%; margin-top: 0px; background-color: #000000; border: 4px solid #f6df90;">
+        <div class="row valign-wrapper" style="width:100%; margin:0px;">
+            <div class="col s12 m12 l12" style="margin: 0px; padding: 0px;">
+                <div class="until__text" style="color: #f6df90; font-size: 1.5rem; font-weight: bold; margin:0px;">00</div>
+            </div>
+        </div>
+    </div>
 
       {% if social or bedpres %}
         {% include 'events/frontpage_list_events.html' with object_list=object_list %}
       {% else %}
         <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
       {% endif %}
-
-    <!-- COUNTDOWN -->
-    <div class="col coffee-box" id="Countdown" style="width: 100%;">
-        <div class="row valign-wrapper" style="width:100%; margin:0px">
-            <div class="col s12 m12 l12" style="margin: 0px; padding: 0px">
-                <div class="until__text " style="color: #F9CF00; font-size: 1.5rem; font-weight: bold; margin:0px;">00</div>
-            </div>
-        </div>
-    </div>
 
       <!--Kontaktskjema-->
       <div class="col coffee-box" style="width: 100%;">
