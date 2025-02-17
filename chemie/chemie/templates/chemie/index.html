@@ -15,6 +15,34 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+
+  <style>
+    .gradient-border {
+      position: relative;
+      display: inline-block;
+      border-radius: 5px;
+      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+    }
+
+    .gradient-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: white; /* Switch between white and black background  */
+      margin: 5px; /* Adjust for border thickness */
+      border-radius: inherit;
+    }
+
+    .gradient-text {
+      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: bold;
+      position: relative;
+      z-index: 1;
+    }
+
+  </style>
   {% if perms.events or perms.news %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -50,10 +78,10 @@
     <!-- Events -->
       <h3 class="heading">Arrangementer</h3>
     <!-- COUNTDOWN -->
-    <div class="col coffee-box" id="Countdown" style="width: 100%; margin-top: 0px; background-color: #000000; border: 4px solid #f6df90;">
-        <div class="row valign-wrapper" style="width:100%; margin:0px;">
+    <div class="col coffee-box gradient-border" id="Countdown" style="width: 100%; margin-top: 0px;">
+        <div class="row valign-wrapper" style="width:100%; margin:0px; height: 100%;">
             <div class="col s12 m12 l12" style="margin: 0px; padding: 0px;">
-                <div class="until__text" style="color: #f6df90; font-size: 1.5rem; font-weight: bold; margin:0px;">00</div>
+                <div class="until__text gradient-text" style="font-size: 1.5rem; font-weight: bold; margin:0px;">00</div>
             </div>
         </div>
     </div>
