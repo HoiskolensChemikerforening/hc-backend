@@ -35,9 +35,8 @@ https://github.com/viewflow/django-material/blob/388db45087e9ded89278a94e1809929
           <div class="help-block">{{ bound_field.help_text|safe }}</div>
           {% endif %}
           {% endpart %}{{ hidden_initial }}
-
       <label{% attrs bound_field 'label' %}
-        for="{{ bound_field.id_for_label }}"
+        for="id_{{ bound_field.html_name }}_0"
     {% endattrs %}>{{ bound_field.label }}</label>
     </div>
 </div>
