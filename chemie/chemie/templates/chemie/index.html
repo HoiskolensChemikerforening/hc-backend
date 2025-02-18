@@ -28,18 +28,36 @@
       content: "";
       position: absolute;
       inset: 0;
-      background: white; /* Switch between white and black background  */
+      background: black; /*linear-gradient(45deg, #f6df90, #ddab06, #f6df90);; /* Switch between white and black background  */
       margin: 5px; /* Adjust for border thickness */
       border-radius: inherit;
+      /* Apply mask 
+      -webkit-mask-image: url('{% static "images/jubileum_ornaments.png" %}'); /* Ensure the path is correct 
+      -webkit-mask-size: cover;
+      -webkit-mask-repeat: no-repeat;
+      -webkit-mask-position: center;
+
+      mask-image: url('{% static "images/jubileum_ornaments.png" %}');
+      mask-size: cover;
+      mask-repeat: no-repeat;
+      mask-position: center;*/
+    }
+
+    @font-face {
+      font-family: 'Amoresa';
+      src: url( "{% static 'font/jubileum/Amoresa.otf' %}" ) format('opentype');
+      font-weight: normal;
+      font-style: normal;
     }
 
     .gradient-text {
       background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-weight: bold;
+      font-family: 'Amoresa';
       position: relative;
       z-index: 1;
+      letter-spacing: 3px;
     }
 
   </style>
