@@ -62,7 +62,7 @@ THIRD_PARTY_APPS = [
     "dal_select2",
     "captcha",
     "sorl.thumbnail",
-    "material",
+    #"material",
     "post_office",
     "wiki",
     "django_nyt",
@@ -104,6 +104,7 @@ LOCAL_APPS = [
     "chemie.electofood",
     "chemie.exchangepage",
     "chemie.refund",
+    "chemie.custommaterial",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
