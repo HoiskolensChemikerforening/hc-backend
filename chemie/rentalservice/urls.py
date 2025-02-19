@@ -22,9 +22,5 @@ urlpatterns = [
     path("nyFaktura/", views.new_invoice, name="new_invoice"),
     path("kontaktac/", views.contact_page, name="contact_info"),
     path("kontaktpromo/", views.contact_page_promo, name="contact_info_promo"),
-    path(
-        "kontaktsportskom/",
-        views.contact_page_sportskom,
-        name="contact_info_sportskom",
-    ),
+    path("kontaktsportskom/",views.contact_page_sportskom, name="contact_info_sportskom"),
 ]

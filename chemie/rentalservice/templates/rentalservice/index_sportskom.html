@@ -27,25 +27,27 @@ Sportskomiteen
             </div>
         </div>
     </div>
-    <div class="col s12 m12 l4" style="max-width:350px;" >
-        <!--Kontaktskjema-->
-        <h3 class="heading">Kontakt</h3>
-        <div class="col coffee-box" style="width: 100%; height:auto;">
-          <a href="kontaktsportskom"style="width: 100%;">
-            <div class="row" style="display: flex; align-items: center; margin: 0; padding: 0">
-              <div class="col s4 m3 l4">
-                <i class="material-icons micon" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
-                max-height: 5rem; margin: 2rem; transform: scale(2); color:#0b3954;" >shopping_cart</i> 
+    <div class="col s12 m12 l4" style="max-width:350px;">
+      <!-- Kontaktskjema -->
+      <h3 class="heading">Kontakt</h3>
+      <div class="col coffee-box" style="width: 100%; height: auto;">
+        <a href="{% url 'rentalservice:contact_info_sportskom' %}" style="width: 100%">
+              <div class="row" style="display: flex; align-items: center; margin: 0; padding: 0">
+                  <div class="col s4 m3 l4">
+                      <i class="material-icons micon" style="filter: grayscale(100%);
+                          max-height: 5rem; margin: 2rem; transform: scale(2); color:#0b3954;">
+                          shopping_cart
+                      </i>
+                  </div>
+                  <div class="col s8 m9 l8">
+                      <p style="color: black;">Ønsker du å leie noe? <br>Ta kontakt her!</p>
+                  </div>
               </div>
-              <div class="col s8 m9 l8">
-                <p style="color: black;">Ønsker du å leie noe? <br>Ta kontakt her!</p>
-              </div>
-            </div>
           </a>
-        </div>
-      </div> 
-           
-</div>
+      </div>
+    </div>
+  
+          
 <div>
   <ul class="pagination nav navbar-nav">
     {% if rentalObjects.has_previous %}
