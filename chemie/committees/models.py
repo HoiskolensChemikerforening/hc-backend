@@ -51,6 +51,8 @@ class Position(models.Model):
     )
     can_manage_committee = models.BooleanField(default=False)
     users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
+    # Used to sort committee positions by importance
+    rank = models.PositiveSmallIntegerField(default=100, verbose_name="Rang")
 
     def remove_from_group(self, users):
         for user in users:

@@ -7,6 +7,7 @@ from django.http import Http404
 from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 
+
 from .email import send_my_lockers_mail, send_activation_mail
 from .forms import (
     RegisterExternalLockerUserForm,

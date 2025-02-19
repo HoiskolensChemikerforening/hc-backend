@@ -25,7 +25,7 @@ class RentalObjectForm(forms.ModelForm):
 
 class CreateRentalObjectForm(RentalObjectForm):
     is_new_type = forms.ChoiceField(
-        required=True,
+        required=False,
         widget=forms.RadioSelect,
         choices=CREATE_TYPE_CHOICES,
         initial=0,
@@ -39,29 +39,29 @@ class CreateRentalObjectForm(RentalObjectForm):
     layout = M.Layout(
         M.Row("name"),
         M.Row("description"),
-        M.Row("price", "quantity"),
-        M.Row("is_new_type"),
-        M.Row("type", "new_type_name"),
+        # M.Row("price", "quantity"),
+        # M.Row("is_new_type"),
+        # M.Row("type", "new_type_name"),
         M.Row("image"),
         M.Row("owner"),
     )
 
-    def clean(self):
-        self.cleaned_data["is_new_type"] = bool(int(self.data["is_new_type"]))
-        super(CreateRentalObjectForm, self).clean()
-        if not self.is_valid:
-            return
+    # def clean(self):
+    #    self.cleaned_data["is_new_type"] = bool(int(self.data["is_new_type"]))
+    #    super(CreateRentalObjectForm, self).clean()
+    #    if not self.is_valid:
+    #        return
 
-        if self.cleaned_data["is_new_type"]:
-            if RentalObjectType.objects.filter(
-                type=self.cleaned_data["new_type_name"]
-            ):
-                raise ValidationError("Produkttypen finnes allerede")
-            new_type = RentalObjectType(
-                type=self.cleaned_data["new_type_name"]
-            )
-            new_type.save()
-            self.cleaned_data["type"] = new_type
+    #    if self.cleaned_data["is_new_type"]:
+    #        if RentalObjectType.objects.filter(
+    #            type=self.cleaned_data["new_type_name"]
+    #        ):
+    #            raise ValidationError("Produkttypen finnes allerede")
+    #       new_type = RentalObjectType(
+    #            type=self.cleaned_data["new_type_name"]
+    #        )
+    #        new_type.save()
+    #        self.cleaned_data["type"] = new_type
 
     class Meta(RentalObjectForm.Meta):
         fields = RentalObjectForm.Meta.fields + [
