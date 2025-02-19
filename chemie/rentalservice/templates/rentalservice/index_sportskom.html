@@ -33,7 +33,7 @@ Sportskomiteen
       <div class="col coffee-box" style="width: 100%; height: auto;">
         <a href="{% url 'rentalservice:contact_info_sportskom' %}" style="width: 100%">
               <div class="row" style="display: flex; align-items: center; margin: 0; padding: 0">
-                  <div class="col s4 m3 l4">
+                  <div class="col s4 m3 l5">
                       <i class="material-icons micon" style="filter: grayscale(100%);
                           max-height: 5rem; margin: 2rem; transform: scale(2); color:#0b3954;">
                           shopping_cart
@@ -80,10 +80,10 @@ Sportskomiteen
     </div>
   {% endif %}
 <div class="row">
-        <div class="col s12"> <!---size of the layout--->
+        <div class="col s12 m12 l8"> <!---size of the layout--->
             <div class="row">
             {% if not rentalObjects %}
-            <p class="flow-text">Ingenting å låne enda!</p>
+            <p class="flow-text" style ="margin-left: 10%;">Ingenting å låne enda!</p>
             {% endif %}
             {% for object in rentalObjects %}
                 <div class="col s12 m6 l4">
