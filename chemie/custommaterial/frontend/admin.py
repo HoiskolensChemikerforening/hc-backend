@@ -6,8 +6,8 @@ from . import models
 class ModuleAdmin(admin.ModelAdmin):  # noqa D102
     actions = None
     icon = '<i class="material-icons">view_module</i>'
-    list_display = ['label', 'installed']
-    readonly_fields = ['label']
+    list_display = ["label", "installed"]
+    readonly_fields = ["label"]
 
     def has_add_permission(self, request):
         """Module added automatically during the database migration."""

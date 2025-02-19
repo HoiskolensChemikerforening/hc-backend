@@ -16,10 +16,14 @@ class ModuleManager(models.Manager):
 
     def installed(self, module):
         """By default, all modules considered installed."""
-        installed_cache = cache.get('material.modules.installed')
+        installed_cache = cache.get("material.modules.installed")
         if not installed_cache:
-            installed_cache = [mod.label for mod in self.get_queryset().filter(installed=True)]
-            cache.set('material.modules.installed', installed_cache, 60 * 60 * 24)
+            installed_cache = [
+                mod.label for mod in self.get_queryset().filter(installed=True)
+            ]
+            cache.set(
+                "material.modules.installed", installed_cache, 60 * 60 * 24
+            )
         return module in installed_cache
 
 
@@ -27,14 +31,14 @@ class ModuleManager(models.Manager):
 class Module(models.Model):
     """Keep module installed state in the database."""
 
-    label = models.SlugField(_('label'))
-    installed = models.BooleanField(_('installed'), default=True)
+    label = models.SlugField(_("label"))
+    installed = models.BooleanField(_("installed"), default=True)
 
     objects = ModuleManager()
 
     class Meta:
-        verbose_name = _('module')
-        verbose_name_plural = _('modules')
+        verbose_name = _("module")
+        verbose_name_plural = _("modules")
 
     def __str__(self):
         return self.label
@@ -42,4 +46,4 @@ class Module(models.Model):
 
 @receiver(post_save, sender=Module)
 def _clean_installed_cache(sender, **kwargs):
-    cache.delete('material.modules.installed')
+    cache.delete("material.modules.installed")

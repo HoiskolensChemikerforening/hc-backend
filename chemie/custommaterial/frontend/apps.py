@@ -66,6 +66,7 @@ class ModuleMixin(object):
         `frontend_dbmodule` table.
         """
         from .models import Module as DbModule
+
         return DbModule.objects.installed(self.label)
 
     def description(self):
@@ -80,13 +81,17 @@ class ModuleMixin(object):
         return True
 
     def get_urls(self):  # noqa D102
-        if module_has_submodule(self.module, 'urls'):
-            urls_module_name = '%s.%s' % (self.name, 'urls')
+        if module_has_submodule(self.module, "urls"):
+            urls_module_name = "%s.%s" % (self.name, "urls")
             urls_module = import_module(urls_module_name)
-            if hasattr(urls_module, 'urlpatterns'):
+            if hasattr(urls_module, "urlpatterns"):
                 return urls_module.urlpatterns
 
-        warnings.warn('Module {} have not urls.py submodule or `urlpatterns` in it'.format(self.label))
+        warnings.warn(
+            "Module {} have not urls.py submodule or `urlpatterns` in it".format(
+                self.label
+            )
+        )
         return []
 
     @property
@@ -95,12 +100,18 @@ class ModuleMixin(object):
 
         By default it would be loaded from '<app>/urls.py'
         """
-        base_url = r'^{}/'.format(self.label)
-        return ModuleURLResolver(base_url, self.get_urls(), module=self, app_name=self.label, namespace=self.label)
+        base_url = r"^{}/".format(self.label)
+        return ModuleURLResolver(
+            base_url,
+            self.get_urls(),
+            module=self,
+            app_name=self.label,
+            namespace=self.label,
+        )
 
     def index_url(self):
         """Entry url for a module."""
-        return reverse('{}:index'.format(self.label))
+        return reverse("{}:index".format(self.label))
 
     def menu(self):
         """Load module menu template.
@@ -114,9 +125,9 @@ class ModuleMixin(object):
             {% include module.menu %}
         """
         try:
-            return get_template('{}/menu.html'.format(self.label))
+            return get_template("{}/menu.html".format(self.label))
         except TemplateDoesNotExist:
-            return Template('')
+            return Template("")
 
     def base_template(self):
         """Base template for a module.
@@ -128,19 +139,21 @@ class ModuleMixin(object):
 
             {% extends current_module.base_template %}
         """
-        return select_template([
-            '{}/base_module.html'.format(self.label),
-            'material/frontend/base_module.html'
-        ])
+        return select_template(
+            [
+                "{}/base_module.html".format(self.label),
+                "material/frontend/base_module.html",
+            ]
+        )
 
 
 class MaterialFrontendConfig(AppConfig):
     """Default config for Material Frontend."""
 
-    name = 'material.frontend'
-    verbose_name = _('Frontend')
+    name = "material.frontend"
+    verbose_name = _("Frontend")
     icon = '<i class="material-icons">view_module</i>'
-    default_auto_field = 'django.db.models.AutoField'
+    default_auto_field = "django.db.models.AutoField"
 
     def ready(self):
         """Register all available modules."""
@@ -157,10 +170,11 @@ def update_modules(app_config, verbosity=2, interactive=True, **kwargs):
     for module in modules_registry.modules():
         _, created = DbModule.objects.get_or_create(label=module.label)
         if created and verbosity >= 2:
-            print('Adding module {}'.format(module.label))
+            print("Adding module {}".format(module.label))
 
     stale_modules = DbModule.objects.exclude(
-        label__in=[module.label for module in modules_registry.modules()])
+        label__in=[module.label for module in modules_registry.modules()]
+    )
 
     if stale_modules.exists():
         if interactive:
@@ -168,12 +182,13 @@ def update_modules(app_config, verbosity=2, interactive=True, **kwargs):
                 "The following modules are stale and need to be deleted:\n {}\n"
                 "Are you sure you want to delete these modules entries?\n\n"
                 "Type 'yes' to continue, or 'no' to cancel: ".format(
-                    '    %s'.join(module.label for module in stale_modules)
-                ))
+                    "    %s".join(module.label for module in stale_modules)
+                )
+            )
         else:
-            ok_to_delete = 'yes'
+            ok_to_delete = "yes"
 
-        if ok_to_delete == 'yes':
+        if ok_to_delete == "yes":
             stale_modules.delete()
             print("Stale modules deleted.")
         else:

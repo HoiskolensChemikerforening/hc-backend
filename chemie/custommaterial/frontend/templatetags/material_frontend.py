@@ -20,7 +20,9 @@ def frontend_urlname(model, url_type):
         {% url view.model|frontend_urlname:'detail' object.pk %}
 
     """
-    return '{}:{}_{}'.format(model._meta.app_label, model._meta.model_name, url_type)
+    return "{}:{}_{}".format(
+        model._meta.app_label, model._meta.model_name, url_type
+    )
 
 
 @register.filter
@@ -49,8 +51,11 @@ def query_back(request, back_link=None):
         <a href="{{ url }}?{{ request|query_back:"here" }}>
         <a href="{{ url }}?{{ request|query_back:"here_if_none" }}>
     """
-    if back_link is not None and back_link not in ['here', 'here_if_none']:
+    if back_link is not None and back_link not in ["here", "here_if_none"]:
         raise TemplateSyntaxError(
-            "query_back tag accepts `here`, or `here_if_none` as parameter. Got {}".format(back_link))
+            "query_back tag accepts `here`, or `here_if_none` as parameter. Got {}".format(
+                back_link
+            )
+        )
 
     return frontend_url(request, back_link=back_link)

@@ -24,7 +24,15 @@ try:
     from django.urls.resolvers import RegexPattern
 
     class ModuleURLResolver(URLResolver):
-        def __init__(self, regex, urlconf_name, default_kwargs=None, app_name=None, namespace=None, module=None):  # noqa D102
+        def __init__(
+            self,
+            regex,
+            urlconf_name,
+            default_kwargs=None,
+            app_name=None,
+            namespace=None,
+            module=None,
+        ):  # noqa D102
             self._module = module
             if app_name is None and namespace is not None:
                 app_name = namespace
@@ -40,13 +48,14 @@ try:
         def resolve(self, *args, **kwargs):  # noqa D102
             result = super(ModuleURLResolver, self).resolve(*args, **kwargs)
 
-            if result and not getattr(self._module, 'installed', True):
-                raise Resolver404({'message': 'Module not installed'})
+            if result and not getattr(self._module, "installed", True):
+                raise Resolver404({"message": "Module not installed"})
 
             result.url_name = ModuleMatchName(result.url_name)
             result.url_name.module = self._module
 
             return result
+
 except ImportError:
     # django 1.11
     from django.urls import RegexURLResolver
@@ -65,14 +74,14 @@ except ImportError:
         """
 
         def __init__(self, *args, **kwargs):  # noqa D102
-            self._module = kwargs.pop('module')
+            self._module = kwargs.pop("module")
             super(ModuleURLResolver, self).__init__(*args, **kwargs)
 
         def resolve(self, *args, **kwargs):  # noqa D102
             result = super(ModuleURLResolver, self).resolve(*args, **kwargs)
 
-            if result and not getattr(self._module, 'installed', True):
-                raise Resolver404({'message': 'Module not installed'})
+            if result and not getattr(self._module, "installed", True):
+                raise Resolver404({"message": "Module not installed"})
 
             result.url_name = ModuleMatchName(result.url_name)
             result.url_name.module = self._module
@@ -96,21 +105,23 @@ def frontend_url(request, url=None, back_link=None, absolute=True):
     """
     params = QueryDict(mutable=True)
     for key, value in six.iterlists(request.GET):
-        if not key.startswith('datatable-') and key != '_':
+        if not key.startswith("datatable-") and key != "_":
             params.setlist(key, value)
 
-    if back_link == 'here_if_none' and 'back' in params:
+    if back_link == "here_if_none" and "back" in params:
         # Do nothing
         pass
     elif back_link is not None:
         if params:
-            back = "{}?{}".format(quote(request.path), quote(params.urlencode()))
+            back = "{}?{}".format(
+                quote(request.path), quote(params.urlencode())
+            )
         else:
             back = "{}".format(quote(request.path))
-        params['back'] = back
+        params["back"] = back
 
     if url is not None:
-        location = '{}?{}'.format(url, params.urlencode())
+        location = "{}?{}".format(url, params.urlencode())
         return request.build_absolute_uri(location) if absolute else location
     else:
         return params.urlencode()

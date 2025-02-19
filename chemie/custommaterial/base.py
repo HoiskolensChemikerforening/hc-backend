@@ -33,10 +33,11 @@ class LayoutNode(object):
 
         """
         template_name = self.template_name
-        if 'template' in context:
-            template_name = context['template']
-        return get_template("{}/{}".format(
-            context['form_template_pack'], template_name))
+        if "template" in context:
+            template_name = context["template"]
+        return get_template(
+            "{}/{}".format(context["form_template_pack"], template_name)
+        )
 
     def render(self, context, **options):
         """
@@ -66,29 +67,35 @@ def _convert_to_field(elements):
 
 
 def _camel_case_to_underscore(name):
-    return re.sub('([a-z0-9])([A-Z])', r'\1_\2',
-                  re.sub('(.)([A-Z][a-z]+)', r'\1_\2', name)).lower()
+    return re.sub(
+        "([a-z0-9])([A-Z])",
+        r"\1_\2",
+        re.sub("(.)([A-Z][a-z]+)", r"\1_\2", name),
+    ).lower()
 
 
 def _get_field_template(template_pack, field):
     widget_templates = [
-        '{}_{}.html'.format(
-            cls.__module__.split('.', 1)[0],
-            cls.__name__.lower())
+        "{}_{}.html".format(
+            cls.__module__.split(".", 1)[0], cls.__name__.lower()
+        )
         for cls in type(field.widget).mro()[:-2]
     ]
 
     field_templates = [
-        '{}_{}/{}'.format(
-            cls.__module__.split('.', 1)[0],
+        "{}_{}/{}".format(
+            cls.__module__.split(".", 1)[0],
             cls.__name__.lower(),
-            widget_template)
+            widget_template,
+        )
         for cls in type(field).mro()[:-2]
         for widget_template in widget_templates
     ]
 
-    template_names = ["{}/fields/{}".format(template_pack, template_name)
-                      for template_name in widget_templates + field_templates]
+    template_names = [
+        "{}/fields/{}".format(template_pack, template_name)
+        for template_name in widget_templates + field_templates
+    ]
 
     return select_template(template_names)
 
@@ -99,7 +106,7 @@ class Layout(LayoutNode):
     Allows to set relative field sizes and positions.
     """
 
-    template_name = 'layout/layout.html'
+    template_name = "layout/layout.html"
 
     def __init__(self, *elements):  # noqa: D102
         self.elements = _convert_to_field(elements)
@@ -113,25 +120,25 @@ class Fieldset(LayoutNode):
     :param span_columns: Relative width of the fieldset
     """
 
-    template_name = 'layout/fieldset.html'
+    template_name = "layout/fieldset.html"
 
     def __init__(self, label, *elements, **kwargs):  # noqa: D102
         self.label = label
         self.elements = _convert_to_field(elements)
-        self.span_columns = kwargs.pop('span_columns', 1)
+        self.span_columns = kwargs.pop("span_columns", 1)
 
 
 class Row(LayoutNode):
     """Place elements in a single line."""
 
-    template_name = 'layout/row.html'
+    template_name = "layout/row.html"
 
-    def __init__(self, *elements, **kwargs):    # noqa: D102
+    def __init__(self, *elements, **kwargs):  # noqa: D102
         self.elements = _convert_to_field(elements)
-        self.row_id = kwargs.pop('row_id', None)
+        self.row_id = kwargs.pop("row_id", None)
 
     def __getattr__(self, name):
-        _, container_size = name.split('_')
+        _, container_size = name.split("_")
         container_size = int(container_size)
 
         def elements_iterator():
@@ -140,8 +147,9 @@ class Row(LayoutNode):
             )
             if container_size % elements_span != 0:
                 warnings.warn(
-                    "Can't equally divide container {} for {} span elements"
-                    .format(container_size, self.elements)
+                    "Can't equally divide container {} for {} span elements".format(
+                        container_size, self.elements
+                    )
                 )
 
             span_multiplier = container_size // elements_span
@@ -157,12 +165,12 @@ class Column(LayoutNode):
     :param span_columns: Relative width of the fieldset
     """
 
-    template_name = 'layout/column.html'
+    template_name = "layout/column.html"
 
     def __init__(self, *elements, **kwargs):  # noqa: D102
         self.elements = _convert_to_field(elements)
-        self.span_columns = kwargs.pop('span_columns', 1)
-        self.column_id = kwargs.pop('column_id', None)
+        self.span_columns = kwargs.pop("span_columns", 1)
+        self.column_id = kwargs.pop("column_id", None)
 
 
 class Span(object):
@@ -175,7 +183,7 @@ class Span(object):
     :param field_name: field name in the form
     """
 
-    template_name = 'layout/field.html'
+    template_name = "layout/field.html"
 
     def __init__(self, span_columns, field_name):  # noqa: D102
         self.span_columns = span_columns
@@ -187,51 +195,55 @@ class Span(object):
 
         Compatible with django ``{% include %}`` tag.
         """
-        template_pack = context['form_template_pack']
-        form = context['form']
+        template_pack = context["form_template_pack"]
+        form = context["form"]
         bound_field = form[self.field_name]
 
         try:
-            if 'template' in options:
-                template = select_template([
-                    "{}/{}".format(template_pack, options['template'])
-                ])
-            elif 'widget' in options:
+            if "template" in options:
+                template = select_template(
+                    ["{}/{}".format(template_pack, options["template"])]
+                )
+            elif "widget" in options:
                 widget_templates = [
-                    '{}/fields/{}_{}.html'.format(
+                    "{}/fields/{}_{}.html".format(
                         template_pack,
-                        cls.__module__.split('.', 1)[0],
-                        cls.__name__.lower()
+                        cls.__module__.split(".", 1)[0],
+                        cls.__name__.lower(),
                     )
-                    for cls in type(options['widget']).mro()[:-2]
+                    for cls in type(options["widget"]).mro()[:-2]
                 ]
                 template = select_template(widget_templates)
             else:
                 template = _get_field_template(
-                    template_pack, bound_field.field)
+                    template_pack, bound_field.field
+                )
         except TemplateDoesNotExist:
             # fallback to default field render
-            warnings.warn("Unknown field and widget {} {}".format(
-                bound_field.field.__class__,
-                bound_field.field.widget.__class__))
+            warnings.warn(
+                "Unknown field and widget {} {}".format(
+                    bound_field.field.__class__,
+                    bound_field.field.widget.__class__,
+                )
+            )
             return force_str(bound_field)
         else:
-            hidden_initial = ''
+            hidden_initial = ""
 
             if bound_field.field.show_hidden_initial:
                 hidden_initial = bound_field.as_hidden(only_initial=True)
 
             context.push()
             try:
-                context['bound_field'] = bound_field
-                context['field'] = bound_field.field
-                context['hidden_initial'] = hidden_initial
+                context["bound_field"] = bound_field
+                context["field"] = bound_field.field
+                context["hidden_initial"] = hidden_initial
                 return template.render(context.flatten())
             finally:
                 context.pop()
 
     def __str__(self):
-        return 'Span{}({})'.format(self.span_columns, self.field_name)
+        return "Span{}({})".format(self.span_columns, self.field_name)
 
 
 Field = partial(Span, 1)
@@ -252,7 +264,7 @@ def _collect_elements(element_cls, parent, container=None):
     if container is None:
         container = []
 
-    if hasattr(parent, 'elements'):
+    if hasattr(parent, "elements"):
         for element in parent.elements:
             _collect_elements(element_cls, element, container=container)
 

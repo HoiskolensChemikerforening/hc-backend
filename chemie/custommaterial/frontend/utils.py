@@ -17,8 +17,11 @@ def get_deleted_objects(root):
 
         try:
             return reverse(
-                '{}:{}_{}_details'.format(opts.app_label, opts.app_label, opts.model_name),
-                args=[obj._get_pk_val()])
+                "{}:{}_{}_details".format(
+                    opts.app_label, opts.app_label, opts.model_name
+                ),
+                args=[obj._get_pk_val()],
+            )
         except NoReverseMatch:
             return None
 

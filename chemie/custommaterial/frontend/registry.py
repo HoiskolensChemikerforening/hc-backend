@@ -6,8 +6,10 @@ class Registry(object):
 
     def modules(self):
         """List of modules in the frontend according to it's order."""
-        return sorted([module for module in self._registry.values()],
-                      key=lambda module: (module.order, module.label))
+        return sorted(
+            [module for module in self._registry.values()],
+            key=lambda module: (module.order, module.label),
+        )
 
     def installed_modules(self):
         """List of installed modules.
@@ -16,13 +18,19 @@ class Registry(object):
         If the module instance have no `installed` attribute, the
         module considered installed.
         """
-        return (module for module in self.modules()
-                if getattr(module, 'installed', True))
+        return (
+            module
+            for module in self.modules()
+            if getattr(module, "installed", True)
+        )
 
     def available_modules(self, user):
         """List of modules permitted for the user."""
-        return (module for module in self.installed_modules()
-                if module.has_perm(user))
+        return (
+            module
+            for module in self.installed_modules()
+            if module.has_perm(user)
+        )
 
     def get_module(self, module_label):
         """Get module by label."""

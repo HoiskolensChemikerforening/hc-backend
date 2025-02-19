@@ -12,7 +12,7 @@ from .mixins import MessageUserMixin, ModelViewMixin
 class UpdateModelView(MessageUserMixin, ModelViewMixin, generic.UpdateView):
     """Thin `generic.UpdateView` wrapper plays nice with `ModelViewSet`."""
 
-    template_name_suffix = '_update'
+    template_name_suffix = "_update"
 
     def has_object_permission(self, request, obj):
         """Object change permission check.
@@ -24,16 +24,18 @@ class UpdateModelView(MessageUserMixin, ModelViewMixin, generic.UpdateView):
 
         # default lookup for the django permission
         opts = self.model._meta
-        codename = get_permission_codename('change', opts)
+        codename = get_permission_codename("change", opts)
         return request.user.has_perm(
-            '{}.{}'.format(opts.app_label, codename), obj=obj)
+            "{}.{}".format(opts.app_label, codename), obj=obj
+        )
 
     def get_success_url(self):
         """Redirect back to the detail view if no `success_url` is configured."""
         if self.success_url is None:
             opts = self.model._meta
-            return reverse('{}:{}_detail'.format(
-                opts.app_label, opts.model_name), args=[self.object.pk]
+            return reverse(
+                "{}:{}_detail".format(opts.app_label, opts.model_name),
+                args=[self.object.pk],
             )
         return super(ModelViewMixin, self).get_success_url()
 

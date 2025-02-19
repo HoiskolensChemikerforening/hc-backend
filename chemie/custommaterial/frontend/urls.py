@@ -3,6 +3,6 @@ from . import modules
 
 
 urlpatterns = [
-    path('accounts/', include('django.contrib.auth.urls')),
-    path('', include(modules.urls)),
+    path("accounts/", include("django.contrib.auth.urls")),
+    path("", include(modules.urls)),
 ]

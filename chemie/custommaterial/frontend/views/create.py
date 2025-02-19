@@ -13,7 +13,7 @@ from ...compat import _
 class CreateModelView(MessageUserMixin, ModelViewMixin, generic.CreateView):
     """Thin `generic.CreateView` wrapper plays nice with `ModelViewSet`."""
 
-    template_name_suffix = '_create'
+    template_name_suffix = "_create"
 
     def has_add_permission(self, request):
         """Object add permission check.
@@ -25,15 +25,16 @@ class CreateModelView(MessageUserMixin, ModelViewMixin, generic.CreateView):
 
         # default lookup for the django permission
         opts = self.model._meta
-        codename = get_permission_codename('add', opts)
-        return request.user.has_perm('{}.{}'.format(opts.app_label, codename))
+        codename = get_permission_codename("add", opts)
+        return request.user.has_perm("{}.{}".format(opts.app_label, codename))
 
     def get_success_url(self):
         """Redirect back to the detail view if no `success_url` is configured."""
         if self.success_url is None:
             opts = self.model._meta
-            return reverse('{}:{}_detail'.format(
-                opts.app_label, opts.model_name), args=[self.object.pk]
+            return reverse(
+                "{}:{}_detail".format(opts.app_label, opts.model_name),
+                args=[self.object.pk],
             )
         return super(ModelViewMixin, self).get_success_url()
 

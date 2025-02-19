@@ -7,6 +7,10 @@ from .viewset import ModelViewSet
 
 
 __all__ = (
-    'CreateModelView', 'ListModelView', 'UpdateModelView',
-    'DeleteModelView', 'DetailModelView', 'ModelViewSet',
+    "CreateModelView",
+    "ListModelView",
+    "UpdateModelView",
+    "DeleteModelView",
+    "DetailModelView",
+    "ModelViewSet",
 )

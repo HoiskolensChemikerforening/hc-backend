@@ -25,22 +25,22 @@ class BaseViewset(object):
         """
         result = []
 
-        format_kwargs = {
-            'model_name': self.model._meta.model_name
-        }
+        format_kwargs = {"model_name": self.model._meta.model_name}
 
         url_entries = (
             getattr(self, attr)
             for attr in dir(self)
-            if attr.endswith('_view')
+            if attr.endswith("_view")
             if isinstance(getattr(self, attr), (list, tuple))
         )
         for url_entry in url_entries:
             regexp, view, name = url_entry
             result.append(
-                re_path(regexp.format(**format_kwargs),
+                re_path(
+                    regexp.format(**format_kwargs),
                     view,
-                    name=name.format(**format_kwargs))
+                    name=name.format(**format_kwargs),
+                )
             )
 
         return result
@@ -124,14 +124,17 @@ class ModelViewSet(BaseViewset):
 
         """
         result = {
-            'model': self.model,
-            'viewset': self,
-            'queryset': self.queryset,
+            "model": self.model,
+            "viewset": self,
+            "queryset": self.queryset,
         }
         result.update(kwargs)
-        return {name: value for name, value in result.items()
-                if hasattr(view_class, name)
-                if value is not DEFAULT}
+        return {
+            name: value
+            for name, value in result.items()
+            if hasattr(view_class, name)
+            if value is not DEFAULT
+        }
 
     """
     Create
@@ -148,9 +151,9 @@ class ModelViewSet(BaseViewset):
         May not be called if `get_create_view` is overridden.
         """
         result = {
-            'layout': self.layout,
-            'form_class': self.form_class,
-            'form_widgets': self.form_widgets,
+            "layout": self.layout,
+            "form_class": self.form_class,
+            "form_widgets": self.form_widgets,
         }
         result.update(kwargs)
         return self.filter_kwargs(self.create_view_class, **result)
@@ -159,9 +162,9 @@ class ModelViewSet(BaseViewset):
     def create_view(self):
         """Triple (regexp, view, name) for create view url config."""
         return [
-            r'^add/$',
+            r"^add/$",
             self.get_create_view(),
-            '{model_name}_add',
+            "{model_name}_add",
         ]
 
     def has_add_permission(self, request):
@@ -170,8 +173,8 @@ class ModelViewSet(BaseViewset):
         May not be called if views have own implementation.
         """
         opts = self.model._meta
-        codename = get_permission_codename('add', opts)
-        return request.user.has_perm('{}.{}'.format(opts.app_label, codename))
+        codename = get_permission_codename("add", opts)
+        return request.user.has_perm("{}.{}".format(opts.app_label, codename))
 
     """
     Detail
@@ -195,8 +198,8 @@ class ModelViewSet(BaseViewset):
         May not be called if views have own implementation.
         """
         opts = self.model._meta
-        codename = get_permission_codename('view', opts)
-        view_perm = '{}.{}'.format(opts.app_label, codename)
+        codename = get_permission_codename("view", opts)
+        view_perm = "{}.{}".format(opts.app_label, codename)
         if request.user.has_perm(view_perm):
             return True
         elif request.user.has_perm(view_perm, obj=obj):
@@ -207,9 +210,9 @@ class ModelViewSet(BaseViewset):
     def detail_view(self):
         """Triple (regexp, view, name) for detail view url config."""
         return [
-            r'^(?P<pk>.+)/detail/$',
+            r"^(?P<pk>.+)/detail/$",
             self.get_detail_view(),
-            '{model_name}_detail'
+            "{model_name}_detail",
         ]
 
     """
@@ -227,9 +230,9 @@ class ModelViewSet(BaseViewset):
         May not be called if `get_list_view` is overridden.
         """
         result = {
-            'list_display': self.list_display,
-            'list_display_links': self.list_display_links,
-            'ordering': self.ordering
+            "list_display": self.list_display,
+            "list_display_links": self.list_display_links,
+            "ordering": self.ordering,
         }
         result.update(kwargs)
         return self.filter_kwargs(self.list_view_class, **result)
@@ -237,11 +240,7 @@ class ModelViewSet(BaseViewset):
     @property
     def list_view(self):
         """Triple (regexp, view, name) for list view url config."""
-        return [
-            '^$',
-            self.get_list_view(),
-            '{model_name}_list'
-        ]
+        return ["^$", self.get_list_view(), "{model_name}_list"]
 
     """
     Update
@@ -258,9 +257,9 @@ class ModelViewSet(BaseViewset):
         May not be called if `get_update_view` is overridden.
         """
         result = {
-            'layout': self.layout,
-            'form_class': self.form_class,
-            'form_widgets': self.form_widgets,
+            "layout": self.layout,
+            "form_class": self.form_class,
+            "form_widgets": self.form_widgets,
         }
         result.update(kwargs)
         return self.filter_kwargs(self.update_view_class, **result)
@@ -271,8 +270,8 @@ class ModelViewSet(BaseViewset):
         May not be called if update view have own implementation.
         """
         opts = self.model._meta
-        codename = get_permission_codename('change', opts)
-        change_perm = '{}.{}'.format(opts.app_label, codename)
+        codename = get_permission_codename("change", opts)
+        change_perm = "{}.{}".format(opts.app_label, codename)
         if request.user.has_perm(change_perm):
             return True
         return request.user.has_perm(change_perm, obj=obj)
@@ -281,9 +280,9 @@ class ModelViewSet(BaseViewset):
     def update_view(self):
         """Triple (regexp, view, name) for update view url config."""
         return [
-            r'^(?P<pk>.+)/change/$',
+            r"^(?P<pk>.+)/change/$",
             self.get_update_view(),
-            '{model_name}_change',
+            "{model_name}_change",
         ]
 
     """
@@ -301,8 +300,8 @@ class ModelViewSet(BaseViewset):
         May not be called if delete view have own implementation.
         """
         opts = self.model._meta
-        codename = get_permission_codename('delete', opts)
-        delete_perm = '{}.{}'.format(opts.app_label, codename)
+        codename = get_permission_codename("delete", opts)
+        delete_perm = "{}.{}".format(opts.app_label, codename)
         if request.user.has_perm(delete_perm):
             return True
         return request.user.has_perm(delete_perm, obj=obj)
@@ -318,7 +317,7 @@ class ModelViewSet(BaseViewset):
     def delete_view(self):
         """Triple (regexp, view, name) for delete view url config."""
         return [
-            r'^(?P<pk>.+)/delete/$',
+            r"^(?P<pk>.+)/delete/$",
             self.get_delete_view(),
-            '{model_name}_delete'
+            "{model_name}_delete",
         ]

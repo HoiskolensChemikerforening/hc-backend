@@ -6,9 +6,11 @@ def modules(request):
     module = None
 
     if request.resolver_match:
-        module = getattr(request.resolver_match.url_name, 'module', None)
+        module = getattr(request.resolver_match.url_name, "module", None)
 
     return {
-        'modules': modules_registry.available_modules(request.user) if hasattr(request, 'user') else [],
-        'current_module': module,
+        "modules": modules_registry.available_modules(request.user)
+        if hasattr(request, "user")
+        else [],
+        "current_module": module,
     }

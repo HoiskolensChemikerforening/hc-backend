@@ -25,7 +25,7 @@ class DeleteModelView(generic.DeleteView):
         `viewflow.get_queryset`
         """
         if self.queryset is None and self.viewset is not None:
-            if hasattr(self.viewset, 'get_queryset'):
+            if hasattr(self.viewset, "get_queryset"):
                 return self.viewset.get_queryset(self.request)
         return super(DeleteModelView, self).get_queryset()
 
@@ -39,8 +39,8 @@ class DeleteModelView(generic.DeleteView):
 
         # default lookup for the django permission
         opts = self.model._meta
-        codename = get_permission_codename('delete', opts)
-        delete_perm = '{}.{}'.format(opts.app_label, codename)
+        codename = get_permission_codename("delete", opts)
+        delete_perm = "{}.{}".format(opts.app_label, codename)
         if request.user.has_perm(delete_perm):
             return True
         return request.user.has_perm(delete_perm, obj=obj)
@@ -55,7 +55,7 @@ class DeleteModelView(generic.DeleteView):
 
         `{{ deleted_objects }}` - list of related objects to delete
         """
-        kwargs.setdefault('deleted_objects', dict(self._get_deleted_objects()))
+        kwargs.setdefault("deleted_objects", dict(self._get_deleted_objects()))
         return super(DeleteModelView, self).get_context_data(**kwargs)
 
     def get_object(self):
@@ -81,7 +81,9 @@ class DeleteModelView(generic.DeleteView):
         """Redirect back to the list view if no `success_url` is configured."""
         if self.success_url is None:
             opts = self.model._meta
-            return reverse('{}:{}_list'.format(opts.app_label, opts.model_name))
+            return reverse(
+                "{}:{}_list".format(opts.app_label, opts.model_name)
+            )
         return super(DeleteModelView, self).get_success_url()
 
     def get_template_names(self):
@@ -96,20 +98,28 @@ class DeleteModelView(generic.DeleteView):
         if self.template_name is None:
             opts = self.model._meta
             return [
-                '{}/{}{}.html'.format(opts.app_label, opts.model_name, self.template_name_suffix),
-                'material/frontend/views/confirm_delete.html',
+                "{}/{}{}.html".format(
+                    opts.app_label, opts.model_name, self.template_name_suffix
+                ),
+                "material/frontend/views/confirm_delete.html",
             ]
 
         return [self.template_name]
 
     def delete(self, request, *args, **kwargs):
-        response = super(DeleteModelView, self).delete(request, *args, **kwargs)
+        response = super(DeleteModelView, self).delete(
+            request, *args, **kwargs
+        )
         self.message_user()
         return response
 
     def message_user(self):
-        message = _('The {name} "{link}"  was deleted successfully.'.format(
-            name=force_str(self.model._meta.verbose_name),
-            link=force_str(self.object)
-        ))
-        messages.add_message(self.request, messages.SUCCESS, message, fail_silently=True)
+        message = _(
+            'The {name} "{link}"  was deleted successfully.'.format(
+                name=force_str(self.model._meta.verbose_name),
+                link=force_str(self.object),
+            )
+        )
+        messages.add_message(
+            self.request, messages.SUCCESS, message, fail_silently=True
+        )
