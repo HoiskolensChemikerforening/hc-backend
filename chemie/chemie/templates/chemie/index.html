@@ -15,6 +15,68 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+
+  <style>
+    .gradient-border {
+      position: relative;
+      display: inline-block;
+      border-radius: 0px;
+      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+    }
+
+    .gradient-border::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: black; /*linear-gradient(45deg, #f6df90, #ddab06, #f6df90);; /* Switch between white and black background  */
+      margin: 3px; /* Adjust for border thickness */
+      border-radius: inherit;
+
+    }
+
+    @font-face {
+      font-family: 'Amoresa';
+      src: url( "{% static 'font/jubileum/Amoresa.otf' %}" ) format('opentype');
+      font-weight: normal;
+      font-style: normal;
+    }
+
+
+    .gradient-text {
+      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-family: 'Amoresa';
+      position: relative;
+      z-index: 1;
+    }
+
+    .gradient-text-small {
+      letter-spacing: 3px;
+      font-size: 1.5rem;
+    }
+
+    .gradient-text-large{
+      letter-spacing: 3px;
+      font-size: 2.5rem;
+    }
+
+
+
+    @media (min-width: 600px) and (max-width: 1300px) { /*770px*/
+      .gradient-text{
+        font-size: 1.1rem;
+        letter-spacing: 2px;
+      }
+    }
+    @media (min-width: 600px) and (max-width: 1300px) { /*770px*/
+    .gradient-text-large{
+        font-size: 1.9rem;
+        letter-spacing: 2px;
+      }
+    }
+
+  </style>
   {% if perms.events or perms.news %}
     <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
@@ -49,21 +111,22 @@
 
     <!-- Events -->
       <h3 class="heading">Arrangementer</h3>
+    <!-- COUNTDOWN -->
+    <div class="col coffee-box" id="Countdown" style="width: 100%; margin-top: 0px;padding:6px;background:black">
+        <div class="gradient-border" style="width: 100%;height: 100%;">
+        <div class="row valign-wrapper" style="width:100%; margin:0px; height: 100%;">
+            <div class="col s12 m12 l12" style="margin: 0px; padding: 0px;">
+                <div class="until__text gradient-text gradient-text-small" style="font-weight: bold; margin:0px;padding-top: 3px;padding-bottom: 3px;">00</div>
+            </div>
+        </div>
+      </div>
+    </div>
 
       {% if social or bedpres %}
         {% include 'events/frontpage_list_events.html' with object_list=object_list %}
       {% else %}
         <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
       {% endif %}
-
-    <!-- COUNTDOWN -->
-    <div class="col coffee-box" id="Countdown" style="width: 100%;">
-        <div class="row valign-wrapper" style="width:100%; margin:0px">
-            <div class="col s12 m12 l12" style="margin: 0px; padding: 0px">
-                <div class="until__text " style="color: #F9CF00; font-size: 1.5rem; font-weight: bold; margin:0px;">00</div>
-            </div>
-        </div>
-    </div>
 
       <!--Kontaktskjema-->
       <div class="col coffee-box" style="width: 100%;">
@@ -135,6 +198,7 @@
 
 {% block footer_js_files %}
     <!---<script type="text/javascript" src="{% static "js/textrain.js" %}"></script>--->
+    <!--<script src="{% static "js/makeItRain.js" %}"></script>-->
 
     <!-- COUNTDOWN -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
@@ -164,8 +228,11 @@
             const duration= calc_duration(now, targetDate);
 
             if (!duration) {
-                element.querySelector(".until__text").textContent = `Jubileumsblot!`;
-                element.querySelector(".until__text").style.fontSize= "2.5rem";
+                let el =  element.querySelector(".until__text")
+                el.textContent = `Jubileumsblot!`;
+                //element.querySelector(".until__text").style.fontSize= "2.5rem";
+                el.classList.remove('gradient-text-small'); 
+                el.classList.add('gradient-text-large'); 
                 return;
             } else {
 
