@@ -1,12 +1,22 @@
 from django.db import models
 
+class Sykdom(models.Model):
+    disease_name = models.CharField(max_length=100)
+    life_expectancy = models.PositiveSmallIntegerField()
+
+    def __str__(self):
+        return f"{self.disease_name}"
+
 
 class Villsvin(models.Model):
     name = models.CharField(max_length=30)
     age = models.PositiveSmallIntegerField()
+    disease = models.ManyToManyField(Sykdom)
 
     def __str__(self):
         return f"{self.name}"
+    
+    
 
 class Korv(models.Model):
     weight = models.DecimalField(decimal_places=2, max_digits=8)
@@ -18,6 +28,3 @@ class Korv(models.Model):
         return f"{self.name} {self.weight}"
 
 
-class Sykdom(models.Model):
-    disease_name = models.CharField(max_length=100)
-    mortality = 
