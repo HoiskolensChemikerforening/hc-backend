@@ -16,3 +16,8 @@ class Korv(models.Model):
 
     def __str__(self):
         return f"{self.name} {self.weight}"
+
+
+class Sykdom(models.Model):
+    disease_name = models.CharField(max_length=100)
+    mortality = 
