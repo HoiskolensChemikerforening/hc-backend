@@ -222,7 +222,8 @@ def admin_voting_is_active(request, pk):
         return redirect("elections:admin_results", pk=pk)
 
     total_voters = election.current_position.get_number_of_voters()
-    context = {"election": election, "total_voters": total_voters}
+    checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
+    context = {"election": election, "total_voters": total_voters, "checkin_count": checkin_count}
     return render(request, "elections/admin/admin_voting_active.html", context)
 
 
