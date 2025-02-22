@@ -13,7 +13,7 @@ class Category(models.Model):
 
 class AbstractWord(models.Model):
     explanations = models.CharField(
-        max_length=300, verbose_name="Forklaring", unique=True
+        max_length=300, verbose_name="Forklaring", unique=False
     )
     author = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="Forfatter"
@@ -36,22 +36,22 @@ class AbstractWord(models.Model):
 class Noun(AbstractWord):
     word = models.CharField(
         max_length=100,
-        verbose_name="ubestemt_entall",
+        verbose_name="Ubestemt entall",
         unique=True,
         blank=False,
     )
     indefinite_plural = models.CharField(
         max_length=100,
-        verbose_name="ubestemt_flertall",
+        verbose_name="Ubestemt flertall",
         unique=False,
         blank=True,
     )
     definite_singular = models.CharField(
-        max_length=100, verbose_name="bestemt_entall", unique=False, blank=True
+        max_length=100, verbose_name="Bestemt entall", unique=False, blank=True
     )
     definite_plural = models.CharField(
         max_length=100,
-        verbose_name="bestemt_flertall",
+        verbose_name="Bestemt flertall",
         unique=False,
         blank=True,
     )
@@ -62,17 +62,17 @@ class Noun(AbstractWord):
 
 class Verb(AbstractWord):
     word = models.CharField(
-        max_length=100, verbose_name="infinitiv", unique=True, blank=False
+        max_length=100, verbose_name="Infinitiv", unique=True, blank=False
     )
     present = models.CharField(
-        max_length=100, verbose_name="presens", unique=False, blank=True
+        max_length=100, verbose_name="Presens", unique=False, blank=True
     )
     past = models.CharField(
-        max_length=100, verbose_name="preteritum", unique=False, blank=True
+        max_length=100, verbose_name="Preteritum", unique=False, blank=True
     )
     future = models.CharField(
         max_length=100,
-        verbose_name="presens futurum",
+        verbose_name="Presens futurum",
         unique=False,
         blank=True,
     )
@@ -83,13 +83,13 @@ class Verb(AbstractWord):
 
 class Adjective(AbstractWord):
     word = models.CharField(
-        max_length=100, verbose_name="positiv", unique=True, blank=False
+        max_length=100, verbose_name="Positiv", unique=True, blank=False
     )
     comparative = models.CharField(
-        max_length=100, verbose_name="komparativ", unique=False, blank=True
+        max_length=100, verbose_name="Komparativ", unique=False, blank=True
     )
     superlative = models.CharField(
-        max_length=100, verbose_name="superlativ", unique=False, blank=True
+        max_length=100, verbose_name="Superlativ", unique=False, blank=True
     )
 
     def __str__(self):

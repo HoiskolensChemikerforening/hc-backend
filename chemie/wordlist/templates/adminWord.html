@@ -10,6 +10,16 @@
 
 {% block content %}
 
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a href="{% url "wordlist:details" pk klassetall %}" class="breadcrumb"> {{ordet.0}}</a>
+    <a class="breadcrumb">Rediger: {{ordet.0}}</a>
+    
+   
+  </div>
+{% endblock %}
 
 
 <style>
@@ -29,10 +39,7 @@
     
 
     {%form form=form%}
-    <div class="input-field col s12">
-      <label>Velg kategorier:</label>
-      {{ form.category }}
-    </div>
+    
     {% endform %}
     
 

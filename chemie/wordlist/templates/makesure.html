@@ -15,14 +15,16 @@
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
     <a href="{% url "wordlist:admincategory" %}" class="breadcrumb">Kategori</a>
-    <a class="breadcrumb">Rediger: {{category}}</a>
+    <a class="breadcrumb">Slette: '{{category_object}}' ?</a>
   </div>
 {% endblock %}
 
 <form enctype="multipart/form-data" method='POST'>
   {% csrf_token %}
-  {{ categoryform.as_p }}
-  <input class="btn" type='submit' value='Lagre kategori'/>
+  
+    <p>Er du sikker på at du vil slette kategorien: '{{category_object}}' ? </p>
+  <input class="btn" type='submit' name = "delete" value='Slett'/>
+  <input class="btn" type='submit' value='Avbryt'/>
 </form>
 
 {% endblock content %}

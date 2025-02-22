@@ -18,7 +18,7 @@ urlpatterns = [
         "<int:pk>/<int:klassetall>/delete/", views.word_delete, name="delete"
     ),
     path(
-        "<int:pk>/slettkategori/",
+        "slettkategori/<int:pk>",
         views.deletecategoryViews,
         name="deletecategory",
     ),

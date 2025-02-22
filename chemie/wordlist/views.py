@@ -159,8 +159,7 @@ def ordListe(request):
         for i in alle_ord_2:
             alle_ord.remove(i)
 
-    for i in alle_ord:
-        i[0].explanations = i[0].explanations[:25] + "..."
+    
 
     obj_per_page = 30  # Show 30 words per page.
     if len(alle_ord) < obj_per_page:
@@ -363,28 +362,17 @@ def adminWord(request, pk, klassetall):
             instance=ordet[0],
         )
 
-    if request.method == "POST":
-        if ordet[1] == 1 and form.is_valid():
-            verbform_instace = form.save(commit=False)
-            verbform_instace.save()
-
-        if ordet[1] == 2 and form.is_valid():
-            adjectiveform_instace = form.save(commit=False)
-            adjectiveform_instace.save()
-
-        if ordet[1] == 3 and form.is_valid():
-            nounform_instace = form.save(commit=False)
-            nounform_instace.save()
-
-        if ordet[1] == 4 and form.is_valid():
-            wordform_instace = form.save(commit=False)
-            wordform_instace.save()
-
+    if request.method == "POST" and form.is_valid():
+        form_instace = form.save(commit=False)
+        form_instace.save()
+        form.save_m2m()
         return HttpResponseRedirect(
             reverse("wordlist:details", args=[pk, klassetall])
         )
+    
+    
 
-    context = {"form": form}
+    context = {"form": form, "ordet":ordet, "pk":pk, "klassetall":klassetall}
     return render(request, "adminWord.html", context)
 
 
@@ -481,12 +469,20 @@ def createcategoryViews(request):
 def deletecategoryViews(request, pk):
     category_object = get_object_or_404(Category, id=pk)
 
-    category_object.delete()
+    if request.method == "POST":
+        if  "delete" in request.POST:
+            category_object.delete()
 
-    messages.add_message(
-        request,
-        messages.SUCCESS,
-        "Kategorien gikk adundas",
-        extra_tags="Slettet",
-    )
-    return HttpResponseRedirect(reverse("wordlist:admincategory"))
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Kategorien gikk adundas",
+                extra_tags="Slettet",
+            )
+            return HttpResponseRedirect(reverse("wordlist:admincategory"))
+        else:
+            return HttpResponseRedirect(reverse("wordlist:admincategory"))
+        
+    context = {"category_object":category_object}
+
+    return render(request, "makesure.html", context)

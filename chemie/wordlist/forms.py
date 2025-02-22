@@ -13,7 +13,7 @@ class WordInput(forms.ModelForm):
     )
 
     category = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple
+        queryset=Category.objects.all(), required=False, label = "Kategori", widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
@@ -23,18 +23,18 @@ class WordInput(forms.ModelForm):
 
 class NounInput(forms.ModelForm):
     layout = M.Layout(
-        M.Row("explanations"),
-        M.Row("picture"),
-        M.Row("secret"),
-        M.Row("category"),
         M.Row("word"),
         M.Row("definite_singular"),
         M.Row("indefinite_plural"),
         M.Row("definite_plural"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),
     )
 
     category = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple
+        queryset=Category.objects.all(), required=False, label = "Kategori", widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
@@ -53,17 +53,18 @@ class NounInput(forms.ModelForm):
 
 class VerbInput(forms.ModelForm):
     layout = M.Layout(
-        M.Row("explanations"),
-        M.Row("picture"),
-        M.Row("secret"),
-        M.Row("category"),
         M.Row("word"),
         M.Row("present"),
         M.Row("past"),
         M.Row("future"),
+        M.Row("explanations"),
+        M.Row("picture"),
+        M.Row("secret"),
+        M.Row("category"),
+        
     )
     category = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple
+        queryset=Category.objects.all(), required=False, label = "Kategori", widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
@@ -82,16 +83,17 @@ class VerbInput(forms.ModelForm):
 
 class AdjectiveInput(forms.ModelForm):
     layout = M.Layout(
+        M.Row("word"),
+        M.Row("comparative"),
+        M.Row("superlative"),
         M.Row("explanations"),
         M.Row("picture"),
         M.Row("secret"),
         M.Row("category"),
-        M.Row("word"),
-        M.Row("comparative"),
-        M.Row("superlative"),
+        
     )
     category = forms.ModelMultipleChoiceField(
-        queryset=Category.objects.all(), widget=forms.CheckboxSelectMultiple
+        queryset=Category.objects.all(), required=False, label = "Kategori", widget=forms.CheckboxSelectMultiple
     )
 
     class Meta:
