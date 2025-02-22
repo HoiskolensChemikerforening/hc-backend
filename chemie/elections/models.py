@@ -312,7 +312,6 @@ class Election(models.Model):
         Election.objects.create(is_open=True)
         cls.clear_all_checkins()  # sets all RFID-checkins to False (no one has showed up)
 
-
     @classmethod
     def clear_all_checkins(cls):
         # Get all profiles where eligible_for_voting is set to True and set False
@@ -323,13 +322,13 @@ class Election(models.Model):
     @classmethod
     def get_latest_election(cls):
         return cls.objects.latest("id")
-    
+
     @classmethod
-    def delete_last_election(cls): 
-        '''
-        Deletes last election, positions, tickets and candiates 
+    def delete_last_election(cls):
+        """
+        Deletes last election, positions, tickets and candiates
         If there is no last election, does nothing
-        '''
+        """
         try:
             latest_election = cls.get_latest_election()
             latest_election.delete()
@@ -338,7 +337,6 @@ class Election(models.Model):
             Candidate.objects.all().delete()
         except ObjectDoesNotExist:
             pass
-
 
     @classmethod
     def is_redirected(cls):
