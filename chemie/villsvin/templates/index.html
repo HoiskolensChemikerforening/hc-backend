@@ -1,1 +1,52 @@
-<h1>Jeg heter wilhelm</h1>
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load staticfiles %}
+{% load static %}
+
+{% block nav_header %}
+  Komiteer
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Endre medlemmer - {{ committee }}
+{% endblock nav_sub_header %}
+
+{% block header %}
+  <style>
+    span.select2-container {
+      width: inherit !important;
+      display: block;
+    }
+
+    label {
+      display: block;
+    }
+
+    .select2-container--default.select2-container--focus {
+      height: auto;
+    }
+  </style>
+{% endblock header %}
+
+{% block content %}
+
+
+<h5>Villsvinene mine</h5>
+{% for villsvin in Villsvin %}
+
+<div>
+<p>Navn: {{ villsvin.name }}, Alder: {{ villsvin.age }}</p>
+     
+{% for sykdom in villsvin.disease.all %}
+<li>Sykdom: {{ sykdom.disease_name }}, Forventet levealder: {{ sykdom.life_expectancy }}</li>
+{% endfor %}
+
+
+</div>
+{% endfor %}
+
+{% endblock content %}
+
+{% block footer_script %}
+{{ formset.form.media }}
+{% endblock footer_script %}

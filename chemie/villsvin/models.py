@@ -16,7 +16,7 @@ class Villsvin(models.Model):
     def __str__(self):
         return f"{self.name}"
     
-    
+
 
 class Korv(models.Model):
     weight = models.DecimalField(decimal_places=2, max_digits=8)
