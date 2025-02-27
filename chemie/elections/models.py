@@ -332,7 +332,6 @@ class Election(models.Model):
         Position.objects.all().delete()
         Ticket.objects.all().delete()
         Candidate.objects.all().delete()
-        
 
     @classmethod
     def is_redirected(cls):
