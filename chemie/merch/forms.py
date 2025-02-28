@@ -1,7 +1,7 @@
 from dataclasses import fields
 from django import forms
 from .models import Merch, MerchCategory
-import material as M
+import chemie.custommaterial as M
 from dal import autocomplete
 
 
