@@ -23,6 +23,14 @@ ARRIVAL_STATUS = Choices(
     ("TRUANT", 3, "Ikke møtt"),
 )
 
+ANSWER_TYPES = Choices(
+    ("BOOL", 0, "Kryss av"), 
+    ("TEXT", 1, "Skriv"), 
+    ("DATE", 2, "Dato"), 
+    ("INT", 3, "Tall"), 
+
+)
+
 
 class BaseEvent(models.Model):
     # Name of the event
