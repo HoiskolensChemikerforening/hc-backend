@@ -14,15 +14,15 @@
 
 
 {% block content %}
+<div>
+    <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %} 
+        {%form form=form%}
+        
+        {% endform %}
+        <input class="btn" type='submit' value='Lagre form'/>
+    </form>
+</div>
 
-<form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %} 
-    {% for field in form %}
-
-    {{field}}
-    
-    {% endfor %}
-    <input class="btn" type='submit' value='Opprett Faktura!'/>
-</form>
 
 
 

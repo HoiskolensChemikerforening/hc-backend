@@ -13,8 +13,8 @@ def index(request):
 def createVillsvin(request):
     form = VillsvinForm()
 
-    # context = {"form":form}
-    context = {}
+    context = {"form":form}
+    
 
     return render(request, "villsvinform.html", context)
 
