@@ -1,0 +1,37 @@
+{% load thumbnail %}
+<style>
+  #social, #bedpres {
+    border-radius: 0 0 8px 8px;
+ }
+
+  #frontpage_event_header {
+    border-radius: 8px 8px 0 0;
+  }
+
+  p {
+    margin: 0;
+    color: var(--card-text);
+  }
+
+  p.colhov {
+    -o-transition: .2s;
+    -moz-transition: .2s;
+    -webkit-transition: .2s;
+   transition: .2s;
+  }
+
+  a:hover p.colhov {
+    color: var(--extra-color)
+  }
+ </style>
+
+
+{% for event in object_list|slice:":5" %}
+  <a href="{{ event.get_absolute_url }}">
+    <p class="flow-text truncate" style="font-weight: normal; font-size: 1.34rem;">
+      {{ event.title }}
+    </p>
+    <p class="flow-text truncate colhov" style="font-weight: normal; font-size: 1rem;">{{ event.register_startdate|date:"j F - H:i" }}</p>
+  </a>
+  <hr>
+{% endfor %}

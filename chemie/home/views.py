@@ -29,7 +29,7 @@ from .forms import (
     ApprovedTermsForm,
 )
 from .models import OfficeApplication
-
+from itertools import chain
 
 def index(request):
     all_social = Social.objects.filter(
@@ -38,6 +38,9 @@ def index(request):
     all_bedpres = Bedpres.objects.filter(
         date__gt=timezone.now(), published=True
     ).order_by("date")
+    all_events_by_register = sorted(
+        chain(all_social, all_bedpres), key=lambda event: event.register_startdate
+    )
     all_posts = Article.objects.filter(published=True).order_by(
         "-published_date"
     )[:4]
@@ -50,6 +53,7 @@ def index(request):
         "posts": all_posts,
         "coffee": coffee,
         "latest_podcast": latest_podcast_url,
+        "all_events": all_events_by_register
     }
     return render(request, "chemie/index.html", context)
 

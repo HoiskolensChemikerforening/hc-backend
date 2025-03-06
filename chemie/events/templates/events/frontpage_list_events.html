@@ -18,9 +18,9 @@
   </a>
 </div>
 <div id="paamelding" class="col s12 card" style="background-color: var(--card-bg)">
-  {% include 'events/frontpage_events.html' with object_list=bedpres %}
-  <a href="{% url "events:index_bedpres" %}">
-    <p class="colhov center-align" style="font-size: 1rem; justify-content: center;"> <br>  </p>
+  {% include 'events/frontpage_upcoming.html' with object_list=all_events %}
+  <a href="#">
+    <p class="colhov center-align" style="font-size: 1rem; justify-content: center;"> <br> </p>
     <p class="center-align"><i class="material-icons" style="color: var(--extra-color);">arrow_forward</i></p>
   </a>
 </div>
