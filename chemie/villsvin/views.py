@@ -13,6 +13,13 @@ def index(request):
 def createVillsvin(request):
     form = VillsvinForm()
 
+    if request.POST:
+        if form.isvalid():
+            form_instance = 
+
+
+
+
     context = {"form":form}
     
 

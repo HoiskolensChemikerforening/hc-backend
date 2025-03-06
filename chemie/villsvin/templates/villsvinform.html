@@ -1,7 +1,6 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
-{% load staticfiles %}
-{% load static %}
+
 
 {% block nav_header %}
   Villsvin
@@ -15,7 +14,8 @@
 
 {% block content %}
 <div>
-    <form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %} 
+    <form class="new_object" enctype="multipart/form-data" method='POST'>
+        {% csrf_token %} 
         {%form form=form%}
         
         {% endform %}

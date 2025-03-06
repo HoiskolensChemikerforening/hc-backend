@@ -11,4 +11,4 @@ class VillsvinForm(forms.ModelForm):
 
     class Meta:
         model = Villsvin
-        fields = ["name", "age", "disease"]
+        fields = ["name", "age"]
