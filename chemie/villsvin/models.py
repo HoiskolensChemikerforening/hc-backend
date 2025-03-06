@@ -11,7 +11,7 @@ class Sykdom(models.Model):
 class Villsvin(models.Model):
     name = models.CharField(max_length=30)
     age = models.PositiveSmallIntegerField()
-    disease = models.ManyToManyField(Sykdom)
+    disease = models.ManyToManyField(Sykdom, required = False)
 
     def __str__(self):
         return f"{self.name}"

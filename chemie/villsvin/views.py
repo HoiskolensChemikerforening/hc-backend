@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from .models import Villsvin, Sykdom
 from .forms import VillsvinForm
+from django.contrib import messages
 
 def index(request):
     a = Villsvin.objects.all()
@@ -12,11 +13,20 @@ def index(request):
 
 def createVillsvin(request):
     form = VillsvinForm()
+    print(0)
+    if request.method == "POST":
+        print(1)
+        if form.is_valid():
+            print(2)
+            form_instance = form.save(commit=False)
+            form_instance.save()
+            form.save_m2m()
 
-    if request.POST:
-        if form.isvalid():
-            form_instance = 
-
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Villsvin er lagret",
+            )
 
 
 
