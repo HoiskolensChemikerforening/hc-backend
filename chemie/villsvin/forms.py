@@ -1,5 +1,5 @@
 from django import forms
-from .models import Villsvin
+from .models import Villsvin, Sykdom
 from crispy_forms.layout import Layout
 
 # layout = M.Layout(
@@ -10,5 +10,5 @@ from crispy_forms.layout import Layout
 class VillsvinForm(forms.ModelForm):
 
     class Meta:
-        model = Villsvin
-        fields = ["name", "age"]
+        model = Sykdom
+        fields = ["disease_name", "life_expectancy"]

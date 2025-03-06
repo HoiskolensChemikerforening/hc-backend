@@ -15,7 +15,13 @@ def createVillsvin(request):
     form = VillsvinForm()
     print(0)
     if request.method == "POST":
+        form = VillsvinForm(data = request.POST)
         print(1)
+        print(form)
+        print("#"*40)
+        print(request.POST)
+        print("#"*40)
+        print(form.errors)
         if form.is_valid():
             print(2)
             form_instance = form.save(commit=False)
