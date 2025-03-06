@@ -1,0 +1,43 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% load staticfiles %}
+{% load static %}
+
+{% block nav_header %}
+  Villsvin
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Lag en instanse av villsvin
+{% endblock nav_sub_header %}
+
+
+
+{% block content %}
+
+<form class="new_object" enctype="multipart/form-data" method='POST'>{% csrf_token %} 
+    {% for field in form %}
+
+    {{field}}
+    
+    {% endfor %}
+    <input class="btn" type='submit' value='Opprett Faktura!'/>
+</form>
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+{% block footer_script %}
+{{ formset.form.media }}
+{% endblock footer_script %}
