@@ -42,7 +42,7 @@
 /* Heading in main block */
 .heading {
   /* margin-top: 0rem;
-  color: var(--main-header-text);          
+  color: var(--main-header-text);  */        
   background: var(--gradient-text);         /*Fjern etter jubileum*/ 
   -webkit-background-clip: text;            /*Fjern etter jubileum*/ 
   -webkit-text-fill-color: transparent;     /*Fjern etter jubileum*/ 
@@ -91,8 +91,17 @@ nav {
 }
 
 footer.page-footer {
-  background-color: var(--footer-bg);
+  /* background-color: var(--footer-bg); */
+  background-color: var(--top-header-bg); /*Fjern etter jubileum*/ 
 }
+
+
+footer * { /*Fjern etter jubileum*/ 
+  background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 
 /* Color when hover above buttons */
 .btn:hover,
