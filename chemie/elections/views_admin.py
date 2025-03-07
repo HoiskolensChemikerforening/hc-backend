@@ -247,7 +247,7 @@ def admin_results(request, pk):
     position.calculate_candidate_votes()
     blank_votes = position.get_blank_votes()
     number_of_voters = position.get_number_of_voters()
-    total_votes = position.get_total_votes()
+    total_votes = position.get_total_votes() #with blank votes
     number_of_tickets = position.get_number_of_tickets()
     context = {
         "position": position,

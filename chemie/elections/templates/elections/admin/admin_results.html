@@ -60,7 +60,7 @@
         <th>Avgitte stemmer</th>
         <th>Antall stemmer</th>
         <th>Prosent med blanke stemmer</th>
-        <th>Prosent uten blanke stemmer</th>
+        <th>Prosent uten blanke stemmer (Simpelt)</th>
       </tr>
       {% for candidate in candidates %}
       <tr>
@@ -101,6 +101,30 @@
   </div>
   <br>
   <a class="btn btn-secondary" href="{% url "elections:admin_register_positions" %}">Tilbake</a>
+</div>
+
+<div class = "div-container">
+  <div class="justify-content-center d-flex">
+    <div class="p-2" style="width:60%; border-style:solid; border-radius: 1rem; border-color:#343a40">
+      <h5 style="margin:0.7rem">Informasjon om valg: </h5>
+      
+        <li><b>Simpelt flertall: </b> Det alternativet som oppnår flest stemmer i en avstemning. Blanke stemmer teller ikke.</li>
+
+        <li><b>Alminnelig flertall:</b> Det alternativet som oppnår flest stemmer og får mer enn 50% av avgitte stemmer. Blanke stemmer teller. </li>
+        
+        <li><b>Kvalifisert flertall:</b> Et kvalifisert flertall oppnås ved 2/3 av de avgitte stemmer. Blanke stemmer teller. </li>
+
+        
+        <li><b>Personvalg:</b>
+          <ul>
+            <li>Dersom noen kommer inn i salen under personvalg, kan de ikke scannes inn.</li>
+            <li>Styreverv må velges inn med alminnelig flertall, øvrige med simpelt flertall. </li>
+          </ul>
+        </li>  
+        
+        
+    </div>
+  </div>
 </div>
 
 {% endblock content %}
