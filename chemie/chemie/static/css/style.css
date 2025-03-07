@@ -26,19 +26,28 @@
 
   /* Text color on hoover */
   --extra-text: #fff;
+
+  --gradient-text: linear-gradient(45deg, #f6df90, #ddab06, #f6df90); /* skal ut*/
 }
 
 /* Headers above main block */
 #heading,
 #subheading {
-  color: var(--top-header-text);
+  /*color: var(--top-header-text); */ /* Denne er eneste som skal være igjen*/
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Heading in main block */
 .heading {
-  margin-top: 0rem;
-  color: var(--main-header-text);
-  text-shadow: 1px 1px 0px #000; /*Fjern etter jubileum*/
+  /* margin-top: 0rem;
+  color: var(--main-header-text);          
+  background: var(--gradient-text);         /*Fjern etter jubileum*/ 
+  -webkit-background-clip: text;            /*Fjern etter jubileum*/ 
+  -webkit-text-fill-color: transparent;     /*Fjern etter jubileum*/ 
+  mix-blend-mode: multiply;                 /*Fjern etter jubileum*/ 
+  filter: drop-shadow(1px 1px 1px black); /*Fjern etter jubileum*/ 
 }
 
 main {
