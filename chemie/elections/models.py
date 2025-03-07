@@ -308,8 +308,9 @@ class Election(models.Model):
 
     @classmethod
     def create_new_election(cls):
+        cls.delete_past_elections()
         Election.objects.create(is_open=True)
-        cls.clear_all_checkins()  # setter alle RFID-checkins til False (ingen har møtt opp enda)
+        cls.clear_all_checkins()  # sets all RFID-checkins to False (no one has showed up)
 
     @classmethod
     def clear_all_checkins(cls):
@@ -321,6 +322,16 @@ class Election(models.Model):
     @classmethod
     def get_latest_election(cls):
         return cls.objects.latest("id")
+
+    @classmethod
+    def delete_past_elections(cls):
+        """
+        Deletes past elections, positions, tickets and candiates
+        """
+        Election.objects.all().delete()
+        Position.objects.all().delete()
+        Ticket.objects.all().delete()
+        Candidate.objects.all().delete()
 
     @classmethod
     def is_redirected(cls):
