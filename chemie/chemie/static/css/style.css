@@ -9,13 +9,13 @@
   --card-bg: #fff;
 
   /* Main area header and background colors */
-  --main-header-text: #0b3954;
+  --main-header-text: #f9cf00 /*#0b3954*/; /*Fjern etter jubileum*/
   --background: #fafafa;
 
   /* Top nav colors */
-  --top-header-text: #fff;
-  --top-header-bg: #0b3954;
-
+  --top-header-text: #f9cf00 /*#fff*/; /*Fjern etter jubileum*/
+  --top-header-bg: #000 /*#0b3954*/; /*Fjern etter jubileum*/
+   
   --footer-bg: #0b3954;
 
   /* Hoover */
@@ -38,6 +38,7 @@
 .heading {
   margin-top: 0rem;
   color: var(--main-header-text);
+  text-shadow: 1px 1px 0px #000; /*Fjern etter jubileum*/
 }
 
 main {
