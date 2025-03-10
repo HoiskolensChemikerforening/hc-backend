@@ -29,6 +29,30 @@
                 <input class="cake-input" id="powdered_sugar" name="powdered_sugar" value=0 type="number" min="0">
             </div>
             <div class="col s12 m12 l12">
+                <span style="margin-top: 20px;"> </span>
+            </div>
+            <div class="col s12 m12 l12">
+                <span style="margin-top: 20px;"> <p>Ekstra ingredienser: </p></span>
+            </div>
+            <div class="col s12 m4 l4">
+                <label for="flour">Bakepulver [g]</label>
+                <input class="cake-input" id="baking_powder" name="baking_powder" value=0 type="number" min="0">
+                <label for="flour">Gulrot [g]</label>
+                <input class="cake-input" id="carrot" name="carrot" value=0 type="number" min="0">
+            </div>
+            <div class="col s12 m4 l4">
+                <label for="flour">Kakaopulver [g]</label>
+                <input class="cake-input" id="cocoa_powder" name="cocoa_powder" value=0 type="number" min="0">
+                <label for="flour">Epler [g]</label>
+                <input class="cake-input" id="apple" name="apple" value=0 type="number" min="0">
+            </div>
+            <div class="col s12 m4 l4">
+                <label for="powdered_sugar">Vaniljesukker [g]</label>
+                <input class="cake-input" id="vanilla_sugar" name="vanilla_sugar" value=0 type="number" min="0">
+                <label for="flour">Kokesjokolade [g]</label>
+                <input class="cake-input" id="chocolate" name="chocolate" value=0 type="number" min="0">
+            </div>
+            <div class="col s12 m12 l12">
                 <span style="margin-top: 20px;"> <p id="total-cake-price"> <b>Kakepris: </b> 0 kr</p> </span>
             </div>
         </div>
@@ -45,12 +69,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const cakeFactors = {
-    "milk": 2.3,
-    "flour": 2/100,
-    "egg": 3,
-    "butter": 7/100,
-    "sugar": 3/100,
-    "powdered_sugar": 4/100
+    "milk": 2.3,             // 2.3 kr per dl melk, egt 2.1
+    "flour": 2/100,          // 2 kr per 100 g mel, egt 1.5
+    "egg": 3,                // 3 kr per egg, egt 3.1
+    "butter": 7/100,         // 7 kr per 100 g smør, egt 11.4
+    "sugar": 3/100,          // 3 kr per 100 g sukker, egt 3.1
+    "powdered_sugar": 4/100 ,// 4 kr per 100 g melis, egt 4.4
+    "baking_powder": 26/250,
+    "cocoa_powder": 50/250, 
+    "vanilla_sugar": 23/125,
+    "apple": 40/1000,        // 40 kr per kg epler, 
+    "carrot": 30/750, 
+    "chocolate": 19/200 ,  // 19 kr per 200 g kokesjokolade, 
 };
 
 const cakeprice = document.getElementById("total-cake-price");
