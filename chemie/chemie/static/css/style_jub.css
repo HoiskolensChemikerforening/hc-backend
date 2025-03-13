@@ -9,13 +9,13 @@
   --card-bg: #fff;
 
   /* Main area header and background colors */
-  --main-header-text: #0b3954;
+  --main-header-text: #f9cf00 /*#0b3954*/; /*Fjern etter jubileum*/
   --background: #fafafa;
 
   /* Top nav colors */
-  --top-header-text: #fff;
-  --top-header-bg: #0b3954;
-
+  --top-header-text: #f9cf00 /*#fff*/; /*Fjern etter jubileum*/
+  --top-header-bg: #000 /*#0b3954*/; /*Fjern etter jubileum*/
+   
   --footer-bg: #0b3954;
 
   /* Hoover */
@@ -26,18 +26,28 @@
 
   /* Text color on hoover */
   --extra-text: #fff;
+
+  --gradient-text: linear-gradient(45deg, #f6df90, #ddab06, #f6df90); /* skal ut*/
 }
 
 /* Headers above main block */
 #heading,
 #subheading {
-  color: var(--top-header-text);
+  /*color: var(--top-header-text); */ /* Denne er eneste som skal være igjen*/
+  background: var(--gradient-text);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
 /* Heading in main block */
 .heading {
-  margin-top: 0rem;
-  color: var(--main-header-text);
+  /* margin-top: 0rem;
+  color: var(--main-header-text);  */        
+  background: var(--gradient-text);         /*Fjern etter jubileum*/ 
+  -webkit-background-clip: text;            /*Fjern etter jubileum*/ 
+  -webkit-text-fill-color: transparent;     /*Fjern etter jubileum*/ 
+  mix-blend-mode: multiply;                 /*Fjern etter jubileum*/ 
+  filter: drop-shadow(1px 1px 1px black); /*Fjern etter jubileum*/ 
 }
 
 main {
@@ -81,8 +91,17 @@ nav {
 }
 
 footer.page-footer {
-  background-color: var(--footer-bg);
+  /* background-color: var(--footer-bg); */
+  background-color: var(--top-header-bg); /*Fjern etter jubileum*/ 
 }
+
+
+footer * { /*Fjern etter jubileum*/ 
+  background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
 
 /* Color when hover above buttons */
 .btn:hover,
