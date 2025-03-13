@@ -19,10 +19,8 @@
 </div>
 <div id="paamelding" class="col s12 card" style="background-color: var(--card-bg)">
   {% include 'events/frontpage_upcoming.html' with object_list=all_events %}
-  <a href="#">
     <p class="colhov center-align" style="font-size: 1rem; justify-content: center;"> <br> </p>
-    <p class="center-align"><i class="material-icons" style="color: var(--extra-color);">arrow_forward</i></p>
-  </a>
+    <p class="center-align"> <br> </p>
 </div>
 
 <script>
@@ -31,15 +29,24 @@ document.addEventListener('DOMContentLoaded', function () {
   var instance = M.Tabs.init(elems);
 
   let tabs = document.querySelectorAll(".tabs a"); // Get all tab links
-  let index = 0; // Start from the first tab
 
   function switchTabs() {
-    index = (index + 1) % tabs.length; // Cycle through tabs
-    let tabId = tabs[index].getAttribute("href"); // Get tab ID
-    let instance = M.Tabs.getInstance(elems[0]); // Get tabs instance
-    instance.select(tabId.substring(1)); // Switch to the tab (remove # from ID)
+    // Find the currently active tab
+    let activeTab = document.querySelector('.tabs .active');
+    let currentIndex = Array.from(tabs).indexOf(activeTab);
+
+    // Calculate the next tab index
+    let nextIndex = (currentIndex + 1) % tabs.length;
+
+    // Get the tab ID of the next tab
+    let nextTabId = tabs[nextIndex].getAttribute("href").substring(1);
+
+    // Switch to the next tab
+    let instance = M.Tabs.getInstance(elems[0]);
+    instance.select(nextTabId);
   }
 
-  setInterval(switchTabs, 10000); // Switch every 5 seconds
+  setInterval(switchTabs, 15000); // Switch every 20 seconds
 });
+
 </script>
