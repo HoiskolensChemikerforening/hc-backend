@@ -1,16 +1,14 @@
 from django import forms
 from .models import Villsvin, Sykdom
-from crispy_forms.layout import Layout, Row
-import material as M
+from crispy_forms.layout import Layout
 
-
+# layout = M.Layout(
+#         M.Row("name"),
+#         M.Row("age"),
+#         M.Row("disease"),
+#     )
 class VillsvinForm(forms.ModelForm):
 
-    layout = M.Layout(
-         M.Row("name"),
-         M.Row("age"),
-         M.Row("disease"),
-    )
     class Meta:
-        model = Villsvin
-        fields = ["name", "age", "disease"]
+        model = Sykdom
+        fields = ["disease_name", "life_expectancy"]

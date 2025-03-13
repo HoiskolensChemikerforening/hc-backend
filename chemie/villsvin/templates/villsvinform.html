@@ -1,0 +1,43 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+
+{% block nav_header %}
+  Villsvin
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Lag en instanse av villsvin
+{% endblock nav_sub_header %}
+
+
+
+{% block content %}
+<div>
+    <form class="new_object" enctype="multipart/form-data" method='POST'>
+        {% csrf_token %} 
+        {%form form=form%}
+        
+        {% endform %}
+        <input class="btn" type='submit' value='Lagre form'/>
+    </form>
+</div>
+
+
+
+
+
+
+
+
+
+{% endblock content %}
+
+
+
+
+
+
+{% block footer_script %}
+{{ formset.form.media }}
+{% endblock footer_script %}
