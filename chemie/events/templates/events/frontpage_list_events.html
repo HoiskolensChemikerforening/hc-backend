@@ -31,22 +31,19 @@ document.addEventListener('DOMContentLoaded', function () {
   let tabs = document.querySelectorAll(".tabs a"); // Get all tab links
 
   function switchTabs() {
-    // Find the currently active tab
     let activeTab = document.querySelector('.tabs .active');
     let currentIndex = Array.from(tabs).indexOf(activeTab);
-
-    // Calculate the next tab index
     let nextIndex = (currentIndex + 1) % tabs.length;
-
-    // Get the tab ID of the next tab
     let nextTabId = tabs[nextIndex].getAttribute("href").substring(1);
 
-    // Switch to the next tab
+    // Switch tab without scrolling
     let instance = M.Tabs.getInstance(elems[0]);
     instance.select(nextTabId);
+
+    // Prevent scroll to active tab
+    window.scrollTo(0, 0);
   }
 
-  setInterval(switchTabs, 15000); // Switch every 20 seconds
+  setInterval(switchTabs, 15000); // Switch every 15 seconds
 });
-
 </script>
