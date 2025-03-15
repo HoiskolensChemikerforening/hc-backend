@@ -41,11 +41,11 @@
       {% for merch in merchs %}
         <div class="col s12 m6 l4">
             <a href={%url "merch:detail" pk=merch.id %}>
-            <div class="card" style ="height: 390px">
+            <div class="card small">
               <!-- Showing the pictures. -->
               <div class="card-image">
-                  {% thumbnail merch.image "9999x9999" upscale=False quality=60 crop="center" as im %}
-                  <img style="height:250px;"src="{{ im.url }}">
+                  {% thumbnail merch.image "630x400" quality=60 crop="center" as im %}
+                  <img src="{{ im.url }}">
                 {% endthumbnail %}
               </div>
               <!-- The box under each picture -->
@@ -117,6 +117,7 @@ $(function(){
               //do something with 'response'
              }
             });
-    });
+    })});
 </script>
+
 {% endblock footer_script %}
