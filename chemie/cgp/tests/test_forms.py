@@ -18,9 +18,6 @@ class TestForms(TestCase):
         form = GroupForm(
             self.cgp,
             None,
-            data={
-                "real_name": "hehe",
-                "country": self.country.id,
-            },
+            data={"real_name": "hehe", "country": self.country.id},
         )
         self.assertTrue(form.is_valid())
