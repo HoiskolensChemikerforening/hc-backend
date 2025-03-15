@@ -11,6 +11,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+{% load thumbnail %}
 
     <div>
         <form enctype="multipart/form-data" method='POST'>
@@ -43,7 +44,9 @@
             <div class="card" style ="height: 390px">
               <!-- Showing the pictures. -->
               <div class="card-image">
-                  <img src="{{merch.image.url}}" alt="img" style="height:250px; object-fit: cover;"}>
+                  {% thumbnail merch.image "9999x9999" upscale=False quality=60 crop="center" as im %}
+                  <img style="height:250px;"src="{{ im.url }}">
+                {% endthumbnail %}
               </div>
               <!-- The box under each picture -->
               <div class="card-content" style="">
