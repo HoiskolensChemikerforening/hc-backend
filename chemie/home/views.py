@@ -39,10 +39,12 @@ def index(request):
     all_bedpres = Bedpres.objects.filter(
         date__gt=timezone.now(), published=True
     ).order_by("date")
+
     all_events_by_register = sorted(
-        chain(all_social, all_bedpres),
+        chain(all_social.filter(register_startdate__gt=timezone.now()), all_bedpres.filter(register_startdate__gt=timezone.now())),
         key=lambda event: event.register_startdate,
     )
+
     all_posts = Article.objects.filter(published=True).order_by(
         "-published_date"
     )[:4]
