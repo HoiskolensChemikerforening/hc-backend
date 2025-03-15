@@ -27,7 +27,6 @@ def createRecipes(request):
         print("#"*40)
         print(form.errors)
 
-
         if form.is_valid():
             print(2)
             form_instace = form.save(commit=False)
@@ -39,6 +38,5 @@ def createRecipes(request):
                 "MatOppskrift er lagret",
             )
 
-
     context = {"form":form}
-    return render(request, "index3.html", context) #sjekke etterpå
+    return render(request, "form.html", context) #sjekke etterpå

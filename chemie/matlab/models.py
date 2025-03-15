@@ -6,7 +6,7 @@ class Ingredients(models.Model):
     quantity = models.PositiveSmallIntegerField()
     unit = models.CharField(max_length=100)
 
-
+    
     def __str__(self):
         return f"{self.name}"
 
@@ -16,7 +16,6 @@ class Recipes(models.Model):
     price = models.PositiveSmallIntegerField()
     time = models.PositiveSmallIntegerField()
     ingredients = models.ManyToManyField(Ingredients, blank = True)
-
 
     def __str__(self):
         return f"{self.name}"

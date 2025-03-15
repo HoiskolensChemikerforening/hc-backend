@@ -1,0 +1,30 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+<!--Main page-->
+{% block nav_header %}
+  MatLab
+{% endblock nav_header %}
+
+
+{% block nav_sub_header %}
+Finn en oppskrift!
+{% endblock nav_sub_header %}
+
+
+
+
+{% block content %}
+<h4>Våre Oppskrifter</h4>
+{% for oppskrift in Recipes %}
+<div>
+    {{oppskrift.name}}, {{oppskrift.price}}, {{oppskrift.time}}
+</div>
+
+
+{% endfor %}
+
+
+{% endblock content %}
+

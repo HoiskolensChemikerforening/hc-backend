@@ -1,0 +1,33 @@
+{% extends 'chemie/base.html' %}
+{% load thumbnail %}
+{% load static %}
+
+<!--Main page-->
+{% block nav_header %}
+  MatLab
+{% endblock nav_header %}
+
+
+{% block nav_sub_header %}
+Veien til en god middag
+{% endblock nav_sub_header %}
+
+
+
+
+{% block content %}
+<h4>Hvordan lage retten</h4>
+{% for oppskrift in Recipes %}
+<div>
+    {{oppskrift.name}}, {{oppskrift.price}}, {{oppskrift.time}}
+    {% for ingredient in oppskrift.ingredients.all %}
+    <li>{{ingredient.name}}; {{ingredient.quantity}} {{ingredient.unit}}</li>
+{% endfor %}
+</div>
+
+
+{% endfor %}
+
+
+{% endblock content %}
+

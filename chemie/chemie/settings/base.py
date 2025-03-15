@@ -101,6 +101,7 @@ LOCAL_APPS = [
     "chemie.merch",
     "chemie.electofood",
     "chemie.exchangepage",
+    "chemie.matlab",
     "chemie.refund",
 ]
 

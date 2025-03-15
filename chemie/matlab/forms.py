@@ -5,4 +5,4 @@ from crispy_forms.layout import Layout
 class RecipesForm(forms.ModelForm):
     class Meta:
         model = Ingredients
-        fields = ["Name"]
+        fields = ["name"]
