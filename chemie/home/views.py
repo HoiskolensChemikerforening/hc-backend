@@ -42,8 +42,8 @@ def index(request):
 
     all_events_by_register = sorted(
         chain(
-            all_social.filter(register_startdate__gt=timezone.now()),
-            all_bedpres.filter(register_startdate__gt=timezone.now()),
+            all_social.filter(register_startdate__gt=timezone.now(), sluts__gt=0),
+            all_bedpres.filter(register_startdate__gt=timezone.now(), sluts__gt=0),
         ),
         key=lambda event: event.register_startdate,
     )
