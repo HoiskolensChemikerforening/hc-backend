@@ -1,6 +1,7 @@
 <ul id="frontpage_event_header" class="tabs tabs-fixed-width card" style="background-color: var(--card-bg);">
-  <li class="tab col s3"><a href="#social">Sosialt</a></li>
-  <li class="tab col s3"><a href="#bedpres">Karriere</a></li>
+  <li class="tab col s4 m4 l4"><a href="#social" style="background-color: var(--card-bg);padding: 0px; width: 100%;">Sosialt</a></li>
+  <li class="tab col s4 m4 l4"><a href="#bedpres"style="background-color: var(--card-bg);padding: 0px; width: 100%;">Karriere</a></li>
+  <li class="tab col s4 m4 l4"><a href="#paamelding"style="background-color: var(--card-bg);padding: 0px; width: 100%;">Påmelding</a></li>
 </ul>
 <div id="social" class="col s12 card" style="background-color: var(--card-bg)">
   {% include 'events/frontpage_events.html' with object_list=social %}
@@ -15,4 +16,9 @@
     <p class="colhov center-align" style="font-size: 1rem; justify-content: center;">Alle karriere arrangementer</p>
     <p class="center-align"><i class="material-icons" style="color: var(--extra-color);">arrow_forward</i></p>
   </a>
+</div>
+<div id="paamelding" class="col s12 card" style="background-color: var(--card-bg)">
+  {% include 'events/frontpage_upcoming.html' with object_list=all_events %}
+    <p class="colhov center-align" style="font-size: 1rem; justify-content: center;"> <br> </p>
+    <p class="center-align"> <br> </p>
 </div>
