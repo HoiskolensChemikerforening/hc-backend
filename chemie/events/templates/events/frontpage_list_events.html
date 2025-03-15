@@ -1,7 +1,7 @@
-<ul id="frontpage_event_header" class="tabs tabs-fixed-width card" style="background-color: var(--card-bg);">
-  <li class="tab col s4 m4 l4"><a href="#social">Sosialt</a></li>
-  <li class="tab col s4 m4 l4"><a href="#bedpres">Karriere</a></li>
-  <li class="tab col s4 m4 l4"><a href="#paamelding"> Påmelding</a></li>
+<ul id="frontpage_event_header" class="tabs tabs-fixed-width card" style="background-color: var(--card-bg)">
+  <li class="tab col s4 m4 l4"><a href="#social" style="background-color: var(--card-bg);padding: 0px; width: 100%;">Sosialt</a></li>
+  <li class="tab col s4 m4 l4"><a href="#bedpres"style="background-color: var(--card-bg);padding: 0px; width: 100%;">Karriere</a></li>
+  <li class="tab col s4 m4 l4"><a href="#paamelding"style="background-color: var(--card-bg);padding: 0px; width: 100%;">Påmelding</a></li>
 </ul>
 <div id="social" class="col s12 card" style="background-color: var(--card-bg)">
   {% include 'events/frontpage_events.html' with object_list=social %}
@@ -22,28 +22,3 @@
     <p class="colhov center-align" style="font-size: 1rem; justify-content: center;"> <br> </p>
     <p class="center-align"> <br> </p>
 </div>
-
-<script>
-document.addEventListener('DOMContentLoaded', function () {
-  var elems = document.querySelectorAll('.tabs');
-  var instance = M.Tabs.init(elems);
-
-  let tabs = document.querySelectorAll(".tabs a"); // Get all tab links
-
-  function switchTabs() {
-    let activeTab = document.querySelector('.tabs .active');
-    let currentIndex = Array.from(tabs).indexOf(activeTab);
-    let nextIndex = (currentIndex + 1) % tabs.length;
-    let nextTabId = tabs[nextIndex].getAttribute("href").substring(1);
-
-    // Switch tab without scrolling
-    let instance = M.Tabs.getInstance(elems[0]);
-    instance.select(nextTabId);
-
-    // Prevent scroll to active tab
-    window.scrollTo(0, 0);
-  }
-
-  setInterval(switchTabs, 15000); // Switch every 15 seconds
-});
-</script>
