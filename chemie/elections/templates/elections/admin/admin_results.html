@@ -28,6 +28,17 @@
     <table class="table" style="margin-bottom: 3rem">
       <tr>
         <th></th>
+        <th>Totalt</th>
+        <th>Har stemt</th>
+      </tr>
+      <tr>
+        <td>Personer i salen</td>
+        <td>{{ checkin_count }}</td>
+        <td>{{ total_voters }}</td>
+      </tr>
+
+      <tr>
+        <th></th>
         <th>Stemmesedler</th>
         <th>Stemmer</th>
       </tr>
@@ -80,8 +91,9 @@
           <p id="voting_percentage-{{ candidate.id }}"></p>
           <script type="text/javascript">
             var votes = parseInt("{{ candidate.votes }}");
+            var checkin_count = parseInt("{{ checkin_count }}");
             var preVotes = parseInt("{{ candidate.pre_votes }}");
-            var percentage_with_blank = (100 * (votes + preVotes) / total_votes).toFixed(2);
+            var percentage_with_blank = (100 * (votes + preVotes) / checkin_count).toFixed(2);
             document.getElementById("voting_percentage-{{candidate.id}}").innerHTML = percentage_with_blank + " %";
           </script>
         </td>
@@ -97,6 +109,24 @@
         </td>
       </tr>
       {% endfor %}
+      <tr>
+        <td>Blanke stemmer</td>
+        <td>
+        </td>
+        <td>
+        </td>
+        <td>{{ position.get_blank_votes }}</td>
+        <td>
+          <p id="blank_votes_percentage"></p>
+          <script type="text/javascript">
+            var blank = parseInt("{{ blank_votes }}");
+            var total = parseInt("{{ total_votes }}");
+            var percentage_blank = (100 * (blank/total)).toFixed(2);
+            document.getElementById("blank_votes_percentage").innerHTML = percentage_blank + "%";
+          </script>
+        </td>
+
+      </tr>
     </table>
   </div>
   <br>
