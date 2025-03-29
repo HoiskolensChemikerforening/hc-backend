@@ -6,6 +6,8 @@ from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet
 from django.contrib import messages
 from chemie.customprofile.models import SPECIALIZATION, Medal
 from django.utils import timezone
+from .serializer import QuestionsSerializer, ExperienceSerializer, TravelletterSerializer
+from rest_framework import generics
 
 
 @login_required()
@@ -410,3 +412,15 @@ def displayIndividualLetter(request, pk):
 
     return render(request, "exchangepage/detail.html", context)
 
+# API
+class displayIndividualLetterAPI(generics.ListAPIView):
+    queryset = Experience.objects.all()
+    serializer_class = ExperienceSerializer
+
+class createTravelletterAPI(generics.ListCreateAPIView):
+    queryset = Travelletter.objects.all()
+    serializer_class = TravelletterSerializer
+
+class createQuestionAPI(generics.ListCreateAPIView):
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer

@@ -18,5 +18,10 @@ urlpatterns = [path("", views.index, name="index"),
                path("admin/slettreisebrev/<int:pk>", views.deleteTravelletter, name="deletetravelletter"),
                path("admin/slettspørsmål/<int:pk>", views.deleteExperienceViews, name="deleteexperience"),
                path("admin/slettbilder/<int:pk>", views.deleteImages, name="deleteimages"),
-               path("<str:city_name>/", views.cityPageViews, name="citypage")]
+               path("<str:city_name>/", views.cityPageViews, name="citypage"),
+               # API
+               path("api/travelletter/<int:pk>/", views.displayIndividualLetterAPI.as_view(), name="apidetail"),
+               path("api/opprett/", views.createTravelletterAPI.as_view(), name="create"),
+               path("api/opprettspørsmål/", views.createQuestionAPI.as_view(), name="create"),
+]
 
