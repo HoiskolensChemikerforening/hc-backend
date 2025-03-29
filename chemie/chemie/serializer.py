@@ -2,7 +2,7 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import pictures_for_404, Sponsor
 from chemie.customprofile.serializers import UserSerializer
-
+from django.contrib.flatpages.models import FlatPage
 
 class pictures_for_404Serializer(serializers.ModelSerializer):
     class Meta:
@@ -15,4 +15,9 @@ class SponsorSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Sponsor
+        fields = "__all__"
+
+class flatpageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = FlatPage
         fields = "__all__"

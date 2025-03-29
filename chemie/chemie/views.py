@@ -4,8 +4,8 @@ from django.shortcuts import render
 from rest_framework import generics
 
 from .models import pictures_for_404, Sponsor
-from .serializer import pictures_for_404Serializer, SponsorSerializer
-
+from .serializer import pictures_for_404Serializer, SponsorSerializer, flatpageSerializer
+from django.contrib.flatpages.models import FlatPage
 
 def page_not_found(request, exception):
     img_404 = pictures_for_404.objects.all()
@@ -37,3 +37,7 @@ class pictures_for_404Detail(generics.RetrieveUpdateDestroyAPIView):
 class SponsorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sponsor.objects.all()
     serializer_class = SponsorSerializer
+
+class FlatpageDetail(generics.ListAPIView):
+    queryset = FlatPage.objects.all()
+    serializer_class = flatpageSerializer

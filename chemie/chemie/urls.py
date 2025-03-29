@@ -94,8 +94,9 @@ urlpatterns += [
         include(
             ("django.contrib.flatpages.urls", "flatpages"),
             namespace="flatpages",
-        ),
-    )
+        )
+    ),
+    path("api/s/", views.FlatpageDetail.as_view(), name="flatpageapi"),
 ]
 
 if settings.DEBUG:
