@@ -38,6 +38,15 @@ class SponsorDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = Sponsor.objects.all()
     serializer_class = SponsorSerializer
 
-class FlatpageDetail(generics.ListAPIView):
+class FlatpageAll(generics.ListAPIView):
     queryset = FlatPage.objects.all()
     serializer_class = flatpageSerializer
+class FlatpageDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = FlatPage.objects.all()
+    serializer_class = flatpageSerializer
+
+    def get_object(self):
+        """Retrieve a flatpage using the `url` field"""
+        url_string = "/" + self.kwargs["st"].strip("/") + "/"  # Ensure correct format
+
+        return FlatPage.objects.get(url=url_string)

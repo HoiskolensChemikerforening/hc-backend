@@ -96,7 +96,8 @@ urlpatterns += [
             namespace="flatpages",
         )
     ),
-    path("api/s/", views.FlatpageDetail.as_view(), name="flatpageapi"),
+    path("api/s/", views.FlatpageAll.as_view(), name="flatpageapi"),
+    path("api/s/<path:st>/", views.FlatpageDetail.as_view(), name="flatpageapi"),
 ]
 
 if settings.DEBUG:
