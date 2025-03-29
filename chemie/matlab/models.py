@@ -1,10 +1,21 @@
 from django.db import models
+from extended_choices import Choices
 
+ALLERGIES = Choices(
+    ("FIRST", 1, "Egg"),
+    ("SECOND", 2, "Gluten"),
+    ("THIRD", 3, "Peanøtt"),
+    ("FOURTH", 4, "Valnøtt"),
+    ("FIFTH", 5, "Andre nøtter"),
+    ("SIXTH", 6, "Melk/Laktose"),
+    ("SEVENTH", 7, "Skalldyr"),
+    ("EIGHT", 8, "Soya"),
+)
 
 class Ingredients(models.Model):
     name = models.CharField(max_length=100)
-    quantity = models.PositiveSmallIntegerField() #1kg løk og 1stk løk vil være to ingredienser... løk er jo løk
-    unit = models.CharField(max_length=100)
+    #quantity = models.PositiveSmallIntegerField() #1kg løk og 1stk løk vil være to ingredienser... løk er jo løk
+    #unit = models.CharField(max_length=100)
 
     
     def __str__(self):
@@ -12,7 +23,7 @@ class Ingredients(models.Model):
 
 class Kategori(models.Model):
     name = models.CharField(max_length=100)
-    
+
     def __str__(self):
         return f"{self.name}"
 
@@ -21,6 +32,7 @@ class Recipes(models.Model):
     price = models.PositiveSmallIntegerField()
     time = models.PositiveSmallIntegerField()
     ingredients = models.ManyToManyField(Ingredients, blank = True)
+    ingredient_quantity = models.CharField(max_length=30, blank=True)
     categories = models.ManyToManyField(Kategori, blank=True)
 
     def __str__(self):
