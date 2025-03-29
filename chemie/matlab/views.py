@@ -2,8 +2,9 @@ from django.shortcuts import render
 from .models import Recipes, Ingredients
 from .forms import RecipesForm
 from django.contrib import messages
+from django.contrib.auth.decorators import permission_required, login_required
 
-
+@login_required
 def index(request):
     a = Recipes.objects.all()
     b = Ingredients.objects.all()
@@ -14,7 +15,7 @@ def index(request):
 
     return render(request, "index.html", context)
 
-
+@login_required
 def createRecipes(request):
     form = RecipesForm()
     print(0)

@@ -1,5 +1,9 @@
-{% extends "events/social/social_base.html" %}
+{% extends "chemie/base.html" %}
 {% load material_form %}
+
+{% block nav_header %}
+  Oppskrift
+{% endblock nav_header %}
 
 {% block nav_sub_header %}
   Opprett
@@ -11,28 +15,27 @@
   </script>
 {% endblock %}
 
+{% block content %}
 {# Breadcrumbs #}
 {% block breadcrumbs %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "events:index_social" %}" class="breadcrumb">Sosiale arrangementer</a>
-    <a href="{% url "events:create_social" %}" class="breadcrumb">Opprett</a>
+    <a href="{% url "events:index_social" %}" class="breadcrumb">Matlab</a>
+    <a href="{% url "events:create_social" %}" class="breadcrumb">Opprett oppskrift</a>
   </div>
 {% endblock %}
 
-{# Main block #}
-{% block maincontent %}
 
 <div class="card">
   <form method="POST" enctype="multipart/form-data">{% csrf_token %}
     <div class="card-content">
-      {% form form=form %}
+      {% form form=lageoppskrift %}
       {% endform %}
       <div class="card-action">
         <div class="right-align">
-          <input class="btn btn-primary pull-right" type='submit' value='Lagre arrangementet!'/>
+          <input class="btn btn-primary pull-right" type='submit' value='Lagre oppskrift!'/>
         </div>
       </div>
     </div>
   </form>
 </div>
-{% endblock maincontent %}
+{% endblock content %}
