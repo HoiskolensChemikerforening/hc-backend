@@ -6,4 +6,4 @@ app_name = "matlab"
 
 
 urlpatterns = [path("", views.index, name="index"),
-               path("form/", views.createRecipes, name = "form")]
+               path("lageoppskrift/", views.createRecipes, name = "lageoppskrift")]

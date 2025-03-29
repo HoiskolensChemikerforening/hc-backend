@@ -38,5 +38,5 @@ def createRecipes(request):
                 "MatOppskrift er lagret",
             )
 
-    context = {"form":form}
-    return render(request, "form.html", context) #sjekke etterpå
+    context = {"lageoppskrift":form}
+    return render(request, "lageoppskrift.html", context) #sjekke etterpå
