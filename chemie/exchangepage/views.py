@@ -412,15 +412,23 @@ def displayIndividualLetter(request, pk):
 
     return render(request, "exchangepage/detail.html", context)
 
+
 # API
 class displayIndividualLetterAPI(generics.ListAPIView):
     queryset = Experience.objects.all()
     serializer_class = ExperienceSerializer
 
+
 class createTravelletterAPI(generics.ListCreateAPIView):
     queryset = Travelletter.objects.all()
     serializer_class = TravelletterSerializer
 
+
 class createQuestionAPI(generics.ListCreateAPIView):
     queryset = Questions.objects.all()
     serializer_class = QuestionsSerializer
+
+
+class adminAPI(generics.ListAPIView):
+    queryset = Travelletter.objects.all()
+    serializer_class = TravelletterSerializer

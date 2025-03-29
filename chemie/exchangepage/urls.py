@@ -21,7 +21,8 @@ urlpatterns = [path("", views.index, name="index"),
                path("<str:city_name>/", views.cityPageViews, name="citypage"),
                # API
                path("api/travelletter/<int:pk>/", views.displayIndividualLetterAPI.as_view(), name="apidetail"),
-               path("api/opprett/", views.createTravelletterAPI.as_view(), name="create"),
-               path("api/opprettspørsmål/", views.createQuestionAPI.as_view(), name="create"),
+               path("api/opprett/", views.createTravelletterAPI.as_view(), name="apicreate"),
+               path("api/opprettspørsmål/", views.createQuestionAPI.as_view(), name="apicreatequestion"),
+               path("api/admin/", views.adminAPI.as_view(), name="apiadmin")
 ]
 
