@@ -103,6 +103,122 @@
   </div>
 
 
+  <!-- April Fools -->
+  <style>
+
+    .who-box {
+      display:flex;
+      align-items: center;
+      /*border: solid;*/
+        border-color: #896707;
+        border-width: 2px;
+        border-radius: 4px;
+        padding: 5px;
+        /*background: linear-gradient(0deg, #ffffff, #ffe8a5);*/
+        /*background-color: #f9cf00;*/
+    }
+    
+    .who-text{
+      font-size: 1rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+        letter-spacing: 0;
+    }
+    .who-text-light{
+      font-size: 1rem;
+        margin-bottom: 20px;
+        font-weight: 500;
+        letter-spacing: 0;
+        color:rgba(0, 0, 0, 0.40);
+    }
+
+    .profile-img-container {
+            position: relative;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+            border-radius: 50%;
+            overflow: hidden; /* Ensures the image is cropped into a circle */
+        }
+
+        .profile-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            filter: blur(4px);
+        }
+
+        /* Create a mask to keep the edges crisp while blurring the center */
+        .profile-img-wrapper {
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        .status-wrapper {
+            position: relative;
+            top: 0;
+            left: 0;
+        }
+
+        .online-status {
+            position: absolute;
+            bottom: 0px;
+            right: 0;
+            width: 15px;
+            height: 15px;
+            background-color: rgb(2, 216, 2);
+            border-radius: 50%;
+            border: 2px solid white;
+        }
+    
+    </style>
+    
+  
+    <!-- Permanent Notification Box -->
+     <hr>
+    <div class="who-box">
+      <div>
+      <div class="status-wrapper">
+      <div class="profile-img-container">
+          <!-- Apply the image inside a wrapper to allow masking -->
+          <div class="profile-img-wrapper">
+            {% thumbnail crush.image_primary "50x50" crop="center" as primary %}
+                      <img src="{{ primary.url }}" alt="" id="profileImage" class="profile-img">
+                  {% empty %}
+                      <img src="{% static 'images/blank_avatar.png' %}" alt="" id="profileImage" class="profile-img">
+                  {% endthumbnail %}
+              <!---<img id="profileImage" class="profile-img" src="" alt="Profile">--->
+          </div>
+      </div>
+      <div class="online-status"></div>
+    </div>
+    </div>
+    <div style="padding-left: 1rem;">
+      <span class="who-text" id="likeNotification"></span>
+      <br>
+      <span class="who-text-light">Kjøp HC-gull for å finne ut mer! </span>
+    </div>
+  </div>
+  <hr>
+
+
+  <script>
+      $(document).ready(function () {
+          let randomName = "{{crush.user.first_name}}";
+
+          let randomNumber = Math.floor(Math.random() * 10) + 1; // 1 to 10
+
+          let events = ["EtterpHaest","pSillis","Gaukerenn","Baalvors","pSuppikalen", "Åpning av Blotet","Fadderuke"]
+          let i = Math.floor(Math.random() * events.length);
+          let event = events[i];
+
+          //$("#profileImage").attr("src", randomImage);
+          $("#likeNotification").text(`${randomName} og ${randomNumber} andre har søkt deg opp siden ${event}.`);
+      });
+  </script>
+  <!-- End April Fools-->
+
 
 
   <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
@@ -190,6 +306,8 @@
 
     {% endfor %}
   </div>
+                  
+
 
 {% endblock content %}
 
@@ -242,5 +360,29 @@
           $('.dropdown-trigger').dropdown();
           $('.modal').modal();
       });
+
+
+      // April fools
+      //$(document).ready(function(){
+      //      $("#modal-gull").modal('open');
+      //});
+
+
   </script>
+
+<script>
+  $(document).ready(function () {
+      let profiles = ["John Doe", "Jane Smith", "Alexander Hansen", "Emma Johansen", 
+                      "Lucas Nielsen", "Olivia Berg", "William Andersen", "Sofie Eriksen"];
+
+      $("#showToast").click(function () {
+          let randomName = profiles[Math.floor(Math.random() * profiles.length)];
+          let randomNumber = Math.floor(Math.random() * 50) + 1; // 1 to 50
+
+          $("#likeToast").text(`${randomName} og ${randomNumber} andre liker deg. Kjøp HC-gull for å finne ut mer!`);
+          
+          $("#likeToast").fadeIn(400).delay(3000).fadeOut(400);
+      });
+  });
+</script>
 {% endblock %}
