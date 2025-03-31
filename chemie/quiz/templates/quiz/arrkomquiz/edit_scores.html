@@ -12,7 +12,7 @@
 {% block content %}
   <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
     <a href="{% url "quiz:index" %}" class="breadcrumb">Quiz</a>
-    <a href="{% url "quiz:kjellerquiz_index" %}" class="breadcrumb">Kjellerquiz</a>
+    <a href="{% url "quiz:arrkomquiz" %}" class="breadcrumb">Arrkomquiz</a>
     <a href="{% url "quiz:term_detail" term.pk %}" class="breadcrumb">{{ term }}</a>
     <a href="{% url "quiz:create_score" term.pk %}" class="breadcrumb">Rediger</a>
     <a class="breadcrumb">Endre poeng</a>
@@ -25,7 +25,7 @@
     <br>
     <hr>
     <form class="form" method="POST">{% csrf_token %}
-      <table class="striped responsive-table">
+      <table class="striped table">
         <thead>
         <tr>
           <th>Plass</th>

@@ -3,9 +3,10 @@
   Aktiver bokskap
 {% endblock nav_header %}
 {% load material_form %}
-{% load static %}
+
 
 {% block content %}
+{% load static %}
   <div class="row">
     <div class="col s12 s12 m10">
       <div class="card">
@@ -14,7 +15,7 @@
             <div class="row">
               <div class="col">
                 <p class="flow-text">Reglene for bruk av bokskap må bekreftes av deg før det blir reservert. <br>
-                  <a href="{% static 'lockers/reglement.pdf' %}">Her</a> kan du lese reglementet.
+                  <a href="{% static "lockers/reglement.pdf" %}">Her</a> kan du lese reglementet.
                 </p>
               </div>
             </div>

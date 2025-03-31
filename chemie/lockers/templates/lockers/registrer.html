@@ -10,7 +10,9 @@
 
 {% load material_form %}
 {% block content %}
-  {% load staticfiles %}
+{% load static %}
+
+
 
   <div class="container">
     <div class="row">
@@ -18,6 +20,9 @@
 
       <h5>Vennligst gjør følgende når du registrer et bokskap:</h5>
       <ol>
+        
+        
+        <li>Les <a href="{% static "lockers/reglement.pdf" %}" >bokskapreglementet</a></li>
         <li>Gå til
           <a target="_blank" href="https://bit.ly/32EIusw"> U2 under Kjemivrimle</a>
           og lokaliser et skap som står ledig</li>

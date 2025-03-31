@@ -11,7 +11,7 @@ urlpatterns = [
     path("periode-detaljer/api/<int:pk>", views.QuizScoreDetail.as_view()),
     path("navnequiz", views.name_quiz_index, name="name_quiz_index"),
     path("navnequiz/<int:year>", views.name_quiz, name="name_quiz"),
-    path("kjellerquiz", views.kjellerquiz_index, name="kjellerquiz_index"),
+    path("arrkomquiz", views.arrkom_index, name="arrkomquiz_index"),
     path("ny", views.create_term, name="create_term"),
     path("<int:pk>/slett", views.delete_term, name="delete_term"),
     path(
