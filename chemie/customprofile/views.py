@@ -349,7 +349,7 @@ def yearbook(request, year=1, spec=1):
 
     # April Fools
     crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
-    #crush = Profile.objects.filter(user__last_name="Groening").first()
+    # crush = Profile.objects.filter(user__last_name="Groening").first()
 
     context = {
         "profiles": profiles,
@@ -359,7 +359,7 @@ def yearbook(request, year=1, spec=1):
         "endYearForm": endYearForm,
         "end_years": end_years,
         "spec": SPECIALIZATION,
-        "crush": crush, # April fools
+        "crush": crush,  # April fools
     }
 
     return render(request, "customprofile/yearbook.html", context)
