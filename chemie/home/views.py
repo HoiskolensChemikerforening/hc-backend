@@ -102,7 +102,7 @@ def contact(request):
             request, "chemie/contact.html", {"form": contact_submission}
         )
 
-
+@login_required()
 def calendar(request):
     return render(request, "chemie/calendar.html")
 

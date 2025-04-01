@@ -77,7 +77,7 @@ urlpatterns = [
 
 # Bedpres
 urlpatterns += [
-    path("bedpres/", views.ListBedpresView.as_view(), name="index_bedpres"),
+    path("bedpres/", login_required(views.ListBedpresView.as_view()), name="index_bedpres"),
     path(
         "bedpres/tidligere/",
         views.ListPastBedpresView.as_view(),
