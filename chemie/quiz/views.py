@@ -38,6 +38,7 @@ def name_quiz(request, year=1):
     return render(request, "quiz/name_quiz/name_quiz.html", context)
 
 
+@login_required
 def arrkom_index(request):
     try:
         active_term = QuizTerm.objects.get(is_active=True)
