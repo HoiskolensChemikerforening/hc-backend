@@ -84,7 +84,7 @@ urlpatterns += [
     ),
     path(
         "bedpres/tidligere/",
-        views.ListPastBedpresView.as_view(),
+        login_required(views.ListPastBedpresView.as_view()),
         name="past_bedpres",
     ),
     path(
