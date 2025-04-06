@@ -287,6 +287,7 @@ class UserToken(models.Model):
 
 
 class RegisterPageStatus(models.Model):
+    name = models.CharField(max_length=100, default="Registreringsside")
     is_active = models.BooleanField(default=False)
 
     def save(self, *args, **kwargs):

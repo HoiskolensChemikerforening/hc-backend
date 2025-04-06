@@ -100,7 +100,7 @@ class UserAdmin(BuiltinUserAdmin):
 
 @admin.register(RegisterPageStatus)
 class RegisterPageStatusAdmin(admin.ModelAdmin):
-    list_display = ["is_active"]
+    list_display = ["name", "is_active"]
 
     def has_add_permission(self, request):
         if RegisterPageStatus.objects.exists():
