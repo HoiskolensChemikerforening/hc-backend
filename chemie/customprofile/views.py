@@ -47,7 +47,7 @@ from .models import (
     Medal,
     MEMBERSHIP_DURATIONS,
     SPECIALIZATION,
-    RegisterPageStatus
+    RegisterPageStatus,
 )
 from .serializers import (
     MedalSerializer,
@@ -59,7 +59,9 @@ from .serializers import (
 def register_user(request):
     page_status = RegisterPageStatus.objects.first()
     if not page_status or not page_status.is_active:
-        return render(request, "customprofile/registration_disabled.html", status=403)
+        return render(
+            request, "customprofile/registration_disabled.html", status=403
+        )
 
     user_core_form = RegisterUserForm(request.POST or None)
     user_profile_form = RegisterProfileForm(
