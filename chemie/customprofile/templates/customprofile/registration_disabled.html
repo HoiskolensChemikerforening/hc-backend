@@ -1,5 +1,27 @@
 {% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Bruker
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Registrasjon
+{% endblock nav_sub_header %}
+
 {% block content %}
-<h2>Registrering er for øyeblikket deaktivert</h2>
-<p>Ta kontakt med administrator om du mener dette er en feil.</p>
+
+
+
+    <div class="row">
+        <h3>Registrering er for øyeblikket deaktivert</h3>
+        <div class="col s12 m12 l8" style="margin-bottom: 150px" > <!---size of the layout--->
+            <div class="container" style="margin-bottom: 40px;">
+                <div class="col-12 col-md-6" style="margin-bottom: 40px;">
+                    <p class="flow-text">
+                       <p>Ta kontakt med <a href="mailto:webkom@hc.ntnu.no"> Webkomiteen </a> om du mener dette er en feil.</p>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}
