@@ -55,6 +55,7 @@ from .serializers import (
 )
 
 
+@login_required
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
     user_profile_form = RegisterProfileForm(
