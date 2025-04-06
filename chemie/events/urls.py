@@ -79,12 +79,12 @@ urlpatterns = [
 urlpatterns += [
     path(
         "bedpres/",
-        login_required(views.ListBedpresView.as_view()),
+        views.ListBedpresView.as_view(),
         name="index_bedpres",
     ),
     path(
         "bedpres/tidligere/",
-        login_required(views.ListPastBedpresView.as_view()),
+        views.ListPastBedpresView.as_view(),
         name="past_bedpres",
     ),
     path(

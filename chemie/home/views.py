@@ -103,7 +103,6 @@ def contact(request):
         )
 
 
-@login_required()
 def calendar(request):
     return render(request, "chemie/calendar.html")
 
