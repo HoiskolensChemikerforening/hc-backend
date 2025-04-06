@@ -6,7 +6,7 @@ from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 
-from .models import Profile, Medal
+from .models import Profile, Medal, RegisterPageStatus
 
 
 def export_csv(modeladmin, request, queryset):
@@ -96,6 +96,11 @@ class UserAdmin(BuiltinUserAdmin):
     )
     inlines = [UserInline]
     actions = [export_csv]
+
+
+@admin.register(RegisterPageStatus)
+class RegisterPageStatusAdmin(admin.ModelAdmin):
+    list_display = ["is_active"]
 
 
 admin.site.unregister(User)

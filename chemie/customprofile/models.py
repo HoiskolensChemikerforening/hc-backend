@@ -284,3 +284,10 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
+
+
+class RegisterPageStatus(models.Model):
+    is_active = models.BooleanField(default=False)
+
+    def __str__(self):
+        return "Registration Page Status"
