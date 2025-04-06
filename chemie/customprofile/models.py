@@ -289,5 +289,10 @@ class UserToken(models.Model):
 class RegisterPageStatus(models.Model):
     is_active = models.BooleanField(default=False)
 
+    def save(self, *args, **kwargs):
+        if RegisterPageStatus.objects.exists() and not self.pk:
+            raise Exception("Only one Register page status instance is allowed.")
+        return super(RegisterPageStatus,self).save(*args, *kwargs)
+
     def __str__(self):
         return "Registration Page Status"
