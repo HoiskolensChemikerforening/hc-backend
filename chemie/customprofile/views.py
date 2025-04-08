@@ -56,6 +56,7 @@ from .serializers import (
 )
 
 
+@login_required
 def register_user(request):
     page_status = RegisterPageStatus.objects.first()
     if not page_status or not page_status.is_active:
