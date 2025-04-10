@@ -37,7 +37,7 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "valentines"; // Change this to select the holiday you want
+const chosenHoliday = "pauloween"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 const maxElements = 70; // Maximum number of elements
