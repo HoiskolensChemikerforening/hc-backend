@@ -1,17 +1,9 @@
 from django import forms
-from .models import Recipes, Ingredients, KATEGORIER, ALLERGIES
+from .models import Recipes, KATEGORIER, ALLERGIES
 from crispy_forms.layout import Layout
 from django.core.validators import ValidationError
 import material as M
 
-class IngredientForm(forms.ModelForm):
-     class Meta:
-        model = Ingredients
-        abstract = True
-        fields = ["name"]
-
-class RegisterIngredientForm(IngredientForm):
-    layout = M.Layout(M.Row("name"))
 
 class RecipesForm(forms.ModelForm):
     allowed_allergies = forms.MultipleChoiceField(
@@ -22,10 +14,10 @@ class RecipesForm(forms.ModelForm):
     def clean_allowed_allergies(self):
         try:
             allergies = self.cleaned_data.get("allowed_allergies")
-            allergies = [int(allergies) for allergie in allergies]
+            allergies = [int(allergi) for allergi in allergies]
             # Next line checks whether the integers in "grades" corresponds to a choice in GRADES,
             # if not, an exception occurs
-            _ = [ALLERGIES.values[int(allergies)] for allergie in allergies]
+            _ = [ALLERGIES.values[int(allergi)] for allergi in allergies]
             return allergies
         except (ValueError, KeyError):
             self.add_error(
@@ -46,10 +38,10 @@ class RecipesForm(forms.ModelForm):
     def clean_categories(self):
         try:
             categories = self.cleaned_data.get("categories")
-            categories = [int(categories) for categorie in categories]
+            categories = [int(kategori) for kategori in categories]
             # Next line checks whether the integers in "grades" corresponds to a choice in GRADES,
             # if not, an exception occurs
-            _ = [KATEGORIER.values[int(categories)] for categorie in categories]
+            _ = [KATEGORIER.values[int(kategori)] for kategori in categories]
             return categories
         except (ValueError, KeyError):
             self.add_error(
@@ -62,25 +54,18 @@ class RecipesForm(forms.ModelForm):
                     }
                 ),
             )
-    ingredients = forms.ModelMultipleChoiceField(
-            queryset=Ingredients.objects.all(),
-            widget=forms.SelectMultiple(),
-            required=True,
-            label='Ingredients',
-        )
+
     class Meta:
         model = Recipes
-        abstract = True
         fields = ["title",
             "ingredients",
-            "ingredient_quantity",
             "description",
             "expected_price",
             "portions",
             "time",
             "image",
             "categories",
-            "allowed_allergies",
+            "allowed_allergies"
             ]
         
 class RegisterRecipiesForm(RecipesForm):
@@ -88,7 +73,6 @@ class RegisterRecipiesForm(RecipesForm):
         M.Row("title"),
         M.Row(
              M.Column("ingredients"),
-             M.Column("ingredient_quantity")
         ),
         M.Row("description"),
         M.Row(

@@ -3,9 +3,10 @@ from extended_choices import Choices
 from sorl.thumbnail import ImageField
 from django.contrib.auth.models import User
 from django.contrib.postgres.fields import ArrayField
+from ckeditor.fields import RichTextField
 
 ALLERGIES = Choices(
-    ("FIRST", 1, "Egg"),
+    ("NONE", 1, "Ingen"),
     ("SECOND", 2, "Gluten"),
     ("THIRD", 3, "Peanøtt"),
     ("FOURTH", 4, "Valnøtt"),
@@ -13,25 +14,29 @@ ALLERGIES = Choices(
     ("SIXTH", 6, "Melk/Laktose"),
     ("SEVENTH", 7, "Skalldyr"),
     ("EIGHT", 8, "Soya"),
+    ("NINE", 9, "Egg"),
 )
 
 KATEGORIER = Choices(
-    ("FIRST", 1, "Vegetar"),
-    ("SECOND", 2, "Dessert"),
-    ("THIRD", 3, "Kjøtt"),
-    ("FOURTH", 4, "Vegansk"),
-    ("FIFTH", 5, "Fisk & Skalldyr"),
-    ("SIXTH", 6, "Pasta & Ris"),
-    ("SEVENTH", 7, "Suppe"),
-    ("EIGHT", 8, "Salater"),
+    ("NONE", 1, "Ingen"),
+    ("TO", 2, "Dessert"),
+    ("TRE", 3, "Kjøtt"),
+    ("FIRE", 4, "Vegansk"),
+    ("FEM", 5, "Fisk & Skalldyr"),
+    ("SEKS", 6, "Pasta & Ris"),
+    ("SJU", 7, "Suppe"),
+    ("ATTE", 8, "Salater"),
+     ("NI", 9, "Vegetar"),
 )
 
-class Ingredients(models.Model):
-    name = models.CharField(max_length=100)
-    #quantity = models.PositiveSmallIntegerField() #1kg løk og 1stk løk vil være to ingredienser... løk er jo løk
-    #unit = models.CharField(max_length=100)
-    def __str__(self):
-        return f"{self.name}"
+def get_defaul_category():
+    return [1]
+
+def get_verbose_allergy():
+    return "Allergier"
+
+def get_verbose_categories():
+    return "Kategorier"
 
 class Recipes(models.Model):
     title = models.CharField(
@@ -48,10 +53,8 @@ class Recipes(models.Model):
         blank=True,
         default=""  # Tom streng som standardverdi
     )
-    ingredients = models.ManyToManyField(
-        Ingredients,
-        blank=True,
-        verbose_name="Ingredienser",
+    ingredients = RichTextField(
+        verbose_name="Ingredienser", config_name="exchangepage"
     )
     ingredient_quantity = models.CharField(
         max_length=30,
@@ -60,9 +63,9 @@ class Recipes(models.Model):
         default=""  # Tom streng som standardverdi
     )
     categories = ArrayField(
-        models.CharField(choices=KATEGORIER, max_length=100),
-        verbose_name="Kategorier",
-        default=list  # Setter en tom liste som standardverdi
+        models.PositiveSmallIntegerField(choices=KATEGORIER),
+        verbose_name= get_verbose_categories,
+        default=get_defaul_category  # Setter en tom liste som standardverdi
     )
     image = ImageField(
         upload_to="matlab",
@@ -71,9 +74,9 @@ class Recipes(models.Model):
         null=True  # Tillater at bildet ikke er påkrevd
     )
     allowed_allergies = ArrayField(
-        models.CharField(choices=ALLERGIES, max_length=100),
-        verbose_name="Allergier",
-        default=list  # Setter en tom liste som standardverdi
+        models.PositiveSmallIntegerField(choices=ALLERGIES),
+        verbose_name=get_verbose_allergy,
+        default=get_defaul_category # Setter en tom liste som standardverdi
     )
     expected_price = models.PositiveSmallIntegerField(
         verbose_name="Antatt pris",
@@ -87,7 +90,8 @@ class Recipes(models.Model):
         User,
         related_name="recipes_author",
         on_delete=models.CASCADE,
-        default=""
+        blank=True,
+        default=None
     )
 
     def __str__(self):

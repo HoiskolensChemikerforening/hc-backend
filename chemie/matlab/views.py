@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Recipes, Ingredients
+from .models import Recipes
 from .forms import RecipesForm
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required, login_required
@@ -7,10 +7,10 @@ from django.contrib.auth.decorators import permission_required, login_required
 @login_required
 def index(request):
     a = Recipes.objects.all()
-    b = Ingredients.objects.all()
+    
 
 
-    context = {"Recipes": a, "Ingredients": b}
+    context = {"Recipes": a,}
 
 
     return render(request, "index.html", context)
@@ -29,10 +29,11 @@ def createRecipes(request):
         print(form.errors)
 
         if form.is_valid():
+            print(format)
             print(2)
             form_instace = form.save(commit=False)
+            form_instace.author = request.user
             form_instace.save()
-            form.save_m2m()
             messages.add_message(
                 request,
                 messages.SUCCESS,
