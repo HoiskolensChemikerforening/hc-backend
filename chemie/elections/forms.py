@@ -1,4 +1,4 @@
-import material as M
+import chemie.custommaterial as M
 from dal import autocomplete
 from django import forms
 from django.core.exceptions import ValidationError

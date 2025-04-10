@@ -3,7 +3,7 @@ from django.contrib.admin.filters import ChoicesFieldListFilter
 from django.contrib.auth.admin import UserAdmin as BuiltinUserAdmin
 from django.contrib.auth.forms import UserChangeForm as OldUserChangeForm
 from django.contrib.auth.models import User
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.core.exceptions import ObjectDoesNotExist
 
 from .models import Profile, Medal, RegisterPageStatus
