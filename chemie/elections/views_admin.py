@@ -247,7 +247,7 @@ def admin_results(request, pk):
     position.calculate_candidate_votes()
     blank_votes = position.get_blank_votes()
     number_of_voters = position.get_number_of_voters()
-    total_votes = position.get_total_votes() #with blank votes
+    total_votes = position.get_total_votes()  # with blank votes
     number_of_tickets = position.get_number_of_tickets()
     checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
     total_voters = election.current_position.get_number_of_voters()
@@ -260,7 +260,6 @@ def admin_results(request, pk):
         "number_of_tickets": number_of_tickets,
         "checkin_count": checkin_count,
         "total_voters": total_voters,
-
     }
     return render(request, "elections/admin/admin_results.html", context)
 
