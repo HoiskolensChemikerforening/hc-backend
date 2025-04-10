@@ -55,6 +55,7 @@ from .serializers import (
 )
 
 
+@login_required
 def register_user(request):
     user_core_form = RegisterUserForm(request.POST or None)
     user_profile_form = RegisterProfileForm(
@@ -347,6 +348,10 @@ def yearbook(request, year=1, spec=1):
                 .prefetch_related("medals")
             )
 
+    # April Fools
+    crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
+    # crush = Profile.objects.filter(user__last_name="Groening").first()
+
     context = {
         "profiles": profiles,
         "grades": GRADES,
@@ -355,6 +360,7 @@ def yearbook(request, year=1, spec=1):
         "endYearForm": endYearForm,
         "end_years": end_years,
         "spec": SPECIALIZATION,
+        "crush": crush,  # April fools
     }
 
     return render(request, "customprofile/yearbook.html", context)

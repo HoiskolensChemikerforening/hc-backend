@@ -11,6 +11,7 @@
 {% endblock nav_sub_header %}
 
 {% block content %}
+{% load thumbnail %}
 
     <div>
         <form enctype="multipart/form-data" method='POST'>
@@ -40,10 +41,12 @@
       {% for merch in merchs %}
         <div class="col s12 m6 l4">
             <a href={%url "merch:detail" pk=merch.id %}>
-            <div class="card" style ="height: 390px">
+            <div class="card small">
               <!-- Showing the pictures. -->
               <div class="card-image">
-                  <img src="{{merch.image.url}}" alt="img" style="height:250px; object-fit: cover;"}>
+                  {% thumbnail merch.image "630x400" quality=60 crop="center" as im %}
+                  <img src="{{ im.url }}">
+                {% endthumbnail %}
               </div>
               <!-- The box under each picture -->
               <div class="card-content" style="">
@@ -114,6 +117,7 @@ $(function(){
               //do something with 'response'
              }
             });
-    });
+    })});
 </script>
+
 {% endblock footer_script %}
