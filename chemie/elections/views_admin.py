@@ -222,7 +222,12 @@ def admin_voting_is_active(request, pk):
         return redirect("elections:admin_results", pk=pk)
 
     total_voters = election.current_position.get_number_of_voters()
-    context = {"election": election, "total_voters": total_voters}
+    checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
+    context = {
+        "election": election,
+        "total_voters": total_voters,
+        "checkin_count": checkin_count,
+    }
     return render(request, "elections/admin/admin_voting_active.html", context)
 
 
@@ -242,8 +247,10 @@ def admin_results(request, pk):
     position.calculate_candidate_votes()
     blank_votes = position.get_blank_votes()
     number_of_voters = position.get_number_of_voters()
-    total_votes = position.get_total_votes()
+    total_votes = position.get_total_votes()  # with blank votes
     number_of_tickets = position.get_number_of_tickets()
+    checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
+    total_voters = election.current_position.get_number_of_voters()
     context = {
         "position": position,
         "candidates": position.candidates.all(),
@@ -251,6 +258,8 @@ def admin_results(request, pk):
         "total_votes": total_votes,
         "blank_votes": blank_votes,
         "number_of_tickets": number_of_tickets,
+        "checkin_count": checkin_count,
+        "total_voters": total_voters,
     }
     return render(request, "elections/admin/admin_results.html", context)
 
