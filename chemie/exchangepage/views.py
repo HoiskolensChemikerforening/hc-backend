@@ -6,7 +6,7 @@ from .forms import ExperienceForm, TravelletterForm, QuestionsForm, ImageFormSet
 from django.contrib import messages
 from chemie.customprofile.models import SPECIALIZATION, Medal
 from django.utils import timezone
-from .serializer import QuestionsSerializer, ExperienceSerializer, TravelletterSerializer
+from .serializer import QuestionsSerializer, ExperienceSerializer, TravelletterSerializer, ImageSerializer
 from rest_framework import generics
 
 
@@ -432,3 +432,33 @@ class createQuestionAPI(generics.ListCreateAPIView):
 class adminAPI(generics.ListAPIView):
     queryset = Travelletter.objects.all()
     serializer_class = TravelletterSerializer
+
+
+class adminQuestionViewsAPI(generics.ListAPIView):
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer
+
+
+class adminQuestionDetailViewsAPI(generics.RetrieveUpdateAPIView):
+    queryset = Questions.objects.all()
+    serializer_class = QuestionsSerializer
+
+
+class adminDetailViewsAPI(generics.RetrieveUpdateAPIView):
+    queryset = Travelletter.objects.all()
+    serializer_class = TravelletterSerializer
+
+
+class adminDetailImageViewsAPI(generics.ListCreateAPIView):
+    serializer_class = ImageSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Images.objects.filter(travelletter=pk)
+
+class createImageViewsAPI(generics.CreateAPIView):
+    serializer_class = ImageSerializer
+
+    def get_queryset(self):
+        pk = self.kwargs['pk']
+        return Images.objects.filter(travelletter=pk)
