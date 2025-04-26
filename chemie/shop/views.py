@@ -211,7 +211,7 @@ def index_tabletshop(request):
                         messages.add_message(
                             request,
                             messages.ERROR,
-                            f"{request.user.get_full_name()} sin konto har itj nok HC-coins, kiis. Saldo på konto er {balance} HC-coins",
+                            f"{profile.user.get_full_name()} sin konto har itj nok HC-coins, kiis. Saldo på konto er {balance} HC-coins",
                             extra_tags="Avvist",
                         )
                     else:
