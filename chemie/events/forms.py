@@ -198,12 +198,13 @@ class SocialRegisterUserForm(forms.ModelForm):
     class Meta:
         model = SocialEventRegistration
 
-        fields = ["companion", "sleepover", "night_snack"]
+        fields = ["companion", "sleepover", "night_snack", "can_eat_vegetarian"]
 
     def __init__(self, *args, **kwargs):
         enable_sleepover = kwargs.pop("enable_sleepover", True)
         enable_night_snack = kwargs.pop("enable_night_snack", True)
         enable_companion = kwargs.pop("enable_companion", True)
+        enable_can_eat_vegetarian = kwargs.pop("enable_can_eat_vegetarian", True)
         super(SocialRegisterUserForm, self).__init__(*args, **kwargs)
         if not enable_sleepover:
             self.fields.pop("sleepover")
@@ -211,6 +212,8 @@ class SocialRegisterUserForm(forms.ModelForm):
             self.fields.pop("night_snack")
         if not enable_companion:
             self.fields.pop("companion")
+        if not enable_can_eat_vegetarian:
+            self.fields.pop("can_eat_vegetarian")
 
 
 class BedpresRegisterUserForm(forms.ModelForm):
