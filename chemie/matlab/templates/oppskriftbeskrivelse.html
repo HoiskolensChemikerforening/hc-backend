@@ -1,108 +1,126 @@
 {% extends "chemie/base.html" %}
 {% load material_form %}
+{% load thumbnail %}
 
 {% block nav_header %}
-  {{oppskrift.title}}
+  Oppskrifter
 {% endblock nav_header %}
 
 {% block nav_sub_header %}
-  Beskrivelse av oppskrift
+  Beskrivelse
 {% endblock nav_sub_header %}
 
+
+{% block content %} 
+
 {% block breadcrumbs %}
-  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
-    <a href="{% url "matlab:index" %}" class="breadcrumb">MatLab</a>
-    <a class="breadcrumb">{{ oppskrift.title }}</a>
-  </div>
+<div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "matlab:index" %}" class="breadcrumb">Matlab</a>
+    <a href="{% url "matlab:oppskriftbeskrivelse" oppskrift.pk %}" class="breadcrumb">Oppskriftsbeskrivelse</a>
+</div>
 {% endblock %}
 
-{% block maincontent %}
-  
+
 <div class="row">
-<p class="col s12 m12 l12">
-<h1 class="heading">{{ oppskrift.title }}</h1>
+    <div class="col s12 m12 l12">
+        <h1 class="heading">{{ oppskrift.title }}</h1>
+    </div>
 </div>
 
-<!--
 <div class="row">
     <div class="col l7 m12">
-        {% thumbnail oppskrift.image "1600" crop="center" as im %}
-        <img class="responsive-img materialboxed" src="{{ im.url }}">
-        {% endthumbnail %}
-</div>
--->
-<div class="col l5 m12 s12">
-    <div class="card card-event">
-    <div class="card-content">
-
-        <!-- General info -->
-        <!-- General info -->
-        <div class="section">
-            <div class="valign-wrapper">
-                <i class="material-icons valign left">playlist_add_check</i>
-                <h5 class="left-align">informasjon</h5>
-            </div>
-            <div>
-                <p class="left valign"><b>Kategorier:</b></p>
-                <p class="right valign">
-                    {% for cat in oppskrift.categories %}
-                    {{ cat }},
-                    {% endfor %}</p>
-                <p class="left valign"><b>Allergier:</b></p>
-                <p class="right valign">
-                    {% for ally in oppskrift.allowed_allergies %}
-                    {{ ally }},
-                    {% endfor %}</p>
-            </div>
-        </div>
-        <div class="divider"></div>
-
-        <div class="section">
-            <div class="valign-wrapper">
-            <i class="material-icons valign left">access_time</i>
-            <h5 class="left-align">Når</h5>
-            </div>
-            <p>{{oppskrift.time}}</p>
-        </div>
-        <div class="divider"></div>
-        {% if social.committee %}
-            <div class="section">
-            <div class="valign-wrapper">
-                <i class="material-icons valign left">contacts</i>
-                <h5 class="left-align">Porsjoner</h5>
-            </div>
-            <p>{{ oppskrift.portions }}</p>
-            </div>
+        {% if oppskrift.image %}
+            {% thumbnail oppskrift.image "1600" crop="center" as im %}
+                <img class="responsive-img materialboxed" src="{{ im.url }}">
+            {% endthumbnail %}
+        {% else %}
+            <p><i>Ingen bilde tilgjengelig</i></p>
         {% endif %}
-        <div class="section">
-            <div class="valign-wrapper">
-            <i class="material-icons valign left">edit</i>
-            <h5 class="left-align">Forfatter</h5>
+    </div>
+
+
+    <div class="col l5 m12 s12">
+        <div class="card card-event">
+        <div class="card-content">
+
+            <!-- General info -->
+            <!-- General info -->
+            <div class="section">
+                <div class="valign-wrapper">
+                    <i class="material-icons valign left">playlist_add_check</i>
+                    <h5 class="left-align">Informasjon</h5>
+                </div>
+                <div class="column">
+                    <div class="row s6">
+                        <p><b>Kategorier:</b></p>
+                        {% if category_label is NONE %} <!-- Nå er det mulig å velge "Ingen" og "Egg", og da vil den vise NONE-->
+                            <p>Ingen kategori</p>
+                        {% else %}
+                            {% for cat in category_labels %}
+                                <p>{{ cat }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                
+                    <div class="row s6">
+                        <p><b>Allergier:</b></p>
+                        {% if allergy_labels is NONE %}
+                            <p>Ingen vanlig allergi</p>
+                        {% else %}
+                            {% for allergy in allergy_labels %}
+                                <p>{{ allergy }}</p>
+                            {% endfor %}
+                        {% endif %}
+                    </div>
+                </div>
             </div>
-            <p>{{oppskrift.author}}</p>
+            <div class="divider"></div>
+
+            <div class="section">
+                <div class="valign-wrapper">
+                <i class="material-icons valign left">access_time</i>
+                <h5 class="left-align">Forventet Tidsbruk</h5>
+                </div>
+                <p>{{oppskrift.time}} minutter</p>
+            </div>
+            <div class="divider"></div>
+                <div class="section">
+                <div class="valign-wrapper">
+                    <i class="material-icons valign left">contacts</i>
+                    <h5 class="left-align">Porsjoner</h5>
+                </div>
+                <p>{{ oppskrift.portions }}</p>
+            </div>
+            <div class="section">
+                <div class="valign-wrapper">
+                <i class="material-icons valign left">edit</i>
+                <h5 class="left-align">Forfatter</h5>
+                </div>
+                <p>{{oppskrift.author}}</p>
+            </div>
+            <div class="divider"></div>
+
+            <!-- Prices -->
+            <div class="section">
+                <div class="valign-wrapper">
+                <i class="material-icons valign left">attach_money</i>
+                <h5 class="left-align">Forventet Pris</h5>
+                </div>
+                <div>
+                <p class="left valign"><b>{{oppskrift.expected_price}} kr</b></p>   
+                </div>
+                <br>
+
+                <br>
+            </div>
+            <div class="divider"></div>
+                <br>
+            </div>
         </div>
         <div class="divider"></div>
-
-        <!-- Prices -->
-        <div class="section">
-            <div class="valign-wrapper">
-            <i class="material-icons valign left">attach_money</i>
-            <h5 class="left-align">Forventet Pris</h5>
-            </div>
-            <div>
-            <p class="left valign"><b>{{oppskrift.expected_price}} kr</b></p>   
-            </div>
-            <br>
-
-            <br>
-        </div>
-        <div class="divider"></div>
-            <br>
         </div>
     </div>
-    <div class="divider"></div>
     </div>
-</div>
 </div>
 
 <!-- Description info -->
@@ -112,15 +130,15 @@
     <div class="card-content">
         <h5>Ingredienser:</h5>
         <div>
-            <p class="left valign"><b>{% for ingredient in oppskrift.ingredients %}
-                {{ingredient}}
-            </b>
-                {% endfor %}</p>
+            <p class="left valign"><b>
+                {{ oppskrift.ingredients }}
+            </b></p>
             
             <p class="right valign">
-                {% for cat in oppskrift.ingredient_quantity %}
-                {{ cat }},
-                {% endfor %}</p>
+                <p class="right valign">
+                    {{ oppskrift.ingredient_quantity }}
+                </p>
+            </p>
         </div>
     </div>
     </div>
@@ -137,5 +155,4 @@
     </div>
 </div>
 </div>
-        
-{% endblock %}
+{% endblock content %}

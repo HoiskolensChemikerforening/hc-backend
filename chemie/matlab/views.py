@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from .models import Recipes
+from .models import Recipes, ALLERGIES, KATEGORIER
 from .forms import RecipesForm
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required, login_required
@@ -48,5 +48,9 @@ def createRecipes(request):
 @login_required
 def detail(request, pk):
     recipe_object = get_object_or_404(Recipes, id=pk)
-    context = {"oppskrift": recipe_object}
+    allergy_labels = [ALLERGIES.for_value(a)[2] for a in recipe_object.allowed_allergies]
+    catergory_labels = [KATEGORIER.for_value(a)[2] for a in recipe_object.categories]
+    context = {"oppskrift": recipe_object,
+               "allergy_labels": allergy_labels,
+               "catergory_labels": catergory_labels}
     return render(request, "oppskriftbeskrivelse.html", context)
