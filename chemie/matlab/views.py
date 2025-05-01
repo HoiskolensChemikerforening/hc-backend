@@ -3,6 +3,8 @@ from .models import Recipes
 from .forms import RecipesForm
 from django.contrib import messages
 from django.contrib.auth.decorators import permission_required, login_required
+from django.shortcuts import get_object_or_404
+
 
 @login_required
 def index(request):
@@ -42,3 +44,9 @@ def createRecipes(request):
 
     context = {"lageoppskrift":form}
     return render(request, "lageoppskrift.html", context) #sjekke etterpå
+
+@login_required
+def detail(request, pk):
+    recipe_object = get_object_or_404(Recipes, id=pk)
+    context = {"oppskrift": recipe_object}
+    return render(request, "oppskriftbeskrivelse.html", context)

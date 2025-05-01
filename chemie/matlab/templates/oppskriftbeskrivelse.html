@@ -1,0 +1,141 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+  {{oppskrift.title}}
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Beskrivelse av oppskrift
+{% endblock nav_sub_header %}
+
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "matlab:index" %}" class="breadcrumb">MatLab</a>
+    <a class="breadcrumb">{{ oppskrift.title }}</a>
+  </div>
+{% endblock %}
+
+{% block maincontent %}
+  
+<div class="row">
+<p class="col s12 m12 l12">
+<h1 class="heading">{{ oppskrift.title }}</h1>
+</div>
+
+<!--
+<div class="row">
+    <div class="col l7 m12">
+        {% thumbnail oppskrift.image "1600" crop="center" as im %}
+        <img class="responsive-img materialboxed" src="{{ im.url }}">
+        {% endthumbnail %}
+</div>
+-->
+<div class="col l5 m12 s12">
+    <div class="card card-event">
+    <div class="card-content">
+
+        <!-- General info -->
+        <!-- General info -->
+        <div class="section">
+            <div class="valign-wrapper">
+                <i class="material-icons valign left">playlist_add_check</i>
+                <h5 class="left-align">informasjon</h5>
+            </div>
+            <div>
+                <p class="left valign"><b>Kategorier:</b></p>
+                <p class="right valign">
+                    {% for cat in oppskrift.categories %}
+                    {{ cat }},
+                    {% endfor %}</p>
+                <p class="left valign"><b>Allergier:</b></p>
+                <p class="right valign">
+                    {% for ally in oppskrift.allowed_allergies %}
+                    {{ ally }},
+                    {% endfor %}</p>
+            </div>
+        </div>
+        <div class="divider"></div>
+
+        <div class="section">
+            <div class="valign-wrapper">
+            <i class="material-icons valign left">access_time</i>
+            <h5 class="left-align">Når</h5>
+            </div>
+            <p>{{oppskrift.time}}</p>
+        </div>
+        <div class="divider"></div>
+        {% if social.committee %}
+            <div class="section">
+            <div class="valign-wrapper">
+                <i class="material-icons valign left">contacts</i>
+                <h5 class="left-align">Porsjoner</h5>
+            </div>
+            <p>{{ oppskrift.portions }}</p>
+            </div>
+        {% endif %}
+        <div class="section">
+            <div class="valign-wrapper">
+            <i class="material-icons valign left">edit</i>
+            <h5 class="left-align">Forfatter</h5>
+            </div>
+            <p>{{oppskrift.author}}</p>
+        </div>
+        <div class="divider"></div>
+
+        <!-- Prices -->
+        <div class="section">
+            <div class="valign-wrapper">
+            <i class="material-icons valign left">attach_money</i>
+            <h5 class="left-align">Forventet Pris</h5>
+            </div>
+            <div>
+            <p class="left valign"><b>{{oppskrift.expected_price}} kr</b></p>   
+            </div>
+            <br>
+
+            <br>
+        </div>
+        <div class="divider"></div>
+            <br>
+        </div>
+    </div>
+    <div class="divider"></div>
+    </div>
+</div>
+</div>
+
+<!-- Description info -->
+<div class="row">
+<div class="col s12 m12 l12">
+    <div class="card">
+    <div class="card-content">
+        <h5>Ingredienser:</h5>
+        <div>
+            <p class="left valign"><b>{% for ingredient in oppskrift.ingredients %}
+                {{ingredient}}
+            </b>
+                {% endfor %}</p>
+            
+            <p class="right valign">
+                {% for cat in oppskrift.ingredient_quantity %}
+                {{ cat }},
+                {% endfor %}</p>
+        </div>
+    </div>
+    </div>
+</div>
+</div>
+<br>
+<div class="row">
+<div class="col s12 m12 l12">
+    <div class="card">
+    <div class="card-content">
+        <h5>Beskrivelse:</h5>
+        <p class="flow-text"> {{oppskrift.description}} </p>
+    </div>
+    </div>
+</div>
+</div>
+        
+{% endblock %}
