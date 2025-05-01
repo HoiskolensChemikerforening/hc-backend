@@ -54,7 +54,7 @@ class Recipes(models.Model):
         default=""  # Tom streng som standardverdi
     )
     ingredients = RichTextField(
-        verbose_name="Ingredienser", config_name="exchangepage"
+        verbose_name="Ingredienser (X enhet ingrediens, eks 3 ts pepper)", config_name="exchangepage"
     )
     ingredient_quantity = models.CharField(
         max_length=30,
