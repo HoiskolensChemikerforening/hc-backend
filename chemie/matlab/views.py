@@ -22,7 +22,7 @@ def createRecipes(request):
     form = RecipesForm()
     print(0)
     if request.method == "POST":
-        form = RecipesForm(data = request.POST)
+        form = RecipesForm(request.POST, request.FILES)
         print(1)
         print(form)
         print("#"*40)

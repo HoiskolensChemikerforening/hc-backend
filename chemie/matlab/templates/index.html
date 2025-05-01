@@ -20,12 +20,20 @@ Finn en oppskrift!
   <div class="col s12 m7">
     <div class="card">
       <div class="card-image">
-        <img src="https://www.certifiedangusbeef.com/_next/image?url=https%3A%2F%2Fappetizing-cactus-7139e93734.media.strapiapp.com%2FClassic_Smashed_Burger_111c4bfdb7.jpeg&w=3840&q=75">
-        <span class="card-title">{{oppskrift.name}}</span>
+        {% thumbnail oppskrift.image "630x400" crop="center" as im %}
+            <img src="{{ im.url }}">
+            {% empty %}
+            <p>Ikke noe bilde</p>
+          {% endthumbnail %}
+        <p class="flow-text truncate">
+          {{ oppskrift.title }} 
+        </p>
       </div>
       <div class="card-content">
-        <li>Antatt pris: {{oppskrift.price}} kr</li>
+        <li>Antatt pris: {{oppskrift.expected_price}} kr</li>
         <li> Tidsbruk: {{oppskrift.time}} min</li>
+        <li> Porsjoner: {{oppskrift.portions}}</li>
+
       </div>
       <div class="card-action">
         <a href="{% url 'matlab:oppskriftbeskrivelse' %}">Trykk her for å se oppskrift</a>
@@ -34,6 +42,7 @@ Finn en oppskrift!
   </div>
 </div>
   
+
 {% endfor %}
 
 <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
