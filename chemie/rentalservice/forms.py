@@ -1,5 +1,5 @@
 from django import forms
-import material as M
+import chemie.custommaterial as M
 from .models import RentalObject, RentalObjectType, Invoice
 from django.core.exceptions import ValidationError
 
