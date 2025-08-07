@@ -153,12 +153,12 @@ class Profile(models.Model):
         blank=True,
         null=True,
         unique=True,
-        verbose_name="EM nummer (ikke ta med 0 dersom det er første siffer)",
+        verbose_name="ES nummer (ikke ta med 0 dersom det er første siffer)",
     )
 
     image_primary = ImageField(upload_to="avatars", null=True, blank=True)
     image_secondary = ImageField(upload_to="avatars", null=True, blank=True)
-    address = models.CharField(max_length=200, verbose_name="Adresse")
+    address = models.CharField(max_length=200, verbose_name="Adresse (Kan være i eller utenfor Trondheim)")
 
     membership = models.OneToOneField(
         "Membership",
