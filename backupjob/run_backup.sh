@@ -18,8 +18,13 @@ weekly)
     ;;
 monthly)
     echo "Monthly"
-   BACKUP_DIR="monthly"
-   TIME_PREFIX=$(date +%m)
+    BACKUP_DIR="monthly"
+    if (( $(date +%-m) % 2)); then
+        TIME_PREFIX="odd"
+    else 
+        TIME_PREFIX="even"
+    fi
+   #TIME_PREFIX=$(date +%m)
     ;;
 *)
     echo -n "Now"
