@@ -42,11 +42,11 @@ then
     /usr/bin/pg_dump -h database -U $PGUSER -Fc $POSTGRES_DB > $NOW/backup.gz 2>> /var/log/syslog
     DBFILE=$REMOTE_BACKUP_DIR/database/$BACKUP_DIR/$TIME_PREFIX.gz
     MD5=($(md5sum $NOW/backup.gz))
-    scp -P $REMOTE_PORT -r -o StrictHostKeyChecking=no -i /ssh/key $NOW/backup.gz $REMOTE_SSH_USER@$REMOTE_HOST:$DBFILE
-    MD5_SERVER=$(ssh $REMOTE_SSH_USER@$REMOTE_HOST -p $REMOTE_PORT -i /ssh/key -o StrictHostKeyChecking=no DBFILE=$DBFILE 'md5=($(md5sum $DBFILE)); echo $md5')
+    scp -P $REMOTE_PORT -r -o StrictHostKeyChecking=no -i /ssh/backup_key $NOW/backup.gz $REMOTE_SSH_USER@$REMOTE_HOST:$DBFILE
+    MD5_SERVER=$(ssh $REMOTE_SSH_USER@$REMOTE_HOST -p $REMOTE_PORT -i /ssh/backup_key -o StrictHostKeyChecking=no DBFILE=$DBFILE 'md5=($(md5sum $DBFILE)); echo $md5')
     rm -r $NOW
     REMOTE_PATH=$REMOTE_BACKUP_DIR/media/$BACKUP_DIR/$TIME_PREFIX
-    rsync -vzrltoD -e "ssh -i /ssh/key -p $REMOTE_PORT" --rsync-path="mkdir -p $REMOTE_PATH && rsync" --delete /code/media/ $REMOTE_SSH_USER@$REMOTE_HOST:$REMOTE_PATH --port $REMOTE_PORT
+    rsync -vzrltoD -e "ssh -i /ssh/backup_key -p $REMOTE_PORT" --rsync-path="mkdir -p $REMOTE_PATH && rsync" --delete /code/media/ $REMOTE_SSH_USER@$REMOTE_HOST:$REMOTE_PATH --port $REMOTE_PORT
 
     if [ "$MD5" == "$MD5_SERVER" ]
     then
