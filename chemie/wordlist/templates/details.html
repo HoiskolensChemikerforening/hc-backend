@@ -1,0 +1,148 @@
+{% extends "chemie/base.html" %}
+{% load static %}
+{% load material_form %}
+{% block nav_header %}
+  Ordliste 
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Detaljer
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    
+    <a class = "breadcrumb"> {{ord.0.word}}</a>
+  </div>
+{% endblock %}
+
+<!--(1 = verb, 2 = adjective, 3 = noun, 4 = word)--> 
+
+
+<card>
+    <h2>{{ord.0.word}}</h2>
+    {%if ord.0.picture%}
+      <img src="{{ord.0.picture.url}}" style="height:400px"/>
+      {%else%}
+      <img alt="bilde"  src="{% static "images/holiday_images/paul_tullebilde.png" %}"/ style="height:400px">
+    {%endif%}
+    <h6>Laget av: {{ord.0.author.profile}}</h6>
+    <h6>Laget: {{ord.0.date}}</h6>
+    <h5>Forklaring:</h5>
+    <p>{{ord.0.explanations}}</p>
+    <h5>Kategori: </h5>
+    <p> {%for word in ord.0.category.all%}
+      {{word}}{% if not forloop.last %}
+      ,
+      {% endif %}
+      {% empty %}
+      Ingen kategori
+      {%endfor%}</p> 
+
+    {%if ord.1 == 1%}
+    <h5>Ordklasse: <h6> Verb: </h6> </h5>
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>Infinitiv</th>
+              <th>Presens</th>
+              <th>Preteritum</th>
+              <th>Presens futurum</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>{{ord.0.word}}</td>
+            <td>{{ord.0.present}}</td>
+            <td>{{ord.0.past}}</td>
+            <td>{{ord.0.future}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {%endif%}
+    {%if ord.1 == 2%}
+    <h5>Ordklasse: <h6> Adjektiv: </h6> </h5>
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>Positiv</th>
+              <th>Komparativ</th>
+              <th>Superlativ</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>{{ord.0.word}}</td>
+            <td>{{ord.0.comparative}}</td>
+            <td>{{ord.0.superlative}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {%endif%}
+    {%if ord.1 == 3%}
+    <h5>Ordklasse: <h6> Substantiv: </h6> </h5>
+      <table class="highlight">
+        <thead>
+          <tr>
+              <th>Ubestemt entall</th>
+              <th>Bestemt entall</th>
+              <th>Ubestemt flertall</th>
+              <th>Bestemt flertall</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>{{ord.0.word}}</td>
+            <td>{{ord.0.definite_singular}}</td>
+            <td>{{ord.0.indefinite_plural}}</td>
+            <td>{{ord.0.definite_plural}}</td>
+          </tr>
+        </tbody>
+      </table>
+    {%endif%}
+
+</card>
+
+
+
+
+{% if perms.wordlist%}
+<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+  <a class="btn-floating btn-large">
+    <i class="large material-icons">dehaze</i>
+  </a>
+  <ul>
+
+    {% if perms.wordlist.delete_word %}
+      <li>
+        <a class="btn-floating red" href={% url "wordlist:delete" pk=ord.0.id klassetall=ord.1 %}>
+          <i class="material-icons">delete</i>
+          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:delete" pk=ord.0.id klassetall=ord.1 %}>Slett</a>
+        </a></li>
+    {% endif %}
+
+    {% if perms.wordlist.change_word %}
+        <li>
+        <a class="btn-floating blue" href={% url "wordlist:adminword" pk=ord.0.id klassetall=ord.1 %}>
+          <i class="material-icons">edit</i>
+          <a class="btn-floating mobile-fab-tip" href={% url "wordlist:adminword" pk=ord.0.id klassetall=ord.1 %}>Rediger</a>
+        </a></li>
+    {% endif %}
+  </ul>
+</div>
+{% endif %}
+
+</div>
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
