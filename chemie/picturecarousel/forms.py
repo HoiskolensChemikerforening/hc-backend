@@ -1,7 +1,7 @@
 from django import forms
 from dal import autocomplete
 from .models import Contribution
-import material as M
+import chemie.custommaterial as M
 
 
 class Pictureform(forms.ModelForm):
