@@ -19,16 +19,16 @@
   <style>
     .gradient-border {
       position: relative;
-      display: inline-block;
+      /*display: inline-block;
       border-radius: 0px;
-      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);*/
     }
 
     .gradient-border::before {
       content: "";
       position: absolute;
       inset: 0;
-      background: black; /*linear-gradient(45deg, #f6df90, #ddab06, #f6df90);; /* Switch between white and black background  */
+      background: rgb(26, 37, 150); /*linear-gradient(45deg, #f6df90, #ddab06, #f6df90);; /* Switch between white and black background  */
       margin: 3px; /* Adjust for border thickness */
       border-radius: inherit;
 
@@ -43,17 +43,17 @@
 
 
     .gradient-text {
-      background: linear-gradient(45deg, #f6df90, #ddab06, #f6df90);
+      background: rgb(247, 247, 249); /*linear-gradient(45deg, #f6df90, #ddab06, #f6df90);*/
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
-      font-family: 'Amoresa';
+      /*font-family: 'Amoresa';*/
       position: relative;
       z-index: 1;
     }
 
     .gradient-text-small {
-      letter-spacing: 3px;
-      font-size: 1.5rem;
+      letter-spacing: auto;
+      font-size: 1.4rem;
     }
 
     .gradient-text-large{
@@ -111,8 +111,8 @@
 
     <!-- Events -->
       <h3 class="heading">Arrangementer</h3>
-    <!-- COUNTDOWN 
-    <div class="col coffee-box" id="Countdown" style="width: 100%; margin-top: 0px;padding:6px;background:black">
+    <!-- COUNTDOWN -->
+    <div class="col coffee-box" id="Countdown" style="width: 100%; margin-top: 0px;padding:1px;background:rgb(26, 37, 150)">
         <div class="gradient-border" style="width: 100%;height: 100%;">
         <div class="row valign-wrapper" style="width:100%; margin:0px; height: 100%;">
             <div class="col s12 m12 l12" style="margin: 0px; padding: 0px;">
@@ -121,7 +121,7 @@
         </div>
       </div>
     </div>
-  -->
+  
       {% if social or bedpres %}
         {% include 'events/frontpage_list_events.html' with object_list=object_list %}
       {% else %}
@@ -245,7 +245,7 @@
 
             if (!duration) {
                 let el =  element.querySelector(".until__text")
-                el.textContent = `Jubileumsblot!`;
+                el.textContent = `Webkom søknadsfrist!`;
                 //element.querySelector(".until__text").style.fontSize= "2.5rem";
                 el.classList.remove('gradient-text-small'); 
                 el.classList.add('gradient-text-large'); 
@@ -262,13 +262,13 @@
         days + "d " + hours.toString().padStart(2, "0") + "t " +
         minutes.toString().padStart(2, "0") + "m " +
         seconds.toString().padStart(2, "0") + "s " +
-        "<br> igjen til Jubileumsblot!";
+        "<br> igjen til Webkom søknadsfrist!";
 
             }
         }, 1000); // Update every 1 second
 
     }
 
-    dayCountdown(document.getElementById("Countdown"), "2025-03-08 19:00");
+    dayCountdown(document.getElementById("Countdown"), "2025-09-19 23:59");
     </script>
   {% endblock footer_js_files %}
