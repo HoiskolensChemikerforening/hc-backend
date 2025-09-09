@@ -2,7 +2,7 @@ const christmasSymbols = ["❄️", "❄️", "❄️", "🎁", "🎄", "🎅"];
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
-const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>25.09.24","🕸️", "💻", "🔌", "‼️", "👩‍💻", "👨‍💻","🍰", "❤️","../../static/images/holiday_images/webkom.png", " ", " ", " "];
+const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>19.09.25","🕸️", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
 const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
 const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart1.png",
@@ -13,7 +13,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart6.png"
 ];
 
-const rainSpeed = 40; // Adjust this value to set the rain speed
+const rainSpeed = 50; // Adjust this value to set the rain speed
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -34,10 +34,10 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "mustache"; // Change this to select the holiday you want
+const chosenHoliday = "webkom"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 70; // Maximum number of elements
+const maxElements = 75; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem

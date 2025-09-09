@@ -56,18 +56,18 @@
         <p class="card center" style="background-color: var(--card-bg); padding: 0.2rem">Det er ingen aktive arrangementer.</p>
       {% endif %}
 
-        <!-- countdown for future use
-        <div class="col coffee-box" id = "Countdown" style="width: 100%;">
+        <!-- countdown for future use-->
+        <div class="col coffee-box" id = "Countdown" style="width: 100%; height: 100%;">
             <div class="row" style="width:100%">
                 <div class="col s4 m3 l3" style="margin: 0px; padding: 0px">
                     <div class="days__until" style = "color: #F9CF00; font-size: 5rem; margin-left: 20px; font-weight: bold">00</div>
                 </div>
                 <div class="col s8 m9 l9">
-                    <div class ="until__text">igjen</div>
+                    <div class ="until__text">Webkom søknadsfrist!</div>
                 </div>
             </div>
 
-        </div> -->
+        </div> 
 
       <!--Kontaktskjema-->
 
@@ -134,7 +134,7 @@
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/dayjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.10/plugin/duration.min.js"></script>
-    <!---<script src="{% static "js/countdown.js" %}"></script>--->
+    <script src="{% static "js/countdown.js" %}"></script>
 {% endblock content %}
 
 
