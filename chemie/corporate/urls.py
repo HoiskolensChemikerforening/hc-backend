@@ -25,11 +25,7 @@ urlpatterns = [
     path("jobb/ny/", views.job_create, name="job_create"),
     path("jobb/<int:id>/", views.job_detail, name="job_detail"),
     path("jobb/<int:id>/fjern/", views.job_delete, name="job_delete"),
-    path(
-        "jobb/<int:id>/rediger/",
-        views.job_edit,
-        name="job_edit",
-    ),
+    path("jobb/<int:id>/rediger/", views.job_edit, name="job_edit"),
     path("diplom/", views.survey, name="statistics"),
     path("diplom/<int:year>/", views.survey, name="survey_year"),
     path("diplom/<int:id>/data/", views.ChartData.as_view()),

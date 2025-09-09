@@ -38,7 +38,6 @@ def admin_register_positions(request):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         election = Election.get_latest_election()
         form = AddPositionForm(request.POST or None)
 
@@ -86,11 +85,9 @@ def admin_register_candidates(request, pk):
     if is_redirected:
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         position = get_object_or_404(Position, pk=pk)
         add_candidate_form = AddCandidateForm(request.POST or None)
         if request.method == "POST":
-
             if add_candidate_form.is_valid():
                 user = add_candidate_form.cleaned_data["user"]
                 position.add_candidate(user)
@@ -114,7 +111,6 @@ def admin_delete_candidate(request, pk):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         if request.method == "POST":
             candidate_username = request.POST.get("Delete", "0")
             position = Position.objects.get(id=pk)
@@ -139,7 +135,6 @@ def admin_start_voting(request, pk):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         if request.method == "POST":
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
@@ -154,7 +149,6 @@ def admin_acclamation(request, pk):
     if is_redirected:  # either voting is active, or election is not open
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         if request.method == "POST":
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
@@ -169,7 +163,6 @@ def admin_register_prevotes(request, pk):
     if is_redirected:
         return redir_function  # Redirect function from Election.is_redirected
     else:
-
         position = get_object_or_404(Position, pk=pk)
         prevote_form = AddPrevoteForm(
             request.POST or None, instance=position, prefix="total_voters"
@@ -187,7 +180,6 @@ def admin_register_prevotes(request, pk):
 
         if request.method == "POST":
             if formset.is_valid() and prevote_form.is_valid():
-
                 if prevote_form.prevotes_allowed(
                     formset, position
                 ):  # checks that the ammount of pre_votes does not exceed feasable amount
@@ -230,7 +222,12 @@ def admin_voting_is_active(request, pk):
         return redirect("elections:admin_results", pk=pk)
 
     total_voters = election.current_position.get_number_of_voters()
-    context = {"election": election, "total_voters": total_voters}
+    checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
+    context = {
+        "election": election,
+        "total_voters": total_voters,
+        "checkin_count": checkin_count,
+    }
     return render(request, "elections/admin/admin_voting_active.html", context)
 
 
@@ -250,8 +247,10 @@ def admin_results(request, pk):
     position.calculate_candidate_votes()
     blank_votes = position.get_blank_votes()
     number_of_voters = position.get_number_of_voters()
-    total_votes = position.get_total_votes()
+    total_votes = position.get_total_votes()  # with blank votes
     number_of_tickets = position.get_number_of_tickets()
+    checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
+    total_voters = election.current_position.get_number_of_voters()
     context = {
         "position": position,
         "candidates": position.candidates.all(),
@@ -259,6 +258,8 @@ def admin_results(request, pk):
         "total_votes": total_votes,
         "blank_votes": blank_votes,
         "number_of_tickets": number_of_tickets,
+        "checkin_count": checkin_count,
+        "total_voters": total_voters,
     }
     return render(request, "elections/admin/admin_results.html", context)
 

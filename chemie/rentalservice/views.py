@@ -2,37 +2,63 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.sites.shortcuts import get_current_site
-from django.contrib.auth.decorators import permission_required
+from django.contrib.auth.decorators import permission_required, login_required
 from django.http import HttpResponseRedirect
+from django.core.paginator import Paginator
 from django.urls import reverse
 from post_office import mail
 
-from .models import RentalObject
+from .models import RentalObject, Landlord
 from .forms import CreateRentalObjectForm, InvoiceForm, RentalObjectForm
 from chemie.home.forms import ContactForm
 
 
 def index(request):
-    rentalObjects = RentalObject.objects.all().order_by("name")
+    return render(request, "rentalservice/index_ac.html")
 
-    context = {"rentalObjects": rentalObjects}
-    return render(request, "rentalservice/index.html", context)
+
 def index_promo(request):
-
     return render(request, "rentalservice/index_promo.html")
 
 
-@permission_required("rentalservice..add_rentalobject")
+@login_required
+def index_sportskom(request):
+    rentalObjects = RentalObject.objects.filter(owner=3).order_by("name")
+    # if not rentalObjects.exists():
+    #    return render(request, "/empty.html")
+
+    obj_per_page = 24  # Show 24 contacts per page.
+    if len(rentalObjects) <= obj_per_page:
+        context = {"rentalObjects": rentalObjects}
+    else:
+        paginator = Paginator(rentalObjects, obj_per_page)
+
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context = {"rentalObjects": page_obj}
+    return render(request, "rentalservice/index_sportskom.html", context)
+
+
+@permission_required("rentalservice.add_rentalobject")
 def new_object(request):
     form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
     if form.is_valid():
         form.save()
-        return redirect("rentalservice:index")
+
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Utleieobjektet ble opprettet",
+            extra_tags="Opprettet",
+        )
+        return redirect("rentalservice:index_sportskom")
 
     context = {"new_obj_form": form}
     return render(request, "rentalservice/new_object.html", context)
 
 
+@login_required
 def detail(request, rentalobject_id):
     rental_object = get_object_or_404(RentalObject, pk=rentalobject_id)
     context = {"rental_object": rental_object}
@@ -49,7 +75,7 @@ def delete_rentalobject(request, rentalobject_id):
         "Utleieobjektet ble slettet",
         extra_tags="Slettet",
     )
-    return HttpResponseRedirect(reverse("rentalservice:index"))
+    return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
 
 
 @permission_required("rentalservice.change_rentalobject")
@@ -68,7 +94,9 @@ def edit_rentalobject(request, rentalobject_id):
                 "Utleieobjekt ble endret",
                 extra_tags="Endret",
             )
-            return HttpResponseRedirect(reverse("rentalservice:index"))
+            return HttpResponseRedirect(
+                reverse("rentalservice:index_sportskom")
+            )
     context = {"new_obj_form": form}
 
     return render(request, "rentalservice/new_object.html", context)
@@ -103,10 +131,9 @@ def contact(request, rentalobject_id):
             },
         )
 
-        return redirect(reverse("rentalservice:index"))
+        return redirect(reverse("rentalservice:index_ac"))
 
     else:
-
         context = {"contact_form": contact_form, "rentalobject": rental_object}
 
         return render(request, "rentalservice/contact.html", context)
@@ -117,19 +144,20 @@ def new_invoice(request):
     form = InvoiceForm(request.POST or None)
     if form.is_valid():
         form.save()
-        return redirect("rentalservice:index")
+        return redirect("rentalservice:index_ac")
 
     context = {"form": form}
     return render(request, "rentalservice/create_invoice.html", context)
 
 
-def rental_list(request):
-    object_list = RentalObject.objects.all()
-    current_rental_products = []
-
-
 def contact_page(request):
-    return render(request, "rentalservice/contact_page.html")
+    return render(request, "rentalservice/contact_page_ac.html")
+
 
 def contact_page_promo(request):
     return render(request, "rentalservice/contact_page_promo.html")
+
+
+@login_required
+def contact_page_sportskom(request):
+    return render(request, "rentalservice/contact_sportskom.html")

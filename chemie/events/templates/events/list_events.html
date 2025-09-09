@@ -7,7 +7,7 @@
 <div class="row">
   {% if not type%}
       {% for event in object_list %}
-        <div class="col s12 m10 l6">
+        <div class="col s12 m12 l6">
           <div class="card medium">
             <div class="card-image">
               <a href="{{ event.get_absolute_url }}">
@@ -16,7 +16,7 @@
                 {% endthumbnail %}
               </a>
               <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
-                <h5 style="font-size: 1.34rem;">{{ event.date|date:"j F - H:i" }}</h5>
+                <h5 style="font-size: 1.34rem;">{{ event.date|date:"j. F - H:i" }}</h5>
               </a>
             </div>
             <div class="card-content">
@@ -51,7 +51,7 @@
       {% endfor %}
     {% elif type == "Waiting" %}
       {% for event, queue_pos in object_list %}
-        <div class="col s12 m10 l6">
+        <div class="col s12 m12 l6">
           <div class="card medium">
             <div class="card-image">
               <a href="{{ event.get_absolute_url }}">
@@ -60,7 +60,7 @@
                 {% endthumbnail %}
               </a>
               <a class="card-title card-event-title" href="{{ event.get_absolute_url }}">
-                <h5 style="font-size: 1.34rem;">{{ event.date|date:"j F - H:i" }}</h5>
+                <h5 style="font-size: 1.34rem;">{{ event.date|date:"j. F - H:i" }}</h5>
               </a>
             </div>
             <div class="card-content">

@@ -1,6 +1,7 @@
 const christmasSymbols = ["❄️", "❄️", "❄️", "🎁", "🎄", "🎅"]; // add in emojis after every Advent
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
+const valentinesSymbols = ["❤️", "🌹", "💘", "👼", "💌", "💋", "🏹"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
 const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>19.09.25","🕸️", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
 const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
@@ -30,6 +31,8 @@ function selectSymbols(choose_your_holiday) {
     return mustacheNovemberImages;
   } else if (choose_your_holiday === "webkom"){
     return webkomSymbols;
+  } else if (choose_your_holiday === "valentines") {
+    return valentinesSymbols;
   }
   return [ ]; // Return an empty array if the holiday is not recognized
 }

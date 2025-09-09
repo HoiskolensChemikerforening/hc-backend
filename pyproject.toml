@@ -1,4 +1,5 @@
 [tool.black]
+version = "18.9b0"
 line-length = 79
 include = '\.pyi?$'
 exclude = '''

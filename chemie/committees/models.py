@@ -8,6 +8,13 @@ from django.db.models.signals import pre_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.text import slugify
 from sorl.thumbnail import ImageField
+from extended_choices import Choices
+
+COMMITTEE_TYPE = Choices(
+    ("COMMITTEE", 1, "Komité"),
+    ("SUBGROUP", 2, "Undergruppe"),
+    ("ASSOSIATEDGROUP", 3, "Organisasjon med særskilt tilknytning"),
+)
 
 
 class Committee(models.Model):
@@ -18,6 +25,11 @@ class Committee(models.Model):
     one_liner = models.CharField(max_length=30, verbose_name="Lynbeskrivelse")
     description = RichTextField(
         verbose_name="Beskrivelse", config_name="committees"
+    )
+    committee_type = models.PositiveSmallIntegerField(
+        choices=COMMITTEE_TYPE,
+        default=COMMITTEE_TYPE.COMMITTEE,
+        verbose_name="gruppe_type",
     )
 
     def __str__(self):
@@ -39,6 +51,8 @@ class Position(models.Model):
     )
     can_manage_committee = models.BooleanField(default=False)
     users = models.ManyToManyField(User, blank=True, verbose_name="medlem")
+    # Used to sort committee positions by importance
+    rank = models.PositiveSmallIntegerField(default=100, verbose_name="Rang")
 
     def remove_from_group(self, users):
         for user in users:
@@ -54,7 +68,6 @@ class Position(models.Model):
     def consistent_permissions(
         sender, instance, action, reverse, model, pk_set, **kwargs
     ):
-
         if action == "pre_add":
             if len(pk_set) + instance.users.count() > instance.max_members:
                 raise ValidationError(

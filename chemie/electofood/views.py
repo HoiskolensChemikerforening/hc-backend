@@ -306,7 +306,6 @@ def valgomat_result(request, id):
         questionlst = []
         # Iterate through all alternatives
         for value in VALUES:
-
             # Fetch the all committee answers which picked the current alternative as an answer
             committee_answer = CommiteeAnswer.objects.filter(
                 question=question
@@ -445,12 +444,12 @@ def delete_question(request, id, question_id):
 @permission_required("electofood.change_electionquestionform")
 def delete_valgomat(request, id):
     """
-        Delete a ElectionQuestionForm object.
-        Args:
-            id: int (ElectionQuestionForm id)
-        returns:
-            redirects to edit index page
-        """
+    Delete a ElectionQuestionForm object.
+    Args:
+        id: int (ElectionQuestionForm id)
+    returns:
+        redirects to edit index page
+    """
 
     # Fetch valgomat form
     electionform = get_object_or_404(ElectionQuestionForm, id=id)

@@ -17,7 +17,7 @@ services:
     volumes:
       - ./chemie:/chemie
       - ./logs/gunicorn:/gunicorn-logfiles
-      - media:/chemie/media
+      - /mnt/hc_ntnu_ssd/hc_ntnu_no/media:/chemie/media
       - static:/chemie/static
     depends_on:
       - database
@@ -32,7 +32,7 @@ services:
       - "1339:80"
     volumes:
       - static:/code/static
-      - media:/code/media
+      - /mnt/hc_ntnu_ssd/hc_ntnu_no/media:/code/media
     links:
       - website:website
   # Builds backup container
@@ -40,7 +40,7 @@ services:
     build: ./backupjob
     container_name: hc_backup
     volumes:
-      - media:/code/media:ro
+      - /mnt/hc_ntnu_ssd/hc_ntnu_no/media:/code/media:ro
     env_file: .env
     links:
       - database:database

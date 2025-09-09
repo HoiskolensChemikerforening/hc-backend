@@ -80,7 +80,6 @@ def all_merch(request):
     if not merch_objects.exists():
         return render(request, "merch/empty.html")
     else:
-
         if request.method == "POST":
             form = SortingForm(request.POST)
             if form.is_valid():

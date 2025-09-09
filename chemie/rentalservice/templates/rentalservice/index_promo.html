@@ -17,15 +17,15 @@ Promoteringskomiteen
             <div class="col-12 col-md-6" style="margin-bottom: 40px;">
                 <p class="flow-text">
                     Vi er promoteringskomiteen! Vi tar bilder og video til HC sine arrangementer. 
-                    Det er også mulig å leie promokom sine tjenester (fotoboks, fotograf eller utstyr) for foreneninger og privatpersoner.
+                    Det er også mulig å leie promokom sine tjenester (fotoboks, fotograf eller utstyr) for foreninger og privatpersoner.
                     </p>
                     <br>
                     <h4>Fotoboks</h4>
-                    <p class="flow-text">Ved å leie ut fotoboksen vår, sikrer du fantastiske bilder på ditt arrangement. 
+                    <p class="flow-text">Ved å leie fotoboksen vår, sikrer du fantastiske bilder på ditt arrangement.
                     Prisen inkluderer opprigg, nedrigg og redigering av bilder. 
-                    OBS! Man er selv ansvarlig for å fikse transport av fotoboksen til og fra gløshaugen.
+                    OBS! Man er selv ansvarlig for å fikse transport av fotoboksen til og fra Gløshaugen.
                     <br> 
-                    <i>Pris: 1500 kr inkl. mva</i></p>
+                    <i>Pris: 1750 kr inkl. mva</i></p>
                     <div class="row" style="justify-content: center;">
                         <img type="image/jpg" src="/static/images/JR-3832.jpg" alt="Fotoboks_bilde_1" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem; ">
                         <img type="image/jpg" src="/static/images/Fotoboks-010.JPG" alt="Fotoboks_bilde_2" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem;">
@@ -34,9 +34,10 @@ Promoteringskomiteen
                     <h4>Fotograf</h4>
                     <p class="flow-text"> Vil du heller ha litt flere candid bilder? 
                     Det kan du få løst ved å leie en av våre talentfulle fotografer. 
-                    Prisen inkluderer fire timer med fotografering og redigering av bildene.
+                    Prisen inkluderer fem timer med fotografering og redigering av bildene.
+                    Utover inkludert tid: 250 kr per påbegynt time.
                     <br> 
-                    <i>Pris: 1500 kr inkl. mva</i>
+                        <i>Pris: 2000 kr inkl. mva</i></p>
                     <div class="row" style="justify-content: center;">
                         <img type="image/jpg" src="/static/images/fotograf1.JPG" alt="Fotograf_bilde_1" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem; ">
                         <img type="image/jpg" src="/static/images/fotograf2.jpg" alt="Fotograf_bilde_2" style="max-width:220px; border-radius: 0.5rem; margin-right:1rem;">
@@ -61,19 +62,64 @@ Promoteringskomiteen
         <!--Kontaktskjema-->
         <h2 class="heading">Kontakt</h2>
         <div class="col coffee-box" style="width: 100%; height:auto;">
-          <a href="kontaktpromo" style="width: 100%;">
-            <div class="row" style="display: flex; align-items: center;">
+          <a href="{% url 'rentalservice:contact_info_promo' %}" style="width: 100%;">
+            <div class="row" style="display: flex; align-items: center; margin: 0; padding: 0">
               <div class="col s4 m3 l4">
                 <i class="material-icons micon" style="-webkit-filter: grayscale(100%); filter: grayscale(100%);
                 max-height: 5rem; margin: 2rem; transform: scale(2); color:#0b3954;" >shopping_cart</i> 
               </div>
               <div class="col s8 m9 l8">
-                <p style="color: black;">Ønsker du å leie noe? <br>Ta kontakt her!</p>
+                <p style="color: black; margin: 0; padding: 0">Ønsker du å leie noe? <br>Ta kontakt her!</p>
               </div>
             </div>
           </a>
         </div>
       </div>      
 </div>
+
+{% if perms.rentalservice %}
+    <!---<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">edit</i>
+      </a>
+      <ul>
+        {% if perms.rentalservice.add_rentalobject %}
+          <li>
+            <a class="btn-floating blue" href="ny/">
+              <i class="material-icons">add</i>
+              <a class="btn-floating mobile-fab-tip" href="ny/">Legg til ny</a>
+            </a></li>
+        {% endif %}
+      </ul>
+    </div> --->
+  {% endif %}
+<div class="row">
+        <div class="col s12"> <!---size of the layout--->
+            <div class="row">
+            {% for object in rentalObjects %}
+                <div class="col s12 m4">
+                <div class="card small">
+                    <div class="card-image">
+                        <a href="{% url 'rentalservice:detail' object.id %}">
+                            {% thumbnail object.image "630x400" crop="center" as im %} <!--- standard image crop for HC--->
+                                <img src="{{ im.url }}"> <!--- locates image url--->
+                            {% endthumbnail %}
+                        </a>
+                    </div>
+                    <div class="card-content" style="padding-top: 0px; margin-top: -15px;" >
+                        <br>
+                        <h5>{{ object.name }}</h5>
+                        <p class="card-text"> {{ object.description|safe }} </p>
+                    </div>
+                    <div class="card-action center">
+                        <a href="{% url 'rentalservice:detail' object.id %}">Mer info</a> <!--- det er ingen hyperlenke her nå--->
+                    </div>
+                </div>
+                </div>
+            {% endfor %}
+            </div>
+        </div>
+</div>
+
 
 {% endblock %}

@@ -27,7 +27,10 @@ GRADES = Choices(
 )
 
 RELATIONSHIP_STATUS = Choices(
-    ("SINGLE", 1, "Singel"), ("TAKEN", 2, "Opptatt"), ("NSA", 3, "Hemmelig!"), ("HC", 4, "HC forhold")
+    ("SINGLE", 1, "Singel"),
+    ("TAKEN", 2, "Opptatt"),
+    ("NSA", 3, "Hemmelig!"),
+    ("HC", 4, "HC forhold"),
 )
 
 MEMBERSHIP_DURATIONS = [
@@ -150,12 +153,12 @@ class Profile(models.Model):
         blank=True,
         null=True,
         unique=True,
-        verbose_name="EM nummer (ikke ta med 0 dersom det er første siffer)",
+        verbose_name="ES nummer (ikke ta med 0 dersom det er første siffer)",
     )
 
     image_primary = ImageField(upload_to="avatars", null=True, blank=True)
     image_secondary = ImageField(upload_to="avatars", null=True, blank=True)
-    address = models.CharField(max_length=200, verbose_name="Adresse")
+    address = models.CharField(max_length=200, verbose_name="Adresse (Kan være i eller utenfor Trondheim)")
 
     membership = models.OneToOneField(
         "Membership",
@@ -231,8 +234,9 @@ class Profile(models.Model):
 
     @classmethod
     def get_balance_sum_for_first_to_fifth_grades(cls):
-        return cls.objects.filter(grade__in=[1, 2, 3, 4, 5]).aggregate(Sum("balance"))["balance__sum"]
-
+        return cls.objects.filter(grade__in=[1, 2, 3, 4, 5]).aggregate(
+            Sum("balance")
+        )["balance__sum"]
 
 
 class Membership(models.Model):
@@ -280,3 +284,18 @@ class UserToken(models.Model):
     # Checks if the authentication object is expired
     def expired(self):
         return not timezone.now() < timedelta(hours=VALID_TIME) + self.created
+
+
+class RegisterPageStatus(models.Model):
+    name = models.CharField(max_length=100, default="Registreringsside")
+    is_active = models.BooleanField(default=False)
+
+    def save(self, *args, **kwargs):
+        if RegisterPageStatus.objects.exists() and not self.pk:
+            raise Exception(
+                "Only one Register page status instance is allowed."
+            )
+        return super(RegisterPageStatus, self).save(*args, *kwargs)
+
+    def __str__(self):
+        return "Registration Page Status"

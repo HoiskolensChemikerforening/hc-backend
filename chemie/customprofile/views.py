@@ -47,6 +47,7 @@ from .models import (
     Medal,
     MEMBERSHIP_DURATIONS,
     SPECIALIZATION,
+    RegisterPageStatus,
 )
 from .serializers import (
     MedalSerializer,
@@ -56,6 +57,12 @@ from .serializers import (
 
 
 def register_user(request):
+    page_status = RegisterPageStatus.objects.first()
+    if not page_status or not page_status.is_active:
+        return render(
+            request, "customprofile/registration_disabled.html", status=403
+        )
+
     user_core_form = RegisterUserForm(request.POST or None)
     user_profile_form = RegisterProfileForm(
         request.POST or None, request.FILES or None
@@ -325,8 +332,6 @@ def yearbook(request, year=1, spec=1):
                 .prefetch_related("medals")
             )
     else:
-        #print(year)
-        #print(int(spec))
         if year != GRADES.DONE:
             if spec == SPECIALIZATION.NONE:
                 profiles = (
@@ -336,7 +341,9 @@ def yearbook(request, year=1, spec=1):
                 )
             else:
                 profiles = (
-                    Profile.objects.filter(grade=year, user__is_active=True,specialization=spec)
+                    Profile.objects.filter(
+                        grade=year, user__is_active=True, specialization=spec
+                    )
                     .order_by("user__last_name")
                     .prefetch_related("medals")
                 )
@@ -347,6 +354,10 @@ def yearbook(request, year=1, spec=1):
                 .prefetch_related("medals")
             )
 
+    # April Fools
+    crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
+    # crush = Profile.objects.filter(user__last_name="Groening").first()
+
     context = {
         "profiles": profiles,
         "grades": GRADES,
@@ -355,6 +366,7 @@ def yearbook(request, year=1, spec=1):
         "endYearForm": endYearForm,
         "end_years": end_years,
         "spec": SPECIALIZATION,
+        "crush": crush,  # April fools
     }
 
     return render(request, "customprofile/yearbook.html", context)

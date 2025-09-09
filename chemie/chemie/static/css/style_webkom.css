@@ -9,7 +9,7 @@
   --card-bg: #fff;
 
   /* Main area header and background colors */
-  --main-header-text: #0b3954;
+  --main-header-text: #0b3954; 
   --background: #fafafa;
 
   /* Top nav colors */
@@ -31,13 +31,14 @@
 /* Headers above main block */
 #heading,
 #subheading {
-  color: var(--top-header-text);
+  color: var(--top-header-text); 
 }
 
 /* Heading in main block */
 .heading {
   margin-top: 0rem;
-  color: var(--main-header-text);
+  color: var(--main-header-text); 
+ 
 }
 
 main {
@@ -81,8 +82,9 @@ nav {
 }
 
 footer.page-footer {
-  background-color: var(--footer-bg);
+  background-color: var(--footer-bg); 
 }
+
 
 /* Color when hover above buttons */
 .btn:hover,

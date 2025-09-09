@@ -7,7 +7,6 @@ PRICE_RANGE_CHOICES = ((1, "Under 500 kr"), (2, "Over 500 kr"))
 
 
 class FundsApplication(models.Model):
-
     # Application on behalf of ...
     applier = models.CharField(
         max_length=2000, verbose_name="Søker på vegne av"
@@ -59,7 +58,9 @@ class OfficeApplication(models.Model):
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     # The users student username (now student email)
     student_username = models.CharField(
-        max_length=50, default="NOT_VALID", verbose_name="Student-e-post (@ntnu.no)"
+        max_length=50,
+        default="NOT_VALID",
+        verbose_name="Student-e-post (@ntnu.no)",
     )
 
     def __str__(self):
