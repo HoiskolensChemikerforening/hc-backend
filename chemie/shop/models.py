@@ -8,6 +8,7 @@ from django.db.models.signals import pre_save
 from extended_choices import Choices
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
+from django.utils import timezone
 
 
 HAPPY_HOUR_DURATION = Choices(

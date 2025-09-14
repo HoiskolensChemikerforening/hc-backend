@@ -12,6 +12,8 @@ import operator
 from django.core.paginator import Paginator
 from dateutil.relativedelta import relativedelta
 from datetime import datetime
+from ..web_push.models import CoffeeSubmission
+
 
 
 from chemie.customprofile.forms import GetRFIDForm
@@ -37,6 +39,20 @@ from .models import (
 )
 from .statistics import get_plot_item
 
+#@login_required
+#def coffee_button(request):
+#    message = None
+#    sender = request.user
+#    if request.method == "POST":
+        # Opprett ny kaffe-submission
+#        submission = CoffeeSubmission.objects.create()
+#
+        # Send varsel til alle (eller filtrer til bare de som har abonnement)
+#         subscribers = Profile.objects.all()
+#        CoffeeSubmission.send_coffee_notification(subscribers)
+#        message = "Kaffeknappen ble trykket og varsel sendt! ☕"
+#
+#    return render(request, "coffee/button.html", {"message": message})
 
 def is_happy_hour():
     now = timezone.now()
@@ -579,3 +595,4 @@ def view_monthly_statistics(request):
             "page_obj": page_obj,
         },
     )
+
