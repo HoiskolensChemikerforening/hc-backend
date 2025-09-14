@@ -14,7 +14,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart6.png"
 ];
 
-const rainSpeed = 50; // Adjust this value to set the rain speed
+const rainSpeed = 30; // Adjust this value to set the rain speed
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -40,7 +40,7 @@ function selectSymbols(choose_your_holiday) {
 const chosenHoliday = "webkom"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 75; // Maximum number of elements
+const maxElements = 250; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem
@@ -85,7 +85,7 @@ function createAndAnimateElements(maxElements) {
     });
 
     createAndAnimateElement();
-  }, 1000); // Adjust the interval as needed
+  }, 500); // Adjust the interval as needed
 }
 
 function createAndAnimateElement() {
