@@ -4,11 +4,12 @@ from django.urls import path
 app_name = "rentalservice"
 
 urlpatterns = [
-    path("AC/", views.index, name="index"),
+    path("AC/", views.index, name="index_ac"),
     path("promo/", views.index_promo, name="index_promo"),
     path("sportskom/", views.index_sportskom, name="index_sportskom"),
     path("ny/", views.new_object, name="new_object"),
-    path("<int:rentalobject_id>/", views.detail, name="detail"),
+    path("s/<int:rentalobject_id>/", views.detail, name="detail"), 
+    path("a/<int:rentalobject_id>/", views.detail_ac, name="detail_ac"), 
     path(
         "<int:rentalobject_id>/slett/",
         views.delete_rentalobject,

@@ -7,7 +7,7 @@ from extended_choices import Choices
 from django.core.validators import MaxValueValidator, MinValueValidator
 
 OWNER = Choices(
-    ("PROMOKOM", 1, "Promoterigskomiteen"),
+    ("PROMOKOM", 1, "Promoteringskomiteen"),
     ("AC", 2, "Audiochromatene"),
     ("SPORTSKOM", 3, "Sportskomiteen"),
     ("NONE", 4, "Ingen"),
@@ -26,7 +26,6 @@ class RentalObjectType(models.Model):
 
     def __str__(self):
         return self.type
-
 
 class Invoice(models.Model):
     client = models.CharField(max_length=100, verbose_name="Kunde")
