@@ -387,7 +387,10 @@
   </script>
 
   <!--  {% if request.user.profile.grade <= 3 %} -->
-  <script src="{% static "js/makeItRain.js" %}"></script>
+  {% block makeitrain %}
+    <script src="{% static 'js/makeItRain.js' %}"></script>
+  {% endblock %}
+
   <!--  {% endif %} -->
 
 </body>
