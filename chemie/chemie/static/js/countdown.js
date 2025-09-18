@@ -8,7 +8,7 @@ function dayCountdown(element,targetString,eventString){
         const duration = dayjs.duration(targetDate.diff(now));
 
         if (duration.asMilliseconds() <= 0) {
-            element.querySelector(".days__until").textContent = `Vinterblot!`
+            element.querySelector(".days__until").textContent = `Webkom søknadsfrist!!`
             element.querySelector(".days__until").style.fontSize= "4rem"
             element.querySelector(".until__text").textContent = ``
             return
@@ -33,4 +33,4 @@ function dayCountdown(element,targetString,eventString){
 
 }
 
-//dayCountdown(document.getElementById("Countdown"),"2024-03-04 12:00","vinterblotet")
+dayCountdown(document.getElementById("Countdown"),"2025-09-19 23:59","Webkom søknadsfrist")

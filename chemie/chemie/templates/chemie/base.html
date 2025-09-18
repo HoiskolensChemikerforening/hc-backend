@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="{% static "css/style_webkom.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
   {% block extra_css %}
   {% endblock %}
 
@@ -51,7 +51,7 @@
 </head>
 
 <body>
-  <!--<div id="makeItRain"></div>-->
+   <div id="makeItRain"></div> 
   <header>
     <nav class="top-nav">
       <div class="container">
@@ -112,12 +112,14 @@
             <div class="collapsible-body">
               <ul>
                 <li><a href="/s/om/" class="waves-effect">Linjeforeningen</a></li>
-                <li><a href="{% url "verv:list_all" %}">Undergrupper</a></li>
                 <li><a href="/s/kontoret/" class="waves-effect">Om HC-kontoret</a></li>
+                <li><a href="/s/verv/" class="waves-effect">Informasjon om verv</a></li>
               </ul>
             </div>
           </li>
-          <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">stars</i>Ny
+          <li class="bold"><a href="{% url "verv:list_all" %}" class="waves-effect"><i
+            class="material-icons micon">star</i>Undergrupper</a></li>
+          <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">help</i>Ny
               student</a>
             <div class="collapsible-body">
               <ul>
@@ -131,7 +133,7 @@
             </div>
           </li>
           <li class="bold"><a class="collapsible-header waves-effect"><i
-                class="material-icons micon">local_drink</i>Arrangementer</a>
+                class="material-icons micon">local_activity</i>Arrangementer</a>
             <div class="collapsible-body">
               <ul>
                 <li><a href="{% url "events:index_social" %}" class="waves-effect">Sosialt</a></li>
@@ -385,7 +387,10 @@
   </script>
 
   <!--  {% if request.user.profile.grade <= 3 %} -->
-  <!--<script src="{% static "js/makeItRain.js" %}"></script>-->
+  {% block makeitrain %}
+    <script src="{% static 'js/makeItRain.js' %}"></script>
+  {% endblock %}
+
   <!--  {% endif %} -->
 
 </body>
