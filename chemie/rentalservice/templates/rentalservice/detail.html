@@ -23,7 +23,7 @@
             <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:delete_rentalobject_sportskom" rental_object.id %}">Slett</a>
           </li>
         {% endif %}
-        {% if perms.rentalservice.edit_rentalobject_sportskom %}
+        {% if perms.rentalservice.change_rentalobject_sportskom %}
           <li>
             <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject_sportskom" rental_object.id %}">
               <i class="material-icons">edit</i>
