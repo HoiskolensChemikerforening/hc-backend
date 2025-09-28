@@ -70,11 +70,11 @@ Audiochromatene
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.rentalservice.add_rentalobject %}
+        {% if perms.rentalservice.add_rentalobject_ac %}
           <li>
-            <a class="btn-floating blue" href="{% url 'rentalservice:new_object' %}">
+            <a class="btn-floating blue" href="{% url 'rentalservice:new_object_ac' %}">
               <i class="material-icons">add</i>
-              <a class="btn-floating mobile-fab-tip" href="{% url 'rentalservice:new_object' %}">Legg til ny</a>
+              <a class="btn-floating mobile-fab-tip" href="{% url 'rentalservice:new_object_ac' %}">Legg til ny</a>
             </a></li>
         {% endif %}
       </ul>

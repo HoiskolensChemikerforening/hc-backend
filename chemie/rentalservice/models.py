@@ -66,6 +66,16 @@ class RentalObject(models.Model):
         verbose_name="Antall",
     )
 
+    class Meta:
+        permissions = [
+            ("add_rentalobject_ac", "add rentalobject AC"),
+            ("add_rentalobject_sportskom", "add rentalobject Sportskomiteen"),
+            ("change_rentalobject_ac", "change rentalobject AC"),
+            ("change_rentalobject_sportskom", "change rentalobject Sportskomiteen"),
+            ("delete_rentalobject_ac", "delete rentalobject AC"),
+            ("delete_rentalobject_sportskom", "delete rentalobject Sportskomiteen"),
+        ]
+
     def __str__(self):
         return self.name
 

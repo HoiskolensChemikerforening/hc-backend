@@ -17,18 +17,18 @@
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.rentalservice.delete_rentalobject %}
+        {% if perms.rentalservice.delete_rentalobject_ac %}
           <li>
-            <a class="btn-floating red" href="{% url "rentalservice:delete_rentalobject" rental_object.id %}"><i class="material-icons">delete_forever</i></a>
-            <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:delete_rentalobject" rental_object.id %}">Slett</a>
+            <a class="btn-floating red" href="{% url "rentalservice:delete_rentalobject_ac" rental_object.id %}"><i class="material-icons">delete_forever</i></a>
+            <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:delete_rentalobject_ac" rental_object.id %}">Slett</a>
           </li>
         {% endif %}
-        {% if perms.rentalservice.edit_rentalobject %}
+        {% if perms.rentalservice.edit_rentalobject_ac %}
           <li>
-            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">
+            <a class="btn-floating blue" href="{% url "rentalservice:edit_rentalobject_ac" rental_object.id %}">
               <i class="material-icons">edit</i>
               </a>
-            <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:edit_rentalobject" rental_object.id %}">Endre</a>
+            <a class="btn-floating mobile-fab-tip" href="{% url "rentalservice:edit_rentalobject_ac" rental_object.id %}">Endre</a>
           </li>
         {% endif %}
       </ul>
