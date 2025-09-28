@@ -186,7 +186,7 @@ html {
 }
 
 ul.sidenav-fixed a {
-  font-size: 16px;
+  font-size: 15px;
   line-height: 44px;
   height: 44px;
   font-weight: 400;
@@ -481,6 +481,7 @@ img.profile-circle {
   opacity: 0.5;
 }
 
+
 .card-event-title {
   padding: 0 10px;
   background-color: rgba(0, 0, 0, 0.2);
@@ -534,6 +535,19 @@ img.profile-circle {
     margin-left: 300px;
   }
 }
+
+.footer-partnere-top {
+  text-align: center; /* sentrert på desktop */
+}
+
+
+/* På små skjermer */
+@media only screen and (max-width: 600px) {
+  .footer-partnere-top {
+    text-align: left; /* venstrejustert på mobil */
+  }
+}
+
 
 p {
   -webkit-font-smoothing: antialiased;
