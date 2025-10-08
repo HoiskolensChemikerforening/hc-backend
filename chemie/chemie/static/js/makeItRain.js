@@ -37,10 +37,10 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "webkom"; // Change this to select the holiday you want
+const chosenHoliday = "breast cancer"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 250; // Maximum number of elements
+const maxElements = 150; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem
