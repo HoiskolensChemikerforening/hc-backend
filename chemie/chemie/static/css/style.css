@@ -1,7 +1,7 @@
 /*  COLOR OPTIONS */
 :root {
   /* Side bar colors */
-  --side-bar-text: #ff69b4;
+  --side-bar-text: #0b3954;
   --side-bar-bg: #fcfcff;
 
   /* Card colors */
@@ -14,9 +14,9 @@
 
   /* Top nav colors */
   --top-header-text: #fff;
-  --top-header-bg:  #ff69b4; /*#0b3954*/
+  --top-header-bg:  #0b3954;
 
-  --footer-bg: #ff69b4;
+  --footer-bg: #0b3954;
 
   /* Hoover */
   --btn-hoover: #3c91e6;
