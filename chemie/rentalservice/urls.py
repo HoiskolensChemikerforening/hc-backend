@@ -12,22 +12,22 @@ urlpatterns = [
     path("s/<int:rentalobject_id>/", views.detail, name="detail"), 
     path("a/<int:rentalobject_id>/", views.detail_ac, name="detail_ac"), 
     path(
-        "<int:rentalobject_id>/slett/a/",
+        "a/<int:rentalobject_id>/slett/",
         views.delete_rentalobject_ac,
         name="delete_rentalobject_ac",
     ),
     path(
-        "<int:rentalobject_id>/slett/s/",
+        "s/<int:rentalobject_id>/slett/",
         views.delete_rentalobject_sportskom,
         name="delete_rentalobject_sportskom",
     ),
     path(
-        "<int:rentalobject_id>/rediger/a/",
+        "a/<int:rentalobject_id>/rediger/",
         views.edit_rentalobject_ac,
         name="edit_rentalobject_ac",
     ),
     path(
-        "<int:rentalobject_id>/rediger/s/",
+        "s/<int:rentalobject_id>/rediger/",
         views.edit_rentalobject_sportskom,
         name="edit_rentalobject_sportskom",
     ),
