@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link href="{% static "css/style_webkom.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
   {% block extra_css %}
   {% endblock %}
 
@@ -51,7 +51,7 @@
 </head>
 
 <body>
-   <div id="makeItRain"></div> 
+   <!--<div id="makeItRain"></div> -->
   <header>
     <nav class="top-nav">
       <div class="container">
@@ -128,7 +128,7 @@
                 <li><a href="/s/fadderperioden/" class="waves-effect">Fadderperioden</a></li>
                 <li><a href="/s/teknostart/" class="waves-effect">Teknostart</a></li>
                 <li><a href="/s/HC/" class="waves-effect">Høiskolens Chemikerforening</a></li>
-                <li><a href="/s/kontakt/" class="waves-effect">Kontaktinfo</a></li>
+                <li><a href="/s/fadderkontakt/" class="waves-effect">Kontaktinfo</a></li>
               </ul>
             </div>
           </li>
@@ -160,11 +160,12 @@
             </div>
           </li>
           <li class="bold">
-            <a class="collapsible-header waves-effect"><i class="material-icons micon">contact_mail</i>Kontakt</a>
+            <a class="collapsible-header waves-effect"><i class="material-icons micon">contact_mail</i>Kontakt oss</a>
                 <div class="collapsible-body">
                   <ul>
                     <li><a href="/s/kontaktinfo/" class="waves-effect">Kontaktinfo</a></li>
-                    <li><a href="/s/schyggesiden/" class="waves-effect">Schyggesiden</a></li>
+                    <li><a href="/s/schyggesiden/" class="waves-effect">Schyggesiden - Varslingsskjema </a></li>
+                    <li><a href="/s/tilbakemeldinger/" class="waves-effect">Tilbakemeldinger til Styret</a></li>
                   </ul>
                 </div>
               </li>
@@ -231,105 +232,72 @@
       <div class="row">
 
         <!-- About -->
-        <div class="col s12 m4 l3">
-          <h5 class="white-text">Om oss</h5>
-          <p class="grey-text text-lighten-4">
-            Linjeforeningen for Industriell Kjemi og Bioteknologi ved NTNU Trondheim.
-          </p>
-        
-          <a href="https://github.com/HoiskolensChemikerforening/website">
-            <img src="{% static "images/github.svg" %}" alt="Github"
-                 style="display: inline-block;vertical-align: middle;">
-            <span style="display: inline-block; margin-left: 10px;" class="white-text">Github</span>
-          </a>
-          <br>
-        
-         
-          <div style="padding-top: 10px;">
-            <a class="grey-text text-lighten-4" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
-          </div>
+        <div class="col s12 m4 l4">
+        <h5 class="white-text">Om oss</h5>
+        <p class="white-text">
+          Linjeforeningen for Industriell Kjemi, Materialer og Bioteknologi ved NTNU Trondheim.
+        </p>
+        <p class="white-text">Organisasjonsnummer: 990833761 <br> Kontonummer: 9051.15.65226</p>
         </div>
+        
 
         
         
 
       <!-- Media/Social -->
-      <div class="col s12 m8 l9">
-        <h5 class="white-text">Sosialt</h5>
-        <div class="col s12 m4 l3">
-        <div class="valign-wrapper">
-          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
+      <div class="col s12 m8 l4">
+        <h5 class="white-text">Sosialt og kontakt</h5>
+        <div class="valign-wrapper" style="gap: 12px; flex-wrap: wrap; margin-top:10px;">
+          <!-- Facebook -->
+          <a href="https://www.facebook.com/HoiskolensChemikerforening/" target="_blank">
             <svg style="width:24px;height:24px" viewBox="0 0 24 24">
               <path fill="#FFF"
-                d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z">
-              </path>
+                d="M17,2V2H17V6H15C14.31,6 14,6.81 14,7.5V10H14L17,10V14H14V22H10V14H7V10H10V6A4,4 0 0,1 14,2H17Z"/>
             </svg>
           </a>
-          <a href="https://www.facebook.com/HoiskolensChemikerforening/?fref=ts" target="_blank">
-            <p class="left-align white-text" style="margin-left: 10px">Facebook</p>
-          </a>
-        </div>
-        <div class="valign-wrapper">
+          <!-- Instagram -->
           <a href="https://www.instagram.com/hcntnu/" target="_blank">
-            <img src ="/static/images/instagram-white-icon.png" alt="Instagram_logo"
-                style="max-width: 20px;" >       
-         </a>
-          <a href="https://www.instagram.com/hcntnu/" target="_blank">
-            <p class="left-align white-text" style="margin-left: 10px">Instagram</p>
+            <img src="/static/images/instagram-white-icon.png" alt="Instagram" style="max-width: 20px;">
           </a>
-        </div>
-        </div>
-        <div class="col s12 m4 l3">
-
-          <div class="valign-wrapper">
-            <a href="https://www.youtube.com/@hcntnu" target="_blank" class="valign-wrapper">
-              <img src ="/static/images/youtube-app-white-icon.png" alt="YouTube_logo"
-                  style="max-width: 20px;" >       
-           </a>
-            <a href="https://www.youtube.com/@hcntnu" target="_blank">
-              <p class="left-align white-text" style="margin-left: 10px">YouTube</p>
-            </a>
-          </div>
-
-          
-
-        <div class="valign-wrapper">
-          <a href="mailto:styret@hc.ntnu.no">
-            <i class="material-icons valign left white-text">email</i>
+          <!-- YouTube -->
+          <a href="https://www.youtube.com/@hcntnu" target="_blank">
+            <img src="/static/images/youtube-app-white-icon.png" alt="YouTube" style="max-width: 20px;">
           </a>
-          <a href="mailto:styret@hc.ntnu.no">
-            <p class="left-align white-text">Epost</p>
+          <!-- GitHub -->
+          <a href="https://github.com/HoiskolensChemikerforening/website" target="_blank">
+            <img src="{% static 'images/github.svg' %}" alt="Github" style="max-width: 20px;">
           </a>
-          </div>
-        </div>
-
-
-      
-        <div class="col s12 m4 l6 hide-on-small-only" style="display: flex; justify-content: center; flex-direction: column; align-items: center;">
-          <p class="grey-text text-lighten-4" style="position: relative; right: 23px;" >
-
-            I samarbeid med:
-          </p>
-          <img src="/static/images/Tekna_logo_Horisontal_Hvit.png" alt="Tekna_logo" style="height: auto; max-height: 50px; max-width: inherit;">
-        </div>
-        <div class="col s12 m4 l6 hide-on-med-and-up" >
-          <p class="grey-text text-lighten-4" style="margin-right: 50px; ">
-            I samarbeid med:
-          </p>
-          <img src="/static/images/Tekna_logo_Horisontal_Hvit.png" alt="Tekna_logo" style="height: auto; max-height: 50px; justify-content: center; max-width: inherit;">
+          <!-- LinkedIn -->
+          <a href="https://www.linkedin.com/company/h%C3%B8iskolens-chemikerforening/" target="_blank">
+            <img src="/static/images/icons8-linkedin.svg" alt="LinkedIn" style="max-width: 20px;">
+          </a>
         </div>
         
-      
+        <div style="margin-top: 25px;">
+          <a class="white-text" href="/s/kontaktinfo">Finn kontaktinfo her</a> <br>
+          <a class="white-text" href="/s/schyggesiden">Schyggesiden - Varslingsskjema</a> 
+        </div>
+        <div style="margin-top: 15px;">
+          <a class="white-text" href="mailto:webkom@hc.ntnu.no">Webansvarlig: Webkom</a>
+        </div>
+      </div>  
     
-        <div class="row">
-          <div class="col s12">
-              <div >
-                <div style="height: 18px;"></div>
-                  <a class="white-text" href="/s/kontaktinfo">Kontakt oss!</a>
-              </div>
+      <div class="col s12 m8 l4">
+        <div class="footer-partnere-top">
+          <h5 class="white-text">I samarbeid med:</h5>
+
+          <!-- Desktop-versjon -->
+         <div class="hide-on-small-only" style="display: flex; justify-content: left; flex-direction: column; align-items: center; margin-top: 20px;">
+          <img src="/static/images/Tekna_logo_Horisontal_Hvit.png" alt="Tekna_logo" style="height: auto; max-height: 50px;">
+         </div>
+
+          <!-- Mobil-versjon -->
+          <div class="logo hide-on-med-and-up" style="display: flex; justify-content: flex-start; margin-top: 20px;">
+            <img src="/static/images/Tekna_logo_Horisontal_Hvit.png" alt="Tekna_logo" style="height: auto; max-height: 50px;">
           </div>
+        </div>
       </div>
-      </div>
+
 
         <!-- Sponsors -->
         {% cache 86400 sponsors %}
@@ -388,7 +356,7 @@
 
   <!--  {% if request.user.profile.grade <= 3 %} -->
   {% block makeitrain %}
-    <script src="{% static 'js/makeItRain.js' %}"></script>
+    <!--<script src="{% static 'js/makeItRain.js' %}"></script> -->
   {% endblock %}
 
   <!--  {% endif %} -->
