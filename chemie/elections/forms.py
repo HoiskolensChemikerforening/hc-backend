@@ -3,7 +3,8 @@ from dal import autocomplete
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
-
+from sorl.thumbnail import get_thumbnail
+from django.utils.safestring import mark_safe
 from .models import Position, Election, Candidate
 
 
@@ -74,7 +75,7 @@ def candidatesChoices(election=None):
         choices = Position.objects.none()
     return choices
 
-
+'''
 class CustomChoiceField(forms.ModelMultipleChoiceField):
     def label_from_instance(self, obj):
         name = mark_safe(
@@ -86,7 +87,19 @@ class CustomChoiceField(forms.ModelMultipleChoiceField):
         )
 
         return image + name
+'''
+class CustomChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, obj):
+        try:
+            thumb = get_thumbnail(obj.image_primary, '412x551', crop='center', quality=80)
+            image_url = thumb.url
+        except Exception:
+            image_url = '/static/images/blank_avatar.png'
 
+        image_html = f"<img src='{image_url}' class='class-image p-2 mt-auto' style='max-width:200px;border-radius:8px;'/>"
+        name_html = f"<p class='vote-name p-2'>{obj.user.first_name} {obj.user.last_name}</p>"
+
+        return mark_safe(image_html + name_html)
 
 class CastVoteForm(forms.Form):
     candidates = CustomChoiceField(
