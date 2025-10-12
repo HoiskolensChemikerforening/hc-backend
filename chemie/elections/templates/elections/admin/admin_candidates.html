@@ -77,7 +77,9 @@
       <div class="p-2" style="height:100%">
         <div class="d-flex flex-column"></div>
         <div class="p-2" style="height:80%">
-          <img src="{{ candidate.image_url }}" style="max-width:6rem">
+          {% thumbnail candidate.image_url "150x150" as thumb %}
+              <img src="{{ candidate.image_url }}" loading="lazy" style="max-width:6rem">
+          {% endthumbnail %}
 
           <p class="p-2">
             {{ candidate }}
