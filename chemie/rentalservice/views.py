@@ -7,14 +7,28 @@ from django.http import HttpResponseRedirect
 from django.core.paginator import Paginator
 from django.urls import reverse
 from post_office import mail
+from django.contrib.auth.models import User
 
-from .models import RentalObject, Landlord
+from .models import RentalObject, Landlord, OWNER
 from .forms import CreateRentalObjectForm, InvoiceForm, RentalObjectForm
 from chemie.home.forms import ContactForm
 
+def index(request): # ac
+    rentalObjects = RentalObject.objects.filter(owner=2).order_by("name")
+    # if not rentalObjects.exists():
+    #    return render(request, "/empty.html")
 
-def index(request):
-    return render(request, "rentalservice/index_ac.html")
+    obj_per_page = 24  # Show 24 contacts per page.
+    if len(rentalObjects) <= obj_per_page:
+        context = {"rentalObjects": rentalObjects}
+    else:
+        paginator = Paginator(rentalObjects, obj_per_page)
+
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        context = {"rentalObjects": page_obj}
+    return render(request, "rentalservice/index_ac.html", context)
 
 
 def index_promo(request):
@@ -39,24 +53,10 @@ def index_sportskom(request):
         context = {"rentalObjects": page_obj}
     return render(request, "rentalservice/index_sportskom.html", context)
 
-
-@permission_required("rentalservice.add_rentalobject")
-def new_object(request):
-    form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
-    if form.is_valid():
-        form.save()
-
-        messages.add_message(
-            request,
-            messages.SUCCESS,
-            "Utleieobjektet ble opprettet",
-            extra_tags="Opprettet",
-        )
-        return redirect("rentalservice:index_sportskom")
-
-    context = {"new_obj_form": form}
-    return render(request, "rentalservice/new_object.html", context)
-
+def detail_ac(request, rentalobject_id):
+    rental_object = get_object_or_404(RentalObject, pk=rentalobject_id)
+    context = {"rental_object": rental_object}
+    return render(request, "rentalservice/detail_ac.html", context)
 
 @login_required
 def detail(request, rentalobject_id):
@@ -64,9 +64,61 @@ def detail(request, rentalobject_id):
     context = {"rental_object": rental_object}
     return render(request, "rentalservice/detail.html", context)
 
+@permission_required("rentalservice.add_rentalobject_ac")
+def new_object_ac(request):
+    user = get_object_or_404(User, id=request.user.id)
+    user.has_perm("rentalservice.add_rentalobject_ac", obj=RentalObject())
 
-@permission_required("rentalservice.delete_rentalobject")
-def delete_rentalobject(request, rentalobject_id):
+    form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        rental_object = get_object_or_404(RentalObject, id=form.instance.id)
+        rental_object.owner = OWNER.AC
+        rental_object.save()
+
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Utleieobjektet ble opprettet",
+            extra_tags="Opprettet",
+        )
+        
+        return HttpResponseRedirect(reverse("rentalservice:index_ac"))
+        
+
+    context = {"new_obj_form": form}
+    return render(request, "rentalservice/new_object.html", context)
+
+
+
+@permission_required("rentalservice.add_rentalobject_sportskom")
+def new_object_sport(request):
+    user = get_object_or_404(User, id=request.user.id)
+    user.has_perm("rentalservice.add_rentalobject_sportskom", obj=RentalObject())
+    form = CreateRentalObjectForm(request.POST or None, request.FILES or None)
+    if form.is_valid():
+        form.save()
+        rental_object = get_object_or_404(RentalObject, id=form.instance.id)
+        rental_object.owner = OWNER.SPORTSKOM
+        rental_object.save()
+        
+        messages.add_message(
+            request,
+            messages.SUCCESS,
+            "Utleieobjektet ble opprettet",
+            extra_tags="Opprettet",
+        )
+        
+        return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
+
+    context = {"new_obj_form": form}
+    return render(request, "rentalservice/new_object.html", context)
+
+
+@permission_required("rentalservice.delete_rentalobject_sportskom")
+def delete_rentalobject_sportskom(request, rentalobject_id):
+    user = get_object_or_404(User, id=request.user.id)
+    user.has_perm("rentalservice.delete_rentalobject_sportskom", obj=RentalObject())
     rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
     rental_object.delete()
     messages.add_message(
@@ -77,9 +129,24 @@ def delete_rentalobject(request, rentalobject_id):
     )
     return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
 
+@permission_required("rentalservice.delete_rentalobject_ac")
+def delete_rentalobject_ac(request, rentalobject_id):
+    user = get_object_or_404(User, id=request.user.id)
+    user.has_perm("rentalservice.delete_rentalobject_ac", obj=RentalObject())
+    rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
+    rental_object.delete()
+    messages.add_message(
+        request,
+        messages.SUCCESS,
+        "Utleieobjektet ble slettet",
+        extra_tags="Slettet",
+    )
+    return HttpResponseRedirect(reverse("rentalservice:index_ac"))
 
-@permission_required("rentalservice.change_rentalobject")
-def edit_rentalobject(request, rentalobject_id):
+@permission_required("rentalservice.change_rentalobject_sportskom")
+def edit_rentalobject_sportskom(request, rentalobject_id):
+    user = get_object_or_404(User, id=request.user.id)
+    user.has_perm("rentalservice.change_rentalobject_sportskom", obj=RentalObject())
     rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
     form = CreateRentalObjectForm(
         request.POST or None, request.FILES or None, instance=rental_object
@@ -94,13 +161,33 @@ def edit_rentalobject(request, rentalobject_id):
                 "Utleieobjekt ble endret",
                 extra_tags="Endret",
             )
-            return HttpResponseRedirect(
-                reverse("rentalservice:index_sportskom")
-            )
+            return HttpResponseRedirect(reverse("rentalservice:index_sportskom"))
     context = {"new_obj_form": form}
 
     return render(request, "rentalservice/new_object.html", context)
 
+@permission_required("rentalservice.change_rentalobject_ac")
+def edit_rentalobject_ac(request, rentalobject_id):
+    user = get_object_or_404(User, id=request.user.id)
+    user.has_perm("rentalservice.change_rentalobject_ac", obj=RentalObject())
+    rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
+    form = CreateRentalObjectForm(
+        request.POST or None, request.FILES or None, instance=rental_object
+    )
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                "Utleieobjekt ble endret",
+                extra_tags="Endret",
+            )
+            return HttpResponseRedirect(reverse("rentalservice:index_ac"))
+    context = {"new_obj_form": form}
+
+    return render(request, "rentalservice/new_object.html", context)
 
 def contact(request, rentalobject_id):
     rental_object = get_object_or_404(RentalObject, id=rentalobject_id)
@@ -148,7 +235,6 @@ def new_invoice(request):
 
     context = {"form": form}
     return render(request, "rentalservice/create_invoice.html", context)
-
 
 def contact_page(request):
     return render(request, "rentalservice/contact_page_ac.html")

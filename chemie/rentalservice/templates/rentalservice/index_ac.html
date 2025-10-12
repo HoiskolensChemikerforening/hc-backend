@@ -17,19 +17,16 @@ Audiochromatene
             <div class="col-12 col-md-6" style="margin-bottom: 40px;">
                 <p class="flow-text">
                     Vi er Audiochromatene, lys- og lydteknisk komité i HC!
-                    Vi har masse utstyr vi bruker på arrangementer i linjeforeningen,
-                    men det meste av dette utstyret kan også leies - både av foreninger og privatpersoner.
-                    Under er dette listet med tilhørende priser og inne på hver enhet er det mer info og tekniske spesifikasjoner.
-                    Om du ønsker å leie men ikke vet helt hva du trenger,
-                    hjelper vi gjerne til for å komme frem til hvilket utstyr som passer best til ditt arrangement.
+                    Vi har utstyr som kan leies både av foreninger, foretninger og privatpersoner.
+                    Detaljer om priser og tekniske spesifikasjoner er beskrevet under de ulike utstyrene.
+
                     Ta kontakt via kontakt-knappen for å avtale.
                     <br><br>
-                    Er du Chemiker? Da får du rabatt på utstyr fra oss! Er du medlem i HC og skal ha et privat arrangement,
-                    får du 25% rabatt. Er det et arrangement der minst et helt klassetrinn er invitert
-                    (evt. åpent for deltakelse fra hele foreningen) får du 50% rabatt.
-                    Alle komitéer som arrangerer fellesarrangementer i HC får låne utstyr gratis.
+                    Er du medlem i HC? Da får du rabatt på leie av utstyr!
+                    <br><br>
                 </p>
             </div>
+            
         </div>
     </div>
     <div class="col s12 m12 l4" style="max-width:350px;" >
@@ -51,30 +48,58 @@ Audiochromatene
     </div>
 </div>
 
+<div class="col s12 m12 l18">
+  <p>
+    <li class="flow-text">Privat arrangement av HC-medlem: 25% rabatt</li>
+    <li class="flow-text">Arrangement der minst et helt klassetrinn knyttet til HC er invitert: 50% rabatt</li>
+    <li class="flow-text">Alle komitéer som arrangerer fellesarrangementer i HC: gratis lån av utstyr</li>
+    <li class="flow-text">For leie over flere dager fås 50% rabatt på påfølgende dager</li>
+    <br><br>
+  </p>
+</div>
+
+<div>
+  <ul class="pagination nav navbar-nav">
+    {% if rentalObjects.has_previous %}
+     <li><a href="?page={{ rentalObjects.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in rentalObjects.paginator.page_range %}
+    <li class="{% if rentalObjects.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if rentalObjects.has_next %}
+      <li><a href="?page={{ rentalObjects.next_page_number }}">Neste</a></li>
+    {% endif %}
+    </ul>
+</div>
+
 {% if perms.rentalservice %}
-    <!---<div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+    <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
       <a class="btn-floating btn-large">
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.rentalservice.add_rentalobject %}
+        {% if perms.rentalservice.add_rentalobject_ac %}
           <li>
-            <a class="btn-floating blue" href="ny/">
+            <a class="btn-floating blue" href="{% url 'rentalservice:new_object_ac' %}">
               <i class="material-icons">add</i>
-              <a class="btn-floating mobile-fab-tip" href="ny/">Legg til ny</a>
+              <a class="btn-floating mobile-fab-tip" href="{% url 'rentalservice:new_object_ac' %}">Legg til ny</a>
             </a></li>
         {% endif %}
       </ul>
-    </div> --->
+    </div>
   {% endif %}
 <div class="row">
         <div class="col s12"> <!---size of the layout--->
             <div class="row">
+            {% if not rentalObjects %}
+            <p class="flow-text">Ingenting å låne enda!</p>
+            {% endif %}
             {% for object in rentalObjects %}
-                <div class="col s12 m4">
+                <div class="col s12 m6 l4">
                 <div class="card small">
                     <div class="card-image">
-                        <a href="{% url 'rentalservice:detail' object.id %}">
+                        <a href="{% url 'rentalservice:detail_ac' object.id %}">
                             {% thumbnail object.image "630x400" crop="center" as im %} <!--- standard image crop for HC--->
                                 <img src="{{ im.url }}"> <!--- locates image url--->
                             {% endthumbnail %}
@@ -86,13 +111,28 @@ Audiochromatene
                         <p class="card-text"> {{ object.description|safe }} </p>
                     </div>
                     <div class="card-action center">
-                        <a href="{% url 'rentalservice:detail' object.id %}">Mer info</a> <!--- det er ingen hyperlenke her nå--->
+                        <a href="{% url 'rentalservice:detail_ac' object.id %}">Mer info</a> <!--- det er ingen hyperlenke her nå--->
                     </div>
                 </div>
                 </div>
             {% endfor %}
             </div>
         </div>
+</div>
+
+<div>
+  <ul class="pagination nav navbar-nav">
+    {% if rentalObjects.has_previous %}
+     <li><a href="?page={{ rentalObjects.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in rentalObjects.paginator.page_range %}
+    <li class="{% if rentalObjects.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if rentalObjects.has_next %}
+      <li><a href="?page={{ rentalObjects.next_page_number }}">Neste</a></li>
+    {% endif %}
+    </ul>
 </div>
 
 {% endblock %}

@@ -69,11 +69,11 @@ Sportskomiteen
         <i class="large material-icons">edit</i>
       </a>
       <ul>
-        {% if perms.rentalservice.add_rentalobject %}
+        {% if perms.rentalservice.add_rentalobject_sportskom %}
           <li>
-            <a class="btn-floating blue" href="{% url 'rentalservice:new_object' %}">
+            <a class="btn-floating blue" href="{% url 'rentalservice:new_object_sport' %}">
               <i class="material-icons">add</i>
-              <a class="btn-floating mobile-fab-tip" href="{% url 'rentalservice:new_object' %}">Legg til ny</a>
+              <a class="btn-floating mobile-fab-tip" href="{% url 'rentalservice:new_object_sport' %}">Legg til ny</a>
             </a></li>
         {% endif %}
       </ul>
