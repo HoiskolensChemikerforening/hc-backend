@@ -37,29 +37,66 @@
   {% endif %}
 
 
-
+<div class="column">
+  <div class="col s6 m6 l7 s12">
+    <nav>
+      <div class="nav-wrapper">
+        <form method='post' class="newPost">{% csrf_token %}
+          <div class="input-field">
+            <input id="{{ search_form.search_field.id_for_label }}"
+                    type="search" required name="{{ search_form.search_field.html_name }}"
+                    value="{{ search_form.search_field.value|default:'' }}">
+            <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
+              <i class="material-icons" style="line-height: 42px;">search</i></label>
+          </div>
+        </form>
+      </div>
+    </nav>
+  </div>
+  <br>
+  <!-- Dropdown filters -->
   <div class="row">
       <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 30px">
-            <div style="margin-right: 10px">
-        <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
-           >Klassetrinn</a>
-        <ul id='dropdown1' class='dropdown-content'>
+        <div style="margin-right: 10px">
+          <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
+            >Klassetrinn</a>
+        <ul id='dropdown1' class='dropdown-content select-dropdown multiple-select-dropdown'> <!-- FIX MULTI-MULTI-FILTER-CHOICE WHEN SINGLE-MULTI-FILTER-CHOICE IS COMPLETE -->
           {% for year_number, year_text in grades %}
-            <li><a href='{% url "profile:yearbook-grade" year=year_number %}'>{{ year_text }}</a></li>
+            <li><a href='{% url "profile:yearbook-forsok1810" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering %}'>{{ year_text }}</a></li>
           {% endfor %}
         </ul>
-            </div>
-
+        </div>
+        <div style="margin-right: 10px">
+          <a class='dropdown-trigger btn-large' href='#' data-target='dropdown4'
+            >Digidaljer</a>
+          <ul id='dropdown4' class='dropdown-content select-dropdown multiple-select-dropdown'>
+            <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer=None spesialisering=spesialisering %}'>Alle</a></li>
+            {% for medal_title in medals %}
+              <li><a href='{% url "profile:yearbook-forsok1810" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering %}'>{{ medal_title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+        <div style="margin-right: 10px">
+          <a class='dropdown-trigger btn-large' href='#' data-target='dropdown5'
+            >Sivilstatus</a>
+          <ul id='dropdown5' class='dropdown-content select-dropdown multiple-select-dropdown'>
+            <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=None klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}'>Ingen filter</a></li>
+            {% for rel_number, rel_text in relstat %}
+              <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}'>{{ rel_text }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
         {% if grade != grades.DONE %}
             <div>
             <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
                 >Spesialisering</a>
             <ul id = 'dropdown3' class='dropdown-content'>
+              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=None klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}'>Alle </a></li>
               {% for spec_value, spec_text in spec %}
                   {% if spec_value == 1 %}
-                    <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>Alle </a></li>
+                    <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}'>Ikke valgt </a></li>
                   {% else %}
-                    <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>{{ spec_text }}</a></li>
+                    <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}'>{{ spec_text }}</a></li>
                   {% endif %}
               {% endfor %}
             </div>
@@ -67,41 +104,29 @@
             <div style="margin-left:20px ">
                 <form method='post' class="newPost">{% csrf_token %}
                   <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
-               >Sluttår</a>
+                >Sluttår</a>
                   <ul class="dropdown-content" id="dropdown2" style="max-height: 250px">
                     {% for end_year in end_years %}
                       <li>
-                      <button class="newbtn" id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
-                              href="" value="{{ end_year}}">{{end_year}}</button>
+                        <button 
+                          class="newbtn" id="year-{{end_year}}" type="submit" 
+                          name="{{ endYearForm.integer_field.html_name }}" href="" value="{{ end_year}}"
+                          >
+                          {{end_year}}
+                        </button>
                       </li>
-
-                      {% endfor %}
+                    {% endfor %}
                   </ul>
                 </form>
             </div>
         {% endif %}
-      </div>
-
-
-
-
-      <div class="col s6 m6 l7 s12">
-        <nav>
-          <div class="nav-wrapper">
-            <form method='post' class="newPost">{% csrf_token %}
-              <div class="input-field">
-                <input id="{{ search_form.search_field.id_for_label }}"
-                       type="search" required name="{{ search_form.search_field.html_name }}"
-                       value="{{ search_form.search_field.value|default:'' }}">
-                <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
-                  <i class="material-icons" style="line-height: 42px;">search</i></label>
-              </div>
-            </form>
-          </div>
-        </nav>
+        <div style="margin-left: 10px"> <!-- Remove filter button -->
+          <a class='btn-large' href='{% url "profile:yearbook-index" %}'
+            >Nullstill!</a>
+        </div>
       </div>
   </div>
-
+</div>
 
 
   <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->

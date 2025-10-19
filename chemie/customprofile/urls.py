@@ -32,8 +32,24 @@ urlpatterns = [
     path(
         "katalog/<int:year>/<int:spec>/", views.yearbook, name="yearbook-spec"
     ),
+    #path(
+    #    "katalog/<int:spec>/", views.yearbook, name="yearbook-spec-only"
+    #),
+    path("katalog/medaljefiltrering/<str:med>/", views.yearbook, name="yearbook-medal"),
+    path("katalog/sivilstatus/<int:relstat>/", views.yearbook, name="yearbook-relationship"),
     path("katalog/", views.yearbook, name="yearbook-index"),
-    path(
+    path("katalog/<int:klassetrinn>/<int:spesialisering>/<int:sivilstatus>/<str:digimedaljer>/", views.yearbook, name="yearbook-multi-singlefilter"),
+    re_path(
+        r"^katalog/(?:(?P<klassetrinn>\d+)/)?(?:(?P<spesialisering>\d+)/)?(?:(?P<sivilstatus>\d+)/)?(?:(?P<digimedaljer>[\w-]+)/)?$",
+        views.yearbook,
+        name="yearbook-multi-singlefilter-final-ORIGINAL",
+    ),
+    re_path(
+        r"^katalog/(?P<klassetrinn>\d+)/(?P<spesialisering>[^/]*)?/(?P<sivilstatus>[^/]*)?/(?P<digimedaljer>[^/]*)?/$",
+        views.yearbook,
+        name="yearbook-forsok1810",
+    ),
+    path(        
         "api/profil/",
         views.ProfileListCreate.as_view(),
         name="api-profile-list",

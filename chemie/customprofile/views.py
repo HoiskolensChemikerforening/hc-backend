@@ -47,6 +47,7 @@ from .models import (
     Medal,
     MEMBERSHIP_DURATIONS,
     SPECIALIZATION,
+    RELATIONSHIP_STATUS,
     RegisterPageStatus,
 )
 from .serializers import (
@@ -289,14 +290,17 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, year=1, spec=1):
-    year = int(year)
+def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digimedaljer=None): #vil =None skape problemer?
+    klassetrinn = int(klassetrinn)
+    defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer]
+    # for [1, None, None, None] => 1. klasse, alle spesialiseringer (+ ingen), alle relationshipstatus, alle medaljer (+ingen)
     # If url arg grade is invalid, make it valid.
-    if year not in GRADES:
-        if year > GRADES.FIFTH.value:
-            year = GRADES.FIFTH.value
+    
+    if klassetrinn not in GRADES:
+        if klassetrinn > GRADES.FIFTH.value:
+            klassetrinn = GRADES.FIFTH.value
         else:
-            year = 1
+            klassetrinn = 1
     form = NameSearchForm(request.POST or None)
     profiles = Profile.objects.none()
 
@@ -313,15 +317,17 @@ def yearbook(request, year=1, spec=1):
         .values_list("end_year", flat=True)
         .distinct()
     )
+    
+    # April Fools
+    crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
+    # crush = Profile.objects.filter(user__last_name="Groening").first()
 
-    if request.method == "POST":
+    if request.method == "POST": #denne er for søkefeltet, da vil vi ikke ta hensyn til de andre filtreringene
         if form.is_valid():
             search_field = form.cleaned_data.get("search_field")
             users = find_user_by_name(search_field)
             profiles = (
                 Profile.objects.filter(user__in=users)
-                .prefetch_related("medals")
-                .order_by("grade")
             )
         if endYearForm.is_valid():
             integer_field = endYearForm.cleaned_data.get("integer_field")
@@ -331,42 +337,75 @@ def yearbook(request, year=1, spec=1):
                 .order_by("user__last_name")
                 .prefetch_related("medals")
             )
-    else:
-        if year != GRADES.DONE:
-            if spec == SPECIALIZATION.NONE:
-                profiles = (
-                    Profile.objects.filter(grade=year, user__is_active=True)
-                    .order_by("user__last_name")
-                    .prefetch_related("medals")
-                )
-            else:
-                profiles = (
-                    Profile.objects.filter(
-                        grade=year, user__is_active=True, specialization=spec
-                    )
-                    .order_by("user__last_name")
-                    .prefetch_related("medals")
-                )
-        else:
+    else: #dette er for filtreringene, da søkefeltet ikke er i bruk
+        if klassetrinn != GRADES.DONE: #hovedsakelig for 1-5 klasse, da disse er de fleste aktive profilene
+            # ha en multiple choice select for klassetrinn og relstat? fixe single choice først
+            base_qs = Profile.objects.select_related("user").prefetch_related("medals")
+            filter_kwargs = {"user__is_active": True}
+            filter_kwargs["grade"] = klassetrinn
+            if spesialisering not in (None, "", "Alle_spes", "None"): #"None" because of url handling, function in line 296 does not work as intended
+                filter_kwargs["specialization"] = spesialisering
+            if sivilstatus not in (None, "", "Alle_rel", "None"):
+                filter_kwargs["relationship_status"] = sivilstatus
+            if digimedaljer not in (None, "", "Alle_med", "None"):
+                filter_kwargs["medals__title"] = digimedaljer #digimedaljer når valgt "alle" gir "None" i url som fucker opp filtreringen
+            
+            print("Filter kwargs:", filter_kwargs)  # Debug print to check filter parameters
             profiles = (
-                Profile.objects.filter(end_year=end_year, user__is_active=True)
+                base_qs.filter(**filter_kwargs)
                 .order_by("user__last_name")
-                .prefetch_related("medals")
+                .distinct()
             )
 
-    # April Fools
-    crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
-    # crush = Profile.objects.filter(user__last_name="Groening").first()
+    # TRYING to ******************normalize empty-string URL parts to None (the view passes "" for empty kwargs)
+    if spesialisering in (None, "", "None"):
+        default_spes = "Alle_spes" #this is what i want in the url - not None (maybe  "" suffices too?)
+    else:
+        default_spes = spesialisering
+    defaulturl[1] = default_spes
+
+    if sivilstatus in (None, "", "None"):
+        default_rel = "Alle_rel"
+    else:
+        default_rel = sivilstatus
+    defaulturl[2] = default_rel
+
+    if digimedaljer in (None, "", "None"):
+        default_med = "Alle_med"
+    else:
+        default_med = digimedaljer
+    defaulturl[3] = default_med
+
+    url = reverse(
+        "profile:yearbook-forsok1810", 
+        kwargs={
+            "klassetrinn": defaulturl[0],
+            "spesialisering": defaulturl[1] or "",
+            "sivilstatus": defaulturl[2] or "",
+            "digimedaljer": defaulturl[3] or "",
+        },
+    )
+    #1910 update: 
+    #Må fikse urlen slik at den ikke har None i seg når man velger "alle" i dropdowns.
+    #Må fjerne filtreringsmuligheter for "ferdig" (html?)
+    #Må legge til en maks grense på antall profiler vist per side, kanskje 200 er good? (html + view?) 
 
     context = {
         "profiles": profiles,
         "grades": GRADES,
         "search_form": form,
-        "grade": year,
+        #"grade": year,
         "endYearForm": endYearForm,
         "end_years": end_years,
         "spec": SPECIALIZATION,
         "crush": crush,  # April fools
+        "relstat": RELATIONSHIP_STATUS,
+        "medals": Medal.objects.all(),
+        "klassetrinn": defaulturl[0], #*********************
+        "spesialisering": defaulturl[1],
+        "sivilstatus": defaulturl[2],
+        "digimedaljer": defaulturl[3],
+        "url": url,
     }
 
     return render(request, "customprofile/yearbook.html", context)
