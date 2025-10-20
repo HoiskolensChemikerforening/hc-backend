@@ -52,7 +52,7 @@
     var numberOfCandidates = 0;
     for (var i = 0; i < checkBoxes.length; i++) {
       if (checkBoxes[i].checked) {
-        var candidateName = checkBoxes[i].parentNode.childNodes[3].innerHTML;
+        var candidateName = checkBoxes[i].closest("label").querySelector(".vote-name").innerText;
         message = message.concat("\n");
         message = message.concat(candidateName.toString());
         numberOfCandidates++
