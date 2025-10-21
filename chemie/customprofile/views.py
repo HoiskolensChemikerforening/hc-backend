@@ -16,6 +16,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django.core.paginator import Paginator
+
 
 from rest_framework import generics
 from rest_framework_simplejwt.views import (
@@ -295,6 +297,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer]
     # for [1, None, None, None] => 1. klasse, alle spesialiseringer (+ ingen), alle relationshipstatus, alle medaljer (+ingen)
     # If url arg grade is invalid, make it valid.
+    obj_per_page = 200
     
     if klassetrinn not in GRADES:
         if klassetrinn > GRADES.FIFTH.value:
@@ -322,40 +325,33 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
     # crush = Profile.objects.filter(user__last_name="Groening").first()
 
-    if request.method == "POST": #denne er for søkefeltet, da vil vi ikke ta hensyn til de andre filtreringene
-        if form.is_valid():
-            search_field = form.cleaned_data.get("search_field")
-            users = find_user_by_name(search_field)
-            profiles = (
-                Profile.objects.filter(user__in=users)
-            )
-        if endYearForm.is_valid():
-            integer_field = endYearForm.cleaned_data.get("integer_field")
-            end_year = integer_field
-            profiles = (
-                Profile.objects.filter(end_year=end_year, user__is_active=True)
-                .order_by("user__last_name")
-                .prefetch_related("medals")
-            )
-    else: #dette er for filtreringene, da søkefeltet ikke er i bruk
-        if klassetrinn != GRADES.DONE: #hovedsakelig for 1-5 klasse, da disse er de fleste aktive profilene
-            # ha en multiple choice select for klassetrinn og relstat? fixe single choice først
-            base_qs = Profile.objects.select_related("user").prefetch_related("medals")
-            filter_kwargs = {"user__is_active": True}
-            filter_kwargs["grade"] = klassetrinn
-            if spesialisering not in (None, "", "Alle_spes", "None"): #"None" because of url handling, function in line 296 does not work as intended
-                filter_kwargs["specialization"] = spesialisering
-            if sivilstatus not in (None, "", "Alle_rel", "None"):
-                filter_kwargs["relationship_status"] = sivilstatus
-            if digimedaljer not in (None, "", "Alle_med", "None"):
-                filter_kwargs["medals__title"] = digimedaljer #digimedaljer når valgt "alle" gir "None" i url som fucker opp filtreringen
-            
-            print("Filter kwargs:", filter_kwargs)  # Debug print to check filter parameters
-            profiles = (
-                base_qs.filter(**filter_kwargs)
-                .order_by("user__last_name")
-                .distinct()
-            )
+    # ha en multiple choice select for klassetrinn og relstat? fixe single choice først
+    base_qs = Profile.objects.select_related("user").prefetch_related("medals")
+    filter_kwargs = {"user__is_active": True}
+    filter_kwargs["grade"] = klassetrinn
+    if spesialisering not in (None, "", "Alle_spes", "None"): #"None" because of url handling, function in line 296 does not work as intended
+        filter_kwargs["specialization"] = spesialisering
+    if sivilstatus not in (None, "", "Alle_rel", "None"):
+        filter_kwargs["relationship_status"] = sivilstatus
+    if digimedaljer not in (None, "", "Alle_med", "None"):
+        filter_kwargs["medals__title"] = digimedaljer #digimedaljer når valgt "alle" gir "None" i url som fucker opp filtreringen
+    
+    if endYearForm.is_valid(): #end_year filter
+        integer_field = endYearForm.cleaned_data.get("integer_field")
+        end_year = integer_field
+        filter_kwargs['end_year'] = end_year
+
+    profiles = ( #the complete filterering
+        base_qs.filter(**filter_kwargs)
+        .order_by("user__last_name")
+        .distinct()
+    )
+
+    if form.is_valid(): #searchfield
+        search_field = form.cleaned_data.get("search_field")
+        users = find_user_by_name(search_field)
+        # assign the filtered queryset back to `profiles` so the search actually applies
+        profiles = profiles.filter(user__in=users).distinct()
 
     # TRYING to ******************normalize empty-string URL parts to None (the view passes "" for empty kwargs)
     if spesialisering in (None, "", "None"):
@@ -387,16 +383,32 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     )
     #1910 update: 
     #Må fikse urlen slik at den ikke har None i seg når man velger "alle" i dropdowns.
-    #Må fjerne filtreringsmuligheter for "ferdig" (html?)
+    #legge til filtrering for ferdige
     #Må legge til en maks grense på antall profiler vist per side, kanskje 200 er good? (html + view?) 
+    #Søk skal ta hensyn til filtrering
+    #Kan velge flere klassetrinn (må minst ha 1? med paginator kan man velge "alle")
+    #sjekk om linje 152-172 i yearbook.html funker
 
+    #1 : 
+    #2 : semi-FIXED : Om du filtrerte før du valgte sluttår så blir filtreringen med i url-en IKKE MED I FAKTISK FILTRERING
+    #3 : NOT FIXED : Har lagt inn noe kode i jamfør html 152-172 og alt med paginator i view - må sjekke om dette funker til slutt
+    #4 : NOT FIXED : Gjør til SLUTT
+    #5 : er i strid med #2, men tror skal gå med paginator | fjerner {% if grade != grades.DONE %} #gjør nest-slutt
+    #6 : (paginator -#3)
+
+    #PÅGÅR: 4: 
+    #Neste: fjerner grade != done i koden(e). (#2)
+
+    # Provide `grade` in context to match template checks (grade != grades.DONE)
     context = {
         "profiles": profiles,
         "grades": GRADES,
         "search_form": form,
-        #"grade": year,
+        # expose a `grade` name for template use (the selected klassetrinn)
+        "grade": defaulturl[0],
         "endYearForm": endYearForm,
         "end_years": end_years,
+        "sluttår": end_year,
         "spec": SPECIALIZATION,
         "crush": crush,  # April fools
         "relstat": RELATIONSHIP_STATUS,
@@ -407,6 +419,33 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         "digimedaljer": defaulturl[3],
         "url": url,
     }
+
+    # Show obj_per_page per page (replace your existing pagination block)
+    try:
+        total_count = profiles.count()
+    except Exception:
+        # fallback if profiles is a list
+        total_count = len(profiles)
+
+    if total_count <= obj_per_page:
+        context["profiles"] = profiles
+        context["is_paginated"] = False
+    else:
+        paginator = Paginator(profiles, obj_per_page)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        # put the page into context so template can both iterate and show navigation
+        context["profiles"] = page_obj       # Page is iterable
+        context["page_obj"] = page_obj
+        context["paginator"] = paginator
+        context["is_paginated"] = page_obj.has_other_pages()
+
+        # Build a querystring prefix that preserves other GET params (except 'page') --- This is work by Copilot
+        qs = request.GET.copy()
+        if "page" in qs:
+            qs.pop("page")
+        context["page_query_prefix"] = ("?" + qs.urlencode() + "&") if qs else "?"
 
     return render(request, "customprofile/yearbook.html", context)
 
