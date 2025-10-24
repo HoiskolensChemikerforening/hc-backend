@@ -292,12 +292,12 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digimedaljer=None): #vil =None skape problemer?
+def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digimedaljer=None):
     klassetrinn = int(klassetrinn)
     defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer]
     # for [1, None, None, None] => 1. klasse, alle spesialiseringer (+ ingen), alle relationshipstatus, alle medaljer (+ingen)
     # If url arg grade is invalid, make it valid.
-    obj_per_page = 200
+    obj_per_page = 1
     
     if klassetrinn not in GRADES:
         if klassetrinn > GRADES.FIFTH.value:
@@ -309,6 +309,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
 
     endYearForm = EndYearForm(request.POST or None)
     qProfilesFifth = Profile.objects.filter(grade=GRADES.FIFTH)
+
     if len(qProfilesFifth) > 0:
         end_year = qProfilesFifth[0].end_year - 1
     else:
@@ -320,34 +321,50 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         .values_list("end_year", flat=True)
         .distinct()
     )
+
+    # allow GET to override path kwargs (so links like ?spesialisering=3 work) | Copilot wanted this badly
+    get_spes = request.GET.get("spesialisering")
+    get_rel = request.GET.get("sivilstatus")
+    get_med = request.GET.get("digimedaljer")
+    get_end_year = request.GET.get("end_year")
+
+    if get_spes not in (None, "", "None"):
+        spesialisering = get_spes
+    if get_rel not in (None, "", "None"):
+        sivilstatus = get_rel
+    if get_med not in (None, "", "None"):
+        digimedaljer = get_med
+    if get_end_year not in (None, "", "None"):
+        try:
+            end_year = int(get_end_year)
+        except ValueError:
+            pass
     
     # April Fools
     crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
     # crush = Profile.objects.filter(user__last_name="Groening").first()
 
     # ha en multiple choice select for klassetrinn og relstat? fixe single choice først
-    base_qs = Profile.objects.select_related("user").prefetch_related("medals")
-    filter_kwargs = {"user__is_active": True}
-    filter_kwargs["grade"] = klassetrinn
+    filter_kwargs = {"user__is_active": True} #filter key word arguments baseline
+    if klassetrinn != GRADES.DONE:
+        filter_kwargs["grade"] = klassetrinn
+    else: #Only filter by end_year (if it is selected )
+        if endYearForm.is_valid(): #Similar to (if end_year:)
+            integer_field = endYearForm.cleaned_data.get("integer_field")
+            end_year = integer_field
+            filter_kwargs["end_year"] = end_year
+
     if spesialisering not in (None, "", "Alle_spes", "None"): #"None" because of url handling, function in line 296 does not work as intended
         filter_kwargs["specialization"] = spesialisering
     if sivilstatus not in (None, "", "Alle_rel", "None"):
         filter_kwargs["relationship_status"] = sivilstatus
     if digimedaljer not in (None, "", "Alle_med", "None"):
         filter_kwargs["medals__title"] = digimedaljer #digimedaljer når valgt "alle" gir "None" i url som fucker opp filtreringen
-    
-    if endYearForm.is_valid(): #end_year filter
-        integer_field = endYearForm.cleaned_data.get("integer_field")
-        end_year = integer_field
-        filter_kwargs['end_year'] = end_year
+        
+    profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("user__last_name").distinct()
 
-    profiles = ( #the complete filterering
-        base_qs.filter(**filter_kwargs)
-        .order_by("user__last_name")
-        .distinct()
-    )
 
-    if form.is_valid(): #searchfield
+    if form.is_valid(): #You need to add filterering before you search by name ***
         search_field = form.cleaned_data.get("search_field")
         users = find_user_by_name(search_field)
         # assign the filtered queryset back to `profiles` so the search actually applies
@@ -381,25 +398,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
             "digimedaljer": defaulturl[3] or "",
         },
     )
-    #1910 update: 
-    #Må fikse urlen slik at den ikke har None i seg når man velger "alle" i dropdowns.
-    #legge til filtrering for ferdige
-    #Må legge til en maks grense på antall profiler vist per side, kanskje 200 er good? (html + view?) 
-    #Søk skal ta hensyn til filtrering
-    #Kan velge flere klassetrinn (må minst ha 1? med paginator kan man velge "alle")
-    #sjekk om linje 152-172 i yearbook.html funker
-
-    #1 : 
-    #2 : semi-FIXED : Om du filtrerte før du valgte sluttår så blir filtreringen med i url-en IKKE MED I FAKTISK FILTRERING
-    #3 : NOT FIXED : Har lagt inn noe kode i jamfør html 152-172 og alt med paginator i view - må sjekke om dette funker til slutt
-    #4 : NOT FIXED : Gjør til SLUTT
-    #5 : er i strid med #2, men tror skal gå med paginator | fjerner {% if grade != grades.DONE %} #gjør nest-slutt
-    #6 : (paginator -#3)
-
-    #PÅGÅR: 4: 
-    #Neste: fjerner grade != done i koden(e). (#2)
-
-    # Provide `grade` in context to match template checks (grade != grades.DONE)
+        
     context = {
         "profiles": profiles,
         "grades": GRADES,
@@ -446,6 +445,30 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         if "page" in qs:
             qs.pop("page")
         context["page_query_prefix"] = ("?" + qs.urlencode() + "&") if qs else "?"
+
+    #Finale note before MERGE:
+    """
+    Alle profilnavn er knyttet til skaane05 sin localhost database som kan gjøre dette lit vanskelig å forstå
+
+    ALT funker egentlig veldig strålende utenom at searchfield tar inn filtrering hele tiden (er kinda useless)
+
+    Check paginator by setting obj_per_page to 2. In a way also check if website canhandle 300+ (up to like 3000-4000) profiles with images. 
+    Paginator works, BUT!
+
+    *When searching, filter stays, but when changing page (with search), filter gets removed!!!
+    *Tilsvarende; om du er på en profil (si webkom sporty) og så søker opp webkom, vil du havne på siden (i paginator) til webkom sporty, selv om vedkommende er side 48.
+    -* Prøv: 6 klasse, søk andreas (2 profiler), velg neste side / side 2; du får atreus 8som er page 2 for ferdige (...)
+    ->virker som når du trykker på side 2 så henter url data: (6 klasse, alle spes.... /page=2) som gjør at du blir sendt til page 2 for den filterringen => nemlig atreus
+    *Is this a good idea: when searching in "nullstill" (katalog/) search takes in no filter
+    -> Search must ignore default filtering in nullstill | is difficult with klassetrinn default = 1
+    *Når du trykker på ferdige dukker ALLE profiler opp, fordi det er enda ikke filtrer på sluttår (bør ha default i sluttår?)
+    -* Ser ut som paginator laster opp ALLE SIDER liksom samtidig (?)
+    *Must fix beauty of url and such of the code (se context -> vil blant annet ikke ha "sluttår" )
+
+    **The usage of defaulturl and filter_kwargs kan pot. fuck eachother up. Quadruple check if defaulturl does not fuck stuff 
+    Its best to remove defaulturl - since filter_kwargs is used to filter, while defaulturl (currently) is used to fix url beauty and
+    in context (where html try to communicate with filter_kwargs)
+    """
 
     return render(request, "customprofile/yearbook.html", context)
 

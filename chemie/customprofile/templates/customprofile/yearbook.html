@@ -148,29 +148,6 @@
 </div>
 
 <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
-
-<!-- Pagination (shows when `profiles` is a Page with multiple pages) -->
-{% if profiles and profiles.has_other_pages %}
-  <nav aria-label="Sider" style="margin: 1rem 0; text-align:center;">
-    <ul class="pagination" style="display:inline-flex; gap:0.5rem; list-style:none; padding:0;">
-      {% if profiles.has_previous %}
-        <li class="page-item"><a class="page-link btn" href="{{ url }}?page={{ profiles.previous_page_number }}">Forrige</a></li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link btn disabled">Forrige</span></li>
-      {% endif %}
-
-      <li class="page-item active"><span class="page-link btn">{{ profiles.number }} / {{ profiles.paginator.num_pages }}</span></li>
-
-      {% if profiles.has_next %}
-        <li class="page-item"><a class="page-link btn" href="{{ url }}?page={{ profiles.next_page_number }}">Neste</a></li>
-      {% else %}
-        <li class="page-item disabled"><span class="page-link btn disabled">Neste</span></li>
-      {% endif %}
-    </ul>
-  </nav>
-{% endif %}
-
-<!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
 <div class="row">
   {% for profile in profiles %}
     <div class="col s12 m4">
@@ -256,8 +233,44 @@
   {% endfor %}
 </div>
                   
+<!-- Pagination (shows when `profiles` is a Page with multiple pages) -->
+{% if profiles and profiles.has_other_pages %}
+<ul class="pagination nav navbar-nav" >
+  {% if profiles.has_previous %}
+    <li><a href="?page={{ profiles.previous_page_number }}">Forrige</a></li>
+  {% endif %}
+  {% for page in profiles.paginator.page_range %}
+    <li class="{% if profiles.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+  {% endfor %}
 
+  {% if profiles.has_next %}
+    <li><a href="?page={{ profiles.next_page_number }}">Neste</a></li>
+  {% endif %}
+</ul>
+{% endif %}
 
+<!--Copilot backup
+
+{% if profiles and profiles.has_other_pages %}
+<nav aria-label="Sider" style="margin: 1rem 0; text-align:center;">
+  <ul class="pagination" style="display:inline-flex; gap:0.5rem; list-style:none; padding:0;">
+    {% if profiles.has_previous %}
+      <li class="page-item"><a class="page-link btn" href="{{ url }}?page={{ profiles.previous_page_number }}">Forrige</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link btn disabled">Forrige</span></li>
+    {% endif %}
+
+    <li class="page-item active"><span class="page-link btn">{{ profiles.number }} / {{ profiles.paginator.num_pages }}</span></li>
+
+    {% if profiles.has_next %}
+      <li class="page-item"><a class="page-link btn" href="{{ url }}?page={{ profiles.next_page_number }}">Neste</a></li>
+    {% else %}
+      <li class="page-item disabled"><span class="page-link btn disabled">Neste</span></li>
+    {% endif %}
+  </ul>
+</nav>
+{% endif %}
+-->
 {% endblock content %}
 
 {% block footer_script %}
