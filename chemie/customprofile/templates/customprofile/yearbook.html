@@ -82,17 +82,18 @@
           >Klassetrinn</a>
       <ul id='dropdown1' class='dropdown-content select-dropdown multiple-select-dropdown'>
         {% for year_number, year_text in grades %}
-          <li><a href='{% url "profile:yearbook-forsok1810" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering %}'>{{ year_text }}</a></li>
+          <li><a href='{% url "profile:yearbook-forsok1810" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering search=search %}'>{{ year_text }}</a></li>
         {% endfor %}
+        <li><a href='{% url "profile:yearbook-forsok1810" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering search=search%}'>Alle trinn</a></li>
       </ul>
       </div>
       <div style="margin-right: 10px">
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown4'
           >Digidaljer</a>
         <ul id='dropdown4' class='dropdown-content select-dropdown multiple-select-dropdown'>
-          <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer=None spesialisering=spesialisering %}'>Alle</a></li>
+          <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer=None spesialisering=spesialisering search=search%}'>Alle</a></li>
           {% for medal_title in medals %}
-            <li><a href='{% url "profile:yearbook-forsok1810" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering %}'>{{ medal_title }}</a></li>
+            <li><a href='{% url "profile:yearbook-forsok1810" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering search=search%}'>{{ medal_title }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -100,9 +101,9 @@
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown5'
           >Sivilstatus</a>
         <ul id='dropdown5' class='dropdown-content select-dropdown multiple-select-dropdown'>
-          <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=None klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}'>Ingen filter</a></li>
+          <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=None klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering search=search%}'>Ingen filter</a></li>
           {% for rel_number, rel_text in relstat %}
-            <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}'>{{ rel_text }}</a></li>
+            <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering search=search%}'>{{ rel_text }}</a></li>
           {% endfor %}
         </ul>
       </div>
@@ -110,12 +111,12 @@
       <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
           >Spesialisering</a>
       <ul id = 'dropdown3' class='dropdown-content'>
-        <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=None klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}'>Alle </a></li>
+        <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=None klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer search=search%}'>Alle </a></li>
         {% for spec_value, spec_text in spec %}
             {% if spec_value == 1 %}
-              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}'>Ikke valgt </a></li>
+              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer search=search%}'>Ikke valgt </a></li>
             {% else %}
-              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}'>{{ spec_text }}</a></li>
+              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer search=search%}'>{{ spec_text }}</a></li>
             {% endif %}
         {% endfor %}
       </div>

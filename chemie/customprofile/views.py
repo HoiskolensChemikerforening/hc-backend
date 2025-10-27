@@ -17,7 +17,7 @@ from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
 from django.core.paginator import Paginator
-
+from urllib.parse import urlencode
 
 from rest_framework import generics
 from rest_framework_simplejwt.views import (
@@ -292,9 +292,10 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digimedaljer=None):
+def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digimedaljer=None, search=''):
     klassetrinn = int(klassetrinn)
     defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer]
+    print(f"defaulturl = {defaulturl}")
     # for [1, None, None, None] => 1. klasse, alle spesialiseringer (+ ingen), alle relationshipstatus, alle medaljer (+ingen)
     # If url arg grade is invalid, make it valid.
     obj_per_page = 1
@@ -302,6 +303,8 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     if klassetrinn not in GRADES:
         if klassetrinn > GRADES.FIFTH.value:
             klassetrinn = GRADES.FIFTH.value
+        if klassetrinn in (0, '0', ''):
+            klassetrinn == 0            
         else:
             klassetrinn = 1
     form = NameSearchForm(request.POST or None)
@@ -309,6 +312,8 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
 
     endYearForm = EndYearForm(request.POST or None)
     qProfilesFifth = Profile.objects.filter(grade=GRADES.FIFTH)
+    search_is_used = False
+    search_field = ''
 
     if len(qProfilesFifth) > 0:
         end_year = qProfilesFifth[0].end_year - 1
@@ -322,11 +327,30 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         .distinct()
     )
 
+    if form.is_valid(): #Search_field
+        search_field = form.cleaned_data.get("search_field")
+        users = find_user_by_name(search_field)
+        # assign the filtered queryset back to `profiles` so the search actually applies
+        #profiles = (Profile.objects.filter(user__in=users).prefetch_related("medals)").order_by("grade"))
+        search_is_used = True
+        search = search_field
+    if search not in ("", " ",):
+        print("search is not empty")
+        search_field = search
+        users = find_user_by_name(search_field)
+    try: #if works, then form is valid
+        print(f"search_field = {search_field}")
+        if search_field not in ('', None):
+            search_is_used = True
+    except AttributeError:
+        pass
+
     # allow GET to override path kwargs (so links like ?spesialisering=3 work) | Copilot wanted this badly
     get_spes = request.GET.get("spesialisering")
     get_rel = request.GET.get("sivilstatus")
     get_med = request.GET.get("digimedaljer")
     get_end_year = request.GET.get("end_year")
+    get_search = request.GET.get("search")
 
     if get_spes not in (None, "", "None"):
         spesialisering = get_spes
@@ -340,19 +364,29 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         except ValueError:
             pass
     
+    # If the raw ?search= query param is present, use it
+    if get_search not in (None, "", "None"):
+        print("Line 369")
+        search_field = get_search
+        users = find_user_by_name(search_field)
+        search_is_used = True
+        search = search_field
+    
     # April Fools
     crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
     # crush = Profile.objects.filter(user__last_name="Groening").first()
 
-    # ha en multiple choice select for klassetrinn og relstat? fixe single choice først
     filter_kwargs = {"user__is_active": True} #filter key word arguments baseline
-    if klassetrinn != GRADES.DONE:
-        filter_kwargs["grade"] = klassetrinn
-    else: #Only filter by end_year (if it is selected )
-        if endYearForm.is_valid(): #Similar to (if end_year:)
-            integer_field = endYearForm.cleaned_data.get("integer_field")
-            end_year = integer_field
-            filter_kwargs["end_year"] = end_year
+    
+    if klassetrinn in GRADES:
+        if klassetrinn != GRADES.DONE:
+            filter_kwargs["grade"] = klassetrinn
+        else: #Only filter by end_year (if it is selected )
+            filter_kwargs["grade"] = 6
+            if endYearForm.is_valid(): #Similar to (if end_year:)
+                integer_field = endYearForm.cleaned_data.get("integer_field")
+                end_year = integer_field
+                filter_kwargs["end_year"] = end_year
 
     if spesialisering not in (None, "", "Alle_spes", "None"): #"None" because of url handling, function in line 296 does not work as intended
         filter_kwargs["specialization"] = spesialisering
@@ -360,15 +394,22 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         filter_kwargs["relationship_status"] = sivilstatus
     if digimedaljer not in (None, "", "Alle_med", "None"):
         filter_kwargs["medals__title"] = digimedaljer #digimedaljer når valgt "alle" gir "None" i url som fucker opp filtreringen
-        
-    profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("user__last_name").distinct()
+    print(f"filter_kwaards = {filter_kwargs}")
 
-
-    if form.is_valid(): #You need to add filterering before you search by name ***
-        search_field = form.cleaned_data.get("search_field")
-        users = find_user_by_name(search_field)
-        # assign the filtered queryset back to `profiles` so the search actually applies
-        profiles = profiles.filter(user__in=users).distinct()
+    if search_is_used:
+        print("Search IS used")
+        search = str(search_field)
+        print(f"search is: {search}")
+        print(f"Klassetrinn = {klassetrinn}")
+        if klassetrinn in (0, "0", ''):
+            print("search 1")
+            profiles = (Profile.objects.filter(user__in=users, **filter_kwargs, grade__in=[1,2,3,4,5]).prefetch_related("medals").order_by("grade")) #Alle klassetrinn
+        else:
+            print("search 2")
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
+    else:
+        print("Search is NOT used")
+        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("user__last_name").distinct()
 
     # TRYING to ******************normalize empty-string URL parts to None (the view passes "" for empty kwargs)
     if spesialisering in (None, "", "None"):
@@ -396,8 +437,14 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
             "spesialisering": defaulturl[1] or "",
             "sivilstatus": defaulturl[2] or "",
             "digimedaljer": defaulturl[3] or "",
+            "search": "",
         },
     )
+
+    if search not in (None, "", " "):
+        url = url + ("?" + urlencode({"search": str(search)})) 
+        #i dont know if it is this, but the url does not change untii a filter i changed. But the search workes non the less
+        #it only fuck up paginator, because when page changes, without 
         
     context = {
         "profiles": profiles,
@@ -417,6 +464,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         "sivilstatus": defaulturl[2],
         "digimedaljer": defaulturl[3],
         "url": url,
+        "search": search,
     }
 
     # Show obj_per_page per page (replace your existing pagination block)
@@ -450,11 +498,10 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     """
     Alle profilnavn er knyttet til skaane05 sin localhost database som kan gjøre dette lit vanskelig å forstå
 
-    ALT funker egentlig veldig strålende utenom at searchfield tar inn filtrering hele tiden (er kinda useless)
-
     Check paginator by setting obj_per_page to 2. In a way also check if website canhandle 300+ (up to like 3000-4000) profiles with images. 
-    Paginator works, BUT!
+    Paginator works, BUT...
 
+    !!!Previously seen issues | needs to be checked before final commit/push
     *When searching, filter stays, but when changing page (with search), filter gets removed!!!
     *Tilsvarende; om du er på en profil (si webkom sporty) og så søker opp webkom, vil du havne på siden (i paginator) til webkom sporty, selv om vedkommende er side 48.
     -* Prøv: 6 klasse, søk andreas (2 profiler), velg neste side / side 2; du får atreus 8som er page 2 for ferdige (...)
@@ -464,6 +511,19 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     *Når du trykker på ferdige dukker ALLE profiler opp, fordi det er enda ikke filtrer på sluttår (bør ha default i sluttår?)
     -* Ser ut som paginator laster opp ALLE SIDER liksom samtidig (?)
     *Must fix beauty of url and such of the code (se context -> vil blant annet ikke ha "sluttår" )
+
+    SEMI-FIXED; Search works, but is not stored when (...) ;
+    
+    !!! Current problems
+    **All problems above correlate with the fact that search_field is not stored when url changes (ergo any changes to filter, or pagechange via paginator)
+    ->Need to be fixed in html and context in view.yearbook and urls to send search_field into in url (likewise klassetrinn and sivilstatus where default is: '')
+    --> Maybe not needed for line 66 in html
+
+    currently trying: added search to urls, default = '', when you change filter when search is used, ought to keep the search_field.
+    check: 
+
+    ->When fixed; find a way to make the standard to search without filter, and thus need to change klassetrinn first -- kan set default IN THIS VIEW to "Alle klassetrinn" (but this will load EVERYBODY...)
+    **When fixed, look into variable names... 
 
     **The usage of defaulturl and filter_kwargs kan pot. fuck eachother up. Quadruple check if defaulturl does not fuck stuff 
     Its best to remove defaulturl - since filter_kwargs is used to filter, while defaulturl (currently) is used to fix url beauty and
@@ -476,7 +536,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
 def find_user_by_name(query_name):
     qs = User.objects.all()
     for term in query_name.split():
-        qs = qs.filter(
+        qs = qs.filter( 
             Q(first_name__icontains=term) | Q(last_name__icontains=term)
         )
     return qs
