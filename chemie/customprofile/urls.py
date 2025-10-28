@@ -30,7 +30,7 @@ urlpatterns = [
     path("profil/studentkort/", views.add_rfid, name="add_rfid"),
     path("katalog/", views.yearbook, name="yearbook-index"),
     re_path(
-        r"^katalog/(?P<klassetrinn>\d+)/(?P<spesialisering>[^/]*)?/(?P<sivilstatus>[^/]*)?/(?P<digimedaljer>[^/]*)?/(?:search=(?P<search>[^/]*))?/$",
+        r"^katalog/(?P<klassetrinn>\d+)/(?P<spesialisering>[^/]*)?/(?P<sivilstatus>[^/]*)?/(?P<digimedaljer>[^/]*)?/$",
         views.yearbook,
         name="yearbook-forsok1810",
     ),

@@ -307,7 +307,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
             klassetrinn == 0            
         else:
             klassetrinn = 1
-    form = NameSearchForm(request.POST or None)
+    form = NameSearchForm(request.GET or None)
     profiles = Profile.objects.none()
 
     endYearForm = EndYearForm(request.POST or None)
@@ -334,6 +334,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         #profiles = (Profile.objects.filter(user__in=users).prefetch_related("medals)").order_by("grade"))
         search_is_used = True
         search = search_field
+    """
     if search not in ("", " ",):
         print("search is not empty")
         search_field = search
@@ -342,15 +343,16 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         print(f"search_field = {search_field}")
         if search_field not in ('', None):
             search_is_used = True
+            search = search_field
     except AttributeError:
         pass
+    """
 
     # allow GET to override path kwargs (so links like ?spesialisering=3 work) | Copilot wanted this badly
     get_spes = request.GET.get("spesialisering")
     get_rel = request.GET.get("sivilstatus")
     get_med = request.GET.get("digimedaljer")
     get_end_year = request.GET.get("end_year")
-    get_search = request.GET.get("search")
 
     if get_spes not in (None, "", "None"):
         spesialisering = get_spes
@@ -363,14 +365,6 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
             end_year = int(get_end_year)
         except ValueError:
             pass
-    
-    # If the raw ?search= query param is present, use it
-    if get_search not in (None, "", "None"):
-        print("Line 369")
-        search_field = get_search
-        users = find_user_by_name(search_field)
-        search_is_used = True
-        search = search_field
     
     # April Fools
     crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
@@ -401,6 +395,8 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         search = str(search_field)
         print(f"search is: {search}")
         print(f"Klassetrinn = {klassetrinn}")
+        users = find_user_by_name(search)   
+
         if klassetrinn in (0, "0", ''):
             print("search 1")
             profiles = (Profile.objects.filter(user__in=users, **filter_kwargs, grade__in=[1,2,3,4,5]).prefetch_related("medals").order_by("grade")) #Alle klassetrinn
@@ -429,7 +425,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
     else:
         default_med = digimedaljer
     defaulturl[3] = default_med
-
+        
     url = reverse(
         "profile:yearbook-forsok1810", 
         kwargs={
@@ -437,15 +433,19 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
             "spesialisering": defaulturl[1] or "",
             "sivilstatus": defaulturl[2] or "",
             "digimedaljer": defaulturl[3] or "",
-            "search": "",
-        },
-    )
+            },)
+    
+    
+    # Handle GET, to keep search (preserve the correct search form field name)
+    try:
+        # get the actual html name for the search field from the form
+        search_param_name = form["search_field"].html_name
+    except Exception:
+        # fallback if form or field is missing
+        search_param_name = "search"
 
-    if search not in (None, "", " "):
-        url = url + ("?" + urlencode({"search": str(search)})) 
-        #i dont know if it is this, but the url does not change untii a filter i changed. But the search workes non the less
-        #it only fuck up paginator, because when page changes, without 
-        
+    search = request.GET.get(search_param_name, "").strip()
+
     context = {
         "profiles": profiles,
         "grades": GRADES,
@@ -465,6 +465,8 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         "digimedaljer": defaulturl[3],
         "url": url,
         "search": search,
+        # expose the actual GET parameter name for search so template can append it
+        "search_param_name": search_param_name,
     }
 
     # Show obj_per_page per page (replace your existing pagination block)
@@ -476,7 +478,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
 
     if total_count <= obj_per_page:
         context["profiles"] = profiles
-        context["is_paginated"] = False
+        context["is_paginated"] = False 
     else:
         paginator = Paginator(profiles, obj_per_page)
         page_number = request.GET.get("page")

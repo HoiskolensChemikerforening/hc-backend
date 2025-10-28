@@ -61,14 +61,23 @@
   <div class="col s6 m6 l7 s12">
     <nav>
       <div class="nav-wrapper">
-        <form method='post' class="newPost">{% csrf_token %}
+        <form method="get" class="newPost">
           <div class="input-field">
             <input id="{{ search_form.search_field.id_for_label }}"
-                    type="search" required name="{{ search_form.search_field.html_name }}"
-                    value="{{ search_form.search_field.value|default:'' }}" style="background-color: #6288A5;">
-            <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
-              <i class="material-icons" style="line-height: 42px;">search</i></label>
+                   type="search" required
+                   name="{{ search_form.search_field.html_name }}"
+                   value="{{ search_form.search_field.value|default:'' }}"
+                   style="background-color: #6288A5;" aria-label="Søk">
+            <label for="{{ search_form.search_field.id_for_label }}" class="label-icon"></label>
+              <i class="material-icons" style="line-height: 42px;">search</i>
+            </label>
           </div>
+
+          <!-- Preserve current filters when submitting the GET form -->
+          <input type="hidden" name="klassetrinn" value="{{ 0 }}">
+          <input type="hidden" name="sivilstatus" value="{{ None }}">
+          <input type="hidden" name="digimedaljer" value="{{ None }}">
+          <input type="hidden" name="spesialisering" value="{{ None }}">
         </form>
       </div>
     </nav>
@@ -82,18 +91,26 @@
           >Klassetrinn</a>
       <ul id='dropdown1' class='dropdown-content select-dropdown multiple-select-dropdown'>
         {% for year_number, year_text in grades %}
-          <li><a href='{% url "profile:yearbook-forsok1810" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering search=search %}'>{{ year_text }}</a></li>
+          <li>
+            <a href='{% url "profile:yearbook-forsok1810" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ year_text }}</a>
+          </li>
         {% endfor %}
-        <li><a href='{% url "profile:yearbook-forsok1810" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering search=search%}'>Alle trinn</a></li>
+        <li>
+          <a href='{% url "profile:yearbook-forsok1810" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle trinn</a>
+        </li>
       </ul>
       </div>
       <div style="margin-right: 10px">
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown4'
           >Digidaljer</a>
         <ul id='dropdown4' class='dropdown-content select-dropdown multiple-select-dropdown'>
-          <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer=None spesialisering=spesialisering search=search%}'>Alle</a></li>
+          <li>
+            <a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer=None spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle</a>
+          </li>
           {% for medal_title in medals %}
-            <li><a href='{% url "profile:yearbook-forsok1810" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering search=search%}'>{{ medal_title }}</a></li>
+            <li>
+              <a href='{% url "profile:yearbook-forsok1810" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ medal_title }}</a>
+            </li>
           {% endfor %}
         </ul>
       </div>
@@ -101,9 +118,13 @@
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown5'
           >Sivilstatus</a>
         <ul id='dropdown5' class='dropdown-content select-dropdown multiple-select-dropdown'>
-          <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=None klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering search=search%}'>Ingen filter</a></li>
+          <li>
+            <a href='{% url "profile:yearbook-forsok1810" sivilstatus=None klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ingen filter</a>
+          </li>
           {% for rel_number, rel_text in relstat %}
-            <li><a href='{% url "profile:yearbook-forsok1810" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering search=search%}'>{{ rel_text }}</a></li>
+            <li>
+              <a href='{% url "profile:yearbook-forsok1810" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ rel_text }}</a>
+            </li>
           {% endfor %}
         </ul>
       </div>
@@ -111,12 +132,18 @@
       <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
           >Spesialisering</a>
       <ul id = 'dropdown3' class='dropdown-content'>
-        <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=None klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer search=search%}'>Alle </a></li>
+        <li>
+          <a href='{% url "profile:yearbook-forsok1810" spesialisering=None klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle </a>
+        </li>
         {% for spec_value, spec_text in spec %}
             {% if spec_value == 1 %}
-              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer search=search%}'>Ikke valgt </a></li>
+              <li>
+                <a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ikke valgt </a>
+              </li>
             {% else %}
-              <li><a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer search=search%}'>{{ spec_text }}</a></li>
+              <li>
+                <a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ spec_text }}</a>
+              </li>
             {% endif %}
         {% endfor %}
       </div>
@@ -237,16 +264,18 @@
 <!-- Pagination (shows when `profiles` is a Page with multiple pages) -->
 {% if profiles and profiles.has_other_pages %}
 <ul class="pagination nav navbar-nav" >
-  {% if profiles.has_previous %}
-    <li><a href="?page={{ profiles.previous_page_number }}">Forrige</a></li>
-  {% endif %}
-  {% for page in profiles.paginator.page_range %}
-    <li class="{% if profiles.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
-  {% endfor %}
+  {% with prefix=page_query_prefix|default:'?' %}
+    {% if profiles.has_previous %}
+      <li><a href="{{ prefix }}page={{ profiles.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in profiles.paginator.page_range %}
+      <li class="{% if profiles.number == page %}active{% endif %}"><a href="{{ prefix }}page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
 
-  {% if profiles.has_next %}
-    <li><a href="?page={{ profiles.next_page_number }}">Neste</a></li>
-  {% endif %}
+    {% if profiles.has_next %}
+      <li><a href="{{ prefix }}page={{ profiles.next_page_number }}">Neste</a></li>
+    {% endif %}
+  {% endwith %}
 </ul>
 {% endif %}
 
