@@ -292,22 +292,21 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digimedaljer=None, search=''):
+def yearbook(request, klassetrinn=0, spesialisering=None, sivilstatus=None, digimedaljer=None, search=''):
     klassetrinn = int(klassetrinn)
-    defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer]
-    print(f"defaulturl = {defaulturl}")
-    # for [1, None, None, None] => 1. klasse, alle spesialiseringer (+ ingen), alle relationshipstatus, alle medaljer (+ingen)
-    # If url arg grade is invalid, make it valid.
-    obj_per_page = 1
-    
+    defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer] #Defaulturl is used for url --- communication between view and html
+    obj_per_page = 2 #Changed based on how server handles profile load amount
+
+    # If url arg grade is invalid, make it valid.    
     if klassetrinn not in GRADES:
         if klassetrinn > GRADES.FIFTH.value:
             klassetrinn = GRADES.FIFTH.value
-        if klassetrinn in (0, '0', ''):
-            klassetrinn == 0            
+        if klassetrinn in (0, '0', ''): #View may be confused by html template
+            klassetrinn = 0            
         else:
             klassetrinn = 1
-    form = NameSearchForm(request.GET or None)
+
+    form = NameSearchForm(request.GET or None) 
     profiles = Profile.objects.none()
 
     endYearForm = EndYearForm(request.POST or None)
@@ -327,34 +326,19 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         .distinct()
     )
 
-    if form.is_valid(): #Search_field
+    if form.is_valid(): #This is for searching, line 401-407 is to keep search.
         search_field = form.cleaned_data.get("search_field")
         users = find_user_by_name(search_field)
-        # assign the filtered queryset back to `profiles` so the search actually applies
-        #profiles = (Profile.objects.filter(user__in=users).prefetch_related("medals)").order_by("grade"))
         search_is_used = True
         search = search_field
-    """
-    if search not in ("", " ",):
-        print("search is not empty")
-        search_field = search
-        users = find_user_by_name(search_field)
-    try: #if works, then form is valid
-        print(f"search_field = {search_field}")
-        if search_field not in ('', None):
-            search_is_used = True
-            search = search_field
-    except AttributeError:
-        pass
-    """
 
-    # allow GET to override path kwargs (so links like ?spesialisering=3 work) | Copilot wanted this badly
+    # allow GET to override path kwargs (so links like ?spesialisering=3 work) (look at line 64-81 in yearbook.html)
     get_spes = request.GET.get("spesialisering")
     get_rel = request.GET.get("sivilstatus")
     get_med = request.GET.get("digimedaljer")
     get_end_year = request.GET.get("end_year")
 
-    if get_spes not in (None, "", "None"):
+    if get_spes not in (None, "", "None"): #Work by Copilot. If value None, then no filter (gets double checked in line 370-376). If value not None, then get/keep value.
         spesialisering = get_spes
     if get_rel not in (None, "", "None"):
         sivilstatus = get_rel
@@ -372,7 +356,8 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
 
     filter_kwargs = {"user__is_active": True} #filter key word arguments baseline
     
-    if klassetrinn in GRADES:
+    #If grade == 0 or "AlleTrinn", then it wont filter by grade.  Therefore all grades will be included.
+    if klassetrinn in GRADES: 
         if klassetrinn != GRADES.DONE:
             filter_kwargs["grade"] = klassetrinn
         else: #Only filter by end_year (if it is selected )
@@ -382,59 +367,39 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
                 end_year = integer_field
                 filter_kwargs["end_year"] = end_year
 
-    if spesialisering not in (None, "", "Alle_spes", "None"): #"None" because of url handling, function in line 296 does not work as intended
+    #When choice in tuple not chosen add kwargs to filter by a specific value.
+    if spesialisering not in (None, "", "AlleSpez", "None"): 
         filter_kwargs["specialization"] = spesialisering
-    if sivilstatus not in (None, "", "Alle_rel", "None"):
+    if sivilstatus not in (None, "", "AlleStatus", "None"):
         filter_kwargs["relationship_status"] = sivilstatus
-    if digimedaljer not in (None, "", "Alle_med", "None"):
-        filter_kwargs["medals__title"] = digimedaljer #digimedaljer når valgt "alle" gir "None" i url som fucker opp filtreringen
-    print(f"filter_kwaards = {filter_kwargs}")
+    if digimedaljer not in (None, "", "AlleDaljer", "None"):
+        filter_kwargs["medals__title"] = digimedaljer
 
+    #Append filter to profiles shown
     if search_is_used:
-        print("Search IS used")
-        search = str(search_field)
-        print(f"search is: {search}")
-        print(f"Klassetrinn = {klassetrinn}")
-        users = find_user_by_name(search)   
-
-        if klassetrinn in (0, "0", ''):
-            print("search 1")
-            profiles = (Profile.objects.filter(user__in=users, **filter_kwargs, grade__in=[1,2,3,4,5]).prefetch_related("medals").order_by("grade")) #Alle klassetrinn
-        else:
-            print("search 2")
-            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
+        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
     else:
-        print("Search is NOT used")
-        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("user__last_name").distinct()
+        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("grade", "user__last_name").distinct()
 
-    # TRYING to ******************normalize empty-string URL parts to None (the view passes "" for empty kwargs)
-    if spesialisering in (None, "", "None"):
-        default_spes = "Alle_spes" #this is what i want in the url - not None (maybe  "" suffices too?)
-    else:
-        default_spes = spesialisering
-    defaulturl[1] = default_spes
+    # Making the URL look prettier 
+    NewUrlNames = ["AlleSpez", "AlleStatus", "AlleDaljer"]
+    for idx, val in enumerate(defaulturl[1:], start=1):
+        if val in (None, "", "None"):
+            try:
+                defaulturl[idx] = NewUrlNames[idx - 1]
+            except IndexError:
+                # fallback if there are more fields than names provided
+                defaulturl[idx] = NewUrlNames[-1]
 
-    if sivilstatus in (None, "", "None"):
-        default_rel = "Alle_rel"
-    else:
-        default_rel = sivilstatus
-    defaulturl[2] = default_rel
-
-    if digimedaljer in (None, "", "None"):
-        default_med = "Alle_med"
-    else:
-        default_med = digimedaljer
-    defaulturl[3] = default_med
-        
     url = reverse(
         "profile:yearbook-forsok1810", 
         kwargs={
-            "klassetrinn": defaulturl[0],
+            "klassetrinn": defaulturl[0], #Klassetrinn is a int value, therefore not included in NewUrlNames
             "spesialisering": defaulturl[1] or "",
             "sivilstatus": defaulturl[2] or "",
             "digimedaljer": defaulturl[3] or "",
-            },)
-    
+        },
+    )
     
     # Handle GET, to keep search (preserve the correct search form field name)
     try:
@@ -459,7 +424,7 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         "crush": crush,  # April fools
         "relstat": RELATIONSHIP_STATUS,
         "medals": Medal.objects.all(),
-        "klassetrinn": defaulturl[0], #*********************
+        "klassetrinn": defaulturl[0],
         "spesialisering": defaulturl[1],
         "sivilstatus": defaulturl[2],
         "digimedaljer": defaulturl[3],
@@ -495,42 +460,6 @@ def yearbook(request, klassetrinn=1, spesialisering=None, sivilstatus=None, digi
         if "page" in qs:
             qs.pop("page")
         context["page_query_prefix"] = ("?" + qs.urlencode() + "&") if qs else "?"
-
-    #Finale note before MERGE:
-    """
-    Alle profilnavn er knyttet til skaane05 sin localhost database som kan gjøre dette lit vanskelig å forstå
-
-    Check paginator by setting obj_per_page to 2. In a way also check if website canhandle 300+ (up to like 3000-4000) profiles with images. 
-    Paginator works, BUT...
-
-    !!!Previously seen issues | needs to be checked before final commit/push
-    *When searching, filter stays, but when changing page (with search), filter gets removed!!!
-    *Tilsvarende; om du er på en profil (si webkom sporty) og så søker opp webkom, vil du havne på siden (i paginator) til webkom sporty, selv om vedkommende er side 48.
-    -* Prøv: 6 klasse, søk andreas (2 profiler), velg neste side / side 2; du får atreus 8som er page 2 for ferdige (...)
-    ->virker som når du trykker på side 2 så henter url data: (6 klasse, alle spes.... /page=2) som gjør at du blir sendt til page 2 for den filterringen => nemlig atreus
-    *Is this a good idea: when searching in "nullstill" (katalog/) search takes in no filter
-    -> Search must ignore default filtering in nullstill | is difficult with klassetrinn default = 1
-    *Når du trykker på ferdige dukker ALLE profiler opp, fordi det er enda ikke filtrer på sluttår (bør ha default i sluttår?)
-    -* Ser ut som paginator laster opp ALLE SIDER liksom samtidig (?)
-    *Must fix beauty of url and such of the code (se context -> vil blant annet ikke ha "sluttår" )
-
-    SEMI-FIXED; Search works, but is not stored when (...) ;
-    
-    !!! Current problems
-    **All problems above correlate with the fact that search_field is not stored when url changes (ergo any changes to filter, or pagechange via paginator)
-    ->Need to be fixed in html and context in view.yearbook and urls to send search_field into in url (likewise klassetrinn and sivilstatus where default is: '')
-    --> Maybe not needed for line 66 in html
-
-    currently trying: added search to urls, default = '', when you change filter when search is used, ought to keep the search_field.
-    check: 
-
-    ->When fixed; find a way to make the standard to search without filter, and thus need to change klassetrinn first -- kan set default IN THIS VIEW to "Alle klassetrinn" (but this will load EVERYBODY...)
-    **When fixed, look into variable names... 
-
-    **The usage of defaulturl and filter_kwargs kan pot. fuck eachother up. Quadruple check if defaulturl does not fuck stuff 
-    Its best to remove defaulturl - since filter_kwargs is used to filter, while defaulturl (currently) is used to fix url beauty and
-    in context (where html try to communicate with filter_kwargs)
-    """
 
     return render(request, "customprofile/yearbook.html", context)
 

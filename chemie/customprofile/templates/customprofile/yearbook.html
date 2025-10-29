@@ -74,6 +74,7 @@
           </div>
 
           <!-- Preserve current filters when submitting the GET form -->
+          <!-- NB! These below changes the url (adds to url), but the filter before any "?" is kept. It looks like filter is changed, but is not due to GET in view function-->
           <input type="hidden" name="klassetrinn" value="{{ 0 }}">
           <input type="hidden" name="sivilstatus" value="{{ None }}">
           <input type="hidden" name="digimedaljer" value="{{ None }}">
