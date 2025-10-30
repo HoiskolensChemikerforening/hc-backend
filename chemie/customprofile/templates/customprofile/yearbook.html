@@ -72,14 +72,7 @@
               <i class="material-icons" style="line-height: 42px;">search</i>
             </label>
           </div>
-
-          <!-- Preserve current filters when submitting the GET form -->
-          <!-- NB! These below changes the url (adds to url), but the filter before any "?" is kept. It looks like filter is changed, but is not due to GET in view function-->
-          <input type="hidden" name="klassetrinn" value="{{ 0 }}">
-          <input type="hidden" name="sivilstatus" value="{{ None }}">
-          <input type="hidden" name="digimedaljer" value="{{ None }}">
-          <input type="hidden" name="spesialisering" value="{{ None }}">
-        </form>
+          </form>
       </div>
     </nav>
   </div>
@@ -106,7 +99,7 @@
           >Digidaljer</a>
         <ul id='dropdown4' class='dropdown-content select-dropdown multiple-select-dropdown'>
           <li>
-            <a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer=None spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle</a>
+            <a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer="" spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle</a>
           </li>
           {% for medal_title in medals %}
             <li>
@@ -120,7 +113,7 @@
           >Sivilstatus</a>
         <ul id='dropdown5' class='dropdown-content select-dropdown multiple-select-dropdown'>
           <li>
-            <a href='{% url "profile:yearbook-forsok1810" sivilstatus=None klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ingen filter</a>
+            <a href='{% url "profile:yearbook-forsok1810" sivilstatus="" klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ingen filter</a>
           </li>
           {% for rel_number, rel_text in relstat %}
             <li>
@@ -134,7 +127,7 @@
           >Spesialisering</a>
       <ul id = 'dropdown3' class='dropdown-content'>
         <li>
-          <a href='{% url "profile:yearbook-forsok1810" spesialisering=None klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle </a>
+          <a href='{% url "profile:yearbook-forsok1810" spesialisering="" klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle </a>
         </li>
         {% for spec_value, spec_text in spec %}
             {% if spec_value == 1 %}

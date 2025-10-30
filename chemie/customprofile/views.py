@@ -292,10 +292,10 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, klassetrinn=0, spesialisering=None, sivilstatus=None, digimedaljer=None, search=''):
+def yearbook(request, klassetrinn=0, spesialisering='', sivilstatus='', digimedaljer='', search=''): # Default inputs is what will be showcased in url when no filter is active.
     klassetrinn = int(klassetrinn)
     defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer] #Defaulturl is used for url --- communication between view and html
-    obj_per_page = 2 #Changed based on how server handles profile load amount
+    obj_per_page = 24 #Changed based on how server handles profile load amount
 
     # If url arg grade is invalid, make it valid.    
     if klassetrinn not in GRADES:
@@ -326,19 +326,19 @@ def yearbook(request, klassetrinn=0, spesialisering=None, sivilstatus=None, digi
         .distinct()
     )
 
-    if form.is_valid(): #This is for searching, line 401-407 is to keep search.
+    if form.is_valid(): #This is for first-time search, try func in line 395 is to keep search
         search_field = form.cleaned_data.get("search_field")
         users = find_user_by_name(search_field)
         search_is_used = True
         search = search_field
 
-    # allow GET to override path kwargs (so links like ?spesialisering=3 work) (look at line 64-81 in yearbook.html)
+    # allow GET to override path kwargs (so links like ?spesialisering=3 work)
     get_spes = request.GET.get("spesialisering")
     get_rel = request.GET.get("sivilstatus")
     get_med = request.GET.get("digimedaljer")
     get_end_year = request.GET.get("end_year")
 
-    if get_spes not in (None, "", "None"): #Work by Copilot. If value None, then no filter (gets double checked in line 370-376). If value not None, then get/keep value.
+    if get_spes not in (None, "", "None"): #Work by Copilot. If value not None, then get/keep value. | Is to keep value, line 370-376 is to make the next change in filter
         spesialisering = get_spes
     if get_rel not in (None, "", "None"):
         sivilstatus = get_rel
@@ -356,7 +356,7 @@ def yearbook(request, klassetrinn=0, spesialisering=None, sivilstatus=None, digi
 
     filter_kwargs = {"user__is_active": True} #filter key word arguments baseline
     
-    #If grade == 0 or "AlleTrinn", then it wont filter by grade.  Therefore all grades will be included.
+    #If grade == 0, then it wont filter by grade. Therefore all grades will be included.
     if klassetrinn in GRADES: 
         if klassetrinn != GRADES.DONE:
             filter_kwargs["grade"] = klassetrinn
@@ -368,11 +368,11 @@ def yearbook(request, klassetrinn=0, spesialisering=None, sivilstatus=None, digi
                 filter_kwargs["end_year"] = end_year
 
     #When choice in tuple not chosen add kwargs to filter by a specific value.
-    if spesialisering not in (None, "", "AlleSpez", "None"): 
+    if spesialisering not in (None, "", "None"): 
         filter_kwargs["specialization"] = spesialisering
-    if sivilstatus not in (None, "", "AlleStatus", "None"):
+    if sivilstatus not in (None, "", "None"):
         filter_kwargs["relationship_status"] = sivilstatus
-    if digimedaljer not in (None, "", "AlleDaljer", "None"):
+    if digimedaljer not in (None, "", "None"):
         filter_kwargs["medals__title"] = digimedaljer
 
     #Append filter to profiles shown
@@ -381,20 +381,10 @@ def yearbook(request, klassetrinn=0, spesialisering=None, sivilstatus=None, digi
     else:
         profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("grade", "user__last_name").distinct()
 
-    # Making the URL look prettier 
-    NewUrlNames = ["AlleSpez", "AlleStatus", "AlleDaljer"]
-    for idx, val in enumerate(defaulturl[1:], start=1):
-        if val in (None, "", "None"):
-            try:
-                defaulturl[idx] = NewUrlNames[idx - 1]
-            except IndexError:
-                # fallback if there are more fields than names provided
-                defaulturl[idx] = NewUrlNames[-1]
-
     url = reverse(
         "profile:yearbook-forsok1810", 
         kwargs={
-            "klassetrinn": defaulturl[0], #Klassetrinn is a int value, therefore not included in NewUrlNames
+            "klassetrinn": defaulturl[0], #Klassetrinn is a int value
             "spesialisering": defaulturl[1] or "",
             "sivilstatus": defaulturl[2] or "",
             "digimedaljer": defaulturl[3] or "",
