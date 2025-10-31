@@ -12,7 +12,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart3.png",
   "../../static/images/holiday_images/bart4.png",
   "../../static/images/holiday_images/bart5.png",
-  "../../static/images/holiday_images/bart6.png"
+  "../../static/images/holiday_images/bart6.png", "💙", "💙", "💙", 
 ];
 
 const rainSpeed = 30; // Adjust this value to set the rain speed
@@ -40,7 +40,7 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "blue cancer"; // Change this to select the holiday you want
+const chosenHoliday = "mustache"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 const maxElements = 75; // Maximum number of elements
