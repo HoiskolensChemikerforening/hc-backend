@@ -37,7 +37,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   {% block extra_js %}
-  {% endblock %}
+
+<!-- Colorchanging header -->
+<script src="{% static 'js/random_header.js' %}"></script> 
+
+<!-- Partybutton -->
+<!--<script src="{% static 'js/random_header_click.js' %}"></script> -->
+
+{% endblock %}
+
+
 
   {% block header %}
   {% endblock header %}
@@ -51,7 +60,7 @@
 </head>
 
 <body>
-  <!-- <div id="makeItRain"></div> -->
+  <div id="makeItRain"></div>
   <header>
     <nav class="top-nav">
       <div class="container">
@@ -354,12 +363,10 @@
     ga('send', 'pageview');
   </script>
 
-  <!--  {% if request.user.profile.grade <= 3 %} -->
-  {% block makeitrain %}
-  <!--  <script src="{% static 'js/makeItRain.js' %}"></script> -->
-  {% endblock %}
 
-  <!--  {% endif %} -->
+  {% block makeitrain %}
+    <script src="{% static 'js/makeItRain.js' %}"></script>
+  {% endblock %}
 
 </body>
 
