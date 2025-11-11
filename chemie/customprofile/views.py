@@ -292,10 +292,10 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, klassetrinn=0, spesialisering='', sivilstatus='', digimedaljer='', search=''): # Default inputs is what will be showcased in url when no filter is active.
+def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimedaljer='', search=''): # Default inputs is what will be showcased in url when no filter is active.
     klassetrinn = int(klassetrinn)
     defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer] #Defaulturl is used for url --- communication between view and html
-    obj_per_page = 24 #Changed based on how server handles profile load amount
+    obj_per_page = 48 #Changed based on how server handles profile load amount
 
     # If url arg grade is invalid, make it valid.    
     if klassetrinn not in GRADES:
@@ -304,7 +304,7 @@ def yearbook(request, klassetrinn=0, spesialisering='', sivilstatus='', digimeda
         if klassetrinn in (0, '0', ''): #View may be confused by html template
             klassetrinn = 0            
         else:
-            klassetrinn = 1
+            klassetrinn = 15  # 15 means "Grade 1, 2, 3, 4 and 5"
 
     form = NameSearchForm(request.GET or None) 
     profiles = Profile.objects.none()
@@ -357,6 +357,7 @@ def yearbook(request, klassetrinn=0, spesialisering='', sivilstatus='', digimeda
     filter_kwargs = {"user__is_active": True} #filter key word arguments baseline
     
     #If grade == 0, then it wont filter by grade. Therefore all grades will be included.
+    #If grade == 15, then it will include all profiles in grade 1, 2, 3, 4 and 5.
     if klassetrinn in GRADES: 
         if klassetrinn != GRADES.DONE:
             filter_kwargs["grade"] = klassetrinn
@@ -376,13 +377,20 @@ def yearbook(request, klassetrinn=0, spesialisering='', sivilstatus='', digimeda
         filter_kwargs["medals__title"] = digimedaljer
 
     #Append filter to profiles shown
+    print("Filter kwargs:", filter_kwargs)
     if search_is_used:
         profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
     else:
-        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("grade", "user__last_name").distinct()
+        if klassetrinn == 0: #When "Alle trinn" is selected
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct()
+        elif klassetrinn == GRADES.DONE: #When "Sluttår" is selected
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct()
+        else: #Default; grades 1-5 | klassetrinn = 15
+            print("Filtering by grades 1-5")
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).exclude(grade=GRADES.DONE).order_by("grade", "user__last_name").distinct()
 
     url = reverse(
-        "profile:yearbook-forsok1810", 
+        "profile:yearbook-multifilter", 
         kwargs={
             "klassetrinn": defaulturl[0], #Klassetrinn is a int value
             "spesialisering": defaulturl[1] or "",

@@ -37,6 +37,62 @@
 
 {% block extra_js %}
   <script src='{% static "js/hammer.min.js" %}' defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => { // buttonId === dropdown1
+      const Nofilter = ["", " ", "Alle", "Ingen filter", "Alle trinn"];
+
+      const dropdownChoices = document.querySelectorAll(".dropdown-content.select-dropdown.dropdown-content.multiple-select-dropdown");
+      console.log("HelloWorld");
+
+      dropdownChoices.forEach(choice => {
+
+        choice.addEventListener("click", (event) => {
+
+          // find the button in the same dropdown container
+          const ul = event.currentTarget; // the dropdown <ul>
+          const buttonId = ul.getAttribute("id"); // e.g. 'dropdown1'
+          const button = document.querySelector(`a.dropdown-trigger.btn-large[data-target="${buttonId}"]`);
+          console.log("buttonID =", buttonId)
+
+          if (!button) return; // prevent error if not found
+          console.log("button exists ; ", button)
+
+          const selectedText = event.target.textContent.trim()
+          console.log("selected Text", selectedText)
+
+          let color = Nofilter.includes(selectedText) ?  "#6288A5": "rgb(11, 57, 84)"; 
+          console.log("dictionary", Nofilter)
+          console.log("dictionaryTest", Nofilter.includes(selectedText))
+
+
+          // Apply and store
+          button.style.backgroundColor = color;
+          localStorage.setItem(buttonId + "_color", color); // Does not revert to #6288A5 when no filter is chosen
+        });
+      });
+    });
+    document.addEventListener("DOMContentLoaded", () => {
+      const buttons = document.querySelectorAll("a.dropdown-trigger.btn-large");
+
+      buttons.forEach(button => {
+        const id = button.getAttribute("data-target");
+        const savedColor = localStorage.getItem(id + "_color");
+
+        if (savedColor) {
+          button.style.backgroundColor = savedColor;
+        }
+      });
+    });
+
+    function resetDropdownColors() {
+      const buttons = document.querySelectorAll("a.dropdown-trigger.btn-large");
+      buttons.forEach(button => {
+        button.style.backgroundColor = "#6288A5";
+        const id = button.getAttribute("data-target");
+        localStorage.removeItem(id + "_color");
+      });
+    }
+  </script>
 {% endblock %}
 
 
@@ -86,11 +142,11 @@
       <ul id='dropdown1' class='dropdown-content select-dropdown multiple-select-dropdown'>
         {% for year_number, year_text in grades %}
           <li>
-            <a href='{% url "profile:yearbook-forsok1810" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ year_text }}</a>
+            <a href='{% url "profile:yearbook-multifilter" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ year_text }}</a>
           </li>
         {% endfor %}
         <li>
-          <a href='{% url "profile:yearbook-forsok1810" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle trinn</a>
+          <a href='{% url "profile:yearbook-multifilter" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle trinn</a>
         </li>
       </ul>
       </div>
@@ -99,11 +155,11 @@
           >Digidaljer</a>
         <ul id='dropdown4' class='dropdown-content select-dropdown multiple-select-dropdown'>
           <li>
-            <a href='{% url "profile:yearbook-forsok1810" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer="" spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle</a>
+            <a href='{% url "profile:yearbook-multifilter" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer="" spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle</a>
           </li>
           {% for medal_title in medals %}
             <li>
-              <a href='{% url "profile:yearbook-forsok1810" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ medal_title }}</a>
+              <a href='{% url "profile:yearbook-multifilter" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ medal_title }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -113,11 +169,11 @@
           >Sivilstatus</a>
         <ul id='dropdown5' class='dropdown-content select-dropdown multiple-select-dropdown'>
           <li>
-            <a href='{% url "profile:yearbook-forsok1810" sivilstatus="" klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ingen filter</a>
+            <a href='{% url "profile:yearbook-multifilter" sivilstatus="" klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ingen filter</a>
           </li>
           {% for rel_number, rel_text in relstat %}
             <li>
-              <a href='{% url "profile:yearbook-forsok1810" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ rel_text }}</a>
+              <a href='{% url "profile:yearbook-multifilter" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ rel_text }}</a>
             </li>
           {% endfor %}
         </ul>
@@ -125,18 +181,18 @@
       <div>
       <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
           >Spesialisering</a>
-      <ul id = 'dropdown3' class='dropdown-content'>
+      <ul id = 'dropdown3' class='dropdown-content select-dropdown multiple-select-dropdown'>
         <li>
-          <a href='{% url "profile:yearbook-forsok1810" spesialisering="" klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle </a>
+          <a href='{% url "profile:yearbook-multifilter" spesialisering="" klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle </a>
         </li>
         {% for spec_value, spec_text in spec %}
             {% if spec_value == 1 %}
               <li>
-                <a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ikke valgt </a>
+                <a href='{% url "profile:yearbook-multifilter" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ikke valgt </a>
               </li>
             {% else %}
               <li>
-                <a href='{% url "profile:yearbook-forsok1810" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ spec_text }}</a>
+                <a href='{% url "profile:yearbook-multifilter" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ spec_text }}</a>
               </li>
             {% endif %}
         {% endfor %}
@@ -146,7 +202,7 @@
           <form method='post' class="newPost">{% csrf_token %}
             <a class='dropdown-trigger btn-large' href='#' data-target='dropdown7'
           >Sluttår</a>
-            <ul class="dropdown-content" id="dropdown7" style="max-height: 250px">
+            <ul class="dropdown-content select-dropdown multiple-select-dropdown" id="dropdown7" style="max-height: 250px">
               {% for end_year in end_years %}
                 <li>
                   <button 
@@ -162,7 +218,7 @@
         </div>
       {% endif %}
       <div style="margin-left: 10px"> <!-- Remove filter button -->
-        <a class='btn-large' href='{% url "profile:yearbook-index" %}'
+        <a class='btn-large' href='{% url "profile:yearbook-index" %}' onclick="resetDropdownColors()"
           >Nullstill!</a>
       </div>
     </div>
@@ -233,6 +289,7 @@
               {% if profile.specialization != 1 %} <!--Check if person has a specialization-->
                 <p> Spesialisering: {{profile.get_nice_specialization }}</p>
               {% endif %}
+              <p>Sluttår: {{ profile.end_year }}</p>
               <div class="row">
                 {% for medal in profile.medals.all %}
                   <img src="{{ medal.image.url }}" alt="{{ medal.title }}"
@@ -257,13 +314,22 @@
                   
 <!-- Pagination (shows when `profiles` is a Page with multiple pages) -->
 {% if profiles and profiles.has_other_pages %}
-<ul class="pagination nav navbar-nav" >
+<ul class="pagination nav navbar-nav">
   {% with prefix=page_query_prefix|default:'?' %}
     {% if profiles.has_previous %}
       <li><a href="{{ prefix }}page={{ profiles.previous_page_number }}">Forrige</a></li>
     {% endif %}
+
     {% for page in profiles.paginator.page_range %}
-      <li class="{% if profiles.number == page %}active{% endif %}"><a href="{{ prefix }}page={{ page }}">{{ page }}</a></li>
+      {% if page == 1 or page == profiles.paginator.num_pages or page >= profiles.number|add:-2 and page <= profiles.number|add:2 %}
+        <li class="{% if profiles.number == page %}active{% endif %}">
+          <a href="{{ prefix }}page={{ page }}">{{ page }}</a>
+        </li>
+      {% elif page == 2 and profiles.number > 4 %}
+        <li><span>…</span></li>
+      {% elif page == profiles.paginator.num_pages|add:-1 and profiles.number < profiles.paginator.num_pages|add:-3 %}
+        <li><span>…</span></li>
+      {% endif %}
     {% endfor %}
 
     {% if profiles.has_next %}
@@ -273,28 +339,6 @@
 </ul>
 {% endif %}
 
-<!--Copilot backup
-
-{% if profiles and profiles.has_other_pages %}
-<nav aria-label="Sider" style="margin: 1rem 0; text-align:center;">
-  <ul class="pagination" style="display:inline-flex; gap:0.5rem; list-style:none; padding:0;">
-    {% if profiles.has_previous %}
-      <li class="page-item"><a class="page-link btn" href="{{ url }}?page={{ profiles.previous_page_number }}">Forrige</a></li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link btn disabled">Forrige</span></li>
-    {% endif %}
-
-    <li class="page-item active"><span class="page-link btn">{{ profiles.number }} / {{ profiles.paginator.num_pages }}</span></li>
-
-    {% if profiles.has_next %}
-      <li class="page-item"><a class="page-link btn" href="{{ url }}?page={{ profiles.next_page_number }}">Neste</a></li>
-    {% else %}
-      <li class="page-item disabled"><span class="page-link btn disabled">Neste</span></li>
-    {% endif %}
-  </ul>
-</nav>
-{% endif %}
--->
 {% endblock content %}
 
 {% block footer_script %}
@@ -346,11 +390,5 @@
           $('.dropdown-trigger').dropdown();
           $('.modal').modal();
       });
-
-
-
-
   </script>
-
-
 {% endblock %}

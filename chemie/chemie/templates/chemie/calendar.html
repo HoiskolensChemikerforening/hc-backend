@@ -43,7 +43,7 @@
           <div id='calendar'></div>
           <div class="card-action">
             <div class="left-align">
-              <a href="https://calendar.google.com/calendar/ical/fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com/public/basic.ics">Kalenderfeed</a>
+              <a onclick="copyLink()">Kalenderfeed</a>
             </div>
           </div>
         </div>
@@ -71,5 +71,14 @@
               height: 'auto'
           });
       });
+      function copyLink() {
+        const copyText = 'https://calendar.google.com/calendar/embed?src=fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com&ctz=Europe%2FOslo'
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText);
+
+        // Alert the copied text
+        alert("Link kopiert!");
+      };
   </script>
+
 {% endblock footer_script %}

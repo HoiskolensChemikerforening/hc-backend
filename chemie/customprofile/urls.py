@@ -32,7 +32,7 @@ urlpatterns = [
     re_path(
         r"^katalog/(?P<klassetrinn>\d+)/(?P<spesialisering>[^/]*)?/(?P<sivilstatus>[^/]*)?/(?P<digimedaljer>[^/]*)?/$",
         views.yearbook,
-        name="yearbook-forsok1810",
+        name="yearbook-multifilter",
     ),
     path(        
         "api/profil/",
