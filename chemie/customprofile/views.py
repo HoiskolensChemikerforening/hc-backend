@@ -338,7 +338,7 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
     get_med = request.GET.get("digimedaljer")
     get_end_year = request.GET.get("end_year")
 
-    if get_spes not in (None, "", "None"): #Work by Copilot. If value not None, then get/keep value. | Is to keep value, line 370-376 is to make the next change in filter
+    if get_spes not in (None, "", "None"): #Work by Copilot. If value not None, then get/keep value. | Is to keep value, line 370-377 is to make the next change in filter
         spesialisering = get_spes
     if get_rel not in (None, "", "None"):
         sivilstatus = get_rel
@@ -378,7 +378,7 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
 
     #Append filter to profiles shown
     print("Filter kwargs:", filter_kwargs)
-    if search_is_used:
+    if search_is_used: #If search is used, filter by users found in search && filter kwargs which includes grade-filter
         profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
     else:
         if klassetrinn == 0: #When "Alle trinn" is selected

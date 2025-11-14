@@ -38,11 +38,10 @@
 {% block extra_js %}
   <script src='{% static "js/hammer.min.js" %}' defer></script>
   <script>
-    document.addEventListener("DOMContentLoaded", () => { // buttonId === dropdown1
+    document.addEventListener("DOMContentLoaded", () => {
       const Nofilter = ["", " ", "Alle", "Ingen filter", "Alle trinn"];
 
       const dropdownChoices = document.querySelectorAll(".dropdown-content.select-dropdown.dropdown-content.multiple-select-dropdown");
-      console.log("HelloWorld");
 
       dropdownChoices.forEach(choice => {
 
@@ -52,26 +51,20 @@
           const ul = event.currentTarget; // the dropdown <ul>
           const buttonId = ul.getAttribute("id"); // e.g. 'dropdown1'
           const button = document.querySelector(`a.dropdown-trigger.btn-large[data-target="${buttonId}"]`);
-          console.log("buttonID =", buttonId)
 
           if (!button) return; // prevent error if not found
-          console.log("button exists ; ", button)
 
           const selectedText = event.target.textContent.trim()
-          console.log("selected Text", selectedText)
 
           let color = Nofilter.includes(selectedText) ?  "#6288A5": "rgb(11, 57, 84)"; 
-          console.log("dictionary", Nofilter)
-          console.log("dictionaryTest", Nofilter.includes(selectedText))
 
-
-          // Apply and store
+          // Store colorsetting in localstorage
           button.style.backgroundColor = color;
-          localStorage.setItem(buttonId + "_color", color); // Does not revert to #6288A5 when no filter is chosen
+          localStorage.setItem(buttonId + "_color", color);
         });
       });
     });
-    document.addEventListener("DOMContentLoaded", () => {
+    document.addEventListener("DOMContentLoaded", () => { // On page load, set colors from localstorage
       const buttons = document.querySelectorAll("a.dropdown-trigger.btn-large");
 
       buttons.forEach(button => {
@@ -84,7 +77,7 @@
       });
     });
 
-    function resetDropdownColors() {
+    function resetDropdownColors() { // Reset all dropdown button colors and empties localstorage
       const buttons = document.querySelectorAll("a.dropdown-trigger.btn-large");
       buttons.forEach(button => {
         button.style.backgroundColor = "#6288A5";
