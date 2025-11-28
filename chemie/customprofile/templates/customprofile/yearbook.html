@@ -218,6 +218,32 @@
   </div>
 </div>
 
+{% if profiles and profiles.has_other_pages %}
+<ul class="pagination nav navbar-nav">
+  {% with prefix=page_query_prefix|default:'?' %}
+    {% if profiles.has_previous %}
+      <li><a href="{{ prefix }}page={{ profiles.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+
+    {% for page in profiles.paginator.page_range %}
+      {% if page == 1 or page == profiles.paginator.num_pages or page >= profiles.number|add:-2 and page <= profiles.number|add:2 %}
+        <li class="{% if profiles.number == page %}active{% endif %}">
+          <a href="{{ prefix }}page={{ page }}">{{ page }}</a>
+        </li>
+      {% elif page == 2 and profiles.number > 4 %}
+        <li><span>…</span></li>
+      {% elif page == profiles.paginator.num_pages|add:-1 and profiles.number < profiles.paginator.num_pages|add:-3 %}
+        <li><span>…</span></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if profiles.has_next %}
+      <li><a href="{{ prefix }}page={{ profiles.next_page_number }}">Neste</a></li>
+    {% endif %}
+  {% endwith %}
+</ul>
+{% endif %}
+
 <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
 <div class="row">
   {% for profile in profiles %}
