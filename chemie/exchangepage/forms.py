@@ -2,6 +2,7 @@ from django import forms
 from .models import Travelletter, Experience, Questions, Images
 from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
+from dal import autocomplete
 
 
 class QuestionsForm(forms.ModelForm):
@@ -31,8 +32,9 @@ class TravelletterForm(forms.ModelForm):
                 {
                     "placeholder": " Ett semester ('H13'), To semester ('H13/V14')"
                 }
-            )
-        }
+            ),
+            "user": autocomplete.ModelSelect2(url="verv:user-autocomplete")
+        }   
 
 
 class ExperienceForm(forms.ModelForm):
