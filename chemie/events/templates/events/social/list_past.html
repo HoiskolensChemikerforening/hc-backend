@@ -33,6 +33,26 @@
 
         </ul>
         <div id="pastEvents" class="col s12">
+        
+            <ul class="pagination center-align">
+                {% if page_obj.has_previous %}
+                    <li class="waves-effect"><a href="?page=1"><i class="material-icons">first_page</i></a></li>
+                    <li class="waves-effect"><a href="?page={{ page_obj.previous_page_number }}"><i class="material-icons">chevron_left</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#!"><i class="material-icons">first_page</i></a></li>
+                    <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                {% endif %}
+
+                <li class="active"><a href="#!"> {{ page_obj.number }} av {{ page_obj.paginator.num_pages }}</a></li>
+
+                {% if page_obj.has_next %}
+                    <li class="waves-effect"><a href="?page={{ page_obj.next_page_number }}"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="waves-effect"><a href="?page={{ page_obj.paginator.num_pages }}"><i class="material-icons">last_page</i></a></li>
+                {% else %}
+                    <li class="disabled"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+                    <li class="disabled"><a href="#!"><i class="material-icons">last_page</i></a></li>
+                {% endif %}
+            </ul>
 
             {% include "events/list_events.html" %}
             {% if not object_list %}
