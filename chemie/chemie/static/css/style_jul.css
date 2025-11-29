@@ -9,15 +9,15 @@
   --card-bg: #fff;
 
   /* Main area header and background colors */
-  --main-header-text: #0b3954; 
+  --main-header-text: #0b3954;  /* #0b3954 */
   --background: #fafafa;
 
   /* Top nav colors */
   --top-header-text: #fff;
 
-  --top-header-bg:  #0b3954;
+  --top-header-bg:  #8B0000;
 
-  --footer-bg: #0b3954;
+  --footer-bg: #8B0000;
 
   /* Hoover */
   --btn-hoover: #3c91e6;

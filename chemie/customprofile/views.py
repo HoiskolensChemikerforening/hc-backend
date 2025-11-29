@@ -16,6 +16,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render
 from django.urls import reverse
 from django.utils import timezone
+from django.core.paginator import Paginator
+from urllib.parse import urlencode
 
 from rest_framework import generics
 from rest_framework_simplejwt.views import (
@@ -47,6 +49,7 @@ from .models import (
     Medal,
     MEMBERSHIP_DURATIONS,
     SPECIALIZATION,
+    RELATIONSHIP_STATUS,
     RegisterPageStatus,
 )
 from .serializers import (
@@ -289,19 +292,28 @@ def change_membership_status(request, profile_id, duration):
 
 
 @login_required
-def yearbook(request, year=1, spec=1):
-    year = int(year)
-    # If url arg grade is invalid, make it valid.
-    if year not in GRADES:
-        if year > GRADES.FIFTH.value:
-            year = GRADES.FIFTH.value
+def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimedaljer='', search=''): # Default inputs is what will be showcased in url when no filter is active.
+    klassetrinn = int(klassetrinn)
+    defaulturl = [klassetrinn, spesialisering, sivilstatus, digimedaljer] #Defaulturl is used for url --- communication between view and html
+    obj_per_page = 48 #Changed based on how server handles profile load amount
+
+    # If url arg grade is invalid, make it valid.    
+    if klassetrinn not in GRADES:
+        if klassetrinn > GRADES.FIFTH.value:
+            klassetrinn = GRADES.FIFTH.value
+        if klassetrinn in (0, '0', ''): #View may be confused by html template
+            klassetrinn = 0            
         else:
-            year = 1
-    form = NameSearchForm(request.POST or None)
+            klassetrinn = 15  # 15 means "Grade 1, 2, 3, 4 and 5"
+
+    form = NameSearchForm(request.GET or None) 
     profiles = Profile.objects.none()
 
     endYearForm = EndYearForm(request.POST or None)
     qProfilesFifth = Profile.objects.filter(grade=GRADES.FIFTH)
+    search_is_used = False
+    search_field = ''
+
     if len(qProfilesFifth) > 0:
         end_year = qProfilesFifth[0].end_year - 1
     else:
@@ -314,60 +326,138 @@ def yearbook(request, year=1, spec=1):
         .distinct()
     )
 
-    if request.method == "POST":
-        if form.is_valid():
-            search_field = form.cleaned_data.get("search_field")
-            users = find_user_by_name(search_field)
-            profiles = (
-                Profile.objects.filter(user__in=users)
-                .prefetch_related("medals")
-                .order_by("grade")
-            )
-        if endYearForm.is_valid():
-            integer_field = endYearForm.cleaned_data.get("integer_field")
-            end_year = integer_field
-            profiles = (
-                Profile.objects.filter(end_year=end_year, user__is_active=True)
-                .order_by("user__last_name")
-                .prefetch_related("medals")
-            )
-    else:
-        if year != GRADES.DONE:
-            if spec == SPECIALIZATION.NONE:
-                profiles = (
-                    Profile.objects.filter(grade=year, user__is_active=True)
-                    .order_by("user__last_name")
-                    .prefetch_related("medals")
-                )
-            else:
-                profiles = (
-                    Profile.objects.filter(
-                        grade=year, user__is_active=True, specialization=spec
-                    )
-                    .order_by("user__last_name")
-                    .prefetch_related("medals")
-                )
-        else:
-            profiles = (
-                Profile.objects.filter(end_year=end_year, user__is_active=True)
-                .order_by("user__last_name")
-                .prefetch_related("medals")
-            )
+    if form.is_valid(): #This is for first-time search, try func in line 395 is to keep search
+        search_field = form.cleaned_data.get("search_field")
+        users = find_user_by_name(search_field)
+        search_is_used = True
+        search = search_field
 
+    # allow GET to override path kwargs (so links like ?spesialisering=3 work)
+    get_spes = request.GET.get("spesialisering")
+    get_rel = request.GET.get("sivilstatus")
+    get_med = request.GET.get("digimedaljer")
+    get_end_year = request.GET.get("end_year")
+
+    if get_spes not in (None, "", "None"): #Work by Copilot. If value not None, then get/keep value. | Is to keep value, line 370-377 is to make the next change in filter
+        spesialisering = get_spes
+    if get_rel not in (None, "", "None"):
+        sivilstatus = get_rel
+    if get_med not in (None, "", "None"):
+        digimedaljer = get_med
+    if get_end_year not in (None, "", "None"):
+        try:
+            end_year = int(get_end_year)
+        except ValueError:
+            pass
+    
     # April Fools
     crush = Profile.objects.filter(grade__lt=6).order_by("?").first()
     # crush = Profile.objects.filter(user__last_name="Groening").first()
+
+    filter_kwargs = {"user__is_active": True} #filter key word arguments baseline
+    
+    #If grade == 0, then it wont filter by grade. Therefore all grades will be included.
+    #If grade == 15, then it will include all profiles in grade 1, 2, 3, 4 and 5.
+    if klassetrinn in GRADES: 
+        if klassetrinn != GRADES.DONE:
+            filter_kwargs["grade"] = klassetrinn
+        else: #Only filter by end_year (if it is selected )
+            filter_kwargs["grade"] = 6
+            if endYearForm.is_valid(): #Similar to (if end_year:)
+                integer_field = endYearForm.cleaned_data.get("integer_field")
+                end_year = integer_field
+                filter_kwargs["end_year"] = end_year
+
+    #When choice in tuple not chosen add kwargs to filter by a specific value.
+    if spesialisering not in (None, "", "None"): 
+        filter_kwargs["specialization"] = spesialisering
+    if sivilstatus not in (None, "", "None"):
+        filter_kwargs["relationship_status"] = sivilstatus
+    if digimedaljer not in (None, "", "None"):
+        filter_kwargs["medals__title"] = digimedaljer
+
+    #Append filter to profiles shown
+    print("Filter kwargs:", filter_kwargs)
+    if search_is_used: #If search is used, filter by users found in search && filter kwargs which includes grade-filter
+        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
+    else:
+        if klassetrinn == 0: #When "Alle trinn" is selected
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct()
+        elif klassetrinn == GRADES.DONE: #When "Sluttår" is selected
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct()
+        else: #Default; grades 1-5 | klassetrinn = 15
+            print("Filtering by grades 1-5")
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).exclude(grade=GRADES.DONE).order_by("grade", "user__last_name").distinct()
+
+    url = reverse(
+        "profile:yearbook-multifilter", 
+        kwargs={
+            "klassetrinn": defaulturl[0], #Klassetrinn is a int value
+            "spesialisering": defaulturl[1] or "",
+            "sivilstatus": defaulturl[2] or "",
+            "digimedaljer": defaulturl[3] or "",
+        },
+    )
+    
+    # Handle GET, to keep search (preserve the correct search form field name)
+    try:
+        # get the actual html name for the search field from the form
+        search_param_name = form["search_field"].html_name
+    except Exception:
+        # fallback if form or field is missing
+        search_param_name = "search"
+
+    search = request.GET.get(search_param_name, "").strip()
 
     context = {
         "profiles": profiles,
         "grades": GRADES,
         "search_form": form,
-        "grade": year,
+        # expose a `grade` name for template use (the selected klassetrinn)
+        "grade": defaulturl[0],
         "endYearForm": endYearForm,
         "end_years": end_years,
+        "sluttår": end_year,
         "spec": SPECIALIZATION,
         "crush": crush,  # April fools
+        "relstat": RELATIONSHIP_STATUS,
+        "medals": Medal.objects.all(),
+        "klassetrinn": defaulturl[0],
+        "spesialisering": defaulturl[1],
+        "sivilstatus": defaulturl[2],
+        "digimedaljer": defaulturl[3],
+        "url": url,
+        "search": search,
+        # expose the actual GET parameter name for search so template can append it
+        "search_param_name": search_param_name,
     }
+
+    # Show obj_per_page per page (replace your existing pagination block)
+    try:
+        total_count = profiles.count()
+    except Exception:
+        # fallback if profiles is a list
+        total_count = len(profiles)
+
+    if total_count <= obj_per_page:
+        context["profiles"] = profiles
+        context["is_paginated"] = False 
+    else:
+        paginator = Paginator(profiles, obj_per_page)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+
+        # put the page into context so template can both iterate and show navigation
+        context["profiles"] = page_obj       # Page is iterable
+        context["page_obj"] = page_obj
+        context["paginator"] = paginator
+        context["is_paginated"] = page_obj.has_other_pages()
+
+        # Build a querystring prefix that preserves other GET params (except 'page') --- This is work by Copilot
+        qs = request.GET.copy()
+        if "page" in qs:
+            qs.pop("page")
+        context["page_query_prefix"] = ("?" + qs.urlencode() + "&") if qs else "?"
 
     return render(request, "customprofile/yearbook.html", context)
 
@@ -375,7 +465,7 @@ def yearbook(request, year=1, spec=1):
 def find_user_by_name(query_name):
     qs = User.objects.all()
     for term in query_name.split():
-        qs = qs.filter(
+        qs = qs.filter( 
             Q(first_name__icontains=term) | Q(last_name__icontains=term)
         )
     return qs

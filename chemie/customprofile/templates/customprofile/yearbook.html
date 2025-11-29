@@ -14,11 +14,80 @@
 
 {% block extra_css %}
   <link href='{% static "css/detailview.css" %}' type="text/css" rel="stylesheet" media="screen,projection"/>
+  <style>
+    @media (max-width: 1000px) {
+      .scroll-on-phone {
+        display: flex;
+        flex-wrap: nowrap;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+        gap: 10px;
+        padding: 8px 0;
+      }
+      .scroll-on-phone .col {
+      margin-left: 10px !important;
+      padding-left: 0 !important;
+    }
+      .scroll-on-phone .col:not(:first-child) {
+        margin-left: 10px;
+      }
+    }
+  </style>
 {% endblock %}
 
 {% block extra_js %}
   <script src='{% static "js/hammer.min.js" %}' defer></script>
+  <script>
+    document.addEventListener("DOMContentLoaded", () => {
+      const Nofilter = ["", " ", "Alle", "Ingen filter", "Alle trinn"];
+
+      const dropdownChoices = document.querySelectorAll(".dropdown-content.select-dropdown.dropdown-content.multiple-select-dropdown");
+
+      dropdownChoices.forEach(choice => {
+
+        choice.addEventListener("click", (event) => {
+
+          // find the button in the same dropdown container
+          const ul = event.currentTarget; // the dropdown <ul>
+          const buttonId = ul.getAttribute("id"); // e.g. 'dropdown1'
+          const button = document.querySelector(`a.dropdown-trigger.btn-large[data-target="${buttonId}"]`);
+
+          if (!button) return; // prevent error if not found
+
+          const selectedText = event.target.textContent.trim()
+
+          let color = Nofilter.includes(selectedText) ?  "#6288A5": "rgb(11, 57, 84)"; 
+
+          // Store colorsetting in localstorage
+          button.style.backgroundColor = color;
+          localStorage.setItem(buttonId + "_color", color);
+        });
+      });
+    });
+    document.addEventListener("DOMContentLoaded", () => { // On page load, set colors from localstorage
+      const buttons = document.querySelectorAll("a.dropdown-trigger.btn-large");
+
+      buttons.forEach(button => {
+        const id = button.getAttribute("data-target");
+        const savedColor = localStorage.getItem(id + "_color");
+
+        if (savedColor) {
+          button.style.backgroundColor = savedColor;
+        }
+      });
+    });
+
+    function resetDropdownColors() { // Reset all dropdown button colors and empties localstorage
+      const buttons = document.querySelectorAll("a.dropdown-trigger.btn-large");
+      buttons.forEach(button => {
+        button.style.backgroundColor = "#6288A5";
+        const id = button.getAttribute("data-target");
+        localStorage.removeItem(id + "_color");
+      });
+    }
+  </script>
 {% endblock %}
+
 
 {% block content %}
   {% if perms.customprofile %}
@@ -37,160 +106,257 @@
   {% endif %}
 
 
-
-  <div class="row">
-      <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 30px">
-            <div style="margin-right: 10px">
+<div class="column">
+  <div class="col s6 m6 l7 s12">
+    <nav>
+      <div class="nav-wrapper">
+        <form method="get" class="newPost">
+          <div class="input-field">
+            <input id="{{ search_form.search_field.id_for_label }}"
+                   type="search" required
+                   name="{{ search_form.search_field.html_name }}"
+                   value="{{ search_form.search_field.value|default:'' }}"
+                   style="background-color: #6288A5;" aria-label="Søk">
+            <label for="{{ search_form.search_field.id_for_label }}" class="label-icon"></label>
+              <i class="material-icons" style="line-height: 42px;">search</i>
+            </label>
+          </div>
+          </form>
+      </div>
+    </nav>
+  </div>
+  <br>
+  <!-- Dropdown filters -->
+  <div class="row scroll-on-phone">
+    <div class="col s4 m4 l4 s6" style="display: flex;flex-direction: row;margin-right: 0">
+      <div style="margin-right: 10px">
         <a class='dropdown-trigger btn-large' href='#' data-target='dropdown1'
-           >Klassetrinn</a>
-        <ul id='dropdown1' class='dropdown-content'>
-          {% for year_number, year_text in grades %}
-            <li><a href='{% url "profile:yearbook-grade" year=year_number %}'>{{ year_text }}</a></li>
+          >Klassetrinn</a>
+      <ul id='dropdown1' class='dropdown-content select-dropdown multiple-select-dropdown'>
+        {% for year_number, year_text in grades %}
+          <li>
+            <a href='{% url "profile:yearbook-multifilter" klassetrinn=year_number sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ year_text }}</a>
+          </li>
+        {% endfor %}
+        <li>
+          <a href='{% url "profile:yearbook-multifilter" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle trinn</a>
+        </li>
+      </ul>
+      </div>
+      <div style="margin-right: 10px">
+        <a class='dropdown-trigger btn-large' href='#' data-target='dropdown4'
+          >Digidaljer</a>
+        <ul id='dropdown4' class='dropdown-content select-dropdown multiple-select-dropdown'>
+          <li>
+            <a href='{% url "profile:yearbook-multifilter" sivilstatus=sivilstatus klassetrinn=klassetrinn digimedaljer="" spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle</a>
+          </li>
+          {% for medal_title in medals %}
+            <li>
+              <a href='{% url "profile:yearbook-multifilter" digimedaljer=medal_title klassetrinn=klassetrinn sivilstatus=sivilstatus spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ medal_title }}</a>
+            </li>
           {% endfor %}
         </ul>
-            </div>
-
-        {% if grade != grades.DONE %}
-            <div>
-            <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
-                >Spesialisering</a>
-            <ul id = 'dropdown3' class='dropdown-content'>
-              {% for spec_value, spec_text in spec %}
-                  {% if spec_value == 1 %}
-                    <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>Alle </a></li>
-                  {% else %}
-                    <li><a href='{% url "profile:yearbook-spec" year=grade spec=spec_value %}'>{{ spec_text }}</a></li>
-                  {% endif %}
-              {% endfor %}
-            </div>
-        {% else %}
-            <div style="margin-left:20px ">
-                <form method='post' class="newPost">{% csrf_token %}
-                  <a class='dropdown-trigger btn-large' href='#' data-target='dropdown2'
-               >Sluttår</a>
-                  <ul class="dropdown-content" id="dropdown2" style="max-height: 250px">
-                    {% for end_year in end_years %}
-                      <li>
-                      <button class="newbtn" id="year-{{end_year}}" type="submit" name="{{ endYearForm.integer_field.html_name }}"
-                              href="" value="{{ end_year}}">{{end_year}}</button>
-                      </li>
-
-                      {% endfor %}
-                  </ul>
-                </form>
-            </div>
-        {% endif %}
       </div>
-
-
-
-
-      <div class="col s6 m6 l7 s12">
-        <nav>
-          <div class="nav-wrapper">
-            <form method='post' class="newPost">{% csrf_token %}
-              <div class="input-field">
-                <input id="{{ search_form.search_field.id_for_label }}"
-                       type="search" required name="{{ search_form.search_field.html_name }}"
-                       value="{{ search_form.search_field.value|default:'' }}">
-                <label for="{{ search_form.search_field.id_for_label }}" class="label-icon">
-                  <i class="material-icons" style="line-height: 42px;">search</i></label>
-              </div>
-            </form>
-          </div>
-        </nav>
+      <div style="margin-right: 10px">
+        <a class='dropdown-trigger btn-large' href='#' data-target='dropdown5'
+          >Sivilstatus</a>
+        <ul id='dropdown5' class='dropdown-content select-dropdown multiple-select-dropdown'>
+          <li>
+            <a href='{% url "profile:yearbook-multifilter" sivilstatus="" klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ingen filter</a>
+          </li>
+          {% for rel_number, rel_text in relstat %}
+            <li>
+              <a href='{% url "profile:yearbook-multifilter" sivilstatus=rel_number klassetrinn=klassetrinn digimedaljer=digimedaljer spesialisering=spesialisering %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ rel_text }}</a>
+            </li>
+          {% endfor %}
+        </ul>
       </div>
-  </div>
-
-
-
-  <!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
-  <div class="row">
-    {% for profile in profiles %}
-      <div class="col s12 m4">
-        <!-- When card is pressed, a detail view pops up. -->
-        <div class="card">
-          <!-- Showing the pictures. -->
-          <div class="card-image">
-            {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
-              <img src="{{ primary.url }}" data-field-id="#modal-{{ profile.pk }}"
-                  {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
-                   data-alt-src="{{ secondary.url }}"
-                  {% endthumbnail %}>
-            {% empty %}
-              <img src="{% static 'images/blank_avatar.png' %}" data-field-id="#modal-{{ profile.pk }}" >
-            {% endthumbnail %}
-          </div>
-
-          <!-- The box under each picture -->
-          <div class="card-content">
-            <a class="card-title">{{ profile }}</a>
-            {% if profile.relationship_status == 1 %}
-              <i class="material-icons icon-green">favorite</i>
-            {% elif profile.relationship_status == 2 %}
-              <i class="material-icons icon-red">favorite</i>
-            {% elif profile.relationship_status == 4 %}
-              <i class="material-icons" style="color: #f9cf00;">favorite</i>
+      <div>
+      <a class='dropdown-trigger btn-large' href='#' data-target='dropdown3'
+          >Spesialisering</a>
+      <ul id = 'dropdown3' class='dropdown-content select-dropdown multiple-select-dropdown'>
+        <li>
+          <a href='{% url "profile:yearbook-multifilter" spesialisering="" klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle </a>
+        </li>
+        {% for spec_value, spec_text in spec %}
+            {% if spec_value == 1 %}
+              <li>
+                <a href='{% url "profile:yearbook-multifilter" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Ikke valgt </a>
+              </li>
             {% else %}
-              <i class="material-icons icon-gray">favorite</i>
+              <li>
+                <a href='{% url "profile:yearbook-multifilter" spesialisering=spec_value klassetrinn=klassetrinn sivilstatus=sivilstatus digimedaljer=digimedaljer %}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>{{ spec_text }}</a>
+              </li>
             {% endif %}
-          </div>
-        </div>
+        {% endfor %}
       </div>
-
-      <!-- Detail view in yearbook -->
-      <div id="modal-{{ profile.pk }}" class="modal">
-
-        <!-- All content in popup goes here -->
-        <div class="modal-content">
-
-          <div class="row">
-            <!-- Picture in detail view -->
-            <div class="center-align">
-              <div class="col s12 m4 l4">
-                  {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
-                      <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
-                           href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
-                  {% empty %}
-                      <img src="{% static 'images/blank_avatar.png' %}" alt="" class="rcorners6 responsive-img z-depth-1" style="margin-top: 10px;">
-                  {% endthumbnail %}
-              </div>
-            </div>
-
-            <!-- All text in view-->
-            <div class="col s12 m8 l8">
-              <div class="center-align">
-                <h4 class="grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
-                <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
-                <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
-                <p>Mobilnummer: {{ profile.phone_number }}</p>
-                <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
-                {% if profile.specialization != 1 %} <!--Check if person has a specialization-->
-                 <p> Spesialisering: {{profile.get_nice_specialization }}</p>
-                {% endif %}
-                <div class="row">
-                  {% for medal in profile.medals.all %}
-                    <img src="{{ medal.image.url }}" alt="{{ medal.title }}"
-                         title="{{ medal.title }}" style="height:50px;width:auto;">
-                  {% endfor %}
-                </div>
-              </div>
-            </div>
-          </div>
+      {% if grade == grades.DONE %}
+        <div style="margin-left:20px ">
+          <form method='post' class="newPost">{% csrf_token %}
+            <a class='dropdown-trigger btn-large' href='#' data-target='dropdown7'
+          >Sluttår</a>
+            <ul class="dropdown-content select-dropdown multiple-select-dropdown" id="dropdown7" style="max-height: 250px">
+              {% for end_year in end_years %}
+                <li>
+                  <button 
+                    class="newbtn" id="year-{{end_year}}" type="submit" 
+                    name="{{ endYearForm.integer_field.html_name }}" value="{{ end_year}}"
+                    >
+                    {{end_year}}
+                  </button>
+                </li>
+              {% endfor %}
+            </ul>
+          </form>
         </div>
-
-        <!-- Footer on popup. Contains closing button. -->
-        <div class="modal-footer">
-          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Lukk</a>
-          <a href="mailto:{{ profile.user.email }}"
-             class="modal-action modal-close waves-effect waves-green btn-flat">Send e-post</a>
-        </div>
+      {% endif %}
+      <div style="margin-left: 10px"> <!-- Remove filter button -->
+        <a class='btn-large' href='{% url "profile:yearbook-index" %}' onclick="resetDropdownColors()"
+          >Nullstill!</a>
       </div>
-
-    {% endfor %}
+    </div>
   </div>
-                  
+</div>
 
+{% if profiles and profiles.has_other_pages %}
+<ul class="pagination nav navbar-nav">
+  {% with prefix=page_query_prefix|default:'?' %}
+    {% if profiles.has_previous %}
+      <li><a href="{{ prefix }}page={{ profiles.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+
+    {% for page in profiles.paginator.page_range %}
+      {% if page == 1 or page == profiles.paginator.num_pages or page >= profiles.number|add:-2 and page <= profiles.number|add:2 %}
+        <li class="{% if profiles.number == page %}active{% endif %}">
+          <a href="{{ prefix }}page={{ page }}">{{ page }}</a>
+        </li>
+      {% elif page == 2 and profiles.number > 4 %}
+        <li><span>…</span></li>
+      {% elif page == profiles.paginator.num_pages|add:-1 and profiles.number < profiles.paginator.num_pages|add:-3 %}
+        <li><span>…</span></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if profiles.has_next %}
+      <li><a href="{{ prefix }}page={{ profiles.next_page_number }}">Neste</a></li>
+    {% endif %}
+  {% endwith %}
+</ul>
+{% endif %}
+
+<!-- Shows all the students which are seemingly put into three columns, but is really one long row -->
+<div class="row">
+  {% for profile in profiles %}
+    <div class="col s12 m4">
+      <!-- When card is pressed, a detail view pops up. -->
+      <div class="card">
+        <!-- Showing the pictures. -->
+        <div class="card-image">
+          {% thumbnail profile.image_primary "412x551" crop="center" as primary %}
+            <img src="{{ primary.url }}" data-field-id="#modal-{{ profile.pk }}"
+                {% thumbnail profile.image_secondary "412x551" crop="center" as secondary %}
+                  data-alt-src="{{ secondary.url }}"
+                {% endthumbnail %}>
+          {% empty %}
+            <img src="{% static 'images/blank_avatar.png' %}" data-field-id="#modal-{{ profile.pk }}" >
+          {% endthumbnail %}
+        </div>
+
+        <!-- The box under each picture -->
+        <div class="card-content">
+          <a class="card-title">{{ profile }}</a>
+          {% if profile.relationship_status == 1 %}
+            <i class="material-icons icon-green">favorite</i>
+          {% elif profile.relationship_status == 2 %}
+            <i class="material-icons icon-red">favorite</i>
+          {% elif profile.relationship_status == 4 %}
+            <i class="material-icons" style="color: #f9cf00;">favorite</i>
+          {% else %}
+            <i class="material-icons icon-gray">favorite</i>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- Detail view in yearbook -->
+    <div id="modal-{{ profile.pk }}" class="modal">
+
+      <!-- All content in popup goes here -->
+      <div class="modal-content">
+
+        <div class="row">
+          <!-- Picture in detail view -->
+          <div class="center-align">
+            <div class="col s12 m4 l4">
+                {% thumbnail profile.image_primary "400x680" crop="center" as primary %}
+                    <img src="{{ primary.url }}" alt="" class="rcorners6 responsive-img z-depth-1"
+                          href="#modal-{{ profile.pk }}" style="margin-top: 10px;">
+                {% empty %}
+                    <img src="{% static 'images/blank_avatar.png' %}" alt="" class="rcorners6 responsive-img z-depth-1" style="margin-top: 10px;">
+                {% endthumbnail %}
+            </div>
+          </div>
+
+          <!-- All text in view-->
+          <div class="col s12 m8 l8">
+            <div class="center-align">
+              <h4 class="grey-text darken-4" style="margin-top: 70px;">{{ profile }}</h4>
+              <p>Klassetrinn: {{ profile.get_nice_grade }}</p>
+              <p>E-post: <a href="mailto:{{ profile.user.email }}">{{ profile.user.email }}</a></p>
+              <p>Mobilnummer: {{ profile.phone_number }}</p>
+              <p>Samlivsstatus: {{ profile.get_nice_relationship_status }}</p>
+              {% if profile.specialization != 1 %} <!--Check if person has a specialization-->
+                <p> Spesialisering: {{profile.get_nice_specialization }}</p>
+              {% endif %}
+              <p>Sluttår: {{ profile.end_year }}</p>
+              <div class="row">
+                {% for medal in profile.medals.all %}
+                  <img src="{{ medal.image.url }}" alt="{{ medal.title }}"
+                        title="{{ medal.title }}" style="height:50px;width:auto;">
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer on popup. Contains closing button. -->
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Lukk</a>
+        <a href="mailto:{{ profile.user.email }}"
+            class="modal-action modal-close waves-effect waves-green btn-flat">Send e-post</a>
+      </div>
+    </div>
+
+  {% endfor %}
+</div>
+                  
+<!-- Pagination (shows when `profiles` is a Page with multiple pages) -->
+{% if profiles and profiles.has_other_pages %}
+<ul class="pagination nav navbar-nav">
+  {% with prefix=page_query_prefix|default:'?' %}
+    {% if profiles.has_previous %}
+      <li><a href="{{ prefix }}page={{ profiles.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+
+    {% for page in profiles.paginator.page_range %}
+      {% if page == 1 or page == profiles.paginator.num_pages or page >= profiles.number|add:-2 and page <= profiles.number|add:2 %}
+        <li class="{% if profiles.number == page %}active{% endif %}">
+          <a href="{{ prefix }}page={{ page }}">{{ page }}</a>
+        </li>
+      {% elif page == 2 and profiles.number > 4 %}
+        <li><span>…</span></li>
+      {% elif page == profiles.paginator.num_pages|add:-1 and profiles.number < profiles.paginator.num_pages|add:-3 %}
+        <li><span>…</span></li>
+      {% endif %}
+    {% endfor %}
+
+    {% if profiles.has_next %}
+      <li><a href="{{ prefix }}page={{ profiles.next_page_number }}">Neste</a></li>
+    {% endif %}
+  {% endwith %}
+</ul>
+{% endif %}
 
 {% endblock content %}
 
@@ -243,11 +409,5 @@
           $('.dropdown-trigger').dropdown();
           $('.modal').modal();
       });
-
-
-
-
   </script>
-
-
 {% endblock %}
