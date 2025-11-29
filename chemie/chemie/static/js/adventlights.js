@@ -77,6 +77,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function isAdventSunday(today = new Date()) {
     const year = today.getFullYear();
     const adventSundays = getAdventSundays(year);
+
     const t = new Date(today);
     t.setHours(0, 0, 0, 0);
     const tTime = t.getTime();
