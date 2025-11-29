@@ -42,8 +42,12 @@
         <div class="card-content">
           <div id='calendar'></div>
           <div class="card-action">
+            <p class="flow-text">
+            Her kan du legge til HC-kalenderen i din egen kalender!
+            </p>
             <div class="left-align">
-              <a href="https://calendar.google.com/calendar/ical/fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com/public/basic.ics">Kalenderfeed</a>
+              <a href="https://calendar.google.com/calendar/ical/fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com/public/basic.ics">Last ned ICS-fil</a>
+              <a onclick="copyLink()">Kopier link!</a>
             </div>
           </div>
         </div>
@@ -71,5 +75,14 @@
               height: 'auto'
           });
       });
+      function copyLink() {
+        const copyText = 'https://calendar.google.com/calendar/embed?src=fse1dddq3jjn4qu9qnf2cgfm08%40group.calendar.google.com&ctz=Europe%2FOslo'
+        // Copy the text inside the text field
+        navigator.clipboard.writeText(copyText);
+
+        // Alert the copied text
+        alert("Link kopiert!");
+      };
   </script>
+
 {% endblock footer_script %}
