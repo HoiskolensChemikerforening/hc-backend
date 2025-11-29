@@ -1,6 +1,7 @@
-const christmasSymbols = ["❄️", "❄️", "❄️", "🎁", "🎄", "🎅"]; // add in emojis after every Advent
+const christmasSymbols = ["❄️", "❄️", "❄️", "🎄", "🤶", "🎅", "⛄️"]; // add in emojis after every Advent "🎄", "🤶", "🎅", "⛄️"
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
+const blueCancerSymbols = [ "🙍‍♂️", "💙", "🫐", " 🍆", " "];
 const valentinesSymbols = ["❤️", "🌹", "💘", "👼", "💌", "💋", "🏹"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
 const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>19.09.25","🕸️", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
@@ -11,7 +12,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart3.png",
   "../../static/images/holiday_images/bart4.png",
   "../../static/images/holiday_images/bart5.png",
-  "../../static/images/holiday_images/bart6.png"
+  "../../static/images/holiday_images/bart6.png", "💙", "💙", "💙", 
 ];
 
 const rainSpeed = 30; // Adjust this value to set the rain speed
@@ -23,6 +24,8 @@ function selectSymbols(choose_your_holiday) {
     return easterSymbols;
   } else if (choose_your_holiday === "breast cancer") {
     return breastCancerSymbols;
+    } else if (choose_your_holiday === "blue cancer") {
+    return blueCancerSymbols;
   } else if (choose_your_holiday === "halloween") {
     return halloweenSymbols;
   } else if (choose_your_holiday === "pauloween") {
@@ -37,10 +40,10 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "breast cancer"; // Change this to select the holiday you want
+const chosenHoliday = "christmas"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 150; // Maximum number of elements
+const maxElements = 50; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem

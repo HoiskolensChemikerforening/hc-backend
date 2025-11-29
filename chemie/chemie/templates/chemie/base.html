@@ -21,7 +21,7 @@
   <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link href="https://cdnjs.cloudflare.com/ajax/libs/IBM-type/0.5.3/css/ibm-type.min.css" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
-  <link href="{% static "css/style.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
+  <link href="{% static "css/style_jul.css" %}" type="text/css" rel="stylesheet" media="screen,projection" />
   {% block extra_css %}
   {% endblock %}
 
@@ -37,7 +37,16 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
   {% block extra_js %}
-  {% endblock %}
+
+<!-- Colorchanging header -->
+<!--<script src="{% static 'js/random_header.js' %}"></script> -->
+
+<!-- Partybutton -->
+<!--<script src="{% static 'js/random_header_click.js' %}"></script> -->
+
+<script src="{% static 'js/adventlights.js' %}"></script>
+
+{% endblock %}
 
   {% block header %}
   {% endblock header %}
@@ -51,7 +60,7 @@
 </head>
 
 <body>
-   <!--<div id="makeItRain"></div> -->
+  <div id="makeItRain"></div> 
   <header>
     <nav class="top-nav">
       <div class="container">
@@ -65,13 +74,14 @@
             <h4 id=subheading>{% block nav_sub_header %}{% endblock nav_sub_header %}</h4>
           </div>
         </div>
+        <div id="hc-header-candles"></div>
       </div>
     </nav>
 
     <ul id="nav-mobile" class="sidenav sidenav-fixed">
       <li class="logo">
         <a id="logo-container" href="/forside/" class="brand-logo">
-          <img id="front-page-logo" type="image/jpg" src="{% static "images/logo.png" %}"></img>
+          <img id="front-page-logo" type="image/jpg" src="{% static "images/HC_logo_jul.png" %}"></img>
         </a>
         <a href="/forside/" style="height: 100%">
           <h4 class="logo-text">Høiskolens Chemikerforening</h4>
@@ -172,7 +182,7 @@
           <li class="bold"><a class="collapsible-header waves-effect"><i class="material-icons micon">shopping_cart</i>Utleie</a>
                 <div class="collapsible-body">
                   <ul>
-                    <li><a href="{% url 'rentalservice:index' %}" class="waves-effect">Lyd og lys</a></li>
+                    <li><a href="{% url 'rentalservice:index_ac' %}" class="waves-effect">Lyd og lys</a></li>
                     <li><a href="{% url 'rentalservice:index_promo' %}" class="waves-effect">Foto</a></li>
                     <li><a href="{% url 'rentalservice:index_sportskom' %}" class="waves-effect">Sportskomiteen</a></li>
                   </ul>
@@ -354,12 +364,10 @@
     ga('send', 'pageview');
   </script>
 
-  <!--  {% if request.user.profile.grade <= 3 %} -->
-  {% block makeitrain %}
-    <!--<script src="{% static 'js/makeItRain.js' %}"></script> -->
-  {% endblock %}
 
-  <!--  {% endif %} -->
+  {% block makeitrain %}
+    <script src="{% static 'js/makeItRain.js' %}"></script>
+  {% endblock %}
 
 </body>
 

@@ -19,7 +19,6 @@ class RentalObjectForm(forms.ModelForm):
             "type",
             "quantity",
             "image",
-            "owner",
         ]
 
 
@@ -43,7 +42,6 @@ class CreateRentalObjectForm(RentalObjectForm):
         # M.Row("is_new_type"),
         # M.Row("type", "new_type_name"),
         M.Row("image"),
-        M.Row("owner"),
     )
 
     # def clean(self):

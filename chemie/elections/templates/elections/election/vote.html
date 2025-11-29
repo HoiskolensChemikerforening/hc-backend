@@ -2,23 +2,25 @@
 {% load thumbnail %}
 {% load static %}
 
+
 {% block content %}
 <h2 style="text-align:center">{{position.spots}} skal velges til {{position}} </h2>
 <form method="POST" onsubmit="return submitVote(this)" class="post-form" href="">{% csrf_token %}
-  <div class="d-flex flex-wrap" style="justify-content: space-evenly">
-    {% for field in form %}
+  <div class="d-flex flex-wrap justify-content-center" style="gap:2rem;">
+  {% for field in form %}
     {% for value in field %}
-    <div class="btn d-flex" style=" margin:1rem;padding:0rem; background-color: lightgray">
-      {{ value }}
-    </div>
+      <label class="btn d-flex flex-column align-items-center justify-content-between text-center shadow-sm"
+             style="padding: 1rem; background-color: #d3d3d3; border-radius: 0.75rem; width: 12rem; height: 16rem;">
+        {{ value }}
+      </label>
     {% endfor %}
-  </div>
   {% endfor %}
   </div>
+
   <div class="justify-content-center d-flex" style="margin:1rem">
     <button type="submit" class="btn btn-success">Stem</button>
   </div>
-  <p style="text-align:center; margin:1rem">For å stemme blankt må du stemme uten å ha valgt noen kandidater</p>
+  <p style="text-align:center; margin:1rem; font-weight:bold;">For å stemme blankt må du stemme uten å ha valgt noen kandidater</p>
 </form>
 
 {% endblock content %}
@@ -50,7 +52,7 @@
     var numberOfCandidates = 0;
     for (var i = 0; i < checkBoxes.length; i++) {
       if (checkBoxes[i].checked) {
-        var candidateName = checkBoxes[i].parentNode.childNodes[3].innerHTML;
+        var candidateName = checkBoxes[i].closest("label").querySelector(".vote-name").innerText;
         message = message.concat("\n");
         message = message.concat(candidateName.toString());
         numberOfCandidates++
