@@ -1,4 +1,4 @@
-const christmasSymbols = ["❄️", "❄️", "❄️"]; // add in emojis after every Advent "🎄", "🤶", "🎅", "⛄️"
+const christmasSymbols = ["❄️", "❄️", "❄️", "🎄", "🤶", "🎅", "⛄️"]; // add in emojis after every Advent "🎄", "🤶", "🎅", "⛄️"
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const blueCancerSymbols = [ "🙍‍♂️", "💙", "🫐", " 🍆", " "];
