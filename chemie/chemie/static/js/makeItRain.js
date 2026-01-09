@@ -1,4 +1,4 @@
-const christmasSymbols = ["❄️", "❄️", "❄️", "🎄", "🤶", "🎅", "⛄️"]; // add in emojis after every Advent "🎄", "🤶", "🎅", "⛄️"
+const christmasSymbols = ["❄️", "❄️", "❄️"]; // add in emojis after every Advent "🎄", "🤶", "🎅", "⛄️"
 const easterSymbols = ["🐰", "🗿", "🐥", "🐣"];
 const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const blueCancerSymbols = [ "🙍‍♂️", "💙", "🫐", " 🍆", " "];
@@ -43,7 +43,7 @@ function selectSymbols(choose_your_holiday) {
 const chosenHoliday = "christmas"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 50; // Maximum number of elements
+const maxElements = 10; // Maximum number of elements
 
 // Image width and hight
 const imageWidth = 4 //rem
