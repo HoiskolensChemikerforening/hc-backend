@@ -342,6 +342,7 @@ class SocialEditRemoveUserRegistration(
         return {
             "enable_sleepover": self.object.sleepover,
             "enable_night_snack": self.object.night_snack,
+            "enable_smallroom": self.object.smallroom,
             "enable_companion": self.object.companion,
             "instance": self.registration,
         }
@@ -376,6 +377,7 @@ class SocialEditRemoveUserRegistration(
             self.object.companion
             or self.object.sleepover
             or self.object.night_snack
+            or self.object.smallroom
         )
         # Remove edit if no fields and editform is in context
         if not (edit_form_boolean) and context["forms"].get("edit"):
@@ -420,6 +422,7 @@ class SocialEditRemoveUserRegistration(
         registration.night_snack = form.cleaned_data.get("night_snack") or 0
         registration.sleepover = form.cleaned_data.get("sleepover") or 0
         registration.companion = form.cleaned_data.get("companion")
+        registration.smallroom = form.cleaned_data.get("smallroom") or 0
         registration.save()
         messages.add_message(
             self.request,
@@ -554,6 +557,7 @@ class SocialRegisterUserView(LoginRequiredMixin, SingleObjectMixin, View):
         return {
             "enable_sleepover": self.object.sleepover,
             "enable_night_snack": self.object.night_snack,
+            "enable_smallroom": self.object.smallroom,
             "enable_companion": self.object.companion,
         }
 

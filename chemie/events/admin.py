@@ -93,6 +93,7 @@ class EventAdmin(admin.ModelAdmin):
         "companion",
         "sleepover",
         "night_snack",
+        "smallroom",
         "published",
     )
 
