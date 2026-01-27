@@ -305,7 +305,7 @@ class SocialEventRegistration(BaseRegistration):
     # Optional fields
     sleepover = models.BooleanField(default=False, verbose_name="Overnatting")
     night_snack = models.BooleanField(default=False, verbose_name="Nattmat")
-    smallroom = models.BooleanField(default=False, verbose_name="Jeg kan sitte på mindre rom")
+    smallroom = models.BooleanField(default=False, verbose_name="Jeg kan sitte på lillerommet")
     companion = models.CharField(
         max_length=40,
         verbose_name="Navn på eksternt følge",

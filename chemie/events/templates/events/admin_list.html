@@ -130,6 +130,9 @@
             {% if event.sleepover %}
               <th>Overnatting</th>
             {% endif %}
+            {% if event.smallroom %}
+              <th>Lillerommet</th>
+            {% endif %}
             <th>Epost</th>
           {% if is_bedpres or social_has_checkin %}
             <th>Oppmøtestatus</th>
@@ -174,6 +177,12 @@
 
             {% if event.sleepover %}
               <td>{% if attendee.sleepover %}
+                <i class="material-icons">done</i>
+              {% endif %}</td>
+            {% endif %}
+
+            {% if event.smallroom %}
+              <td>{% if attendee.smallroom %}
                 <i class="material-icons">done</i>
               {% endif %}</td>
             {% endif %}
