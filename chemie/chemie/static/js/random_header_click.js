@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
+  // Velg tilfeldig side der knappen skal vises
+  const allowedPages = ['/kalender/', '/arrangementer/', '/forside', '/s/om', '/', '/bokskap/', '/undergrupper/', '/utleie/sportskom/'];
+  const randomPage = allowedPages[Math.floor(Math.random() * allowedPages.length)];
+  
+  // Vis bare knappen hvis vi er på den valgte siden
+  if (!window.location.pathname.includes(randomPage)) {
+    return;
+  }
+
   const Shades = [
     "#11ff00ff", "#0227bdff", "#00a6ffff", "#dde503ff",
     "#0011ffff", "#00ff6eff", "#ef4ff7ff", "#81D4FA", "#ff0a0aff"
