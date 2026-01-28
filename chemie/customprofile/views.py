@@ -78,6 +78,7 @@ def register_user(request):
     ):
         user = user_core_form.save(commit=False)
         user.set_password(user_core_form.password_matches())
+        user.username = user.username.lower()
         user.save()
 
         profile = user_profile_form.save(commit=False)
@@ -479,12 +480,29 @@ class LoginView(OldLoginView):
     redirect to home page
     """
 
-    def form_valid(self, form):
-        user = form.get_user()
-        if user.profile.approved_terms:
-            return super().form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
+        if 'data' in kwargs.keys():
+            # remember old state
+            _mutable = kwargs['data']._mutable
 
-        return self.approval_form_view(self.request, form)
+            # set to mutable
+            kwargs['data']._mutable = True
+
+            # сhange the values you want
+            kwargs['data']['username'] = kwargs['data']['username'].lower()
+
+            # set mutable flag back
+            kwargs['data']._mutable = _mutable
+        return kwargs
+
+    def form_valid(self, loginform):
+        user = loginform.get_user()
+        if user.profile.approved_terms:
+            return super().form_valid(loginform)
+
+        return self.approval_form_view(self.request, loginform)
 
     def approval_form_view(self, request, loginform):
         if request.method == "POST":
