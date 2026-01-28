@@ -1,4 +1,4 @@
-import material as M
+import chemie.custommaterial as M
 from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.flatpages.models import FlatPage

@@ -1,7 +1,7 @@
 from django import forms
 from .models import LockerUser
 from captcha.fields import ReCaptchaField
-import material as M
+import chemie.custommaterial as M
 
 
 class RegisterExternalLockerUserForm(forms.ModelForm):
