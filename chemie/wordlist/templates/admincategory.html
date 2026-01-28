@@ -1,0 +1,92 @@
+{% extends "chemie/base.html" %}
+{% block nav_header %}
+  Kategori
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Endre og slette kategorier
+{% endblock nav_sub_header %}
+
+
+{% block content %}
+
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a class="breadcrumb">Kategori</a>
+    
+
+  </div>
+{% endblock %}
+
+
+
+
+<div>
+  <table class="striped">
+    <thead>
+      <tr>
+        <th>Kategori</th>
+        <th>Rediger</th>
+        <th>Slett</th>
+      </tr>
+    </thead>
+
+    <tbody>
+    {% for category in admincategory %}
+      <tr>
+        <td>{{category}}</td>
+        <td>
+        
+          <a class="btn-floating btn-large waves-effect waves-light green" href = "{% url 'wordlist:editcategory' category.id %}">
+          <i class="material-icons">edit</i></a>
+        </td>
+
+        <td>
+        
+          
+          <a class="btn-floating btn-large waves-effect waves-light red" href = "{% url 'wordlist:deletecategory' category.id %}">
+          <i class="material-icons">delete</i></a>
+     
+        </td>
+        
+        {% endfor %}
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+
+
+
+
+
+
+{% if perms.wordlist%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">dehaze</i>
+          </a>
+          <ul>
+            {% if perms.wordlist.add_word %}
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:createcategory" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:createcategory" %}>Legg til en ny kategori</a>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+
+
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}

@@ -1,0 +1,67 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block nav_header %}
+  Endring av ord
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a href="{% url "wordlist:details" pk klassetall %}" class="breadcrumb"> {{ordet.0}}</a>
+    <a class="breadcrumb">Rediger: {{ordet.0}}</a>
+    
+   
+  </div>
+{% endblock %}
+
+
+<style>
+
+  select{display: block;}
+  .knapp{display: block;}
+  
+  
+</style>
+
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    
+
+    {%form form=form%}
+    
+    {% endform %}
+    
+
+    
+
+
+  
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen", class = "btn" /> 
+       
+    </div>
+
+  </form>
+</div>
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
+
+
+
+

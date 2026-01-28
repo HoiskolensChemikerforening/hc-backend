@@ -1,0 +1,134 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block nav_header %}
+  Innsending av ord
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a class="breadcrumb">Innsending av ord</a>
+  </div>
+{% endblock %}
+
+<style>
+
+  select{display: block;}
+  .knapp{display: block;}
+
+  
+  
+</style>
+
+{% if formindex == 0 %}
+<h5>Velg skjema for type ord du vil legge inn i ordlisten:</h5>
+<div>
+  <form method = "POST" enctype = "multipart/form-data" id="select"> 
+    {% csrf_token %}
+    {%form form=form%}
+    
+    {% endform %}
+    <div>
+      <input type = "submit" value = "Velg skjema", name = "check" class = "btn" />
+      
+    </div>
+  </form>
+</div>
+{% endif %}
+
+
+{% if formindex == 1 %}
+<h5>Ord (uspesifisert klasse):</h5>
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=form%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_1" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_1" class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}
+
+{% if formindex == 2 %}
+<h5>Verb:</h5>
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=form%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_2" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_2" class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}
+
+{% if formindex == 3 %}
+<h5>Substantiv:</h5>
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=form%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_3" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_3" class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}
+
+{% if formindex == 4 %}
+<h5>Adjektiv:</h5>
+<div>
+  
+  <form method = "POST" enctype = "multipart/form-data"> 
+  
+    {% csrf_token %}
+
+    {%form form=form%}
+    {% endform %}
+    
+    <div>
+      <input type = "submit" value = "Lagre ord i databasen" name = "tag_4" class = "btn" /> 
+      <input type = "submit" value = "Lag ett ord til!" name = "nytt_tag_4" class = "btn" /> 
+    </div>
+
+  </form>
+</div>
+{% endif %}
+
+
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
