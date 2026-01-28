@@ -71,11 +71,11 @@ document.addEventListener("DOMContentLoaded", function() {
         return;
       }
       console.log('random_header_click: confirmed');
-      const interval = setInterval(updateColor, 1);
+      const interval = setInterval(updateColor, 50);
       setTimeout(() => {
         clearInterval(interval);
         resetColor();
-      }, 5000);
+      }, 3000);
     }
 
     fabLink.addEventListener("click", startRandomHeader);
