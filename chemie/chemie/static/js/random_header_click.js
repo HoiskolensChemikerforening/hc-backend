@@ -44,17 +44,33 @@ document.addEventListener("DOMContentLoaded", function() {
     fabLink.className = "btn-floating btn-large red"; 
     fabLink.innerHTML = '<i class="material-icons">celebration</i>';
     fabLink.style.boxShadow = "none";
+      fabLink.href = "javascript:void(0)";
+      fabLink.setAttribute('role', 'button');
+      fabLink.setAttribute('tabindex', '0');
+      fabLink.style.cursor = 'pointer';
 
 
   fabDiv.appendChild(fabLink);
   if (header) header.appendChild(fabDiv);
 
-  // Event listener
-  fabLink.addEventListener("click", function() {
-    const interval = setInterval(updateColor, 1);
-    setTimeout(() => {
-      clearInterval(interval);
-      resetColor();
-    }, 5000);
+  // Event listener with confirmation
+  function startRandomHeader(e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      console.log('random_header_click: clicked');
+      if (!confirm("Epiplepsi? Dette er en advarsel.")) {
+        console.log('random_header_click: cancelled');
+        return;
+      }
+      console.log('random_header_click: confirmed');
+      const interval = setInterval(updateColor, 1);
+      setTimeout(() => {
+        clearInterval(interval);
+        resetColor();
+      }, 5000);
+    }
+
+    fabLink.addEventListener("click", startRandomHeader);
+    fabLink.addEventListener("keydown", function(e) {
+      if (e.key === 'Enter' || e.key === ' ') startRandomHeader(e);
   });
 });
