@@ -141,6 +141,9 @@
         <li>
           <a href='{% url "profile:yearbook-multifilter" klassetrinn=0 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Alle trinn</a>
         </li>
+        <li>
+          <a href='{% url "profile:yearbook-multifilter" klassetrinn=15 sivilstatus=sivilstatus digimedaljer=digimedaljer spesialisering=spesialisering%}{% if search %}?{{ search_param_name }}={{ search|urlencode }}{% endif %}'>Aktive (1-5)</a>
+        </li>
       </ul>
       </div>
       <div style="margin-right: 10px">

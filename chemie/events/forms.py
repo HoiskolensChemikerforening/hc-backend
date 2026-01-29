@@ -147,7 +147,7 @@ class RegisterEventForm(BaseRegisterEventForm):
         M.Row("payment_information"),
         M.Row(M.Column("image"), M.Column("sluts")),
         M.Row("price_member", "price_not_member", "price_companion"),
-        M.Row("companion", "sleepover", "night_snack", "check_in"),
+        M.Row("companion", "sleepover", "night_snack", "smallroom", "check_in"),
         M.Row("allowed_grades"),
     )
 
@@ -163,6 +163,7 @@ class RegisterEventForm(BaseRegisterEventForm):
             "companion",
             "sleepover",
             "night_snack",
+            "smallroom",
             "check_in",
         ]
 
@@ -198,20 +199,22 @@ class SocialRegisterUserForm(forms.ModelForm):
     class Meta:
         model = SocialEventRegistration
 
-        fields = ["companion", "sleepover", "night_snack"]
+        fields = ["companion", "sleepover", "night_snack", "smallroom"]
 
     def __init__(self, *args, **kwargs):
         enable_sleepover = kwargs.pop("enable_sleepover", True)
         enable_night_snack = kwargs.pop("enable_night_snack", True)
+        enable_smallroom = kwargs.pop("enable_smallroom", True)
         enable_companion = kwargs.pop("enable_companion", True)
         super(SocialRegisterUserForm, self).__init__(*args, **kwargs)
         if not enable_sleepover:
             self.fields.pop("sleepover")
         if not enable_night_snack:
             self.fields.pop("night_snack")
+        if not enable_smallroom:
+            self.fields.pop("smallroom")
         if not enable_companion:
             self.fields.pop("companion")
-
 
 class BedpresRegisterUserForm(forms.ModelForm):
     approval = forms.BooleanField(

@@ -367,6 +367,9 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
                 integer_field = endYearForm.cleaned_data.get("integer_field")
                 end_year = integer_field
                 filter_kwargs["end_year"] = end_year
+    elif klassetrinn == 15: #Need to be specified here (not in line 414-423) in order to work with search functionality
+        filter_kwargs["grade__in"] = [GRADES.FIRST, GRADES.SECOND, GRADES.THIRD, GRADES.FOURTH, GRADES.FIFTH]
+
 
     #When choice in tuple not chosen add kwargs to filter by a specific value.
     if spesialisering not in (None, "", "None"): 
@@ -377,16 +380,14 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
         filter_kwargs["medals__title"] = digimedaljer
 
     #Append filter to profiles shown
-    print("Filter kwargs:", filter_kwargs)
     if search_is_used: #If search is used, filter by users found in search && filter kwargs which includes grade-filter
-        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("user__last_name").distinct()
+        profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("-end_year", "user__last_name").distinct()
     else:
         if klassetrinn == 0: #When "Alle trinn" is selected
-            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct()
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("grade", "user__last_name").distinct() #Believe "grade" and "-end_year" are equivalent here
         elif klassetrinn == GRADES.DONE: #When "Sluttår" is selected
-            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct()
-        else: #Default; grades 1-5 | klassetrinn = 15
-            print("Filtering by grades 1-5")
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct() #Sort by end_year descending
+        else: #Default, bt also applied when "Aktive (1->5) is selected"; grades 1-5 | klassetrinn = 15
             profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).exclude(grade=GRADES.DONE).order_by("grade", "user__last_name").distinct()
 
     url = reverse(
