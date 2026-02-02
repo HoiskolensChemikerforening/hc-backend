@@ -66,7 +66,7 @@ document.addEventListener("DOMContentLoaded", function() {
   function startRandomHeader(e) {
       if (e && typeof e.preventDefault === 'function') e.preventDefault();
       console.log('random_header_click: clicked');
-      if (!confirm("Epiplepsi? Dette er en advarsel.")) {
+      if (!confirm("Epilepsi? Dette er en advarsel.")) {
         console.log('random_header_click: cancelled');
         return;
       }
