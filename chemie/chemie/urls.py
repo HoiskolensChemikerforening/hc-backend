@@ -87,6 +87,10 @@ urlpatterns = [
     path("api/sponsor/<int:pk>/", views.SponsorDetail.as_view()),
     path("merch/", include("chemie.merch.urls", namespace="merch")),
     path("refusjon/", include("chemie.refund.urls", namespace="refund")),
+    path("test_app/", include("chemie.test_app.urls", namespace="test_app")), 
+    path("test_app_2/", include("chemie.test_app_2.urls", namespace="test_app_2")), 
+
+    
 ]
 
 handler404 = "chemie.chemie.views.page_not_found"
