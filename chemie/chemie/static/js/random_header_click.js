@@ -1,4 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
+  // Velg tilfeldig side der knappen skal vises
+  const allowedPages = ['/kalender/', '/arrangementer/', '/forside', '/s/om', '/', '/bokskap/', '/undergrupper/', '/utleie/sportskom/'];
+  const randomPage = allowedPages[Math.floor(Math.random() * allowedPages.length)];
+  
+  // Vis bare knappen hvis vi er på den valgte siden
+  if (!window.location.pathname.includes(randomPage)) {
+    return;
+  }
+
   const Shades = [
     "#11ff00ff", "#0227bdff", "#00a6ffff", "#dde503ff",
     "#0011ffff", "#00ff6eff", "#ef4ff7ff", "#81D4FA", "#ff0a0aff"
@@ -44,17 +53,33 @@ document.addEventListener("DOMContentLoaded", function() {
     fabLink.className = "btn-floating btn-large red"; 
     fabLink.innerHTML = '<i class="material-icons">celebration</i>';
     fabLink.style.boxShadow = "none";
+      fabLink.href = "javascript:void(0)";
+      fabLink.setAttribute('role', 'button');
+      fabLink.setAttribute('tabindex', '0');
+      fabLink.style.cursor = 'pointer';
 
 
   fabDiv.appendChild(fabLink);
   if (header) header.appendChild(fabDiv);
 
-  // Event listener
-  fabLink.addEventListener("click", function() {
-    const interval = setInterval(updateColor, 1);
-    setTimeout(() => {
-      clearInterval(interval);
-      resetColor();
-    }, 5000);
+  // Event listener with confirmation
+  function startRandomHeader(e) {
+      if (e && typeof e.preventDefault === 'function') e.preventDefault();
+      console.log('random_header_click: clicked');
+      if (!confirm("Epilepsi? Dette er en advarsel.")) {
+        console.log('random_header_click: cancelled');
+        return;
+      }
+      console.log('random_header_click: confirmed');
+      const interval = setInterval(updateColor, 50);
+      setTimeout(() => {
+        clearInterval(interval);
+        resetColor();
+      }, 3000);
+    }
+
+    fabLink.addEventListener("click", startRandomHeader);
+    fabLink.addEventListener("keydown", function(e) {
+      if (e.key === 'Enter' || e.key === ' ') startRandomHeader(e);
   });
 });
