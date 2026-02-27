@@ -27,6 +27,7 @@ class PositionType(models.Model):
         (2, "Sommerjobb"),
         (3, "Deltidsjobb"),
         (4, "Fulltidsjobb"),
+        (5, "Vikariat"),
     )
 
     name = models.PositiveSmallIntegerField(choices=POSITIONTYPES, unique=True)
