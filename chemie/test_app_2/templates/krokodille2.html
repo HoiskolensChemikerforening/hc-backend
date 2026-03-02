@@ -1,3 +1,26 @@
 <H1>krokodille2</H1>
 
 <a href="{% url "test_app_2:index" %}">trykkmeg for å gå til test_app_2</a>
+
+
+<form method="POST" enctype="multipart/form-data">{% csrf_token %}
+
+          {{html_form}}
+
+          <div class="card-action" id="button-container">
+            <div class="right-align">
+              <input class="btn btn-primary pull-right" type='submit' value='Lagre spørsmål!'/>
+            </div>
+          </div>
+      </form>
+
+
+
+
+{{for book in html_books}}
+
+<p>{{book.content}}</p>
+
+
+
+{{end for}}
