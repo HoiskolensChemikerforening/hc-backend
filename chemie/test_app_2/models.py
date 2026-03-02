@@ -8,13 +8,13 @@ class Executive(models.Model):
     Is_executive=models.BooleanField()
 
 class Bruker(models.Model):
-    navn=models.CharField(max=1000)
+    navn=models.CharField(max_length=1000)
     age=models.PositiveIntegerField()
     er_leder=models.OneToOneField(Role, blank=True)
     Dead=models.BooleanField(default=False)
 
 class Sacrifice(models.Model):
-    navn=models.CharField(max=1000)
+    navn=models.CharField(max_length=1000)
     age=models.DateTimeField()
     used=models.BooleanField(default=False)
 
