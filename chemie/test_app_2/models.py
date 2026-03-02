@@ -8,4 +8,9 @@ class Book(models.Model):
     }
     color = models.CharField(max_length=1,choices=COLORS)
 
-class 
+class Publisher(models.Model):
+    name = models.CharField(max_length=50)
+    Date_of_birth = models.DateTimeField
+
+class Genres(models.Model):
+    name = models.CharField(max_length=50)
