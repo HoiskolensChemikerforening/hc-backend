@@ -17,7 +17,3 @@ class Book(models.Model):
     )
     cost = models.SmallIntegerField()  # For Sugepumpa to keep track on used submissions
 
-# class BookUser(models.Model):
-#     navn=models.CharField(max=100)
-#     age=models.PositiveIntegerField()
-
