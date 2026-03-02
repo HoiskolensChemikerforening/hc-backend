@@ -5,7 +5,7 @@ COLORS = {
 class Book(models.Model):
     title = models.CharField(max_length=30)
     authour = models.CharField(max_length=30)
-    color = models.CharField(max_length=1,choices=COLORS)
+    #color = models.CharField(max_length=1,choices=COLORS)
 
 class Publisher(models.Model):
     name = models.CharField(max_length=50)
