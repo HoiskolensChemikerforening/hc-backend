@@ -1,5 +1,5 @@
 from django import forms
-from .models import Book
+from .models import Cult
 from chemie.customprofile.models import Profile
 from django.forms import modelformset_factory, BaseModelFormSet
 
@@ -8,5 +8,5 @@ from django.forms import modelformset_factory, BaseModelFormSet
 class BookForm(forms.ModelForm):
     
     class Meta:
-        model = Book
+        model = Cult
         fields = "__all__"
