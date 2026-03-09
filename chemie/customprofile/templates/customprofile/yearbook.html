@@ -193,12 +193,25 @@
             {% endif %}
         {% endfor %}
       </div>
-      {% if grade == grades.DONE %}
+      {% if grade == grades.DONE or grade == 0 %}
         <div style="margin-left:20px ">
           <form method='post' class="newPost">{% csrf_token %}
             <a class='dropdown-trigger btn-large' href='#' data-target='dropdown7'
           >Sluttår</a>
             <ul class="dropdown-content select-dropdown multiple-select-dropdown" id="dropdown7" style="max-height: 250px">
+              {% if grade == 0 %}
+                {% for end_year in all_end_years %}
+                  <li>
+                    <button 
+                      class="newbtn" id="year-{{end_year}}" type="submit" 
+                      name="{{ endYearForm.integer_field.html_name }}" value="{{end_year}}"
+                      >
+                      {{end_year}}
+                    </button>
+                  </li>
+                {% endfor %}
+              {% endif %}
+
               {% for end_year in end_years %}
                 <li>
                   <button 

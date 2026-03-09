@@ -321,8 +321,14 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
 
     end_years = (
         Profile.objects.filter(grade=GRADES.DONE)
-        .filter(end_year__lte=end_year)
+        .filter(end_year__lte=end_year) #end_year =< end_year (variabel)
         .order_by("-end_year")
+        .values_list("end_year", flat=True)
+        .distinct()
+    )
+
+    all_end_years = (
+        Profile.objects.all().order_by("-end_year")
         .values_list("end_year", flat=True)
         .distinct()
     )
@@ -432,6 +438,7 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
         "search": search,
         # expose the actual GET parameter name for search so template can append it
         "search_param_name": search_param_name,
+        "all_end_years" : all_end_years,
     }
 
     # Show obj_per_page per page (replace your existing pagination block)
