@@ -22,3 +22,27 @@ def dih(request):
     context = {}
     #return HttpResponseRedirect(reverse("test_app:jeg_er_fra_test_app"))
     return render(request, "test_app:jeg_er_fra_Test_app.html", context)
+
+def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
+
+    all_books = Book.objects.all()
+
+    if request.method == "POST":
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            messages.add_message(
+                request,
+                messages.SUCCESS,
+                f"Nytt spørsmål opprettet!",
+                extra_tags="Suksess",
+            )
+            # Redirect to the desired page after successful editing
+            return redirect("test_app_2:index_2")
+
+
+    else:
+        form = BookForm()
+
+    context = {"html_form":form, "html_books":all_books}

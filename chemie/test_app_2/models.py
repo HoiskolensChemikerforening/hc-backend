@@ -33,3 +33,4 @@ class Sacrifice(models.Model):
 class Gold(models.Model):
     amount=models.PositiveIntegerField()
     gold=models.OneToOneField(Cult, on_delete=models.CASCADE)
+
