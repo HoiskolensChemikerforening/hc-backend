@@ -5,7 +5,7 @@ from django.forms import modelformset_factory, BaseModelFormSet
 
 
 
-class BookForm(forms.ModelForm):
+class CultForms(forms.ModelForm):
     
     class Meta:
         model = Cult
