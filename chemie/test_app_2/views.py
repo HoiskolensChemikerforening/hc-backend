@@ -40,10 +40,6 @@ def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
     return render(request, "krokodille2.html", context)
 
 
-
-
-
-
 def dih(request):
     context = {}
     #return HttpResponseRedirect(reverse("test_app:jeg_er_fra_test_app"))
