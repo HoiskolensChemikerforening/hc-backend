@@ -8,19 +8,18 @@ class Cult(models.Model):
     )
     motto=models.TextField(max_length=2000)
     date = models.DateTimeField(verbose_name="Dato")
-    #lager en cult med dato culten er laget, og et bilde
 
 class Role(models.Model):
-    Role = models.CharField()
+    Role = models.CharField(max_length=100)
 
 class Executive(models.Model):
     Is_executive=models.BooleanField()
-    executive = models.ManyToOneRel(Cult, blank=True, on_delete=models.CASACADE)
+    executive = models.ForeignKey(Cult, blank=True, on_delete=models.CASCADE)
 
 class Bruker(models.Model):
     navn=models.CharField(max_length=1000)
     age=models.PositiveIntegerField()
-    er_leder=models.OneToOneField(Role, blank=True, on_delete=models.do_nothing)
+    er_leder=models.OneToOneField(Role, blank=True, on_delete=models.DO_NOTHING)
     dead=models.BooleanField(default=False)
     tilhører=models.ForeignKey(Cult, on_delete=models.CASCADE)
 
@@ -29,7 +28,7 @@ class Sacrifice(models.Model):
     navn=models.CharField(max_length=1000)
     age=models.DateTimeField()
     used=models.BooleanField(default=False)
-    sacrifices=models.ManyToOneRel(Cult, blank=True, on_delete=models.CASCADE)
+    sacrifices=models.ForeignKey(Cult, blank=True, on_delete=models.CASCADE)
 
 class Gold(models.Model):
     amount=models.PositiveIntegerField()
