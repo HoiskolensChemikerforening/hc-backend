@@ -317,7 +317,8 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
     if len(qProfilesFifth) > 0:
         end_year = qProfilesFifth[0].end_year - 1
     else:
-        end_year = 2030  # To handle the case of 0 profiles in 5th grade
+        end_year = 9999  # To handle the case of 0 profiles in 5th grade
+
     end_years = (
         Profile.objects.filter(grade=GRADES.DONE)
         .filter(end_year__lte=end_year)
