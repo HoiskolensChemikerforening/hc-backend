@@ -2,8 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
-from .models import Book
-from .forms import BookForm
+from .models import Role, Scheme, Member, Investment
+from .forms import RoleForm, SchemeForm, MemberForm, InverstmentForm
 
 
 def index(request):
@@ -15,12 +15,14 @@ def index(request):
     return render(request, "krokodille.html", context)
 
 
+
+
 def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
 
-    all_books = Book.objects.all()
+    all_member = Member.objects.all()
 
     if request.method == "POST":
-        form = BookForm(request.POST)
+        form = MemberForm(request.POST)
         if form.is_valid():
             form.save()
 
@@ -35,12 +37,14 @@ def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
 
 
     else:
-        form = BookForm()
+        form = MemberForm()
 
-    context = {"html_form":form, "html_books":all_books}
+    context = {"html_form":form, "html_members":all_member}
 
 
     return render(request, "krokodille2.html", context)
+
+
 
 
 

@@ -1,3 +1,18 @@
 <H1>krokodille2</H1>
 
-<a href="{% url "test_app_2:index" %}">trykkmeg for å gå til test_app_2</a>
+<a href="{% url "test_app_2:index" %}">trykkmeg for å gå til test_app_2</a>  
+
+
+<form enctype="multipart/form-data" method='POST'>{% csrf_token %}
+    {{ html_form }}
+      <input class="btn" type='submit' value='Opprett member!'/>
+  </form>
+
+
+{% for member in html_members %}
+
+<div>
+    {{member.full_name}}
+</div>
+
+{% endfor %}
