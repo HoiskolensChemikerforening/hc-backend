@@ -8,6 +8,9 @@ class Cult(models.Model):
     )
     motto=models.TextField(max_length=2000)
     date = models.DateTimeField(verbose_name="Dato")
+    
+    def __str__(self):
+        return self.name
 
 class Role(models.Model):
     Role = models.CharField(max_length=100)
