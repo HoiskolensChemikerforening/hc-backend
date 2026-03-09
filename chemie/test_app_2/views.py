@@ -14,7 +14,7 @@ def index(request):
 
 def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
 
-    all_books = Cult.objects.all()
+    all_cults = Cult.objects.all()
 
     if request.method == "POST":
         form = CultForms(request.POST)
@@ -34,7 +34,7 @@ def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
     else:
         form = CultForms()
 
-    context = {"html_form":form, "html_books":all_books}
+    context = {"html_form":form, "html_cults":all_cults}
 
 
     return render(request, "krokodille2.html", context)
