@@ -10,14 +10,20 @@ class Cult(models.Model):
     date = models.DateTimeField(verbose_name="Dato")
     
     def __str__(self):
-        return self.name
+        return self.name + self.motto
+
+
 
 class Role(models.Model):
     Role = models.CharField(max_length=100)
 
+
+
 class Executive(models.Model):
     Is_executive=models.BooleanField()
     executive = models.ForeignKey(Cult, blank=True, on_delete=models.CASCADE)
+
+
 
 class Bruker(models.Model):
     navn=models.CharField(max_length=1000)
@@ -27,11 +33,14 @@ class Bruker(models.Model):
     tilhører=models.ForeignKey(Cult, on_delete=models.CASCADE)
 
 
+
 class Sacrifice(models.Model):
     navn=models.CharField(max_length=1000)
     age=models.DateTimeField()
     used=models.BooleanField(default=False)
     sacrifices=models.ForeignKey(Cult, blank=True, on_delete=models.CASCADE)
+
+
 
 class Gold(models.Model):
     amount=models.PositiveIntegerField()
