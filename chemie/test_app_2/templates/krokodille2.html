@@ -23,7 +23,7 @@
 {% for book in html_books %}
 
 
-<a href="{% url "test_app_2:editbook" book.id %}">
+<a href="{% url "test_app_2:changeBook" id=book.id %}">
 <div>
   
   <p>{{ book.content}}</p>
