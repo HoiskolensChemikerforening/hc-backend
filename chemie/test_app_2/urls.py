@@ -7,7 +7,7 @@ urlpatterns = [
     path("", views.index, name="index"),
     path("krokodille_2/", views.index_2, name="index_2"),
     # path("../test_app/", views.dih, name="dih"),
-    path("dih/", views.dih, name="dih")
-    
+    path("dih/", views.dih, name="dih"),
+    path("editbook/", views.changeBook, name="editbook"),
 
 ]

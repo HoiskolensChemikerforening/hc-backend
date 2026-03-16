@@ -1,7 +1,5 @@
-<H1>krokodille2</H1>
 
-<a href="{% url "test_app_2:index" %}">trykkmeg for å gå til test_app_2</a>
-
+<H1>Rediger objekt</H1>
 
 <form method="POST" enctype="multipart/form-data">{% csrf_token %}
 
@@ -14,21 +12,3 @@
           </div>
 </form>
 
-
-
-
-<H2>Her er objektene som lages:</H2>
-
-
-{% for book in html_books %}
-
-
-<a href="{% url "test_app_2:editbook" book.id %}">
-<div>
-  
-  <p>{{ book.content}}</p>
-</div>
-</a>
-
-
-{% endfor %}

@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseRedirect
 from django.urls import reverse
 from django.contrib import messages
@@ -43,7 +43,25 @@ def index_2(request): # http://127.0.0.1:8000/test_app_2/krokodille_2/
     return render(request, "krokodille2.html", context)
 
 
+def changeBook(request, id):
 
+    book = get_object_or_404(Book, id=id)
+    if request.method == "POST":
+        form = BookForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+        return redirect("test_app_2:index_2")
+
+
+
+
+    else:
+        form = BookForm(instance=book)
+
+    context = {"html_form":form}
+
+    return render(request, "krokodille3.html", context)
 
 
 
