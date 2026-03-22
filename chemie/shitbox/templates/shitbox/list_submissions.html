@@ -127,7 +127,7 @@
       $(".usedStatus").on("click", function(event) {
         let submissionID = $(this).attr("id");
         $.ajax({
-          url: "{% url "shitbox:toggle-used" %}",
+          url: "{% url 'shitbox:toggle-used' %}",
           data: {"id": submissionID},
           type: "POST"
         })

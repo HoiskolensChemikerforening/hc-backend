@@ -25,8 +25,7 @@ def post_votes(request):
         )
         return redirect(reverse("puns:index"))
     context = {"form": form}
-
-    return render(request, "/post_f.html", context)
+    return render(request, "puns/post_f.html", context)
 
 
 @permission_required("puns.change_submission")
@@ -74,6 +73,7 @@ def submissions_overview(request):
     }
 
     return render(request, "/list_sub.html", context=context)
+
 
 
 @permission_required("puns.change_submission")
