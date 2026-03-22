@@ -1,0 +1,54 @@
+{% extends "shop/base_shop.html" %}
+{% load thumbnail %}
+{% load static %}
+{% load shop_extras %}
+
+{% block nav_header %}
+Busstider & Værmelding
+{% endblock nav_header %}
+
+{% block style %}
+<link rel="stylesheet" href="{% static 'css/style_buss.css' %}" type="text/css" media="screen,projection">
+{% endblock style %}
+
+{% block content %}
+<script type="text/javascript">
+    // The dictionary is the equivalent shopping cart
+    //Finner NSR:Quay:XXXX på; https://stoppested.entur.org/?stopPlaceId=NSR:StopPlace:44085 , NSR:StopPlace:44085 er busstoppet "Gløshaugen", men Quay skiller fra/mot sentrum
+    /*
+    const GLOSHAUGEN_MS = "NSR:Quay:75708"
+    const GLOSHAUGEN_FS = "NSR:Quay:75707"
+    const HESTEHAGEN_MS = "NSR:Quay:71204" //Mot sentrum
+    const HESTEHAGEN_FS = "NSR:Quay:102719" //Fra sentrum
+    const HOISKOLERINGEN_MS = "NSR:Quay:71939"
+    const HOISKOLERINGEN_FS = "NSR:Quay:71940"
+    */
+</script>
+
+<!-- Display items as cards -->
+{% load thumbnail %}
+<div class="row">
+    <div class="column" id="Gloshaugen">
+        <div id="GLOS_MS"></div>
+        <div id="GLOS_FS"></div>
+    </div>
+    <div class="column" id="Hoiskoleringen">
+        <div id="HSR_MS"></div>
+        <div id="HSR_FS"></div>
+    </div>
+     <div class="column" id="Hesthagen">
+        <div id="HH_MS"></div>
+        <div id="HH_FS"></div>
+    </div>
+</div>
+
+  {% if perms.buss.see_buss %}
+
+
+  {% endif %}
+  {% endblock content %}
+
+  {% block footer_script %}
+  <script src="{% static "js/buss.js" %}"></script>
+  {% endblock footer_script %}
+</div>
