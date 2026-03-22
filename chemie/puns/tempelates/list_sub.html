@@ -1,0 +1,146 @@
+{% extends "chemie/base.html" %}
+{% load thumbnail %}
+
+{% block nav_header %}
+  Pun-boks
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Innsendinger
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <style>
+    img.responsive-img, video.responsive-video {
+      height: auto;
+      width: auto;
+      max-width: 300px;
+    }
+    @media only screen and (max-width: 600px){
+        .hide_on_small{
+            display: none;
+        }
+    }
+    @media only screen and (max-width: 600px){
+        .break_on_small{
+            width: 0;
+        }
+    }
+    @media only screen and (max-width: 992px) {
+    .card-content {
+        overflow-x: auto; /* Enable horizontal scrolling */
+    }
+}
+  </style>
+  <div class="row center">
+    <ul class="pagination nav navbar-nav">
+      {% if submission_page.has_previous %}
+        <li><a href="?page={{ submission_page.previous_page_number }}">Forrige</a></li>
+      {% else %}
+        <li class="disabled"><a class="grey-text text-lighten-1">Forrige</a></li>
+      {% endif %}
+
+      <li><a class="grey-text text-darken-1" href="?page={{ submission_page.paginator.first_page }}">Første</a></li>
+
+      {% for page in limit_useful_page_range %}
+        <li class="{% if submission_page.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+      {% endfor %}
+
+      <li><a class="grey-text text-darken-1" href="?page={{ submission_page.paginator.last_page }}">Siste</a></li>
+      {% if submission_page.has_next %}
+        <li><a href="?page={{ submission_page.next_page_number }}">Neste</a></li>
+      {% else %}
+        <li class="disabled"><a class="grey-text text-lighten-1">Neste</a></li>
+      {% endif %}
+    </ul>
+  </div>
+  <div class="row">
+    <div class="card">
+      <div class="card-content">
+        <table class="bordered" id="shittable">
+          <thead>
+          <tr>
+            <th>Innsender</th>
+            <th class="hide_on_small">Dato</th>
+            <th>Gullkorn</th>
+            <th class="hide_on_small">Bilde</th>
+            <th class="hide_on_small">Brukt</th>
+          </tr>
+          </thead>
+          <tbody>
+          {% for submission in puns_submission_page %}
+            <tr>
+              <td><p>{{ submission.author.profile }}</p></td>
+              <td class="hide_on_small"><p>{{ submission.date|date:"j. F" }}</p></td>
+              <td class="break_on_small"><p>{{ submission.content }}</p></td>
+              <td class="hide_on_small">
+                {% if submission.image %}
+                  <img class="responsive-img materialboxed" src="{{ submission.image.url }}">
+                {% endif %}
+              </td>
+              <td class="hide_on_small">
+                <p>
+                  <label>
+                    <input type="checkbox" class="usedStatus" id="{{ submission.id }}"
+                           {% if submission.used %}
+                            checked="checked"
+                           {% endif %}/>
+                    <span></span>
+                  </label>
+                </p>
+              </td>
+            </tr>
+          {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+  <div class="row center">
+      <ul class="pagination nav navbar-nav">
+        {% if puns_submission_page.has_previous %}
+          <li><a href="?page={{ puns_submission_page.previous_page_number }}">Forrige</a></li>
+        {% else %}
+          <li class="disabled"><a class="grey-text text-lighten-1">Forrige</a></li>
+        {% endif %}
+
+        <li><a class="grey-text text-darken-1" href="?page={{ puns_submission_page.paginator.first_page }}">Første</a></li>
+
+        {% for page in limit_useful_page_range %}
+          <li class="{% if puns_submission_page.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+        {% endfor %}
+
+        <li><a class="grey-text text-darken-1" href="?page={{ puns_submission_page.paginator.last_page }}">Siste</a></li>
+        {% if puns_submission_page.has_next %}
+          <li><a href="?page={{ puns_submission_page.next_page_number }}">Neste</a></li>
+        {% else %}
+          <li class="disabled"><a class="grey-text text-lighten-1">Neste</a></li>
+        {% endif %}
+      </ul>
+    </div>
+{% endblock content %}
+
+{% block footer_script %}
+
+  <script>
+    $(document).ready(function(){
+      $(".usedStatus").on("click", function(event) {
+        let submissionID = $(this).attr("id");
+        $.ajax({
+          url: "{% url 'puns:toggle-used' %}",
+          data: {"id": submissionID},
+          type: "POST"
+        })
+      })
+    });
+
+    $.ajaxSetup({
+      headers: { "X-CSRFToken": '{{csrf_token}}' }
+    });
+
+    $(document).ready(function () {
+        $('.materialboxed').materialbox();
+    });
+
+  </script>
+{% endblock footer_script %}
