@@ -376,6 +376,8 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
                 filter_kwargs["end_year"] = end_year
     elif klassetrinn == 15: #Need to be specified here (not in line 414-423) in order to work with search functionality
         filter_kwargs["grade__in"] = [GRADES.FIRST, GRADES.SECOND, GRADES.THIRD, GRADES.FOURTH, GRADES.FIFTH]
+    elif klassetrinn == 0: #No filters, but set up for choice of end_year
+        filter_kwargs["end_year__in"] = all_end_years
 
 
     #When choice in tuple not chosen add kwargs to filter by a specific value.
@@ -391,14 +393,14 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
         profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs, user__in=users).order_by("-end_year", "user__last_name").distinct()
     else:
         if klassetrinn == 0: #When "Alle trinn" is selected
-            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("grade", "user__last_name").distinct() #Believe "grade" and "-end_year" are equivalent here
+            profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct() #Believe "grade" and "-end_year" are equivalent here
         elif klassetrinn == GRADES.DONE: #When "Sluttår" is selected
             profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).order_by("-end_year", "user__last_name").distinct() #Sort by end_year descending
         else: #Default, bt also applied when "Aktive (1->5) is selected"; grades 1-5 | klassetrinn = 15
             profiles = Profile.objects.select_related("user").prefetch_related("medals").filter(**filter_kwargs).exclude(grade=GRADES.DONE).order_by("grade", "user__last_name").distinct()
 
     url = reverse(
-        "profile:yearbook-multifilter", 
+        "profile:yearbook-multifilter",
         kwargs={
             "klassetrinn": defaulturl[0], #Klassetrinn is a int value
             "spesialisering": defaulturl[1] or "",
