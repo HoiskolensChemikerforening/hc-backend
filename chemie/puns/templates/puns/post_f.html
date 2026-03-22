@@ -1,0 +1,45 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+
+{% block nav_header %}
+  Pun-boks
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Send innslag
+{% endblock nav_sub_header %}
+
+{% block content %}
+  <!-- Administration button -->
+  {% if perms.puns.change_submission %}
+    <div class="fixed-action-btn">
+      <a class="btn-floating btn-large">
+        <i class="large material-icons">mode_edit</i>
+      </a>
+      <ul>
+        <li>
+          <a class="btn-floating blue" href="{% url "puns:list" %}"><i class="material-icons">format_quote</i></a>
+          <a class="btn-floating mobile-fab-tip" href="{% url "puns:list" %}">Se vitser</a>
+        </li>
+      </ul>
+    </div>
+  {% endif %}
+
+  <div class="row">
+    <div class="col s12 m12 l8">
+      <p class="flow-text">
+        Sitter du inne med en bra vits som du vil dele? Send inn en vits her. Den kan være om hva som 
+        helst...nesten. Sender du inn en bra vits, kan det hende den dukker opp på forsiden! Ved spørsmål, 
+        nøl med å ta kontakt med oss <a href="mailto:sp@hc.ntnu.no">sp@hc.ntnu.no</a> - vi svarer sannsynligvis.
+      </p>
+
+      <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+        {% form form=form %}
+        {% endform %}
+        <input class="btn" type='submit' value='Send inn en vits!'/>
+      </form>
+    </div>
+  </div>
+
+
+{% endblock content %}
