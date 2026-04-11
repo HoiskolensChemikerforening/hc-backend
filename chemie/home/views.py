@@ -61,7 +61,7 @@ def index(request):
     latest_podcast_url = Podcast.get_latest_podcast_url()
 
     all_puns = Puns_Submission.objects.all()
-    random_index = randint(0, len(all_puns)-1)
+    random_index = randint(0, len(all_puns))
     joke = all_puns[random_index]
 
     context = {
