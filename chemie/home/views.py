@@ -11,6 +11,8 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView
+from chemie.puns.models import Puns_Submission
+import random
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -58,6 +60,12 @@ def index(request):
     coffee = CoffeeSubmission.get_latest_submission()
     latest_podcast_url = Podcast.get_latest_podcast_url()
 
+    all_puns = Puns_Submission.objects.all()
+
+    joke = None
+    if all_puns.exists():
+        joke = random.choice(all_puns)
+
     context = {
         "social": all_social,
         "bedpres": all_bedpres,
@@ -65,6 +73,7 @@ def index(request):
         "coffee": coffee,
         "latest_podcast": latest_podcast_url,
         "all_events": all_events_by_register,
+        "random_joke": joke,
     }
     return render(request, "chemie/index.html", context)
 
