@@ -6,7 +6,6 @@ from django.contrib.auth.models import User
 from django.db import models
 from django.db.models import Q, Sum
 from django.utils import timezone
-from extended_choices import Choices
 from sorl.thumbnail import ImageField
 from django.core.exceptions import ObjectDoesNotExist
 from django.http import Http404
@@ -17,21 +16,19 @@ from chemie.web_push.models import Device, Subscription
 VALID_TIME = 2
 
 # TODO: Decide how to handle weird students aka "PI" / 6th ++ year students
-GRADES = Choices(
-    ("FIRST", 1, "Første"),
-    ("SECOND", 2, "Andre"),
-    ("THIRD", 3, "Tredje"),
-    ("FOURTH", 4, "Fjerde"),
-    ("FIFTH", 5, "Femte"),
-    ("DONE", 6, "Ferdig"),
-)
 
-RELATIONSHIP_STATUS = Choices(
-    ("SINGLE", 1, "Singel"),
-    ("TAKEN", 2, "Opptatt"),
-    ("NSA", 3, "Hemmelig!"),
-    ("HC", 4, "HC forhold"),
-)
+class GRADES(models.IntegerChoices):
+        FIRST = 1, "Første"
+        SECOND = 2, "Andre"
+        THIRD = 3, "Tredje"
+        FOURTH = 4, "Fjerde"
+        FIFTH = 5, "Femte"
+        DONE = 6, "Ferdig"
+
+
+
+    
+
 
 MEMBERSHIP_DURATIONS = [
     {"duration_id": 1, "description": "Ettårig"},
@@ -49,15 +46,9 @@ STIPULATED_TIME = 5
 FINISH_YEAR = CURRENT_YEAR + STIPULATED_TIME + 3
 YEARS = [(i, i) for i in range(COMMENCE_YEAR, FINISH_YEAR)]
 
-SPECIALIZATION = Choices(
-    ("NONE", 1, "Ingen"),
-    ("ANALYTICAL", 2, "Analytisk kjemi"),
-    ("APPLIED", 3, "Anvendt teoretisk kjemi"),
-    ("BIOTECH", 4, "Bioteknologi"),
-    ("MATERIAL", 5, "Materialkjemi og energiteknologi"),
-    ("ORGANICAL", 6, "Organisk kjemi"),
-    ("PROCESS", 7, "Kjemisk prosessteknologi"),
-)
+
+    
+
 
 
 class ProfileManager(models.Manager):
@@ -114,6 +105,26 @@ class Medal(models.Model):
 
 
 class Profile(models.Model):
+
+    class SPECIALIZATION(models.IntegerChoices):
+        NONE = 1, "Ingen"
+        ANALYTICAL = 2, "Analytisk kjemi"
+        APPLIED = 3, "Anvendt teoretisk kjemi"
+        BIOTECH = 4, "Bioteknologi"
+        MATERIAL = 5, "Materialkjemi og energiteknologi"
+        ORGANICAL = 6, "Organisk kjemi"
+        PROCESS = 7, "Kjemisk prosessteknologi"
+
+    class RELATIONSHIP_STATUS(models.IntegerChoices):
+        SINGLE = 1, "Singel"
+        TAKEN = 2, "Opptatt"
+        NSA = 3, "Hemmelig!"
+        HC = 4, "HC forhold"
+
+    
+    
+
+
     user = models.OneToOneField(
         User,
         related_name="profile",
@@ -121,8 +132,8 @@ class Profile(models.Model):
         verbose_name="Bruker",
     )
 
-    grade = models.PositiveSmallIntegerField(
-        choices=GRADES, default=GRADES.FIRST, verbose_name="Klassetrinn"
+    grade = models.IntegerField(
+        choices=GRADES.choices, default=GRADES.FIRST, verbose_name="Klassetrinn"
     )
     start_year = models.PositiveSmallIntegerField(
         choices=YEARS, default=CURRENT_YEAR, verbose_name="Startår"
@@ -133,7 +144,7 @@ class Profile(models.Model):
         verbose_name="Estimert ferdig",
     )
     specialization = models.PositiveSmallIntegerField(
-        choices=SPECIALIZATION,
+        choices=SPECIALIZATION.choices,
         default=SPECIALIZATION.NONE,
         verbose_name="Spesialisering",
     )
@@ -142,7 +153,7 @@ class Profile(models.Model):
         null=True, blank=True, verbose_name="Matallergi"
     )
     relationship_status = models.PositiveSmallIntegerField(
-        choices=RELATIONSHIP_STATUS,
+        choices=RELATIONSHIP_STATUS.choices,
         default=RELATIONSHIP_STATUS.SINGLE,
         verbose_name="Samlivsstatus",
     )

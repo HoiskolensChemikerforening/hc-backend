@@ -3,15 +3,8 @@ from django.db import models
 from ckeditor.fields import RichTextField
 from sorl.thumbnail import ImageField
 from chemie.committees.models import Committee
-from extended_choices import Choices
 from django.core.validators import MaxValueValidator, MinValueValidator
 
-OWNER = Choices(
-    ("PROMOKOM", 1, "Promoterigskomiteen"),
-    ("AC", 2, "Audiochromatene"),
-    ("SPORTSKOM", 3, "Sportskomiteen"),
-    ("NONE", 4, "Ingen"),
-)
 
 
 class Landlord(models.Model):  # Utleier aka promokom/ac
@@ -39,13 +32,23 @@ class Invoice(models.Model):
 
 
 class RentalObject(models.Model):
+
+    class OWNER(models.IntegerChoices):
+        PROMOKOM = 1, "Promoterigskomiteen"
+        AC = 2, "Audiochromatene"
+        SPORTSKOM = 3, "Sportskomiteen"
+        NONE = 4, "Ingen"
+
+
+
+
     name = models.CharField(
         max_length=100, unique=True, verbose_name="Utleieobjekt"
     )
     description = RichTextField(verbose_name="Beskrivelse", config_name="news")
     image = ImageField(upload_to="rentalservice", verbose_name="Bilde")
     owner = models.PositiveSmallIntegerField(
-        choices=OWNER, verbose_name="Utleier", default=OWNER.NONE
+        choices=OWNER.choices, verbose_name="Utleier", default=OWNER.NONE
     )
     price = models.FloatField(
         validators=[MinValueValidator(0.0)],

@@ -1,21 +1,22 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator, MinValueValidator
-from extended_choices import Choices
+
 
 # Track the status of a request
-STATUS = Choices(
-    ("REJECTED", 1, "Avslått"),
-    ("PENDING", 2, "Under behandling"),
-    ("APPROVED", 3, "Tilbakebetalt"),
-)
-
 
 class RefundRequest(models.Model):
     """
     The refund request object contains information about the user requesting a
     refund. It is connected to one or more Refund objects (receipts) which contain further information.
     """
+
+    class STATUS(models.IntegerChoices):
+        REJECTED = 1, "Avslått"
+        PENDING = 2, "Under behandling"
+        APPROVED = 3, "Tilbakebetalt"
+
+
 
     # Variable containing the user requesting a refund
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -29,7 +30,7 @@ class RefundRequest(models.Model):
     )
     # Variable to keep track of the request's status.
     status = models.SmallIntegerField(
-        choices=STATUS, default=STATUS.PENDING, verbose_name="Tilbakebetalt"
+        choices=STATUS.choices, default=STATUS.PENDING, verbose_name="Tilbakebetalt"
     )
 
     def get_total(self):

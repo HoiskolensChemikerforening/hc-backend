@@ -2,7 +2,6 @@ import chemie.custommaterial as M
 from dal import autocomplete
 from django import forms
 from django.core.validators import ValidationError
-from extended_choices import Choices
 from chemie.customprofile.models import GRADES
 from .models import (
     Social,
@@ -16,7 +15,7 @@ from .models import (
 class BaseRegisterEventForm(forms.ModelForm):
     allowed_grades = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
-        choices=GRADES,
+        choices=GRADES.choices,
         label="Tillatte klassetrinn",
     )
 

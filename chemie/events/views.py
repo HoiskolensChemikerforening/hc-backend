@@ -43,7 +43,7 @@ from .models import (
     RegistrationMessage,
     Bedpres,
     BedpresRegistration,
-    ARRIVAL_STATUS,
+    Arrival_Status,
 )
 
 from rest_framework import generics

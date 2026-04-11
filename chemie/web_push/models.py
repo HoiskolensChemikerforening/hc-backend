@@ -1,5 +1,5 @@
 from django.db import models
-from extended_choices import Choices
+
 from django.db.models.signals import pre_delete
 from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
@@ -9,9 +9,12 @@ import pytz
 
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
-SUSBSCRIPTION_CHOICES = Choices(
-    ("COFFEE", 1, "Coffee"), ("NEWS", 2, "News"), ("HAPPY", 3, "Happy")
-)
+class SUSBSCRIPTION_CHOICES(models.IntegerChoices):
+    COFFEE = 1, "Coffee"
+    NEWS = 2, "News"
+    HAPPY = 3, "Happy"
+
+
 
 
 class CoffeeSubmission(models.Model):
@@ -238,7 +241,7 @@ class Subscription(models.Model):
     active = models.BooleanField(default=True)
 
     subscription_type = models.PositiveSmallIntegerField(
-        choices=SUSBSCRIPTION_CHOICES
+        choices=SUSBSCRIPTION_CHOICES.choices
     )
 
     owner = models.ForeignKey(

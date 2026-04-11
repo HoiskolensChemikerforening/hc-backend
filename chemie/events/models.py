@@ -3,25 +3,27 @@ from django.contrib.postgres.fields import ArrayField
 from django.urls import reverse
 from django.db import models
 from django.utils import timezone
-from extended_choices import Choices
 from sorl.thumbnail import ImageField
-
 from chemie.customprofile.models import GRADES
 from chemie.committees.models import Committee
 from .email import send_event_mail
 
 
-REGISTRATION_STATUS = Choices(
-    ("CONFIRMED", 1, "Confirmed"),
-    ("WAITING", 2, "Waiting"),
-    ("INTERESTED", 3, "Interested"),
-)
 
-ARRIVAL_STATUS = Choices(
-    ("NONE", 1, "Ikke satt"),
-    ("PRESENT", 2, "Møtt"),
-    ("TRUANT", 3, "Ikke møtt"),
-)
+    
+
+
+class REGISTRATION_STATUS(models.IntegerChoices):
+    CONFIRMED = 1, "Confirmed"
+    WAITING = 2, "Waiting"
+    INTERESTED = 3, "Interested"
+
+
+class Arrival_Status(models.IntegerChoices):
+        NONE = 1, "Ikke satt"
+        PRESENT = 2, "Møtt",
+        TRUANT = 3, "Ikke møtt"
+
 
 
 class BaseEvent(models.Model):
@@ -248,16 +250,20 @@ class RegistrationManager(models.Manager):
 
 
 class BaseRegistration(models.Model):
+
+    
+    
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     event = models.ForeignKey(BaseEvent, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now=False, auto_now_add=True)
     edited = models.DateTimeField(auto_now=True, auto_now_add=False)
     status = models.IntegerField(
-        choices=REGISTRATION_STATUS, default=REGISTRATION_STATUS.INTERESTED
+        choices=REGISTRATION_STATUS.choices, default=REGISTRATION_STATUS.INTERESTED
     )
     arrival_status = models.IntegerField(
-        choices=ARRIVAL_STATUS,
-        default=ARRIVAL_STATUS.NONE,
+        choices=Arrival_Status.choices,
+        default=Arrival_Status.NONE,
         verbose_name="Oppmøtestatus",
     )
 

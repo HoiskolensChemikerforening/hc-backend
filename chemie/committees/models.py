@@ -8,16 +8,19 @@ from django.db.models.signals import pre_save, m2m_changed
 from django.dispatch import receiver
 from django.utils.text import slugify
 from sorl.thumbnail import ImageField
-from extended_choices import Choices
+# from extended_choices import Choices
 
-COMMITTEE_TYPE = Choices(
-    ("COMMITTEE", 1, "Komité"),
-    ("SUBGROUP", 2, "Undergruppe"),
-    ("ASSOSIATEDGROUP", 3, "Organisasjon med særskilt tilknytning"),
-)
+
 
 
 class Committee(models.Model):
+
+    class Committee_Type(models.IntegerChoices):
+        COMMITTEE = 1, "Komité"
+        SUBGROUP = 2, "Undergruppe"
+        ASSOSIATEDGROUP = 3, "Organisasjon med særskilt tilknytning"
+
+
     title = models.CharField(max_length=100, unique=True)
     email = models.EmailField(null=True, blank=True)
     image = ImageField(upload_to="komiteer")
@@ -27,8 +30,8 @@ class Committee(models.Model):
         verbose_name="Beskrivelse", config_name="committees"
     )
     committee_type = models.PositiveSmallIntegerField(
-        choices=COMMITTEE_TYPE,
-        default=COMMITTEE_TYPE.COMMITTEE,
+        choices=Committee_Type.choices,
+        default=Committee_Type.COMMITTEE,
         verbose_name="gruppe_type",
     )
 

@@ -5,18 +5,13 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models.signals import pre_save
-from extended_choices import Choices
 from django.shortcuts import get_object_or_404
 from django.utils.text import slugify
 
 
-HAPPY_HOUR_DURATION = Choices(
-    ("ONE", 1, "1 time"),
-    ("TWO", 2, "2 timer"),
-    ("THREE", 3, "3 timer"),
-    ("FOUR", 4, "4 timer"),
-    ("FIVE", 5, "5 timer"),
-)
+
+
+
 
 
 class RefillReceipt(models.Model):
@@ -154,10 +149,20 @@ class Order(models.Model):
 
 
 class HappyHour(models.Model):
+
+    class HAPPY_HOUR_DURATION(models.IntegerChoices):
+        ONE = 1, "1 time"
+        TWO = 2, "2 timer"
+        THREE = 3, "3 timer"
+        FOUR = 4, "4 timer"
+        FIVE = 5, "5 timer"
+
+
+
     provider = models.ForeignKey(User, on_delete=models.DO_NOTHING)
     created = models.DateTimeField(auto_now_add=True, verbose_name="Oprettet")
-    duration = models.PositiveSmallIntegerField(
-        choices=HAPPY_HOUR_DURATION,
+    duration = models.IntegerField(
+        choices=HAPPY_HOUR_DURATION.choices,
         verbose_name="Varighet",
         default=HAPPY_HOUR_DURATION.ONE,
     )
