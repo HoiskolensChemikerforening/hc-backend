@@ -72,7 +72,7 @@ def submissions_overview(request):
         "limit_useful_page_range": limit_useful_page_range,
     }
 
-    return render(request, "/list_sub.html", context=context)
+    return render(request, "puns/list_sub.html", context=context)
 
 
 
