@@ -11,7 +11,6 @@ from django.shortcuts import redirect
 from django.shortcuts import render, get_object_or_404
 from django.utils import timezone
 from django.views.generic import ListView
-from random import randint
 
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -58,7 +57,6 @@ def index(request):
     )[:4]
     coffee = CoffeeSubmission.get_latest_submission()
     latest_podcast_url = Podcast.get_latest_podcast_url()
-
 
     context = {
         "social": all_social,
