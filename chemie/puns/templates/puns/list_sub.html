@@ -63,7 +63,6 @@
             <th>Innsender</th>
             <th class="hide_on_small">Dato</th>
             <th>Gullkorn</th>
-            <th class="hide_on_small">Bilde</th>
             <th class="hide_on_small">Brukt</th>
           </tr>
           </thead>
@@ -73,11 +72,6 @@
               <td><p>{{ submission.author.profile }}</p></td>
               <td class="hide_on_small"><p>{{ submission.date|date:"j. F" }}</p></td>
               <td class="break_on_small"><p>{{ submission.content }}</p></td>
-              <td class="hide_on_small">
-                {% if submission.image %}
-                  <img class="responsive-img materialboxed" src="{{ submission.image.url }}">
-                {% endif %}
-              </td>
               <td class="hide_on_small">
                 <p>
                   <label>
