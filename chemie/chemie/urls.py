@@ -87,6 +87,7 @@ urlpatterns = [
     path("api/sponsor/<int:pk>/", views.SponsorDetail.as_view()),
     path("merch/", include("chemie.merch.urls", namespace="merch")),
     path("puns/", include("chemie.puns.urls", namespace="puns")),
+    path("magic8ball/", include("chemie.magic8ball.urls", namespace="magic8ball")),
     path("refusjon/", include("chemie.refund.urls", namespace="refund")),
 ]
 

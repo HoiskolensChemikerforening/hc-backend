@@ -1,0 +1,113 @@
+{% extends "chemie/base.html" %}
+{% load thumbnail %}
+
+{% block nav_header %}
+  Studie-Orakelet 🎱
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Magic-8-ball
+{% endblock nav_sub_header %}
+
+{% block content %}
+<style>
+    .magic-container {
+        max-width: 700px;
+        margin: 40px auto;
+        text-align: center;
+        padding: 40px;
+        background: #fdfdfd;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .ball {
+        width: 260px;
+        height: 260px;
+        margin: 30px auto;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #444, #000);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        padding: 25px;
+        color: white;
+        font-size: 1.4em;
+        font-weight: bold;
+        box-shadow: inset -15px -15px 30px rgba(255,255,255,0.08),
+                    inset 15px 15px 30px rgba(0,0,0,0.4),
+                    0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    .answer-text {
+        animation: fadeIn 0.8s ease-in;
+    }
+
+    .answer-text.positiv {
+        color: #2ecc71;
+    }
+
+    .answer-text.negativ {
+        color: #e74c3c;
+    }
+
+    .answer-text.usikker {
+        color: #f39c12;
+    }
+
+    .answer-text.morsom {
+        color: #9b59b6;
+    }
+
+    .eight-ball-button {
+        background-color: #2c3e50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        transition: transform 0.2s;
+    }
+
+    .eight-ball-button:hover {
+        transform: scale(1.05);
+        background-color: #34495e;
+    }
+
+    @keyframes fadeIn {
+        from { 
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to { 
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+</style>
+
+<div class="magic-container">
+    <h1>Spør Studie-Orakelet 🎱</h1>
+
+    <div class="ball">
+        {% if svar %}
+            <div class="answer-text {{ vibe }}">
+                "{{ svar }}"
+            </div>
+        {% else %}
+            <div>
+                Still et spørsmål
+            </div>
+        {% endif %}
+    </div>
+
+    <form method="post">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="eight-ball-button">Rist kula!</button>
+    </form>
+</div>
+{% endblock content %}
