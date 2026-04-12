@@ -4,17 +4,22 @@ def convert_profile_ids_to_user_ids(apps, schema_editor):
     Travelletter = apps.get_model("exchangepage", "Travelletter")
     Profile = apps.get_model("customprofile", "Profile")
 
+    # Only process rows where the profile exists
+    valid_profiles = Profile.objects.values_list("id", "user_id")
+
+    profile_map = {pid: uid for pid, uid in valid_profiles}
+
     for tl in Travelletter.objects.all():
-        if tl.user_id is None:
+        old_id = tl.user_id
+
+        # Skip if no profile exists for this ID
+        if old_id not in profile_map:
             continue
 
-        try:
-            profile = Profile.objects.get(id=tl.user_id)
-            tl.user_id = profile.user_id  # convert Profile.id → User.id
-            tl.save(update_fields=["user_id"])
-        except Profile.DoesNotExist:
-            continue
-
+        # Update to the correct user_id
+        tl.user_id = profile_map[old_id]
+        tl.save(update_fields=["user_id"])
+        
 class Migration(migrations.Migration):
 
     dependencies = [
