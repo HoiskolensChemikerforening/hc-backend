@@ -56,6 +56,7 @@ urlpatterns = [
     path("valg/", include("chemie.elections.urls", namespace="elections")),
     path("web_push/", include("chemie.web_push.urls", namespace="web_push")),
     path("kontoret/", include("chemie.shop.urls", namespace="shop")),
+    path("buss/", include("chemie.busstable.urls", namespace="busstable")),
     path("quiz/", include("chemie.quiz.urls", namespace="quiz")),
     path(
         "sugepodden/",

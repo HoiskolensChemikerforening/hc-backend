@@ -143,3 +143,36 @@
   .select2-selection{
     padding:0rem
   }
+
+
+.row{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    padding:8px;
+    margin: 10px;
+}
+
+.line{
+    background: limegreen;
+    color: white;
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    min-width: 35px;
+    text-align: center;
+}
+
+.dest{
+    flex: 1;
+    margin: 10px;
+}
+
+.time{
+    font-weight: bold;
+}
+
+.arrival{
+    font-weight: bold;
+    margin-left: 10px; 
+}
