@@ -1,5 +1,5 @@
 from django.db import models
-from chemie.customprofile.models import Profile
+from chemie.customprofile.models import Profile, User
 from django.core.validators import (
     MinValueValidator,
     MaxValueValidator,
@@ -11,7 +11,7 @@ from ckeditor.fields import RichTextField
 
 class Travelletter(models.Model):
     user = models.ForeignKey(
-        Profile, on_delete=models.CASCADE, verbose_name="Bruker"
+        User, on_delete=models.CASCADE, verbose_name="Bruker"
     )
     country = models.CharField(max_length=30, verbose_name="Land")
     semester = models.CharField(
@@ -55,7 +55,7 @@ class Travelletter(models.Model):
     )
 
     def __str__(self):
-        return f"{self.user.user.first_name} {self.country}"
+        return f"{self.user.first_name} {self.country}"
 
     def save(self, *args, **kwargs):
         """Make the first letter uppercase for country and city"""
