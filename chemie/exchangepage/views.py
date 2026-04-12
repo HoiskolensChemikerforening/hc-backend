@@ -436,7 +436,7 @@ def displayIndividualLetter(request, pk):
     if images.exists():
         context["images"] = images
 
-    specialization_id = travelletter.user.specialization - 1
+    specialization_id = travelletter.user.profile.specialization - 1
 
     context["travelletter"] = travelletter
     context["experiences"] = experiences
