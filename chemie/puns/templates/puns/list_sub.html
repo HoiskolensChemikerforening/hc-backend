@@ -118,12 +118,12 @@
 
   <script>
     $(document).ready(function(){
-      $(".usedStatus").on("click", function(event) {
+      $(".usedStatus").on("change", function(event) {
         let submissionID = $(this).attr("id");
-        $.ajax({
+        $.ajax({ 
           url: "{% url 'puns:toggle-used' %}",
           data: {"id": submissionID},
-          type: "POST"
+          methode: "POST"
         })
       })
     });

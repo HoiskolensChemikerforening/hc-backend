@@ -79,7 +79,7 @@ def submissions_overview(request):
 @permission_required("shitbox.change_submission")
 def toggle_used(request):
     if request.method == "POST":
-        submission = Submission.objects.get(id=request.POST["id"])
+        submission = Submission.objects.get(id=request.POST["id"]) 
         submission.used = not submission.used
         submission.save()
         return JsonResponse({"used": submission.used})
