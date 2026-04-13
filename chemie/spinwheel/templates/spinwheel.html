@@ -91,24 +91,30 @@
 </div>
 
 <script>
-    let alternativer = [
-        {% for alternativ in alternativer %}
-            "{{ alternativ|escapejs }}"{% if not forloop.last %},{% endif %}
-        {% endfor %}
-    ];
+   let alternativer = [];
+   {% for alternativ in alternativer %}
+        alternativer.push("{{ alternativ|escapejs }}");
+    {% endfor %}
 
-    function oppdaterListe() {
-        const liste = document.getElementById("alternativliste");
-        if (!liste) return;
+    function oppdaterListe(valgt = null) {
+    const liste = document.getElementById("alternativliste");
+    if (!liste) return;
 
-        liste.innerHTML = "";
+    liste.innerHTML = "";
 
-        alternativer.forEach(function(alternativ) {
-            const li = document.createElement("li");
-            li.textContent = alternativ;
-            liste.appendChild(li);
-        });
-    }
+    alternativer.forEach(function(alternativ) {
+        const li = document.createElement("li");
+        li.textContent = alternativ;
+
+        if (alternativ === valgt) {
+            li.style.fontWeight = "bold";
+            li.style.color = "#2c3e50";
+        }
+
+        liste.appendChild(li);
+    });
+}
+
 
     function oppdaterResultat(tekst) {
         const resultatTekst = document.getElementById("resultat-tekst");
@@ -118,15 +124,20 @@
     }
 
     function spinIgjen() {
-        if (alternativer.length === 0) {
-            oppdaterResultat("Ingen alternativer igjen.");
-            return;
-        }
+    if (alternativer.length === 0) {
+        oppdaterResultat("Ingen alternativer igjen.");
+        return;
+    }
 
+    oppdaterResultat("Spinner...");
+
+    setTimeout(function() {
         const tilfeldigIndex = Math.floor(Math.random() * alternativer.length);
         const valgt = alternativer[tilfeldigIndex];
         oppdaterResultat(valgt);
-    }
+        oppdaterListe(valgt);
+    }, 500);
+}
 
     function fjernValgt() {
         const resultatTekst = document.getElementById("resultat-tekst");
@@ -138,7 +149,7 @@
             return alternativ !== valgt;
         });
 
-        oppdaterListe();
+        oppdaterListe(valgt);
 
         if (alternativer.length === 0) {
             oppdaterResultat("Ingen alternativer igjen.");

@@ -13,9 +13,12 @@ def spin_wheel_view(request):
             tekst = form.cleaned_data["alternativer"]
             alternativer = tekst.splitlines()
             alternativer = [alternativ.strip() for alternativ in alternativer if alternativ.strip()]
+            alternativer = list(dict.fromkeys(alternativer))
 
             if alternativer:
                 resultat = random.choice(alternativer)
+            else:
+                form.add_error("alternativer", "Du må skrive minst ett alternativ.")
     
     return render(request, "spinwheel.html", {
         "form": form,
