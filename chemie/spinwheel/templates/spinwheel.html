@@ -1,0 +1,155 @@
+{% extends "chemie/base.html" %}
+
+{% block nav_header %}
+  Spin the Wheel 🎡
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Velg tilfeldig
+{% endblock nav_sub_header %}
+
+{% block content %}
+<style>
+    .spinwheel-container {
+        max-width: 700px;
+        margin: 40px auto;
+        padding: 40px;
+        background: #fdfdfd;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        text-align: center;
+    }
+
+    .spin-button,
+    .action-button {
+        background-color: #2c3e50;
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+        margin: 8px;
+    }
+
+    .spin-button:hover,
+    .action-button:hover {
+        background-color: #34495e;
+    }
+
+    .result-box {
+        margin-top: 30px;
+        padding: 20px;
+        border: 2px dashed #2c3e50;
+        border-radius: 10px;
+        font-size: 1.5em;
+        font-weight: bold;
+    }
+
+    .alternativliste {
+        margin-top: 30px;
+        text-align: left;
+    }
+
+    .hidden {
+        display: none;
+    }
+</style>
+
+<div class="spinwheel-container">
+    <h1>Spin the Wheel 🎡</h1>
+
+    <form method="post" id="spinwheel-form">
+        {% csrf_token %}
+        <div style="margin-bottom: 20px;">
+            {{ form.as_p }}
+        </div>
+        <button type="submit" class="spin-button">Spin!</button>
+    </form>
+
+    {% if resultat %}
+        <div class="result-box" id="result-box">
+            Valgt alternativ: <span id="resultat-tekst">{{ resultat }}</span>
+        </div>
+
+        <div id="action-buttons">
+            <button type="button" class="action-button" onclick="spinIgjen()">Spin igjen</button>
+            <button type="button" class="action-button" onclick="fjernValgt()">Fjern valgt alternativ</button>
+            <button type="button" class="action-button" onclick="nullstillHjul()">Nullstill</button>
+        </div>
+    {% endif %}
+
+    {% if alternativer %}
+        <div class="alternativliste" id="alternativliste-wrapper">
+            <h3>Alternativer:</h3>
+            <ul id="alternativliste">
+                {% for alternativ in alternativer %}
+                    <li>{{ alternativ }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+</div>
+
+<script>
+    let alternativer = [
+        {% for alternativ in alternativer %}
+            "{{ alternativ|escapejs }}"{% if not forloop.last %},{% endif %}
+        {% endfor %}
+    ];
+
+    function oppdaterListe() {
+        const liste = document.getElementById("alternativliste");
+        if (!liste) return;
+
+        liste.innerHTML = "";
+
+        alternativer.forEach(function(alternativ) {
+            const li = document.createElement("li");
+            li.textContent = alternativ;
+            liste.appendChild(li);
+        });
+    }
+
+    function oppdaterResultat(tekst) {
+        const resultatTekst = document.getElementById("resultat-tekst");
+        if (resultatTekst) {
+            resultatTekst.textContent = tekst;
+        }
+    }
+
+    function spinIgjen() {
+        if (alternativer.length === 0) {
+            oppdaterResultat("Ingen alternativer igjen.");
+            return;
+        }
+
+        const tilfeldigIndex = Math.floor(Math.random() * alternativer.length);
+        const valgt = alternativer[tilfeldigIndex];
+        oppdaterResultat(valgt);
+    }
+
+    function fjernValgt() {
+        const resultatTekst = document.getElementById("resultat-tekst");
+        if (!resultatTekst) return;
+
+        const valgt = resultatTekst.textContent;
+
+        alternativer = alternativer.filter(function(alternativ) {
+            return alternativ !== valgt;
+        });
+
+        oppdaterListe();
+
+        if (alternativer.length === 0) {
+            oppdaterResultat("Ingen alternativer igjen.");
+            return;
+        }
+
+        spinIgjen();
+    }
+
+    function nullstillHjul() {
+        window.location.href = window.location.pathname;
+    }
+</script>
+{% endblock content %}

@@ -103,6 +103,7 @@ LOCAL_APPS = [
     "chemie.exchangepage",
     "chemie.puns",
     "chemie.magic8ball",
+    "chemie.spinwheel",
     "chemie.refund",
 ]
 
