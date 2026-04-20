@@ -1,6 +1,6 @@
 from .models import Podcast
 from django import forms
-import material as M
+import chemie.custommaterial as M
 
 
 class PodcastForm(forms.ModelForm):

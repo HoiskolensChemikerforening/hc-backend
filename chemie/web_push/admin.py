@@ -7,7 +7,7 @@ from push_notifications.models import (
     WNSDevice,
 )
 from push_notifications.admin import GCMDeviceAdmin
-from push_notifications.gcm import GCMError
+from push_notifications.exceptions import GCMError
 
 
 @admin.register(Device)

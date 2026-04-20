@@ -23,6 +23,8 @@ ALLOWED_HOSTS = ["*"]
 
 SHELL_PLUS = "ipython"
 
+DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
+
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # ADMINS is a list of recipients which errors are sent to, see link below
@@ -60,7 +62,7 @@ THIRD_PARTY_APPS = [
     "dal_select2",
     "captcha",
     "sorl.thumbnail",
-    "material",
+    # "material",
     "post_office",
     "wiki",
     "django_nyt",
@@ -102,6 +104,7 @@ LOCAL_APPS = [
     "chemie.electofood",
     "chemie.exchangepage",
     "chemie.refund",
+    "chemie.custommaterial",
 ]
 
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
@@ -121,6 +124,11 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "corsheaders.middleware.CorsMiddleware",
 ]
+
+
+# Depreciated this line exists only until sorl.thumbnails resolves the issue.
+# The DEFAULT_FILE_STORAGE can be deleated afterwards
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
 
 
 # TEMPLATE CONFIGURATION
@@ -173,11 +181,11 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher",
     "django.contrib.auth.hashers.BCryptSHA256PasswordHasher",
     "django.contrib.auth.hashers.BCryptPasswordHasher",
-    "django.contrib.auth.hashers.SHA1PasswordHasher",
+    # "django.contrib.auth.hashers.SHA1PasswordHasher",
     "django.contrib.auth.hashers.MD5PasswordHasher",
-    "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
-    "django.contrib.auth.hashers.CryptPasswordHasher",
-    "hashers_passlib.phpass",
+    # "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
+    # "django.contrib.auth.hashers.CryptPasswordHasher",
+    # "hashers_passlib.phpass", # Old password hasher for backward compatibility. It is assumed that there are no passwords left using this hasher. The first algorithm in this list is the standard method.
 )
 
 
