@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.core.validators import MinLengthValidator, MinValueValidator
 from extended_choices import Choices
+from pathlib import Path
 
 # Track the status of a request
 STATUS = Choices(
@@ -106,6 +107,15 @@ class Refund(models.Model):
     # Variable containing an image of the receipt
     file = models.FileField(upload_to="receipts", verbose_name="Kvittering / Skjema for Kjøregodtgjørelse")
     # file will be saved to MEDIA_ROOT/uploads/2015/01/30
+
+    def get_file_type(file):
+        ext = Path(file.file.url).suffixes
+        for i in ext:
+            if i in [".jpg", ".jpeg", ".png", ".gif", ".webp"]:
+                return "image"
+            elif i == ".pdf":
+                return "pdf"
+        return "other"
 
 
     def __str__(self):

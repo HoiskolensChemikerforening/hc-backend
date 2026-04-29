@@ -12,7 +12,6 @@ from post_office import mail
 from django.conf import settings
 from django.contrib.sites.shortcuts import get_current_site
 
-
 @login_required()
 def index(request):
     """
@@ -118,7 +117,6 @@ def get_detail_context(request, id, admin=False):
         "admin": admin,
     }
     return context
-
 
 @login_required()
 def detail_view(request, id):
