@@ -104,7 +104,9 @@ class Refund(models.Model):
         verbose_name="Pris", validators=[MinValueValidator(0)]
     )
     # Variable containing an image of the receipt
-    image = models.ImageField(upload_to="receipts", verbose_name="Kvittering")
+    file = models.FileField(upload_to="receipts", verbose_name="Kvittering / Skjema for Kjøregodtgjørelse")
+    # file will be saved to MEDIA_ROOT/uploads/2015/01/30
+
 
     def __str__(self):
         return f"{self.date} {self.event} Total: {self.price}"

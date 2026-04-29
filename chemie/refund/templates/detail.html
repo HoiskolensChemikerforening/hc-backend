@@ -79,21 +79,18 @@
 
 <div class="row">
 {% for receipt in receipts  %}
-
     <div class="col s12 m6 l4">
     <div class="card">
     <div class="card-content">
         <p style="font-weight: bold" class="receipt-counter">Kvittering {{ forloop.counter }}</p>
         <hr>
-                <p><b>Utleggsdato:</b> {{ receipt.date.date}}</p>
-                <p><b>Kjøpssted:</b> {{receipt.store}}</p>
-                <p><b>Vare:</b> {{receipt.item}}</p>
-                <p><b>Hensikt:</b> {{receipt.event}}</p>
-                <p><b>Pris:</b> {{receipt.price}} kr</p>
-                <hr>
-                <div style="display: flex; justify-content: center;width: 100%; min-height: 300px;">
-                <img class="materialboxed" src="{{ receipt.image.url }}" alt="kvittering{{ forloop.counter }}" style="max-width: 100%;max-height:300px;">
-                </div>
+            <p><b>Utleggsdato:</b> {{ receipt.date.date}}</p>
+            <p><b>Kjøpssted:</b> {{receipt.store}}</p>
+            <p><b>Vare:</b> {{receipt.item}}</p>
+            <p><b>Hensikt:</b> {{receipt.event}}</p>
+            <p><b>Pris:</b> {{receipt.price}} kr</p>
+            <hr>
+            <iframe class0="materialboxed" src="{{ receipt.file.url }}" alt="kvittering{{ forloop.counter }}" style="width: 100%; height: auto;"></iframe>
         <hr>
     </div>
     </div>
