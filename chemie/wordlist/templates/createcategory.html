@@ -1,0 +1,34 @@
+{% extends "chemie/base.html" %}
+{% load material_form %}
+{% block nav_header %}
+  Lag ny kategori
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+{# Breadcrumbs #}
+{% block breadcrumbs %}
+  <div class="nav-wrapper" style="line-height: 56px; padding-bottom: 10px;">
+    <a href="{% url "wordlist:index" %}" class="breadcrumb">Ordlisten</a>
+    <a href="{% url "wordlist:admincategory" %}" class="breadcrumb">Kategori</a>
+    <a class="breadcrumb">Lag ny kategori</a>
+  </div>
+{% endblock %}
+
+
+
+<form enctype="multipart/form-data" method='POST'>
+  {% csrf_token %}
+  {{ categoryform.as_p }}
+  <input class="btn" type='submit' value='Lagre kategori'/>
+</form>
+
+{% endblock content %}
+
+{% block footer_script %}
+
+{% endblock footer_script %}
