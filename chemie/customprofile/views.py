@@ -422,7 +422,7 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
         "spec": SPECIALIZATION,
         "crush": crush,  # April fools
         "relstat": RELATIONSHIP_STATUS,
-        "medals": Medal.objects.all(),
+        "medals": Medal.objects.all().order_by('title'),
         "klassetrinn": defaulturl[0],
         "spesialisering": defaulturl[1],
         "sivilstatus": defaulturl[2],
