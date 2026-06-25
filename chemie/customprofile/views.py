@@ -578,5 +578,5 @@ class MedalListCreate(generics.ListCreateAPIView):
 
 
 class MedalDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Medal.objects.all()
+    queryset = Medal.objects.all().order_by('title')
     serializer_class = MedalSerializer
