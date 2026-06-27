@@ -143,7 +143,10 @@ class EditProfileForm(forms.ModelForm):
             "relationship_status",
             "medals",
         ]
-
+    def __init__(self, *args, **kwargs): #inisiates together with when EditProfileForm is called, and can take any typical Django argument
+        super().__init__(*args, **kwargs) #allows the class to first make the entire form, before changing anything
+        #needs to be here so medals exist before we change it
+        self.fields["medals"].queryset = Medal.objects.order_by("title") #Dictonary searches for medals, then changes the values to be in order 
 
 class EditPushForm(forms.ModelForm):
     class Meta:
