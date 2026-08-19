@@ -166,19 +166,25 @@
       </div>
 
       <!-- Coffee -->
-      <div class="col coffee-box" style="width: 100%;">
-           <div class="row" style="width:100%; margin: 0">
-               <div class="col s4 m3 l3 valign-wrapper" style="display: flex;justify-content: center; height: 100%">
-                    <img type="image/png" src="{% static "images/caffeine.png" %}" style="max-height:5rem; max-width:5rem">
-               </div>
-               <div class="col s8 m9 l9">
-                    <p style="margin: auto; margin-top: 1rem" >
-                      Kaffeknappen sist trykket: <br>
-                      {{coffee}}
-                    </p>
-               </div>
-           </div>
-      </div>
+      <form method="POST">
+        {% csrf_token %}
+        <div class="col coffee-box" style="width: 100%;">
+          <button type="submission" style="width: 100%">
+            <div class="row" style="width:100%; margin: 0">
+                <div class="col s4 m3 l3 valign-wrapper" style="display: flex;justify-content: center; height: 100%">
+                      <img type="image/png" src="{% static "images/caffeine.png" %}" style="max-height:5rem; max-width:5rem">
+                </div>
+                <div class="col s8 m9 l9">
+                      <p style="margin: auto; margin-top: 1rem" >
+                        Kaffe ble sist laget: <br>
+                        {{coffee}}
+                      </p>
+                </div>
+            </div>
+          </button>
+        </div>
+      </form>
+        
      <!--Links to video about office -->
 
       <!-- Latest sugepodden episode-->
