@@ -82,6 +82,21 @@ class Ticket(models.Model):
 
 
 class Position(models.Model):
+    #Deler Position in i to forskjellige valgtyper: vanlig valg og preferansevalg
+    ORDINARY = "ordinary"
+    STV = "stv"
+
+    ELECTION_TYPE_CHOICES = [
+        (ORDINARY, "Vanlig valg"),
+        (STV, "Preferansevalg"),
+    ]
+
+    election_type = models.CharField(
+        max_length=20,
+        choices=ELECTION_TYPE_CHOICES,
+        default=ORDINARY,
+    )
+
     position_name = models.CharField(
         max_length=100, verbose_name="Navn på verv"
     )

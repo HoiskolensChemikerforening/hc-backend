@@ -10,12 +10,16 @@ from .models import Position, Election, Candidate
 
 class AddPositionForm(forms.ModelForm):
     layout = M.Layout(
-        M.Row(M.Column("Navn på verv"), M.Column("Antall plasser"))
+        M.Row(
+            M.Column("Navn på verv"),
+            M.Column("Antall plasser"),
+            M.Column("Valgtype"),
+        )
     )
 
     class Meta:
         model = Position
-        fields = ("position_name", "spots")
+        fields = ("position_name", "spots", "election_type")
 
 
 class AddCandidateForm(forms.ModelForm):
