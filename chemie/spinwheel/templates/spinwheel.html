@@ -92,7 +92,7 @@
 
 <script>
    let alternativer = [];
-   {% for alternativ in alternativer %}
+    {% for alternativ in alternativer %}
         alternativer.push("{{ alternativ|escapejs }}");
     {% endfor %}
 
