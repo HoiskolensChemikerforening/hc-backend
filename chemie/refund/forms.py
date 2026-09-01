@@ -34,7 +34,7 @@ class RefundForm(forms.ModelForm):
 
     class Meta:
         model = Refund
-        fields = ["date", "store", "item", "event", "price", "image"]
+        fields = ["date", "store", "item", "event", "price", "file"]
         widgets = {"date": DatePickerInput()}
 
     def __init__(self, *arg, **kwarg):
