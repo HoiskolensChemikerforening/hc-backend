@@ -98,8 +98,10 @@
                 <a href="{{ receipt.file.url }}" target="_blank">
                     Skjema <!-- Some browsers fucks up with the usage of iframe, so linking to another tab is the best solution with pdf's-->
                 </a>
-            {% else %}
+            {% elif receipt.get_file_type == 'other' %}
                 <p>Ikke gyldig filtype</p>
+            {% else %}
+                <p>Ingen fil lastet opp</p>
             {% endif %}
         <hr>
     </div>
