@@ -111,7 +111,7 @@ class Refund(models.Model):
     def get_file_type(file):
         ext = Path(file.file.url).suffixes
         for i in ext:
-            if i in [".jpg", ".jpeg", ".png", ".gif", ".webp"]:
+            if i in [".jpg", ".jpeg", ".png", ".gif", ".webp", ".jfif"]:
                 return "image"
             elif i == ".pdf":
                 return "pdf"
