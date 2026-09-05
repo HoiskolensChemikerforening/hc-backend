@@ -4,7 +4,7 @@ const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const blueCancerSymbols = [ "🙍‍♂️", "💙", "🫐", " 🍆", " "];
 const valentinesSymbols = ["❤️", "🌹", "💘", "👼", "💌", "💋", "🏹"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
-const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>19.09.25","🕸️", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
+const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>27.09.27","🕸️", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
 const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
 const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart1.png",
@@ -40,14 +40,14 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "christmas"; // Change this to select the holiday you want
+const chosenHoliday = "webkom"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
 const maxElements = 10; // Maximum number of elements
 
 // Image width and hight
-const imageWidth = 4 //rem
-const imageHeight = 3 //rem
+const imageWidth = 20 //rem
+const imageHeight = 15 //rem
 
 const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
 const mainHeight = document.getElementsByTagName("main")[0].offsetHeight;
