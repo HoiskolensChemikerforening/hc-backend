@@ -7,7 +7,7 @@
     <div class="modal-content">
         <h4>Kakekalkulator</h4>
 
-        <p>Kalkulatoren brukes for estimere prisen på hjemmebakt kake (ikke posekake). Refusjon for kakeutlegg skal ikke overstige 100 kr.</p>
+        <p>Kalkulatoren brukes for estimere prisen på hjemmebakt kake (ikke posekake). Refusjon for kakeutlegg skal ikke overstige 150 kr.</p>
 
         <div class="row" style="margin-top: 20px;">
             <div class="col s12 m4 l4">
@@ -69,18 +69,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 const cakeFactors = {
-    "milk": 2.3,             // 2.3 kr per dl melk, egt 2.1
-    "flour": 2/100,          // 2 kr per 100 g mel, egt 1.5
-    "egg": 3,                // 3 kr per egg, egt 3.1
-    "butter": 7/100,         // 7 kr per 100 g smør, egt 11.4
-    "sugar": 3/100,          // 3 kr per 100 g sukker, egt 3.1
-    "powdered_sugar": 4/100 ,// 4 kr per 100 g melis, egt 4.4
-    "baking_powder": 26/250,
-    "cocoa_powder": 50/250, 
-    "vanilla_sugar": 23/125,
-    "apple": 40/1000,        // 40 kr per kg epler, 
-    "carrot": 30/750, 
-    "chocolate": 19/200 ,  // 19 kr per 200 g kokesjokolade, 
+    "milk": 2.3,                // 2.3 kr per dl melk,                    #2.3 kr pr dl 
+    "flour": 1.6/100,           // 2 kr per 100 g mel,                    #1.6 kr pr 100g
+    "egg": 5.3,                 // 3 kr per egg,                          #5.3 kr pr egg
+    "butter": 43/500 ,          // 7 kr per 100 g smør                    #8.6 kr pr 100g 
+    "sugar": 7/200,             // 3 kr per 100 g sukker                  #3.5 kr pr 100g  
+    "powdered_sugar": 43/1000 ,   // 4 kr per 100 g melis                   #4.3 kr pr 100g (4.3)
+    "baking_powder": 26/200,    // 10.4 kr per 100 g bakepulver                   #13.2 kr pr 100g (13)
+    "cocoa_powder": 31/100,     // 12.5 kr per 100g kakaopulver                      #31.8 kr pr 100g (31)
+    "vanilla_sugar": 91/500,    // 18.4 kr per 100g vaniljesukker           #18.2 kr pr 100g (18.2)
+    "apple": 40/1000,           // 40 kr per kg epler                     #39.8 kr pr kg  (40)
+    "carrot": 4.8/100,            // 4 kr pr 100g, gulrot                         #4.8 kr pr 100g (5)
+    "chocolate": 28/100,       // 19 kr per 200 g kokesjokolade          #56 kr pr 200g
 };
 
 const cakeprice = document.getElementById("total-cake-price");
