@@ -89,6 +89,7 @@
             <p><b>Vare:</b> {{receipt.item}}</p>
             <p><b>Hensikt:</b> {{receipt.event}}</p>
             <p><b>Pris:</b> {{receipt.price}} kr</p>
+            
             <hr>
             {% if receipt.get_file_type == 'image' %}
                 <div style="display: flex; justify-content: center;width: 100%; min-height: 300px;">
@@ -96,7 +97,7 @@
                 </div>
             {% elif receipt.get_file_type == 'pdf' %}
                 <a href="{{ receipt.file.url }}" target="_blank">
-                    Skjema <!-- Some browsers fucks up with the usage of iframe, so linking to another tab is the best solution with pdf's-->
+                    Skjema <!-- Some browsers fucks up with the usage of iframe, so linking to another tab is the best solution with pdf's -->
                 </a>
             {% elif receipt.get_file_type == 'other' %}
                 <p>Ikke gyldig filtype</p>
