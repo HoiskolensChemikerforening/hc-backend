@@ -105,15 +105,16 @@ class Refund(models.Model):
         verbose_name="Pris", validators=[MinValueValidator(0)]
     )
     # Variable containing an image of the receipt
-    file = models.FileField(
+    image = models.FileField(
         upload_to="receipts",
         verbose_name="Kvittering / Skjema for Kjøregodtgjørelse", 
         validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'jfif', 'pdf'])],
         null=True,
+        db_column="image",
     )
     # file will be saved to MEDIA_ROOT/uploads/2015/01/30 # 03.09.2026 Is probably outdated info?
-    def get_file_type(file):
-        ext = Path(file.file.url).suffixes
+    def get_file_type(image):
+        ext = Path(image.file.url).suffixes
         for i in ext:
             if i in [".jpg", ".jpeg", ".png", ".gif", ".webp", ".jfif"]:
                 return "image"
