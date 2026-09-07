@@ -101,6 +101,8 @@
                 </a>
             {% elif receipt.get_file_type == 'other' %}
                 <p>Ikke gyldig filtype</p>
+            {% elif receipt.get_file_type == 'NotFound' %}
+                <p>Fil ikke funnet</p>
             {% endif %}
         <hr>
     </div>
