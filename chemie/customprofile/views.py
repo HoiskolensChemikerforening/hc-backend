@@ -422,7 +422,7 @@ def yearbook(request, klassetrinn=15, spesialisering='', sivilstatus='', digimed
         "spec": SPECIALIZATION,
         "crush": crush,  # April fools
         "relstat": RELATIONSHIP_STATUS,
-        "medals": Medal.objects.all().order_by('title'),
+        "medals": Medal.objects.all(),
         "klassetrinn": defaulturl[0],
         "spesialisering": defaulturl[1],
         "sivilstatus": defaulturl[2],
@@ -578,5 +578,5 @@ class MedalListCreate(generics.ListCreateAPIView):
 
 
 class MedalDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Medal.objects.all().order_by('title')
+    queryset = Medal.objects.all()
     serializer_class = MedalSerializer
