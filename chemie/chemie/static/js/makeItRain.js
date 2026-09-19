@@ -4,7 +4,7 @@ const breastCancerSymbols = ["🎀", "🌸", "💗"];
 const blueCancerSymbols = [ "🙍‍♂️", "💙", "🫐", " 🍆", " "];
 const valentinesSymbols = ["❤️", "🌹", "💘", "👼", "💌", "💋", "🏹"];
 const halloweenSymbols = ["🎃", "🎃", "🎃", "🕷️", "👻", "🪦", "⚰️", "🕸️", "🦇"];
-const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>19.09.25","🕸️", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
+const webkomSymbols = ["Søk Webkom!", "Søknadsfrist:<br/>27.09.26","Webkom har opptak!", "💻", "🔌", "👩‍💻", "👨‍💻","🍰",,"🎤", "❤️","../../static/images/holiday_images/webkom.png"];
 const paulImages = ["../../static/images/holiday_images/paul.png", "../../static/images/holiday_images/paul_tullebilde.png"];
 const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart1.png",
@@ -15,7 +15,7 @@ const mustacheNovemberImages = [
   "../../static/images/holiday_images/bart6.png", "💙", "💙", "💙", 
 ];
 
-const rainSpeed = 30; // Adjust this value to set the rain speed
+const rainSpeed = 20; // Adjust this value to set the rain speed
 
 function selectSymbols(choose_your_holiday) {
   if (choose_your_holiday === "christmas") {
@@ -40,14 +40,14 @@ function selectSymbols(choose_your_holiday) {
   return [ ]; // Return an empty array if the holiday is not recognized
 }
 
-const chosenHoliday = "christmas"; // Change this to select the holiday you want
+const chosenHoliday = "webkom"; // Change this to select the holiday you want
 const selectedSymbols = selectSymbols(chosenHoliday);
 
-const maxElements = 10; // Maximum number of elements
+const maxElements = 100; // Maximum number of elements
 
 // Image width and hight
-const imageWidth = 4 //rem
-const imageHeight = 3 //rem
+const imageWidth = 20 //rem
+const imageHeight = 15 //rem
 
 const headerHeight = document.getElementsByTagName("header")[0].offsetHeight;
 const mainHeight = document.getElementsByTagName("main")[0].offsetHeight;
@@ -75,21 +75,42 @@ function handleResize() {
   return pageHeight;
 }
 
-function createAndAnimateElements(maxElements) {
-  for (let i = 0; i < maxElements; i++) {
-    createAndAnimateElement();
-  }
-
-  // Continuously create and animate new elements at a set interval
-  setInterval(() => {
-    // Check for height change on window resize
-    window.addEventListener('resize', () => {
-      height = handleResize();
-    });
-
-    createAndAnimateElement();
-  }, 500); // Adjust the interval as needed
+function calculateSpawnInterval() {
+  // const pageHeight = handleResize();
+  
+  // Gjennomsnittlig tid et element bruker fra topp til bunn i sekunder
+  // (Siden koden din bruker: rainSpeed + Math.random() * 5)
+  const averageFallTimeSeconds = rainSpeed + 2.5; 
+  
+  // Konverterer den totale levetiden til millisekunder
+  const totalLifeTimeMs = averageFallTimeSeconds * 1000;
+  
+  // For å ha nøyaktig maxElements på skjermen samtidig,
+  // må intervallet være den totale levetiden delt på maks antall elementer
+  const optimalInterval = totalLifeTimeMs / maxElements;
+  
+  // Sikrer at vi ikke crasher nettleseren med et intervall på 0
+  return Math.max(10, optimalInterval); 
 }
+
+function createAndAnimateElements(maxElements) {
+  // Lytt på resize én gang, ikke inne i intervallet
+  window.addEventListener('resize', () => {
+    height = handleResize();
+  });
+
+  // Start en kontinuerlig strøm med en gang
+  const rainInterval = setInterval(() => {
+    createAndAnimateElement();
+    
+    // Remove the oldest element when exceeding the maximum
+    const elements = document.getElementsByClassName('rainElement');
+    if (elements.length >= maxElements) {
+      rainContainer.removeChild(elements[0]);
+    }
+  }, calculateSpawnInterval()); // 40 millisekunder gir rundt 25 nye elementer i sekundet. Juster denne for tetthet!
+}
+
 
 function createAndAnimateElement() {
   // Random width & height between 0 and viewport
@@ -97,10 +118,10 @@ function createAndAnimateElement() {
   const randomWidth = Math.floor(Math.random() * (Math.max(document.documentElement.clientWidth, window.innerWidth || 0)-convertRemToPixels(imageWidth)-swingDistance));
 
   // Calculate the animation duration based on the rain speed
-  const animationDuration = rainSpeed + Math.random() * 5;
+  const animationDuration = rainSpeed + Math.random() * 5; // Lavere tall = raskere fall 
 
   // Random animation-delay
-  const randomAnimationDelay = Math.floor(Math.random() * 40); // adjust the number to make it longer before the rain starts
+  //const randomAnimationDelay = Math.random() * 2; // adjust the number to make it longer before the rain starts
 
   // Create element
   const randomSymbol = selectedSymbols[Math.floor(Math.random() * selectedSymbols.length)];
@@ -115,16 +136,12 @@ function createAndAnimateElement() {
   element.className = 'rainElement rainSize';
   element.style.left = randomWidth + 'px';
   element.style.animation = `fall ${animationDuration}s infinite, swing ${Math.random() * 4 + 2}s alternate infinite`;
-  element.style.animationDelay = randomAnimationDelay + 's';
+  //element.style.animationDelay = randomAnimationDelay + 's';
+  element.style.animationDelay = '0s';
   element.style.color = 'hsl('+(Math.random()*360|0)+',80%,50%)';
   element.style.fontWeight = "bold";
   element.style.width = "auto";
   element.style.textShadow="-1px -1px 0 #000, 1px -1px 0 #000, -1px 1px 0 #000, 1px 1px 0 #000;";
   rainContainer.appendChild(element);
 
-  // Remove the oldest element when exceeding the maximum
-  const elements = document.getElementsByClassName('rainElement');
-  if (elements.length > maxElements) {
-    rainContainer.removeChild(elements[0]);
-  }
 }

@@ -33,4 +33,4 @@ function dayCountdown(element,targetString,eventString){
 
 }
 
-dayCountdown(document.getElementById("Countdown"),"2025-09-19 23:59","Webkom søknadsfrist")
+dayCountdown(document.getElementById("Countdown"),"2026-09-27 23:59","Webkom søknadsfrist")
