@@ -112,6 +112,10 @@ class Medal(models.Model):
     def __str__(self):
         return self.title
 
+    class Meta: #makes the medals always in alphabetical order
+        ordering=['title'] 
+
+
 
 class Profile(models.Model):
     user = models.OneToOneField(
