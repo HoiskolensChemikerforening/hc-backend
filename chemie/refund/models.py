@@ -1,6 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
-from django.core.validators import MinLengthValidator, MinValueValidator
+from django.core.validators import MinLengthValidator, MinValueValidator, FileExtensionValidator
 from extended_choices import Choices
 from pathlib import Path
 
@@ -105,17 +105,27 @@ class Refund(models.Model):
         verbose_name="Pris", validators=[MinValueValidator(0)]
     )
     # Variable containing an image of the receipt
-    file = models.FileField(upload_to="receipts", verbose_name="Kvittering / Skjema for Kjøregodtgjørelse")
+    image = models.FileField(
+        upload_to="receipts",
+        verbose_name="Kvittering / Skjema for Kjøregodtgjørelse", 
+        validators=[FileExtensionValidator(allowed_extensions=['jpg', 'jpeg', 'png', 'webp', 'jfif', 'pdf'])],
+        null=True,
+        db_column="image",
+    )
     # file will be saved to MEDIA_ROOT/uploads/2015/01/30 # 03.09.2026 Is probably outdated info?
-
-    def get_file_type(file):
-        ext = Path(file.file.url).suffixes
-        for i in ext:
-            if i in [".jpg", ".jpeg", ".png", ".gif", ".webp", ".jfif", ".svg"]:
-                return "image"
-            elif i == ".pdf":
-                return "pdf"
+    def get_file_type(self):
+        if not self.image:
+            return "NotFound"
+        
+        # self.image.name gir f.eks. "receipts/bilde.jpg"
+        ext = Path(self.image.name).suffix.lower()
+        
+        if ext in [".jpg", ".jpeg", ".png", ".gif", ".webp", ".jfif"]:
+            return "image"
+        elif ext == ".pdf":
+            return "pdf"
         return "other"
+
 
 
     def __str__(self):
