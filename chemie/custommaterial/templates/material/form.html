@@ -1,0 +1,18 @@
+{% load material_form material_form_internal %}
+{% part form %}
+    {% include "material/non_field_errors.html" %}
+    {% part form hidden %}{% for hidden in form.hidden_fields %}
+            {{ hidden }}
+    {% endfor %}{% endpart %}
+    {% if layout %}{% part form visible %}
+            {% render layout %}{% endrender %}
+    {% endpart %}{% else %}
+        {% part form visible %}
+            {% for bound_field in form.visible_fields %}{% render bound_field %}{% endrender %} {% endfor %}
+        {% endpart %}{% part 'inlines' %}
+            {% for inline in inlines %}
+                {{ inline }}
+            {% endfor %}
+        {% endpart %}
+    {% endif %}
+{% endpart %}

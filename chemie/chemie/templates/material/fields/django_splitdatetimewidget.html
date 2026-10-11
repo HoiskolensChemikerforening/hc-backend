@@ -35,9 +35,8 @@ https://github.com/viewflow/django-material/blob/388db45087e9ded89278a94e1809929
           <div class="help-block">{{ bound_field.help_text|safe }}</div>
           {% endif %}
           {% endpart %}{{ hidden_initial }}
-
       <label{% attrs bound_field 'label' %}
-        for="{{ bound_field.id_for_label }}"
+        for="id_{{ bound_field.html_name }}_0"
     {% endattrs %}>{{ bound_field.label }}</label>
     </div>
 </div>
@@ -56,6 +55,9 @@ https://github.com/viewflow/django-material/blob/388db45087e9ded89278a94e1809929
             {% if bound_field.errors %}class="invalid timepicker"{% endif %}
             {% if bound_field.value %} value="{{ bound_field|multiwidget_value:1|datepicker_value:field.fields.1.input_formats.0 }}"{% endif %}
          {% endattrs %}>
+         <label{% attrs bound_field 'label' %}
+        for="id_{{ bound_field.html_name }}_1"
+        {% endattrs %}>---</label>
     </div>
 </div>
 {% endpart %}

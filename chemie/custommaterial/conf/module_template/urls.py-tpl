@@ -1,0 +1,10 @@
+{{ unicode_literals }}from django.urls import path, include
+from django.views import generic
+
+from . import views
+
+
+urlpatterns = [
+    # path('', generic.RedirectView.as_view(url='./mymodel/'), name="index"),
+    # path('mymodel/', include(views.MyModelViewSet().urls)),
+]

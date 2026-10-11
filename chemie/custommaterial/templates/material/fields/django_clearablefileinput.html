@@ -1,0 +1,14 @@
+{% load material_form material_form_internal i18n %}
+
+{% render bound_field template='fields/django_fileinput.html' %}
+    {% part bound_field suffix %}
+    {% if bound_field.value|is_initial_file and not field.required %}
+        <div class="file-field-clear">
+            <label>
+              <input id="{{ bound_field.html_name }}-clear_id" name="{{ bound_field.html_name }}-clear" type="checkbox" {% if field.disabled %}disabled{% endif %}>
+              <span>{{ field.widget.clear_checkbox_label }}</span>
+            </label>
+        </div>
+    {% endif %}
+    {% endpart %}
+{% endrender %}
