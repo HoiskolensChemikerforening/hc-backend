@@ -33,6 +33,13 @@ class RegisterUserForm(forms.ModelForm):
         model = User
         fields = ["first_name", "last_name", "email", "username"]
 
+    def uniqueUsername(self):
+        username = self.cleaned_data.get("username")
+        if User.objects.filter(username=username.lower()).count():
+            self.add_error(
+                None, ValidationError({"username": ["Brukernavnet er allerede i bruk!"]})
+            )
+
     def password_matches(self):
         password = self.cleaned_data.get("password")
         confrimed_password = self.cleaned_data.get("password_confirm")
@@ -57,6 +64,7 @@ class RegisterUserForm(forms.ModelForm):
                 ),
             )
             return False
+        self.uniqueUsername()
         return password
 
     def clean(self):
