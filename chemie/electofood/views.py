@@ -270,10 +270,15 @@ def valgomat_result(request, id):
     # Fetch the currently selectet ElectionQuestionForm object by id
     electionform = get_object_or_404(ElectionQuestionForm, id=id)
 
+
+    # Redirect if user has not submitted an answer
+    if not electionform.userHasAnswered(request.user):
+        return redirect(reverse("valgomat:index_valgomat"))
+
     # Fetch all corresponding questions
     questions = electionform.electionquestion_set.all()
 
-    # Fetch all committees which have submittet an answer
+    # Fetch all committees which have submitted an answer
     committees = electionform.get_participating_committes()
 
     # Initialize a list to contain the result
