@@ -1,0 +1,25 @@
+.column{
+    width: auto;
+    background-color: orange;
+
+
+}
+
+select {
+    display: block;
+}
+
+
+
+.word-header {
+    color: "red";
+}
+
+
+
+
+.words_column{
+    text-align: column;
+    
+
+}

@@ -1,0 +1,169 @@
+{% extends "chemie/base.html" %}
+
+{% load material_form %}
+{% load static %}
+{% block extra_css %}
+  <link href = "{% static "css/wordlist.css" %}" type = "text/css" rel = "stylesheet" media = "screen,projection" /> 
+{% endblock %}
+
+{% block nav_header %}
+  Ordliste
+{% endblock nav_header %}
+
+{% block nav_sub_header %}
+  Alle ord i ordlisten
+{% endblock nav_sub_header %}
+
+{% block content %}
+
+<style>/* Rounded corners of cards */
+  .card,
+  .card-image,
+  .card .card-image img {
+    border-radius: 8px 8px 0 0;
+  }
+  .card,
+  .card {
+    border-radius: 8px 8px 8px 8px;
+  }
+</style>
+
+
+
+<div>
+  <h5>Søkemotor: </h5>
+  <form enctype="multipart/form-data" method='POST'>
+    {% csrf_token %}
+    <div class="card-content">
+      {% for field in form %}{{field.error}}{{field}}{%endfor%}
+      <input class="btn" type='submit' name='submit' value='Søk!'/>
+      <input class="btn" type='submit' name='submit' value='Nullstill søk'/>
+    </div>
+  </form>
+</div>
+
+
+
+<div>
+  <h5>Velg en kategori:</h5>
+  <form enctype="multipart/form-data" method='POST'>
+    {% csrf_token %}
+    {%form form=category_form%}
+      {% endform %}
+    <div class="card-content">
+        
+      <input class="btn" type='submit' name='submit' value='Ta meg til kategorien'/>
+    </div>
+  </form>
+</div>
+
+
+
+<div class="container"> <!--Vi bruker 0 for å indeksere første verdi i settet gitt fra viewen-->
+  <div class="row">
+    {% for alle_ord in alle_ord %}
+    <div class="col s14 m6 l4">
+      <div class="card small">
+        <a href="{% url 'wordlist:details' alle_ord.0.id alle_ord.1%}"> <!--sikkerhets problem, dersom man har både et adjektiv og et substantiv med samme id og navn-->
+          <div class="card-image">
+            {% if alle_ord.0.picture %}
+              <img src="{{ alle_ord.0.picture.url }}" alt="{{ alle_ord.0.explanations }}">
+            {% else %}
+              <img src="{% static "images/holiday_images/paul_tullebilde.png" %}" alt="bilde">
+            {% endif %}
+          </div>
+          <div class="card-content">
+            <div style="overflow: hidden">
+            <span class="card-title" style="font-size: 18px; font-weight: 400;">{{ alle_ord.0.word }}</span>
+            <p>{{alle_ord.0.explanations}}</p>
+          </div>     </div>
+        </a>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+
+
+{% if perms.wordlist%}
+        <div class="fixed-action-btn" style="bottom: 45px; right: 24px;">
+          <a class="btn-floating btn-large">
+            <i class="large material-icons">dehaze</i>
+          </a>
+          <ul>
+            {% if perms.wordlist.add_word %}
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:admincategory" %}>
+                  <i class="material-icons">edit</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:admincategory" %}>Endre eller slette kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:createcategory" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:createcategory" %}>Legg til en ny kategori</a>
+                </a>
+              </li>
+              <li>
+                <a class="btn-floating blue" href={% url "wordlist:innsending" %}>
+                  <i class="material-icons">add</i>
+                  <a class="btn-floating mobile-fab-tip" href={% url "wordlist:innsending" %}>Legg til ett ord</a>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </div>
+    {% endif %}
+
+
+
+
+
+
+
+
+
+
+<div>
+  <ul class="pagination nav navbar-nav">
+    {% if alle_ord.has_previous %}
+     <li><a href="?page={{ alle_ord.previous_page_number }}">Forrige</a></li>
+    {% endif %}
+    {% for page in alle_ord.paginator.page_range %}
+    <li class="{% if alle_ord.number == page %}active{% endif %}"><a href="?page={{ page }}">{{ page }}</a></li>
+    {% endfor %}
+
+    {% if alle_ord.has_next %}
+      <li><a href="?page={{ alle_ord.next_page_number }}">Neste</a></li>
+    {% endif %}
+    </ul>
+</div>
+
+
+
+{% endblock content %}
+
+
+
+
+
+{% block footer_script %}
+
+
+<script>
+$function()
+        $("#refresh").click(function(event){
+            $.ajax({
+             type: "POST",
+             url: 'refresh/',
+              success:function(response) {
+              location.reload(true);
+
+              //do something with 'response'
+             }
+            });
+    });
+</script>
+
+{% endblock footer_script %}
