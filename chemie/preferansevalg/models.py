@@ -44,18 +44,21 @@ class CandidatePref(models.Model): #GOOD
 
 
 
-class Ticket(models.Model): 
+class TicketPref(models.Model): 
     candidates = models.ManyToManyField(
         CandidatePref,
         blank=True,
-        related_name="tickets",
+        related_name="tickets_prefvalg",
         verbose_name="Kandidatene som stemmes på",
         through="CandidateRank"
     )
 
     #is_blank = models.BooleanField(default=False, verbose_name="Blank stemme")
 
-    position = models.ForeignKey("Position", on_delete=models.CASCADE)
+    position = models.ForeignKey(
+        "PositionPref", 
+        on_delete=models.CASCADE
+    )
 
     @classmethod
     def create_ticket(cls, voted_candidates, position):
@@ -77,7 +80,7 @@ class Ticket(models.Model):
 
 
 class CandidateRank(models.Model):
-    ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
+    ticket = models.ForeignKey(TicketPref, on_delete=models.CASCADE)
     candidate = models.ForeignKey(
         CandidatePref, 
         on_delete=models.CASCADE, 
@@ -108,7 +111,7 @@ class CandidateRank(models.Model):
 
 # TODO: Gi ny logikk, opptelling, stemmeseddel-definisjon... alt:
 
-class Position(models.Model):
+class PositionPref(models.Model):
     position_name = models.CharField(
         max_length=100, verbose_name="Navn på verv"
     )
@@ -141,16 +144,16 @@ class Position(models.Model):
     )
 
     tickets = models.ManyToManyField(
-        Ticket,
+        TicketPref,
         blank=True,
-        related_name="ticket_position",
+        related_name="ticket_position_prefvalg",
         verbose_name="stemmeseddel",
     )
 
     stemmesedler = models.ManyToManyField(
         CandidateRank,
         blank=True,
-        related_name="seddel_position",
+        related_name="seddel_position_prefvalg",
         verbose_name="True stemmeseddel"
     )
 
@@ -232,7 +235,7 @@ class Position(models.Model):
     - Fikse HTML-sidene | Troubleshooting av views & forms
     - Sjekke at whas_won transferer til å telle opp fra orignalstemmene med vinner kaset ut
     """
-    alle_tickets = Ticket.objects.all() #TODO bytt ut alle variable som henter fra ticket (CandidateRank) til å hente fra denne variabelen.
+    alle_tickets = TicketPref.objects.all() #TODO bytt ut alle variable som henter fra ticket (CandidateRank) til å hente fra denne variabelen.
     #transform_ticket skal endre denne gjennom stemmeløpet. 
 
     def get_highest_index(self): #opptelling av stemmer
@@ -334,7 +337,7 @@ class Position(models.Model):
                 .order_by("rank")
             )
 
-            nye_ticket = Ticket.objects.create(
+            nye_ticket = TicketPref.objects.create(
                 position=ticket.position
             )
 
@@ -347,7 +350,7 @@ class Position(models.Model):
 
             nye_tickets.append(nye_ticket)
 
-        return Ticket.objects.filter(
+        return TicketPref.objects.filter(
             id__in=[ticket.id for ticket in nye_tickets]
         )
     
@@ -427,7 +430,7 @@ class Position(models.Model):
 
     def vote(self, candidates, user): #sjekk om bruker har stemt
         if not user.profile.voted:
-            ticket = Ticket.create_ticket(
+            ticket = TicketPref.create_ticket(
                 candidates, self
             )  # Lager stemmeseddelen for brukeren
 
@@ -439,7 +442,7 @@ class Position(models.Model):
 
     def vote_blank(self, user): 
         if not user.profile.voted:
-            blank_ticket = Ticket.create_blank_ticket(self)
+            blank_ticket = TicketPref.create_blank_ticket(self)
             self.tickets.add(blank_ticket)
             user.profile.voted = True
             user.profile.save()
@@ -447,19 +450,19 @@ class Position(models.Model):
         return
 
 
-class Election(models.Model): #GOOD?
+class ElectionPref(models.Model): #GOOD?
     # For the entire election
     is_open = models.BooleanField(verbose_name="Er åpent", default=False)
 
     positions = models.ManyToManyField(
-        Position, blank=True, related_name="election", verbose_name="Verv"
+        PositionPref, blank=True, related_name="election_prefvalg", verbose_name="Verv"
     )
 
     current_position = models.ForeignKey(
-        Position,
+        PositionPref,
         blank=True,
         null=True,
-        related_name="current_election",
+        related_name="current_election_prefvalg",
         on_delete=models.DO_NOTHING,
         verbose_name="Vervet som skal stemmes på",
     )
@@ -495,7 +498,7 @@ class Election(models.Model): #GOOD?
     @classmethod
     def create_new_election(cls):
         cls.delete_past_elections()
-        Election.objects.create(is_open=True)
+        ElectionPref.objects.create(is_open=True)
         cls.clear_all_checkins()  # sets all RFID-checkins to False (no one has showed up)
 
     @classmethod
@@ -514,9 +517,9 @@ class Election(models.Model): #GOOD?
         """
         Deletes past elections, positions, tickets and candiates
         """
-        Election.objects.all().delete()
-        Position.objects.all().delete()
-        Ticket.objects.all().delete()
+        ElectionPref.objects.all().delete()
+        PositionPref.objects.all().delete()
+        TicketPref.objects.all().delete()
         CandidatePref.objects.all().delete()
         CandidateRank.objects.all().delete()
 
@@ -543,7 +546,7 @@ class Election(models.Model): #GOOD?
             "position_name", flat=True
         ):
             # hvis vi ikke har lagt til vervet allerede
-            position = Position.objects.create(
+            position = PositionPref.objects.create(
                 position_name=str(position_name), spots=int(spots)
             )
 
@@ -564,7 +567,7 @@ class Election(models.Model): #GOOD?
         return
 
     def start_current_position_voting(self, position_id):
-        position = Position.objects.get(id=position_id)
+        position = PositionPref.objects.get(id=position_id)
         # Find candidates running for current position
         candidates = position.candidates.all()
 
@@ -596,7 +599,7 @@ class Election(models.Model): #GOOD?
         return
 
     def change_current_position(self, pk):
-        new_position = Position.objects.get(pk=pk)
+        new_position = PositionPref.objects.get(pk=pk)
         self.current_position = new_position
         self.save()
         return

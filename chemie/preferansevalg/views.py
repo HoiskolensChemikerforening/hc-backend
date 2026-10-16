@@ -10,14 +10,14 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .forms import CastVoteForm
-from .models import Election, Position
+from .models import ElectionPref, PositionPref
 
 
 @login_required
 def index(request):
     eligible = request.user.profile.eligible_for_voting
     try:
-        election = Election.get_latest_election()
+        election = ElectionPref.get_latest_election()
         voted = request.user.profile.voted
         context = {"election": election, "voted": voted, "eligible": eligible}
     except ObjectDoesNotExist:
@@ -28,7 +28,7 @@ def index(request):
 
 @login_required
 def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
-    if not Election.current_position_is_active():
+    if not ElectionPref.current_position_is_active():
         return redirect("preferansevalg:index")
 
     if not request.user.profile.eligible_for_voting:
@@ -37,7 +37,7 @@ def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
     if request.user.profile.voted:
         return redirect("preferansevalg:index")
 
-    election = Election.get_latest_election()
+    election = ElectionPref.get_latest_election()
     form = CastVoteForm(request.POST or None, election=election)
 
     if request.method == "POST":
@@ -50,7 +50,7 @@ def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
         elif form.is_blank(candidate_list):
             election.current_position.vote_blank(user)
 
-        return redirect("preferansevalg:has_voted")
+        return redirect("preferansevalg:has_voted_pref")
 
     cands = election.current_position.candidates.all().order_by("id")
     context = {
@@ -59,48 +59,48 @@ def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
         "candidates": cands,
     }
 
-    return render(request, "elections/election/vote.html", context)
+    return render(request, "elections/election/vote_pref.html", context)
 
 
 @login_required
 def has_voted(request):
-    if not Election.current_position_is_active():
+    if not ElectionPref.current_position_is_active():
         return redirect("preferansevalg:index")
 
     if not request.user.profile.eligible_for_voting:
         return redirect("preferansevalg:index")
 
     if not request.user.profile.voted:
-        return redirect("preferansevalg:vote")
+        return redirect("preferansevalg:vote_pref")
 
-    return render(request, "elections/election/vote_ended.html")
+    return render(request, "elections/election/vote_ended_pref.html")
 
 
 @login_required
 def view_previous_elections_index(request):
     try:
-        election = Election.get_latest_election()
+        election = ElectionPref.get_latest_election()
         if election.is_open:
-            return redirect("preferansevalg:admin_register_positions")
+            return redirect("preferansevalg:admin_register_positions_pref")
     except ObjectDoesNotExist:
         return redirect("preferansevalg:index")
 
-    elections = Election.objects.filter(
+    elections = ElectionPref.objects.filter(
         date__range=["2019-04-29", "2200-01-01"]
     ).order_by(
         "-date"
     )  # Reason for filtering after 29.04.2019 is because of changes to the old system
     context = {"elections": elections}
     return render(
-        request, "elections/election/previous_election_index.html", context
+        request, "elections/election/previous_election_index_pref.html", context
     )
 
 
 @login_required
 def view_previous_election(request, pk):
-    election = get_object_or_404(Election, pk=pk)
+    election = get_object_or_404(ElectionPref, pk=pk)
     if election.is_open:
-        return redirect("preferansevalg:admin_register_positions")
+        return redirect("preferansevalg:admin_register_positions_pref")
     else:
         positions = election.positions.all()
         n_voters = [
@@ -125,5 +125,5 @@ def view_previous_election(request, pk):
         }
 
         return render(
-            request, "elections/election/previous_election.html", context
+            request, "elections/election/previous_election_pref.html", context
         )

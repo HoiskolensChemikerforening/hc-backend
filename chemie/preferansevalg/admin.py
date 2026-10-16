@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from .models import CandidatePref, Position, Election, Ticket, CandidateRank
+from .models import CandidatePref, PositionPref, ElectionPref, TicketPref, CandidateRank
 
 admin.site.site_title = "Valg"
 
 
-@admin.register(Election)
+@admin.register(ElectionPref)
 class ElectionAdmin(admin.ModelAdmin):
     list_display = ["date", "is_open"]
 
@@ -18,7 +18,7 @@ class CandidateAdmin(admin.ModelAdmin):
         return obj.candidate_position.first().position_name
 
 #TODO: Legg til alt av stuff models gir. Fix models først.
-@admin.register(Position)
+@admin.register(PositionPref)
 class PositionAdmin(admin.ModelAdmin):
     list_display = [
         "position_name",
@@ -46,7 +46,7 @@ class PositionAdmin(admin.ModelAdmin):
     def total_votes(self, obj):
         return str(obj.get_total_votes())
 
-@admin.register(Ticket)
+@admin.register(TicketPref)
 class TicketAdmin(admin.ModelAdmin):
     list_display = ["id", "position", "get_candidates"]
 

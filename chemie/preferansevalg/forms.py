@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from sorl.thumbnail import get_thumbnail
 from django.utils.safestring import mark_safe
-from .models import Position, Election, CandidatePref, CandidateRank
+from .models import PositionPref, ElectionPref, CandidatePref, CandidateRank
 
 
 class AddPositionForm(forms.ModelForm):
@@ -14,7 +14,7 @@ class AddPositionForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Position
+        model = PositionPref
         fields = ("position_name", "spots", "gender", "important_gender")
 
 #TODO check gender check
@@ -29,7 +29,7 @@ class AddCandidateForm(forms.ModelForm): #Legge til gender?
 #TODO sjekk til slutt om tid
 class AddPrevoteForm(forms.ModelForm):
     class Meta:
-        model = Position
+        model = PositionPref
         fields = ["number_of_prevote_tickets"]
 
     def prevotes_allowed(self, formset, position):
@@ -59,7 +59,7 @@ class AddPreVoteToCandidateForm(forms.ModelForm):
 
 class OpenElectionForm(forms.ModelForm):
     class Meta:
-        model = Election
+        model = ElectionPref
         fields = ["is_open"]
 
 
@@ -72,7 +72,7 @@ def candidatesChoices(election=None):
         position = election.current_position
         choices = position.candidates.all()
     except:  # AttributeError:
-        choices = Position.objects.none()
+        choices = PositionPref.objects.none()
     return choices
 
 class CandidateRankForm(forms.ModelForm):
