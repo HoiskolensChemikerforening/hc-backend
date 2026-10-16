@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.utils.safestring import mark_safe
 from sorl.thumbnail import get_thumbnail
 from django.utils.safestring import mark_safe
-from .models import Position, Election, Candidate, CandidateRank
+from .models import Position, Election, CandidatePref, CandidateRank
 
 
 class AddPositionForm(forms.ModelForm):
@@ -18,10 +18,10 @@ class AddPositionForm(forms.ModelForm):
         fields = ("position_name", "spots", "gender", "important_gender")
 
 #TODO check gender check
-class AddCandidateForm(forms.ModelForm): #la til gender under fields #GOOD
+class AddCandidateForm(forms.ModelForm): #Legge til gender?
     class Meta:
-        model = Candidate
-        fields = ("user","gender") 
+        model = CandidatePref
+        fields = ('user','gender',) 
         widgets = {
             "user": autocomplete.ModelSelect2(url="verv:user-autocomplete")
         }
@@ -49,7 +49,7 @@ class AddPrevoteForm(forms.ModelForm):
 #TODO sjekk til slutt elns
 class AddPreVoteToCandidateForm(forms.ModelForm):
     class Meta:
-        model = Candidate
+        model = CandidatePref
         fields = ["pre_votes"]
 
     def __init__(self, *args, **kwargs):

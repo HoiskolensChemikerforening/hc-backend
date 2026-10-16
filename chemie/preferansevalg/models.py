@@ -11,10 +11,10 @@ GENDERS = Choices(
     ("IRRELEVANT", 3, "Irrelevant"),
 )
 
-class Candidate(models.Model): #GOOD
+class CandidatePref(models.Model): #GOOD
     user = models.ForeignKey(
         User,
-        related_name="candidate",
+        related_name="candidate_preferansevalg",
         verbose_name="kandidatens bruker",
         on_delete=models.CASCADE,
     )
@@ -33,6 +33,7 @@ class Candidate(models.Model): #GOOD
     gender = models.CharField(
         choices=GENDERS,
         default="IRRELEVANT",
+        max_length=50,
     )
 
     def __str__(self):
@@ -45,7 +46,7 @@ class Candidate(models.Model): #GOOD
 
 class Ticket(models.Model): 
     candidates = models.ManyToManyField(
-        Candidate,
+        CandidatePref,
         blank=True,
         related_name="tickets",
         verbose_name="Kandidatene som stemmes på",
@@ -78,7 +79,7 @@ class Ticket(models.Model):
 class CandidateRank(models.Model):
     ticket = models.ForeignKey(Ticket, on_delete=models.CASCADE)
     candidate = models.ForeignKey(
-        Candidate, 
+        CandidatePref, 
         on_delete=models.CASCADE, 
         null=True, 
         blank=True,
@@ -133,7 +134,7 @@ class Position(models.Model):
     )
 
     candidates = models.ManyToManyField(
-        Candidate,
+        CandidatePref,
         blank=True,
         related_name="candidate_position",
         verbose_name="Kandidater som stiller",
@@ -157,12 +158,11 @@ class Position(models.Model):
         default=False, verbose_name="Is gender important?",
     )
 
-    important_gender = models.CharField(
-        Choices=GENDERS,
-        default="Irrelevant",
-        verbose_name="The important gender"
+    important_gender = models.PositiveSmallIntegerField(
+        choices=GENDERS,
+        default=GENDERS.IRRELEVANT,
+        verbose_name="The important gender",
     )
-
 
     def __str__(self):
         return self.position_name
@@ -180,11 +180,11 @@ class Position(models.Model):
 
         if to_be_added:
             try:  # checks if user has a image_primary
-                candidate = Candidate.objects.create(
+                candidate = CandidatePref.objects.create(
                     user=user, image_url=user.profile.image_primary.url
                 )
             except ValueError:
-                candidate = Candidate.objects.create(user=user)
+                candidate = CandidatePref.objects.create(user=user)
             self.candidates.add(candidate)
             self.save()
 
@@ -228,6 +228,9 @@ class Position(models.Model):
     
     TODO:
     - Må gjøre at admin viser alle outputs av transform_ticket
+    - prefvalg må hente innsjekka folk fra vanlig valgsiden (henter fra profil?)
+    - Fikse HTML-sidene | Troubleshooting av views & forms
+    - Sjekke at whas_won transferer til å telle opp fra orignalstemmene med vinner kaset ut
     """
     alle_tickets = Ticket.objects.all() #TODO bytt ut alle variable som henter fra ticket (CandidateRank) til å hente fra denne variabelen.
     #transform_ticket skal endre denne gjennom stemmeløpet. 
@@ -242,7 +245,7 @@ class Position(models.Model):
                 blank_votes += 1
         
     def check_has_won(self): #TODO if gender important: do something.
-        for candidate in Candidate.objects.all():
+        for candidate in CandidatePref.objects.all():
             if candidate.votes > self.get_total_candidate_votes()/2:
                 self.alle_tickets = self.transform_tickets(remove_candidate=candidate, sedler=self.alle_tickets)
                 """
@@ -264,10 +267,10 @@ class Position(models.Model):
                 return None
             
     def check_who_has_lost(self):
-        candidate_with_least_votes = Candidate.objects.order_by('votes').first
+        candidate_with_least_votes = CandidatePref.objects.order_by('votes').first
         bad_candidates = []
         multiple = False
-        for candidate in Candidate.objects.all():
+        for candidate in CandidatePref.objects.all():
             if candidate.votes == candidate_with_least_votes.votes:
                 bad_candidates.append(candidate)
                 multiple = True
@@ -285,7 +288,7 @@ class Position(models.Model):
         }
         """
         candidate_vote_per_rank = {}
-        candidates = Candidate.objects.all()
+        candidates = CandidatePref.objects.all()
         antall_ranks = CandidateRank.objects.values("rank").distinct().count()
 
         #legge til alle kandidater i dictionary
@@ -514,7 +517,8 @@ class Election(models.Model): #GOOD?
         Election.objects.all().delete()
         Position.objects.all().delete()
         Ticket.objects.all().delete()
-        Candidate.objects.all().delete()
+        CandidatePref.objects.all().delete()
+        CandidateRank.objects.all().delete()
 
     @classmethod
     def is_redirected(cls):

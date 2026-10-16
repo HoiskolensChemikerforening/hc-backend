@@ -8,7 +8,7 @@ from chemie.customprofile.forms import GetRFIDForm, ManualRFIDForm
 from chemie.customprofile.models import ProfileManager, Profile
 from .forms import AddPositionForm, AddCandidateForm
 from .forms import AddPrevoteForm, AddPreVoteToCandidateForm
-from .models import Election, Position, Candidate
+from .models import Election, Position, CandidatePref
 
 
 @permission_required("elections.add_election")
@@ -19,14 +19,14 @@ def admin_start_election(request):
 
         if election.current_position_is_active():
             return redirect(
-                "elections:admin_voting_active",
+                "preferansevalg:admin_voting_active",
                 pk=election.current_position.id,
             )
-        return redirect("elections:admin_register_positions")
+        return redirect("preferansevalg:admin_register_positions")
 
     if request.method == "POST":  # brukeren trykker på knappen
         Election.create_new_election()
-        return redirect("elections:admin_register_positions")
+        return redirect("preferansevalg:admin_register_positions")
 
     return render(request, "elections/admin/admin_start_election.html")
 
@@ -75,33 +75,53 @@ def admin_delete_position(request):
         position_id = request.POST.get("Delete", "0")
         election = Election.get_latest_election()
         election.delete_position(position_id)
-    return redirect("elections:admin_register_positions")
+    return redirect("preferansevalg:admin_register_positions")
 
 
 @permission_required("elections.add_election")
 @login_required
+
 def admin_register_candidates(request, pk):
     is_redirected, redir_function = Election.is_redirected()
+
     if is_redirected:
-        return redir_function  # Redirect function from Election.is_redirected
+        return redir_function
+
+    position = get_object_or_404(Position, pk=pk)
+
+    if request.method == "POST" and "addCandidate" in request.POST:
+        form = AddCandidateForm(request.POST)
+
+        if form.is_valid():
+            candidate_pref = form.save(commit=False)
+
+            if request.POST.get("woman") == "1":
+                candidate_pref.gender = "Kvinne"
+            else:
+                candidate_pref.gender = "Mann"
+
+            candidate_pref.save()
+            position.add_candidate(candidate_pref.user)
+
+            return redirect(request.path)
+
     else:
-        position = get_object_or_404(Position, pk=pk)
-        add_candidate_form = AddCandidateForm(request.POST or None)
-        if request.method == "POST":
-            if add_candidate_form.is_valid():
-                user = add_candidate_form.cleaned_data["user"]
-                position.add_candidate(user)
+        form = AddCandidateForm()
 
-        candidates = position.candidates.all().order_by("user")
-        context = {
-            "candidates": candidates,
-            "position": position,
-            "add_candidate_form": add_candidate_form,
-        }
+    candidates = position.candidates.all().order_by("user")
 
-        return render(
-            request, "elections/admin/admin_candidates.html", context
-        )
+    context = {
+        "candidates": candidates,
+        "position": position,
+        "add_candidate_form": form,
+    }
+
+    return render(
+        request,
+        "elections/admin/admin_candidates_pref.html",
+        context,
+    )
+
 
 
 @permission_required("elections.add_election")
@@ -125,7 +145,7 @@ def admin_delete_candidate(request, pk):
                     "Pass på at totalt antall forhåndsstemmer er korrekt før du starter valget!",
                     extra_tags="Obs!",
                 )
-    return redirect("elections:admin_register_candidates", pk=pk)
+    return redirect("preferansevalg:admin_register_candidates", pk=pk)
 
 
 @permission_required("elections.add_election")
@@ -139,7 +159,7 @@ def admin_start_voting(request, pk):
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
 
-        return redirect("elections:admin_register_candidates", pk=pk)
+        return redirect("preferansevalg:admin_register_candidates", pk=pk)
 
 
 @permission_required("elections.add_election")
@@ -153,7 +173,7 @@ def admin_acclamation(request, pk):
             election = Election.get_latest_election()
             election.start_current_position_voting(pk)
             election.end_current_position_voting_by_acclamation()
-        return redirect("elections:admin_register_positions")
+        return redirect("preferansevalg:admin_register_positions")
 
 
 @permission_required("elections.add_election")
@@ -170,7 +190,7 @@ def admin_register_prevotes(request, pk):
 
         # Form for adjusting individual candidate's votes
         CandidateFormSet = modelformset_factory(
-            Candidate, form=AddPreVoteToCandidateForm, extra=0
+            CandidatePref, form=AddPreVoteToCandidateForm, extra=0
         )
         formset = CandidateFormSet(
             request.POST or None,
@@ -190,7 +210,7 @@ def admin_register_prevotes(request, pk):
 
                     return redirect(
                         reverse(
-                            "elections:admin_register_candidates",
+                            "preferansevalg:admin_register_candidates",
                             kwargs={"pk": position.id},
                         )
                     )
@@ -214,12 +234,12 @@ def admin_register_prevotes(request, pk):
 @login_required
 def admin_voting_is_active(request, pk):
     if not Election.latest_election_is_open():
-        return redirect("elections:admin_start_election")
+        return redirect("preferansevalg:admin_start_election")
 
     election = Election.get_latest_election()
     if request.method == "POST":
         election.end_current_position_voting()
-        return redirect("elections:admin_results", pk=pk)
+        return redirect("preferansevalg:admin_results", pk=pk)
 
     total_voters = election.current_position.get_number_of_voters()
     checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
@@ -268,13 +288,13 @@ def admin_results(request, pk):
 @login_required
 def admin_end_election(request):
     if Election.objects.all().count() <= 0:
-        return redirect("elections:admin_start_election")
+        return redirect("preferansevalg:admin_start_election")
 
     election = Election.get_latest_election()
     if election.is_open:
         election.end_election()
 
-    return redirect("elections:admin_start_election")
+    return redirect("preferansevalg:admin_start_election")
 
 
 @permission_required("elections.add_election")
@@ -290,7 +310,7 @@ def open_election_for_everyone(request):
         extra_tags="Vellykket!",
     )
 
-    return redirect("elections:admin_register_positions")
+    return redirect("preferansevalg:admin_register_positions")
 
 
 @permission_required("elections.add_election")
@@ -336,7 +356,7 @@ def change_rfid_status(request):
                     extra_tags="Utsjekk",
                 )
 
-        return redirect("elections:checkin")
+        return redirect("preferansevalg:checkin")
     else:
         is_open = Election.latest_election_is_open()
         context = {"form": form, "is_open": is_open}
@@ -383,7 +403,7 @@ def manual_rfid_status(request):
                     "Brukeren finnes ikke.",
                     extra_tags="Advarsel",
                 )
-        return redirect("elections:checkin_manually")
+        return redirect("preferansevalg:checkin_manually")
     else:
         is_open = Election.latest_election_is_open()
         context = {"form": form, "is_open": is_open}

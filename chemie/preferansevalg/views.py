@@ -11,7 +11,6 @@ from rest_framework.views import APIView
 
 from .forms import CastVoteForm
 from .models import Election, Position
-from .serializers import CGPSerializer
 
 
 @login_required
@@ -30,13 +29,13 @@ def index(request):
 @login_required
 def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
     if not Election.current_position_is_active():
-        return redirect("elections:index")
+        return redirect("preferansevalg:index")
 
     if not request.user.profile.eligible_for_voting:
-        return redirect("elections:index")
+        return redirect("preferansevalg:index")
 
     if request.user.profile.voted:
-        return redirect("elections:index")
+        return redirect("preferansevalg:index")
 
     election = Election.get_latest_election()
     form = CastVoteForm(request.POST or None, election=election)
@@ -51,7 +50,7 @@ def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
         elif form.is_blank(candidate_list):
             election.current_position.vote_blank(user)
 
-        return redirect("elections:has_voted")
+        return redirect("preferansevalg:has_voted")
 
     cands = election.current_position.candidates.all().order_by("id")
     context = {
@@ -66,13 +65,13 @@ def vote(request): #TODO den og dens side må endres? Skal ha sliders og sånt
 @login_required
 def has_voted(request):
     if not Election.current_position_is_active():
-        return redirect("elections:index")
+        return redirect("preferansevalg:index")
 
     if not request.user.profile.eligible_for_voting:
-        return redirect("elections:index")
+        return redirect("preferansevalg:index")
 
     if not request.user.profile.voted:
-        return redirect("elections:vote")
+        return redirect("preferansevalg:vote")
 
     return render(request, "elections/election/vote_ended.html")
 
@@ -82,9 +81,9 @@ def view_previous_elections_index(request):
     try:
         election = Election.get_latest_election()
         if election.is_open:
-            return redirect("elections:admin_register_positions")
+            return redirect("preferansevalg:admin_register_positions")
     except ObjectDoesNotExist:
-        return redirect("elections:index")
+        return redirect("preferansevalg:index")
 
     elections = Election.objects.filter(
         date__range=["2019-04-29", "2200-01-01"]
@@ -101,7 +100,7 @@ def view_previous_elections_index(request):
 def view_previous_election(request, pk):
     election = get_object_or_404(Election, pk=pk)
     if election.is_open:
-        return redirect("elections:admin_register_positions")
+        return redirect("preferansevalg:admin_register_positions")
     else:
         positions = election.positions.all()
         n_voters = [

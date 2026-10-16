@@ -15,7 +15,7 @@
   {% if eligible %}
   {% if election.current_position.is_active %}
   {% if not voted %}
-  <a href="{% url "elections:vote" %}" class="btn btn-secondary">Gå til avstemning</a>
+  <a href="{% url "preferansevalg:vote" %}" class="btn btn-secondary">Gå til avstemning</a>
   {% else %}
   <h5 class="card-title">Du har alt stemt, vennligst vent</h5>
   {% endif %}
@@ -36,7 +36,7 @@
   <div class="row">
     <div class="col-md-12">
       <div class="btn-group-sm" id="mini-fab" style="position:fixed !important; right: 29px; bottom:29px">
-        <a href="{% url 'elections:admin_start_election' %}" class="btn btn-info btn-fab" id="admin">
+        <a href="{% url 'preferansevalg:admin_start_election' %}" class="btn btn-info btn-fab" id="admin">
           <i class="material-icons">
             build
           </i>

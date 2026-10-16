@@ -3,7 +3,7 @@ from chemie.committees.views import UserAutocomplete
 from . import views
 from . import views_admin
 
-app_name = "prefvalg"
+app_name = "preferansevalg"
 
 admin_urlpatterns = [
     path(
@@ -81,3 +81,4 @@ user_urlpatterns = [
         name="checkin_manually",
     ),
 ]
+urlpatterns = admin_urlpatterns + user_urlpatterns

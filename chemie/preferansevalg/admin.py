@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Candidate, Position, Election, Ticket, CandidateRank
+from .models import CandidatePref, Position, Election, Ticket, CandidateRank
 
 admin.site.site_title = "Valg"
 
@@ -10,7 +10,7 @@ class ElectionAdmin(admin.ModelAdmin):
     list_display = ["date", "is_open"]
 
 
-@admin.register(Candidate)
+@admin.register(CandidatePref)
 class CandidateAdmin(admin.ModelAdmin):
     list_display = ["user", "get_position", "gender"]
 

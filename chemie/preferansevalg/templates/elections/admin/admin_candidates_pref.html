@@ -12,7 +12,7 @@
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item "><a href="{% url "elections:admin_register_positions" %}"
+    <li class="breadcrumb-item "><a href="{% url "preferansevalg:admin_register_positions" %}"
         style="color:#edcd2f">Admin</a></li>
     <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Registrer kandidater</li>
   </ol>
@@ -33,29 +33,41 @@
   <div>
     {% if candidates %}
     <div style="margin-left:3rem ">
-      <form method="post" action="{% url 'elections:admin_start_voting' pk=position.id %}"
+      <form method="post" action="{% url 'preferansevalg:admin_start_voting' pk=position.id %}"
         onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
         <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
           valget
         </button>
       </form>
-      <form method="post" style="margin-top:1rem" action="{% url 'elections:admin_acclamation' pk=position.id %}"
+      <form method="post" style="margin-top:1rem" action="{% url 'preferansevalg:admin_acclamation' pk=position.id %}"
         onsubmit="return confirm('Skal alle kandidater vinne ved akklamasjon?')">{% csrf_token %}
         <button class="btn btn-success" type="submit" name="akkamation" value="{{ position.id }}" }}>Vinn ved
           akklamasjon
         </button>
       </form>
       <div style="margin-top:1rem">
-        <a href="{% url "elections:admin_register_prevotes" position.id %}">
+        <a href="{% url "preferansevalg:admin_register_prevotes" position.id %}">
           <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
         </a>
       </div>
     </div>
     {% endif %}
     <div style="margin:2rem">
-      <form method="POST" action=""> {% csrf_token %}
+      <form method="POST" action="">
+          {% csrf_token %}
+
         {{ add_candidate_form.user }}
-        <input type="submit" class="btn btn-secondary" name="addCandidate" value="Legg til kandidat" height="10px" />
+        <p>
+            <input type="checkbox" id="woman" name="woman" value="1">
+            <label for="woman">Er kandidaten en kvinne?</label>
+        </p>
+        <input
+            type="submit"
+            class="btn btn-secondary"
+            name="addCandidate"
+            value="Legg til kandidat"
+        >
+
       </form>
       {% if position.is_done %}
       <div class="div-container">
