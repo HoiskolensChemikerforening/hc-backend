@@ -124,7 +124,7 @@ def edit_description(request, slug):
     return render(request, "committees/edit_description.html", context)
 
 
-class UserAutocomplete(autocomplete.Select2QuerySetView):
+class UserAutocomplete(autocomplete.Select2QuerySetView): #Beware of change!
     def get_queryset(self):
         if not self.request.user.is_authenticated:
             return User.objects.none()
@@ -133,9 +133,12 @@ class UserAutocomplete(autocomplete.Select2QuerySetView):
 
         for term in self.q.split():
             qs = qs.filter(
-                Q(first_name__icontains=term) | Q(last_name__icontains=term)
-            ) | qs.filter(username__icontains=self.q)
-        return qs
+                Q(first_name__icontains=term) |
+                Q(last_name__icontains=term) |
+                Q(username__icontains=term)
+            )
+
+        return qs.order_by("last_name", "first_name", "pk")
 
     def get_result_label(self, user):
         return format_html("{}", user.get_full_name())

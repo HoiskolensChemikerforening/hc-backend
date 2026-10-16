@@ -80,7 +80,6 @@ def admin_delete_position(request):
 
 @permission_required("elections.add_election")
 @login_required
-
 def admin_register_candidates(request, pk):
     is_redirected, redir_function = ElectionPref.is_redirected()
 
@@ -93,18 +92,21 @@ def admin_register_candidates(request, pk):
         form = AddCandidateForm(request.POST)
 
         if form.is_valid():
-            candidate_pref = form.save(commit=False)
+            user = form.cleaned_data["user"]
+            gender = form.cleaned_data["gender"]
 
-            if request.POST.get("woman") == "1":
-                candidate_pref.gender = "Kvinne"
-            else:
-                candidate_pref.gender = "Mann"
+            candidate = position.add_candidate(
+                user=user,
+                gender=gender,
+            )
 
-            candidate_pref.save()
-            position.add_candidate(candidate_pref.user)
+            if candidate is not None:
+                return redirect(request.path)
 
-            return redirect(request.path)
-
+            form.add_error(
+                "user",
+                "Brukeren er allerede kandidat til denne posisjonen.",
+            )
     else:
         form = AddCandidateForm()
 
@@ -298,7 +300,7 @@ def admin_end_election(request):
 
 
 @permission_required("elections.add_election")
-def open_election_for_everyone(request):
+def open_election_for_everyone(request): #alt med stemmerett kan hentes fra election
     for profile in Profile.objects.all():
         profile.eligible_for_voting = True
         profile.save()
@@ -310,7 +312,7 @@ def open_election_for_everyone(request):
         extra_tags="Vellykket!",
     )
 
-    return redirect("preferansevalg:admin_register_positions_pref")
+    return redirect("preferansevalg:admin_register_positions")
 
 
 @permission_required("elections.add_election")

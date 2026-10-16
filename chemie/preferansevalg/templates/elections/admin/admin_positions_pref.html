@@ -9,7 +9,7 @@
       inn brukere
     </button>
     <a type="submit" class="btn btn-primary" style="margin-left: 1rem; margin-top:-0.8rem" 
-            id="openElectionForEveryone" href="{% url 'preferansevalg:open_election_for_everyone' %}">
+            id="openElectionForEveryone" href="{% url 'preferansevalg:open_election_for_everyone_pref' %}">
     Åpne valg for alle
     </a>
     <button class="btn btn-danger" style="margin-left: 1rem; margin-top:-0.8rem" id="closeElectionButton">Steng valget
@@ -57,7 +57,7 @@
               </div>
               <div class="ml-auto p-2">
                 <form onsubmit="return submitDelete(this)" method="POST"
-                  action="{% url 'preferansevalg:admin_delete_position' %}" name="{{ position.position_name }}">
+                  action="{% url 'preferansevalg:admin_delete_position_pref' %}" name="{{ position.position_name }}">
                   {% csrf_token %}
                   <button class="btn btn-danger" type="submit" name="Delete" value="{{ position.id }}">Slett
                   </button>
@@ -125,7 +125,7 @@
                 {% endfor %}
               </div>
               <a class="btn btn-secondary ml-auto" style="height:2.5rem"
-                href="{% url 'preferansevalg:admin_results' pk=position.id %}">
+                href="{% url 'preferansevalg:admin_results_pref' pk=position.id %}">
                 Se resultat
               </a>
             </div>
@@ -174,7 +174,7 @@
 <script>
   document.getElementById("closeElectionButton").onclick = function () {
     if (window.confirm('Avslutte valget?')) {
-      location.href = "{% url 'preferansevalg:admin_end_election'%}";
+      location.href = "{% url 'preferansevalg:admin_end_election_pref'%}";
     }
   };
 
@@ -190,7 +190,7 @@
   }
 
   document.getElementById("checkInDirect").onclick = function () {
-    location.href = "{% url 'preferansevalg:checkin'%}";
+    location.href = "{% url 'preferansevalg:checkin_pref'%}";
   };
 
 </script>

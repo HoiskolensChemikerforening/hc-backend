@@ -12,7 +12,7 @@
 {% block breadcrumbs %}
 <nav aria-label="breadcrumb">
   <ol class="breadcrumb" style="background-color:#343a40;border-radius:0rem">
-    <li class="breadcrumb-item "><a href="{% url "preferansevalg:admin_register_positions" %}"
+    <li class="breadcrumb-item "><a href="{% url "preferansevalg:admin_register_positions_pref" %}"
         style="color:#edcd2f">Admin</a></li>
     <li class="breadcrumb-item active" aria-current="page" style="color:#edcd2fb4">Registrer kandidater</li>
   </ol>
@@ -33,20 +33,20 @@
   <div>
     {% if candidates %}
     <div style="margin-left:3rem ">
-      <form method="post" action="{% url 'preferansevalg:admin_start_voting' pk=position.id %}"
+      <form method="post" action="{% url 'preferansevalg:admin_start_voting_pref' pk=position.id %}"
         onsubmit="return confirm('Åpne valget?')">{% csrf_token %}
         <button class="btn btn-success" type="submit" name="startVoting" value="{{ position.id }}" }}>Start
           valget
         </button>
       </form>
-      <form method="post" style="margin-top:1rem" action="{% url 'preferansevalg:admin_acclamation' pk=position.id %}"
+      <form method="post" style="margin-top:1rem" action="{% url 'preferansevalg:admin_acclamation_pref' pk=position.id %}"
         onsubmit="return confirm('Skal alle kandidater vinne ved akklamasjon?')">{% csrf_token %}
         <button class="btn btn-success" type="submit" name="akkamation" value="{{ position.id }}" }}>Vinn ved
           akklamasjon
         </button>
       </form>
       <div style="margin-top:1rem">
-        <a href="{% url "preferansevalg:admin_register_prevotes" position.id %}">
+        <a href="{% url "preferansevalg:admin_register_prevotes_pref" position.id %}">
           <button class="btn btn-secondary">Legg inn forhåndsstemmer</button>
         </a>
       </div>

@@ -32,7 +32,7 @@ class CandidatePref(models.Model): #GOOD
     )
     gender = models.CharField(
         choices=GENDERS,
-        default="IRRELEVANT",
+        default=GENDERS.IRRELEVANT,
         max_length=50,
     )
 
@@ -170,26 +170,28 @@ class PositionPref(models.Model):
     def __str__(self):
         return self.position_name
 
-    def add_candidate(self, user, gender): #gender check here?
-        if gender not in (3, "Irrelevant"):
-            pass
-        
-        position_candidates = self.candidates.all()
-        to_be_added = (
-            False
-            if user in [usr.user for usr in position_candidates]
-            else True
+    def add_candidate(self, user, gender=None):
+        # Ikke legg til samme bruker to ganger i samme posisjon.
+        if self.candidates.filter(user=user).exists():
+            return None
+
+        # Bruk standardverdien dersom kjønn ikke er valgt.
+        if gender is None:
+            gender = GENDERS.IRRELEVANT
+
+        try:
+            image_url = user.profile.image_primary.url
+        except (ValueError, ObjectDoesNotExist, AttributeError):
+            image_url = "/static/images/blank_avatar.png"
+
+        candidate = CandidatePref.objects.create(
+            user=user,
+            gender=gender,
+            image_url=image_url,
         )
 
-        if to_be_added:
-            try:  # checks if user has a image_primary
-                candidate = CandidatePref.objects.create(
-                    user=user, image_url=user.profile.image_primary.url
-                )
-            except ValueError:
-                candidate = CandidatePref.objects.create(user=user)
-            self.candidates.add(candidate)
-            self.save()
+        self.candidates.add(candidate)
+        return candidate
 
     def delete_candidate(self, candidate_username):
         candidate_user_object = User.objects.get(username=candidate_username)
@@ -531,13 +533,13 @@ class ElectionPref(models.Model): #GOOD?
         """
 
         if not cls.latest_election_is_open():
-            return True, redirect("elections:admin_start_election")
+            return True, redirect("preferansevalg:admin_start_election_pref")
         else:
             election = cls.get_latest_election()
 
             if election.current_position_is_active():
                 pk = election.current_position.id
-                return True, redirect("elections:admin_voting_active", pk=pk)
+                return True, redirect("prefereansevalg:admin_voting_active_pref", pk=pk)
 
             return False, None
 
