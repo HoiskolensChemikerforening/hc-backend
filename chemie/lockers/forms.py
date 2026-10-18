@@ -1,6 +1,6 @@
 from django import forms
 from .models import LockerUser
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 import chemie.custommaterial as M
 
 

@@ -1,4 +1,4 @@
-from ckeditor.fields import RichTextField
+from django_prose_editor.fields import ProseEditorField
 from django.contrib.auth.models import Group, User
 from django.core.exceptions import ValidationError
 from django.urls import reverse
@@ -26,9 +26,32 @@ class Committee(models.Model):
     image = ImageField(upload_to="komiteer")
     slug = models.SlugField(null=True, blank=True)
     one_liner = models.CharField(max_length=30, verbose_name="Lynbeskrivelse")
-    description = RichTextField(
-        verbose_name="Beskrivelse", config_name="committees"
-    )
+    description = ProseEditorField(
+        verbose_name="Beskrivelse",
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,     
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
     committee_type = models.PositiveSmallIntegerField(
         choices=Committee_Type.choices,
         default=Committee_Type.COMMITTEE,

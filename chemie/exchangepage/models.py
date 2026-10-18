@@ -6,7 +6,7 @@ from django.core.validators import (
     MinLengthValidator,
     MaxLengthValidator,
 )
-from ckeditor.fields import RichTextField
+from django_prose_editor.fields import ProseEditorField
 
 
 class Travelletter(models.Model):
@@ -50,9 +50,32 @@ class Travelletter(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(10)],
         verbose_name="Arbeidsmengde",
     )
-    destinationInfo = RichTextField(
-        max_length=700, verbose_name="Info om sted", config_name="exchangepage"
-    )
+    destinationInfo = ProseEditorField(
+        verbose_name="Info om sted",
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
 
     def __str__(self):
         return f"{self.user.user.first_name} {self.country}"
@@ -154,7 +177,32 @@ class Experience(models.Model):
     question = models.ForeignKey(
         Questions, on_delete=models.CASCADE, verbose_name="Spørsmål"
     )
-    answer = RichTextField(verbose_name="Svar", config_name="exchangepage")
+    answer = ProseEditorField(
+        verbose_name="Svar", 
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
     travelletter = models.ForeignKey(
         Travelletter, on_delete=models.CASCADE, related_name="experiences"
     )

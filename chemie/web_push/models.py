@@ -5,7 +5,8 @@ from django.contrib.auth.models import User
 from django.core.exceptions import ObjectDoesNotExist
 from push_notifications.models import APNSDevice, GCMDevice
 import datetime
-import pytz
+from zoneinfo import ZoneInfo
+
 
 HC_ICON = "https://chemie.no/static/favicons/android-chrome-192x192.png"
 
@@ -32,7 +33,7 @@ class CoffeeSubmission(models.Model):
         fifteen_minutes = datetime.timedelta(0, 900)
         now = datetime.datetime.now()
         last_coffee_submission_date = (now - fifteen_minutes).replace(
-            tzinfo=pytz.timezone("Europe/Oslo")
+            tzinfo=ZoneInfo("Europe/Oslo")
         )
 
         if CoffeeSubmission.objects.filter(

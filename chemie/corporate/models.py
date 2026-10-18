@@ -1,5 +1,5 @@
 from django.db import models
-from ckeditor.fields import RichTextField
+from django_prose_editor.fields import ProseEditorField
 from sorl.thumbnail import ImageField
 
 
@@ -37,7 +37,32 @@ class PositionType(models.Model):
 
 class Interview(models.Model):
     title = models.CharField(max_length=40, verbose_name="Navn på intervjuet")
-    text = RichTextField(verbose_name="Intervjuet", config_name="forms")
+    text = ProseEditorField(
+        verbose_name="Intervjuet", 
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,   
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
     picture = ImageField(upload_to="corporate", verbose_name="Bilde")
     company_picture = ImageField(
         upload_to="corporate",
@@ -58,9 +83,32 @@ class Interview(models.Model):
 
 class Job(models.Model):
     title = models.CharField(max_length=100, verbose_name="Stilling")
-    description = RichTextField(
-        verbose_name="Beskrivelse", config_name="forms"
-    )
+    description = ProseEditorField(
+        verbose_name="Beskrivelse",
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
     specializations = models.ManyToManyField(
         Specialization, verbose_name="Aktuelle retninger", blank=True
     )

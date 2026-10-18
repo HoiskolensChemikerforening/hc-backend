@@ -1,6 +1,6 @@
 from django.db import models
 
-from ckeditor.fields import RichTextField
+from django_prose_editor.fields import ProseEditorField
 from sorl.thumbnail import ImageField
 from chemie.committees.models import Committee
 from django.core.validators import MaxValueValidator, MinValueValidator
@@ -45,7 +45,32 @@ class RentalObject(models.Model):
     name = models.CharField(
         max_length=100, unique=True, verbose_name="Utleieobjekt"
     )
-    description = RichTextField(verbose_name="Beskrivelse", config_name="news")
+    description = ProseEditorField(
+        verbose_name="Beskrivelse", 
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
     image = ImageField(upload_to="rentalservice", verbose_name="Bilde")
     owner = models.PositiveSmallIntegerField(
         choices=OWNER.choices, verbose_name="Utleier", default=OWNER.NONE

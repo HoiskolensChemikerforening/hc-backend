@@ -4,17 +4,21 @@ from django.core.validators import MinLengthValidator, MinValueValidator
 
 
 # Track the status of a request
+class STATUS(models.IntegerChoices):
+        REJECTED = 1, "Avslått"
+        PENDING = 2, "Under behandling"
+        APPROVED = 3, "Tilbakebetalt"
 
+
+
+        
 class RefundRequest(models.Model):
     """
     The refund request object contains information about the user requesting a
     refund. It is connected to one or more Refund objects (receipts) which contain further information.
     """
 
-    class STATUS(models.IntegerChoices):
-        REJECTED = 1, "Avslått"
-        PENDING = 2, "Under behandling"
-        APPROVED = 3, "Tilbakebetalt"
+    
 
 
 

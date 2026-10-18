@@ -1,7 +1,7 @@
 from .models import Order, Item
 from django.core.exceptions import ObjectDoesNotExist
 import datetime
-import pytz
+
 
 
 def get_bought_items(user):
@@ -54,7 +54,7 @@ def get_plot_item(user, id):
         item = Item.objects.get(id=int(id))
         item_name = item.name
         orders = Order.objects.filter(buyer=user)
-        now = datetime.datetime.now().replace(tzinfo=pytz.UTC)
+        now = datetime.datetime.now(datetime.timezone.utc)
         plot_time = [now.date()]
         plot_quantity = [0]
         for order in orders:

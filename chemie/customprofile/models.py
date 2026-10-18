@@ -26,7 +26,14 @@ class GRADES(models.IntegerChoices):
         DONE = 6, "Ferdig"
 
 
-
+class SPECIALIZATION(models.IntegerChoices):
+        NONE = 1, "Ingen"
+        ANALYTICAL = 2, "Analytisk kjemi"
+        APPLIED = 3, "Anvendt teoretisk kjemi"
+        BIOTECH = 4, "Bioteknologi"
+        MATERIAL = 5, "Materialkjemi og energiteknologi"
+        ORGANICAL = 6, "Organisk kjemi"
+        PROCESS = 7, "Kjemisk prosessteknologi"
     
 
 
@@ -106,14 +113,7 @@ class Medal(models.Model):
 
 class Profile(models.Model):
 
-    class SPECIALIZATION(models.IntegerChoices):
-        NONE = 1, "Ingen"
-        ANALYTICAL = 2, "Analytisk kjemi"
-        APPLIED = 3, "Anvendt teoretisk kjemi"
-        BIOTECH = 4, "Bioteknologi"
-        MATERIAL = 5, "Materialkjemi og energiteknologi"
-        ORGANICAL = 6, "Organisk kjemi"
-        PROCESS = 7, "Kjemisk prosessteknologi"
+    
 
     class RELATIONSHIP_STATUS(models.IntegerChoices):
         SINGLE = 1, "Singel"

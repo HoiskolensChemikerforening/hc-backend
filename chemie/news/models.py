@@ -1,4 +1,4 @@
-from ckeditor.fields import RichTextField
+from django_prose_editor.fields import ProseEditorField
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.db import models
@@ -10,7 +10,32 @@ from sorl.thumbnail import ImageField
 class Article(models.Model):
     title = models.CharField(max_length=100)
     slug = models.SlugField(max_length=100)
-    content = RichTextField(verbose_name="Beskrivelse", config_name="news")
+    content = ProseEditorField(
+        verbose_name="Beskrivelse", 
+        extensions={
+            "Bold": True,
+            "Italic": True,
+            "Underline": True,
+            "Strike": True,
+            "Subscript": True,
+            "Superscript": True,
+            "Heading": {"levels": [1, 2, 3, 4, 5, 6]},
+            "BulletList": True,
+            "OrderedList": True,
+            "ListItem": True,
+            "Blockquote": True,
+            "CodeBlock": True,
+            "Code": True,
+            "Link": True,
+            "Table": True,
+            "TableRow": True,      
+            "TableHeader": True,   
+            "TableCell": True,
+            "HorizontalRule": True,
+            "History": True,  # Undo og Redo-knapper
+        },
+        sanitize=True   # Fjerner W004 og gjør tekstfeltet helt sikkert
+        )
     published_date = models.DateTimeField(auto_now_add=True)
     image = ImageField(upload_to="news", verbose_name="Bilde")
     author = models.ForeignKey(User, on_delete=models.CASCADE)

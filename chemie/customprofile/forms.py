@@ -1,5 +1,5 @@
 import chemie.custommaterial as M
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
 from dal import autocomplete

@@ -87,7 +87,7 @@ class CreateSocialView(
     permission_required = "events.add_social"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": list(GRADES.values.keys())}
+    initial = {"allowed_grades": GRADES.values}
     success_message = "%(name)s was created successfully"
     message_content = (
         messages.SUCCESS,
@@ -118,7 +118,7 @@ class CreateBedpresView(
     permission_required = "events.add_bedpres"
     # TODO: Couple the allowed grades with GRADES enum
     # from customprofile models
-    initial = {"allowed_grades": list(GRADES.values.keys())}
+    initial = {"allowed_grades": GRADES.values}
     message_content = (
         messages.SUCCESS,
         "Arrangementet ble opprettet",

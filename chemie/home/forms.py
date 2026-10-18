@@ -1,8 +1,8 @@
 import chemie.custommaterial as M
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 from django import forms
+from django_prose_editor.widgets import ProseEditorWidget
 from django.contrib.flatpages.models import FlatPage
-from ckeditor.widgets import CKEditorWidget
 from .models import FundsApplication
 from .models import OfficeApplication
 
@@ -62,7 +62,7 @@ class PostOfficeForms(forms.ModelForm):
 
 
 class FlatpageEditForm(forms.ModelForm):
-    content = forms.CharField(widget=CKEditorWidget(config_name="flatpages"))
+    content = forms.CharField(widget=ProseEditorWidget())
 
     class Meta:
         model = FlatPage
