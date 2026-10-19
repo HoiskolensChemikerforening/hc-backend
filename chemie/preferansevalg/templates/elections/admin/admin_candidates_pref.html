@@ -57,10 +57,9 @@
           {% csrf_token %}
 
         {{ add_candidate_form.user }}
-        <p>
-            <input type="checkbox" id="woman" name="woman" value="1">
-            <label for="woman">Er kandidaten en kvinne?</label>
-        </p>
+        <!--{{ add_candidate_form.gender }}-->
+
+
         <input
             type="submit"
             class="btn btn-secondary"

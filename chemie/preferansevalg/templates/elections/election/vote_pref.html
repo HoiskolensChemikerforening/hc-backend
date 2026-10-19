@@ -2,75 +2,150 @@
 {% load thumbnail %}
 {% load static %}
 
-
 {% block content %}
-<h2 style="text-align:center">{{position.spots}} skal velges til {{position}} </h2>
-<form method="POST" onsubmit="return submitVote(this)" class="post-form" href="">{% csrf_token %}
-  <div class="d-flex flex-wrap justify-content-center" style="gap:2rem;">
-  {% for field in form %}
-    {% for value in field %}
-      <label class="btn d-flex flex-column align-items-center justify-content-between text-center shadow-sm"
-             style="padding: 1rem; background-color: #d3d3d3; border-radius: 0.75rem; width: 12rem; height: 16rem;">
-        {{ value }}
-      </label>
-    {% endfor %}
-  {% endfor %}
-  </div>
 
-  <div class="justify-content-center d-flex" style="margin:1rem">
-    <button type="submit" class="btn btn-success">Stem</button>
-  </div>
-  <p style="text-align:center; margin:1rem; font-weight:bold;">For å stemme blankt må du stemme uten å ha valgt noen kandidater</p>
+<h2 style="text-align:center">
+    {{ position.spots }} skal velges til {{ position }}
+</h2>
+
+<form method="POST" onsubmit="return submitVote(this)" class="post-form">
+    {% csrf_token %}
+
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {{ form.non_field_errors }}
+        </div>
+    {% endif %}
+
+    <h4 class="text-center mt-4 mb-3">Kandidater</h4>
+
+    <!-- Kandidatoversikt med profilbilder -->
+    <div class="d-flex flex-wrap justify-content-center"
+         style="gap: 2rem;">
+
+        {% for candidate in form.candidates %}
+            <div class="candidate-card d-flex flex-column align-items-center
+                        justify-content-between text-center shadow-sm"
+                 style="padding: 1rem; background-color: #d3d3d3;
+                        border-radius: 0.75rem; width: 12rem;
+                        min-height: 16rem;">
+
+                {% thumbnail candidate.user.profile.image_primary "200x250" crop="center" quality=85 as thumb %}
+                    <img src="{{ thumb.url }}"
+                         class="class-image p-1 mt-auto"
+                         alt="{{ candidate.user.get_full_name }}"
+                         style="max-width: 100%; max-height: 10rem;
+                                object-fit: cover;">
+                {% empty %}
+                    <img src="{% static 'images/blank_avatar.png' %}"
+                         class="class-image p-1 mt-auto"
+                         alt="Standard profilbilde"
+                         style="max-width: 100%; max-height: 10rem;
+                                object-fit: cover;">
+                {% endthumbnail %}
+
+                <p class="vote-name p-2 mb-0">
+                    {{ candidate.user.get_full_name }}
+                </p>
+            </div>
+        {% empty %}
+            <p>Det finnes ingen kandidater i dette valget.</p>
+        {% endfor %}
+
+    </div>
+
+    <!-- Dynamiske dropdown-menyer for rangering -->
+    <h4 class="text-center mt-5 mb-3">Ranger kandidatene</h4>
+
+    <p class="text-center">
+        Velg kandidatene i prioritert rekkefølge. Førsteplassen er
+        kandidaten du foretrekker mest. Du trenger ikke å rangere alle.
+    </p>
+
+    <div class="mx-auto" style="max-width: 500px;">
+
+        {% for field in form %}
+            {% if field.name != "candidates" %}
+                <div class="mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+
+                    {% for error in field.errors %}
+                        <div class="text-danger">
+                            {{ error }}
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <p class="text-center mt-4">
+        For å stemme blankt lar du alle dropdown-menyene stå på
+        «Velg kandidat».
+    </p>
+
+    <div class="text-center mt-3 mb-4">
+        <button type="submit" class="btn btn-primary">
+            Stem
+        </button>
+    </div>
+
 </form>
 
 {% endblock content %}
 
+
 {% block footer_script %}
-<script type="text/javascript">
-  var checkboxes = document.getElementsByName("candidates");
-  for (var i = 0; i < checkboxes.length; i++) {
-    checkboxes[i].setAttribute("class", "vote-field");
-    checkboxes[i].setAttribute("style", "width:0;opacity:0");
-    checkboxes[i].checked = false
-  }
-  $(document).ready(function (e) {
-    $(".vote-field").click(function () {
-      var divElem = this.parentNode.parentNode;
-      if (this.checked) {
-        divElem.style.backgroundColor = "#28A745"
-      } else {
-        divElem.style.backgroundColor = "lightGray"
-      }
+<script>
+function submitVote(form) {
+    const selects = form.querySelectorAll('select');
+    const selectedCandidates = [];
+    let foundEmpty = false;
 
-    });
-  });
+    for (const select of selects) {
+        if (!select.name.startsWith('candidate_')) {
+            continue;
+        }
 
-  function submitVote(el) {
-    var positionSpots = parseInt("{{position.spots}}");
-    var checkBoxes = document.getElementsByName("candidates");
-    var message = "Du stemmer nå på ";
-    var numberOfCandidates = 0;
-    for (var i = 0; i < checkBoxes.length; i++) {
-      if (checkBoxes[i].checked) {
-        var candidateName = checkBoxes[i].closest("label").querySelector(".vote-name").innerText;
-        message = message.concat("\n");
-        message = message.concat(candidateName.toString());
-        numberOfCandidates++
-      }
+        if (!select.value) {
+            foundEmpty = true;
+            continue;
+        }
+
+        if (foundEmpty) {
+            alert(
+                "Du må rangere kandidatene i rekkefølge fra førsteplass."
+            );
+            return false;
+        }
+
+        const selectedOption = select.options[select.selectedIndex];
+        selectedCandidates.push(selectedOption.text);
     }
-    if (numberOfCandidates <= positionSpots) {
-      if (numberOfCandidates <= 0) {
-        message = "Du stemmer nå BLANK!\nDu har ikke valgt noen kandidater. Dette valget vil si å stemme mot alle kandidatene"
-      }
-      returnVal = confirm(message);
-      if (returnVal) {
-        return true
-      }
+
+    if (new Set(selectedCandidates).size !== selectedCandidates.length) {
+        alert("Du kan ikke velge samme kandidat flere ganger.");
+        return false;
+    }
+
+    let message;
+
+    if (selectedCandidates.length === 0) {
+        message =
+            "Du stemmer nå BLANK!\n" +
+            "Du har ikke valgt noen kandidater. " +
+            "Dette valget vil si å stemme mot alle kandidatene.";
     } else {
-      alert("Du har valgt flere kandidater enn det som er tillatt\nVelg færre kandidater kis")
+        message = "Du stemmer nå på:\n" +
+            selectedCandidates
+                .map((name, index) => `${index + 1}. ${name}`)
+                .join("\n");
     }
-    return false
-  }
-</script>
 
+    return confirm(message);
+}
+</script>
 {% endblock footer_script %}
+```

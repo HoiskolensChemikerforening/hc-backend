@@ -81,23 +81,34 @@ def admin_delete_position(request):
 @permission_required("elections.add_election")
 @login_required
 def admin_register_candidates(request, pk):
+    print("Prøver å registrere bruker")
     is_redirected, redir_function = ElectionPref.is_redirected()
 
     if is_redirected:
+        print("is_redirected")
         return redir_function
 
     position = get_object_or_404(PositionPref, pk=pk)
+    print("Position:", position)
+    print("Prøver å registrere bruker")
 
     if request.method == "POST" and "addCandidate" in request.POST:
         form = AddCandidateForm(request.POST)
 
+        print("POST-data:", request.POST)
+        print("Er skjemaet gyldig?", form.is_valid())
+        print("Skjemafeil:", form.errors.as_data())
+        print("Skjemafeil (lesbart):", form.errors)
+        print("POST user:", request.POST.get("user"))
+        #print("POST gender:", request.POST.get("gender"))
+
         if form.is_valid():
             user = form.cleaned_data["user"]
-            gender = form.cleaned_data["gender"]
+            #gender = form.cleaned_data["gender"]
 
             candidate = position.add_candidate(
                 user=user,
-                gender=gender,
+            #    gender=gender,
             )
 
             if candidate is not None:
@@ -312,7 +323,7 @@ def open_election_for_everyone(request): #alt med stemmerett kan hentes fra elec
         extra_tags="Vellykket!",
     )
 
-    return redirect("preferansevalg:admin_register_positions")
+    return redirect("preferansevalg:admin_register_positions_pref")
 
 
 @permission_required("elections.add_election")

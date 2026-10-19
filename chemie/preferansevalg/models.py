@@ -30,11 +30,13 @@ class CandidatePref(models.Model): #GOOD
     image_url = models.CharField(
         max_length=200, default="/static/images/blank_avatar.png"
     )
+    """
     gender = models.CharField(
         choices=GENDERS,
         default=GENDERS.IRRELEVANT,
         max_length=50,
     )
+    """
 
     def __str__(self):
         return self.user.get_full_name()
@@ -71,12 +73,11 @@ class TicketPref(models.Model):
             )
         return new_ticket
 
-    """
     @classmethod
     def create_blank_ticket(cls, position): #kan fjerne?
         new_ticket = cls.objects.create(is_blank=True, position=position) #om blank er førsteprioritering. For andreprioritering osv, blir det håndtert i views
         return new_ticket
-    """
+
 
 
 class CandidateRank(models.Model):
@@ -156,7 +157,7 @@ class PositionPref(models.Model):
         related_name="seddel_position_prefvalg",
         verbose_name="True stemmeseddel"
     )
-
+    """
     gender = models.BooleanField(
         default=False, verbose_name="Is gender important?",
     )
@@ -167,18 +168,25 @@ class PositionPref(models.Model):
         verbose_name="The important gender",
     )
 
+    Evt gjøre kjønn valgfritt, noe som dette ish:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["gender"].required = False
+    """
+
     def __str__(self):
         return self.position_name
 
-    def add_candidate(self, user, gender=None):
+    def add_candidate(self, user):#  gender=None
         # Ikke legg til samme bruker to ganger i samme posisjon.
         if self.candidates.filter(user=user).exists():
             return None
 
+        """
         # Bruk standardverdien dersom kjønn ikke er valgt.
         if gender is None:
             gender = GENDERS.IRRELEVANT
-
+        """
         try:
             image_url = user.profile.image_primary.url
         except (ValueError, ObjectDoesNotExist, AttributeError):
@@ -186,7 +194,7 @@ class PositionPref(models.Model):
 
         candidate = CandidatePref.objects.create(
             user=user,
-            gender=gender,
+        #    gender=gender,
             image_url=image_url,
         )
 
@@ -539,7 +547,7 @@ class ElectionPref(models.Model): #GOOD?
 
             if election.current_position_is_active():
                 pk = election.current_position.id
-                return True, redirect("prefereansevalg:admin_voting_active_pref", pk=pk)
+                return True, redirect("preferansevalg:admin_voting_active_pref", pk=pk)
 
             return False, None
 

@@ -12,8 +12,9 @@ class ElectionAdmin(admin.ModelAdmin):
 
 @admin.register(CandidatePref)
 class CandidateAdmin(admin.ModelAdmin):
-    list_display = ["user", "get_position", "gender"]
-
+    #list_display = ["user", "get_position", "gender"]
+    list_display = ["user", "get_position"]
+    
     def get_position(self, obj):
         return obj.candidate_position.first().position_name
 
@@ -29,7 +30,7 @@ class PositionAdmin(admin.ModelAdmin):
         "is_active",
         "is_done",
         "get_candidates_votes",
-        "important_gender",
+    #   "important_gender",
     ]
 
     def get_candidates_votes(self, obj):
