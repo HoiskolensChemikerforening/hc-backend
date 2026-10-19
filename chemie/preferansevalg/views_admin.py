@@ -294,7 +294,43 @@ def admin_results(request, pk):
         }
         for kandidat in position.candidates.all()
     ]
-    print("KANDIDATER:", list(position.candidates.all()))
+
+    tickets = position.alle_tickets.all()
+
+    rounds = []
+    round_number = 1
+
+    while tickets.exists():
+        # Tell stemmer for denne runden
+        candidate_results = [
+            {
+                "candidate": kandidat,
+                "votes_by_rank": position.read_votes_by_rank(
+                    kandidat, tickets
+                ),
+            }
+            for kandidat in position.candidates.all()
+        ]
+
+        rounds.append({
+            "round_number": round_number,
+            "candidate_results": candidate_results,
+        })
+
+        # Avslutt dersom en kandidat har vunnet
+        winner = position.check_has_won()
+
+        if winner:
+            break
+
+        # Gå videre til neste opptellingsrunde
+        loser = position.check_who_has_lost()
+        tickets = position.transform_tickets(
+            remove_candidate=loser,
+            sedler=tickets,
+        )
+
+        round_number += 1
 
     context = {
         "position": position,

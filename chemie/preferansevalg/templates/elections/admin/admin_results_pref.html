@@ -179,4 +179,35 @@
         {% endfor %}
     </tbody>
 </table>
+
+
+
+{% for round in rounds %}
+  <h2>Opptellingsrunde {{ round.round_number }}</h2>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Kandidat</th>
+        <th>1. plass</th>
+        <th>2. plass</th>
+        <th>3. plass</th>
+        <th>4. plass</th>
+      </tr>
+    </thead>
+
+    <tbody>
+      {% for result in round.candidate_results %}
+        <tr>
+          <td>{{ result.candidate }}</td>
+
+          {% for votes in result.votes_by_rank %}
+            <td>{{ votes }}</td>
+          {% endfor %}
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endfor %}
+
 {% endblock content %}

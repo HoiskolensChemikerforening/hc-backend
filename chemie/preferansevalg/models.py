@@ -318,7 +318,12 @@ class PositionPref(models.Model):
                 return None
             
     def check_who_has_lost(self):
-        candidate_with_least_votes = CandidatePref.objects.order_by('votes').first
+        candidate_with_least_votes = (
+            CandidatePref.objects
+            .filter(candidate_position=self)
+            .order_by("votes")
+            .first()
+        )
         bad_candidates = []
         multiple = False
         for candidate in CandidatePref.objects.all():
@@ -331,20 +336,13 @@ class PositionPref(models.Model):
             worst = self.check_votes_per_rank(bad_candidates)
             return worst
 
-    def read_orginal_tickets(self): #TODO output vises i admin!
-        """
-            {
-            "Kandidat":[antall stemmer med rank=1, antall stemmer med rank=2, ...],
-            "Kandidat 2":...
-        }
-        """
+    def read_orginal_tickets(self):
         candidate_vote_per_rank = {}
         candidates = CandidatePref.objects.all()
         antall_ranks = CandidateRank.objects.values("rank").distinct().count()
 
-        #legge til alle kandidater i dictionary
         for can in candidates:
-            candidate_vote_per_rank[f"{can}"] = []
+            candidate_vote_per_rank[str(can)] = []
 
             for r in range(1, antall_ranks + 1):
                 opptelling = CandidateRank.objects.filter(
@@ -352,11 +350,48 @@ class PositionPref(models.Model):
                     candidate=can,
                 ).count()
 
-                candidate_vote_per_rank[f"{can}"].append(opptelling)
+                candidate_vote_per_rank[str(can)].append(opptelling)
 
-            return candidate_vote_per_rank
+        return candidate_vote_per_rank
 
     def check_votes_per_rank(self, kandidater_to_check): #sjekker ved stemmerlikhet
+        opptelling = self.read_orginal_tickets()
+
+        # Fjern duplikater og behold kandidatobjektene
+        kandidater = list({
+            kandidat.pk: kandidat
+            for kandidat in kandidater_to_check
+        }.values())
+
+        rank_check = 1
+
+        while kandidater:
+            votes = [
+                opptelling[str(kandidat)][rank_check - 1]
+                for kandidat in kandidater
+            ]
+
+            lowest_vote_amount = min(votes)
+
+            # Behold bare kandidatene med færrest stemmer på denne rangen
+            kandidater = [
+                kandidat
+                for kandidat, antall in zip(kandidater, votes)
+                if antall == lowest_vote_amount
+            ]
+
+            if len(kandidater) == 1:
+                return kandidater[0]
+
+            rank_check += 1
+
+            # Ingen flere ranger å undersøke
+            if rank_check > len(next(iter(opptelling.values()))):
+                return kandidater[0]
+
+        return None
+        
+        """
         opptelling = self.read_orginal_tickets() #en dictionary
         kandidater = [k for k in kandidater_to_check]
         #laveste_antall = min(opptelling.values())
@@ -373,7 +408,7 @@ class PositionPref(models.Model):
             else: #return den verste kandidaten
                 the_worst = [i for i in kandidater if opptelling[i][rank_check-1] == lowest_vote_amount]
                 return the_worst[0] #TODO sjekk om denne returnerer et Candidate object!
-            
+        """   
     def transform_tickets(self,remove_candidate, sedler):
         nye_tickets = []
 
@@ -401,7 +436,20 @@ class PositionPref(models.Model):
         return TicketPref.objects.filter(
             id__in=[ticket.id for ticket in nye_tickets]
         )
-    
+
+    def read_votes_by_rank(self, kandidat, tickets):
+        antall_ranks = CandidateRank.objects.filter(
+            ticket__in=tickets
+        ).values("rank").distinct().count()
+
+        return [
+            CandidateRank.objects.filter(
+                ticket__in=tickets,
+                candidate=kandidat,
+                rank=r,
+            ).count()
+            for r in range(1, antall_ranks + 1)
+        ]
 
 
     def get_total_candidate_ticket_votes(self): #Må endres
