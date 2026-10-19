@@ -124,7 +124,7 @@ class CastVoteForm(forms.Form):
         for rank in range(1, self.candidates.count() + 1):
             self.fields[f"candidate_{rank}"] = forms.ModelChoiceField(
                 queryset=self.candidates,
-                label=f"{rank}. plass",
+                label=f"{rank}.",
                 empty_label="Velg kandidat",
                 required=False,
                 widget=forms.Select(
@@ -157,7 +157,7 @@ class CastVoteForm(forms.Form):
             raise forms.ValidationError(
                 "Du kan ikke velge samme kandidat flere ganger."
             )
-        
+
         """
         # Eventuell begrensning på antall rangeringer
         max_ranks = self.election.current_position.spots

@@ -284,6 +284,18 @@ def admin_results(request, pk):
     number_of_tickets = position.get_number_of_tickets()
     checkin_count = Profile.objects.filter(eligible_for_voting=True).count()
     total_voters = election.current_position.get_number_of_voters()
+    #first_time_tickets = position.alle_tickets #queryset?
+    
+    original_tickets = position.read_orginal_tickets() #liste
+    candidate_results = [
+        {
+            "candidate": kandidat,
+            "votes_by_rank": kandidat.get_votes_by_rank_for_Candidate(position),
+        }
+        for kandidat in position.candidates.all()
+    ]
+    print("KANDIDATER:", list(position.candidates.all()))
+
     context = {
         "position": position,
         "candidates": position.candidates.all(),
@@ -293,6 +305,8 @@ def admin_results(request, pk):
         "number_of_tickets": number_of_tickets,
         "checkin_count": checkin_count,
         "total_voters": total_voters,
+        "candidate_results": candidate_results,
+        "original_tickets":original_tickets,
     }
     return render(request, "elections/admin/admin_results_pref.html", context)
 

@@ -157,4 +157,26 @@
   </div>
 </div>
 
+<table class="table">
+    <thead>
+        <tr>
+            <th>Kandidat</th>
+            <th>Stemmer per prioritet</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for result in candidate_results %}
+            <tr>
+                <td>{{ result.candidate.user.get_full_name }}</td>
+                <td>{{ result.votes_by_rank }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="2">
+                    Ingen kandidatresultater funnet.
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 {% endblock content %}

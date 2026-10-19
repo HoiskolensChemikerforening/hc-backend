@@ -44,6 +44,36 @@ class CandidatePref(models.Model): #GOOD
     def get_candidate_votes(self):
         return self.votes + self.pre_votes
 
+    def get_votes_by_rank_for_Candidate(self, position): 
+        """
+        returnerer en liste, f.eks. [2,4,3] 
+        som tilsier at kandidaten var; 
+        førsteprioritet på 2 stemmesedler
+        andreprioritet på 4 stemmesedler
+        tredjeprioritet på 3 stemmesedler
+
+        denne funksjonen ble lagt i ettertid for å håndtere views_admin / admin_results_pref.html lettere
+        """
+        votes_by_rank = {}
+
+        entries = CandidateRank.objects.filter(
+            candidate=self,
+            ticket__position=position,
+        )
+
+        for entry in entries:
+            votes_by_rank[entry.rank] = (
+                votes_by_rank.get(entry.rank, 0) + 1
+            )
+
+        if not votes_by_rank:
+            return []
+
+        return [
+            votes_by_rank.get(rank, 0)
+            for rank in range(1, max(votes_by_rank) + 1)
+        ]
+
 
 
 class TicketPref(models.Model): 
@@ -65,7 +95,7 @@ class TicketPref(models.Model):
     @classmethod
     def create_ticket(cls, voted_candidates, position):
         new_ticket = cls.objects.create(position=position)
-        for candidate, rank in voted_candidates.items():
+        for rank, candidate in enumerate(voted_candidates, start=1):
             CandidateRank.objects.create(
                 ticket=new_ticket,
                 candidate=candidate,
@@ -74,8 +104,15 @@ class TicketPref(models.Model):
         return new_ticket
 
     @classmethod
-    def create_blank_ticket(cls, position): #kan fjerne?
-        new_ticket = cls.objects.create(is_blank=True, position=position) #om blank er førsteprioritering. For andreprioritering osv, blir det håndtert i views
+    def create_blank_ticket(cls, position):
+        new_ticket = cls.objects.create(position=position)
+
+        CandidateRank.objects.create(
+            ticket=new_ticket,
+            candidate=None,
+            rank=1,
+        )
+
         return new_ticket
 
 
@@ -223,8 +260,9 @@ class PositionPref(models.Model):
         return count
 
     def get_non_blank_votes(self):
-        non_blank_tickets = self.tickets.filter(is_blank=False)
-        return non_blank_tickets.count()
+        return self.tickets.filter(
+            candidates__isnull=False
+        ).distinct().count()
 
     def get_number_of_tickets(self):
         return self.tickets.count()
@@ -371,11 +409,11 @@ class PositionPref(models.Model):
         """
         Sjekker førsteindex i hver stemmeseddel
         """
-        candidate_votes = 0
-        non_blank_tickets = self.tickets.filter(is_blank=False)
-        for ticket in non_blank_tickets:
-            candidate_votes += ticket.candidates.count()
-        return candidate_votes
+        return CandidateRank.objects.filter( #Henter kun tickets er hele seddelen er tom
+            ticket__in=self.tickets.all(),
+            candidate__isnull=False,
+            rank=1,
+        ).count()
 
     def get_total_candidate_prevotes(self): #Se over
         # Total votes received on candidates in the form of prevotes (not tickets)
@@ -391,51 +429,59 @@ class PositionPref(models.Model):
             + self.get_total_candidate_ticket_votes()
         )
 
-    def get_blank_votes(self): #Endre
-        # Number of tickets that are blank (not voted for any candidates)
-        blank_tickets = self.tickets.filter(is_blank=True)
-        number_of_blank = 0
-
-        for ticket in blank_tickets:
-            if ticket.candidates.all().count() == 0:
-                number_of_blank += 1
-
-        if (
-            blank_tickets.count() != number_of_blank
-        ):  # TODO: hvordan vil vi sjekke error
-            raise ValueError
-        return number_of_blank
+    def get_blank_votes(self):
+        return CandidateRank.objects.filter(
+            ticket__in=self.tickets.all(),
+            candidate__isnull=True,
+            rank=1,
+        ).count()
 
     def calculate_candidate_votes(self,): #ÆÆÆÆÆÆ
         # TODO Validate this fucker with tests
         # Go over all tickets and assign votes to each candidate
-        tickets = self.tickets.exclude(is_blank=True).all()
+        #tickets = self.tickets.exclude(is_blank=True).all()
+        tickets = self.tickets.all()
         candidates = self.candidates.all()
 
         for candidate in candidates:
             candidate.votes = 0
             candidate.save()
 
-        for candidate in candidates:
-            for ticket in tickets:
-                if candidate in ticket.candidates.all():
-                    candidate.votes += 1
-            candidate.save()
+        for ticket in tickets:
+            first_choice = (
+                CandidateRank.objects
+                .filter(ticket=ticket, rank=1)
+                .first()
+            )
 
-    def get_total_votes(self): #se på
+            if first_choice and first_choice.candidate:
+                candidate = first_choice.candidate
+                candidate.votes += 1
+                candidate.save()
+
+    def get_total_votes(self):
         # Total votes on candidates AND blank votes
         tickets = self.tickets.all()
         total_votes = 0
+
         candidates = self.candidates.all()
 
         for candidate in candidates:
             total_votes += candidate.pre_votes
 
         for ticket in tickets:
-            if ticket.is_blank:
+            first_choice = CandidateRank.objects.filter(
+                ticket=ticket,
+                rank=1
+            ).first()
+
+            if first_choice is None or first_choice.candidate is None:
+                # Blank stemme
                 total_votes += 1
             else:
-                total_votes += ticket.candidates.all().count()
+                # Stemme på en kandidat
+                total_votes += 1
+
         return total_votes
 
     def vote(self, candidates, user): #sjekk om bruker har stemt
