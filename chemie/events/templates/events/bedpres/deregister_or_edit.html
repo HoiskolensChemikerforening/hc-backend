@@ -1,6 +1,6 @@
 {% extends "events/bedpres/bedpres_base.html" %}
 {% load staticfiles %}
-{% load material_form %}
+{% load chemie_forms %}
 
 {% block nav_sub_header %}
   Påmelding
@@ -44,7 +44,7 @@
       <!-- Edit registration form -->
       {% if forms.deregister %}
         <form class="deregister" method="POST">{% csrf_token %}
-          {% form form=forms.deregister %}{% endform %}
+          {% render_form form=forms.deregister %}
           <button name='action' value='deregister' type="submit"
                   class="waves-effect waves-light btn btn-primary red">Meld meg av
           </button>

@@ -1,5 +1,5 @@
 {% extends "events/social/social_base.html" %}
-{% load material_form %}
+{% load chemie_forms %}
 {% load staticfiles %}
 {% load static %}
 
@@ -64,7 +64,7 @@
           <button name='action' value='deregister' type="submit"
                   class="waves-effect waves-light btn btn-primary red" style="margin: 0 20px 20px 0;">Meld meg av
           </button>
-          {% form form=forms.deregister %}{% endform %}
+          {% render_form form=forms.deregister %}
       </div>
       </form>
       {% else %}

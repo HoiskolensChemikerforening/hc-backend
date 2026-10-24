@@ -181,6 +181,17 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 class RegisterBedpresForm(BaseRegisterEventForm):
 
+
+    layout = [
+            [("published", 6), ("tentative", 6)],
+            [("title", 12)],
+            [("date", 3), ("register_startdate", 3),("register_deadline", 3), ("deregister_deadline", 3)],
+            [("location", 12)],
+            [("description", 12)],
+            [("image", 6),("sluts", 6)],
+            [ ("allowed_grades", 8)],
+        ]
+
     class Meta(BaseRegisterEventForm.Meta):
         model = Bedpres
         fields = BaseRegisterEventForm.Meta.fields.copy()

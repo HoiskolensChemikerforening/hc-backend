@@ -1,6 +1,6 @@
 {% extends "chemie/base.html" %}
 {% load static %}
-{% load material_form %}
+{% load chemie_forms %}
 
 {% block header %}
 
@@ -38,9 +38,10 @@
     {% endif %}
     <form method='POST' id="registration">{% csrf_token %}
 
-      {% form form=registration_form %}
+      {% render_form form=registration_form %}
+      
 
-      {% endform %}
+      
 
       <!-- Checks if committee "Industrikomiteen" is the one in charge of the event, regardless of event type -->
       {% if event.committee.title == "Industrikomiteen" or event.get_model_type == "bedpres" %}

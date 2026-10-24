@@ -1,12 +1,12 @@
 {% extends "chemie/base.html" %}
 
-{% load material_form %}
+{% load chemie_forms %}
 
 
 {% block content %}
       <form method='POST'>{% csrf_token %}
-      {% form form=form %}
-      {% endform %}
+      {% render_form form=form %}
+      
 
       <button class="waves-effect waves-light btn btn-primary" name="check-em" type="submit">Send</button>
       </form>
