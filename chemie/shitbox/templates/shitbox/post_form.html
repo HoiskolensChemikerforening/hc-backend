@@ -1,5 +1,4 @@
 {% extends "chemie/base.html" %}
-{% load material_form %}
 
 {% block nav_header %}
   Sladreboksen
@@ -35,8 +34,7 @@
       </p>
 
       <form method="POST" enctype="multipart/form-data">{% csrf_token %}
-        {% form form=form %}
-        {% endform %}
+        {{form.as_p}}
         <input class="btn" type='submit' value='Send inn sladder!'/>
       </form>
     </div>
