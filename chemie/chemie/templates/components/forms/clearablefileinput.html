@@ -1,0 +1,18 @@
+
+<div class="input-field file-field col s12{% if bound_field.field.required %} required{% endif %}{% if bound_field.errors %} has-error{% endif %}"
+        id="{{ bound_field.auto_id }}_container">
+
+    <div class="btn">
+        <span>Fil</span>
+        {{ bound_field }}
+    </div>
+
+    <div class="file-path-wrapper">
+        <input class="file-path" type="text" placeholder="{{ bound_field.label }}">
+    </div>
+
+    {% for error in bound_field.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
+
+</div>

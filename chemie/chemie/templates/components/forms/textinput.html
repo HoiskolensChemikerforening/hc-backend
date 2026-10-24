@@ -1,0 +1,10 @@
+<div class="input-field">
+    {{ bound_field }}
+
+    <label for="{{ bound_field.id_for_label }}"
+           {% if field.value %}class="active"{% endif %}>
+        {{ bound_field.label }}
+    </label>
+
+    {{ bound_field.errors }}
+</div>

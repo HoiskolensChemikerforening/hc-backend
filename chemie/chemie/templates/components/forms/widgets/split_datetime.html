@@ -1,0 +1,23 @@
+{% for subwidget in widget.subwidgets %}
+    <div class="row">
+        <div class="input-field col s12{% if widget.required %} required{% endif %}"
+             style="margin-top:-7px"
+             {% if forloop.first %}id="{{ widget.attrs.id }}_container"{% endif %}>
+
+            {% if forloop.first %}
+                <i class="material-icons prefix">insert_invitation</i>
+            {% else %}
+                <i class="material-icons prefix">query_builder</i>
+            {% endif %}
+
+            {% include subwidget.template_name with widget=subwidget %}
+
+            {% if forloop.first %}
+                <label for="{{ subwidget.attrs.id }}"
+                       {% if subwidget.value %}class="active"{% endif %}>
+                    {{ widget.label }}
+                </label>
+            {% endif %}
+        </div>
+    </div>
+{% endfor %}

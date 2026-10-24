@@ -1,0 +1,13 @@
+<div class="checkbox-field col s12{% if bound_field.field.required %} required{% endif %}{% if bound_field.errors %} has-error{% endif %}"
+     id="{{ bound_field.auto_id }}_container">
+
+    <label>
+        {{ bound_field }}
+        <span>{{ bound_field.label }}</span>
+    </label>
+
+    {% for error in bound_field.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
+
+</div>

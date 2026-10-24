@@ -1,0 +1,47 @@
+
+
+{% load chemie_forms %}
+
+{% if form.non_field_errors %}
+    <div class="form-errors">
+        {% for error in form.non_field_errors %}
+            <small class="error">{{ error }}</small>
+        {% endfor %}
+    </div>
+{% endif %}
+
+{% for hidden in form.hidden_fields %}
+    {{ hidden }}
+{% endfor %}
+
+{% for bound_field in form.visible_fields %}
+    {% with type=bound_field|widget_type %}
+        {% if type == "TextInput" %}
+            {% include "components/forms/textinput.html" %}
+        {% elif type == "Textarea" %}
+            {% include "components/forms/textarea.html" %}
+        {% elif type == "NumberInput" %}
+            {% include "components/forms/numberinput.html" %}
+        {% elif type == "ClearableFileInput" %}
+            {% include "components/forms/clearablefileinput.html" %}
+        {% elif type == "CheckboxInput" %}
+            {% include "components/forms/checkboxinput.html" %}
+        {% elif type == "CheckboxSelectMultiple" %}
+            {% include "components/forms/checkboxselectmultiple.html" %}
+        {% elif type == "SplitDateTimeWidget" %}
+            {% include "components/forms/splitdatetimewidget.html" %}
+        {% elif type == "Select" %}
+            {% include "components/forms/select.html" %}
+
+        
+
+        {% else %}
+            Error missing {{type}}
+        {% endif %}
+    
+        
+        
+    {% endwith %}
+{% endfor %}
+
+

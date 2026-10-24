@@ -1,0 +1,22 @@
+<div class="row">
+    <div class="input-field col s12{% if field.field.required %} required{% endif %}{% if field.errors %} has-error{% endif %}">
+
+        {{ bound_field }}
+
+        <label for="{{ bound_field.id_for_label }}"
+               {% if bound_field.value %}class="active"{% endif %}>
+            {{ bound_field.label }}
+        </label>
+
+        {% if bound_field.help_text %}
+            <span class="helper-text">{{ bound_field.help_text }}</span>
+        {% endif %}
+
+        {% for error in bound_field.errors %}
+            <span class="helper-text red-text">{{ error }}</span>
+        {% endfor %}
+
+    </div>
+</div>
+
+

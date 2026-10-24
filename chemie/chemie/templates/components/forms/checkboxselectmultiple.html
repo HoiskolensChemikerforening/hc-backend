@@ -1,0 +1,20 @@
+<div class="row">
+    <div class="col s12">
+        <label>{{ bound_field.label }}</label>
+
+        <div class="col l12" id="{{ bound_field.auto_id }}">
+            {% for choice in bound_field %}
+                <div class="checkbox">
+                    <label>
+                        {{ choice.tag }}
+                        <span>{{ choice.choice_label }}</span>
+                    </label>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% for error in bound_field.errors %}
+            <span class="helper-text red-text">{{ error }}</span>
+        {% endfor %}
+    </div>
+</div>

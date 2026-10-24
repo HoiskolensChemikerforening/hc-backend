@@ -1,5 +1,6 @@
 {% extends "events/social/social_base.html" %}
-{% load material_form %}
+
+{% load chemie_forms %}
 
 {% block nav_sub_header %}
   Opprett
@@ -22,13 +23,14 @@
 {# Main block #}
 {% block maincontent %}
 
+{% render_form form=form %}
+
 <p class="flow-text">Her lager du de beste arrangementene på Gløs!</p>
 <div class="card">
   <form method="POST" enctype="multipart/form-data">{% csrf_token %}
     <div class="card-content">
-      {% form form=form %}
-      {% endform %}
-
+      {{form.as_p}}
+      {{form.media}}
       <div class="card-action">
         <div class="right-align">
           <input class="btn btn-primary pull-right" type='submit' value='Lagre arrangementet!'/>

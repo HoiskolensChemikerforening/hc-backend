@@ -1,4 +1,4 @@
-import material as M
+
 from dal import autocomplete
 from django import forms
 from django.core.validators import ValidationError
@@ -11,6 +11,8 @@ from .models import (
     BedpresRegistration,
     BaseEvent,
 )
+
+from chemie.chemie.widgets import MaterializeSplitDateTimeWidget
 
 
 class BaseRegisterEventForm(forms.ModelForm):
@@ -130,26 +132,19 @@ class BaseRegisterEventForm(forms.ModelForm):
             "deregister_deadline": forms.SplitDateTimeField,
         }
 
+        widgets = {
+            name: MaterializeSplitDateTimeWidget()
+            for name in (
+                "date",
+                "register_startdate",
+                "register_deadline",
+                "deregister_deadline",
+            )
+}
+
 
 class RegisterEventForm(BaseRegisterEventForm):
-    layout = M.Layout(
-        M.Row(M.Column("published"), M.Column("tentative")),
-        M.Row("title"),
-        M.Row("committee"),
-        M.Row(
-            M.Column("date", span_columns=1),
-            M.Column("register_startdate", span_columns=1),
-            M.Column("register_deadline", span_columns=1),
-            M.Column("deregister_deadline", span_columns=1),
-        ),
-        M.Row("location"),
-        M.Row("description"),
-        M.Row("payment_information"),
-        M.Row(M.Column("image"), M.Column("sluts")),
-        M.Row("price_member", "price_not_member", "price_companion"),
-        M.Row("companion", "sleepover", "night_snack", "smallroom", "check_in"),
-        M.Row("allowed_grades"),
-    )
+    
 
     class Meta(BaseRegisterEventForm.Meta):
         model = Social
@@ -169,20 +164,6 @@ class RegisterEventForm(BaseRegisterEventForm):
 
 
 class RegisterBedpresForm(BaseRegisterEventForm):
-    layout = M.Layout(
-        M.Row(M.Column("published"), M.Column("tentative")),
-        M.Row("title"),
-        M.Row(
-            M.Column("date", span_columns=1),
-            M.Column("register_startdate", span_columns=1),
-            M.Column("register_deadline", span_columns=1),
-            M.Column("deregister_deadline", span_columns=1),
-        ),
-        M.Row("location"),
-        M.Row("description"),
-        M.Row(M.Column("image"), M.Column("sluts")),
-        M.Row("allowed_grades"),
-    )
 
     class Meta(BaseRegisterEventForm.Meta):
         model = Bedpres
