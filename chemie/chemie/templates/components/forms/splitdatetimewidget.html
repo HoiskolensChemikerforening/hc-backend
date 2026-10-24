@@ -1,3 +1,5 @@
+<div class="row">
+    <div class="input-field col s12{% if field.field.required %} required{% endif %}{% if field.errors %} has-error{% endif %}">
 
 
 {{ bound_field }}
@@ -6,3 +8,6 @@
 {% for error in bound_field.errors %}
     <span class="helper-text red-text">{{ error }}</span>
 {% endfor %}
+
+</div>
+</div>

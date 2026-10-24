@@ -6,5 +6,9 @@
         {{ bound_field.label }}
     </label>
 
-    {{ bound_field.errors }}
+    {% for error in bound_field.errors %}
+    <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
+
+
 </div>

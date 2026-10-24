@@ -23,14 +23,13 @@
 {# Main block #}
 {% block maincontent %}
 
-{% render_form form=form %}
+
 
 <p class="flow-text">Her lager du de beste arrangementene på Gløs!</p>
 <div class="card">
-  <form method="POST" enctype="multipart/form-data">{% csrf_token %}
+  <form method="POST" enctype="multipart/form-data" novalidate>{% csrf_token %}
     <div class="card-content">
-      {{form.as_p}}
-      {{form.media}}
+      {% render_form form=form %}
       <div class="card-action">
         <div class="right-align">
           <input class="btn btn-primary pull-right" type='submit' value='Lagre arrangementet!'/>

@@ -14,34 +14,26 @@
     {{ hidden }}
 {% endfor %}
 
-{% for bound_field in form.visible_fields %}
-    {% with type=bound_field|widget_type %}
-        {% if type == "TextInput" %}
-            {% include "components/forms/textinput.html" %}
-        {% elif type == "Textarea" %}
-            {% include "components/forms/textarea.html" %}
-        {% elif type == "NumberInput" %}
-            {% include "components/forms/numberinput.html" %}
-        {% elif type == "ClearableFileInput" %}
-            {% include "components/forms/clearablefileinput.html" %}
-        {% elif type == "CheckboxInput" %}
-            {% include "components/forms/checkboxinput.html" %}
-        {% elif type == "CheckboxSelectMultiple" %}
-            {% include "components/forms/checkboxselectmultiple.html" %}
-        {% elif type == "SplitDateTimeWidget" %}
-            {% include "components/forms/splitdatetimewidget.html" %}
-        {% elif type == "Select" %}
-            {% include "components/forms/select.html" %}
+{% if form.layout %}
 
-        
+    {% for row in form.layout %}
+        <div class="row">
+            {% for field_name, width in row %}
+                <div class="col s12 m{{ width }}">
+                    {% with bound_field=form|get_field:field_name %}
+                        {% include "components/forms/field.html" %}
+                    {% endwith %}
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 
-        {% else %}
-            Error missing {{type}}
-        {% endif %}
-    
-        
-        
-    {% endwith %}
-{% endfor %}
+{% else %}
+
+    {% for bound_field in form.visible_fields %}
+        {% include "components/forms/field.html" %}
+    {% endfor %}
+
+{% endif %}
 
 

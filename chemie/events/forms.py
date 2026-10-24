@@ -104,6 +104,8 @@ class BaseRegisterEventForm(forms.ModelForm):
                 ),
             )
 
+
+
     class Meta:
         abstract = True
         model = BaseEvent
@@ -144,6 +146,20 @@ class BaseRegisterEventForm(forms.ModelForm):
 
 
 class RegisterEventForm(BaseRegisterEventForm):
+    layout = [
+        [("published", 6), ("tentative", 6)],
+        [("title", 12)],
+        [("committee", 12)],
+        [("date", 3), ("register_startdate", 3),("register_deadline", 3), ("deregister_deadline", 3)],
+        [("location", 12)],
+        [("description", 12)],
+        [("payment_information", 12)],
+        [("image", 6),("sluts", 6)],
+        [("price_member", 4),("price_not_member", 4),("price_companion", 4)],
+        [("companion", 3),("sleepover", 3),("night_snack", 3),("check_in", 3)],
+        [ ("allowed_grades", 8)],
+    ]
+
     
 
     class Meta(BaseRegisterEventForm.Meta):

@@ -6,6 +6,21 @@ register = template.Library()
 @register.filter
 def widget_type(bound_field):
     widget = bound_field.field.widget
+    
+  
+    if bound_field.errors:
+        if isinstance(widget, forms.MultiWidget):
+            widgets = widget.widgets
+        else:
+            widgets = [widget]
+
+        for w in widgets:
+            classes = w.attrs.get("class", "").split()
+
+            if "invalid" not in classes:
+                classes.append("invalid")
+
+            w.attrs["class"] = " ".join(classes)
 
     if isinstance(widget, forms.Textarea):
         classes = widget.attrs.get("class", "").split()
@@ -30,3 +45,7 @@ def widget_type(bound_field):
 @register.inclusion_tag("components/forms/form.html")
 def render_form(form):
     return {"form": form}
+
+@register.filter
+def get_field(form, name):
+    return form[name]
