@@ -60,7 +60,6 @@ THIRD_PARTY_APPS = [
     "dal_select2",
     "captcha",
     "sorl.thumbnail",
-    "material",
     "post_office",
     "wiki",
     "django_nyt",
