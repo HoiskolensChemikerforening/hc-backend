@@ -80,6 +80,7 @@ THIRD_PARTY_APPS = [
     "push_notifications",
     "crispy_forms",
     "corsheaders",
+    "crispy_bootstrap5"
 ]
 
 LOCAL_APPS = [
@@ -111,7 +112,8 @@ LOCAL_APPS = [
 INSTALLED_APPS = DJANGO_APPS + LOCAL_APPS + THIRD_PARTY_APPS
 
 # For bootstrap crispy forms
-CRISPY_TEMPLATE_PACK = "bootstrap4"
+CRISPY_TEMPLATE_PACK = "bootstrap5"
+CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
 
 # MIDDLEWARE CONFIGURATION
 # ------------------------------------------------------------------------------

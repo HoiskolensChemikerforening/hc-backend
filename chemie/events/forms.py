@@ -91,6 +91,7 @@ class BaseRegisterEventForm(forms.ModelForm):
             return grades
         except (ValueError, KeyError):
             self.add_error(
+                
                 None,
                 ValidationError(
                     {

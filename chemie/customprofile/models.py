@@ -18,23 +18,23 @@ VALID_TIME = 2
 # TODO: Decide how to handle weird students aka "PI" / 6th ++ year students
 
 class GRADES(models.IntegerChoices):
-        FIRST = 1, "Første"
-        SECOND = 2, "Andre"
-        THIRD = 3, "Tredje"
-        FOURTH = 4, "Fjerde"
-        FIFTH = 5, "Femte"
-        DONE = 6, "Ferdig"
+    FIRST = 1, "Første"
+    SECOND = 2, "Andre"
+    THIRD = 3, "Tredje"
+    FOURTH = 4, "Fjerde"
+    FIFTH = 5, "Femte"
+    DONE = 6, "Ferdig"
 
 
 class SPECIALIZATION(models.IntegerChoices):
-        NONE = 1, "Ingen"
-        ANALYTICAL = 2, "Analytisk kjemi"
-        APPLIED = 3, "Anvendt teoretisk kjemi"
-        BIOTECH = 4, "Bioteknologi"
-        MATERIAL = 5, "Materialkjemi og energiteknologi"
-        ORGANICAL = 6, "Organisk kjemi"
-        PROCESS = 7, "Kjemisk prosessteknologi"
-    
+    NONE = 1, "Ingen"
+    ANALYTICAL = 2, "Analytisk kjemi"
+    APPLIED = 3, "Anvendt teoretisk kjemi"
+    BIOTECH = 4, "Bioteknologi"
+    MATERIAL = 5, "Materialkjemi og energiteknologi"
+    ORGANICAL = 6, "Organisk kjemi"
+    PROCESS = 7, "Kjemisk prosessteknologi"
+
 
 
 MEMBERSHIP_DURATIONS = [

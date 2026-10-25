@@ -2,7 +2,7 @@
 psycopg2==2.9.10
 
 # Core Django & API (Oppgradert for å fjerne pkg_resources feil)
-Django==5.1.6
+Django==5.2
 djangorestframework>=3.15.2
 djangorestframework-simplejwt>=5.3.1
 django-cors-headers>=4.0.0
@@ -15,6 +15,7 @@ django-crispy-forms>=2.0
 django-sekizai>=4.1.0
 django-smart-selects>=1.7.2
 django-simple-captcha>=0.7.0
+crispy-bootstrap5
 
 # Utils
 django-crontab==0.7.1

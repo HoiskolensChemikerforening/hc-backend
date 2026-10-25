@@ -349,12 +349,12 @@ def yearbook(request, year=1, spec=1):
 
     context = {
         "profiles": profiles,
-        "grades": GRADES,
+        "grades": GRADES.choices,
         "search_form": form,
         "grade": year,
         "endYearForm": endYearForm,
         "end_years": end_years,
-        "spec": SPECIALIZATION,
+        "spec": SPECIALIZATION.choices,
     }
 
     return render(request, "customprofile/yearbook.html", context)
