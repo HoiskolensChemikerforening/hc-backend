@@ -1,5 +1,5 @@
 {% extends "chemie/base.html" %}
-{% load material_form %}
+{% load chemie_forms %}
 {% block nav_header %}
   Bruker
 {% endblock nav_header %}
@@ -19,16 +19,14 @@
         <form id='login-form' method='POST'>
           {% csrf_token %}
           <div class="card-content">
-            {% form form=form %}
-            {% endform %}
+            {% render_form form=form %}
           </div>
           {% if show_popup %}
               <div>
                 <div class="card-content">
                   {% include "registration/terms_and_conditions.html" %}
                   <div style="float: left; clear:none; margin-right: 3px">
-                    {% form form=termsform %}
-                    {% endform %}
+                    {% render_form form=termsform %}
                   </div>
                   <div style="font-size: 15px; padding-top: 1.2px">
                     <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>

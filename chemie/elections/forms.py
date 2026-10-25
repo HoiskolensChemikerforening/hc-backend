@@ -1,4 +1,4 @@
-import material as M
+
 from dal import autocomplete
 from django import forms
 from django.core.exceptions import ValidationError
@@ -9,9 +9,6 @@ from .models import Position, Election, Candidate
 
 
 class AddPositionForm(forms.ModelForm):
-    layout = M.Layout(
-        M.Row(M.Column("Navn på verv"), M.Column("Antall plasser"))
-    )
 
     class Meta:
         model = Position

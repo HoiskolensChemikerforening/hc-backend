@@ -1,5 +1,5 @@
 {% extends 'chemie/base.html' %}
-{% load material_form %}
+{% load chemie_forms %}
 
 {% block nav_header %}
   Quiz
@@ -17,8 +17,7 @@
   </div>
 
   <form method="POST">{% csrf_token %}
-    {% form form=form %}
-    {% endform %}
+    {% render_form form=form %}
     <input class="btn btn-primary" type='submit' value='Opprett Quiz!'/>
   </form>
 {% endblock %}

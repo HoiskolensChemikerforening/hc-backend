@@ -1,5 +1,13 @@
+{% load chemie_forms %}
+
+{% with icon=bound_field|field_icon %}
+
 <div class="row">
+    
     <div class="input-field col s12{% if field.field.required %} required{% endif %}{% if field.errors %} has-error{% endif %}">
+        {% if icon %}
+            <i class="material-icons prefix">{{ icon }}</i>
+        {% endif %}
 
         {{ bound_field }}
 
@@ -18,5 +26,7 @@
 
     </div>
 </div>
+
+{% endwith %}
 
 

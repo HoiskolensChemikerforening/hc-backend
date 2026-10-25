@@ -1,5 +1,5 @@
 {% extends 'chemie/base.html' %}
-{% load material_form %}
+{% load chemie_forms %}
 
 {% block nav_header %}
   Bokskap
@@ -9,7 +9,7 @@
   Glemt skap
 {% endblock nav_sub_header %}
 
-{% load material_form %}
+
 
 {% block content %}
   <div class="row">
@@ -25,8 +25,7 @@
             </div>
             <div class="row">
               <div class="col s12 m12 l12">
-                {% form form=form %}
-                {% endform %}
+                {% render_form form=form %}
               </div>
             </div>
             <input class="btn" type='submit' value='Send!'/>

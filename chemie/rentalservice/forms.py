@@ -1,5 +1,4 @@
 from django import forms
-import material as M
 from .models import RentalObject, RentalObjectType, Invoice
 from django.core.exceptions import ValidationError
 
@@ -34,15 +33,17 @@ class CreateRentalObjectForm(RentalObjectForm):
     new_type_name = forms.CharField(
         max_length=100, required=False, label="Ny produkttype"
     )
+    description = forms.CharField(widget=forms.Textarea,label="Beskrivelse",required=True)
 
-    layout = M.Layout(
-        M.Row("name"),
-        M.Row("description"),
-        # M.Row("price", "quantity"),
-        # M.Row("is_new_type"),
-        # M.Row("type", "new_type_name"),
-        M.Row("image"),
-    )
+    layout = [
+            [("name",12)],
+            [("description",12)],
+            #[("price",6),("quantity",6)],
+            #[("is_new_type",12)],
+            #[("type",6),("new_type_name",6)],
+            [("image",12)]
+            ]
+
 
     # def clean(self):
     #    self.cleaned_data["is_new_type"] = bool(int(self.data["is_new_type"]))
@@ -69,12 +70,14 @@ class CreateRentalObjectForm(RentalObjectForm):
 
 
 class InvoiceForm(forms.ModelForm):
-    layout = M.Layout(
-        M.Row("event"),
-        M.Row("client"),
-        M.Row("client_mail"),
-        M.Row("client_phone_nr"),
-    )
+    layout = [
+                [("event",12)],
+                [("client",12)],
+                [("client_mail",12)],
+                [("client_phone_nr",12)]
+                ]
+    
+
 
     class Meta:
         model = Invoice
@@ -82,7 +85,6 @@ class InvoiceForm(forms.ModelForm):
 
 
 class TypeForm(forms.ModelForm):
-    layout = M.Layout(M.Row("type"))
 
     class Meta:
         model = RentalObjectType

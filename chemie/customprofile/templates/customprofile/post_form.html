@@ -1,4 +1,4 @@
-{% load material_form %}
+{% load chemie_forms %}
 
 
 {% block content %}
@@ -6,11 +6,7 @@
     <p class="flow-text">Registering plz</p>
     <form method="POST" class="viewform">{% csrf_token %}
 
-      {% form %}
-        {% part form.username prefix %}<i class="mdi-action-account-box prefix"></i>{% endpart %}
-        {% part form.email prefix %}<i class="mdi-communication-email prefix"></i>{% endpart %}
-        {% part form.password prefix %}<i class="mdi-action-lock-open prefix"></i>{% endpart %}
-      {% endform %}
+      {% render_form form=form %}
 
       <button type="submit" name="_submit" class="btn btn-primary btn-lg">Submit</button>
     </form>

@@ -1,5 +1,5 @@
 {% extends "chemie/base.html" %}
-{% load material_form %}
+{% load chemie_forms %}
 {% block nav_header %}
 Kontortilgang
 {% endblock nav_header %}
@@ -39,13 +39,12 @@ Send søknad
             </p>
             <form method="POST" enctype="multipart/form-data">{% csrf_token %}
                 <div class="card-content">
-                    {% form form=office_form %}
-                    {% endform %}
+                    {% render_form form=office_form %}
+                    
                 </div>
                 <div class="card-content">
                     <div style="float: left; clear:none; margin-right: 3px">
-                        {% form form=approved_terms_form %}
-                        {% endform %}
+                        {% render_form form=approved_terms_form %}
                     </div>
                     {% include "home/office_terms_modal.html" %}
                     <div style="font-size: 15px; padding-top: 1.2px">

@@ -36,6 +36,14 @@ def widget_type(bound_field):
             classes.append("filled-in")
         widget.attrs["class"] = " ".join(classes)
 
+    if isinstance(widget, forms.RadioSelect):
+        classes = widget.attrs.get("class", "").split()
+
+        if "with-gap" not in classes:
+            classes.append("with-gap")
+
+        widget.attrs["class"] = " ".join(classes)
+
     if isinstance(widget, forms.SplitDateTimeWidget):
         widget.field_label = bound_field.label
         return "SplitDateTimeWidget"
@@ -49,3 +57,8 @@ def render_form(form):
 @register.filter
 def get_field(form, name):
     return form[name]
+
+@register.filter
+def field_icon(bound_field):
+    icons = getattr(bound_field.form, "field_icons", {})
+    return icons.get(bound_field.name, "")

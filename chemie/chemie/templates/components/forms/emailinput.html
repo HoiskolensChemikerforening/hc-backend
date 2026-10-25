@@ -1,0 +1,26 @@
+{% load chemie_forms %}
+
+{% with icon=bound_field|field_icon %}
+
+<div class="input-field">
+    {% if icon %}
+            <i class="material-icons prefix">{{ icon }}</i>
+    {% endif %}
+
+    {{ bound_field }}
+
+    <label for="{{ bound_field.id_for_label }}"
+            {% if bound_field.value %}class="active"{% endif %}>
+        {{ bound_field.label }}
+    </label>
+
+    {% if bound_field.help_text %}
+        <span class="helper-text">{{ bound_field.help_text }}</span>
+    {% endif %}
+
+    {% for error in bound_field.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
+
+</div>
+{% endwith %}

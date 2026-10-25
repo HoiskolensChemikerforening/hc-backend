@@ -17,8 +17,16 @@
             {% include "components/forms/splitdatetimewidget.html" %}
         {% elif type == "Select" %}
             {% include "components/forms/select.html" %}
-
-        
+        {% elif type == "RadioSelect" %}
+            {% include "components/forms/radioselect.html" %}
+        {% elif type == "EmailInput" %}
+            {% include "components/forms/emailinput.html" %}
+        {% elif type == "PasswordInput" %}
+            {% include "components/forms/textinput.html" %}
+        {% elif type == "SelectMultiple" %}
+            {% include "components/forms/select.html" %}
+        {% elif type == "ReCaptcha" %}
+            {% include "components/forms/recaptcha.html" %}
 
         {% else %}
             Error missing {{type}}

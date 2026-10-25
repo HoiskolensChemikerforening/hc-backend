@@ -1,4 +1,4 @@
-import material as M
+
 from captcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.flatpages.models import FlatPage
@@ -8,11 +8,18 @@ from .models import OfficeApplication
 
 
 class ContactForm(forms.Form):
-    layout = M.Layout(
-        M.Row("contact_name", "contact_email"),
-        M.Row("content"),
-        M.Row("captcha"),
-    )
+    layout = [
+                [("contact_name", 6), ("contact_email", 6)],
+                [("content", 12)],
+                [("captcha", 12)]
+            ]
+
+    field_icons = {
+            "contact_name": "account_circle",
+            "contact_email": "contact_mail",
+            "content": "message"
+        }
+
     captcha = ReCaptchaField()
     contact_name = forms.CharField(required=False, label="Navn")
     contact_email = forms.EmailField(required=False, label="E-post")
@@ -22,12 +29,22 @@ class ContactForm(forms.Form):
 
 
 class PostFundsForm(forms.ModelForm):
-    layout = M.Layout(
-        M.Row("applier", "bank_account_holder"),
-        M.Row("price_range", "bank_account_id"),
-        M.Row("purpose"),
-        M.Row("description"),
-    )
+    layout = [
+                [("applier", 6), ("bank_account_holder", 6)],
+                [("price_range", 6), ("bank_account_id", 6)],
+                [("purpose", 12)],
+                [("description", 12)]
+            ]
+
+    field_icons = {
+        "applier": "recent_actors",
+        "bank_account_holder": "assignment_ind",
+        "price_range": "shopping_cart",
+        "bank_account_id": "play_for_work",
+        "purpose": "label",
+        "description": "description",
+    }
+
 
     class Meta:
         model = FundsApplication

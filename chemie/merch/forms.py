@@ -1,7 +1,6 @@
 from dataclasses import fields
 from django import forms
 from .models import Merch, MerchCategory
-import material as M
 from dal import autocomplete
 
 
@@ -17,13 +16,14 @@ class MerchForm(forms.ModelForm):
         widget=autocomplete.ModelSelect2(url="merch:category-autocomplete"),
     )
 
-    layout = M.Layout(
-        M.Row("name"),
-        M.Row("price"),
-        M.Row("image"),
-        M.Row("info"),
-        M.Row("category"),
-    )
+    layout = [
+        [("name", 12)],
+        [("price", 12)],
+        [("image", 12)],
+        [("info", 12)],
+        [("category", 12)]
+    ]
+    
 
     class Meta:
         model = Merch
@@ -31,7 +31,6 @@ class MerchForm(forms.ModelForm):
 
 
 class MerchCategoryForm(forms.ModelForm):
-    layout = M.Layout(M.Row("name"))
 
     class Meta:
         model = MerchCategory
@@ -43,7 +42,7 @@ class SortingForm(forms.Form):
         super(SortingForm, self).__init__(*args, **kwargs)
         self.fields["category"].widget.attrs["style"] = "width:100%;"
 
-    layout = M.Layout(M.Row("category"))
+    
     category = forms.ModelChoiceField(
         queryset=MerchCategory.objects.all(),
         widget=autocomplete.ModelSelect2(url="merch:category-autocomplete"),

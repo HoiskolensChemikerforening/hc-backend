@@ -1,4 +1,4 @@
-import material as M
+
 from captcha.fields import ReCaptchaField
 from crispy_forms.helper import FormHelper
 from crispy_forms.layout import Layout
@@ -22,12 +22,18 @@ class RegisterUserForm(forms.ModelForm):
         widget=forms.PasswordInput, label="Gjenta passord"
     )
 
-    layout = M.Layout(
-        M.Row("first_name", "last_name"),
-        M.Row("email"),
-        M.Row("username"),
-        M.Row("password", "password_confirm"),
-    )
+    layout = [
+        [("first_name",6), ("last_name",6)],
+        [("email",12)],
+        [("username",12)],
+        [("password",6), ("password_confirm",6)],
+    ]
+
+    field_icons = {
+            "first_name": "account_circle",
+            "last_name": "account_circle",
+            "email": "contact_mail"
+        }
 
     class Meta:
         model = User
@@ -66,16 +72,25 @@ class RegisterUserForm(forms.ModelForm):
 
 class RegisterProfileForm(forms.ModelForm):
     #    registration_key = forms.CharField(max_length=40, required=True)
-    layout = M.Layout(
-        M.Row("grade"),
-        M.Row("start_year", "end_year"),
-        M.Row("specialization"),
-        M.Row("address"),
-        M.Row("access_card"),
-        M.Row("phone_number"),
-        M.Row("allergies", "relationship_status"),
-        M.Row("image_primary", "image_secondary"),
-    )
+
+
+    layout = [
+            [("grade",12)],
+            [("start_year",6), ("end_year",6)],
+            [("specialization",12)],
+            [("address",12)],
+            [("access_card",12)],
+            [("phone_number",12)],
+            [("allergies",6), ("relationship_status",6)],
+            [("image_primary",6), ("image_secondary",6)],
+        ]
+
+    field_icons = {
+                "address": "home",
+                "access_card": "credit_card",
+                "phone_number": "contact_phone",
+                "allergies": "error_outline"
+            }
 
     # M.Row('registration_key'),)
 
@@ -112,7 +127,17 @@ class RegisterProfileForm(forms.ModelForm):
 
 
 class EditUserForm(forms.ModelForm):
-    layout = M.Layout(M.Row("first_name", "last_name"), M.Row("email"))
+    field_icons = {
+        "first_name": "account_circle",
+        "last_name": "account_circle",
+        "email": "contact_mail"
+    }
+
+    layout = [
+            
+            [("first_name",6),("last_name",6)],
+            [("email",12)],
+        ] 
 
     class Meta:
         model = User
@@ -120,15 +145,23 @@ class EditUserForm(forms.ModelForm):
 
 
 class EditProfileForm(forms.ModelForm):
-    layout = M.Layout(
-        M.Row("start_year", "end_year"),
-        M.Row("address"),
-        M.Row("specialization"),
-        M.Row("access_card"),
-        M.Row("phone_number"),
-        M.Row("allergies", "relationship_status"),
-        M.Row("medals"),
-    )
+
+    field_icons = {
+            "address": "home",
+            "access_card": "credit_card",
+            "phone_number": "contact_phone",
+            "allergies": "error_outline"
+        }
+
+    layout = [
+        [("start_year",6), ("end_year",6)],
+        [("address",12)],
+        [("specialization",12)],
+        [("access_card",12)],
+        [("phone_number",12)],
+        [("allergies",6), ("relationship_status",6)],
+        [("medals",12)],
+    ]
 
     class Meta:
         model = Profile
@@ -172,9 +205,10 @@ class ChangePasswordForm(forms.ModelForm):
     password_new_confirm = forms.CharField(
         widget=forms.PasswordInput, label="Confirm new password"
     )
-    layout = M.Layout(
-        M.Row("password"), M.Row("password_new", "password_new_confirm")
-    )
+    layout = [
+        [("password",12)],
+        [("password_new",6),("password_new_confirm",6)],
+    ] 
 
     class Meta:
         model = User
@@ -222,7 +256,6 @@ class ChangePasswordForm(forms.ModelForm):
 class ForgotPassword(forms.ModelForm):
     email = forms.CharField(widget=forms.EmailInput, label="E-post")
     captcha = ReCaptchaField()
-    layout = M.Layout(M.Row("email"), M.Row("captcha"))
 
     class Meta:
         model = User
@@ -236,7 +269,6 @@ class SetNewPassword(forms.ModelForm):
     password_new_confirm = forms.CharField(
         widget=forms.PasswordInput, label="Bekreft nytt passord"
     )
-    layout = M.Layout(M.Row("password_new"), M.Row("password_new_confirm"))
 
     class Meta:
         model = User

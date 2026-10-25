@@ -2,7 +2,7 @@
 {% block nav_header %}
   Aktiver bokskap
 {% endblock nav_header %}
-{% load material_form %}
+{% load chemie_forms %}
 
 
 {% block content %}
@@ -21,8 +21,7 @@
             </div>
             <div class="row">
               <div class="col s12 m12 l12">
-                {% form form=form %}
-                {% endform %}
+                {% render_form form=form %}
               </div>
             </div>
             <input class="btn" type='submit' value='Bekreft'/>

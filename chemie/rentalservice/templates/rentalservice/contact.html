@@ -1,7 +1,7 @@
 {% extends "chemie/base.html" %}
 
 {% load staticfiles %}
-{% load material_form %}
+{% load chemie_forms %}
 
 {% block nav_header %}
   Utstyr til leie
@@ -28,13 +28,7 @@
             Oppgi en gyldig epostadresse for at {{ rentalobject.owner }} kan kontakte deg tilbake.
           </p>
           <form method='POST'>{% csrf_token %}
-            {% form form=contact_form %}
-              {% part contact_form.contact_name prefix %}<i class="material-icons prefix">account_circle</i>
-              {% endpart %}
-              {% part contact_form.contact_email prefix %}<i class="material-icons prefix">contact_mail</i>
-              {% endpart %}
-              {% part contact_form.content prefix %}<i class="material-icons prefix">message</i>{% endpart %}
-            {% endform %}
+            {% render_form form=contact_form %}
             <button type="submit" name="submit" class="btn">Submit</button>
           </form>
         </div>

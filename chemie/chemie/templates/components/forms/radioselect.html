@@ -1,0 +1,26 @@
+{% load chemie_forms %}
+
+{% with icon=bound_field|field_icon %}
+
+<div class="radio-field{% if bound_field.errors %} has-error{% endif %}">
+
+    {% if icon %}
+            <i class="material-icons prefix">{{ icon }}</i>
+    {% endif %}
+    <label>{{ bound_field.label }}</label>
+
+    {% for choice in bound_field %}
+        <p>
+            <label>
+                {{ choice.tag }}
+                <span>{{ choice.choice_label }}</span>
+            </label>
+        </p>
+    {% endfor %}
+
+    {% for error in bound_field.errors %}
+        <span class="helper-text red-text">{{ error }}</span>
+    {% endfor %}
+</div>
+
+{% endwith %}

@@ -8,7 +8,7 @@
   Reservasjon
 {% endblock nav_sub_header %}
 
-{% load material_form %}
+{% load chemie_forms %}
 {% block content %}
 {% load static %}
 
@@ -43,14 +43,7 @@
         <div class="card">
           <div class="card-content">
             <form method='POST'>{% csrf_token %}
-              {% form %}
-                {% part form.first_name prefix %}<i class="material-icons prefix">account_circle</i>
-                {% endpart %}
-                {% part form.last_name prefix %}<i class="material-icons prefix">account_circle</i>
-                {% endpart %}
-                {% part form.email prefix %}<i class="material-icons prefix">email</i>{% endpart %}
-                {% part form.agree_to_terms prefix %}{% endpart %}
-              {% endform %}
+              {% render_form form=form%}
               <div class="row">
                 {{ form.captcha }}
               </div>
@@ -62,3 +55,5 @@
     </div>
   </div>
 {% endblock content %}
+
+

@@ -1,5 +1,5 @@
 {% extends "chemie/base.html" %}
-{% load material_form %}
+{% load chemie_forms %}
 {% block nav_header %}
   Bruker
 {% endblock nav_header %}
@@ -20,35 +20,16 @@
         <div class="card">
           <form method='POST' enctype="multipart/form-data">{% csrf_token %}
             <div class="card-content">
-              {% form form=user_core_form %}
-                {% part user_core_form.first_name prefix %}
-                  <i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part user_core_form.last_name prefix %}
-                  <i class="material-icons prefix">account_circle</i>{% endpart %}
-                {% part user_core_form.email prefix %}<i class="material-icons prefix">contact_mail</i>
-                {% endpart %}
-                
-              {% endform %}
+              {% render_form form=user_core_form %}
 
 
-              {% form form=user_profile_form %}
-                {% part user_profile_form.address prefix %}<i class="material-icons prefix">home</i>
-                
-                {% endpart %}
-                {% part user_profile_form.access_card prefix %}
-                  <i class="material-icons prefix">credit_card</i>{% endpart %}
-                {% part user_profile_form.phone_number prefix %}
-                  <i class="material-icons prefix">contact_phone</i>{% endpart %}
-                {% part user_profile_form.allergies prefix %}
-                  <i class="material-icons prefix">error_outline</i>{% endpart %}
-              {% endform %}
+              {% render_form form=user_profile_form %}
 
 
               <div class="card-content">
                 {% include "registration/terms_and_conditions.html" %}
                 <div style="float: left; clear:none; margin-right: 3px">
-                  {% form form=approved_terms_form %}
-                  {% endform %}
+                  {% render_form form=approved_terms_form %}
                 </div>
                 <div style="font-size: 15px; padding-top: 1.2px">
                   <a class="modal-trigger" href="#terms_modal"> Vilkår og Betingelsene</a>
