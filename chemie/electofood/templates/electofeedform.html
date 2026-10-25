@@ -23,7 +23,7 @@
     {% for question in questions %}
         <div id="card-{{ forloop.counter }}" class="card" {% if  forloop.counter != 1 %} style="visibility: hidden; width: 0; height: 0; margin: 0" {% endif %}>
             <div class="card-body cardstyle">
-            <div class="secondary-title">Medlemsmøte med valg høst 2023 {% if committee %}({{ committee }}){% endif %}</div>
+            <div class="secondary-title">Medlemsmøte med valg høst 2026 {% if committee %}({{ committee }}){% endif %}</div>
                 <div class="question">{{ question}}</div>
         <div class="radio-container alternativesform">
         {% for value in values %}
