@@ -31,7 +31,6 @@ RELATIONSHIP_STATUS = Choices(
     ("TAKEN", 2, "Opptatt"),
     ("NSA", 3, "Hemmelig!"),
     ("HC", 4, "HC forhold"),
-    ("NABLA", 5, "Nabla forhold")
 )
 
 MEMBERSHIP_DURATIONS = [
