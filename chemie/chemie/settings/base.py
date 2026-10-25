@@ -60,7 +60,7 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     "dal",
     "dal_select2",
-    "captcha",
+    "django_recaptcha",
     "sorl.thumbnail",
     "post_office",
     "wiki",
@@ -74,7 +74,6 @@ THIRD_PARTY_APPS = [
     "rest_framework.authtoken",
     "smart_selects",
     "ckeditor",
-    "django_extensions",
     "push_notifications",
     "crispy_forms",
     "corsheaders",

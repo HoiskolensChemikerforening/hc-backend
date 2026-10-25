@@ -1,5 +1,5 @@
 
-from captcha.fields import ReCaptchaField
+from django_recaptcha.fields import ReCaptchaField
 from django import forms
 from django.contrib.flatpages.models import FlatPage
 from ckeditor.widgets import CKEditorWidget

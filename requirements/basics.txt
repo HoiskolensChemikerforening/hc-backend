@@ -1,0 +1,33 @@
+Django==5.2.18
+psycopg2
+
+# Features
+django-post-office
+django-push-notifications
+wiki
+django-extended-choices # Remove
+setuptools<81  # Required by django-extended-choices (pkg_resources)
+
+#Security 
+django-environ
+django-recaptcha
+
+# Style
+django-ckeditor # Remove why use rich text in those cases, just maintanance
+django-crispy-forms # Remove 
+django-smart-selects # Remove only 1 migration depends on it
+django-autocomplete-light
+
+# Tests
+pytest
+pytest-django
+freezegun
+
+# Ny nettside
+django-cors-headers
+djangorestframework
+djangorestframework-simplejwt
+
+
+# Crap to be removed
+pytz #in shop

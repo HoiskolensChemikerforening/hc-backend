@@ -80,7 +80,7 @@ django-js-asset==3.0.1
     #   django-mptt
 django-markdown2==0.3.1
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
-django-material==1.11.3
+#django-material==1.11.3
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
 django-model-utils==3.1.2
     # via -r D:\User\Dokumenter\Webkom\BackendUpgradeDjango\hc-backend\requirements\base.in
