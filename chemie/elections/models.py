@@ -76,12 +76,11 @@ class Ticket(models.Model):
         return new_ticket
 
     @classmethod
-    def create_blank_ticket(cls, position): #gir en tom liste "[]"
+    def create_blank_ticket(cls, position):
         new_ticket = cls.objects.create(is_blank=True, position=position)
         return new_ticket
 
 
-    
 class Position(models.Model):
     position_name = models.CharField(
         max_length=100, verbose_name="Navn på verv"
