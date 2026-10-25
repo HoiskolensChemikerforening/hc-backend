@@ -3,7 +3,7 @@ from uuid import uuid4
 from datetime import timedelta
 from django.utils import timezone
 from django.core.exceptions import ValidationError
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from django.urls import reverse
 from .validators import validate_NTNU
 

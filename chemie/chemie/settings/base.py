@@ -23,6 +23,8 @@ ALLOWED_HOSTS = ["*"]
 
 SHELL_PLUS = "ipython"
 
+DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'
+
 # MANAGER CONFIGURATION
 # ------------------------------------------------------------------------------
 # ADMINS is a list of recipients which errors are sent to, see link below
@@ -122,6 +124,11 @@ MIDDLEWARE = [
 ]
 
 
+# Depreciated this line exists only until sorl.thumbnails resolves the issue.
+# The DEFAULT_FILE_STORAGE can be deleated afterwards
+DEFAULT_FILE_STORAGE = "django.core.files.storage.FileSystemStorage"
+
+
 # TEMPLATE CONFIGURATION
 # ------------------------------------------------------------------------------
 TEMPLATES = [
@@ -176,7 +183,7 @@ PASSWORD_HASHERS = (
     "django.contrib.auth.hashers.MD5PasswordHasher",
     "django.contrib.auth.hashers.UnsaltedMD5PasswordHasher",
     "django.contrib.auth.hashers.CryptPasswordHasher",
-    "hashers_passlib.phpass",
+    # "hashers_passlib.phpass", # Old password hasher for backward compatibility. It is assumed that there are no passwords left using this hasher. The first algorithm in this list is the standard method.  
 )
 
 

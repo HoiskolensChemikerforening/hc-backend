@@ -28,7 +28,7 @@ class FundsApplication(models.Model):
         verbose_name="Kontonummer",
         validators=[
             RegexValidator(
-                regex="^(\d{10}|\d{11})$",
+                regex=r"^(\d{10}|\d{11})$",
                 message="Kun tall, 11 siffer",
                 code="nomatch",
             )
