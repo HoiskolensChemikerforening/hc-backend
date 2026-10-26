@@ -6,8 +6,13 @@ from django.shortcuts import render
 from django.http import JsonResponse
 from django.contrib.auth.decorators import permission_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from rest_framework import generics
+from rest_framework.parsers import MultiPartParser, FormParser
+
 from .forms import PostForm
 from .models import Submission
+from .serializers import SubmissionSerializer
 
 
 @login_required
@@ -85,3 +90,14 @@ def toggle_used(request):
         return JsonResponse({"used": submission.used})
     else:
         return redirect("shitbox:list")
+
+
+class SubmissionListView(generics.ListCreateAPIView):
+    parser_class = [MultiPartParser, FormParser]
+    queryset = Submission.objects.all()
+    serializer_class = SubmissionSerializer
+
+
+class SubmissionDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = Submission.objects.all()
+    serializer_class = SubmissionSerializer
